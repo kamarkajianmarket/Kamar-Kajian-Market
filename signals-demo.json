@@ -1,0 +1,27 @@
+{
+  "note": "Data contoh untuk desain Kamar Study. Nanti diganti sumber Supabase/API.",
+  "running": [
+    {
+      "id_zona": "KM-STUDY/Buy/M15-077",
+      "pair": "XAUUSD",
+      "timeframe": "M15",
+      "jenis_zona": "Fresh",
+      "skenario": "BUY",
+      "area": "4071.37 – 4080.10",
+      "running_point": 2.0,
+      "max_running_point": 3.0,
+      "status": "RUNNING"
+    }
+  ],
+  "recap": {
+    "daily": 4.2,
+    "weekly": 12.8,
+    "monthly": 36.5
+  },
+  "history": [
+    "Buy M15 · TP1 Hit · +3.00 Point",
+    "Sell M30 · Invalid · -1.20 Point",
+    "Buy H1 · TP3 Hit · +10.00 Point",
+    "Sell M15 · Running · +1.50 Point"
+  ]
+}

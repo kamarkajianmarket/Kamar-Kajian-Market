@@ -30,6 +30,12 @@
     <a class="header-cta" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Telegram</a>
   </header>
 
+  <div class="quick-mobile-nav" aria-label="Shortcut cepat">
+    <a href="#kamar-study">Kamar Study</a>
+    <a href="#study-running">Setup Running</a>
+    <a href="#study-fresh">New Fresh</a>
+  </div>
+
   <main id="top">
     <section class="hero section-shell">
       <div class="hero-copy">
@@ -122,34 +128,89 @@
     <section id="kamar-study" class="study section-shell compact-section">
       <div class="section-heading">
         <span class="eyebrow">Kamar Study</span>
-        <h2>Signal/setup market terbaru sebagai bahan kajian, bukan instruksi transaksi.</h2>
+        <h2>Kajian setup market terbaru yang sedang aktif dan mudah dibaca.</h2>
         <p>
-          Data di bawah ini masih tampilan contoh untuk validasi desain. Nanti bagian ini akan
-          tersambung otomatis dari EA menuju Supabase dan website.
+          Bagian ini masih memakai data contoh untuk validasi desain. Nanti data akan tersambung otomatis
+          dari EA menuju Supabase dan tampil di website.
         </p>
       </div>
 
-      <div class="study-dashboard">
-        <div class="study-main">
-          <div class="study-panel">
-            <div class="panel-head">
-              <div>
-                <span class="mini-label">Running Setup</span>
-                <h3>XAUUSD · M15</h3>
-              </div>
-              <span class="status-pill running">Running</span>
-            </div>
+      <div class="study-tabs" aria-label="Kategori Kamar Study">
+        <a href="#study-fresh">New Setup Fresh</a>
+        <a href="#study-running">Setup Aktif / Running</a>
+        <a href="#study-recap">Rekap Kajian</a>
+        <a href="#study-history">Riwayat Kajian</a>
+      </div>
 
-            <div class="study-signal-title">
-              <strong>Buy Study · Fresh</strong>
-              <small>ID: KM-STUDY/Buy/M15-077</small>
+      <div class="study-layout-v3">
+        <article id="study-fresh" class="study-panel study-card-v3 fresh-card">
+          <div class="panel-head">
+            <div>
+              <span class="mini-label">New Setup Fresh</span>
+              <h3>XAUUSD · M15</h3>
             </div>
+            <span class="status-pill fresh">Fresh</span>
+          </div>
 
-            <div class="signal-metrics">
+          <div class="study-signal-title compact-title">
+            <strong>Buy Study · Fresh</strong>
+            <small>ID: KM-STUDY/Buy/M15-078</small>
+          </div>
+
+          <div class="signal-two-rails">
+            <div class="rail-card left-rail">
               <div>
                 <span>Area Kajian</span>
                 <strong>4071.37 – 4080.10</strong>
               </div>
+              <div>
+                <span>Invalidasi</span>
+                <strong>4070.37</strong>
+              </div>
+            </div>
+            <div class="rail-card right-rail">
+              <div>
+                <span>Status</span>
+                <strong>Menunggu Area</strong>
+              </div>
+              <div>
+                <span>Potensi Target</span>
+                <strong>4083.10 · 4085.10 · 4090.10</strong>
+              </div>
+            </div>
+          </div>
+
+          <p class="study-note">
+            Setup baru/fresh sebagai bahan kajian skenario market. Bukan instruksi transaksi wajib.
+          </p>
+        </article>
+
+        <article id="study-running" class="study-panel study-card-v3 running-card">
+          <div class="panel-head">
+            <div>
+              <span class="mini-label">Setup Aktif / Running</span>
+              <h3>XAUUSD · M15</h3>
+            </div>
+            <span class="status-pill running">Running</span>
+          </div>
+
+          <div class="study-signal-title compact-title">
+            <strong>Buy Study · Fresh</strong>
+            <small>ID: KM-STUDY/Buy/M15-077</small>
+          </div>
+
+          <div class="signal-two-rails">
+            <div class="rail-card left-rail">
+              <div>
+                <span>Area Kajian</span>
+                <strong>4071.37 – 4080.10</strong>
+              </div>
+              <div>
+                <span>Invalidasi</span>
+                <strong>4070.37</strong>
+              </div>
+            </div>
+            <div class="rail-card right-rail progress-rail">
               <div>
                 <span>Running</span>
                 <strong class="positive">+2.00 Point</strong>
@@ -158,30 +219,26 @@
                 <span>Max Running</span>
                 <strong class="positive">+3.00 Point</strong>
               </div>
-              <div>
-                <span>Invalidasi</span>
-                <strong>4070.37</strong>
-              </div>
             </div>
-
-            <div class="target-row">
-              <span>Target Kajian</span>
-              <strong>4083.10 · 4085.10 · 4090.10</strong>
-            </div>
-
-            <p class="study-note">
-              Bahan kajian setup market untuk memahami skenario harga. Bukan instruksi transaksi wajib.
-            </p>
           </div>
-        </div>
 
-        <aside class="study-side">
-          <div class="study-panel compact-panel">
+          <div class="target-row target-v3">
+            <span>Target Kajian</span>
+            <strong>4083.10 · 4085.10 · 4090.10</strong>
+          </div>
+
+          <p class="study-note">
+            Bahan kajian setup market untuk memahami skenario harga. Bukan instruksi transaksi wajib.
+          </p>
+        </article>
+
+        <aside class="study-side-v3">
+          <div id="study-recap" class="study-panel compact-panel">
             <div class="panel-head small-head">
               <span class="mini-label">Rekap Kajian</span>
               <span class="period-label">Demo</span>
             </div>
-            <div class="recap-grid">
+            <div class="recap-grid recap-v3">
               <div>
                 <span>Hari Ini</span>
                 <strong class="positive">+4.20 Point</strong>
@@ -197,7 +254,7 @@
             </div>
           </div>
 
-          <div class="study-panel compact-panel">
+          <div id="study-history" class="study-panel compact-panel">
             <div class="panel-head small-head">
               <span class="mini-label">Riwayat Kajian</span>
               <span class="period-label">Terbaru</span>

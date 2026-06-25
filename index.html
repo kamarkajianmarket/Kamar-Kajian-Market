@@ -29,7 +29,7 @@
     </nav>
     <div class="header-actions">
       <a class="header-cta" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Grup Telegram</a>
-      <a class="header-cta header-member-cta" href="#member-login">Login Member</a>
+      <a class="header-cta header-member-cta" href="#member-login">Daftar / Login Member</a>
     </div>
   </header>
 
@@ -52,7 +52,7 @@
         <div class="hero-actions">
           <a class="btn btn-primary" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Grup Telegram</a>
           <a class="btn btn-secondary" href="#fasilitas">Lihat Fasilitas</a>
-          <a class="btn btn-ghost" href="#member-area">Masuk Member Area</a>
+          <a class="btn btn-ghost" href="#member-area">Daftar / Login Member</a>
         </div>
         <div class="hero-badges" aria-label="Fokus pembelajaran">
           <span>Market Logic</span>
@@ -321,27 +321,43 @@
 
     <section id="member-area" class="member-area section-shell compact-section">
       <div class="section-heading centered">
-        <span class="eyebrow">Member Area V1</span>
-        <h2>Akses member untuk Dashboard, Kamar Study, dan Profil Akun.</h2>
+        <span class="eyebrow">Member Area Sahabat Kamar</span>
+        <h2>Daftar, login, dan kelola akses fasilitas Sahabat Kamar.</h2>
         <p>
-          Member Area dibuat sebagai ruang terpisah dari halaman utama. Prototype awal ini menampilkan struktur akses,
-          sebelum login, role, masa langganan, dan Kamar Study disambungkan ke Supabase.
+          Member Area dibuat sebagai ruang terpisah dari halaman utama. Setiap pendaftar disebut Sahabat Kamar, dengan hak akses fasilitas yang aktif setelah pembayaran langganan dikonfirmasi admin.
         </p>
       </div>
 
-      <div id="member-login" class="member-login-shell">
-        <article class="member-login-card">
+      <div id="member-login" class="member-login-shell auth-split-shell">
+        <article class="member-login-card auth-card">
           <img src="assets/logo-kamar.jpeg" alt="Logo Kamar Kajian Market" />
-          <span class="mini-label">Masuk Member Area</span>
-          <h3>Login Member Kamar</h3>
-          <p>Gunakan email dan password member setelah sistem akses aktif penuh.</p>
+          <span class="mini-label">Daftar Sahabat Kamar</span>
+          <h3>Daftar Member</h3>
+          <p>Buat akun Sahabat Kamar. Setelah daftar, lanjutkan pembayaran langganan sebagai komitmen akses fasilitas.</p>
+          <form class="member-login-form">
+            <label>Nama Lengkap<input type="text" value="Sahabat Kamar" aria-label="Nama lengkap" /></label>
+            <label>Email<input type="email" value="sahabat@kamar.com" aria-label="Email pendaftaran" /></label>
+            <label>Password<input type="password" value="prototype" aria-label="Password pendaftaran" /></label>
+            <a class="btn btn-primary" href="#member-dashboard">Daftar & Lanjut Pembayaran</a>
+          </form>
+          <div class="payment-box">
+            <strong>Alur Aktivasi</strong>
+            <span>Daftar akun → lakukan pembayaran → konfirmasi via admin → akses fasilitas diaktifkan.</span>
+          </div>
+        </article>
+
+        <article class="member-login-card auth-card secondary-auth-card">
+          <img src="assets/logo-kamar.jpeg" alt="Logo Kamar Kajian Market" />
+          <span class="mini-label">Login Sahabat Kamar</span>
+          <h3>Login Member</h3>
+          <p>Gunakan email dan password jika akun Sahabat Kamar sudah dibuat.</p>
           <form class="member-login-form">
             <label>Email<input type="email" value="member@kamar.com" aria-label="Email member" /></label>
             <label>Password<input type="password" value="prototype" aria-label="Password member" /></label>
-            <a class="btn btn-primary" href="#member-dashboard">Masuk Prototype</a>
+            <a class="btn btn-secondary" href="#member-dashboard">Masuk Dashboard</a>
           </form>
           <div class="member-login-help">
-            <span>Belum punya akses member?</span>
+            <span>Butuh bantuan aktivasi?</span>
             <a href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Chat Admin</a>
           </div>
         </article>
@@ -349,7 +365,7 @@
 
       <div class="member-app" id="member-dashboard">
         <aside class="member-sidebar">
-          <div class="member-sidebar-brand">KAMAR MEMBER</div>
+          <div class="member-sidebar-brand">SAHABAT KAMAR</div>
           <a href="#member-dashboard">Dashboard</a>
           <a href="#member-study">Kamar Study</a>
           <a href="#member-education">Materi Edukasi</a>
@@ -364,11 +380,11 @@
           <div class="member-topbar">
             <div>
               <span class="mini-label">Dashboard</span>
-              <h3>Member Area Kamar Kajian Market</h3>
-              <p>Belajar market logic dengan akses fasilitas yang lebih terarah.</p>
+              <h3>Dashboard Sahabat Kamar</h3>
+              <p>Kelola status akun, pembayaran, masa akses, dan hak akses fasilitas Kamar.</p>
             </div>
             <div class="member-badge-row">
-              <span class="status-pill running">Study Member</span>
+              <span class="status-pill running">Sahabat Kamar</span>
               <a class="member-logout" href="#member-login">Logout</a>
             </div>
           </div>
@@ -376,13 +392,13 @@
           <div class="member-summary-grid member-summary-grid-5">
             <article class="member-summary-card">
               <span>Status Akun</span>
-              <strong>Aktif</strong>
-              <small>Role: Member</small>
+              <strong>Menunggu Aktivasi</strong>
+              <small>Role: Sahabat Kamar</small>
             </article>
             <article class="member-summary-card">
-              <span>Jenis Akses</span>
-              <strong>Study Member</strong>
-              <small>Dashboard, Kamar Study, Profil Akun</small>
+              <span>Status Pembayaran</span>
+              <strong>Menunggu Konfirmasi</strong>
+              <small>Konfirmasi via admin setelah pembayaran.</small>
             </article>
             <article class="member-summary-card highlight-summary">
               <span>Target Evaluasi Harian</span>
@@ -396,15 +412,24 @@
             </article>
             <article class="member-summary-card renewal-summary">
               <span>Sisa Akses</span>
-              <strong>23 Hari</strong>
-              <small>Berakhir: 20 Juli 2026</small>
+              <strong>Belum Aktif</strong>
+              <small>Aktif setelah pembayaran dikonfirmasi.</small>
             </article>
+          </div>
+
+          <div class="activation-panel">
+            <div>
+              <span class="mini-label">Pembayaran Langganan</span>
+              <h3>Selesaikan pembayaran untuk mengaktifkan akses.</h3>
+              <p>Akun Sahabat Kamar sudah dapat dibuat lebih dulu, tetapi hak akses fasilitas aktif setelah pembayaran dikonfirmasi admin.</p>
+            </div>
+            <a class="btn btn-primary" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Konfirmasi Pembayaran via Admin</a>
           </div>
 
           <div class="member-facility-grid">
             <article class="member-feature active"><span>Aktif</span><h4>Dashboard</h4><p>Ringkasan akun dan status evaluasi harian.</p><a href="#member-dashboard">Buka</a></article>
-            <article class="member-feature active"><span>Aktif</span><h4>Kamar Study</h4><p>Detail signal member, area kajian, target, invalidasi, dan riwayat.</p><a href="#member-study">Buka</a></article>
-            <article class="member-feature active"><span>Aktif</span><h4>Profil Akun</h4><p>Status akun, jenis akses, role, dan fasilitas aktif.</p><a href="#member-profile">Buka</a></article>
+            <article class="member-feature pending"><span>Menunggu Aktivasi</span><h4>Kamar Study</h4><p>Detail signal member, area kajian, target, invalidasi, dan riwayat aktif setelah pembayaran dikonfirmasi.</p><a href="#member-study">Lihat Info</a></article>
+            <article class="member-feature active"><span>Aktif</span><h4>Profil Akun</h4><p>Status akun, pembayaran, masa akses, dan hak akses fasilitas.</p><a href="#member-profile">Buka</a></article>
             <article class="member-feature pending"><span>Segera Hadir</span><h4>Materi Edukasi</h4><p>PDF, video pembelajaran, rekaman, dan panduan belajar Kamar.</p><a href="#member-education">Lihat Info</a></article>
             <article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Private</h4><p>Pendampingan, evaluasi, QNA, dan pembelajaran intensif.</p><a href="#member-private">Lihat Info</a></article>
             <article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Indikator</h4><p>Panduan, file tools, update versi, dan informasi penggunaan indikator.</p><a href="#member-indicator">Lihat Info</a></article>
@@ -413,8 +438,8 @@
 
           <section id="member-study" class="member-page-panel">
             <div class="member-panel-head">
-              <div><span class="mini-label">Kamar Study Member</span><h3>Detail bahan kajian market versi member.</h3></div>
-              <span class="period-label">Data Contoh</span>
+              <div><span class="mini-label">Kamar Study</span><h3>Detail bahan kajian market aktif setelah hak akses dikonfirmasi.</h3></div>
+              <span class="period-label">Menunggu Aktivasi</span>
             </div>
 
             <div class="member-daily-grid">
@@ -473,16 +498,16 @@
             </div>
             <div class="profile-grid">
               <div><span>Email</span><strong>member@kamar.com</strong></div>
-              <div><span>Status Akun</span><strong>Aktif</strong></div>
-              <div><span>Jenis Akses</span><strong>Study Member</strong></div>
-              <div><span>Role</span><strong>Member</strong></div>
-              <div><span>Tanggal Mulai Akses</span><strong>20 Juni 2026</strong></div>
-              <div><span>Tanggal Berakhir</span><strong>20 Juli 2026</strong></div>
-              <div class="profile-highlight"><span>Sisa Masa Akses</span><strong>23 Hari</strong></div>
-              <div><span>Status Renewal</span><strong>Aktif</strong></div>
-              <div class="profile-wide"><span>Fasilitas Aktif</span><strong>Dashboard, Kamar Study, Profil Akun</strong></div>
+              <div><span>Status Akun</span><strong>Menunggu Aktivasi</strong></div>
+              <div><span>Status Pembayaran</span><strong>Menunggu Konfirmasi</strong></div>
+              <div><span>Role</span><strong>Sahabat Kamar</strong></div>
+              <div><span>Tanggal Mulai Akses</span><strong>Belum Aktif</strong></div>
+              <div><span>Tanggal Berakhir</span><strong>Belum Aktif</strong></div>
+              <div class="profile-highlight"><span>Sisa Masa Akses</span><strong>Belum Aktif</strong></div>
+              <div><span>Status Renewal</span><strong>Menunggu Aktivasi</strong></div>
+              <div class="profile-wide"><span>Hak Akses Fasilitas</span><strong>Dashboard & Profil: Aktif · Kamar Study: Menunggu Aktivasi · Fasilitas lain: Segera Hadir</strong></div>
             </div>
-            <p class="study-note">Sisa masa akses akan dihitung otomatis dari tanggal berakhir akses setelah sistem Supabase aktif.</p>
+            <p class="study-note">Setelah pembayaran dikonfirmasi admin, tanggal mulai, tanggal berakhir, sisa akses, dan hak akses fasilitas akan diperbarui otomatis.</p>
           </section>
 
           <section class="member-coming-grid">

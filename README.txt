@@ -1,16 +1,13 @@
-Kamar Kajian Market — Market Logic Community
+Kamar Kajian Market WebApp — FAQ Update
 
-Cara membuka lokal:
+Update:
+- FAQ A-F final dimasukkan ke website.
+- FAQ dibuat accordion 2 level: kategori -> pertanyaan.
+- Kategori FAQ otomatis menutup kategori lain saat dibuka.
+- Desain tetap mengikuti style dark premium Kamar Kajian Market.
+
+Cara upload:
 1. Extract ZIP ini.
-2. Buka file index.html di browser.
-
-Cara upload online paling mudah:
-1. Extract ZIP ini.
-2. Upload seluruh folder Kamar-Kajian-Market-WebApp-Final ke Netlify/Vercel/hosting.
-3. Jangan upload index.html saja. Folder assets, style.css, dan manifest wajib ikut.
-
-Link yang sudah terpasang:
-Telegram Grup: https://t.me/kamarkajianmarket
-YouTube: https://www.youtube.com/@kamarkajianmarket
-TikTok: https://www.tiktok.com/@kamarkajianmarket
-Admin: https://t.me/kajianmarketkamar
+2. Upload seluruh isi folder ke repository GitHub website.
+3. Commit changes.
+4. Vercel akan auto-deploy dari GitHub.

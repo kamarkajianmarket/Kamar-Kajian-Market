@@ -26,9 +26,11 @@
       <a href="#akses">Akses</a>
       <a href="#kamar-study">Kamar Study</a>
       <a href="#faq">FAQ</a>
-      <a href="#member-area">Member</a>
     </nav>
-    <a class="header-cta" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Telegram</a>
+    <div class="header-actions">
+      <a class="header-cta" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Grup Telegram</a>
+      <a class="header-cta header-member-cta" href="#member-login">Login Member</a>
+    </div>
   </header>
 
   <div class="quick-mobile-nav" aria-label="Shortcut cepat">
@@ -322,8 +324,8 @@
         <span class="eyebrow">Member Area V1</span>
         <h2>Akses member untuk Dashboard, Kamar Study, dan Profil Akun.</h2>
         <p>
-          Prototype awal ini menampilkan struktur member area. Data masih contoh untuk validasi desain,
-          sebelum login, role, dan Kamar Study disambungkan ke Supabase.
+          Member Area dibuat sebagai ruang terpisah dari halaman utama. Prototype awal ini menampilkan struktur akses,
+          sebelum login, role, masa langganan, dan Kamar Study disambungkan ke Supabase.
         </p>
       </div>
 
@@ -371,7 +373,7 @@
             </div>
           </div>
 
-          <div class="member-summary-grid">
+          <div class="member-summary-grid member-summary-grid-5">
             <article class="member-summary-card">
               <span>Status Akun</span>
               <strong>Aktif</strong>
@@ -391,6 +393,11 @@
               <span>Status Hari Ini</span>
               <strong>Target Belum Tercapai</strong>
               <small>Hasil hari ini: +2.50 Point</small>
+            </article>
+            <article class="member-summary-card renewal-summary">
+              <span>Sisa Akses</span>
+              <strong>23 Hari</strong>
+              <small>Berakhir: 20 Juli 2026</small>
             </article>
           </div>
 
@@ -461,17 +468,21 @@
 
           <section id="member-profile" class="member-page-panel">
             <div class="member-panel-head">
-              <div><span class="mini-label">Profil Akun</span><h3>Informasi dasar member.</h3></div>
+              <div><span class="mini-label">Profil Akun</span><h3>Informasi dasar member dan masa akses.</h3></div>
+              <a class="member-logout renewal-button" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Renewal via Admin</a>
             </div>
             <div class="profile-grid">
               <div><span>Email</span><strong>member@kamar.com</strong></div>
               <div><span>Status Akun</span><strong>Aktif</strong></div>
               <div><span>Jenis Akses</span><strong>Study Member</strong></div>
               <div><span>Role</span><strong>Member</strong></div>
-              <div><span>Tanggal Bergabung</span><strong>Akan diperbarui</strong></div>
-              <div><span>Fasilitas Aktif</span><strong>Dashboard, Kamar Study, Profil Akun</strong></div>
+              <div><span>Tanggal Mulai Akses</span><strong>20 Juni 2026</strong></div>
+              <div><span>Tanggal Berakhir</span><strong>20 Juli 2026</strong></div>
+              <div class="profile-highlight"><span>Sisa Masa Akses</span><strong>23 Hari</strong></div>
+              <div><span>Status Renewal</span><strong>Aktif</strong></div>
+              <div class="profile-wide"><span>Fasilitas Aktif</span><strong>Dashboard, Kamar Study, Profil Akun</strong></div>
             </div>
-            <p class="study-note">Data profil akan diperbarui setelah sistem member aktif penuh.</p>
+            <p class="study-note">Sisa masa akses akan dihitung otomatis dari tanggal berakhir akses setelah sistem Supabase aktif.</p>
           </section>
 
           <section class="member-coming-grid">

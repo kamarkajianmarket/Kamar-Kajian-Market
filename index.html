@@ -26,6 +26,7 @@
       <a href="#akses">Akses</a>
       <a href="#kamar-study">Kamar Study</a>
       <a href="#faq">FAQ</a>
+      <a href="#member-area">Member</a>
     </nav>
     <a class="header-cta" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Telegram</a>
   </header>
@@ -49,6 +50,7 @@
         <div class="hero-actions">
           <a class="btn btn-primary" href="https://t.me/kamarkajianmarket" target="_blank" rel="noopener">Join Grup Telegram</a>
           <a class="btn btn-secondary" href="#fasilitas">Lihat Fasilitas</a>
+          <a class="btn btn-ghost" href="#member-area">Masuk Member Area</a>
         </div>
         <div class="hero-badges" aria-label="Fokus pembelajaran">
           <span>Market Logic</span>
@@ -130,8 +132,8 @@
         <span class="eyebrow">Kamar Study</span>
         <h2>Kajian setup market terbaru yang sedang aktif dan mudah dibaca.</h2>
         <p>
-          Bagian ini masih memakai data contoh untuk validasi desain. Nanti data akan tersambung otomatis
-          dari EA menuju Supabase dan tampil di website.
+          Area publik menampilkan maksimal 1 signal preview harian dan rekap hasil ringkas dari kajian publik maupun member.
+          Detail lengkap Kamar Study Member tersedia setelah login member.
         </p>
       </div>
 
@@ -250,18 +252,19 @@
             </div>
             <div class="recap-grid recap-v3">
               <div>
-                <span>Hari Ini</span>
-                <strong class="positive">+4.20 Point</strong>
+                <span>Target Evaluasi</span>
+                <strong class="positive">+5.00 Point</strong>
               </div>
               <div>
-                <span>Minggu Ini</span>
-                <strong class="positive">+12.80 Point</strong>
+                <span>Hasil Member</span>
+                <strong class="positive">+5.20 Point</strong>
               </div>
               <div>
-                <span>Bulan Ini</span>
-                <strong class="positive">+36.50 Point</strong>
+                <span>Hasil Publik</span>
+                <strong class="positive">+5.00 Point</strong>
               </div>
             </div>
+            <p class="public-recap-note">Rekap hasil ditampilkan sebagai dokumentasi edukatif dari skenario yang sudah selesai. Detail area kajian member tetap berada di Member Area.</p>
           </div>
 
           <div id="study-history" class="study-panel compact-panel">
@@ -270,10 +273,10 @@
               <span class="period-label">Terbaru</span>
             </div>
             <div class="history-list">
-              <div><span>Buy M15 · TP1 Hit</span><strong class="positive">+3.00 Point</strong></div>
-              <div><span>Sell M30 · Invalid</span><strong class="negative">-1.20 Point</strong></div>
-              <div><span>Buy H1 · TP3 Hit</span><strong class="positive">+10.00 Point</strong></div>
-              <div><span>Sell M15 · Running</span><strong class="positive">+1.50 Point</strong></div>
+              <div><span>Member Study · XAUUSD M15 · TP1 Hit</span><strong class="positive">+3.00 Point</strong></div>
+              <div><span>Member Study · XAUUSD M5 · TP2 Hit</span><strong class="positive">+2.20 Point</strong></div>
+              <div><span>Public Study · XAUUSD M15 · TP1 Hit</span><strong class="positive">+5.00 Point</strong></div>
+              <div><span>Member Study · XAUUSD M15 · Invalid</span><strong class="negative">-1.00 Point</strong></div>
             </div>
           </div>
         </aside>
@@ -308,6 +311,175 @@
         <div class="access-action">
           <p>Untuk detail fasilitas, alur akses, dan ketentuan terbaru, silakan konfirmasi langsung.</p>
           <a class="btn btn-primary" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Chat Admin</a>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section id="member-area" class="member-area section-shell compact-section">
+      <div class="section-heading centered">
+        <span class="eyebrow">Member Area V1</span>
+        <h2>Akses member untuk Dashboard, Kamar Study, dan Profil Akun.</h2>
+        <p>
+          Prototype awal ini menampilkan struktur member area. Data masih contoh untuk validasi desain,
+          sebelum login, role, dan Kamar Study disambungkan ke Supabase.
+        </p>
+      </div>
+
+      <div id="member-login" class="member-login-shell">
+        <article class="member-login-card">
+          <img src="assets/logo-kamar.jpeg" alt="Logo Kamar Kajian Market" />
+          <span class="mini-label">Masuk Member Area</span>
+          <h3>Login Member Kamar</h3>
+          <p>Gunakan email dan password member setelah sistem akses aktif penuh.</p>
+          <form class="member-login-form">
+            <label>Email<input type="email" value="member@kamar.com" aria-label="Email member" /></label>
+            <label>Password<input type="password" value="prototype" aria-label="Password member" /></label>
+            <a class="btn btn-primary" href="#member-dashboard">Masuk Prototype</a>
+          </form>
+          <div class="member-login-help">
+            <span>Belum punya akses member?</span>
+            <a href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Chat Admin</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="member-app" id="member-dashboard">
+        <aside class="member-sidebar">
+          <div class="member-sidebar-brand">KAMAR MEMBER</div>
+          <a href="#member-dashboard">Dashboard</a>
+          <a href="#member-study">Kamar Study</a>
+          <a href="#member-education">Materi Edukasi</a>
+          <a href="#member-private">Kamar Private</a>
+          <a href="#member-indicator">Kamar Indikator</a>
+          <a href="#member-robot">Kamar Robot</a>
+          <a href="#member-profile">Profil Akun</a>
+          <a href="#member-login">Logout</a>
+        </aside>
+
+        <div class="member-content">
+          <div class="member-topbar">
+            <div>
+              <span class="mini-label">Dashboard</span>
+              <h3>Member Area Kamar Kajian Market</h3>
+              <p>Belajar market logic dengan akses fasilitas yang lebih terarah.</p>
+            </div>
+            <div class="member-badge-row">
+              <span class="status-pill running">Study Member</span>
+              <a class="member-logout" href="#member-login">Logout</a>
+            </div>
+          </div>
+
+          <div class="member-summary-grid">
+            <article class="member-summary-card">
+              <span>Status Akun</span>
+              <strong>Aktif</strong>
+              <small>Role: Member</small>
+            </article>
+            <article class="member-summary-card">
+              <span>Jenis Akses</span>
+              <strong>Study Member</strong>
+              <small>Dashboard, Kamar Study, Profil Akun</small>
+            </article>
+            <article class="member-summary-card highlight-summary">
+              <span>Target Evaluasi Harian</span>
+              <strong class="positive">+5 Point</strong>
+              <small>Target evaluasi, bukan jaminan hasil.</small>
+            </article>
+            <article class="member-summary-card">
+              <span>Status Hari Ini</span>
+              <strong>Target Belum Tercapai</strong>
+              <small>Hasil hari ini: +2.50 Point</small>
+            </article>
+          </div>
+
+          <div class="member-facility-grid">
+            <article class="member-feature active"><span>Aktif</span><h4>Dashboard</h4><p>Ringkasan akun dan status evaluasi harian.</p><a href="#member-dashboard">Buka</a></article>
+            <article class="member-feature active"><span>Aktif</span><h4>Kamar Study</h4><p>Detail signal member, area kajian, target, invalidasi, dan riwayat.</p><a href="#member-study">Buka</a></article>
+            <article class="member-feature active"><span>Aktif</span><h4>Profil Akun</h4><p>Status akun, jenis akses, role, dan fasilitas aktif.</p><a href="#member-profile">Buka</a></article>
+            <article class="member-feature pending"><span>Segera Hadir</span><h4>Materi Edukasi</h4><p>PDF, video pembelajaran, rekaman, dan panduan belajar Kamar.</p><a href="#member-education">Lihat Info</a></article>
+            <article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Private</h4><p>Pendampingan, evaluasi, QNA, dan pembelajaran intensif.</p><a href="#member-private">Lihat Info</a></article>
+            <article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Indikator</h4><p>Panduan, file tools, update versi, dan informasi penggunaan indikator.</p><a href="#member-indicator">Lihat Info</a></article>
+            <article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Robot</h4><p>Panduan, parameter risiko, update file, dan informasi robot.</p><a href="#member-robot">Lihat Info</a></article>
+          </div>
+
+          <section id="member-study" class="member-page-panel">
+            <div class="member-panel-head">
+              <div><span class="mini-label">Kamar Study Member</span><h3>Detail bahan kajian market versi member.</h3></div>
+              <span class="period-label">Data Contoh</span>
+            </div>
+
+            <div class="member-daily-grid">
+              <div><span>Target Harian</span><strong class="positive">+5 Point</strong></div>
+              <div><span>Hasil Hari Ini</span><strong class="positive">+2.50 Point</strong></div>
+              <div><span>Signal Hari Ini</span><strong>2 Signal</strong></div>
+              <div><span>Status</span><strong>Target Belum Tercapai</strong></div>
+            </div>
+
+            <div class="member-filter-row">
+              <span>Pair: Semua</span>
+              <span>Timeframe: Semua</span>
+              <span>Status: Semua</span>
+            </div>
+
+            <div class="member-study-sections">
+              <article class="member-study-card">
+                <div class="panel-head small-head"><span class="mini-label">New Setup Fresh</span><span class="status-pill fresh">Fresh</span></div>
+                <h4>Buy Study · XAUUSD M15</h4>
+                <div class="member-signal-grid">
+                  <div><span>Area Kajian</span><strong>4071.37 – 4080.10</strong></div>
+                  <div><span>Invalidasi</span><strong>4070.37</strong></div>
+                  <div><span>Target Kajian</span><strong>4083.10 · 4085.10 · 4090.10</strong></div>
+                  <div><span>Target Lanjutan</span><strong>4105.10 · 4130.10 · 4180.10</strong></div>
+                </div>
+                <p>Status: Menunggu Harga Masuk. Bukan instruksi transaksi wajib.</p>
+              </article>
+
+              <article class="member-study-card">
+                <div class="panel-head small-head"><span class="mini-label">Setup Aktif / Running</span><span class="status-pill running">Running</span></div>
+                <h4>Sell Study · XAUUSD M5</h4>
+                <div class="member-signal-grid">
+                  <div><span>Area Kajian</span><strong>4092.50 – 4097.20</strong></div>
+                  <div><span>Running</span><strong class="positive">+2.30 Point</strong></div>
+                  <div><span>Max Running</span><strong class="positive">+3.10 Point</strong></div>
+                  <div><span>Status</span><strong>Berjalan</strong></div>
+                </div>
+                <p>Setup sudah aktif dan tidak digunakan sebagai acuan entry baru.</p>
+              </article>
+
+              <article class="member-study-card recap-card-wide">
+                <div class="panel-head small-head"><span class="mini-label">Rekap & Riwayat Kajian</span><span class="period-label">Hari Ini</span></div>
+                <div class="history-list">
+                  <div><span>XAUUSD M15 · Buy Study · TP1 Hit</span><strong class="positive">+3.00 Point</strong></div>
+                  <div><span>XAUUSD M5 · Sell Study · Running</span><strong class="positive">+2.50 Point</strong></div>
+                  <div><span>XAUUSD M15 · Buy Study · Invalid</span><strong class="negative">-1.00 Point</strong></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section id="member-profile" class="member-page-panel">
+            <div class="member-panel-head">
+              <div><span class="mini-label">Profil Akun</span><h3>Informasi dasar member.</h3></div>
+            </div>
+            <div class="profile-grid">
+              <div><span>Email</span><strong>member@kamar.com</strong></div>
+              <div><span>Status Akun</span><strong>Aktif</strong></div>
+              <div><span>Jenis Akses</span><strong>Study Member</strong></div>
+              <div><span>Role</span><strong>Member</strong></div>
+              <div><span>Tanggal Bergabung</span><strong>Akan diperbarui</strong></div>
+              <div><span>Fasilitas Aktif</span><strong>Dashboard, Kamar Study, Profil Akun</strong></div>
+            </div>
+            <p class="study-note">Data profil akan diperbarui setelah sistem member aktif penuh.</p>
+          </section>
+
+          <section class="member-coming-grid">
+            <article id="member-education" class="member-coming-card"><span>Segera Hadir</span><h3>Materi Edukasi</h3><p>Fasilitas materi edukasi sedang disiapkan. Nantinya akan berisi PDF, video pembelajaran, rekaman, dan panduan belajar Kamar Kajian Market.</p></article>
+            <article id="member-private" class="member-coming-card"><span>Segera Hadir</span><h3>Kamar Private</h3><p>Area Kamar Private sedang disiapkan untuk pendampingan, evaluasi, QNA, dan pembelajaran market logic secara lebih intensif.</p></article>
+            <article id="member-indicator" class="member-coming-card"><span>Segera Hadir</span><h3>Kamar Indikator</h3><p>Area Kamar Indikator sedang disiapkan untuk panduan penggunaan, update versi, file tools, dan informasi zona otomatis.</p></article>
+            <article id="member-robot" class="member-coming-card"><span>Segera Hadir</span><h3>Kamar Robot</h3><p>Area Kamar Robot sedang disiapkan untuk panduan penggunaan, parameter risiko, update file, dan informasi sistem robot.</p></article>
+          </section>
         </div>
       </div>
     </section>

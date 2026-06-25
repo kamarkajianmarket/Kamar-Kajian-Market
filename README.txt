@@ -1,13 +1,16 @@
-Kamar Kajian Market WebApp — FAQ Update
+Kamar Kajian Market WebApp - Member Area V1 Prototype
 
-Update:
-- FAQ A-F final dimasukkan ke website.
-- FAQ dibuat accordion 2 level: kategori -> pertanyaan.
-- Kategori FAQ otomatis menutup kategori lain saat dibuka.
-- Desain tetap mengikuti style dark premium Kamar Kajian Market.
+Update ini berisi:
+- Perbaikan visual FAQ category agar deskripsi kecil lebih rapi dan simetris.
+- Tambahan tombol Masuk Member Area.
+- Prototype login member dummy.
+- Dashboard Member.
+- Kamar Study Member dummy data.
+- Profil Akun dummy.
+- Materi Edukasi, Kamar Private, Kamar Indikator, Kamar Robot sebagai fasilitas Segera Hadir.
+- Rekap hasil Kamar Study di halaman utama: publik + member secara ringkas.
 
-Cara upload:
-1. Extract ZIP ini.
-2. Upload seluruh isi folder ke repository GitHub website.
-3. Commit changes.
-4. Vercel akan auto-deploy dari GitHub.
+Catatan:
+- Belum memakai Supabase Auth.
+- Belum memakai data real dari EA/Webhook.
+- Ini tahap desain/prototype untuk review tampilan.

@@ -10,6 +10,10 @@
   function client(){ if(!window.kamarSupabase) throw new Error(window.KAMAR_SUPABASE_ERROR || "Supabase client belum siap."); return window.kamarSupabase; }
   function formatDate(v){ if(!v) return "-"; try { return new Intl.DateTimeFormat("id-ID", {day:"2-digit", month:"short", year:"numeric"}).format(new Date(v)); } catch(e){ return String(v); } }
   function set(id, value){ const el=document.getElementById(id); if(el) el.textContent = value || "-"; }
+  function humanStatus(v){
+    const map={active:"Aktif",pending_activation:"Menunggu Aktivasi",expired:"Expired",suspended:"Suspended",confirmed:"Terkonfirmasi",pending:"Pending",rejected:"Ditolak",failed:"Gagal",refunded:"Refunded"};
+    return map[v] || v || "-";
+  }
   async function getAccess(profileId){ const {data,error}=await client().from("member_access").select("access_kamar_study,access_materi_edukasi,access_kamar_private,access_kamar_indikator,access_kamar_robot,locked_by_expired").eq("profile_id", profileId).maybeSingle(); if(error) throw error; return data || {}; }
   document.addEventListener("DOMContentLoaded", async function(){
     if(!window.KamarAuth) return;
@@ -24,7 +28,7 @@
       set("profileEmail", p.email);
       set("profileWhatsapp", p.whatsapp);
       set("profileTelegram", p.telegram_username ? "@" + String(p.telegram_username).replace(/^@/, "") : "-");
-      set("profileStatus", `${p.account_status || "-"} / ${p.payment_status || "-"}`);
+      set("profileStatus", `${humanStatus(p.account_status)} / ${humanStatus(p.payment_status)}`);
       set("profileAccessDate", `${formatDate(p.access_start_date)} - ${formatDate(p.access_end_date)}`);
       set("profileFacilities", active.length ? active.join(", ") : "Belum ada fasilitas aktif");
     } catch(error){

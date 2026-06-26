@@ -152,6 +152,14 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .admin-empty-state{border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:24px;background:rgba(255,255,255,.02);color:rgba(245,240,230,.72);line-height:1.6;}
 .admin-detail-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px;}
 .admin-detail-panel .setting-card strong{display:block;color:#fff4db;font-size:17px;margin-top:5px;}
+.admin-member-card{position:relative;}
+.admin-member-card.is-open{border-color:rgba(244,223,144,.52);background:linear-gradient(135deg,rgba(212,166,63,.07),rgba(255,255,255,.02));}
+.admin-inline-detail{grid-column:1/-1;border-top:1px solid rgba(238,206,122,.16);margin-top:4px;padding-top:16px;animation:kamarDetailIn .18s ease both;}
+@keyframes kamarDetailIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.admin-detail-panel .setting-card span{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:1000;color:#d8cda9;}
+.admin-detail-panel .setting-card{min-height:86px;}
+button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.3)}
+
 @media(max-width:920px){.data-toolbar,.admin-member-card,.admin-detail-panel,.form-grid,.kamar-form-grid{grid-template-columns:1fr}.admin-member-actions{justify-content:flex-start}}
 @media(max-width:560px){input:not([type="checkbox"]):not([type="radio"]),select,textarea{font-size:16px!important;min-height:56px!important;padding:15px 16px!important}.admin-member-card{padding:16px}}
 </style>

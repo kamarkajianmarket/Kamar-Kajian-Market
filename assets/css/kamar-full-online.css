@@ -178,3 +178,67 @@ label.field,.kamar-field{font-size:15px!important;font-weight:1000!important;col
 .todo-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;flex-wrap:wrap!important;min-width:330px!important;}
 .todo-actions .btn[disabled],.todo-actions button[disabled]{opacity:.4!important;cursor:not-allowed!important;}
 @media(max-width:980px){.todo-list-item{grid-template-columns:1fr!important;}.todo-actions{justify-content:flex-start!important;min-width:0!important;}}
+
+
+/* Step 24R — Member profile proportional data list */
+.setting-card span{
+  display:block!important;
+  margin:0 0 8px!important;
+  color:rgba(244,223,144,.78)!important;
+  font-size:12px!important;
+  line-height:1.25!important;
+  text-transform:uppercase!important;
+  letter-spacing:.12em!important;
+  font-weight:1000!important;
+}
+.setting-card strong{
+  display:block!important;
+  color:#fff3d8!important;
+  font-size:clamp(16px,1.2vw,19px)!important;
+  line-height:1.35!important;
+  letter-spacing:-.015em!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+.profile-panel{padding:24px!important;}
+.profile-detail-list{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:12px!important;
+  width:100%!important;
+}
+.profile-detail-row{
+  display:grid!important;
+  grid-template-columns:220px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:20px!important;
+  min-height:68px!important;
+  border:1px solid rgba(238,206,122,.15)!important;
+  border-radius:20px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.042),rgba(255,255,255,.014))!important;
+  padding:16px 18px!important;
+}
+.profile-detail-row span{
+  display:block!important;
+  color:rgba(244,223,144,.78)!important;
+  font-size:12px!important;
+  line-height:1.25!important;
+  text-transform:uppercase!important;
+  letter-spacing:.14em!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+.profile-detail-row strong{
+  display:block!important;
+  color:#fff3d8!important;
+  font-size:clamp(17px,1.25vw,20px)!important;
+  line-height:1.35!important;
+  font-weight:900!important;
+  letter-spacing:-.02em!important;
+  overflow-wrap:anywhere!important;
+}
+.profile-detail-row:hover{border-color:rgba(244,223,144,.34)!important;background:linear-gradient(135deg,rgba(244,223,144,.06),rgba(255,255,255,.018))!important;}
+@media(max-width:760px){
+  .profile-detail-row{grid-template-columns:1fr!important;gap:8px!important;align-items:start!important;min-height:auto!important;padding:15px!important;}
+  .profile-detail-row span{white-space:normal!important;}
+}

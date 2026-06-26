@@ -507,3 +507,66 @@ label.field,.kamar-field{font-size:15px!important;font-weight:1000!important;col
 
 /* Step 24Y - Admin content/status list cleanup */
 .admin-list{display:grid;gap:14px}.admin-list-row{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;align-items:start;border:1px solid rgba(238,206,122,.16);border-radius:22px;background:rgba(255,255,255,.025);padding:18px}.admin-list-main h3{margin:0 0 6px;color:#fff3d8;font-size:20px;line-height:1.25}.admin-list-main p{margin:0;color:#bdb4a1;line-height:1.5}.admin-list-meta{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}.status-stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.status-stack small,.admin-list-meta small{color:#bdb4a1;font-size:12px;font-weight:700}.study-admin-price-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.study-admin-price-row span{display:inline-flex;border:1px solid rgba(238,206,122,.14);border-radius:999px;padding:7px 10px;color:#d8d0bd;background:rgba(0,0,0,.18);font-size:13px;font-weight:800}@media(max-width:900px){.admin-list-row{grid-template-columns:1fr}.admin-list-meta,.status-stack{align-items:flex-start;text-align:left}}
+
+
+/* Step 24AB - Elegant color system for Kamar Study status & progress */
+.study-pill.zone-status,
+.kamar-pill.zone-status,
+.study-pill.progress-update,
+.kamar-pill.progress-update{
+  border-width:1px;
+  border-style:solid;
+  font-weight:900;
+  letter-spacing:.02em;
+  box-shadow:0 10px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Status Zona: 3 status utama */
+.zone-status.fresh{
+  color:#f8d889;
+  border-color:rgba(248,216,137,.42);
+  background:linear-gradient(135deg,rgba(248,216,137,.18),rgba(96,74,24,.16));
+}
+.zone-status.active{
+  color:#b9f8d4;
+  border-color:rgba(79,222,137,.46);
+  background:linear-gradient(135deg,rgba(46,180,105,.22),rgba(8,70,42,.18));
+}
+.zone-status.invalid{
+  color:#ffb6b6;
+  border-color:rgba(255,102,102,.46);
+  background:linear-gradient(135deg,rgba(255,88,88,.20),rgba(88,18,18,.18));
+}
+
+/* Update Perkembangan Zona */
+.progress-update.target-kajian{
+  color:#bfe7ff;
+  border-color:rgba(86,182,255,.46);
+  background:linear-gradient(135deg,rgba(66,153,225,.22),rgba(15,55,95,.18));
+}
+.progress-update.target-lanjutan{
+  color:#d7c7ff;
+  border-color:rgba(166,128,255,.46);
+  background:linear-gradient(135deg,rgba(129,90,230,.22),rgba(52,35,110,.18));
+}
+.progress-update.invalidasi{
+  color:#ffd0a8;
+  border-color:rgba(255,157,86,.48);
+  background:linear-gradient(135deg,rgba(255,139,64,.22),rgba(92,42,12,.18));
+}
+.progress-meta .study-pill:first-child{
+  color:#f7e5b0;
+  border-color:rgba(238,206,122,.35);
+  background:rgba(238,206,122,.10);
+}
+.status-stack small.progress-caption{
+  color:#e7dfcd;
+  opacity:.92;
+}
+.status-stack .progress-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:flex-end;
+}
+@media(max-width:900px){.status-stack .progress-row{justify-content:flex-start}}

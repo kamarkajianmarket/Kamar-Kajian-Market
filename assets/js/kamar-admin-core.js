@@ -13,6 +13,11 @@
   function toast(m){ if(window.toast) window.toast(m); else console.log(m); }
   function pill(v){ const key=String(v||'').toLowerCase(); const cls=key==='active'||key==='confirmed'||key==='done'||key==='published'?'on':(key.includes('pending')||key==='new'||key==='draft'?'warn':'off'); return `<span class="kamar-pill ${cls}">${esc(STATUS[key]||v||'-')}</span>`; }
 
+  function zoneStatusClass(v){ const key=String(v||'').toLowerCase(); if(key==='fresh') return 'fresh'; if(key==='active') return 'active'; if(key==='invalid') return 'invalid'; return 'fresh'; }
+  function progressClass(v){ const key=String(v||'').toLowerCase(); if(key.includes('invalidasi')) return 'invalidasi'; if(key.includes('lanjutan')) return 'target-lanjutan'; if(key.includes('kajian')) return 'target-kajian'; return 'target-kajian'; }
+  function zonePill(v){ return `<span class="kamar-pill zone-status ${zoneStatusClass(v)}">${esc(v||'-')}</span>`; }
+  function progressPill(v){ return `<span class="kamar-pill progress-update ${progressClass(v)}">${esc(v||'-')}</span>`; }
+
   function contentStatusValue(x){
     if(!x) return '-';
     if(typeof x.status === 'string' && x.status.trim()) return x.status;
@@ -48,7 +53,7 @@
     const activeText = x.is_active ? 'Data Aktif' : 'Data Nonaktif';
     const publishText = x.is_published ? 'Published' : 'Draft';
     const updates = zoneProgressUpdates(x);
-    return `<div class="status-stack">${pill(zoneText)}${updates.length?`<small>Update: ${esc(updates.join(' · '))}</small>`:''}<small>${esc(activeText)} · ${esc(publishText)}</small></div>`;
+    return `<div class="status-stack">${zonePill(zoneText)}${updates.length?`<small class="progress-caption">Update Perkembangan</small><div class="progress-row">${updates.map(progressPill).join('')}</div>`:''}<small>${esc(activeText)} · ${esc(publishText)}</small></div>`;
   }
   function formatStudyPrice(v){
     if(v===null || v===undefined || v==='') return '-';

@@ -100,6 +100,23 @@
     return updates;
   }
 
+
+  function zoneStatusClass(status) {
+    const key = String(status || "").toLowerCase();
+    if (key === "fresh") return "fresh";
+    if (key === "active") return "active";
+    if (key === "invalid") return "invalid";
+    return "fresh";
+  }
+
+  function progressClass(label) {
+    const key = String(label || "").toLowerCase();
+    if (key.includes("invalidasi")) return "invalidasi";
+    if (key.includes("lanjutan")) return "target-lanjutan";
+    if (key.includes("kajian")) return "target-kajian";
+    return "target-kajian";
+  }
+
   function normalizeDirection(value) {
     const raw = text(value, "").toUpperCase();
     if (raw === "BUY") return "Buy";
@@ -211,9 +228,9 @@
                 <span class="study-pill">${escapeHtml(item.timeframe)}</span>
                 <span class="study-pill">${escapeHtml(item.zoneType)}</span>
                 <span class="study-pill">${escapeHtml(normalizeDirection(item.direction))}</span>
-                <span class="study-pill">Status Zona: ${escapeHtml(normalizeZoneStatus(item))}</span>
+                <span class="study-pill zone-status ${zoneStatusClass(normalizeZoneStatus(item))}">Status Zona: ${escapeHtml(normalizeZoneStatus(item))}</span>
               </div>
-              ${progressUpdates(item).length ? `<div class="study-meta progress-meta"><span class="study-pill on">Update Zona</span>${progressUpdates(item).map(function (u) { return `<span class="study-pill">${escapeHtml(u)}</span>`; }).join("")}</div>` : ""}
+              ${progressUpdates(item).length ? `<div class="study-meta progress-meta"><span class="study-pill">Update Perkembangan</span>${progressUpdates(item).map(function (u) { return `<span class="study-pill progress-update ${progressClass(u)}">${escapeHtml(u)}</span>`; }).join("")}</div>` : ""}
             </div>
           </div>
           <div class="study-levels">

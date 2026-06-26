@@ -28,7 +28,7 @@
 
     const { data, error } = await client()
       .from("member_profiles")
-      .select("id,user_id,member_id,full_name,email,role,account_status,payment_status,access_start_date,access_end_date")
+      .select("id,user_id,member_id,full_name,email,whatsapp,telegram_username,role,account_status,payment_status,access_start_date,access_end_date")
       .eq("user_id", user.id)
       .maybeSingle();
 
@@ -67,10 +67,6 @@
       full_name: payload.fullName,
       whatsapp: payload.whatsapp,
       telegram_username: payload.telegramUsername,
-      selected_facility: payload.selectedFacility,
-      selected_facilities: payload.selectedFacilities,
-      duration_days: payload.durationDays,
-      payment_method: payload.paymentMethod,
       referral_code: payload.referralCode || null,
       source: "website_register"
     };
@@ -85,17 +81,6 @@
     });
 
     if (error) throw error;
-
-    // Jika Supabase Email Confirmation OFF, session biasanya langsung tersedia.
-    // Kalau session tersedia, kita coba buat payment request pending.
-    if (data && data.session) {
-      try {
-        await createRegistrationPaymentRequest(payload);
-      } catch (rpcError) {
-        console.warn("Payment request belum dibuat otomatis:", rpcError);
-      }
-    }
-
     return data;
   }
 
@@ -201,12 +186,6 @@
         const telegramUsername = UI.normalizeTelegram(UI.qs("#registerTelegram", form).value);
         const password = UI.qs("#registerPassword", form).value;
         const confirmPassword = UI.qs("#registerPasswordConfirm", form).value;
-        const facilityInput = UI.qs("#registerFacility", form);
-        const durationInput = UI.qs("#registerDuration", form);
-        const paymentInput = UI.qs("#registerPaymentMethod", form);
-        const facilityText = facilityInput ? facilityInput.value : "Belum dipilih";
-        const durationText = durationInput ? durationInput.value : "0 Hari";
-        const paymentMethod = paymentInput ? paymentInput.value : "Konfirmasi Admin";
         const referralCode = UI.qs("#registerReferral", form).value.trim();
         const agreeRisk = UI.qs("#registerAgreeRisk", form).checked;
         const agreeTerms = UI.qs("#registerAgreeTerms", form).checked;
@@ -227,23 +206,12 @@
           throw new Error("Centang pernyataan risiko dan ketentuan akses terlebih dahulu.");
         }
 
-        const facilityKey = facilityInput ? UI.facilityToKey(facilityText) : "pending_selection";
-        const selectedFacilities = facilityInput
-          ? (facilityKey === "all_paid"
-            ? ["kamar_study", "materi_edukasi", "kamar_private", "kamar_indikator", "kamar_robot"]
-            : [facilityKey])
-          : [];
-
         const payload = {
           fullName,
           email,
           whatsapp,
           telegramUsername,
           password,
-          selectedFacility: facilityKey,
-          selectedFacilities,
-          durationDays: UI.durationToDays(durationText),
-          paymentMethod,
           referralCode
         };
 

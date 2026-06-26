@@ -51,6 +51,22 @@
     );
   }
 
+  function updateMemberSidebar(access, profile) {
+    const activeAccount = isActiveAccount(profile, access || {});
+    const links = Array.from(document.querySelectorAll(".split-sidebar a"));
+    Object.keys(FACILITY_PAGES).forEach(function (pageName) {
+      const facility = FACILITY_PAGES[pageName];
+      const link = links.find(function (a) {
+        return String(a.textContent || "").toLowerCase().includes(facility.label.toLowerCase());
+      });
+      if (!link) return;
+      const canAccess = Boolean(access && access[facility.key]) && activeAccount;
+      link.classList.toggle("disabled", !canAccess);
+      link.href = canAccess ? pageName : "member-renewal.html";
+      link.textContent = canAccess ? facility.label : facility.label + " 🔒";
+    });
+  }
+
   async function getAccess(profileId) {
     const { data, error } = await client()
       .from("member_access")
@@ -121,12 +137,13 @@
     const auth = await window.KamarAuth.requireAuth("member");
     if (!auth || !auth.profile) return;
 
+    const access = await getAccess(auth.profile.id);
+    updateMemberSidebar(access, auth.profile);
+
     if (!facility) {
       showPendingProfile(auth.profile);
       return;
     }
-
-    const access = await getAccess(auth.profile.id);
     const allowed = Boolean(access[facility.key]) && isActiveAccount(auth.profile, access);
     if (!allowed) showLockedPage(facility, auth.profile, access);
   }

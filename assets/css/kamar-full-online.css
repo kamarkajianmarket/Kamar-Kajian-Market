@@ -35,3 +35,146 @@ label.field,.kamar-field{font-size:15px!important;font-weight:1000!important;col
 .kamar-section-head h2{margin:0;color:#fff3d8;}
 .kamar-section-head p{margin:6px 0 0;color:var(--kamar-muted);}
 @media(max-width:1000px){.form-grid,.kamar-form-grid,.admin-form-grid,.admin-form-grid.three,.kamar-card-grid{grid-template-columns:1fr!important}.kamar-table{display:block;overflow-x:auto}.split-card h1{font-size:34px!important}}
+
+/* Step 24O: Auth/login layout symmetry fix */
+.member-area#member-login{
+  padding-top:clamp(34px,5vw,72px)!important;
+  padding-bottom:clamp(34px,5vw,72px)!important;
+}
+#member-login .section-heading{
+  max-width:760px!important;
+  margin:0 auto 24px!important;
+  text-align:center!important;
+}
+#member-login .section-heading h2{
+  max-width:720px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  font-size:clamp(34px,4.4vw,58px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.055em!important;
+  text-wrap:balance!important;
+}
+#member-login .section-heading p{
+  max-width:640px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.member-login-shell{
+  width:100%!important;
+  max-width:680px!important;
+  margin:0 auto!important;
+  display:flex!important;
+  justify-content:center!important;
+}
+.member-login-card.auth-card{
+  width:100%!important;
+  max-width:640px!important;
+  margin:0 auto!important;
+  padding:clamp(24px,3.2vw,42px)!important;
+  border-radius:34px!important;
+  border:1px solid rgba(238,206,122,.22)!important;
+  background:
+    radial-gradient(circle at 86% 0%,rgba(244,223,144,.12),transparent 34%),
+    linear-gradient(145deg,rgba(255,255,255,.065),rgba(0,0,0,.34))!important;
+  box-shadow:0 28px 90px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+.member-login-card.auth-card > img{
+  display:block!important;
+  width:88px!important;
+  height:88px!important;
+  object-fit:cover!important;
+  border-radius:22px!important;
+  margin:0 auto 22px!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.35)!important;
+}
+.member-login-card.auth-card > .mini-label,
+.member-login-card.auth-card > h3,
+.member-login-card.auth-card > p{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.member-login-card.auth-card > .mini-label{
+  display:block!important;
+  margin-bottom:10px!important;
+}
+.member-login-card.auth-card > h3{
+  font-size:clamp(36px,4.2vw,56px)!important;
+  line-height:.98!important;
+  letter-spacing:-.06em!important;
+  color:#fff1d6!important;
+  margin-bottom:14px!important;
+}
+.member-login-card.auth-card > p{
+  max-width:480px!important;
+  font-size:16px!important;
+  line-height:1.55!important;
+  color:rgba(245,240,230,.72)!important;
+  margin-bottom:26px!important;
+}
+.member-login-form{
+  display:grid!important;
+  gap:18px!important;
+}
+.member-login-form label{
+  display:grid!important;
+  gap:9px!important;
+  font-size:15px!important;
+  font-weight:950!important;
+  color:#eadfc8!important;
+  letter-spacing:-.01em!important;
+}
+.member-login-form input{
+  min-height:62px!important;
+  border-radius:22px!important;
+  font-size:17px!important;
+  padding:17px 20px!important;
+}
+.member-login-form .btn,
+.member-login-form button{
+  min-height:60px!important;
+  border-radius:999px!important;
+  font-size:16px!important;
+  font-weight:1000!important;
+  margin-top:4px!important;
+}
+.member-login-help{
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  align-items:center!important;
+  gap:18px!important;
+  padding:18px 0!important;
+  border-top:1px solid rgba(238,206,122,.13)!important;
+  color:rgba(245,240,230,.72)!important;
+  font-size:15px!important;
+  line-height:1.35!important;
+}
+.member-login-help:first-of-type{margin-top:24px!important;}
+.member-login-help a{
+  color:#f4df90!important;
+  font-weight:1000!important;
+  text-decoration:none!important;
+  white-space:nowrap!important;
+}
+@media(max-width:760px){
+  .member-login-shell{max-width:100%!important;}
+  .member-login-card.auth-card{border-radius:28px!important;padding:24px!important;}
+  .member-login-help{grid-template-columns:1fr!important;gap:8px!important;text-align:left!important;}
+  .member-login-card.auth-card > img{width:78px!important;height:78px!important;}
+}
+
+
+/* Step 24P — Admin To-Do list cleanup */
+.todo-list{display:grid!important;grid-template-columns:1fr!important;gap:14px!important;margin-top:18px!important;}
+.todo-list-item{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:18px!important;align-items:center!important;border:1px solid rgba(238,206,122,.16)!important;border-radius:24px!important;background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.014))!important;padding:18px 18px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;}
+.todo-list-main{min-width:0!important;}
+.todo-list-title-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;margin-bottom:6px!important;}
+.todo-list-title-row h3{margin:0!important;color:#fff1d6!important;font-size:clamp(18px,1.45vw,23px)!important;line-height:1.16!important;letter-spacing:-.025em!important;}
+.todo-list-item p{margin:6px 0 10px!important;color:rgba(245,240,230,.72)!important;line-height:1.55!important;font-size:15px!important;}
+.todo-member-line{display:flex!important;flex-wrap:wrap!important;gap:8px 12px!important;align-items:center!important;color:rgba(245,240,230,.66)!important;font-size:13px!important;}
+.todo-member-line strong{color:#f4df90!important;font-weight:1000!important;}
+.todo-member-line span{font-size:13px!important;letter-spacing:0!important;text-transform:none!important;color:rgba(245,240,230,.62)!important;font-weight:800!important;}
+.todo-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;flex-wrap:wrap!important;min-width:330px!important;}
+.todo-actions .btn[disabled],.todo-actions button[disabled]{opacity:.4!important;cursor:not-allowed!important;}
+@media(max-width:980px){.todo-list-item{grid-template-columns:1fr!important;}.todo-actions{justify-content:flex-start!important;min-width:0!important;}}

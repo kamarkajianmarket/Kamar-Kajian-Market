@@ -26,14 +26,114 @@
     const map=Object.fromEntries(access.map(a=>[a.profile_id,a]));
     return (profiles||[]).map(p=>({...p,access:map[p.id]||{}}));
   }
+  function todoTitle(t){
+    const map={
+      new_registration:'Pendaftaran Member Baru',
+      upgrade_request:'Tambah / Upgrade Fasilitas',
+      profile_change:'Pengajuan Perubahan Profil',
+      access_expired:'Akses Member Expired',
+      payment_confirmation:'Konfirmasi Pembayaran',
+      payment_request:'Konfirmasi Pembayaran',
+      renewal_request:'Perpanjangan Akses',
+      manual_note:'Catatan Admin'
+    };
+    return map[String(t.todo_type||'').toLowerCase()] || t.title || 'To-Do Member';
+  }
+  function todoDescription(t){
+    const type=String(t.todo_type||'').toLowerCase();
+    const map={
+      new_registration:'Member baru menunggu pengecekan dan follow-up admin.',
+      upgrade_request:'Member mengajukan tambah atau upgrade fasilitas.',
+      profile_change:'Member mengajukan perubahan data profil.',
+      access_expired:'Masa akses member sudah berakhir dan perlu follow-up renewal.',
+      payment_confirmation:'Member menunggu pengecekan pembayaran.',
+      payment_request:'Member menunggu pengecekan pembayaran.',
+      renewal_request:'Member mengajukan perpanjangan akses.'
+    };
+    const raw=String(t.description||'');
+    if(!raw || /sql editor|testing|manual_note/i.test(raw)) return map[type] || 'Perlu ditindaklanjuti admin.';
+    return raw;
+  }
+  function todoStatusText(v){
+    const map={new:'Baru',processing:'Diproses',done:'Selesai',rejected:'Ditolak'};
+    return map[String(v||'').toLowerCase()] || v || '-';
+  }
+  function todoWaUrl(member,t){
+    const phone=String(member&&member.whatsapp||'').replace(/[^0-9]/g,'');
+    if(!phone) return '';
+    const name=(member&&member.full_name)||'Kawan Kamar';
+    const msg=`Halo ${name}, kami dari Admin Kamar Kajian Market. Kami ingin follow-up: ${todoTitle(t)}. Mohon konfirmasi ketika sudah sempat.`;
+    return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  }
+  function todoTelegramUrl(member){
+    const raw=String(member&&member.telegram_username||'').trim().replace(/^@/,'');
+    return raw ? `https://t.me/${encodeURIComponent(raw)}` : '';
+  }
+  async function getActionTodos(){
+    const allowed=['new_registration','payment_confirmation','payment_request','upgrade_request','profile_change','access_expired','renewal_request'];
+    const {data,error}=await client().from('admin_todos')
+      .select('id,profile_id,todo_type,todo_status,title,description,created_at')
+      .in('todo_status',['new','processing'])
+      .not('profile_id','is',null)
+      .order('created_at',{ascending:false})
+      .limit(30);
+    if(error) throw error;
+    const todos=(data||[]).filter(t=>allowed.includes(String(t.todo_type||'').toLowerCase()));
+    const ids=[...new Set(todos.map(t=>t.profile_id).filter(Boolean))];
+    let profiles=[];
+    if(ids.length){
+      const r=await client().from('member_profiles').select('id,member_id,full_name,email,whatsapp,telegram_username,account_status,payment_status').in('id',ids);
+      if(r.error) throw r.error;
+      profiles=r.data||[];
+    }
+    const map=Object.fromEntries(profiles.map(p=>[p.id,p]));
+    return todos.map(t=>({...t,member:map[t.profile_id]||{}}));
+  }
+  async function updateTodoStatus(id,status){
+    const {error}=await client().from('admin_todos').update({todo_status:status,updated_at:new Date().toISOString()}).eq('id',id);
+    if(error) throw error;
+  }
   async function loadDashboard(){
     const el=main(); setLoading(el,'Membaca ringkasan admin...');
     try{
       const [total,active,pending,todos]=await Promise.all([
-        count('member_profiles'), count('member_profiles',q=>q.eq('account_status','active')), count('member_profiles',q=>q.eq('account_status','pending_activation')), client().from('admin_todos').select('id,todo_type,todo_status,title,description,created_at').order('created_at',{ascending:false}).limit(8)
+        count('member_profiles'),
+        count('member_profiles',q=>q.eq('account_status','active')),
+        count('member_profiles',q=>q.eq('account_status','pending_activation')),
+        getActionTodos()
       ]);
-      const todoRows=(todos.data||[]).map(t=>`<div class="todo-item"><span>${esc(t.todo_type)}</span><h3>${esc(t.title)}</h3><p>${esc(t.description||'')}</p><small>${fmtDate(t.created_at)} · ${esc(t.todo_status)}</small></div>`).join('')||`<div class="kamar-empty">Belum ada To-Do admin.</div>`;
-      el.innerHTML=`<section class="split-card"><span class="eyebrow">Dashboard Admin</span><h1>Dashboard Admin</h1><p>Ringkasan real dari Supabase untuk member, aktivasi, dan To-Do admin.</p></section><section class="grid-3"><div class="stat-card"><span>Total Member</span><strong>${total}</strong><small>Semua akun terdaftar</small></div><div class="stat-card"><span>Member Aktif</span><strong>${active}</strong><small>Status active</small></div><div class="stat-card"><span>Pending Aktivasi</span><strong>${pending}</strong><small>Menunggu admin</small></div></section><section class="split-card"><div class="kamar-section-head"><div><h2>To-Do Terbaru</h2><p>Data real dari admin_todos.</p></div><a class="btn secondary" href="admin-members.html">Lihat Member</a></div><div class="grid-2">${todoRows}</div></section>`;
+      const todoRows=(todos||[]).map(t=>{
+        const m=t.member||{};
+        const wa=todoWaUrl(m,t), tg=todoTelegramUrl(m);
+        return `<article class="todo-list-item" data-todo-id="${esc(t.id)}">
+          <div class="todo-list-main">
+            <div class="todo-list-title-row">
+              <h3>${esc(todoTitle(t))}</h3>
+              <span class="kamar-pill ${String(t.todo_status)==='new'?'warn':'off'}">${esc(todoStatusText(t.todo_status))}</span>
+            </div>
+            <p>${esc(todoDescription(t))}</p>
+            <div class="todo-member-line">
+              <strong>${esc(m.full_name||'Member')}</strong>
+              <span>${esc(m.member_id||'-')}</span>
+              <span>${esc(m.email||'-')}</span>
+            </div>
+          </div>
+          <div class="todo-actions">
+            ${wa?`<a class="btn mini" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>`:`<button class="btn mini secondary" disabled>WA Kosong</button>`}
+            ${tg?`<a class="btn mini secondary" href="${esc(tg)}" target="_blank" rel="noopener">Telegram</a>`:`<button class="btn mini secondary" disabled>Telegram Kosong</button>`}
+            <a class="btn mini secondary" href="admin-members.html">Data Member</a>
+            ${String(t.todo_status)==='new'?`<button class="btn mini secondary" data-todo-action="processing" data-todo-id="${esc(t.id)}">Proses</button>`:''}
+            <button class="btn mini" data-todo-action="done" data-todo-id="${esc(t.id)}">Selesai</button>
+          </div>
+        </article>`;
+      }).join('')||`<div class="kamar-empty">Belum ada To-Do member yang perlu ditindaklanjuti.</div>`;
+      el.innerHTML=`<section class="split-card"><span class="eyebrow">Dashboard Admin</span><h1>Dashboard Admin</h1><p>Ringkasan member dan follow-up penting dari Supabase.</p></section><section class="grid-3"><div class="stat-card"><span>Total Member</span><strong>${total}</strong><small>Semua akun terdaftar</small></div><div class="stat-card"><span>Member Aktif</span><strong>${active}</strong><small>Status active</small></div><div class="stat-card"><span>Pending Aktivasi</span><strong>${pending}</strong><small>Menunggu admin</small></div></section><section class="split-card"><div class="kamar-section-head"><div><h2>To-Do Member</h2><p>Hanya menampilkan follow-up member yang masih perlu diproses.</p></div><a class="btn secondary" href="admin-members.html">Lihat Member</a></div><div class="todo-list">${todoRows}</div></section>`;
+      el.querySelectorAll('[data-todo-action]').forEach(btn=>btn.addEventListener('click',async()=>{
+        const id=btn.dataset.todoId, status=btn.dataset.todoAction;
+        btn.disabled=true; const old=btn.textContent; btn.textContent='Memproses...';
+        try{ await updateTodoStatus(id,status); toast(status==='done'?'To-Do ditandai selesai.':'To-Do ditandai diproses.'); await loadDashboard(); }
+        catch(e){ toast(e.message); btn.disabled=false; btn.textContent=old; }
+      }));
     }catch(e){ el.innerHTML=`<section class="split-card">${statusBox(e.message,'error')}</section>`; }
   }
   function renderMemberTable(members, mount){
@@ -85,7 +185,7 @@
   }
   async function renderContentPage(kind){
     const cfg={banner:['banners','Banner Pengumuman'],video:['videos','Konten Video'],materials:['materials','Konten & Materi'],tools:['tools_files','File Tools'],study:['signals','Kamar Study Control']}; const [table,title]=cfg[kind];
-    const el=main(); el.innerHTML=`<section class="split-card"><span class="eyebrow">${esc(title)}</span><h1>${esc(title)}</h1><p>Membaca data real dari tabel ${esc(table)}. Form tambah/edit detail akan dirapikan pada fase final setelah semua alur stabil.</p></section><section class="split-card"><div class="kamar-section-head"><div><h2>Data Tersimpan</h2><p>Daftar terakhir dari Supabase.</p></div><button id="refreshContent" class="btn secondary">Refresh</button></div><div id="contentList">Memuat...</div></section>`;
+    const el=main(); el.innerHTML=`<section class="split-card"><span class="eyebrow">${esc(title)}</span><h1>${esc(title)}</h1><p>Kelola data yang ditampilkan pada website dan area member.</p></section><section class="split-card"><div class="kamar-section-head"><div><h2>Data Tersimpan</h2><p>Daftar data terbaru.</p></div><button id="refreshContent" class="btn secondary">Refresh</button></div><div id="contentList">Memuat...</div></section>`;
     async function load(){ const box=document.getElementById('contentList'); try{ const {data,error}=await client().from(table).select('*').order('created_at',{ascending:false}).limit(50); if(error) throw error; box.innerHTML=`<table class="kamar-table"><thead><tr><th>Judul/Key</th><th>Status</th><th>Area/Akses</th><th>Update</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td><strong>${esc(x.title||x.setting_key||x.id_zona||x.id||'-')}</strong><div class="kamar-muted">${esc(x.description||x.body||x.category||x.pair||'')}</div></td><td>${pill(x.publish_status||x.status||x.is_active===false?'inactive':'active')}</td><td>${esc(x.display_area||x.access_required||x.timeframe||'-')}</td><td>${fmtDate(x.updated_at||x.created_at)}</td></tr>`).join('')||'<tr><td colspan="4"><div class="kamar-empty">Belum ada data.</div></td></tr>'}</tbody></table>`; }catch(e){box.innerHTML=statusBox(e.message,'error');} }
     document.getElementById('refreshContent').onclick=load; load();
   }

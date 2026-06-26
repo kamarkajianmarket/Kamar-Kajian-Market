@@ -10,6 +10,10 @@
 <link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="manifest.webmanifest" rel="manifest"/>
 <link href="style.css" rel="stylesheet"/>
+
+<style>
+.renewal-card{border:1px solid rgba(238,206,122,.18);background:rgba(255,255,255,.025);border-radius:26px;padding:22px}.renewal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.renewal-card label{display:flex;flex-direction:column;gap:8px;color:#d8d0bd;font-weight:900}.renewal-card select,.renewal-card input{border:1px solid rgba(238,206,122,.18);background:rgba(0,0,0,.32);color:#f5f0e6;border-radius:18px;padding:14px 16px}.locked-access-note{border:1px solid rgba(255,198,86,.22);background:rgba(255,198,86,.06);border-radius:24px;padding:18px;margin-top:16px;color:#f5e5b8}.member-feature.locked{opacity:.62;border-color:rgba(238,206,122,.10)}.member-feature.locked span{color:#aaa;background:rgba(255,255,255,.04)}.renewal-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.renewal-actions a,.renewal-actions button{border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:13px 22px;text-decoration:none;cursor:pointer}.renewal-actions .secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid rgba(238,206,122,.18)}@media(max-width:720px){.renewal-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
   <div class="page-glow page-glow-1"></div>
@@ -36,6 +40,7 @@
     <a href="#member-dashboard">Dashboard</a>
     <a href="#member-study">Kamar Study</a>
     <a href="#member-profile">Profil Akun</a>
+    <a href="#member-renewal">Renewal</a>
   </div>
 
   <main id="top">
@@ -49,7 +54,8 @@
 <aside class="member-sidebar">
 <div class="member-sidebar-brand">KAWAN KAMAR</div>
 <a class="nav-active" href="#member-dashboard">Dashboard</a>
-<a class="nav-active" href="#member-study">Kamar Study</a>
+<span class="nav-disabled">Kamar Study</span>
+<a class="nav-active" href="#member-renewal">Perpanjangan / Tambah Fasilitas</a>
 <span class="nav-disabled">Materi Edukasi</span>
 <span class="nav-disabled">Kamar Private</span>
 <span class="nav-disabled">Kamar Indikator</span>
@@ -70,25 +76,58 @@
 <a class="member-logout" href="member.html">Logout</a>
 </div>
 <div class="access-meta">
-<strong>Sisa Akses: Belum Aktif</strong>
-<span>Menunggu konfirmasi admin</span>
+<strong>Sisa Akses: 0 Hari</strong>
+<span>Expired / semua fasilitas terkunci</span>
 </div>
 </div>
 </div>
 <div class="member-facility-grid">
-<article class="member-feature active"><span>Aktif</span><h4>Dashboard</h4><p>Ringkasan akses dan navigasi utama Kawan Kamar.</p><a href="#member-dashboard">Buka</a></article>
-<article class="member-feature active"><span>Aktif</span><h4>Kamar Study</h4><p>Detail signal member, area kajian, target, invalidasi, dan riwayat.</p><a href="#member-study">Buka</a></article>
+<article class="member-feature active"><span>Aktif</span><h4>Dashboard</h4><p>Dashboard tetap bisa dibuka untuk melihat status akun dan renewal.</p><a href="#member-dashboard">Buka</a></article>
+<article class="member-feature locked"><span>Terkunci</span><h4>Kamar Study</h4><p>Fasilitas member terkunci karena masa akses sudah expired.</p><em>Renewal diperlukan</em></article>
 <article class="member-feature active"><span>Aktif</span><h4>Profil Akun</h4><p>Status akun, pembayaran, masa akses, dan hak akses fasilitas.</p><a href="#member-profile">Buka</a></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Materi Edukasi</h4><p>PDF, video pembelajaran, rekaman, dan panduan belajar Kamar.</p><em>Segera tersedia</em></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Private</h4><p>Pendampingan, evaluasi, QNA, dan pembelajaran intensif.</p><em>Segera tersedia</em></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Indikator</h4><p>Panduan, file tools, update versi, dan informasi penggunaan indikator.</p><em>Segera tersedia</em></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Robot</h4><p>Panduan, parameter risiko, update file, dan informasi robot.</p><em>Segera tersedia</em></article>
+<article class="member-feature active"><span>Aktif</span><h4>Perpanjangan / Tambah Fasilitas</h4><p>Perpanjang langganan atau tambah fasilitas dari dashboard member.</p><a href="#member-renewal">Buka</a></article>
+<article class="member-feature locked"><span>Terkunci</span><h4>Materi Edukasi</h4><p>Fasilitas member berbayar. Akses aktif kembali setelah renewal / aktivasi fasilitas.</p><em>Renewal diperlukan</em></article>
+<article class="member-feature locked"><span>Terkunci</span><h4>Kamar Private</h4><p>Fasilitas member berbayar. Akses aktif kembali setelah renewal / aktivasi fasilitas.</p><em>Renewal diperlukan</em></article>
+<article class="member-feature locked"><span>Terkunci</span><h4>Kamar Indikator</h4><p>Fasilitas member berbayar. Akses aktif kembali setelah renewal / aktivasi fasilitas.</p><em>Renewal diperlukan</em></article>
+<article class="member-feature locked"><span>Terkunci</span><h4>Kamar Robot</h4><p>Fasilitas member berbayar. Akses aktif kembali setelah renewal / aktivasi fasilitas.</p><em>Renewal diperlukan</em></article>
 </div>
+
+<section class="member-page-panel" id="member-renewal">
+<div class="member-panel-head">
+<div><span class="mini-label">Perpanjangan / Tambah Fasilitas</span><h3>Perpanjang langganan atau tambah fasilitas Kamar.</h3></div>
+<span class="period-label">Renewal</span>
+</div>
+<div class="locked-access-note">Masa akses Kawan Kamar sudah berakhir. Dashboard tetap bisa dibuka, tetapi semua fasilitas member terkunci sampai perpanjangan atau tambah fasilitas dikonfirmasi admin.</div>
+<div class="renewal-card">
+<div class="renewal-grid">
+<label>Pilih Kebutuhan
+<select id="renewalType"><option>Perpanjang Langganan</option><option>Tambah Fasilitas</option><option>Perpanjang + Tambah Fasilitas</option></select>
+</label>
+<label>Fasilitas
+<select id="renewalFacility"><option>Kamar Study</option><option>Materi Edukasi</option><option>Kamar Private</option><option>Kamar Indikator</option><option>Kamar Robot</option><option>Paket Lengkap</option></select>
+</label>
+<label>Durasi
+<select id="renewalDuration"><option>30 Hari</option><option>90 Hari</option><option>180 Hari</option><option>1 Tahun</option></select>
+</label>
+<label>Metode Pembayaran
+<select id="renewalPayment"><option>Mayar Payment Link</option><option>Konfirmasi Admin</option><option>Transfer Manual</option></select>
+</label>
+</div>
+<div class="renewal-actions">
+<a href="https://web.mayar.id/" target="_blank" rel="noopener">Bayar via Mayar</a>
+<a class="secondary" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Konfirmasi Admin</a>
+<button class="secondary" type="button" onclick="alert('Request renewal/tambah fasilitas dikirim ke admin dalam simulasi.')">Kirim Request</button>
+</div>
+<p class="public-recap-note">Nanti link pembayaran Mayar atau payment gateway dapat diatur dari Dashboard Admin. Setelah pembayaran dikonfirmasi, fasilitas akan aktif kembali sesuai hak akses.</p>
+</div>
+</section>
+
 <section class="member-page-panel" id="member-study">
 <div class="member-panel-head">
-<div><span class="mini-label">Kamar Study</span><h3>Detail bahan kajian market aktif setelah hak akses dikonfirmasi.</h3></div>
-<span class="period-label">Aktif</span>
+<div><span class="mini-label">Kamar Study</span><h3>Fasilitas terkunci saat masa akses expired.</h3></div>
+<span class="period-label">Terkunci</span>
 </div>
+<div class="locked-access-note">Kamar Study adalah fasilitas member berbayar. Untuk membuka kembali detail signal, silakan gunakan menu Perpanjangan / Tambah Fasilitas.</div>
 <div class="member-daily-grid">
 <div><span>Target Harian</span><strong class="positive">+5 Point</strong></div>
 <div><span>Hasil Hari Ini</span><strong class="positive">+2.50 Point</strong></div>
@@ -229,9 +268,9 @@
 </div>
 <div class="profile-grid">
 <div><span>Role</span><strong>Kawan Kamar</strong></div>
-<div><span>Status Akun</span><strong>Aktif</strong></div>
-<div><span>Status Pembayaran</span><strong>Terkonfirmasi</strong></div>
-<div><span>Sisa Akses</span><strong>Belum Aktif</strong></div>
+<div><span>Status Akun</span><strong>Expired</strong></div>
+<div><span>Status Pembayaran</span><strong>Perlu Renewal</strong></div>
+<div><span>Sisa Akses</span><strong>0 Hari</strong></div>
 <div><span>Tanggal Mulai</span><strong>Akan diperbarui</strong></div>
 <div><span>Tanggal Berakhir</span><strong>Akan diperbarui</strong></div>
 </div>

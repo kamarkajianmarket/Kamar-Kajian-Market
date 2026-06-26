@@ -461,5 +461,21 @@
       });
     });
   </script>
+
+<script>
+(function(){
+  document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
+    if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
+      var sw=document.createElement('span');
+      sw.className='toggle-switch';
+      sw.setAttribute('aria-hidden','true');
+      var dot=document.createElement('span');
+      dot.className='toggle-dot';
+      sw.appendChild(dot);
+      input.insertAdjacentElement('afterend', sw);
+    }
+  });
+})();
+</script>
 </body>
 </html>

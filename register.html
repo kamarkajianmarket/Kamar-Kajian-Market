@@ -97,5 +97,21 @@
     <p><strong>Disclaimer:</strong> Seluruh materi Kamar Kajian Market bersifat edukasi, diskusi, dan bahan kajian. Trading memiliki risiko. Tidak ada jaminan profit, sinyal pasti, hasil tetap, atau instruksi transaksi wajib. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab masing-masing trader.</p>
     <small>© Kamar Kajian Market</small>
   </footer>
+
+<script>
+(function(){
+  document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
+    if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
+      var sw=document.createElement('span');
+      sw.className='toggle-switch';
+      sw.setAttribute('aria-hidden','true');
+      var dot=document.createElement('span');
+      dot.className='toggle-dot';
+      sw.appendChild(dot);
+      input.insertAdjacentElement('afterend', sw);
+    }
+  });
+})();
+</script>
 </body>
 </html>

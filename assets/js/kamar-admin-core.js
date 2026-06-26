@@ -61,6 +61,60 @@
     if(Number.isNaN(n)) return esc(v);
     return n.toFixed(2);
   }
+  function parseAdminNumber(v){
+    if(v===null || v===undefined || String(v).trim()==='') return null;
+    const n=Number(String(v).replace(',', '.'));
+    if(Number.isNaN(n)) throw new Error('Format angka tidak valid: '+v);
+    return n;
+  }
+  function studyProgressText(x){
+    const updates=zoneProgressUpdates(x);
+    return updates.length ? updates.join(', ') : 'Belum ada update perkembangan';
+  }
+  async function safeUpdateSignal(id, payload){
+    const {error}=await client().from('signals').update({...payload, updated_at:new Date().toISOString()}).eq('id', id);
+    if(error) throw error;
+  }
+  async function setStudyZoneStatus(id, status){
+    const now=new Date().toISOString();
+    const upper=String(status||'').toUpperCase();
+    if(upper==='FRESH'){
+      const payload={status:'FRESH', price_entered_area_at:null, first_reaction_at:null, invalidated_at:null, finished_at:null, tp1_hit_at:null, tp2_hit_at:null, tp3_hit_at:null, tp_hit_level:0, farthest_tp_level:0, result_point:null};
+      try{ await safeUpdateSignal(id,payload); }
+      catch(e){
+        if(String(e.message||'').toLowerCase().includes('enum') || String(e.message||'').toLowerCase().includes('invalid input')){
+          await safeUpdateSignal(id,{...payload,status:'ACTIVE'});
+        } else throw e;
+      }
+      return;
+    }
+    if(upper==='ACTIVE'){
+      await safeUpdateSignal(id,{status:'ACTIVE', price_entered_area_at:now, first_reaction_at:now, invalidated_at:null, finished_at:null});
+      return;
+    }
+    if(upper==='INVALID'){
+      await safeUpdateSignal(id,{status:'INVALID', invalidated_at:now, finished_at:now, invalidation_reason:'Zona diubah menjadi Invalid dari Admin Study Control.', finish_reason:'Zona invalid berdasarkan update admin.'});
+      return;
+    }
+    throw new Error('Status zona tidak valid.');
+  }
+  async function setStudyProgress(id, progress){
+    const now=new Date().toISOString();
+    const key=String(progress||'');
+    if(key==='target_kajian'){
+      await safeUpdateSignal(id,{tp_hit_level:1, farthest_tp_level:1, tp1_hit_at:now});
+      return;
+    }
+    if(key==='target_lanjutan'){
+      await safeUpdateSignal(id,{tp_hit_level:2, farthest_tp_level:2, tp2_hit_at:now});
+      return;
+    }
+    if(key==='invalidasi'){
+      await safeUpdateSignal(id,{status:'INVALID', invalidated_at:now, finished_at:now, invalidation_reason:'HIT Invalidasi dari Admin Study Control.', finish_reason:'Zona selesai karena invalidasi.'});
+      return;
+    }
+    throw new Error('Update perkembangan tidak valid.');
+  }
 
   function activeFacilities(a){ if(!a) return '-'; return FACILITIES.filter(([k])=>a[k]).map(([,l])=>l).join(', ')||'-'; }
   function statusBox(msg,type='info'){ return `<div class="${type==='error'?'expired-note':'page-note'}"><strong>${type==='error'?'Perlu Dicek':'Status'}</strong><br/>${esc(msg)}</div>`; }
@@ -242,7 +296,10 @@
         const {data,error}=await client().from(table).select('*').order('created_at',{ascending:false}).limit(50);
         if(error) throw error;
         if(kind==='study'){
-          box.innerHTML=`<div class="admin-list">${(data||[]).map(x=>`<article class="admin-list-row study-admin-row">
+          window.__kamarStudyRows = data || [];
+          box.innerHTML=`<div class="admin-study-action-panel">
+            <div class="page-note"><strong>Kontrol Admin</strong><br/>Klik Detail untuk update status zona, perkembangan zona, harga berjalan, dan publish data.</div>
+          </div><div class="admin-list study-list-only">${(data||[]).map(x=>`<article class="admin-list-row study-admin-row" data-study-row="${esc(x.id)}">
             <div class="admin-list-main">
               <h3>${esc(x.setup_title||x.id_zona||'-')}</h3>
               <p>${esc(x.id_zona||'-')} · ${esc(x.pair||'-')} · ${esc(x.timeframe||'-')} · ${esc(x.jenis_zona||'-')} · ${esc(x.skenario||'-')}</p>
@@ -255,8 +312,94 @@
             <div class="admin-list-meta">
               ${studyStatusPill(x)}
               <small>${esc(x.visibility||'-')} · ${fmtDate(x.updated_at||x.created_at)}</small>
+              <button class="btn secondary study-detail-btn" data-study-detail="${esc(x.id)}" type="button">Detail</button>
+            </div>
+            <div class="study-detail-panel hidden" id="studyDetail-${esc(x.id)}">
+              <div class="study-detail-grid">
+                <div class="setting-card"><span>Status Zona</span><strong>${esc(zoneStatusText(x))}</strong></div>
+                <div class="setting-card"><span>Update Perkembangan</span><strong>${esc(studyProgressText(x))}</strong></div>
+                <div class="setting-card"><span>Harga Berjalan</span><strong>${formatStudyPrice(x.current_price)}</strong></div>
+                <div class="setting-card"><span>Point</span><strong>${esc(x.running_point??0)} / Max ${esc(x.max_running_point??0)}</strong></div>
+              </div>
+              <form class="study-admin-form" data-study-form="${esc(x.id)}">
+                <div class="grid-3">
+                  <label class="field">Status Zona
+                    <select name="zone_status">
+                      <option value="FRESH" ${zoneStatusText(x)==='Fresh'?'selected':''}>Fresh</option>
+                      <option value="ACTIVE" ${zoneStatusText(x)==='Active'?'selected':''}>Active</option>
+                      <option value="INVALID" ${zoneStatusText(x)==='Invalid'?'selected':''}>Invalid</option>
+                    </select>
+                  </label>
+                  <label class="field">Update Perkembangan
+                    <select name="progress_update">
+                      <option value="">Pilih Update</option>
+                      <option value="target_kajian">HIT Target Kajian</option>
+                      <option value="target_lanjutan">HIT Target Lanjutan</option>
+                      <option value="invalidasi">HIT Invalidasi</option>
+                    </select>
+                  </label>
+                  <label class="field">Harga Berjalan
+                    <input name="current_price" inputmode="decimal" placeholder="4015.00" value="${x.current_price!==null&&x.current_price!==undefined?formatStudyPrice(x.current_price):''}">
+                  </label>
+                  <label class="field">Running Point
+                    <input name="running_point" inputmode="numeric" value="${esc(x.running_point??0)}">
+                  </label>
+                  <label class="field">Max Running Point
+                    <input name="max_running_point" inputmode="numeric" value="${esc(x.max_running_point??0)}">
+                  </label>
+                  <label class="field">Visibility
+                    <select name="visibility">
+                      <option value="member" ${String(x.visibility||'')==='member'?'selected':''}>Member</option>
+                      <option value="public" ${String(x.visibility||'')==='public'?'selected':''}>Public</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="toggle-row compact-toggle"><div><span>Data Aktif</span><small>OFF = tidak dipakai sistem</small></div><input type="checkbox" name="is_active" ${x.is_active?'checked':''}></div>
+                <div class="toggle-row compact-toggle"><div><span>Published</span><small>OFF = tidak tampil di website/member</small></div><input type="checkbox" name="is_published" ${x.is_published?'checked':''}></div>
+                <label class="field kamar-wide">Catatan Admin
+                  <textarea name="admin_notes" placeholder="Catatan perkembangan zona">${esc(x.admin_notes||'')}</textarea>
+                </label>
+                <div class="button-row">
+                  <button class="btn" type="submit">Simpan Update</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_kajian" data-study-id="${esc(x.id)}">HIT Target Kajian</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_lanjutan" data-study-id="${esc(x.id)}">HIT Target Lanjutan</button>
+                  <button class="btn danger" type="button" data-study-progress="invalidasi" data-study-id="${esc(x.id)}">HIT Invalidasi</button>
+                </div>
+              </form>
             </div>
           </article>`).join('')||'<div class="kamar-empty">Belum ada data Kamar Study.</div>'}</div>`;
+          box.querySelectorAll('[data-study-detail]').forEach(btn=>btn.addEventListener('click',()=>{
+            const panel=document.getElementById('studyDetail-'+btn.dataset.studyDetail);
+            if(panel) panel.classList.toggle('hidden');
+          }));
+          box.querySelectorAll('[data-study-form]').forEach(form=>form.addEventListener('submit',async e=>{
+            e.preventDefault();
+            const id=form.dataset.studyForm;
+            try{
+              await setStudyZoneStatus(id, form.querySelector('[name="zone_status"]').value);
+              const cp=form.querySelector('[name="current_price"]').value;
+              const rp=form.querySelector('[name="running_point"]').value;
+              const mp=form.querySelector('[name="max_running_point"]').value;
+              const payload={
+                current_price:parseAdminNumber(cp),
+                running_point:parseAdminNumber(rp) ?? 0,
+                max_running_point:parseAdminNumber(mp) ?? 0,
+                visibility:form.querySelector('[name="visibility"]').value,
+                is_active:form.querySelector('[name="is_active"]').checked,
+                is_published:form.querySelector('[name="is_published"]').checked,
+                admin_notes:form.querySelector('[name="admin_notes"]').value || null
+              };
+              await safeUpdateSignal(id,payload);
+              const progress=form.querySelector('[name="progress_update"]').value;
+              if(progress) await setStudyProgress(id, progress);
+              toast('Update Kamar Study disimpan.');
+              load();
+            }catch(err){ toast('Gagal: '+err.message); }
+          }));
+          box.querySelectorAll('[data-study-progress]').forEach(btn=>btn.addEventListener('click',async()=>{
+            try{ await setStudyProgress(btn.dataset.studyId, btn.dataset.studyProgress); toast('Update perkembangan disimpan.'); load(); }
+            catch(err){ toast('Gagal: '+err.message); }
+          }));
           return;
         }
         box.innerHTML=`<table class="kamar-table"><thead><tr><th>Judul/Key</th><th>Status</th><th>Area/Akses</th><th>Update</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td><strong>${esc(x.title||x.setting_key||x.id_zona||x.id||'-')}</strong><div class="kamar-muted">${esc(x.description||x.body||x.category||x.pair||'')}</div></td><td>${pill(contentStatusValue(x))}</td><td>${esc(x.display_area||x.access_required||x.timeframe||'-')}</td><td>${fmtDate(x.updated_at||x.created_at)}</td></tr>`).join('')||'<tr><td colspan="4"><div class="kamar-empty">Belum ada data.</div></td></tr>'}</tbody></table>`;

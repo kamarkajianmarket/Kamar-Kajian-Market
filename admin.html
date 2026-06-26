@@ -4,12 +4,17 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Dashboard Admin Kamar — Kamar Kajian Market</title>
-<meta content="Dashboard Admin Kamar Kajian Market untuk mengelola member, aktivasi akses, renewal, Kamar Study, dan kontrol tampilan website." name="description"/>
+<meta content="Prototype Dashboard Admin Kamar Kajian Market untuk mengelola member, aktivasi akses, renewal, maintenance, banner, link, video, dan kontrol fasilitas." name="description"/>
 <meta content="#070707" name="theme-color"/>
 <link href="assets/favicon.png" rel="icon"/>
 <link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="manifest.webmanifest" rel="manifest"/>
 <link href="style.css" rel="stylesheet"/>
+<style>
+  .admin-v2 .member-content{gap:26px}.admin-v2 button,.admin-v2 input,.admin-v2 select,.admin-v2 textarea{font:inherit}.admin-v2 .clickable-card{cursor:pointer;text-align:left;width:100%;transition:.2s ease;}.admin-v2 .clickable-card:hover{transform:translateY(-3px);border-color:rgba(238,206,122,.45)}.admin-v2 .admin-sidebar a,.admin-v2 .admin-sidebar button{display:block;width:100%;text-align:left;background:transparent;border:0;color:inherit;text-decoration:none}.admin-v2 .admin-sidebar .nav-active{cursor:pointer}.admin-v2 .admin-sidebar .nav-active:hover{color:#f1d98a}.admin-v2 .nav-disabled{opacity:.38;cursor:not-allowed}.admin-section{scroll-margin-top:110px}.admin-summary-grid button{border:1px solid rgba(238,206,122,.18);background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.01));color:inherit;border-radius:26px;padding:24px}.admin-summary-grid button span{display:block;text-transform:uppercase;letter-spacing:.18em;font-size:13px;color:#d8cda9}.admin-summary-grid button strong{display:block;font-size:42px;margin:8px 0}.admin-summary-grid button small{color:#a9a394}.admin-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.admin-form-grid label,.admin-full-field{display:flex;flex-direction:column;gap:8px;color:#d8d0bd;font-weight:800}.admin-form-grid input,.admin-form-grid select,.admin-full-field textarea,.admin-full-field input,.admin-link-input{width:100%;border:1px solid rgba(238,206,122,.18);background:rgba(0,0,0,.32);color:#f5f0e6;border-radius:18px;padding:14px 16px;outline:none}.admin-full-field textarea{min-height:100px;resize:vertical}.admin-save-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.admin-button{border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:13px 22px;cursor:pointer}.admin-button.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid rgba(238,206,122,.18)}.admin-button.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.25)}.admin-member-card{cursor:pointer}.admin-member-card.selected{border-color:rgba(158,255,202,.45);box-shadow:0 0 0 1px rgba(158,255,202,.12) inset}.admin-member-card[hidden]{display:none}.admin-edit-bar{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}.admin-detail-panel .profile-grid strong select,.admin-detail-panel .profile-grid strong input{font-size:16px;width:100%}.admin-note-box textarea{margin-top:12px;width:100%;border:1px solid rgba(238,206,122,.16);background:rgba(0,0,0,.28);color:#f5f0e6;border-radius:18px;padding:14px;min-height:88px}.admin-control-columns.three{grid-template-columns:repeat(3,minmax(0,1fr))}.maintenance-card,.banner-preview,.video-preview-card{border:1px solid rgba(238,206,122,.16);background:rgba(255,255,255,.025);border-radius:26px;padding:22px}.maintenance-card h4,.banner-preview h4,.video-preview-card h4{margin:0 0 12px;color:#fff3d8}.maintenance-card p,.banner-preview p,.video-preview-card p{color:#aaa393;margin:0}.banner-preview{margin-top:18px}.video-card-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}.video-preview-card a{color:#f3d985;font-weight:900;text-decoration:none}.toast{position:fixed;right:22px;bottom:22px;z-index:50;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.95);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}.setting-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.setting-row{border:1px solid rgba(238,206,122,.16);border-radius:24px;padding:20px;background:rgba(255,255,255,.025)}.setting-row span{display:block;color:#d9cfae;font-weight:900;text-transform:uppercase;letter-spacing:.14em;font-size:12px;margin-bottom:8px}.setting-row input{width:100%;border:0;background:transparent;color:#fff;font-size:18px;outline:none}.empty-result{display:none;border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:22px;color:#a9a394}.expired-warning{border-color:rgba(255,96,96,.3)!important;background:rgba(255,96,96,.07)!important}.maintenance-message{margin-top:12px;color:#9effca!important}.admin-mini-note{font-size:13px;color:#a9a394;margin-top:10px}.admin-table-like{display:grid;gap:12px}.admin-table-row{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center;border:1px solid rgba(238,206,122,.14);background:rgba(255,255,255,.025);border-radius:20px;padding:16px}.admin-table-row strong{color:#fff}.admin-table-row span{color:#aaa393}.admin-table-row .admin-button{padding:10px 16px}.status-message-box{margin-top:18px;border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:24px;padding:18px;color:#c9ffe1}.admin-submenu-status{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:6px 12px;color:#d8cda9;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.12em}.admin-submenu-status.on{color:#9effca;border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)}.admin-submenu-status.off{color:#aaa393}.admin-submenu-status.maint{color:#ffd582;background:rgba(255,198,86,.08)}
+  @media(max-width:980px){.admin-form-grid,.setting-grid,.admin-control-columns.three,.video-card-list{grid-template-columns:1fr}.admin-table-row{grid-template-columns:1fr}.admin-summary-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:640px){.admin-summary-grid{grid-template-columns:1fr}.admin-save-row .admin-button{width:100%}}
+</style>
 </head>
 <body>
   <div class="page-glow page-glow-1"></div>
@@ -22,8 +27,8 @@
     <nav aria-label="Navigasi admin" class="nav-links">
       <a href="#admin-dashboard">Dashboard</a>
       <a href="#admin-member">Data Member</a>
-      <a href="#admin-activation">Aktivasi</a>
-      <a href="#admin-control">Kontrol</a>
+      <a href="#admin-maintenance">Maintenance</a>
+      <a href="#admin-banners">Banner</a>
       <a href="#admin-settings">Pengaturan</a>
     </nav>
     <div class="header-actions">
@@ -35,15 +40,15 @@
   <div class="quick-mobile-nav" aria-label="Shortcut admin">
     <a href="#admin-dashboard">Dashboard</a>
     <a href="#admin-member">Member</a>
-    <a href="#admin-control">Kontrol</a>
+    <a href="#admin-banners">Banner</a>
   </div>
 
   <main id="top">
-    <section class="member-area section-shell compact-section" id="admin-dashboard">
+    <section class="member-area section-shell compact-section admin-v2" id="admin-dashboard">
       <div class="section-heading centered">
         <span class="eyebrow">Dashboard Admin Kamar</span>
-        <h2>Pusat kontrol member, akses fasilitas, dan tampilan website.</h2>
-        <p>Prototype ini untuk mengunci alur kerja admin. Data masih simulasi sampai Supabase aktif.</p>
+        <h2>Pusat kontrol member, akses fasilitas, tampilan website, dan konten Kamar.</h2>
+        <p>Ini prototype fungsi admin. Semua klik, filter, toggle, dan edit masih simulasi sampai Supabase aktif.</p>
       </div>
 
       <div class="member-app admin-app">
@@ -54,10 +59,15 @@
           <a class="nav-active" href="#admin-activation">Aktivasi Akses</a>
           <a class="nav-active" href="#admin-renewal">Renewal Member</a>
           <a class="nav-active" href="#admin-study">Kamar Study Control</a>
-          <a class="nav-active" href="#admin-control">Kontrol Website</a>
-          <span class="nav-disabled">Konten & Materi</span>
-          <span class="nav-disabled">File Tools</span>
-          <a class="nav-active" href="#admin-settings">Pengaturan</a>
+          <a class="nav-active" href="#admin-maintenance">Maintenance Fasilitas</a>
+          <a class="nav-active" href="#admin-banners">Banner Pengumuman</a>
+          <a class="nav-active" href="#admin-videos">Konten Video</a>
+          <a class="nav-active" href="#admin-materials">Konten & Materi</a>
+          <a class="nav-active" href="#admin-tools">File Tools</a>
+          <a class="nav-active" href="#admin-page-control">Kontrol Halaman Utama</a>
+          <a class="nav-active" href="#admin-dashboard-control">Kontrol Dashboard Member</a>
+          <a class="nav-active" href="#admin-links">Pengaturan Link</a>
+          <a class="nav-active" href="#admin-settings">Pengaturan Umum</a>
           <a class="nav-active" href="member.html">Logout</a>
         </aside>
 
@@ -66,228 +76,104 @@
             <div>
               <span class="mini-label">Admin Dashboard</span>
               <h3>Dashboard Admin Kamar</h3>
-              <p>Kelola data member, validasi pembayaran, aktivasi fasilitas, dan kontrol tampilan dari satu tempat.</p>
+              <p>Kelola data member, validasi pembayaran, aktivasi fasilitas, banner, link, video, dan maintenance dari satu tempat.</p>
             </div>
             <div class="member-badge-row dashboard-actions">
-              <div>
-                <span class="status-pill running">Admin Kamar</span>
-                <a class="member-logout" href="member.html">Logout</a>
-              </div>
-              <div class="access-meta">
-                <strong>Mode: Prototype</strong>
-                <span>Belum tersambung Supabase</span>
-              </div>
+              <div><span class="status-pill running">Admin Kamar</span><a class="member-logout" href="member.html">Logout</a></div>
+              <div class="access-meta"><strong>Mode: Prototype</strong><span>Belum tersambung Supabase</span></div>
             </div>
           </div>
 
           <div class="admin-summary-grid">
-            <article class="admin-stat-card"><span>Total Member</span><strong>128</strong><small>Semua akun Kawan Kamar</small></article>
-            <article class="admin-stat-card warning"><span>Menunggu Konfirmasi</span><strong>7</strong><small>Perlu cek pembayaran</small></article>
-            <article class="admin-stat-card success"><span>Member Aktif</span><strong>94</strong><small>Akses masih berjalan</small></article>
-            <article class="admin-stat-card danger"><span>Hampir Habis</span><strong>12</strong><small>Sisa akses ≤ 7 hari</small></article>
+            <button class="clickable-card" type="button" data-jump="#admin-member" data-filter="semua"><span>Total Member</span><strong>128</strong><small>Klik untuk membuka semua data member</small></button>
+            <button class="clickable-card warning" type="button" data-jump="#admin-activation" data-filter="menunggu"><span>Menunggu Konfirmasi</span><strong>7</strong><small>Klik untuk pekerjaan aktivasi</small></button>
+            <button class="clickable-card success" type="button" data-jump="#admin-member" data-filter="aktif"><span>Member Aktif</span><strong>94</strong><small>Klik untuk filter member aktif</small></button>
+            <button class="clickable-card danger" type="button" data-jump="#admin-renewal" data-filter="hampir-habis"><span>Hampir Habis</span><strong>12</strong><small>Klik untuk renewal</small></button>
           </div>
 
-          <section class="member-page-panel" id="admin-member">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Data Member</span><h3>Card member dibuat ringkas. Klik card untuk melihat detail dan toggle akses.</h3></div>
-              <span class="period-label">Ringkas</span>
-            </div>
+          <section class="member-page-panel admin-section" id="admin-member">
+            <div class="member-panel-head"><div><span class="mini-label">Data Member</span><h3>Card member ringkas. Klik card untuk mengubah detail, status, masa akses, dan fasilitas.</h3></div><span class="period-label">Aktif</span></div>
             <div class="admin-filter-row">
-              <label>Cari Member
-                <input type="search" id="memberSearch" placeholder="Nama / email / ID" aria-label="Cari member"/>
-              </label>
-              <label>Status
-                <select id="memberStatusFilter" aria-label="Filter status member">
-                  <option value="semua">Semua</option>
-                  <option value="aktif">Aktif</option>
-                  <option value="menunggu">Menunggu</option>
-                  <option value="hampir-habis">Hampir Habis</option>
-                  <option value="expired">Expired</option>
-                </select>
-              </label>
+              <label>Cari Member<input type="search" id="memberSearch" placeholder="Nama / email / ID" aria-label="Cari member"/></label>
+              <label>Status<select id="memberStatusFilter" aria-label="Filter status member"><option value="semua">Semua</option><option value="aktif">Aktif</option><option value="menunggu">Menunggu</option><option value="hampir-habis">Hampir Habis</option><option value="expired">Expired</option></select></label>
             </div>
             <div class="admin-member-list" id="adminMemberList">
-              <button class="admin-member-card" type="button" data-name="Ahmad Fauzi" data-id="KM-0001" data-email="ahmad@email.com" data-wa="081234567890" data-telegram="@ahmadtrader" data-status="aktif" data-payment="Terkonfirmasi" data-start="26 Juni 2026" data-end="26 Juli 2026" data-left="30 Hari" data-facility="Kamar Study" data-ref="KAMAR2026" data-note="Akses Kamar Study aktif." data-study="true" data-education="false" data-private="false" data-indicator="false" data-robot="false">
-                <strong>Ahmad Fauzi</strong><span>KM-0001 / ahmad@email.com</span><em>Sisa Akses: 30 Hari</em><i>Aktif</i>
-              </button>
-              <button class="admin-member-card" type="button" data-name="Rina Putri" data-id="KM-0002" data-email="rina@email.com" data-wa="081298765432" data-telegram="@rinamarket" data-status="menunggu" data-payment="Menunggu Konfirmasi" data-start="Belum Aktif" data-end="Belum Aktif" data-left="Belum Aktif" data-facility="Kamar Private" data-ref="-" data-note="Menunggu bukti pembayaran." data-study="false" data-education="false" data-private="false" data-indicator="false" data-robot="false">
-                <strong>Rina Putri</strong><span>KM-0002 / rina@email.com</span><em>Sisa Akses: Belum Aktif</em><i>Menunggu</i>
-              </button>
-              <button class="admin-member-card" type="button" data-name="Bima Pratama" data-id="KM-0003" data-email="bima@email.com" data-wa="081211223344" data-telegram="@bimafx" data-status="hampir-habis" data-payment="Terkonfirmasi" data-start="02 Juni 2026" data-end="02 Juli 2026" data-left="6 Hari" data-facility="Kamar Study, Kamar Indikator" data-ref="KMREF01" data-note="Perlu follow up renewal." data-study="true" data-education="false" data-private="false" data-indicator="true" data-robot="false">
-                <strong>Bima Pratama</strong><span>KM-0003 / bima@email.com</span><em>Sisa Akses: 6 Hari</em><i>Hampir Habis</i>
-              </button>
-              <button class="admin-member-card" type="button" data-name="Salsa Nabila" data-id="KM-0004" data-email="salsa@email.com" data-wa="081255667788" data-telegram="@salsatrade" data-status="expired" data-payment="Expired" data-start="18 Mei 2026" data-end="18 Juni 2026" data-left="0 Hari" data-facility="Kamar Study" data-ref="-" data-note="Akses perlu diperpanjang." data-study="false" data-education="false" data-private="false" data-indicator="false" data-robot="false">
-                <strong>Salsa Nabila</strong><span>KM-0004 / salsa@email.com</span><em>Sisa Akses: 0 Hari</em><i>Expired</i>
-              </button>
+              <button class="admin-member-card" type="button" data-name="Ahmad Fauzi" data-id="KM-0001" data-email="ahmad@email.com" data-wa="081234567890" data-telegram="@ahmadtrader" data-status="aktif" data-payment="Terkonfirmasi" data-start="2026-06-26" data-end="2026-07-26" data-left="30 Hari" data-facility="Kamar Study" data-ref="KAMAR2026" data-note="Akses Kamar Study aktif." data-study="true" data-education="false" data-private="false" data-indicator="false" data-robot="false"><strong>Ahmad Fauzi</strong><span>KM-0001 / ahmad@email.com</span><em>Sisa Akses: 30 Hari</em><i>Aktif</i></button>
+              <button class="admin-member-card" type="button" data-name="Rina Putri" data-id="KM-0002" data-email="rina@email.com" data-wa="081298765432" data-telegram="@rinamarket" data-status="menunggu" data-payment="Menunggu Konfirmasi" data-start="Belum Aktif" data-end="Belum Aktif" data-left="Belum Aktif" data-facility="Kamar Private" data-ref="-" data-note="Menunggu bukti pembayaran." data-study="false" data-education="false" data-private="false" data-indicator="false" data-robot="false"><strong>Rina Putri</strong><span>KM-0002 / rina@email.com</span><em>Sisa Akses: Belum Aktif</em><i>Menunggu</i></button>
+              <button class="admin-member-card" type="button" data-name="Bima Pratama" data-id="KM-0003" data-email="bima@email.com" data-wa="081211223344" data-telegram="@bimafx" data-status="hampir-habis" data-payment="Terkonfirmasi" data-start="2026-06-02" data-end="2026-07-02" data-left="6 Hari" data-facility="Kamar Study, Kamar Indikator" data-ref="KMREF01" data-note="Perlu follow up renewal." data-study="true" data-education="false" data-private="false" data-indicator="true" data-robot="false"><strong>Bima Pratama</strong><span>KM-0003 / bima@email.com</span><em>Sisa Akses: 6 Hari</em><i>Hampir Habis</i></button>
+              <button class="admin-member-card" type="button" data-name="Salsa Nabila" data-id="KM-0004" data-email="salsa@email.com" data-wa="081255667788" data-telegram="@salsatrade" data-status="expired" data-payment="Expired" data-start="2026-05-18" data-end="2026-06-18" data-left="0 Hari" data-facility="Kamar Study" data-ref="-" data-note="Akses perlu diperpanjang. Sistem akan menolak akses dashboard member setelah expired." data-study="false" data-education="false" data-private="false" data-indicator="false" data-robot="false"><strong>Salsa Nabila</strong><span>KM-0004 / salsa@email.com</span><em>Sisa Akses: 0 Hari</em><i>Expired</i></button>
             </div>
+            <div class="empty-result" id="emptyMemberResult">Belum ada member yang sesuai dengan pencarian/filter ini.</div>
           </section>
 
-          <section class="member-page-panel admin-detail-panel" id="adminMemberDetail">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Detail Member</span><h3 id="detailName">Pilih salah satu card member.</h3></div>
-              <span class="period-label" id="detailStatus">Belum Dipilih</span>
-            </div>
+          <section class="member-page-panel admin-detail-panel admin-section" id="adminMemberDetail">
+            <div class="member-panel-head"><div><span class="mini-label">Detail Member</span><h3 id="detailName">Pilih salah satu card member.</h3></div><span class="period-label" id="detailStatus">Belum Dipilih</span></div>
             <div class="profile-grid admin-profile-grid">
-              <div><span>ID Member</span><strong id="detailId">-</strong></div>
-              <div><span>Email</span><strong id="detailEmail">-</strong></div>
-              <div><span>WhatsApp</span><strong id="detailWa">-</strong></div>
-              <div><span>Telegram</span><strong id="detailTelegram">-</strong></div>
-              <div><span>Status Pembayaran</span><strong id="detailPayment">-</strong></div>
-              <div><span>Fasilitas Dipilih</span><strong id="detailFacility">-</strong></div>
-              <div><span>Tanggal Mulai</span><strong id="detailStart">-</strong></div>
-              <div><span>Tanggal Berakhir</span><strong id="detailEnd">-</strong></div>
-              <div><span>Sisa Akses</span><strong id="detailLeft">-</strong></div>
-              <div><span>Kode Referral</span><strong id="detailRef">-</strong></div>
+              <div><span>ID Member</span><strong id="detailId">-</strong></div><div><span>Email</span><strong id="detailEmail">-</strong></div><div><span>WhatsApp</span><strong id="detailWa">-</strong></div><div><span>Telegram</span><strong id="detailTelegram">-</strong></div>
+              <div><span>Status Pembayaran</span><strong><select id="editPayment"><option>Terkonfirmasi</option><option>Menunggu Konfirmasi</option><option>Ditolak</option><option>Expired</option></select></strong></div>
+              <div><span>Status Akun</span><strong><select id="editStatus"><option value="aktif">Aktif</option><option value="menunggu">Menunggu</option><option value="hampir-habis">Hampir Habis</option><option value="expired">Expired</option></select></strong></div>
+              <div><span>Tanggal Mulai</span><strong><input id="editStart" type="text"/></strong></div><div><span>Tanggal Berakhir</span><strong><input id="editEnd" type="text"/></strong></div><div><span>Sisa Akses</span><strong id="detailLeft">-</strong></div><div><span>Kode Referral</span><strong><input id="editRef" type="text"/></strong></div>
             </div>
-            <div class="admin-toggle-panel">
-              <div class="admin-toggle-head">
-                <span class="mini-label">Hak Akses Fasilitas</span>
-                <p>Toggle ini nanti menjadi ON/OFF akses fasilitas untuk masing-masing member.</p>
-              </div>
-              <div class="admin-toggle-grid">
-                <label class="toggle-row"><span>Kamar Study</span><input type="checkbox" id="toggleStudy"/><i></i></label>
-                <label class="toggle-row"><span>Materi Edukasi</span><input type="checkbox" id="toggleEducation"/><i></i></label>
-                <label class="toggle-row"><span>Kamar Private</span><input type="checkbox" id="togglePrivate"/><i></i></label>
-                <label class="toggle-row"><span>Kamar Indikator</span><input type="checkbox" id="toggleIndicator"/><i></i></label>
-                <label class="toggle-row"><span>Kamar Robot</span><input type="checkbox" id="toggleRobot"/><i></i></label>
-              </div>
+            <div class="status-message-box" id="accessWarning">Akses member aktif selama masa langganan belum berakhir.</div>
+            <div class="admin-toggle-panel"><div class="admin-toggle-head"><span class="mini-label">Hak Akses Fasilitas</span><p>ON/OFF akses fasilitas untuk member terpilih. Jika masa akses expired, login dashboard member akan ditolak sampai renewal.</p></div>
+              <div class="admin-toggle-grid"><label class="toggle-row"><span>Kamar Study</span><input type="checkbox" id="toggleStudy"/><i></i></label><label class="toggle-row"><span>Materi Edukasi</span><input type="checkbox" id="toggleEducation"/><i></i></label><label class="toggle-row"><span>Kamar Private</span><input type="checkbox" id="togglePrivate"/><i></i></label><label class="toggle-row"><span>Kamar Indikator</span><input type="checkbox" id="toggleIndicator"/><i></i></label><label class="toggle-row"><span>Kamar Robot</span><input type="checkbox" id="toggleRobot"/><i></i></label></div>
             </div>
-            <div class="admin-note-box"><span>Catatan Admin</span><p id="detailNote">Klik card member untuk melihat catatan.</p></div>
+            <div class="admin-note-box"><span>Catatan Internal Admin</span><textarea id="detailNote" placeholder="Tulis catatan manual admin untuk member ini..."></textarea></div>
+            <div class="admin-save-row"><button class="admin-button" type="button" id="saveMember">Simpan Perubahan</button><button class="admin-button secondary" type="button" id="renew30">Perpanjang 30 Hari</button><button class="admin-button secondary" type="button" id="renew90">Perpanjang 90 Hari</button><button class="admin-button danger" type="button" id="disableAccess">Nonaktifkan Akses</button></div>
           </section>
 
-          <section class="member-page-panel" id="admin-activation">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Aktivasi Akses</span><h3>Fokus untuk validasi pembayaran dan aktivasi fasilitas.</h3></div>
-              <span class="period-label">Harian</span>
-            </div>
-            <div class="admin-action-grid">
-              <article><strong>7 Member</strong><span>Menunggu konfirmasi pembayaran</span><button type="button">Lihat daftar</button></article>
-              <article><strong>5 Member</strong><span>Perlu tanggal mulai & berakhir akses</span><button type="button">Atur akses</button></article>
-              <article><strong>3 Member</strong><span>Fasilitas belum dipilih / belum sinkron</span><button type="button">Sinkronkan</button></article>
-            </div>
-          </section>
+          <section class="member-page-panel admin-section" id="admin-activation"><div class="member-panel-head"><div><span class="mini-label">Aktivasi Akses</span><h3>Validasi pembayaran dan aktifkan fasilitas yang dibeli.</h3></div><span class="period-label">Harian</span></div><div class="admin-table-like"><div class="admin-table-row"><strong>Rina Putri</strong><span>Menunggu pembayaran</span><span>Kamar Private · 30 Hari</span><button class="admin-button" type="button" data-toast="Pembayaran Rina ditandai terkonfirmasi. Aktifkan fasilitas di Detail Member.">Konfirmasi</button></div><div class="admin-table-row"><strong>Fajar Ramadhan</strong><span>Perlu cek bukti</span><span>Kamar Study · 90 Hari</span><button class="admin-button secondary" type="button" data-toast="Buka detail Fajar untuk verifikasi manual.">Lihat</button></div></div></section>
 
-          <section class="member-page-panel" id="admin-renewal">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Renewal Member</span><h3>Pantau akses yang hampir habis agar follow up lebih mudah.</h3></div>
-              <span class="period-label">Reminder</span>
-            </div>
-            <div class="history-list admin-renewal-list">
-              <div><span>Bima Pratama · KM-0003 · sisa 6 hari</span><strong>Segera Renewal</strong></div>
-              <div><span>Salsa Nabila · KM-0004 · expired</span><strong class="negative">Expired</strong></div>
-              <div><span>Rendi Saputra · KM-0005 · sisa 3 hari</span><strong>Follow Up</strong></div>
-            </div>
-          </section>
+          <section class="member-page-panel admin-section" id="admin-renewal"><div class="member-panel-head"><div><span class="mini-label">Renewal Member</span><h3>Pantau member hampir habis/expired dan lakukan perpanjangan cepat.</h3></div><span class="period-label">Reminder</span></div><div class="admin-table-like"><div class="admin-table-row"><strong>Bima Pratama</strong><span>Sisa 6 hari</span><span>Kamar Study + Indikator</span><button class="admin-button secondary" type="button" data-toast="Reminder renewal untuk Bima disiapkan.">Reminder</button></div><div class="admin-table-row"><strong>Salsa Nabila</strong><span>Expired</span><span>Akses dashboard ditolak</span><button class="admin-button" type="button" data-toast="Renewal Salsa diarahkan ke Detail Member.">Perpanjang</button></div></div></section>
 
-          <section class="member-page-panel" id="admin-study">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Kamar Study Control</span><h3>Kontrol ringkas untuk publik/member dan target evaluasi harian.</h3></div>
-              <span class="period-label">Dummy</span>
-            </div>
-            <div class="member-daily-grid">
-              <div><span>Target Publik</span><strong class="positive">+5 Point</strong></div>
-              <div><span>Target Member</span><strong class="positive">+5 Point</strong></div>
-              <div><span>Signal Publik</span><strong>2 Signal</strong></div>
-              <div><span>Signal Member</span><strong>4 Signal</strong></div>
-            </div>
-            <div class="admin-toggle-grid compact-toggles">
-              <label class="toggle-row"><span>Tampilkan Kamar Study Publik</span><input type="checkbox" checked/><i></i></label>
-              <label class="toggle-row"><span>Tampilkan Rekap Hasil</span><input type="checkbox" checked/><i></i></label>
-              <label class="toggle-row"><span>Mode Maintenance Kamar Study</span><input type="checkbox"/><i></i></label>
-            </div>
-          </section>
+          <section class="member-page-panel admin-section" id="admin-study"><div class="member-panel-head"><div><span class="mini-label">Kamar Study Control</span><h3>Kontrol publik/member, target evaluasi harian, dan mode tampil rekap.</h3></div><span class="period-label">Dummy</span></div><div class="member-daily-grid"><div><span>Target Publik</span><strong class="positive">+5 Point</strong></div><div><span>Target Member</span><strong class="positive">+5 Point</strong></div><div><span>Signal Publik</span><strong>2 Signal</strong></div><div><span>Signal Member</span><strong>4 Signal</strong></div></div><div class="admin-toggle-grid compact-toggles"><label class="toggle-row"><span>Tampilkan Kamar Study Publik</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Rekap Hasil</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Mode Maintenance Kamar Study</span><input type="checkbox" class="maintenance-toggle" data-target="Kamar Study"/><i></i></label></div></section>
 
-          <section class="member-page-panel" id="admin-control">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Kontrol Website & Dashboard Member</span><h3>Atur apa yang tampil di halaman utama dan dashboard member.</h3></div>
-              <span class="period-label">Global</span>
-            </div>
-            <div class="admin-control-columns">
-              <div>
-                <h4>Halaman Utama</h4>
-                <label class="toggle-row"><span>Kamar Study Publik</span><input type="checkbox" checked/><i></i></label>
-                <label class="toggle-row"><span>Rekap Hasil</span><input type="checkbox" checked/><i></i></label>
-                <label class="toggle-row"><span>Banner Pengumuman</span><input type="checkbox"/><i></i></label>
-                <label class="toggle-row"><span>CTA Daftar/Login</span><input type="checkbox" checked/><i></i></label>
-              </div>
-              <div>
-                <h4>Dashboard Member</h4>
-                <label class="toggle-row"><span>Kamar Study</span><input type="checkbox" checked/><i></i></label>
-                <label class="toggle-row"><span>Materi Edukasi</span><input type="checkbox"/><i></i></label>
-                <label class="toggle-row"><span>Kamar Private</span><input type="checkbox"/><i></i></label>
-                <label class="toggle-row"><span>Kamar Indikator</span><input type="checkbox"/><i></i></label>
-                <label class="toggle-row"><span>Kamar Robot</span><input type="checkbox"/><i></i></label>
-              </div>
-            </div>
-          </section>
+          <section class="member-page-panel admin-section" id="admin-maintenance"><div class="member-panel-head"><div><span class="mini-label">Maintenance Fasilitas</span><h3>Aktifkan mode maintenance per fasilitas. Member akan melihat pesan khusus saat membuka fasilitas.</h3></div><span class="period-label">Global</span></div><div class="admin-control-columns three"><div class="maintenance-card"><h4>Member Area</h4><label class="toggle-row"><span>Dashboard Member</span><input type="checkbox" class="maintenance-toggle" data-target="Dashboard Member"/><i></i></label><label class="toggle-row"><span>Kamar Study</span><input type="checkbox" class="maintenance-toggle" data-target="Kamar Study"/><i></i></label><p class="maintenance-message">Pesan: Fasilitas sedang dalam proses maintenance. Tim Kamar sedang melakukan pembaruan sistem agar akses dan pengalaman belajar tetap stabil.</p></div><div class="maintenance-card"><h4>Fasilitas Lanjutan</h4><label class="toggle-row"><span>Materi Edukasi</span><input type="checkbox" class="maintenance-toggle" data-target="Materi Edukasi"/><i></i></label><label class="toggle-row"><span>Kamar Private</span><input type="checkbox" class="maintenance-toggle" data-target="Kamar Private"/><i></i></label><label class="toggle-row"><span>Kamar Indikator</span><input type="checkbox" class="maintenance-toggle" data-target="Kamar Indikator"/><i></i></label><label class="toggle-row"><span>Kamar Robot</span><input type="checkbox" class="maintenance-toggle" data-target="Kamar Robot"/><i></i></label></div><div class="maintenance-card"><h4>Halaman Publik</h4><label class="toggle-row"><span>Halaman Utama</span><input type="checkbox" class="maintenance-toggle" data-target="Halaman Utama"/><i></i></label><label class="toggle-row"><span>Kamar Study Publik</span><input type="checkbox" class="maintenance-toggle" data-target="Kamar Study Publik"/><i></i></label><p>Jika ON, bagian tersebut menampilkan info maintenance, bukan data aktif.</p></div></div></section>
 
-          <section class="member-page-panel" id="admin-settings">
-            <div class="member-panel-head">
-              <div><span class="mini-label">Pengaturan</span><h3>Pengaturan dasar brand dan sistem.</h3></div>
-              <span class="period-label">Simple</span>
-            </div>
-            <div class="profile-grid">
-              <div><span>Target Evaluasi Default</span><strong>+5 Point</strong></div>
-              <div><span>Durasi Default</span><strong>30 Hari</strong></div>
-              <div><span>Admin Telegram</span><strong>@kajianmarketkamar</strong></div>
-              <div><span>Footer</span><strong>© Kamar Kajian Market</strong></div>
-            </div>
-          </section>
+          <section class="member-page-panel admin-section" id="admin-banners"><div class="member-panel-head"><div><span class="mini-label">Banner Pengumuman</span><h3>Atur banner website publik dan banner khusus member area.</h3></div><span class="period-label">Manual</span></div><div class="admin-control-columns"><div><h4>Banner Halaman Utama</h4><label class="toggle-row"><span>Tampilkan Banner Publik</span><input type="checkbox" id="publicBannerToggle" checked/><i></i></label><div class="admin-form-grid"><label>Judul<input id="publicBannerTitle" value="Pengumuman Kamar"/></label><label>Link CTA<input id="publicBannerLink" value="https://t.me/kajianmarketkamar"/></label></div><label class="admin-full-field">Isi Pengumuman<textarea id="publicBannerText">Update sistem member sedang dilakukan. Beberapa fasilitas akan diperbarui secara bertahap.</textarea></label><label class="admin-full-field">Link Gambar Banner / Upload URL<input id="publicBannerImage" placeholder="https://..."/></label></div><div><h4>Banner Member Area</h4><label class="toggle-row"><span>Tampilkan Banner Member</span><input type="checkbox" id="memberBannerToggle" checked/><i></i></label><div class="admin-form-grid"><label>Judul<input id="memberBannerTitle" value="Info Kawan Kamar"/></label><label>Link CTA<input id="memberBannerLink" value="https://t.me/kajianmarketkamar"/></label></div><label class="admin-full-field">Isi Pengumuman<textarea id="memberBannerText">Kamar Study sedang dalam pembaruan data. Mohon cek update berikutnya setelah maintenance selesai.</textarea></label><label class="admin-full-field">Link Gambar Banner / Upload URL<input id="memberBannerImage" placeholder="https://..."/></label></div></div><div class="admin-save-row"><button class="admin-button" type="button" id="previewBanner">Preview Banner</button><button class="admin-button secondary" type="button" data-toast="Pengaturan banner disimpan dalam simulasi.">Simpan Banner</button></div><div class="banner-preview" id="bannerPreview"><h4>Preview Banner</h4><p>Pilih tombol preview untuk melihat teks banner yang sedang diatur.</p></div></section>
+
+          <section class="member-page-panel admin-section" id="admin-videos"><div class="member-panel-head"><div><span class="mini-label">Konten Video</span><h3>Kelola link YouTube yang tampil di halaman utama, member area, atau fasilitas tertentu.</h3></div><span class="period-label">YouTube</span></div><div class="admin-form-grid"><label>Judul Video<input id="videoTitle" value="Belajar Market Logic dari Nol"/></label><label>Link YouTube<input id="videoLink" value="https://www.youtube.com/@kamarkajianmarket"/></label><label>Kategori<select id="videoCategory"><option>Edukasi Market Logic</option><option>Analisis Market</option><option>Tutorial Member Area</option><option>Tutorial Kamar Indikator</option><option>Tutorial Kamar Robot</option><option>Rekaman Kamar Private</option></select></label><label>Tampil Di<select id="videoPlacement"><option>Halaman Utama</option><option>Member Area</option><option>Kamar Indikator</option><option>Kamar Robot</option><option>Kamar Private</option></select></label></div><label class="admin-full-field">Deskripsi Singkat<textarea id="videoDesc">Video pilihan Kamar untuk membantu memahami cara membaca market secara logis.</textarea></label><div class="admin-save-row"><button class="admin-button" type="button" id="addVideo">Tambah Card Video</button><button class="admin-button secondary" type="button" data-toast="Status tampil video diubah dalam simulasi.">ON/OFF Tampil</button></div><div class="video-card-list" id="videoList"><article class="video-preview-card"><h4>Video Pilihan Kamar</h4><p>Edukasi Market Logic · Halaman Utama</p><a href="https://www.youtube.com/@kamarkajianmarket" target="_blank" rel="noopener">Buka YouTube</a></article></div></section>
+
+          <section class="member-page-panel admin-section" id="admin-materials"><div class="member-panel-head"><div><span class="mini-label">Konten & Materi</span><h3>Kelola link PDF, video rekaman, dan materi belajar. File besar tetap memakai Drive/YouTube/Supabase Storage.</h3></div><span class="period-label">Roadmap</span></div><div class="admin-form-grid"><label>Judul Materi<input value="PDF Market Logic Dasar"/></label><label>Link Materi<input value="Google Drive / YouTube Unlisted"/></label><label>Akses Untuk<select><option>Kamar Private</option><option>Materi Edukasi</option><option>Semua Kawan Kamar</option></select></label><label>Status<select><option>Draft</option><option>Publish</option></select></label></div><p class="admin-mini-note">Admin mengelola link materi dari sini. File premium tidak disimpan langsung di folder website.</p></section>
+
+          <section class="member-page-panel admin-section" id="admin-tools"><div class="member-panel-head"><div><span class="mini-label">File Tools</span><h3>Kelola link file indikator, robot, versi, dan panduan instalasi.</h3></div><span class="period-label">Roadmap</span></div><div class="admin-form-grid"><label>Nama File<input value="Kamar Indikator v1.0"/></label><label>Link Download<input value="Google Drive / Supabase Storage"/></label><label>Versi<input value="1.0"/></label><label>Akses Untuk<select><option>Kamar Indikator</option><option>Kamar Robot</option><option>Paket Lengkap</option></select></label></div><label class="admin-full-field">Catatan Update<textarea>Tambahkan catatan update versi dan panduan penggunaan.</textarea></label></section>
+
+          <section class="member-page-panel admin-section" id="admin-page-control"><div class="member-panel-head"><div><span class="mini-label">Kontrol Halaman Utama</span><h3>Atur section yang tampil di landing page publik.</h3></div><span class="period-label">Global</span></div><div class="admin-toggle-grid compact-toggles"><label class="toggle-row"><span>Tampilkan Kamar Study Publik</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Rekap Hasil</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Video Pilihan</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Banner Pengumuman</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Fasilitas Kamar Robot</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan CTA Daftar/Login</span><input type="checkbox" checked/><i></i></label></div></section>
+
+          <section class="member-page-panel admin-section" id="admin-dashboard-control"><div class="member-panel-head"><div><span class="mini-label">Kontrol Dashboard Member</span><h3>Atur fasilitas yang terlihat secara global di dashboard Kawan Kamar.</h3></div><span class="period-label">Global</span></div><div class="admin-toggle-grid compact-toggles"><label class="toggle-row"><span>Tampilkan Kamar Study</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Materi Edukasi</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Kamar Private</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Kamar Indikator</span><input type="checkbox" checked/><i></i></label><label class="toggle-row"><span>Tampilkan Kamar Robot</span><input type="checkbox" checked/><i></i></label></div><p class="admin-mini-note">Ini mengatur tampilan global. Hak akses per member tetap diatur dari detail member.</p></section>
+
+          <section class="member-page-panel admin-section" id="admin-links"><div class="member-panel-head"><div><span class="mini-label">Pengaturan Link</span><h3>Ubah link Telegram, YouTube, TikTok, admin, pembayaran, dan lainnya.</h3></div><span class="period-label">Manual</span></div><div class="setting-grid"><div class="setting-row"><span>Telegram Grup</span><input value="https://t.me/kamarkajianmarket"/></div><div class="setting-row"><span>Telegram Admin</span><input value="https://t.me/kajianmarketkamar"/></div><div class="setting-row"><span>YouTube</span><input value="https://www.youtube.com/@kamarkajianmarket"/></div><div class="setting-row"><span>TikTok</span><input value="https://www.tiktok.com/@kamarkajianmarket"/></div><div class="setting-row"><span>Link Konfirmasi Pembayaran</span><input value="https://t.me/kajianmarketkamar"/></div><div class="setting-row"><span>Link Support</span><input value="https://t.me/kajianmarketkamar"/></div></div><div class="admin-save-row"><button class="admin-button" type="button" data-toast="Link sosial disimpan dalam simulasi.">Simpan Link</button></div></section>
+
+          <section class="member-page-panel admin-section" id="admin-settings"><div class="member-panel-head"><div><span class="mini-label">Pengaturan Umum</span><h3>Pengaturan dasar brand, target harian, durasi default, dan disclaimer.</h3></div><span class="period-label">Simple</span></div><div class="setting-grid"><div class="setting-row"><span>Target Evaluasi Default</span><input value="+5 Point"/></div><div class="setting-row"><span>Durasi Default</span><input value="30 Hari"/></div><div class="setting-row"><span>Nama Brand</span><input value="Kamar Kajian Market"/></div><div class="setting-row"><span>Footer</span><input value="© Kamar Kajian Market"/></div></div><label class="admin-full-field">Disclaimer Singkat<textarea>Seluruh materi Kamar Kajian Market bersifat edukasi dan bahan kajian. Trading memiliki risiko dan tidak ada jaminan profit.</textarea></label><div class="admin-save-row"><button class="admin-button" type="button" data-toast="Pengaturan umum disimpan dalam simulasi.">Simpan Pengaturan</button></div></section>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <p><strong>Disclaimer:</strong> Halaman admin ini masih prototype tampilan. Aktivasi asli, data member, pembayaran, dan role admin baru berjalan setelah integrasi Supabase.</p>
-    <small>© Kamar Kajian Market</small>
-  </footer>
-
+  <footer class="site-footer"><p><strong>Disclaimer:</strong> Halaman admin ini masih prototype tampilan. Aktivasi asli, data member, pembayaran, banner, video, dan role admin baru berjalan setelah integrasi Supabase.</p><small>© Kamar Kajian Market</small></footer>
+  <div class="toast" id="toast">Aksi berhasil diproses.</div>
 <script>
 (function(){
-  const cards=[...document.querySelectorAll('.admin-member-card')];
-  const search=document.getElementById('memberSearch');
-  const status=document.getElementById('memberStatusFilter');
-  const detail={
-    name:document.getElementById('detailName'), status:document.getElementById('detailStatus'), id:document.getElementById('detailId'), email:document.getElementById('detailEmail'), wa:document.getElementById('detailWa'), telegram:document.getElementById('detailTelegram'), payment:document.getElementById('detailPayment'), facility:document.getElementById('detailFacility'), start:document.getElementById('detailStart'), end:document.getElementById('detailEnd'), left:document.getElementById('detailLeft'), ref:document.getElementById('detailRef'), note:document.getElementById('detailNote')
-  };
+  const toast=document.getElementById('toast');
+  function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.classList.remove('show'),2600)}
+  document.querySelectorAll('[data-toast]').forEach(el=>el.addEventListener('click',()=>showToast(el.dataset.toast)));
+  document.querySelectorAll('[data-jump]').forEach(btn=>btn.addEventListener('click',()=>{const target=document.querySelector(btn.dataset.jump); if(btn.dataset.filter&&document.getElementById('memberStatusFilter')){document.getElementById('memberStatusFilter').value=btn.dataset.filter; filterCards()} target?.scrollIntoView({behavior:'smooth',block:'start'});}));
+  const cards=[...document.querySelectorAll('.admin-member-card')], search=document.getElementById('memberSearch'), status=document.getElementById('memberStatusFilter'), empty=document.getElementById('emptyMemberResult');
+  const detail={name:document.getElementById('detailName'), status:document.getElementById('detailStatus'), id:document.getElementById('detailId'), email:document.getElementById('detailEmail'), wa:document.getElementById('detailWa'), telegram:document.getElementById('detailTelegram'), left:document.getElementById('detailLeft'), note:document.getElementById('detailNote')};
+  const edit={payment:document.getElementById('editPayment'), status:document.getElementById('editStatus'), start:document.getElementById('editStart'), end:document.getElementById('editEnd'), ref:document.getElementById('editRef')};
   const toggles={study:document.getElementById('toggleStudy'), education:document.getElementById('toggleEducation'), private:document.getElementById('togglePrivate'), indicator:document.getElementById('toggleIndicator'), robot:document.getElementById('toggleRobot')};
-  function normalize(v){return (v||'').toLowerCase();}
-  function filterCards(){
-    const q=normalize(search.value);
-    const st=status.value;
-    cards.forEach(card=>{
-      const text=normalize(card.dataset.name+' '+card.dataset.id+' '+card.dataset.email);
-      const okText=!q || text.includes(q);
-      const okStatus=st==='semua' || card.dataset.status===st;
-      card.hidden=!(okText&&okStatus);
-    });
-  }
-  function fill(card){
-    cards.forEach(c=>c.classList.remove('selected'));
-    card.classList.add('selected');
-    detail.name.textContent=card.dataset.name;
-    detail.status.textContent=card.querySelector('i').textContent;
-    detail.id.textContent=card.dataset.id;
-    detail.email.textContent=card.dataset.email;
-    detail.wa.textContent=card.dataset.wa;
-    detail.telegram.textContent=card.dataset.telegram;
-    detail.payment.textContent=card.dataset.payment;
-    detail.facility.textContent=card.dataset.facility;
-    detail.start.textContent=card.dataset.start;
-    detail.end.textContent=card.dataset.end;
-    detail.left.textContent=card.dataset.left;
-    detail.ref.textContent=card.dataset.ref;
-    detail.note.textContent=card.dataset.note;
-    toggles.study.checked=card.dataset.study==='true';
-    toggles.education.checked=card.dataset.education==='true';
-    toggles.private.checked=card.dataset.private==='true';
-    toggles.indicator.checked=card.dataset.indicator==='true';
-    toggles.robot.checked=card.dataset.robot==='true';
-  }
-  cards.forEach(card=>card.addEventListener('click',()=>fill(card)));
-  [search,status].forEach(el=>el.addEventListener('input',filterCards));
-  if(cards[0]) fill(cards[0]);
+  let selectedCard=null; function norm(v){return (v||'').toLowerCase()}
+  window.filterCards=function(){const q=norm(search.value), st=status.value;let shown=0;cards.forEach(card=>{const text=norm(card.dataset.name+' '+card.dataset.id+' '+card.dataset.email), okText=!q||text.includes(q), okStatus=st==='semua'||card.dataset.status===st;card.hidden=!(okText&&okStatus);if(!card.hidden)shown++;}); empty.style.display=shown?'none':'block'}
+  function setWarning(card){const box=document.getElementById('accessWarning'); if(card.dataset.status==='expired'||card.dataset.left==='0 Hari'){box.classList.add('expired-warning');box.textContent='Masa akses member sudah berakhir. Hak akses dashboard/fasilitas akan ditolak sampai admin melakukan renewal.'}else if(card.dataset.status==='menunggu'){box.classList.remove('expired-warning');box.textContent='Akses belum aktif sampai pembayaran dikonfirmasi dan fasilitas dinyalakan oleh admin.'}else{box.classList.remove('expired-warning');box.textContent='Akses member aktif selama masa langganan belum berakhir.'}}
+  function fill(card){selectedCard=card;cards.forEach(c=>c.classList.remove('selected'));card.classList.add('selected');detail.name.textContent=card.dataset.name;detail.status.textContent=card.querySelector('i').textContent;detail.id.textContent=card.dataset.id;detail.email.textContent=card.dataset.email;detail.wa.textContent=card.dataset.wa;detail.telegram.textContent=card.dataset.telegram;edit.payment.value=card.dataset.payment;edit.status.value=card.dataset.status;edit.start.value=card.dataset.start;edit.end.value=card.dataset.end;detail.left.textContent=card.dataset.left;edit.ref.value=card.dataset.ref;detail.note.value=card.dataset.note;toggles.study.checked=card.dataset.study==='true';toggles.education.checked=card.dataset.education==='true';toggles.private.checked=card.dataset.private==='true';toggles.indicator.checked=card.dataset.indicator==='true';toggles.robot.checked=card.dataset.robot==='true';setWarning(card);document.getElementById('adminMemberDetail').scrollIntoView({behavior:'smooth',block:'start'})}
+  cards.forEach(card=>card.addEventListener('click',()=>fill(card))); [search,status].forEach(el=>el.addEventListener('input',filterCards)); if(cards[0]) fill(cards[0]);
+  document.getElementById('saveMember').addEventListener('click',()=>{if(!selectedCard)return showToast('Pilih member dulu.');selectedCard.dataset.payment=edit.payment.value;selectedCard.dataset.status=edit.status.value;selectedCard.dataset.start=edit.start.value;selectedCard.dataset.end=edit.end.value;selectedCard.dataset.ref=edit.ref.value;selectedCard.dataset.note=detail.note.value;selectedCard.dataset.study=toggles.study.checked;selectedCard.dataset.education=toggles.education.checked;selectedCard.dataset.private=toggles.private.checked;selectedCard.dataset.indicator=toggles.indicator.checked;selectedCard.dataset.robot=toggles.robot.checked;selectedCard.querySelector('i').textContent=edit.status.options[edit.status.selectedIndex].text;showToast('Perubahan member disimpan dalam simulasi.');filterCards()});
+  document.getElementById('renew30').addEventListener('click',()=>{if(!selectedCard)return;selectedCard.dataset.status='aktif';selectedCard.dataset.left='30 Hari';selectedCard.querySelector('em').textContent='Sisa Akses: 30 Hari';selectedCard.querySelector('i').textContent='Aktif';fill(selectedCard);showToast('Akses diperpanjang 30 hari dalam simulasi.')});
+  document.getElementById('renew90').addEventListener('click',()=>{if(!selectedCard)return;selectedCard.dataset.status='aktif';selectedCard.dataset.left='90 Hari';selectedCard.querySelector('em').textContent='Sisa Akses: 90 Hari';selectedCard.querySelector('i').textContent='Aktif';fill(selectedCard);showToast('Akses diperpanjang 90 hari dalam simulasi.')});
+  document.getElementById('disableAccess').addEventListener('click',()=>{if(!selectedCard)return;Object.values(toggles).forEach(t=>t.checked=false);selectedCard.dataset.status='expired';selectedCard.dataset.left='0 Hari';selectedCard.querySelector('em').textContent='Sisa Akses: 0 Hari';selectedCard.querySelector('i').textContent='Expired';fill(selectedCard);showToast('Akses member dinonaktifkan dalam simulasi.')});
+  document.querySelectorAll('.maintenance-toggle').forEach(t=>t.addEventListener('change',()=>showToast(`${t.dataset.target} ${t.checked?'masuk mode maintenance':'keluar dari mode maintenance'}.`)));
+  document.getElementById('previewBanner').addEventListener('click',()=>{const publicOn=document.getElementById('publicBannerToggle').checked, memberOn=document.getElementById('memberBannerToggle').checked;document.getElementById('bannerPreview').innerHTML=`<h4>${publicOn?document.getElementById('publicBannerTitle').value:'Banner publik OFF'}</h4><p>${publicOn?document.getElementById('publicBannerText').value:'Tidak tampil di halaman utama.'}</p><hr style="border-color:rgba(238,206,122,.12);margin:16px 0"><h4>${memberOn?document.getElementById('memberBannerTitle').value:'Banner member OFF'}</h4><p>${memberOn?document.getElementById('memberBannerText').value:'Tidak tampil di member area.'}</p>`;showToast('Preview banner diperbarui.')});
+  document.getElementById('addVideo').addEventListener('click',()=>{const title=document.getElementById('videoTitle').value, link=document.getElementById('videoLink').value, cat=document.getElementById('videoCategory').value, place=document.getElementById('videoPlacement').value, desc=document.getElementById('videoDesc').value;const card=document.createElement('article');card.className='video-preview-card';card.innerHTML=`<h4>${title}</h4><p>${cat} · ${place}</p><p>${desc}</p><a href="${link}" target="_blank" rel="noopener">Buka Video</a>`;document.getElementById('videoList').prepend(card);showToast('Card video ditambahkan dalam simulasi.')});
 })();
 </script>
 </body>

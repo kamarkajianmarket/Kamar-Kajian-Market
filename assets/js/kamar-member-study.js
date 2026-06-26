@@ -92,26 +92,52 @@
     return "Fresh";
   }
 
+  function sourcePayload(item) {
+    const payload = item && (item.source_payload || item.sourcePayload);
+    if (!payload) return {};
+    if (typeof payload === "object") return payload;
+    try { return JSON.parse(payload); } catch (error) { return {}; }
+  }
+
+  function highestKajianLevel(item) {
+    const level = Number(item && (item.tpHitLevel ?? item.tp_hit_level ?? 0));
+    if (level >= 1) return Math.min(3, level);
+    if (item && (item.tp3HitAt || item.tp3_hit_at)) return 3;
+    if (item && (item.tp2HitAt || item.tp2_hit_at)) return 2;
+    if (item && (item.tp1HitAt || item.tp1_hit_at)) return 1;
+    return 0;
+  }
+
+  function progressFromPayload(item) {
+    const payload = sourcePayload(item);
+    const code = String(payload.progress_update || payload.progressCode || "").toLowerCase();
+    const label = String(payload.progress_label || payload.progressLabel || "").trim();
+    if (label) return label;
+
+    let match = code.match(/target_kajian[_-]([123])/);
+    if (match) return "HIT Target Kajian " + match[1];
+
+    match = code.match(/target_lanjutan[_-]([123])/);
+    if (match) return "HIT Target Lanjutan " + match[1];
+
+    if (code === "invalidasi" || code === "hit_invalidasi") return "HIT Invalidasi";
+    return "";
+  }
+
   function progressUpdates(item) {
-    const updates = [];
     const raw = text(item && item.status, "").toUpperCase();
-    const tpHit = Number(item && (item.tpHitLevel ?? item.tp_hit_level ?? 0));
-    const farthest = Number(item && (item.farthestTpLevel ?? item.farthest_tp_level ?? 0));
 
     if (item && (item.invalidatedAt || item.invalidated_at || raw === "INVALID")) {
-      updates.push("HIT Invalidasi");
-      return updates;
+      return ["HIT Invalidasi"];
     }
 
-    if (tpHit >= 1 || farthest >= 1 || item && (item.tp1HitAt || item.tp1_hit_at)) {
-      updates.push("HIT Target Kajian");
-    }
+    const payloadProgress = progressFromPayload(item);
+    if (payloadProgress) return [payloadProgress];
 
-    if (farthest >= 2 || item && (item.tp2HitAt || item.tp2_hit_at || item.tp3HitAt || item.tp3_hit_at)) {
-      updates.push("HIT Target Lanjutan");
-    }
+    const kajianLevel = highestKajianLevel(item);
+    if (kajianLevel >= 1) return ["HIT Target Kajian " + kajianLevel];
 
-    return updates;
+    return [];
   }
 
 

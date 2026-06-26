@@ -39,14 +39,20 @@
     return 'Fresh';
   }
   function zoneProgressUpdates(x){
-    const updates=[];
     const raw=String((x && x.status)||'').toUpperCase();
-    const tp=Number((x && x.tp_hit_level)||0);
-    const far=Number((x && x.farthest_tp_level)||0);
     if(raw==='INVALID' || (x && x.invalidated_at)) return ['HIT Invalidasi'];
-    if(tp>=1 || far>=1 || (x && x.tp1_hit_at)) updates.push('HIT Target Kajian');
-    if(far>=2 || (x && (x.tp2_hit_at || x.tp3_hit_at))) updates.push('HIT Target Lanjutan');
-    return updates;
+
+    const payload=sourcePayload(x);
+    const payloadLabel=String(payload.progress_label || payload.progressLabel || '').trim();
+    if(payloadLabel) return [payloadLabel];
+
+    const codeLabel=progressLabelFromCode(payload.progress_update || payload.progressCode);
+    if(codeLabel) return [codeLabel];
+
+    const kajianLevel=highestKajianLevel(x);
+    if(kajianLevel>=1) return [`HIT Target Kajian ${kajianLevel}`];
+
+    return [];
   }
   function studyStatusPill(x){
     const zoneText = zoneStatusText(x);
@@ -71,6 +77,29 @@
     const n=Number(v);
     if(Number.isNaN(n)) return esc(v);
     return `${n>0?'+':''}${n.toFixed(2)} Point`;
+  }
+  function sourcePayload(x){
+    const payload=x && x.source_payload;
+    if(!payload) return {};
+    if(typeof payload === 'object') return payload;
+    try{return JSON.parse(payload);}catch(e){return {};}
+  }
+  function progressLabelFromCode(code){
+    const key=String(code||'').toLowerCase();
+    let m=key.match(/target_kajian[_-]([123])/);
+    if(m) return `HIT Target Kajian ${m[1]}`;
+    m=key.match(/target_lanjutan[_-]([123])/);
+    if(m) return `HIT Target Lanjutan ${m[1]}`;
+    if(key==='invalidasi' || key==='hit_invalidasi') return 'HIT Invalidasi';
+    return '';
+  }
+  function highestKajianLevel(x){
+    const tp=Number((x && x.tp_hit_level)||0);
+    if(tp>=1) return Math.min(3,tp);
+    if(x && x.tp3_hit_at) return 3;
+    if(x && x.tp2_hit_at) return 2;
+    if(x && x.tp1_hit_at) return 1;
+    return 0;
   }
   function parseAdminNumber(v){
     if(v===null || v===undefined || String(v).trim()==='') return null;
@@ -109,21 +138,44 @@
     }
     throw new Error('Status zona tidak valid.');
   }
+  async function getSignalRow(id){
+    const {data,error}=await client().from('signals').select('source_payload,tp_hit_level,farthest_tp_level').eq('id',id).maybeSingle();
+    if(error) throw error;
+    return data || {};
+  }
   async function setStudyProgress(id, progress){
     const now=new Date().toISOString();
-    const key=String(progress||'');
-    if(key==='target_kajian'){
-      await safeUpdateSignal(id,{tp_hit_level:1, farthest_tp_level:1, tp1_hit_at:now});
-      return;
-    }
-    if(key==='target_lanjutan'){
-      await safeUpdateSignal(id,{tp_hit_level:2, farthest_tp_level:2, tp2_hit_at:now});
-      return;
-    }
+    const key=String(progress||'').toLowerCase();
+
     if(key==='invalidasi'){
-      await safeUpdateSignal(id,{status:'INVALID', invalidated_at:now, finished_at:now, invalidation_reason:'HIT Invalidasi dari Admin Study Control.', finish_reason:'Zona selesai karena invalidasi.'});
+      const row=await getSignalRow(id);
+      const payload={...sourcePayload(row),progress_update:'invalidasi',progress_label:'HIT Invalidasi',progress_updated_at:now};
+      await safeUpdateSignal(id,{status:'INVALID', invalidated_at:now, finished_at:now, invalidation_reason:'HIT Invalidasi dari Admin Study Control.', finish_reason:'Zona selesai karena invalidasi.', source_payload:payload});
       return;
     }
+
+    let match=key.match(/^target_kajian_([123])$/);
+    if(match){
+      const level=Number(match[1]);
+      const row=await getSignalRow(id);
+      const payload={...sourcePayload(row),progress_update:`target_kajian_${level}`,progress_label:`HIT Target Kajian ${level}`,progress_updated_at:now};
+      const patch={tp_hit_level:level, farthest_tp_level:Math.max(Number(row.farthest_tp_level||0), level), source_payload:payload};
+      if(level>=1) patch.tp1_hit_at=now;
+      if(level>=2) patch.tp2_hit_at=now;
+      if(level>=3) patch.tp3_hit_at=now;
+      await safeUpdateSignal(id,patch);
+      return;
+    }
+
+    match=key.match(/^target_lanjutan_([123])$/);
+    if(match){
+      const level=Number(match[1]);
+      const row=await getSignalRow(id);
+      const payload={...sourcePayload(row),progress_update:`target_lanjutan_${level}`,progress_label:`HIT Target Lanjutan ${level}`,target_lanjutan_level:level,progress_updated_at:now};
+      await safeUpdateSignal(id,{farthest_tp_level:Math.max(Number(row.farthest_tp_level||0), level), source_payload:payload});
+      return;
+    }
+
     throw new Error('Update perkembangan tidak valid.');
   }
 
@@ -345,8 +397,12 @@
                   <label class="field">Update Perkembangan
                     <select name="progress_update">
                       <option value="">Pilih Update</option>
-                      <option value="target_kajian">HIT Target Kajian</option>
-                      <option value="target_lanjutan">HIT Target Lanjutan</option>
+                      <option value="target_kajian_1">HIT Target Kajian 1</option>
+                      <option value="target_kajian_2">HIT Target Kajian 2</option>
+                      <option value="target_kajian_3">HIT Target Kajian 3</option>
+                      <option value="target_lanjutan_1">HIT Target Lanjutan 1</option>
+                      <option value="target_lanjutan_2">HIT Target Lanjutan 2</option>
+                      <option value="target_lanjutan_3">HIT Target Lanjutan 3</option>
                       <option value="invalidasi">HIT Invalidasi</option>
                     </select>
                   </label>
@@ -356,7 +412,7 @@
                   <label class="field">Running Actual
                     <input name="running_point" inputmode="numeric" value="${esc(x.running_point??0)}">
                   </label>
-                  <label class="field">Running Terjauh Actual
+                  <label class="field">Running Terjauh
                     <input name="max_running_point" inputmode="numeric" value="${esc(x.max_running_point??0)}">
                   </label>
                   <label class="field">Visibility
@@ -373,8 +429,12 @@
                 </label>
                 <div class="button-row">
                   <button class="btn" type="submit">Simpan Update</button>
-                  <button class="btn secondary" type="button" data-study-progress="target_kajian" data-study-id="${esc(x.id)}">HIT Target Kajian</button>
-                  <button class="btn secondary" type="button" data-study-progress="target_lanjutan" data-study-id="${esc(x.id)}">HIT Target Lanjutan</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_kajian_1" data-study-id="${esc(x.id)}">HIT Target Kajian 1</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_kajian_2" data-study-id="${esc(x.id)}">HIT Target Kajian 2</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_kajian_3" data-study-id="${esc(x.id)}">HIT Target Kajian 3</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_lanjutan_1" data-study-id="${esc(x.id)}">HIT Target Lanjutan 1</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_lanjutan_2" data-study-id="${esc(x.id)}">HIT Target Lanjutan 2</button>
+                  <button class="btn secondary" type="button" data-study-progress="target_lanjutan_3" data-study-id="${esc(x.id)}">HIT Target Lanjutan 3</button>
                   <button class="btn danger" type="button" data-study-progress="invalidasi" data-study-id="${esc(x.id)}">HIT Invalidasi</button>
                 </div>
               </form>

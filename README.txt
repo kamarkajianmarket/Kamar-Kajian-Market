@@ -1,13 +1,14 @@
-Kamar Kajian Market — Update Kawan Kamar Split Page
+Kamar Kajian Market - Final UI + Admin Prototype
 
-Isi update:
+Struktur:
 - index.html = halaman utama publik
-- member.html = halaman daftar/login + dashboard Kawan Kamar
-- Semua istilah Sahabat Kamar diganti menjadi Kawan Kamar
-- Tombol Daftar / Login Member diarahkan ke member.html
+- member.html = halaman login member/admin prototype
+- register.html = halaman daftar Kawan Kamar
+- dashboard.html = dashboard Kawan Kamar
+- admin.html = prototype Dashboard Admin Kamar
+- style.css = style utama
 
-Cara upload:
-1. Extract ZIP.
-2. Upload semua isi folder ini ke root repository GitHub.
-3. Commit changes.
-4. Tunggu Vercel deploy.
+Catatan:
+- UI masih prototype, belum tersambung Supabase.
+- Login asli, role member/admin, aktivasi akses, dan data real dibuat pada tahap Supabase.
+- Footer semua halaman menggunakan format © Kamar Kajian Market.

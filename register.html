@@ -44,15 +44,15 @@
           <img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
           <span class="mini-label">Form Pendaftaran</span>
           <h3>Data Kawan Kamar</h3>
-          <form class="member-login-form">
-            <label>Nama Lengkap<input aria-label="Nama lengkap" type="text" placeholder="Nama lengkap sesuai identitas"/></label>
-            <label>Email<input aria-label="Email pendaftaran" type="email" placeholder="email@domain.com"/></label>
-            <label>Nomor WhatsApp<input aria-label="Nomor WhatsApp" type="tel" placeholder="08xxxxxxxxxx"/></label>
-            <label>Username Telegram<input aria-label="Username Telegram" type="text" placeholder="@username"/></label>
-            <label>Password<input aria-label="Password pendaftaran" type="password" placeholder="Buat password"/></label>
-            <label>Konfirmasi Password<input aria-label="Konfirmasi password" type="password" placeholder="Ulangi password"/></label>
+          <form class="member-login-form" id="kamarRegisterForm">
+            <label>Nama Lengkap<input id="registerFullName" name="full_name" aria-label="Nama lengkap" type="text" autocomplete="name" placeholder="Nama lengkap sesuai identitas" required/></label>
+            <label>Email<input id="registerEmail" name="email" aria-label="Email pendaftaran" type="email" autocomplete="email" placeholder="email@domain.com" required/></label>
+            <label>Nomor WhatsApp<input id="registerWhatsapp" name="whatsapp" aria-label="Nomor WhatsApp" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" required/></label>
+            <label>Username Telegram<input id="registerTelegram" name="telegram_username" aria-label="Username Telegram" type="text" placeholder="@username"/></label>
+            <label>Password<input id="registerPassword" name="password" aria-label="Password pendaftaran" type="password" autocomplete="new-password" placeholder="Buat password" required/></label>
+            <label>Konfirmasi Password<input id="registerPasswordConfirm" name="password_confirm" aria-label="Konfirmasi password" type="password" autocomplete="new-password" placeholder="Ulangi password" required/></label>
             <label>Pilih Fasilitas
-              <select aria-label="Pilih fasilitas">
+              <select id="registerFacility" name="facility" aria-label="Pilih fasilitas">
                 <option>Kamar Study</option>
                 <option>Materi Edukasi</option>
                 <option>Kamar Private</option>
@@ -62,7 +62,7 @@
               </select>
             </label>
             <label>Durasi Langganan
-              <select aria-label="Durasi langganan">
+              <select id="registerDuration" name="duration" aria-label="Durasi langganan">
                 <option>30 Hari</option>
                 <option>90 Hari</option>
                 <option>180 Hari</option>
@@ -70,16 +70,17 @@
               </select>
             </label>
             <label>Metode Pembayaran
-              <select aria-label="Metode pembayaran">
+              <select id="registerPaymentMethod" name="payment_method" aria-label="Metode pembayaran">
                 <option>Transfer Bank</option>
                 <option>E-Wallet</option>
                 <option>Konfirmasi Admin</option>
               </select>
             </label>
-            <label>Kode Referral <span class="mini-label">Opsional</span><input aria-label="Kode referral" type="text" placeholder="Kosongkan jika tidak ada"/></label>
-            <label class="check-row"><input type="checkbox"/> Saya memahami bahwa Kamar Kajian Market adalah fasilitas edukasi dan kajian market, bukan layanan jaminan profit.</label>
-            <label class="check-row"><input type="checkbox"/> Saya setuju mengikuti ketentuan akses, pembayaran, dan penggunaan fasilitas Kamar Kajian Market.</label>
-            <a class="btn btn-primary" href="dashboard.html">Daftar &amp; Lanjut Pembayaran</a>
+            <label>Kode Referral <span class="mini-label">Opsional</span><input id="registerReferral" name="referral_code" aria-label="Kode referral" type="text" placeholder="Kosongkan jika tidak ada"/></label>
+            <label class="check-row"><input id="registerAgreeRisk" type="checkbox" required/> Saya memahami bahwa Kamar Kajian Market adalah fasilitas edukasi dan kajian market, bukan layanan jaminan profit.</label>
+            <label class="check-row"><input id="registerAgreeTerms" type="checkbox" required/> Saya setuju mengikuti ketentuan akses, pembayaran, dan penggunaan fasilitas Kamar Kajian Market.</label>
+            <button class="btn btn-primary" type="submit" id="registerSubmitBtn">Daftar &amp; Lanjut Pembayaran</button>
+            <p class="form-note" id="registerStatus" hidden></p>
           </form>
           <div class="payment-box">
             <strong>Setelah daftar</strong>
@@ -97,6 +98,12 @@
     <p><strong>Disclaimer:</strong> Seluruh materi Kamar Kajian Market bersifat edukasi, diskusi, dan bahan kajian. Trading memiliki risiko. Tidak ada jaminan profit, sinyal pasti, hasil tetap, atau instruksi transaksi wajib. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab masing-masing trader.</p>
     <small>© Kamar Kajian Market</small>
   </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js"></script>
+<script src="assets/js/kamar-supabase.js"></script>
+<script src="assets/js/kamar-ui.js"></script>
+<script src="assets/js/kamar-auth.js"></script>
 
 <script>
 (function(){

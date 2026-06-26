@@ -45,11 +45,11 @@
           <span class="mini-label">Login Kawan Kamar</span>
           <h3>Login Member</h3>
           <p>Gunakan email atau ID member dan password yang sudah terdaftar.</p>
-          <form class="member-login-form">
-            <label>Email / ID Member<input aria-label="Email atau ID member" type="text" placeholder="email@domain.com / KM-0001"/></label>
-            <label>Password<input aria-label="Password member" type="password" placeholder="Masukkan password"/></label>
-            <button class="btn btn-primary" type="button" id="loginMockBtn">Login ke Dashboard</button>
-            <p class="form-note" id="loginMockNote" hidden>Login akan aktif setelah sistem akun terhubung. Jika belum punya akun, klik <strong>Daftar Sekarang</strong> atau hubungi admin.</p>
+          <form class="member-login-form" id="kamarLoginForm">
+            <label>Email Terdaftar<input id="loginEmail" name="email" aria-label="Email terdaftar" type="email" autocomplete="email" placeholder="email@domain.com" required/></label>
+            <label>Password<input id="loginPassword" name="password" aria-label="Password member" type="password" autocomplete="current-password" placeholder="Masukkan password" required/></label>
+            <button class="btn btn-primary" type="submit" id="loginSubmitBtn">Login ke Dashboard</button>
+            <p class="form-note" id="loginStatus" hidden></p>
           </form>
           <div class="member-login-help">
             <span>Belum punya akun?</span>
@@ -67,16 +67,12 @@
     <p><strong>Disclaimer:</strong> Seluruh materi Kamar Kajian Market bersifat edukasi, diskusi, dan bahan kajian. Trading memiliki risiko. Tidak ada jaminan profit, sinyal pasti, hasil tetap, atau instruksi transaksi wajib. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab masing-masing trader.</p>
     <small>© Kamar Kajian Market</small>
   </footer>
-<script>
-  const loginBtn = document.getElementById("loginMockBtn");
-  const loginNote = document.getElementById("loginMockNote");
-  if (loginBtn && loginNote) {
-    loginBtn.addEventListener("click", () => {
-      loginNote.hidden = false;
-      loginNote.scrollIntoView({behavior:"smooth", block:"nearest"});
-    });
-  }
-</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js"></script>
+<script src="assets/js/kamar-supabase.js"></script>
+<script src="assets/js/kamar-ui.js"></script>
+<script src="assets/js/kamar-auth.js"></script>
 
 <script>
 (function(){

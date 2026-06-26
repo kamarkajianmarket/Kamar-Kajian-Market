@@ -61,6 +61,17 @@
     if(Number.isNaN(n)) return esc(v);
     return n.toFixed(2);
   }
+  function pointClass(v){
+    const n=Number(v);
+    if(Number.isNaN(n) || n===0) return 'neutral';
+    return n>0?'positive':'negative';
+  }
+  function pointText(v){
+    if(v===null || v===undefined || v==='') return '-';
+    const n=Number(v);
+    if(Number.isNaN(n)) return esc(v);
+    return `${n>0?'+':''}${n.toFixed(2)} Point`;
+  }
   function parseAdminNumber(v){
     if(v===null || v===undefined || String(v).trim()==='') return null;
     const n=Number(String(v).replace(',', '.'));
@@ -319,7 +330,8 @@
                 <div class="setting-card"><span>Status Zona</span><strong>${esc(zoneStatusText(x))}</strong></div>
                 <div class="setting-card"><span>Update Perkembangan</span><strong>${esc(studyProgressText(x))}</strong></div>
                 <div class="setting-card"><span>Harga Berjalan</span><strong>${formatStudyPrice(x.current_price)}</strong></div>
-                <div class="setting-card"><span>Point</span><strong>${esc(x.running_point??0)} / Max ${esc(x.max_running_point??0)}</strong></div>
+                <div class="setting-card study-point-card ${pointClass(x.running_point??0)}"><span>Running Actual</span><strong>${pointText(x.running_point??0)}</strong></div>
+                <div class="setting-card study-point-card ${pointClass(x.max_running_point??0)}"><span>Running Terjauh</span><strong>${pointText(x.max_running_point??0)}</strong></div>
               </div>
               <form class="study-admin-form" data-study-form="${esc(x.id)}">
                 <div class="grid-3">
@@ -341,10 +353,10 @@
                   <label class="field">Harga Berjalan
                     <input name="current_price" inputmode="decimal" placeholder="4015.00" value="${x.current_price!==null&&x.current_price!==undefined?formatStudyPrice(x.current_price):''}">
                   </label>
-                  <label class="field">Running Point
+                  <label class="field">Running Actual
                     <input name="running_point" inputmode="numeric" value="${esc(x.running_point??0)}">
                   </label>
-                  <label class="field">Max Running Point
+                  <label class="field">Running Terjauh Actual
                     <input name="max_running_point" inputmode="numeric" value="${esc(x.max_running_point??0)}">
                   </label>
                   <label class="field">Visibility

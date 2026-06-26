@@ -37,6 +37,20 @@
     return n.toLocaleString("id-ID", { maximumFractionDigits: 3 });
   }
 
+  function pointText(value) {
+    if (value === null || value === undefined || value === "") return "-";
+    const n = Number(value);
+    if (!Number.isFinite(n)) return text(value);
+    const sign = n > 0 ? "+" : "";
+    return sign + n.toFixed(2) + " Point";
+  }
+
+  function pointClass(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n === 0) return "neutral";
+    return n > 0 ? "positive" : "negative";
+  }
+
   function priceText(value, pair) {
     if (value === null || value === undefined || value === "") return "-";
     const n = Number(value);
@@ -213,8 +227,11 @@
     list.innerHTML = items.map(function (raw) {
       const item = normalizeItem(raw);
       const area = item.areaLow !== null || item.areaHigh !== null ? priceText(item.areaLow, item.pair) + " - " + priceText(item.areaHigh, item.pair) : "-";
-      const pointInfo = item.runningPoint !== null || item.maxPoint !== null
-        ? `<div><span>Point</span><strong>${numberText(item.runningPoint)} / Max ${numberText(item.maxPoint)}</strong></div>`
+      const runningInfo = item.runningPoint !== null
+        ? `<div class="study-point-card ${pointClass(item.runningPoint)}"><span>Running Actual</span><strong>${pointText(item.runningPoint)}</strong></div>`
+        : "";
+      const maxInfo = item.maxPoint !== null
+        ? `<div class="study-point-card ${pointClass(item.maxPoint)}"><span>Running Terjauh</span><strong>${pointText(item.maxPoint)}</strong></div>`
         : "";
 
       return `
@@ -238,7 +255,8 @@
             <div><span>Invalidasi</span><strong>${escapeHtml(priceText(item.invalidasi, item.pair))}</strong></div>
             <div><span>TP 1</span><strong>${escapeHtml(priceText(item.tp1, item.pair))}</strong></div>
             <div><span>TP 2 / TP 3</span><strong>${escapeHtml(priceText(item.tp2, item.pair))} / ${escapeHtml(priceText(item.tp3, item.pair))}</strong></div>
-            ${pointInfo}
+            ${runningInfo}
+            ${maxInfo}
           </div>
           <p class="study-note"><small>ID Zona: ${escapeHtml(item.idZona)} · Update: ${escapeHtml(formatDate(item.updated))}</small></p>
         </article>

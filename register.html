@@ -89,8 +89,8 @@
 <section class="member-area section-shell compact-section" id="register-member">
 <div class="section-heading centered">
 <span class="eyebrow">Daftar Kawan Kamar</span>
-<h2>Buat akun member dan lanjutkan pembayaran langganan.</h2>
-<p>Isi data dengan benar agar admin mudah memeriksa pembayaran, mengaktifkan akses, dan mengatur masa langganan.</p>
+<h2>Buat akun Kawan Kamar.</h2>
+<p>Isi data utama dengan benar. Setelah akun dibuat, aktivasi fasilitas akan dikonfirmasi oleh Admin Kamar.</p>
 </div>
 <div class="member-login-shell">
 <article class="member-login-card auth-card">
@@ -104,40 +104,15 @@
 <label>Username Telegram<input aria-label="Username Telegram" id="registerTelegram" name="telegram_username" placeholder="@username" type="text"/></label>
 <label>Password<input aria-label="Password pendaftaran" autocomplete="new-password" id="registerPassword" name="password" placeholder="Buat password" required="" type="password"/></label>
 <label>Konfirmasi Password<input aria-label="Konfirmasi password" autocomplete="new-password" id="registerPasswordConfirm" name="password_confirm" placeholder="Ulangi password" required="" type="password"/></label>
-<label>Pilih Fasilitas
-              <select aria-label="Pilih fasilitas" id="registerFacility" name="facility">
-<option>Kamar Study</option>
-<option>Materi Edukasi</option>
-<option>Kamar Private</option>
-<option>Kamar Indikator</option>
-<option>Kamar Robot</option>
-<option>Paket Lengkap</option>
-</select>
-</label>
-<label>Durasi Langganan
-              <select aria-label="Durasi langganan" id="registerDuration" name="duration">
-<option>30 Hari</option>
-<option>90 Hari</option>
-<option>180 Hari</option>
-<option>1 Tahun</option>
-</select>
-</label>
-<label>Metode Pembayaran
-              <select aria-label="Metode pembayaran" id="registerPaymentMethod" name="payment_method">
-<option>Transfer Bank</option>
-<option>E-Wallet</option>
-<option>Konfirmasi Admin</option>
-</select>
-</label>
 <label>Kode Referral <span class="mini-label">Opsional</span><input aria-label="Kode referral" id="registerReferral" name="referral_code" placeholder="Kosongkan jika tidak ada" type="text"/></label>
 <label class="check-row"><input id="registerAgreeRisk" required="" type="checkbox"/> Saya memahami bahwa Kamar Kajian Market adalah fasilitas edukasi dan kajian market, bukan layanan jaminan profit.</label>
 <label class="check-row"><input id="registerAgreeTerms" required="" type="checkbox"/> Saya setuju mengikuti ketentuan akses, pembayaran, dan penggunaan fasilitas Kamar Kajian Market.</label>
-<button class="btn btn-primary" id="registerSubmitBtn" type="submit">Daftar &amp; Lanjut Pembayaran</button>
+<button class="btn btn-primary" id="registerSubmitBtn" type="submit">Daftar Akun</button>
 <p class="form-note" hidden="" id="registerStatus"></p>
 </form>
 <div class="payment-box">
 <strong>Setelah daftar</strong>
-<span>Akun akan masuk status Belum Aktif sampai pembayaran dikonfirmasi admin dan fasilitas yang dipilih diaktifkan.</span>
+<span>Akun masuk status menunggu aktivasi admin. Fasilitas akan aktif setelah pembayaran dan konfirmasi admin selesai.</span>
 </div>
 <div class="member-login-help">
 <span>Sudah punya akun?</span>

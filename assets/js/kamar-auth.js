@@ -201,9 +201,12 @@
         const telegramUsername = UI.normalizeTelegram(UI.qs("#registerTelegram", form).value);
         const password = UI.qs("#registerPassword", form).value;
         const confirmPassword = UI.qs("#registerPasswordConfirm", form).value;
-        const facilityText = UI.qs("#registerFacility", form).value;
-        const durationText = UI.qs("#registerDuration", form).value;
-        const paymentMethod = UI.qs("#registerPaymentMethod", form).value;
+        const facilityInput = UI.qs("#registerFacility", form);
+        const durationInput = UI.qs("#registerDuration", form);
+        const paymentInput = UI.qs("#registerPaymentMethod", form);
+        const facilityText = facilityInput ? facilityInput.value : "Belum dipilih";
+        const durationText = durationInput ? durationInput.value : "0 Hari";
+        const paymentMethod = paymentInput ? paymentInput.value : "Konfirmasi Admin";
         const referralCode = UI.qs("#registerReferral", form).value.trim();
         const agreeRisk = UI.qs("#registerAgreeRisk", form).checked;
         const agreeTerms = UI.qs("#registerAgreeTerms", form).checked;
@@ -224,10 +227,12 @@
           throw new Error("Centang pernyataan risiko dan ketentuan akses terlebih dahulu.");
         }
 
-        const facilityKey = UI.facilityToKey(facilityText);
-        const selectedFacilities = facilityKey === "all_paid"
-          ? ["kamar_study", "materi_edukasi", "kamar_private", "kamar_indikator", "kamar_robot"]
-          : [facilityKey];
+        const facilityKey = facilityInput ? UI.facilityToKey(facilityText) : "pending_selection";
+        const selectedFacilities = facilityInput
+          ? (facilityKey === "all_paid"
+            ? ["kamar_study", "materi_edukasi", "kamar_private", "kamar_indikator", "kamar_robot"]
+            : [facilityKey])
+          : [];
 
         const payload = {
           fullName,
@@ -248,7 +253,7 @@
           UI.setStatus(status, "Pendaftaran berhasil. Akun masuk status menunggu aktivasi admin. Mengalihkan ke dashboard...", "success");
           setTimeout(function () { window.location.href = "dashboard.html"; }, 900);
         } else {
-          UI.setStatus(status, "Pendaftaran berhasil. Jika email confirmation aktif, cek email untuk verifikasi. Setelah itu login dan lanjutkan konfirmasi pembayaran ke Admin Kamar.", "success");
+          UI.setStatus(status, "Pendaftaran berhasil. Jika email confirmation aktif, cek email untuk verifikasi. Setelah itu login dan tunggu aktivasi dari Admin Kamar.", "success");
         }
       } catch (error) {
         UI.setStatus(status, error.message || "Pendaftaran gagal. Periksa kembali data yang diisi.", "error");

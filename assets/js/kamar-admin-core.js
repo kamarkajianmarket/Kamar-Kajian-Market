@@ -4,7 +4,7 @@
   const FACILITIES=[
     ["access_kamar_study","Kamar Study"],["access_materi_edukasi","Materi Edukasi"],["access_kamar_private","Kamar Private"],["access_kamar_indikator","Kamar Indikator"],["access_kamar_robot","Kamar Robot"]
   ];
-  const STATUS={active:"Aktif",pending_activation:"Pending Aktivasi",expired:"Expired",suspended:"Suspended",confirmed:"Confirmed",pending:"Pending",rejected:"Rejected",done:"Done",new:"New",processing:"Processing"};
+  const STATUS={active:"Active",fresh:"Fresh",invalid:"Invalid",pending_activation:"Pending Aktivasi",expired:"Expired",suspended:"Suspended",confirmed:"Confirmed",pending:"Pending",rejected:"Rejected",done:"Done",new:"New",processing:"Processing"};
   function client(){ if(!window.kamarSupabase) throw new Error(window.KAMAR_SUPABASE_ERROR||"Supabase belum siap."); return window.kamarSupabase; }
   function page(){ return (location.pathname.split('/').pop()||'admin.html'); }
   function esc(v){ return String(v??'').replace(/[&<>'"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[m])); }
@@ -12,6 +12,51 @@
   function fmtMoney(v){ if(v===null||v===undefined||v==='') return '-'; try{return new Intl.NumberFormat('id-ID').format(Number(v));}catch(e){return esc(v);} }
   function toast(m){ if(window.toast) window.toast(m); else console.log(m); }
   function pill(v){ const key=String(v||'').toLowerCase(); const cls=key==='active'||key==='confirmed'||key==='done'||key==='published'?'on':(key.includes('pending')||key==='new'||key==='draft'?'warn':'off'); return `<span class="kamar-pill ${cls}">${esc(STATUS[key]||v||'-')}</span>`; }
+
+  function contentStatusValue(x){
+    if(!x) return '-';
+    if(typeof x.status === 'string' && x.status.trim()) return x.status;
+    if(typeof x.publish_status === 'string' && x.publish_status.trim()) return x.publish_status;
+    if(x.is_published === false) return 'draft';
+    if(x.is_active === false) return 'inactive';
+    if(x.is_published === true || x.is_active === true) return 'active';
+    return '-';
+  }
+  function zoneStatusText(x){
+    const raw = String((x && x.status) || '').toUpperCase();
+    if (raw === 'INVALID' || (x && x.invalidated_at)) return 'Invalid';
+    const entered = x && (
+      x.price_entered_area_at || x.first_reaction_at ||
+      x.tp1_hit_at || x.tp2_hit_at || x.tp3_hit_at ||
+      Number(x.tp_hit_level || 0) > 0 || Number(x.farthest_tp_level || 0) > 0
+    );
+    if (entered) return 'Active';
+    return 'Fresh';
+  }
+  function zoneProgressUpdates(x){
+    const updates=[];
+    const raw=String((x && x.status)||'').toUpperCase();
+    const tp=Number((x && x.tp_hit_level)||0);
+    const far=Number((x && x.farthest_tp_level)||0);
+    if(raw==='INVALID' || (x && x.invalidated_at)) return ['HIT Invalidasi'];
+    if(tp>=1 || far>=1 || (x && x.tp1_hit_at)) updates.push('HIT Target Kajian');
+    if(far>=2 || (x && (x.tp2_hit_at || x.tp3_hit_at))) updates.push('HIT Target Lanjutan');
+    return updates;
+  }
+  function studyStatusPill(x){
+    const zoneText = zoneStatusText(x);
+    const activeText = x.is_active ? 'Data Aktif' : 'Data Nonaktif';
+    const publishText = x.is_published ? 'Published' : 'Draft';
+    const updates = zoneProgressUpdates(x);
+    return `<div class="status-stack">${pill(zoneText)}${updates.length?`<small>Update: ${esc(updates.join(' · '))}</small>`:''}<small>${esc(activeText)} · ${esc(publishText)}</small></div>`;
+  }
+  function formatStudyPrice(v){
+    if(v===null || v===undefined || v==='') return '-';
+    const n=Number(v);
+    if(Number.isNaN(n)) return esc(v);
+    return n.toFixed(2);
+  }
+
   function activeFacilities(a){ if(!a) return '-'; return FACILITIES.filter(([k])=>a[k]).map(([,l])=>l).join(', ')||'-'; }
   function statusBox(msg,type='info'){ return `<div class="${type==='error'?'expired-note':'page-note'}"><strong>${type==='error'?'Perlu Dicek':'Status'}</strong><br/>${esc(msg)}</div>`; }
   function main(){ return document.querySelector('.split-main')||document.querySelector('main')||document.body; }
@@ -185,8 +230,33 @@
   }
   async function renderContentPage(kind){
     const cfg={banner:['banners','Banner Pengumuman'],video:['videos','Konten Video'],materials:['materials','Konten & Materi'],tools:['tools_files','File Tools'],study:['signals','Kamar Study Control']}; const [table,title]=cfg[kind];
-    const el=main(); el.innerHTML=`<section class="split-card"><span class="eyebrow">${esc(title)}</span><h1>${esc(title)}</h1><p>Kelola data yang ditampilkan pada website dan area member.</p></section><section class="split-card"><div class="kamar-section-head"><div><h2>Data Tersimpan</h2><p>Daftar data terbaru.</p></div><button id="refreshContent" class="btn secondary">Refresh</button></div><div id="contentList">Memuat...</div></section>`;
-    async function load(){ const box=document.getElementById('contentList'); try{ const {data,error}=await client().from(table).select('*').order('created_at',{ascending:false}).limit(50); if(error) throw error; box.innerHTML=`<table class="kamar-table"><thead><tr><th>Judul/Key</th><th>Status</th><th>Area/Akses</th><th>Update</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td><strong>${esc(x.title||x.setting_key||x.id_zona||x.id||'-')}</strong><div class="kamar-muted">${esc(x.description||x.body||x.category||x.pair||'')}</div></td><td>${pill(x.publish_status||x.status||x.is_active===false?'inactive':'active')}</td><td>${esc(x.display_area||x.access_required||x.timeframe||'-')}</td><td>${fmtDate(x.updated_at||x.created_at)}</td></tr>`).join('')||'<tr><td colspan="4"><div class="kamar-empty">Belum ada data.</div></td></tr>'}</tbody></table>`; }catch(e){box.innerHTML=statusBox(e.message,'error');} }
+    const el=main(); el.innerHTML=`<section class="split-card kamar-title-card"><h1>${esc(title)}</h1></section><section class="split-card"><div class="kamar-section-head"><div><h2>Data Tersimpan</h2><p>${kind==='study'?'Daftar kajian market dari tabel signals. Status mengikuti kolom status, bukan publish toggle.':'Daftar data terbaru dari Supabase.'}</p></div><button id="refreshContent" class="btn secondary">Refresh</button></div><div id="contentList">Memuat...</div></section>`;
+    async function load(){
+      const box=document.getElementById('contentList');
+      try{
+        const {data,error}=await client().from(table).select('*').order('created_at',{ascending:false}).limit(50);
+        if(error) throw error;
+        if(kind==='study'){
+          box.innerHTML=`<div class="admin-list">${(data||[]).map(x=>`<article class="admin-list-row study-admin-row">
+            <div class="admin-list-main">
+              <h3>${esc(x.setup_title||x.id_zona||'-')}</h3>
+              <p>${esc(x.id_zona||'-')} · ${esc(x.pair||'-')} · ${esc(x.timeframe||'-')} · ${esc(x.jenis_zona||'-')} · ${esc(x.skenario||'-')}</p>
+              <div class="study-admin-price-row">
+                <span>Zona ${formatStudyPrice(x.area_low)} - ${formatStudyPrice(x.area_high)}</span>
+                <span>TP ${formatStudyPrice(x.tp1)} / ${formatStudyPrice(x.tp2)} / ${formatStudyPrice(x.tp3)}</span>
+                <span>Invalidasi ${formatStudyPrice(x.invalidasi)}</span>
+              </div>
+            </div>
+            <div class="admin-list-meta">
+              ${studyStatusPill(x)}
+              <small>${esc(x.visibility||'-')} · ${fmtDate(x.updated_at||x.created_at)}</small>
+            </div>
+          </article>`).join('')||'<div class="kamar-empty">Belum ada data Kamar Study.</div>'}</div>`;
+          return;
+        }
+        box.innerHTML=`<table class="kamar-table"><thead><tr><th>Judul/Key</th><th>Status</th><th>Area/Akses</th><th>Update</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td><strong>${esc(x.title||x.setting_key||x.id_zona||x.id||'-')}</strong><div class="kamar-muted">${esc(x.description||x.body||x.category||x.pair||'')}</div></td><td>${pill(contentStatusValue(x))}</td><td>${esc(x.display_area||x.access_required||x.timeframe||'-')}</td><td>${fmtDate(x.updated_at||x.created_at)}</td></tr>`).join('')||'<tr><td colspan="4"><div class="kamar-empty">Belum ada data.</div></td></tr>'}</tbody></table>`;
+      }catch(e){box.innerHTML=statusBox(e.message,'error');}
+    }
     document.getElementById('refreshContent').onclick=load; load();
   }
   async function boot(){

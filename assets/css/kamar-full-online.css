@@ -503,3 +503,7 @@ label.field,.kamar-field{font-size:15px!important;font-weight:1000!important;col
   .admin-detail-row-clean span{white-space:normal!important;}
   .kamar-access-toggle{grid-template-columns:1fr!important;}
 }
+
+
+/* Step 24Y - Admin content/status list cleanup */
+.admin-list{display:grid;gap:14px}.admin-list-row{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;align-items:start;border:1px solid rgba(238,206,122,.16);border-radius:22px;background:rgba(255,255,255,.025);padding:18px}.admin-list-main h3{margin:0 0 6px;color:#fff3d8;font-size:20px;line-height:1.25}.admin-list-main p{margin:0;color:#bdb4a1;line-height:1.5}.admin-list-meta{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}.status-stack{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.status-stack small,.admin-list-meta small{color:#bdb4a1;font-size:12px;font-weight:700}.study-admin-price-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.study-admin-price-row span{display:inline-flex;border:1px solid rgba(238,206,122,.14);border-radius:999px;padding:7px 10px;color:#d8d0bd;background:rgba(0,0,0,.18);font-size:13px;font-weight:800}@media(max-width:900px){.admin-list-row{grid-template-columns:1fr}.admin-list-meta,.status-stack{align-items:flex-start;text-align:left}}

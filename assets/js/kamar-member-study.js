@@ -55,19 +55,49 @@
     });
   }
 
-  function normalizeStatus(status) {
-    const raw = text(status, "").toUpperCase();
-    const map = {
-      ACTIVE: "Aktif",
-      RUNNING: "Running",
-      WAITING: "Menunggu Reaksi",
-      TP1_HIT: "TP1 Hit",
-      TP2_HIT: "TP2 Hit",
-      TP3_HIT: "TP3 Hit",
-      INVALID: "Invalid",
-      FINISHED: "Selesai"
-    };
-    return map[raw] || text(status, "-");
+  function normalizeZoneStatus(item) {
+    const raw = text(item && item.status, "").toUpperCase();
+
+    // Status awal zona Kamar hanya 3:
+    // Fresh  = harga belum masuk zona.
+    // Active = harga sudah masuk zona dan zona masih berjalan.
+    // Invalid = zona sudah dibreak / kena invalidasi.
+    if (raw === "INVALID" || (item && item.invalidatedAt) || (item && item.invalidated_at)) return "Invalid";
+
+    const entered = item && (
+      item.priceEnteredAt || item.price_entered_area_at ||
+      item.firstReactionAt || item.first_reaction_at ||
+      item.tp1HitAt || item.tp1_hit_at ||
+      item.tp2HitAt || item.tp2_hit_at ||
+      item.tp3HitAt || item.tp3_hit_at ||
+      Number(item.tpHitLevel || item.tp_hit_level || 0) > 0 ||
+      Number(item.farthestTpLevel || item.farthest_tp_level || 0) > 0
+    );
+
+    if (entered) return "Active";
+    return "Fresh";
+  }
+
+  function progressUpdates(item) {
+    const updates = [];
+    const raw = text(item && item.status, "").toUpperCase();
+    const tpHit = Number(item && (item.tpHitLevel ?? item.tp_hit_level ?? 0));
+    const farthest = Number(item && (item.farthestTpLevel ?? item.farthest_tp_level ?? 0));
+
+    if (item && (item.invalidatedAt || item.invalidated_at || raw === "INVALID")) {
+      updates.push("HIT Invalidasi");
+      return updates;
+    }
+
+    if (tpHit >= 1 || farthest >= 1 || item && (item.tp1HitAt || item.tp1_hit_at)) {
+      updates.push("HIT Target Kajian");
+    }
+
+    if (farthest >= 2 || item && (item.tp2HitAt || item.tp2_hit_at || item.tp3HitAt || item.tp3_hit_at)) {
+      updates.push("HIT Target Lanjutan");
+    }
+
+    return updates;
   }
 
   function normalizeDirection(value) {
@@ -142,7 +172,17 @@
       tp3: valueFrom(item, ["tp3", "take_profit_3"], "-"),
       runningPoint: valueFrom(item, ["running_point", "current_point"], null),
       maxPoint: valueFrom(item, ["max_running_point", "max_point"], null),
-      updated: valueFrom(item, ["updated_at", "created_at", "published_at"], null)
+      updated: valueFrom(item, ["updated_at", "created_at", "published_at"], null),
+      priceEnteredAt: valueFrom(item, ["price_entered_area_at"], null),
+      firstReactionAt: valueFrom(item, ["first_reaction_at"], null),
+      invalidatedAt: valueFrom(item, ["invalidated_at"], null),
+      finishedAt: valueFrom(item, ["finished_at"], null),
+      currentPrice: valueFrom(item, ["current_price"], null),
+      tpHitLevel: valueFrom(item, ["tp_hit_level"], 0),
+      farthestTpLevel: valueFrom(item, ["farthest_tp_level"], 0),
+      tp1HitAt: valueFrom(item, ["tp1_hit_at"], null),
+      tp2HitAt: valueFrom(item, ["tp2_hit_at"], null),
+      tp3HitAt: valueFrom(item, ["tp3_hit_at"], null)
     };
   }
 
@@ -171,8 +211,9 @@
                 <span class="study-pill">${escapeHtml(item.timeframe)}</span>
                 <span class="study-pill">${escapeHtml(item.zoneType)}</span>
                 <span class="study-pill">${escapeHtml(normalizeDirection(item.direction))}</span>
-                <span class="study-pill">${escapeHtml(normalizeStatus(item.status))}</span>
+                <span class="study-pill">Status Zona: ${escapeHtml(normalizeZoneStatus(item))}</span>
               </div>
+              ${progressUpdates(item).length ? `<div class="study-meta progress-meta"><span class="study-pill on">Update Zona</span>${progressUpdates(item).map(function (u) { return `<span class="study-pill">${escapeHtml(u)}</span>`; }).join("")}</div>` : ""}
             </div>
           </div>
           <div class="study-levels">
@@ -188,18 +229,24 @@
     }).join("");
   }
 
-  function applyFiltersToQuery(query, pair, timeframe, status) {
+  function applyFiltersToQuery(query, pair, timeframe) {
     if (pair) query = query.eq("pair", pair);
     if (timeframe) query = query.eq("timeframe", timeframe);
-    if (status) query = query.eq("status", status);
     return query;
+  }
+
+  function applyStatusFilter(items, status) {
+    if (!status) return items;
+    return (items || []).filter(function (raw) {
+      return normalizeZoneStatus(normalizeItem(raw)).toLowerCase() === String(status).toLowerCase();
+    });
   }
 
   async function loadByRpc(pair, timeframe, status) {
     const { data, error } = await client().rpc("get_member_kamar_study_feed", {
       filter_pair: pair,
       filter_timeframe: timeframe,
-      filter_status: status,
+      filter_status: null,
       result_limit: 20
     });
     if (error) throw error;
@@ -209,7 +256,7 @@
   async function loadDirectFallback(pair, timeframe, status) {
     let query = client()
       .from("signals")
-      .select("id_zona,pair,timeframe,jenis_zona,skenario,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,setup_title,setup_description,visibility,is_active,is_published,finished_at,created_at,updated_at,display_order")
+      .select("id_zona,pair,timeframe,jenis_zona,skenario,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,setup_title,setup_description,visibility,is_active,is_published,price_entered_area_at,first_reaction_at,current_price,invalidated_at,finished_at,tp_hit_level,farthest_tp_level,tp1_hit_at,tp2_hit_at,tp3_hit_at,created_at,updated_at,display_order")
       .eq("is_active", true)
       .eq("is_published", true)
       .is("finished_at", null)
@@ -218,7 +265,7 @@
       .order("created_at", { ascending: false })
       .limit(20);
 
-    query = applyFiltersToQuery(query, pair, timeframe, status);
+    query = applyFiltersToQuery(query, pair, timeframe);
     const { data, error } = await query;
     if (error) throw error;
     return Array.isArray(data) ? data : [];
@@ -252,6 +299,7 @@
       }
     }
 
+    data = applyStatusFilter(data, status);
     renderFeed(data);
   }
 

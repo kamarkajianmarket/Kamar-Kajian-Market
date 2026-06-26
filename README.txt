@@ -1,16 +1,13 @@
-Kamar Kajian Market WebApp - Member Area V1 Prototype
+Kamar Kajian Market — Update Kawan Kamar Split Page
 
-Update ini berisi:
-- Perbaikan visual FAQ category agar deskripsi kecil lebih rapi dan simetris.
-- Tambahan tombol Masuk Member Area.
-- Prototype login member dummy.
-- Dashboard Member.
-- Kamar Study Member dummy data.
-- Profil Akun dummy.
-- Materi Edukasi, Kamar Private, Kamar Indikator, Kamar Robot sebagai fasilitas Segera Hadir.
-- Rekap hasil Kamar Study di halaman utama: publik + member secara ringkas.
+Isi update:
+- index.html = halaman utama publik
+- member.html = halaman daftar/login + dashboard Kawan Kamar
+- Semua istilah Sahabat Kamar diganti menjadi Kawan Kamar
+- Tombol Daftar / Login Member diarahkan ke member.html
 
-Catatan:
-- Belum memakai Supabase Auth.
-- Belum memakai data real dari EA/Webhook.
-- Ini tahap desain/prototype untuk review tampilan.
+Cara upload:
+1. Extract ZIP.
+2. Upload semua isi folder ini ke root repository GitHub.
+3. Commit changes.
+4. Tunggu Vercel deploy.

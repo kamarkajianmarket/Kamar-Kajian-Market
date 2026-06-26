@@ -12,11 +12,17 @@
   let members = [];
   let accessByProfile = new Map();
   let openDetailId = null;
+  let savingFacility = false;
 
-  function qs(sel){ return document.querySelector(sel); }
+  function qs(sel, root){ return (root || document).querySelector(sel); }
   function client(){
     if(!window.kamarSupabase) throw new Error(window.KAMAR_SUPABASE_ERROR || "Supabase client belum siap.");
     return window.kamarSupabase;
+  }
+  function toast(message){
+    if(window.KamarUI && typeof window.KamarUI.toast === "function") return window.KamarUI.toast(message);
+    if(typeof window.toast === "function") return window.toast(message);
+    console.log(message);
   }
   function esc(value){
     return String(value ?? "").replace(/[&<>"']/g, function(ch){
@@ -33,31 +39,36 @@
     return map[status] || status || "-";
   }
   function paymentLabel(status){
-    const map = { confirmed:"Confirmed", pending:"Pending", rejected:"Rejected", failed:"Failed", refunded:"Refunded" };
+    const map = { confirmed:"Terkonfirmasi", pending:"Pending", rejected:"Ditolak", failed:"Gagal", refunded:"Refunded" };
     return map[status] || status || "-";
   }
-  function statusChipClass(status){
-    if(status === "active") return "on";
-    if(status === "pending_activation") return "warn";
+  function chipClass(status){
+    if(status === "active" || status === "confirmed") return "on";
+    if(status === "pending_activation" || status === "pending") return "warn";
     return "off";
   }
   function getAccess(profileId){ return accessByProfile.get(profileId) || {}; }
-  function activeFacilities(access){ return Object.keys(FACILITY_LABELS).filter(function(key){ return Boolean(access[key]); }); }
+  function activeFacilityKeys(access){ return Object.keys(FACILITY_LABELS).filter(function(key){ return Boolean(access[key]); }); }
+  function activeFacilitiesText(access){
+    const keys = activeFacilityKeys(access);
+    return keys.length ? keys.map(function(k){ return FACILITY_LABELS[k]; }).join(", ") : "Belum ada fasilitas aktif";
+  }
+  function normalizeTelegram(username){ return String(username || "").replace(/^@+/, "").trim(); }
   function waUrl(member){
     const number = String(member.whatsapp || "").replace(/[^0-9]/g, "");
     if(!number) return "";
-    const msg = `Halo ${member.full_name || "Kawan Kamar"}, saya Admin Kamar Kajian Market. Kami ingin follow up terkait status akun/fasilitas member Anda.`;
+    const msg = `Halo ${member.full_name || "Kawan Kamar"}, saya Admin Kamar Kajian Market. Saya ingin follow up terkait status akun/fasilitas member Anda.`;
     return `https://wa.me/${encodeURIComponent(number)}?text=${encodeURIComponent(msg)}`;
   }
   function tgUrl(member){
-    const username = String(member.telegram_username || "").replace(/^@+/, "").trim();
+    const username = normalizeTelegram(member.telegram_username);
     return username ? `https://t.me/${encodeURIComponent(username)}` : "";
   }
 
   async function loadMembers(){
     const statusEl = qs("#adminMembersStatus");
     const listEl = qs("#adminMembersList");
-    if(statusEl) { statusEl.className = "page-note"; statusEl.textContent = "Memuat data member dari Supabase..."; }
+    if(statusEl){ statusEl.className = "page-note"; statusEl.textContent = "Memuat data member dari Supabase..."; }
     if(listEl) listEl.innerHTML = "";
 
     if(window.KamarAuth){ await window.KamarAuth.requireAuth("admin"); }
@@ -91,36 +102,57 @@
     const facility = qs("#adminMemberFacilityFilter")?.value || "all";
     return members.filter(function(member){
       const access = getAccess(member.id);
-      const haystack = [member.member_id, member.full_name, member.email, member.whatsapp, member.telegram_username, member.account_status, member.payment_status].join(" ").toLowerCase();
+      const haystack = [member.member_id, member.full_name, member.email, member.whatsapp, member.telegram_username, member.account_status, member.payment_status, activeFacilitiesText(access)].join(" ").toLowerCase();
       return (!q || haystack.includes(q)) && (status === "all" || member.account_status === status) && (facility === "all" || Boolean(access[facility]));
     });
   }
 
-  function renderDetailBlock(member, access){
-    const facilities = Object.keys(FACILITY_LABELS).map(function(key){
-      return `<span class="kamar-chip ${access[key] ? "on" : "off"}">${esc(FACILITY_LABELS[key])}: ${access[key] ? "ON" : "OFF"}</span>`;
-    }).join(" ");
+  function renderFacilityToggles(member, access){
+    return Object.keys(FACILITY_LABELS).map(function(key){
+      const checked = Boolean(access[key]);
+      return `
+        <label class="kamar-access-toggle">
+          <span>
+            <strong>${esc(FACILITY_LABELS[key])}</strong>
+            <small>${checked ? "Aktif untuk member ini" : "Belum aktif"}</small>
+          </span>
+          <input type="checkbox" data-facility-toggle="${esc(key)}" data-profile-id="${esc(member.id)}" ${checked ? "checked" : ""}/>
+          <i aria-hidden="true"></i>
+        </label>`;
+    }).join("");
+  }
+
+  function renderDetail(member, access){
     const wa = waUrl(member);
     const tg = tgUrl(member);
     return `
-      <div class="admin-inline-detail" id="detail-${esc(member.id)}">
-        <div class="admin-detail-panel">
-          <div class="setting-card"><span>Nama</span><strong>${esc(member.full_name || "-")}</strong></div>
-          <div class="setting-card"><span>Member ID</span><strong>${esc(member.member_id || "-")}</strong></div>
-          <div class="setting-card"><span>Email</span><strong>${esc(member.email || "-")}</strong></div>
-          <div class="setting-card"><span>WhatsApp</span><strong>${esc(member.whatsapp || "-")}</strong></div>
-          <div class="setting-card"><span>Telegram</span><strong>${esc(member.telegram_username ? "@" + String(member.telegram_username).replace(/^@+/, "") : "-")}</strong></div>
-          <div class="setting-card"><span>Status</span><strong>${esc(statusLabel(member.account_status))} · ${esc(paymentLabel(member.payment_status))}</strong></div>
-          <div class="setting-card"><span>Masa Akses</span><strong>${formatDate(member.access_start_date)} — ${formatDate(member.access_end_date)}</strong></div>
-          <div class="setting-card"><span>Locked</span><strong>${access.locked_by_expired ? "Ya" : "Tidak"}</strong></div>
-          <div class="setting-card full" style="grid-column:1/-1"><span>Fasilitas</span><div class="member-meta">${facilities}</div></div>
-          <div class="setting-card full" style="grid-column:1/-1"><span>Catatan Lock</span><strong>${esc(access.locked_reason || "-")}</strong></div>
+      <div class="admin-member-detail" data-detail-panel="${esc(member.id)}">
+        <div class="admin-detail-list">
+          <div class="admin-detail-row-clean"><span>Nama</span><strong>${esc(member.full_name || "-")}</strong></div>
+          <div class="admin-detail-row-clean"><span>Member ID</span><strong>${esc(member.member_id || "-")}</strong></div>
+          <div class="admin-detail-row-clean"><span>Email</span><strong>${esc(member.email || "-")}</strong></div>
+          <div class="admin-detail-row-clean"><span>WhatsApp</span><strong>${esc(member.whatsapp || "-")}</strong></div>
+          <div class="admin-detail-row-clean"><span>Telegram</span><strong>${esc(normalizeTelegram(member.telegram_username) ? "@" + normalizeTelegram(member.telegram_username) : "-")}</strong></div>
+          <div class="admin-detail-row-clean"><span>Status</span><strong>${esc(statusLabel(member.account_status))} · ${esc(paymentLabel(member.payment_status))}</strong></div>
+          <div class="admin-detail-row-clean"><span>Masa Akses</span><strong>${formatDate(member.access_start_date)} — ${formatDate(member.access_end_date)}</strong></div>
+          <div class="admin-detail-row-clean"><span>Fasilitas Aktif</span><strong>${esc(activeFacilitiesText(access))}</strong></div>
+          <div class="admin-detail-row-clean"><span>Locked</span><strong>${access.locked_by_expired ? "Ya" : "Tidak"}</strong></div>
+          <div class="admin-detail-row-clean"><span>Catatan Lock</span><strong>${esc(access.locked_reason || "-")}</strong></div>
         </div>
-        <div class="button-row">
+        <div class="admin-member-contact-actions">
           ${wa ? `<a class="btn mini" href="${wa}" target="_blank" rel="noopener">WhatsApp</a>` : `<button class="btn mini secondary" type="button" disabled>WhatsApp Kosong</button>`}
           ${tg ? `<a class="btn mini secondary" href="${tg}" target="_blank" rel="noopener">Telegram</a>` : `<button class="btn mini secondary" type="button" disabled>Telegram Kosong</button>`}
-          <a class="btn mini secondary" href="admin-activation.html?member=${encodeURIComponent(member.email || "")}">Aktivasi / Ubah Akses</a>
-          <a class="btn mini secondary" href="admin-renewal.html?member=${encodeURIComponent(member.email || "")}">Renewal</a>
+          <a class="btn mini secondary" href="admin-activation.html?member=${encodeURIComponent(member.email || "")}">Halaman Aktivasi</a>
+          <a class="btn mini secondary" href="admin-renewal.html?member=${encodeURIComponent(member.email || "")}">Halaman Renewal</a>
+        </div>
+        <div class="admin-access-editor">
+          <div class="admin-access-editor-head">
+            <h3>ON/OFF Fasilitas Member</h3>
+            <p>Toggle ini langsung mengubah hak akses fasilitas member di Supabase.</p>
+          </div>
+          <div class="admin-access-toggle-list">
+            ${renderFacilityToggles(member, access)}
+          </div>
         </div>
       </div>`;
   }
@@ -147,37 +179,69 @@
       listEl.innerHTML = '<div class="admin-empty-state">Tidak ada member yang cocok dengan filter.</div>';
       return;
     }
-    if(statusEl){ statusEl.className = "page-note"; statusEl.innerHTML = "<strong>Data member terbaca.</strong><br/>Klik Detail untuk membuka data lengkap, kontak, dan aksi admin."; }
+    if(statusEl){ statusEl.className = "page-note"; statusEl.innerHTML = "<strong>Data member terbaca.</strong><br/>Klik Detail untuk membuka data lengkap dan mengubah fasilitas member."; }
 
     listEl.innerHTML = filtered.map(function(member){
       const access = getAccess(member.id);
-      const facilities = activeFacilities(access);
-      const chips = facilities.length
-        ? facilities.map(function(key){ return '<span class="kamar-chip on">'+esc(FACILITY_LABELS[key])+'</span>'; }).join("")
-        : '<span class="kamar-chip off">Belum ada fasilitas aktif</span>';
       const isOpen = openDetailId === member.id;
+      const facilities = activeFacilityKeys(access);
+      const facilityText = facilities.length ? facilities.map(function(k){ return FACILITY_LABELS[k]; }).join(", ") : "Belum ada fasilitas aktif";
       return `
-        <article class="admin-member-card ${isOpen ? "is-open" : ""}" data-member-card="${esc(member.id)}">
-          <div>
-            <h3>${esc(member.full_name || "Tanpa Nama")}</h3>
-            <p><strong>${esc(member.member_id || "-")}</strong> · ${esc(member.email || "-")}</p>
-            <div class="member-meta">
-              <span class="kamar-chip ${statusChipClass(member.account_status)}">${esc(statusLabel(member.account_status))}</span>
-              <span class="kamar-chip ${member.payment_status === "confirmed" ? "on" : "warn"}">${esc(paymentLabel(member.payment_status))}</span>
-              ${chips}
+        <article class="admin-member-list-item ${isOpen ? "is-open" : ""}" data-member-card="${esc(member.id)}">
+          <div class="admin-member-summary-row">
+            <div class="admin-member-primary">
+              <h3>${esc(member.full_name || "Tanpa Nama")}</h3>
+              <span>${esc(member.member_id || "-")}</span>
+            </div>
+            <div class="admin-member-contact">
+              <strong>${esc(member.email || "-")}</strong>
+              <span>WA: ${esc(member.whatsapp || "-")} · TG: ${esc(normalizeTelegram(member.telegram_username) ? "@" + normalizeTelegram(member.telegram_username) : "-")}</span>
+            </div>
+            <div class="admin-member-statuses">
+              <span class="kamar-chip ${chipClass(member.account_status)}">${esc(statusLabel(member.account_status))}</span>
+              <span class="kamar-chip ${chipClass(member.payment_status)}">${esc(paymentLabel(member.payment_status))}</span>
+            </div>
+            <div class="admin-member-access-summary">
+              <strong>${formatDate(member.access_end_date)}</strong>
+              <span>${esc(facilityText)}</span>
+            </div>
+            <div class="admin-member-actions-clean">
+              <button class="btn mini secondary" type="button" data-detail-id="${esc(member.id)}">${isOpen ? "Tutup" : "Detail"}</button>
             </div>
           </div>
-          <div>
-            <p>WA: ${esc(member.whatsapp || "-")}</p>
-            <p>Telegram: ${esc(member.telegram_username ? "@" + String(member.telegram_username).replace(/^@+/, "") : "-")}</p>
-            <p>Masa akses: ${formatDate(member.access_start_date)} — ${formatDate(member.access_end_date)}</p>
-          </div>
-          <div class="admin-member-actions">
-            <button class="btn mini secondary" type="button" data-detail-id="${esc(member.id)}">${isOpen ? "Tutup" : "Detail"}</button>
-          </div>
-          ${isOpen ? renderDetailBlock(member, access) : ""}
+          ${isOpen ? renderDetail(member, access) : ""}
         </article>`;
     }).join("");
+  }
+
+  async function toggleFacility(profileId, key, checked){
+    if(savingFacility) return;
+    savingFacility = true;
+    const listEl = qs("#adminMembersList");
+    if(listEl) listEl.classList.add("is-saving");
+    try{
+      const current = getAccess(profileId);
+      const next = Object.assign({}, current, { [key]: checked });
+      const payload = {};
+      Object.keys(FACILITY_LABELS).forEach(function(f){ payload[f] = Boolean(next[f]); });
+
+      const { error } = await client()
+        .from("member_access")
+        .update(payload)
+        .eq("profile_id", profileId);
+      if(error) throw error;
+
+      accessByProfile.set(profileId, Object.assign({}, current, payload));
+      toast(`${FACILITY_LABELS[key]} ${checked ? "diaktifkan" : "dinonaktifkan"}.`);
+      renderMembers();
+    }catch(error){
+      console.error("[Admin Members Toggle]", error);
+      toast("Gagal mengubah fasilitas. Cek RLS/policy admin untuk update member_access.");
+      renderMembers();
+    }finally{
+      savingFacility = false;
+      if(listEl) listEl.classList.remove("is-saving");
+    }
   }
 
   document.addEventListener("DOMContentLoaded", function(){
@@ -187,12 +251,21 @@
     });
     qs("#adminMemberRefresh")?.addEventListener("click", function(){ loadMembers().catch(showError); });
     qs("#adminMembersList")?.addEventListener("click", function(event){
-      const btn = event.target.closest("[data-detail-id]");
-      if(!btn) return;
-      const id = btn.getAttribute("data-detail-id");
-      openDetailId = openDetailId === id ? null : id;
-      renderMembers();
-      if(openDetailId){ setTimeout(function(){ qs(`[data-member-card="${CSS.escape(openDetailId)}"]`)?.scrollIntoView({behavior:"smooth", block:"center"}); }, 30); }
+      const detailBtn = event.target.closest("[data-detail-id]");
+      if(detailBtn){
+        event.preventDefault();
+        const id = detailBtn.getAttribute("data-detail-id");
+        openDetailId = openDetailId === id ? null : id;
+        renderMembers();
+        return;
+      }
+    });
+    qs("#adminMembersList")?.addEventListener("change", function(event){
+      const toggle = event.target.closest("[data-facility-toggle]");
+      if(!toggle) return;
+      const profileId = toggle.getAttribute("data-profile-id");
+      const key = toggle.getAttribute("data-facility-toggle");
+      toggleFacility(profileId, key, toggle.checked);
     });
     loadMembers().catch(showError);
   });

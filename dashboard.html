@@ -27,8 +27,8 @@
       <a href="index.html#faq">FAQ</a>
     </nav>
     <div class="header-actions">
-      <a class="header-cta" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>
-      <a class="header-cta header-member-cta" href="member.html">Daftar / Login Member</a>
+      <a class="header-cta" href="index.html">Kembali ke Beranda</a>
+      <a class="header-cta header-member-cta" href="member.html">Logout</a>
     </div>
   </header>
 
@@ -48,75 +48,46 @@
       <div class="member-app" id="member-dashboard">
 <aside class="member-sidebar">
 <div class="member-sidebar-brand">KAWAN KAMAR</div>
-<a href="#member-dashboard">Dashboard</a>
-<a href="#member-study">Kamar Study</a>
-<a href="#member-education">Materi Edukasi</a>
-<a href="#member-private">Kamar Private</a>
-<a href="#member-indicator">Kamar Indikator</a>
-<a href="#member-robot">Kamar Robot</a>
-<a href="#member-profile">Profil Akun</a>
-<a href="member.html">Logout</a>
+<a class="nav-active" href="#member-dashboard">Dashboard</a>
+<a class="nav-active" href="#member-study">Kamar Study</a>
+<span class="nav-disabled">Materi Edukasi</span>
+<span class="nav-disabled">Kamar Private</span>
+<span class="nav-disabled">Kamar Indikator</span>
+<span class="nav-disabled">Kamar Robot</span>
+<a class="nav-active" href="#member-profile">Profil Akun</a>
+<a class="nav-active" href="member.html">Logout</a>
 </aside>
 <div class="member-content">
-<div class="member-topbar">
+<div class="member-topbar dashboard-hero-card">
 <div>
 <span class="mini-label">Dashboard</span>
 <h3>Dashboard Kawan Kamar</h3>
-<p>Kelola status akun, pembayaran, masa akses, dan hak akses fasilitas Kamar.</p>
+<p>Kelola hak akses fasilitas Kamar dari satu tempat.</p>
 </div>
-<div class="member-badge-row">
+<div class="member-badge-row dashboard-actions">
+<div>
 <span class="status-pill running">Kawan Kamar</span>
 <a class="member-logout" href="member.html">Logout</a>
 </div>
+<div class="access-meta">
+<strong>Sisa Akses: Belum Aktif</strong>
+<span>Menunggu konfirmasi admin</span>
 </div>
-<div class="member-summary-grid member-summary-grid-5">
-<article class="member-summary-card">
-<span>Status Akun</span>
-<strong>Menunggu Aktivasi</strong>
-<small>Role: Kawan Kamar</small>
-</article>
-<article class="member-summary-card">
-<span>Status Pembayaran</span>
-<strong>Menunggu Konfirmasi</strong>
-<small>Konfirmasi via admin setelah pembayaran.</small>
-</article>
-<article class="member-summary-card highlight-summary">
-<span>Target Evaluasi Harian</span>
-<strong class="positive">+5 Point</strong>
-<small>Target evaluasi, bukan jaminan hasil.</small>
-</article>
-<article class="member-summary-card">
-<span>Status Hari Ini</span>
-<strong>Target Belum Tercapai</strong>
-<small>Hasil hari ini: +2.50 Point</small>
-</article>
-<article class="member-summary-card renewal-summary">
-<span>Sisa Akses</span>
-<strong>Belum Aktif</strong>
-<small>Aktif setelah pembayaran dikonfirmasi.</small>
-</article>
 </div>
-<div class="activation-panel">
-<div>
-<span class="mini-label">Pembayaran Langganan</span>
-<h3>Selesaikan pembayaran untuk mengaktifkan akses.</h3>
-<p>Akun Kawan Kamar sudah dapat dibuat lebih dulu, tetapi hak akses fasilitas aktif setelah pembayaran dikonfirmasi admin.</p>
-</div>
-<a class="btn btn-primary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Konfirmasi Pembayaran via Admin</a>
 </div>
 <div class="member-facility-grid">
-<article class="member-feature active"><span>Aktif</span><h4>Dashboard</h4><p>Ringkasan akun dan status evaluasi harian.</p><a href="#member-dashboard">Buka</a></article>
-<article class="member-feature pending"><span>Menunggu Aktivasi</span><h4>Kamar Study</h4><p>Detail signal member, area kajian, target, invalidasi, dan riwayat aktif setelah pembayaran dikonfirmasi.</p><a href="#member-study">Lihat Info</a></article>
+<article class="member-feature active"><span>Aktif</span><h4>Dashboard</h4><p>Ringkasan akses dan navigasi utama Kawan Kamar.</p><a href="#member-dashboard">Buka</a></article>
+<article class="member-feature active"><span>Aktif</span><h4>Kamar Study</h4><p>Detail signal member, area kajian, target, invalidasi, dan riwayat.</p><a href="#member-study">Buka</a></article>
 <article class="member-feature active"><span>Aktif</span><h4>Profil Akun</h4><p>Status akun, pembayaran, masa akses, dan hak akses fasilitas.</p><a href="#member-profile">Buka</a></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Materi Edukasi</h4><p>PDF, video pembelajaran, rekaman, dan panduan belajar Kamar.</p><a href="#member-education">Lihat Info</a></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Private</h4><p>Pendampingan, evaluasi, QNA, dan pembelajaran intensif.</p><a href="#member-private">Lihat Info</a></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Indikator</h4><p>Panduan, file tools, update versi, dan informasi penggunaan indikator.</p><a href="#member-indicator">Lihat Info</a></article>
-<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Robot</h4><p>Panduan, parameter risiko, update file, dan informasi robot.</p><a href="#member-robot">Lihat Info</a></article>
+<article class="member-feature pending"><span>Segera Hadir</span><h4>Materi Edukasi</h4><p>PDF, video pembelajaran, rekaman, dan panduan belajar Kamar.</p><em>Segera tersedia</em></article>
+<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Private</h4><p>Pendampingan, evaluasi, QNA, dan pembelajaran intensif.</p><em>Segera tersedia</em></article>
+<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Indikator</h4><p>Panduan, file tools, update versi, dan informasi penggunaan indikator.</p><em>Segera tersedia</em></article>
+<article class="member-feature pending"><span>Segera Hadir</span><h4>Kamar Robot</h4><p>Panduan, parameter risiko, update file, dan informasi robot.</p><em>Segera tersedia</em></article>
 </div>
 <section class="member-page-panel" id="member-study">
 <div class="member-panel-head">
 <div><span class="mini-label">Kamar Study</span><h3>Detail bahan kajian market aktif setelah hak akses dikonfirmasi.</h3></div>
-<span class="period-label">Menunggu Aktivasi</span>
+<span class="period-label">Aktif</span>
 </div>
 <div class="member-daily-grid">
 <div><span>Target Harian</span><strong class="positive">+5 Point</strong></div>
@@ -124,13 +95,39 @@
 <div><span>Signal Hari Ini</span><strong>2 Signal</strong></div>
 <div><span>Status</span><strong>Target Belum Tercapai</strong></div>
 </div>
-<div class="member-filter-row">
-<span>Pair: Semua</span>
-<span>Timeframe: Semua</span>
-<span>Status: Semua</span>
+<div class="member-filter-row interactive-filter">
+<label>Pair
+<select id="filterPair" aria-label="Filter pair">
+<option value="semua">Semua</option>
+<option value="XAUUSD">XAUUSD</option>
+<option value="Forex">Forex</option>
+<option value="Crypto">Crypto</option>
+<option value="Index">Index</option>
+</select>
+</label>
+<label>Timeframe
+<select id="filterTimeframe" aria-label="Filter timeframe">
+<option value="semua">Semua</option>
+<option value="M5">M5</option>
+<option value="M15">M15</option>
+<option value="M30">M30</option>
+<option value="H1">H1</option>
+<option value="H4">H4</option>
+</select>
+</label>
+<label>Status
+<select id="filterStatus" aria-label="Filter status">
+<option value="semua">Semua</option>
+<option value="Fresh">Fresh</option>
+<option value="Running">Running</option>
+<option value="Selesai">Selesai</option>
+<option value="Invalid">Invalid</option>
+</select>
+</label>
 </div>
-<div class="member-study-sections">
-<article class="member-study-card">
+<div class="study-order-note">Default menampilkan maksimal 6 kajian paling relevan, diurutkan berdasarkan kedekatan area terhadap harga berjalan. Filter default: semua.</div>
+<div class="member-study-sections" id="studyCards">
+<article class="member-study-card signal-card" data-pair="XAUUSD" data-timeframe="M15" data-status="Fresh" data-distance="1">
 <div class="panel-head small-head"><span class="mini-label">New Setup Fresh</span><span class="status-pill fresh">Fresh</span></div>
 <h4>Buy Study · XAUUSD M15</h4>
 <div class="member-signal-grid">
@@ -141,7 +138,7 @@
 </div>
 <p>Status: Menunggu Harga Masuk. Bukan instruksi transaksi wajib.</p>
 </article>
-<article class="member-study-card">
+<article class="member-study-card signal-card" data-pair="XAUUSD" data-timeframe="M5" data-status="Running" data-distance="2">
 <div class="panel-head small-head"><span class="mini-label">Setup Aktif / Running</span><span class="status-pill running">Running</span></div>
 <h4>Sell Study · XAUUSD M5</h4>
 <div class="member-signal-grid">
@@ -152,21 +149,108 @@
 </div>
 <p>Setup sudah aktif dan tidak digunakan sebagai acuan entry baru.</p>
 </article>
-<article class="member-study-card recap-card-wide">
-<div class="panel-head small-head"><span class="mini-label">Rekap &amp; Riwayat Kajian</span><span class="period-label">Hari Ini</span></div>
-<div class="history-list">
-<div><span>XAUUSD M15 · Buy Study · TP1 Hit</span><strong class="positive">+3.00 Point</strong></div>
-<div><span>XAUUSD M5 · Sell Study · Running</span><strong class="positive">+2.50 Point</strong></div>
-<div><span>XAUUSD M15 · Buy Study · Invalid</span><strong class="negative">-1.00 Point</strong></div>
+<article class="member-study-card signal-card" data-pair="XAUUSD" data-timeframe="H1" data-status="Fresh" data-distance="3">
+<div class="panel-head small-head"><span class="mini-label">New Setup Fresh</span><span class="status-pill fresh">Fresh</span></div>
+<h4>Buy Study · XAUUSD H1</h4>
+<div class="member-signal-grid">
+<div><span>Area Kajian</span><strong>4058.20 – 4064.80</strong></div>
+<div><span>Invalidasi</span><strong>4056.90</strong></div>
+<div><span>Target Kajian</span><strong>4068.80 · 4074.20 · 4082.50</strong></div>
+<div><span>Target Lanjutan</span><strong>4095.00 · 4110.00 · 4130.00</strong></div>
 </div>
+<p>Ditampilkan sebagai kajian terdekat berikutnya sesuai filter.</p>
+</article>
+<article class="member-study-card signal-card" data-pair="Forex" data-timeframe="M30" data-status="Selesai" data-distance="4">
+<div class="panel-head small-head"><span class="mini-label">Riwayat Kajian</span><span class="period-label">Selesai</span></div>
+<h4>Buy Study · EURUSD M30</h4>
+<div class="member-signal-grid">
+<div><span>Hasil</span><strong class="positive">+5.20 Point</strong></div>
+<div><span>Status</span><strong>Target Harian Tercapai</strong></div>
+</div>
+<p>Riwayat ringkas hasil kajian yang sudah selesai.</p>
+</article>
+<article class="member-study-card signal-card" data-pair="Crypto" data-timeframe="H4" data-status="Running" data-distance="5">
+<div class="panel-head small-head"><span class="mini-label">Setup Aktif / Running</span><span class="status-pill running">Running</span></div>
+<h4>Buy Study · BTCUSD H4</h4>
+<div class="member-signal-grid">
+<div><span>Area Kajian</span><strong>64800 – 65500</strong></div>
+<div><span>Running</span><strong class="positive">+1.80 Point</strong></div>
+</div>
+<p>Contoh data dummy untuk uji filter pair Crypto.</p>
+</article>
+<article class="member-study-card signal-card" data-pair="Index" data-timeframe="M15" data-status="Invalid" data-distance="6">
+<div class="panel-head small-head"><span class="mini-label">Riwayat Kajian</span><span class="period-label">Invalid</span></div>
+<h4>Sell Study · NAS100 M15</h4>
+<div class="member-signal-grid">
+<div><span>Hasil</span><strong class="negative">-1.00 Point</strong></div>
+<div><span>Status</span><strong>Invalid</strong></div>
+</div>
+<p>Contoh data dummy untuk uji filter status Invalid.</p>
+</article>
+<article class="member-study-card recap-card-wide" id="emptyFilterMessage" hidden>
+<div class="panel-head small-head"><span class="mini-label">Filter Kajian</span></div>
+<p>Belum ada kajian yang sesuai dengan filter ini.</p>
 </article>
 </div>
+<div class="study-load-row"><button class="btn btn-ghost" type="button" id="showAllStudy">Lihat Semua Kajian</button></div>
+<script>
+(function(){
+ const cards=[...document.querySelectorAll('.signal-card')];
+ const pair=document.getElementById('filterPair');
+ const tf=document.getElementById('filterTimeframe');
+ const st=document.getElementById('filterStatus');
+ const empty=document.getElementById('emptyFilterMessage');
+ const showAll=document.getElementById('showAllStudy');
+ let expanded=false;
+ function match(card){
+   return (pair.value==='semua'||card.dataset.pair===pair.value) &&
+          (tf.value==='semua'||card.dataset.timeframe===tf.value) &&
+          (st.value==='semua'||card.dataset.status===st.value);
+ }
+ function apply(){
+   const matched=cards.filter(match).sort((a,b)=>Number(a.dataset.distance)-Number(b.dataset.distance));
+   cards.forEach(c=>c.hidden=true);
+   matched.slice(0, expanded ? matched.length : 6).forEach(c=>c.hidden=false);
+   empty.hidden=matched.length!==0;
+   showAll.hidden=matched.length<=6;
+   showAll.textContent=expanded?'Tampilkan 6 Kajian':'Lihat Semua Kajian';
+ }
+ [pair,tf,st].forEach(el=>el.addEventListener('change',()=>{expanded=false;apply();}));
+ showAll.addEventListener('click',()=>{expanded=!expanded;apply();});
+ apply();
+})();
+</script>
 </section>
+
+<section class="member-page-panel" id="member-profile">
+<div class="member-panel-head">
+<div><span class="mini-label">Profil Akun</span><h3>Informasi akun Kawan Kamar.</h3></div>
+<span class="period-label">Aktif</span>
+</div>
+<div class="profile-grid">
+<div><span>Role</span><strong>Kawan Kamar</strong></div>
+<div><span>Status Akun</span><strong>Aktif</strong></div>
+<div><span>Status Pembayaran</span><strong>Terkonfirmasi</strong></div>
+<div><span>Sisa Akses</span><strong>Belum Aktif</strong></div>
+<div><span>Tanggal Mulai</span><strong>Akan diperbarui</strong></div>
+<div><span>Tanggal Berakhir</span><strong>Akan diperbarui</strong></div>
+</div>
+<p class="public-recap-note">Data profil dan masa akses akan mengikuti status aktivasi admin saat sistem member terhubung penuh.</p>
+</section>
+
+<section class="member-coming-grid" aria-label="Fasilitas segera hadir">
+<article class="member-coming-card" id="member-education"><span>Segera Hadir</span><h3>Materi Edukasi</h3><p>Area PDF, video pembelajaran, rekaman, dan panduan belajar Kamar sedang disiapkan.</p></article>
+<article class="member-coming-card" id="member-private"><span>Segera Hadir</span><h3>Kamar Private</h3><p>Area pendampingan, evaluasi, QNA, dan pembelajaran intensif sedang disiapkan.</p></article>
+<article class="member-coming-card" id="member-indicator"><span>Segera Hadir</span><h3>Kamar Indikator</h3><p>Area panduan, file tools, update versi, dan informasi penggunaan indikator sedang disiapkan.</p></article>
+<article class="member-coming-card" id="member-robot"><span>Segera Hadir</span><h3>Kamar Robot</h3><p>Area panduan, parameter risiko, update file, dan informasi robot sedang disiapkan.</p></article>
+</section>
+</div>
+</div>
     </section>
   </main>
   <footer class="site-footer">
     <p><strong>Disclaimer:</strong> Seluruh materi Kamar Kajian Market bersifat edukasi, diskusi, dan bahan kajian. Trading memiliki risiko. Tidak ada jaminan profit, sinyal pasti, hasil tetap, atau instruksi transaksi wajib. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab masing-masing trader.</p>
-    <small>© Kamar Kajian Market — Market Logic Community</small>
+    <small>© Kamar Kajian Market</small>
   </footer>
 </body>
 </html>

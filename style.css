@@ -477,3 +477,32 @@ h1{font-size:clamp(42px,6vw,74px);line-height:.96;letter-spacing:-.06em;margin-b
   margin-top:4px;
   accent-color:#d4af37;
 }
+
+/* Final UI correction overrides */
+.site-header{
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) auto minmax(220px,1fr);
+  align-items:center;
+  gap:18px;
+}
+.site-header .brand{justify-self:start;min-width:0}
+.site-header .nav-links{justify-self:center;display:flex;align-items:center;justify-content:center;gap:24px}
+.site-header .header-actions{justify-self:end;display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
+.site-header .nav-links a{white-space:nowrap;text-align:center}
+.site-footer small{font-weight:800;color:rgba(246,240,223,.62)}
+.form-note{margin:10px 0 0!important;padding:12px 14px;border-radius:16px;border:1px solid rgba(216,173,84,.18);background:rgba(216,173,84,.08);color:var(--gold-soft)!important;font-size:13px!important;line-height:1.5!important}
+.member-sidebar a.nav-active{color:var(--gold-soft);cursor:pointer}
+.member-sidebar a.nav-active:hover{color:var(--gold-soft);background:rgba(216,173,84,.09);border-color:rgba(216,173,84,.20)}
+.member-sidebar .nav-disabled{padding:11px 12px;border-radius:15px;color:rgba(246,240,223,.36);font-weight:850;cursor:not-allowed;user-select:none;opacity:.72}
+.dashboard-hero-card{position:relative;min-height:190px;overflow:hidden}
+.dashboard-hero-card:after{content:"";position:absolute;right:-80px;bottom:-80px;width:240px;height:240px;border-radius:999px;background:radial-gradient(circle,rgba(44,207,143,.12),transparent 70%);pointer-events:none}
+.dashboard-actions{display:grid;justify-items:end;align-content:space-between;min-height:136px;position:relative;z-index:2}
+.dashboard-actions>div:first-child{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.access-meta{text-align:right;color:var(--muted);font-size:13px;line-height:1.45}
+.access-meta strong{display:block;color:var(--gold-soft);font-size:15px;margin-bottom:3px}.access-meta span{display:block}
+.member-feature.pending{opacity:.74}.member-feature.pending a{pointer-events:none;color:rgba(246,240,223,.42)}.member-feature.pending em{display:inline-block;color:rgba(246,240,223,.42);font-style:normal;font-weight:900;cursor:not-allowed}.member-feature.active a{color:var(--gold-soft)}.member-feature.active{border-color:rgba(216,173,84,.24)}
+.interactive-filter{align-items:end}.interactive-filter label{display:grid;gap:6px;color:var(--gold-soft);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.09em}.interactive-filter select{appearance:none;-webkit-appearance:none;padding:10px 36px 10px 13px;border-radius:999px;border:1px solid rgba(216,173,84,.18);background:rgba(216,173,84,.08);color:rgba(246,240,223,.84);font-weight:850;outline:none;min-width:150px}.interactive-filter label{position:relative}.interactive-filter label:after{content:"⌄";position:absolute;right:14px;bottom:9px;color:var(--gold-soft);pointer-events:none}.study-order-note{margin:0 0 14px;padding:12px 14px;border-radius:18px;border:1px solid rgba(216,173,84,.14);background:rgba(0,0,0,.20);color:var(--muted);font-size:13px;line-height:1.5}.study-load-row{display:flex;justify-content:center;margin-top:14px}.signal-card[hidden],#emptyFilterMessage[hidden]{display:none!important}
+.member-page-panel .period-label{color:var(--gold-soft)}
+@media (max-width: 1100px){.site-header{grid-template-columns:auto 1fr auto}.site-header .nav-links{gap:15px}.header-cta{font-size:12px;padding:9px 12px}}
+@media (max-width: 920px){.site-header{display:flex;justify-content:space-between}.site-header .nav-links{display:none}.site-header .header-actions{justify-content:flex-end}.dashboard-actions{justify-items:start;min-height:auto}.access-meta{text-align:left;margin-top:12px}.dashboard-hero-card{min-height:auto}.interactive-filter select{min-width:135px}}
+@media (max-width: 560px){.site-header .header-actions{flex-direction:row;flex-wrap:wrap;justify-content:flex-end}.dashboard-actions>div:first-child{justify-content:flex-start}.interactive-filter{display:grid}.interactive-filter select{width:100%;min-width:0}}

@@ -80,7 +80,7 @@
       password: payload.password,
       options: {
         data: metadata,
-        emailRedirectTo: window.location.origin + "/member.html"
+        emailRedirectTo: (window.KAMAR_CONFIG && window.KAMAR_CONFIG.AUTH_REDIRECT_URL) || (window.location.origin + "/member.html")
       }
     });
 

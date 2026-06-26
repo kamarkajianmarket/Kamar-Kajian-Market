@@ -37,6 +37,24 @@
     return n.toLocaleString("id-ID", { maximumFractionDigits: 3 });
   }
 
+  function priceText(value, pair) {
+    if (value === null || value === undefined || value === "") return "-";
+    const n = Number(value);
+    if (!Number.isFinite(n)) return text(value);
+
+    const symbol = String(pair || "").toUpperCase();
+
+    // Standar Kamar untuk XAUUSD: tanpa separator ribuan, selalu 2 desimal.
+    // Contoh: 4015.00, bukan 4.015 atau 4,015.00.
+    if (symbol.includes("XAU")) return n.toFixed(2);
+
+    // Default non-XAU: tetap ringkas, maksimal 5 desimal untuk forex/crypto.
+    return n.toLocaleString("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 5
+    });
+  }
+
   function normalizeStatus(status) {
     const raw = text(status, "").toUpperCase();
     const map = {
@@ -137,7 +155,7 @@
 
     list.innerHTML = items.map(function (raw) {
       const item = normalizeItem(raw);
-      const area = item.areaLow !== null || item.areaHigh !== null ? numberText(item.areaLow) + " - " + numberText(item.areaHigh) : "-";
+      const area = item.areaLow !== null || item.areaHigh !== null ? priceText(item.areaLow, item.pair) + " - " + priceText(item.areaHigh, item.pair) : "-";
       const pointInfo = item.runningPoint !== null || item.maxPoint !== null
         ? `<div><span>Point</span><strong>${numberText(item.runningPoint)} / Max ${numberText(item.maxPoint)}</strong></div>`
         : "";
@@ -159,9 +177,9 @@
           </div>
           <div class="study-levels">
             <div><span>Zona</span><strong>${escapeHtml(area)}</strong></div>
-            <div><span>Invalidasi</span><strong>${escapeHtml(numberText(item.invalidasi))}</strong></div>
-            <div><span>TP 1</span><strong>${escapeHtml(numberText(item.tp1))}</strong></div>
-            <div><span>TP 2 / TP 3</span><strong>${escapeHtml(numberText(item.tp2))} / ${escapeHtml(numberText(item.tp3))}</strong></div>
+            <div><span>Invalidasi</span><strong>${escapeHtml(priceText(item.invalidasi, item.pair))}</strong></div>
+            <div><span>TP 1</span><strong>${escapeHtml(priceText(item.tp1, item.pair))}</strong></div>
+            <div><span>TP 2 / TP 3</span><strong>${escapeHtml(priceText(item.tp2, item.pair))} / ${escapeHtml(priceText(item.tp3, item.pair))}</strong></div>
             ${pointInfo}
           </div>
           <p class="study-note"><small>ID Zona: ${escapeHtml(item.idZona)} · Update: ${escapeHtml(formatDate(item.updated))}</small></p>

@@ -154,7 +154,7 @@
         }
 
         if (!String(email).includes("@")) {
-          throw new Error("Untuk tahap integrasi awal, login gunakan email terdaftar. Login memakai ID member akan kita aktifkan setelah RPC lookup aman dibuat.");
+          throw new Error("Login saat ini hanya menggunakan email terdaftar. Masukkan email akun Kawan Kamar.");
         }
 
         await loginWithEmail(email, password);

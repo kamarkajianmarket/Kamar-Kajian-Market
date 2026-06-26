@@ -75,7 +75,87 @@ body{background:#070707;color:var(--text)}
   .hero .hero-copy h1{font-size:42px!important;}
   .split-main > .split-card:first-child{padding:20px!important;}
 }
-</style></head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a class="disabled" href="member-renewal.html">Kamar Study 🔒</a><a class="active" href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><a href="member-profile.html">Profil Akun</a><a class="disabled" href="member-renewal.html">Materi Edukasi 🔒</a><a class="disabled" href="member-renewal.html">Kamar Private 🔒</a><a class="disabled" href="member-renewal.html">Kamar Indikator 🔒</a><a class="disabled" href="member-renewal.html">Kamar Robot 🔒</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
+</style>
+<style id="kamar-form-admin-cleanup">
+/* === KAMAR V4.3: Elegant readable form controls + admin data panels === */
+.split-card label:not(.check-row),
+.member-page-panel label:not(.check-row),
+.field{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  color:#e8ddc7!important;
+  font-size:15px!important;
+  line-height:1.35!important;
+  font-weight:900!important;
+  letter-spacing:-.01em!important;
+}
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea{
+  width:100%!important;
+  min-height:58px!important;
+  box-sizing:border-box!important;
+  border:1px solid rgba(238,206,122,.24)!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025))!important;
+  color:#fff4db!important;
+  font-size:16px!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+  letter-spacing:-.01em!important;
+  padding:16px 18px!important;
+  outline:none!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 10px 28px rgba(0,0,0,.14)!important;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease,transform .18s ease!important;
+}
+textarea{
+  min-height:128px!important;
+  resize:vertical!important;
+  font-weight:750!important;
+}
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus{
+  border-color:rgba(244,223,144,.62)!important;
+  background:linear-gradient(135deg,rgba(244,223,144,.105),rgba(255,255,255,.035))!important;
+  box-shadow:0 0 0 4px rgba(244,223,144,.085),inset 0 1px 0 rgba(255,255,255,.05)!important;
+}
+input::placeholder,textarea::placeholder{color:rgba(245,240,230,.52)!important;font-weight:700!important;}
+select{appearance:auto!important;-webkit-appearance:auto!important;cursor:pointer!important;}
+select option{background:#11100d!important;color:#fff4db!important;font-size:16px!important;font-weight:800!important;}
+.check-row{
+  display:grid!important;
+  grid-template-columns:22px minmax(0,1fr)!important;
+  align-items:flex-start!important;
+  gap:12px!important;
+  color:rgba(245,240,230,.78)!important;
+  font-size:15px!important;
+  line-height:1.5!important;
+  font-weight:750!important;
+}
+.check-row input[type="checkbox"]{width:18px!important;height:18px!important;margin-top:3px!important;accent-color:#d4a63f!important;}
+.form-grid,.kamar-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px;align-items:start;}
+.form-grid .full,.kamar-form-grid .full{grid-column:1/-1;}
+.data-toolbar{display:grid;grid-template-columns:1.4fr .8fr .8fr auto;gap:14px;align-items:end;margin-top:8px;}
+.admin-member-list{display:grid;gap:14px;margin-top:18px;}
+.admin-member-card{border:1px solid rgba(238,206,122,.16);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015));padding:18px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:16px;align-items:center;transition:.18s ease;}
+.admin-member-card:hover{border-color:rgba(244,223,144,.45);transform:translateY(-1px);}
+.admin-member-card h3{margin:0 0 6px!important;color:#fff3d8!important;font-size:20px!important;line-height:1.15!important;}
+.admin-member-card p{margin:0!important;color:rgba(245,240,230,.68)!important;font-size:14px!important;line-height:1.5!important;}
+.member-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.kamar-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(238,206,122,.16);border-radius:999px;padding:7px 10px;color:#dfd4bd;background:rgba(255,255,255,.035);font-size:12px;font-weight:1000;letter-spacing:.03em;text-transform:uppercase;}
+.kamar-chip.on{color:#bfffd9;border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12);}
+.kamar-chip.warn{color:#ffd582;border-color:rgba(255,213,130,.28);background:rgba(255,213,130,.08);}
+.kamar-chip.off{color:#bdb5a5;opacity:.72;}
+.admin-member-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+.admin-empty-state{border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:24px;background:rgba(255,255,255,.02);color:rgba(245,240,230,.72);line-height:1.6;}
+.admin-detail-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px;}
+.admin-detail-panel .setting-card strong{display:block;color:#fff4db;font-size:17px;margin-top:5px;}
+@media(max-width:920px){.data-toolbar,.admin-member-card,.admin-detail-panel,.form-grid,.kamar-form-grid{grid-template-columns:1fr}.admin-member-actions{justify-content:flex-start}}
+@media(max-width:560px){input:not([type="checkbox"]):not([type="radio"]),select,textarea{font-size:16px!important;min-height:56px!important;padding:15px 16px!important}.admin-member-card{padding:16px}}
+</style>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/></head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a class="disabled" href="member-renewal.html">Kamar Study 🔒</a><a class="active" href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><a href="member-profile.html">Profil Akun</a><a class="disabled" href="member-renewal.html">Materi Edukasi 🔒</a><a class="disabled" href="member-renewal.html">Kamar Private 🔒</a><a class="disabled" href="member-renewal.html">Kamar Indikator 🔒</a><a class="disabled" href="member-renewal.html">Kamar Robot 🔒</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 <div class="split-card"><span class="eyebrow">Perpanjangan / Tambah Fasilitas</span><h1>Perpanjangan &amp; Tambah Fasilitas</h1><p>Ajukan perpanjangan akses atau penambahan fasilitas melalui Admin Kamar.</p></div>
 <section class="split-card"><div class="page-note" id="renewalStatusBox"><strong>Status Akun</strong><br/>Memuat status akun dan masa akses.</div><div class="grid-2" style="margin-top:18px"><label class="field">Kebutuhan<select><option>Perpanjang Langganan</option><option>Tambah Fasilitas</option><option>Perpanjang + Tambah Fasilitas</option></select></label><label class="field">Fasilitas<select><option>Kamar Study</option><option>Materi Edukasi</option><option>Kamar Private</option><option>Kamar Indikator</option><option>Kamar Robot</option><option>Paket Lengkap</option></select></label><label class="field">Durasi<select><option>30 Hari</option><option>90 Hari</option><option>180 Hari</option><option>1 Tahun</option></select></label><label class="field">Catatan<textarea placeholder="Tulis kebutuhan akses atau catatan untuk admin"></textarea></label></div><div class="button-row"><a class="btn" href="https://t.me/kajianmarketkamar" target="_blank">Hubungi Admin</a><a class="btn secondary" href="dashboard.html">Kembali ke Dashboard</a></div></section>
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>

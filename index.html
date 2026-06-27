@@ -360,6 +360,156 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 </style>
 
+
+<style id="kamar-step24ba-access-layout-fix">
+/* Step 24BA — Access section proportional polish */
+#akses.compact-section{
+  max-width:1180px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding-top:54px!important;
+  padding-bottom:54px!important;
+}
+#akses .access-box{
+  position:relative!important;
+  overflow:hidden!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:42px!important;
+  border:1px solid rgba(238,206,122,.18)!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 18% 0%,rgba(212,166,63,.10),transparent 34%),
+    radial-gradient(circle at 88% 20%,rgba(82,205,141,.075),transparent 36%),
+    linear-gradient(135deg,rgba(255,255,255,.040),rgba(255,255,255,.012))!important;
+  box-shadow:0 26px 90px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#akses .access-box::before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.035);
+  pointer-events:none;
+}
+#akses .access-intro{
+  max-width:860px!important;
+  margin:0 auto 26px!important;
+  text-align:center!important;
+}
+#akses .access-intro .eyebrow{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+  margin:0 auto 12px!important;
+}
+#akses .access-intro .eyebrow::before{
+  content:"";
+  width:44px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(238,206,122,.82));
+}
+#akses .access-intro h2{
+  margin:0!important;
+  color:#fff3d8!important;
+  font-size:clamp(30px,3vw,46px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.045em!important;
+  text-wrap:balance;
+}
+#akses .access-intro p{
+  max-width:820px!important;
+  margin:16px auto 0!important;
+  color:rgba(245,240,230,.72)!important;
+  font-size:16px!important;
+  line-height:1.65!important;
+}
+#akses .access-options{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:20px!important;
+  max-width:860px!important;
+  margin:0 auto!important;
+}
+#akses .access-option{
+  min-height:164px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:26px 28px!important;
+  border-radius:24px!important;
+  border:1px solid rgba(238,206,122,.17)!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.050),rgba(255,255,255,.014))!important;
+  box-shadow:0 18px 60px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#akses .access-option.paid-option{
+  border-color:rgba(82,205,141,.20)!important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(82,205,141,.09),transparent 44%),
+    linear-gradient(135deg,rgba(255,255,255,.052),rgba(255,255,255,.014))!important;
+}
+#akses .access-option span{
+  width:42px!important;
+  height:42px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0 0 14px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(238,206,122,.22)!important;
+  background:rgba(238,206,122,.075)!important;
+  color:#ffe7a2!important;
+  font-size:12px!important;
+  font-weight:1000!important;
+  letter-spacing:.12em!important;
+}
+#akses .access-option h3{
+  margin:0!important;
+  color:#fff2d6!important;
+  font-size:clamp(22px,2vw,28px)!important;
+  line-height:1.08!important;
+  letter-spacing:-.03em!important;
+}
+#akses .access-option p{
+  max-width:360px!important;
+  margin:14px 0 0!important;
+  color:rgba(245,240,230,.70)!important;
+  font-size:15px!important;
+  line-height:1.55!important;
+}
+#akses .access-action{
+  max-width:760px!important;
+  margin:26px auto 0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:18px!important;
+  text-align:center!important;
+  flex-wrap:wrap!important;
+}
+#akses .access-action p{
+  flex:1 1 420px!important;
+  max-width:590px!important;
+  margin:0!important;
+  color:rgba(245,240,230,.74)!important;
+  font-size:15px!important;
+  line-height:1.55!important;
+}
+#akses .access-action .btn{
+  flex:0 0 auto!important;
+}
+@media(max-width:820px){
+  #akses.compact-section{padding-top:38px!important;padding-bottom:38px!important;}
+  #akses .access-box{padding:26px 18px!important;border-radius:24px!important;}
+  #akses .access-box::before{display:none!important;}
+  #akses .access-options{grid-template-columns:1fr!important;max-width:560px!important;}
+  #akses .access-option{min-height:auto!important;padding:22px!important;}
+  #akses .access-action{display:grid!important;justify-items:center!important;}
+  #akses .access-action p{flex:auto!important;}
+}
+</style>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>

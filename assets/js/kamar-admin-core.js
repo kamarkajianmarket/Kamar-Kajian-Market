@@ -356,7 +356,11 @@
     async function load(){
       const box=document.getElementById('contentList');
       try{
-        const {data,error}=await client().from(table).select('*').order('created_at',{ascending:false}).limit(50);
+        box.innerHTML = '<div class="page-note"><strong>Memuat ulang data...</strong><br/>Mengambil data terbaru dari Supabase.</div>';
+        let query = client().from(table).select('*');
+        if(kind==='study') query = query.order('updated_at',{ascending:false,nullsFirst:false}).order('created_at',{ascending:false});
+        else query = query.order('created_at',{ascending:false});
+        const {data,error}=await query.limit(50);
         if(error) throw error;
         if(kind==='study'){
           window.__kamarStudyRows = data || [];
@@ -477,7 +481,18 @@
         box.innerHTML=`<table class="kamar-table"><thead><tr><th>Judul/Key</th><th>Status</th><th>Area/Akses</th><th>Update</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td><strong>${esc(x.title||x.setting_key||x.id_zona||x.id||'-')}</strong><div class="kamar-muted">${esc(x.description||x.body||x.category||x.pair||'')}</div></td><td>${pill(contentStatusValue(x))}</td><td>${esc(x.display_area||x.access_required||x.timeframe||'-')}</td><td>${fmtDate(x.updated_at||x.created_at)}</td></tr>`).join('')||'<tr><td colspan="4"><div class="kamar-empty">Belum ada data.</div></td></tr>'}</tbody></table>`;
       }catch(e){box.innerHTML=statusBox(e.message,'error');}
     }
-    document.getElementById('refreshContent').onclick=load; load();
+    const refreshBtn=document.getElementById('refreshContent');
+    if(refreshBtn){
+      refreshBtn.onclick=async()=>{
+        const oldText=refreshBtn.textContent;
+        refreshBtn.textContent='Merefresh...';
+        refreshBtn.disabled=true;
+        try{ await load(); toast('Data Kamar Study direfresh.'); }
+        catch(e){ toast(e.message || 'Gagal refresh data.'); }
+        finally{ refreshBtn.textContent=oldText; refreshBtn.disabled=false; }
+      };
+    }
+    load();
   }
   async function boot(){
     const p=page();

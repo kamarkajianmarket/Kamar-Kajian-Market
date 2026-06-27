@@ -337,6 +337,14 @@ async function getDailySignalSummary(visibility, now = new Date()) {
 
 export default async function handler(req, res) {
   try {
+    if (req.method === "GET") {
+      return send(res, 200, {
+        ok: true,
+        message: "API Kamar Study aktif. Endpoint ini menerima POST dari EA.",
+        endpoint: "/api/kamar-study-update",
+        expected_method: "POST"
+      });
+    }
     if (req.method !== "POST") {
       res.setHeader("Allow", "POST");
       return send(res, 405, { ok: false, message: "Method tidak valid. Gunakan POST." });

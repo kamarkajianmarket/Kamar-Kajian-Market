@@ -1128,6 +1128,174 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 </style>
 
+
+<style id="kamar-step24BI-faq-professional-fix">
+/* Step 24BI — FAQ professional alignment fix */
+#faq.faq-section{
+  width:min(100%,1200px)!important;
+  max-width:1200px!important;
+  margin:0 auto!important;
+  padding:clamp(58px,7vw,92px) clamp(18px,3vw,30px)!important;
+}
+#faq .faq-accordion{
+  width:100%!important;
+  max-width:1060px!important;
+  margin:38px auto 0!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:18px!important;
+}
+#faq .faq-category{
+  width:100%!important;
+  overflow:hidden!important;
+  border-radius:28px!important;
+  border:1px solid rgba(238,206,122,.18)!important;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(238,206,122,.10),transparent 34%),
+    radial-gradient(circle at 100% 18%,rgba(62,190,122,.055),transparent 36%),
+    linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.012))!important;
+  box-shadow:0 26px 80px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#faq .faq-category>summary{
+  width:100%!important;
+  min-height:112px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 44px!important;
+  grid-template-rows:auto auto!important;
+  column-gap:24px!important;
+  row-gap:8px!important;
+  align-items:center!important;
+  padding:28px 30px!important;
+  cursor:pointer!important;
+}
+#faq .faq-category>summary span{
+  grid-column:1!important;
+  grid-row:1!important;
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  color:#fff4dc!important;
+  font-size:clamp(26px,2.25vw,36px)!important;
+  line-height:1.08!important;
+  letter-spacing:-.045em!important;
+  font-weight:1000!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+#faq .faq-category>summary small{
+  grid-column:1!important;
+  grid-row:2!important;
+  display:block!important;
+  width:100%!important;
+  max-width:820px!important;
+  margin:0!important;
+  color:rgba(245,240,230,.66)!important;
+  font-size:15px!important;
+  line-height:1.58!important;
+  font-weight:760!important;
+  letter-spacing:-.005em!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  text-align:left!important;
+}
+#faq .faq-category>summary::after{
+  grid-column:2!important;
+  grid-row:1 / span 2!important;
+  justify-self:end!important;
+  align-self:center!important;
+  content:"+"!important;
+  width:44px!important;
+  height:44px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  border:1px solid rgba(238,206,122,.28)!important;
+  background:rgba(238,206,122,.08)!important;
+  color:#ffe2a0!important;
+  font-size:22px!important;
+  font-weight:1000!important;
+  line-height:1!important;
+}
+#faq .faq-category[open]>summary::after{content:"−"!important;}
+#faq .faq-category[open]>summary{border-bottom:1px solid rgba(238,206,122,.13)!important;}
+#faq .faq-items{
+  width:100%!important;
+  padding:22px 24px 26px!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+#faq .faq-item{
+  width:100%!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  border-radius:20px!important;
+  border:1px solid rgba(238,206,122,.13)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.010))!important;
+}
+#faq .faq-item>summary{
+  width:100%!important;
+  min-height:68px!important;
+  display:grid!important;
+  grid-template-columns:30px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:14px!important;
+  padding:18px 20px!important;
+  color:#fff1d6!important;
+  font-size:16px!important;
+  line-height:1.42!important;
+  font-weight:950!important;
+  letter-spacing:-.012em!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  text-align:left!important;
+}
+#faq .faq-item>summary::before{
+  content:"+"!important;
+  width:30px!important;
+  height:30px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  border:1px solid rgba(238,206,122,.20)!important;
+  color:#f2d28a!important;
+  background:rgba(238,206,122,.065)!important;
+  font-size:15px!important;
+  font-weight:1000!important;
+  line-height:1!important;
+}
+#faq .faq-item[open]>summary::before{content:"−"!important;}
+#faq .faq-item p{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0 22px 20px 64px!important;
+  color:rgba(245,240,230,.68)!important;
+  font-size:15px!important;
+  line-height:1.68!important;
+  font-weight:700!important;
+  text-align:left!important;
+}
+@media(max-width:860px){
+  #faq .faq-items{grid-template-columns:1fr!important;padding:18px!important;}
+  #faq .faq-category>summary{min-height:auto!important;padding:24px!important;}
+}
+@media(max-width:560px){
+  #faq .faq-category{border-radius:22px!important;}
+  #faq .faq-category>summary{grid-template-columns:minmax(0,1fr) 38px!important;column-gap:14px!important;padding:21px 18px!important;}
+  #faq .faq-category>summary span{font-size:25px!important;}
+  #faq .faq-category>summary small{font-size:14px!important;line-height:1.55!important;}
+  #faq .faq-category>summary::after{width:38px!important;height:38px!important;font-size:20px!important;}
+  #faq .faq-item>summary{grid-template-columns:28px minmax(0,1fr)!important;padding:16px!important;font-size:15px!important;}
+  #faq .faq-item p{padding:0 16px 18px 58px!important;font-size:14px!important;}
+}
+</style>
+
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>

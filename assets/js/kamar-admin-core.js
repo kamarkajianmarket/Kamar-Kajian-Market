@@ -84,6 +84,25 @@
     if(typeof payload === 'object') return payload;
     try{return JSON.parse(payload);}catch(e){return {};}
   }
+  function studyShowPublic(x){
+    const payload=sourcePayload(x);
+    if(payload.show_public !== undefined) return !!payload.show_public;
+    return String(x && x.visibility || '').toLowerCase() === 'public';
+  }
+  function studyShowMember(x){
+    const payload=sourcePayload(x);
+    if(payload.show_member !== undefined) return !!payload.show_member;
+    return String(x && x.visibility || '').toLowerCase() === 'member';
+  }
+  function studyVisibilitySummary(x){
+    const parts=[];
+    if(studyShowPublic(x)) parts.push('Publik');
+    if(studyShowMember(x)) parts.push('Member');
+    return parts.length ? parts.join(' + ') : 'Tidak tampil';
+  }
+  function toggleControl(name, title, help, checked){
+    return `<div class="toggle-row compact-toggle study-toggle-control"><div><span>${esc(title)}</span><small>${esc(help)}</small></div><input type="checkbox" name="${esc(name)}" ${checked?'checked':''}><span class="toggle-switch" aria-hidden="true"><span class="toggle-dot"></span></span></div>`;
+  }
   function progressLabelFromCode(code){
     const key=String(code||'').toLowerCase();
     let m=key.match(/target_kajian[_-]([123])/);
@@ -378,7 +397,7 @@
             </div>
             <div class="admin-list-meta">
               ${studyStatusPill(x)}
-              <small>${esc(x.visibility||'-')} · ${fmtDate(x.updated_at||x.created_at)}</small>
+              <small>${esc(studyVisibilitySummary(x))} · ${fmtDate(x.updated_at||x.created_at)}</small>
               <button class="btn secondary study-detail-btn" data-study-detail="${esc(x.id)}" type="button">Detail</button>
             </div>
             <div class="study-detail-panel hidden" id="studyDetail-${esc(x.id)}">
@@ -419,15 +438,15 @@
                   <label class="field">Running Terjauh
                     <input name="max_running_point" inputmode="numeric" value="${esc(x.max_running_point??0)}">
                   </label>
-                  <label class="field">Visibility
-                    <select name="visibility">
-                      <option value="member" ${String(x.visibility||'')==='member'?'selected':''}>Member</option>
-                      <option value="public" ${String(x.visibility||'')==='public'?'selected':''}>Public</option>
-                    </select>
-                  </label>
                 </div>
-                <div class="toggle-row compact-toggle"><div><span>Data Aktif</span><small>OFF = tidak dipakai sistem</small></div><input type="checkbox" name="is_active" ${x.is_active?'checked':''}></div>
-                <div class="toggle-row compact-toggle"><div><span>Published</span><small>OFF = tidak tampil di website/member</small></div><input type="checkbox" name="is_published" ${x.is_published?'checked':''}></div>
+                <div class="grid-2 study-visibility-toggle-grid">
+                  ${toggleControl('show_public','Tampilkan di Publik','ON = muncul di halaman publik/beranda.',studyShowPublic(x))}
+                  ${toggleControl('show_member','Tampilkan di Member','ON = muncul di Kamar Study member.',studyShowMember(x))}
+                </div>
+                <div class="grid-2 study-system-toggle-grid">
+                  ${toggleControl('is_active','Data Aktif','ON = signal dipakai sistem.',x.is_active)}
+                  ${toggleControl('is_published','Published','ON = signal boleh tampil di publik/member sesuai toggle.',x.is_published)}
+                </div>
                 <label class="field kamar-wide">Catatan Admin
                   <textarea name="admin_notes" placeholder="Catatan perkembangan zona">${esc(x.admin_notes||'')}</textarea>
                 </label>
@@ -456,13 +475,19 @@
               const cp=form.querySelector('[name="current_price"]').value;
               const rp=form.querySelector('[name="running_point"]').value;
               const mp=form.querySelector('[name="max_running_point"]').value;
+              const row=(window.__kamarStudyRows||[]).find(r=>String(r.id)===String(id)) || {};
+              const oldPayload=sourcePayload(row);
+              const showPublic=form.querySelector('[name="show_public"]').checked;
+              const showMember=form.querySelector('[name="show_member"]').checked;
+              const nextVisibility = showPublic ? 'public' : 'member';
               const payload={
                 current_price:parseAdminNumber(cp),
                 running_point:parseAdminNumber(rp) ?? 0,
                 max_running_point:parseAdminNumber(mp) ?? 0,
-                visibility:form.querySelector('[name="visibility"]').value,
+                visibility:nextVisibility,
                 is_active:form.querySelector('[name="is_active"]').checked,
                 is_published:form.querySelector('[name="is_published"]').checked,
+                source_payload:{...oldPayload, show_public:showPublic, show_member:showMember, visibility_mode:(showPublic&&showMember?'both':showPublic?'public':showMember?'member':'hidden'), manual_visibility_updated_at:new Date().toISOString()},
                 admin_notes:form.querySelector('[name="admin_notes"]').value || null
               };
               await safeUpdateSignal(id,payload);

@@ -98,6 +98,11 @@
     if (typeof payload === "object") return payload;
     try { return JSON.parse(payload); } catch (error) { return {}; }
   }
+  function shouldShowInMember(item) {
+    const payload = sourcePayload(item);
+    if (payload.show_member !== undefined) return !!payload.show_member;
+    return String(item && item.visibility || '').toLowerCase() === 'member';
+  }
 
   function highestKajianLevel(item) {
     const level = Number(item && (item.tpHitLevel ?? item.tp_hit_level ?? 0));
@@ -317,11 +322,10 @@
   async function loadDirectFallback(pair, timeframe, status) {
     let query = client()
       .from("signals")
-      .select("id_zona,pair,timeframe,jenis_zona,skenario,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,setup_title,setup_description,visibility,is_active,is_published,price_entered_area_at,first_reaction_at,current_price,invalidated_at,finished_at,tp_hit_level,farthest_tp_level,tp1_hit_at,tp2_hit_at,tp3_hit_at,created_at,updated_at,display_order")
+      .select("id_zona,pair,timeframe,jenis_zona,skenario,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,setup_title,setup_description,visibility,source_payload,is_active,is_published,price_entered_area_at,first_reaction_at,current_price,invalidated_at,finished_at,tp_hit_level,farthest_tp_level,tp1_hit_at,tp2_hit_at,tp3_hit_at,created_at,updated_at,display_order")
       .eq("is_active", true)
       .eq("is_published", true)
       .is("finished_at", null)
-      .in("visibility", ["member", "public"])
       .order("display_order", { ascending: true })
       .order("created_at", { ascending: false })
       .limit(20);
@@ -329,7 +333,7 @@
     query = applyFiltersToQuery(query, pair, timeframe);
     const { data, error } = await query;
     if (error) throw error;
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data) ? data.filter(shouldShowInMember) : [];
   }
 
   async function loadFeed() {
@@ -360,6 +364,7 @@
       }
     }
 
+    data = (data || []).filter(shouldShowInMember);
     data = applyStatusFilter(data, status);
     renderFeed(data);
   }

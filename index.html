@@ -859,6 +859,275 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 </style>
 
+
+<style id="kamar-step24BH-final-polish">
+/* Step 24BH: request corrections — about stats, CTA consistency, and clean FAQ layout */
+.about#tentang .about-stats-grid,
+#tentang .about-stats-grid{
+  width:min(100%,940px)!important;
+  margin:30px auto 0!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:18px!important;
+  align-items:stretch!important;
+  justify-content:center!important;
+}
+.about#tentang .about-stats-grid>div,
+#tentang .about-stats-grid>div{
+  min-height:148px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  border-radius:26px!important;
+  padding:24px!important;
+  border:1px solid rgba(238,206,122,.17)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.046),rgba(255,255,255,.014))!important;
+  box-shadow:0 18px 58px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+.about#tentang .about-stats-grid strong,
+#tentang .about-stats-grid strong{
+  color:#fff4dc!important;
+  font-size:clamp(24px,2.1vw,32px)!important;
+  line-height:1.04!important;
+  letter-spacing:-.045em!important;
+  margin:0 0 16px!important;
+}
+.about#tentang .about-stats-grid span,
+#tentang .about-stats-grid span{
+  color:rgba(245,240,230,.68)!important;
+  font-size:15px!important;
+  line-height:1.55!important;
+  font-weight:800!important;
+}
+.facility-detail-card .btn:not(.btn-disabled):not([aria-disabled="true"]){
+  min-width:260px!important;
+  min-height:58px!important;
+  padding:17px 26px!important;
+  border-radius:999px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(135deg,#ffe99e,#d7aa43)!important;
+  border:1px solid rgba(255,236,166,.54)!important;
+  color:#080806!important;
+  font-size:15px!important;
+  font-weight:1000!important;
+  letter-spacing:.02em!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  box-shadow:0 18px 48px rgba(212,166,63,.22),inset 0 1px 0 rgba(255,255,255,.50)!important;
+}
+/* FAQ reset: override older accordion styles that created cramped/narrow cards */
+#faq.faq-section{
+  width:min(100%,1180px)!important;
+  max-width:1180px!important;
+  margin:0 auto!important;
+  padding:clamp(58px,7vw,92px) clamp(18px,3vw,28px)!important;
+  box-sizing:border-box!important;
+}
+#faq .section-heading.centered{
+  max-width:900px!important;
+  margin:0 auto 34px!important;
+  text-align:center!important;
+}
+#faq .section-heading .eyebrow{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto 18px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:14px!important;
+}
+#faq .section-heading .eyebrow::before{
+  content:""!important;
+  width:54px!important;
+  height:1px!important;
+  display:block!important;
+  background:linear-gradient(90deg,transparent,rgba(244,223,144,.9))!important;
+  flex:0 0 54px!important;
+}
+#faq .section-heading h2{
+  max-width:880px!important;
+  margin:0 auto!important;
+  color:#fff4dd!important;
+  font-size:clamp(42px,5.1vw,74px)!important;
+  line-height:.96!important;
+  letter-spacing:-.06em!important;
+  text-wrap:balance!important;
+}
+#faq .section-heading p{
+  max-width:760px!important;
+  margin:18px auto 0!important;
+  color:rgba(245,240,230,.66)!important;
+  font-size:clamp(15px,1.1vw,17px)!important;
+  line-height:1.65!important;
+  text-wrap:balance!important;
+}
+#faq .faq-accordion{
+  width:min(100%,1040px)!important;
+  max-width:1040px!important;
+  margin:34px auto 0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:16px!important;
+  align-items:stretch!important;
+}
+#faq details,
+#faq summary,
+#faq .faq-category,
+#faq .faq-item{
+  box-sizing:border-box!important;
+  min-width:0!important;
+}
+#faq summary{list-style:none!important;}
+#faq summary::-webkit-details-marker{display:none!important;}
+#faq .faq-category{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border-radius:30px!important;
+  border:1px solid rgba(238,206,122,.17)!important;
+  background:
+    radial-gradient(circle at 7% 0%,rgba(238,206,122,.09),transparent 38%),
+    radial-gradient(circle at 96% 20%,rgba(82,205,141,.055),transparent 38%),
+    linear-gradient(135deg,rgba(255,255,255,.038),rgba(255,255,255,.010))!important;
+  box-shadow:0 24px 82px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#faq .faq-category[open]{border-color:rgba(238,206,122,.30)!important;}
+#faq .faq-category>summary{
+  width:100%!important;
+  min-height:96px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 42px!important;
+  align-items:center!important;
+  gap:22px!important;
+  padding:25px 28px!important;
+  cursor:pointer!important;
+  border:0!important;
+}
+#faq .faq-category>summary::after{
+  content:"+"!important;
+  width:42px!important;
+  height:42px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  border:1px solid rgba(238,206,122,.24)!important;
+  background:rgba(238,206,122,.075)!important;
+  color:#ffe3a1!important;
+  font-size:21px!important;
+  font-weight:1000!important;
+  line-height:1!important;
+}
+#faq .faq-category[open]>summary::after{content:"−"!important;}
+#faq .faq-category>summary span{
+  display:block!important;
+  max-width:100%!important;
+  color:#fff3d8!important;
+  font-size:clamp(23px,2vw,32px)!important;
+  line-height:1.04!important;
+  letter-spacing:-.045em!important;
+  font-weight:1000!important;
+}
+#faq .faq-category>summary small{
+  display:block!important;
+  max-width:760px!important;
+  margin:9px 0 0!important;
+  color:rgba(245,240,230,.60)!important;
+  font-size:14px!important;
+  line-height:1.5!important;
+  font-weight:750!important;
+}
+#faq .faq-category[open]>summary{border-bottom:1px solid rgba(238,206,122,.12)!important;}
+#faq .faq-items{
+  width:100%!important;
+  max-width:none!important;
+  padding:20px 24px 26px!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:12px!important;
+}
+#faq .faq-item{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border-radius:20px!important;
+  border:1px solid rgba(238,206,122,.12)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.036),rgba(255,255,255,.012))!important;
+  box-shadow:none!important;
+}
+#faq .faq-item[open]{border-color:rgba(238,206,122,.24)!important;background:linear-gradient(135deg,rgba(238,206,122,.07),rgba(255,255,255,.014))!important;}
+#faq .faq-item>summary{
+  width:100%!important;
+  min-height:62px!important;
+  display:grid!important;
+  grid-template-columns:28px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:14px!important;
+  padding:18px 20px!important;
+  color:#fff0d4!important;
+  font-size:clamp(15px,1.15vw,17px)!important;
+  line-height:1.38!important;
+  font-weight:950!important;
+  letter-spacing:-.012em!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+#faq .faq-item>summary::before{
+  content:"+"!important;
+  width:28px!important;
+  height:28px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  border:1px solid rgba(238,206,122,.18)!important;
+  color:#f2d28a!important;
+  background:rgba(238,206,122,.055)!important;
+  font-size:15px!important;
+  font-weight:1000!important;
+  line-height:1!important;
+}
+#faq .faq-item[open]>summary::before{content:"−"!important;}
+#faq .faq-item p{
+  width:100%!important;
+  max-width:900px!important;
+  margin:0!important;
+  padding:0 22px 20px 62px!important;
+  color:rgba(245,240,230,.68)!important;
+  font-size:15px!important;
+  line-height:1.68!important;
+  font-weight:700!important;
+}
+@media(max-width:900px){
+  .about#tentang .about-stats-grid,#tentang .about-stats-grid{grid-template-columns:1fr!important;width:min(100%,560px)!important;}
+  .about#tentang .about-stats-grid>div,#tentang .about-stats-grid>div{min-height:auto!important;}
+  #faq .faq-category>summary{grid-template-columns:minmax(0,1fr) 38px!important;padding:22px!important;}
+  #faq .faq-items{padding:16px!important;}
+  #faq .faq-item p{padding:0 18px 18px 58px!important;}
+}
+@media(max-width:560px){
+  #faq.faq-section{padding-left:14px!important;padding-right:14px!important;}
+  #faq .section-heading h2{font-size:38px!important;}
+  #faq .faq-category{border-radius:24px!important;}
+  #faq .faq-category>summary{min-height:auto!important;grid-template-columns:1fr!important;gap:14px!important;}
+  #faq .faq-category>summary::after{width:36px!important;height:36px!important;}
+  #faq .faq-item>summary{grid-template-columns:26px minmax(0,1fr)!important;padding:16px!important;}
+  #faq .faq-item p{padding:0 16px 17px 56px!important;font-size:14px!important;}
+  .facility-detail-card .btn:not(.btn-disabled):not([aria-disabled="true"]){width:100%!important;min-width:0!important;}
+}
+</style>
+
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -919,9 +1188,9 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
         </p>
 </div>
 <div class="stats-grid about-stats-grid">
-<div><strong>5+ Tahun</strong><span>Komunitas edukatif yang terus berjalan.</span></div>
+<div><strong>3+ Tahun</strong><span>Komunitas edukatif yang terus berjalan.</span></div>
 <div><strong>Diskusi Edukatif</strong><span>Ruang belajar, tanya jawab, dan kajian market.</span></div>
-<div><strong>Market Logic</strong><span>Fokus pada price action, struktur, dan sebab-akibat.</span></div>
+
 <div><strong>Tanpa Janji Profit</strong><span>Edukasi objektif, disiplin, dan risk management.</span></div>
 </div>
 </section>
@@ -960,9 +1229,9 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="facility-detail-wrap" id="facilityDetailPanel">
 <article class="facility-detail-card" data-detail="edukasi" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Edukasi</h3><p>Materi belajar untuk memahami price action, market structure, supply-demand, risk, dan cara membaca chart secara objektif.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Materi QNA, pembahasan konsep, studi kasus market, dan dasar market logic.</span></div><div><strong>Cocok untuk</strong><span>Trader pemula-menengah yang ingin membangun fondasi baca chart.</span></div><div><strong>Arah belajar</strong><span>Memahami sebab, reaksi, dan risiko sebelum mengambil keputusan trading.</span></div></div><div class="facility-status-row"><span class="facility-status-badge green">Gratis</span><span class="facility-status-badge muted">Coming Soon</span></div><a aria-disabled="true" class="btn btn-secondary btn-disabled" role="link">DAFTAR KAMAR EDUKASI</a></article>
 <article class="facility-detail-card active" data-detail="study"><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Study</h3><p>Kajian Setup Entry. Fokus pada area kajian, level target, level invalidasi, dan diskusi edukatif tanpa janji profit.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Kajian area, batas risiko, skenario market, dan alasan market logic di balik setup.</span></div><div><strong>Cocok untuk</strong><span>Trader yang ingin mengikuti bahan kajian terstruktur untuk membangun disiplin dan komitmen.</span></div><div><strong>Alur akses</strong><span>Daftar via website, konfirmasi pembayaran atau gunakan akses gratis melalui admin, lalu lanjut ke grup Telegram khusus "Kamar Study".</span></div></div><div class="facility-status-row"><span class="facility-status-badge green">Gratis / Berbayar</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR STUDY</a></article>
-<article class="facility-detail-card" data-detail="private" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Private</h3><p>Fasilitas pendampingan 1 on 1 / perorangan untuk belajar lebih fokus, evaluasi, dan pengembangan pemahaman market sesuai kebutuhan peserta.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Mentoring, evaluasi, pembahasan market, video rekaman, PDF, dan update materi sesuai paket.</span></div><div><strong>Cocok untuk</strong><span>Member yang ingin pendampingan personal, evaluasi berkala, dan arah belajar yang lebih terstruktur.</span></div><div><strong>Catatan</strong><span>Fokus pada proses belajar, disiplin, risk management, dan evaluasi objektif.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge">Harga Variatif Sesuai Paket Materi</span></div><a class="btn btn-secondary" href="register.html">DAFTAR KAMAR PRIVATE</a></article>
-<article class="facility-detail-card" data-detail="indikator" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Indikator</h3><p>Tools untuk membaca dan memvisualisasikan semua jenis zona analisis Kamar Kajian Market, seperti supply-demand Simple &amp; Dynamic, Trading Block, Liquidity, Equilibrium, Discount &amp; Premium, Indecision, dan masih banyak lagi.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Visualisasi zona analisis, area reaksi market, struktur zona, dan bantuan pembacaan chart agar lebih tertata.</span></div><div><strong>Cocok untuk</strong><span>Trader yang ingin membaca zona dengan tampilan lebih rapi, konsisten, dan sesuai kerangka analisis Kamar.</span></div><div><strong>Catatan</strong><span>Indikator adalah alat bantu analisis, bukan jaminan hasil trading.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge green">Gratis Untuk Member Kamar Private</span></div><a class="btn btn-secondary" href="register.html">DAFTAR KAMAR INDIKATOR</a></article>
-<article class="facility-detail-card" data-detail="robot" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Robot</h3><p>Tools alat bantu entry otomatis dari zona Kamar Indikator dan Kamar Study. Robot membantu eksekusi teknis berdasarkan zona yang sudah dikaji, bukan pengganti analisis, disiplin, dan risk management.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Alat bantu entry otomatis berbasis zona, parameter risiko, panduan penggunaan, dan pengelolaan akses.</span></div><div><strong>Cocok untuk</strong><span>Member yang sudah memahami risiko dan ingin memakai tools otomatis secara terukur.</span></div><div><strong>Catatan</strong><span>Bukan profit otomatis. Risiko tetap wajib dipahami, dibatasi, dan dipantau.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge">Sewa atau Beli License</span></div><a class="btn btn-secondary" href="register.html">DAFTAR KAMAR ROBOT</a></article>
+<article class="facility-detail-card" data-detail="private" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Private</h3><p>Fasilitas pendampingan 1 on 1 / perorangan untuk belajar lebih fokus, evaluasi, dan pengembangan pemahaman market sesuai kebutuhan peserta.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Mentoring, evaluasi, pembahasan market, video rekaman, PDF, dan update materi sesuai paket.</span></div><div><strong>Cocok untuk</strong><span>Member yang ingin pendampingan personal, evaluasi berkala, dan arah belajar yang lebih terstruktur.</span></div><div><strong>Catatan</strong><span>Fokus pada proses belajar, disiplin, risk management, dan evaluasi objektif.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge">Harga Variatif Sesuai Paket Materi</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR PRIVATE</a></article>
+<article class="facility-detail-card" data-detail="indikator" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Indikator</h3><p>Tools untuk membaca dan memvisualisasikan semua jenis zona analisis Kamar Kajian Market, seperti supply-demand Simple &amp; Dynamic, Trading Block, Liquidity, Equilibrium, Discount &amp; Premium, Indecision, dan masih banyak lagi.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Visualisasi zona analisis, area reaksi market, struktur zona, dan bantuan pembacaan chart agar lebih tertata.</span></div><div><strong>Cocok untuk</strong><span>Trader yang ingin membaca zona dengan tampilan lebih rapi, konsisten, dan sesuai kerangka analisis Kamar.</span></div><div><strong>Catatan</strong><span>Indikator adalah alat bantu analisis, bukan jaminan hasil trading.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge green">Gratis Untuk Member Kamar Private</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR INDIKATOR</a></article>
+<article class="facility-detail-card" data-detail="robot" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Robot</h3><p>Tools alat bantu entry otomatis dari zona Kamar Indikator dan Kamar Study. Robot membantu eksekusi teknis berdasarkan zona yang sudah dikaji, bukan pengganti analisis, disiplin, dan risk management.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Alat bantu entry otomatis berbasis zona, parameter risiko, panduan penggunaan, dan pengelolaan akses.</span></div><div><strong>Cocok untuk</strong><span>Member yang sudah memahami risiko dan ingin memakai tools otomatis secara terukur.</span></div><div><strong>Catatan</strong><span>Bukan profit otomatis. Risiko tetap wajib dipahami, dibatasi, dan dipantau.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge">Sewa atau Beli License</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR ROBOT</a></article>
 </div>
 </section>
 <section class="access section-shell compact-section" id="akses">

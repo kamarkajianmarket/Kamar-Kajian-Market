@@ -1,6 +1,6 @@
 /**
  * Kamar Kajian Market — EA Study Update API
- * Step 24AO
+ * Step 24AR
  *
  * Endpoint: POST /api/kamar-study-update
  * Runtime: Vercel Serverless Function / Node.js 18+
@@ -180,6 +180,28 @@ function highestLanjutanLevel(progressCode, existingLevel = 0) {
   return Math.max(Number(existingLevel || 0), Number(m[1]));
 }
 
+function safeMaxRunningPoint(previousMax, incomingMax, incomingRunning) {
+  const values = [];
+  const prev = asNumber(previousMax, null);
+  const maxIn = asNumber(incomingMax, null);
+  const runIn = asNumber(incomingRunning, null);
+  if (prev !== null) values.push(prev);
+  if (maxIn !== null) values.push(maxIn);
+  if (runIn !== null && runIn > 0) values.push(runIn);
+  if (!values.length) return null;
+  return round2(Math.max(...values));
+}
+
+function shouldPreserveRunningActual(normalized, previousRunning) {
+  const prev = asNumber(previousRunning, null);
+  if (prev === null) return false;
+  const incoming = asNumber(normalized.runningPoint, null);
+  const progress = asString(normalized.progressCode, '').toLowerCase();
+  const isHitUpdate = progress.includes('target_kajian') || progress.includes('target_lanjutan');
+  // EA sometimes sends HIT update without a fresh running value. Do not wipe a valid running value to 0.
+  return isHitUpdate && (incoming === null || incoming === 0) && Math.abs(prev) > 0;
+}
+
 function normalizePayload(body) {
   const now = new Date().toISOString();
   const idZona = asString(body.id_zona || body.zone_id || body.idZona);
@@ -285,12 +307,13 @@ function parseSourcePayload(value) {
 async function hideOlderFreshSignals(normalized) {
   // When EA publishes a new Fresh signal, older Fresh signals for the same pair/feed should not remain as the current public/member card.
   const rows = await supabaseFetch(
-    `signals?select=id,id_zona,visibility,source_payload,status,is_active,is_published&pair=eq.${encodeURIComponent(normalized.pair)}&status=eq.FRESH&is_active=eq.true&is_published=eq.true&limit=100`,
+    `signals?select=id,id_zona,visibility,source_payload,status,is_active,is_published,timeframe,skenario&pair=eq.${encodeURIComponent(normalized.pair)}&timeframe=eq.${encodeURIComponent(normalized.timeframe)}&status=eq.FRESH&is_active=eq.true&is_published=eq.true&limit=100`,
     { method: "GET" }
   );
   const list = Array.isArray(rows) ? rows : [];
   for (const row of list) {
     if (!row || row.id_zona === normalized.idZona) continue;
+    if (String(row.skenario || '').toUpperCase() !== String(normalized.scenario || '').toUpperCase()) continue;
     const sp = parseSourcePayload(row.source_payload);
     let shouldPatch = false;
     if (normalized.showPublic && (sp.show_public === true || String(row.visibility || "").toLowerCase() === "public")) {
@@ -324,8 +347,12 @@ function buildSourcePayload(normalized, previousPayload = {}) {
     progress_update: normalized.progressCode || previousPayload.progress_update || "",
     progress_label: normalized.progressLabel || previousPayload.progress_label || "",
     progress_updated_at: normalized.progressCode ? normalized.now : previousPayload.progress_updated_at || null,
-    running_pips: normalized.runningPips,
-    max_running_pips: normalized.maxRunningPips,
+    running_pips: normalized.runningPips !== null && normalized.runningPips !== undefined ? normalized.runningPips : previousPayload.running_pips,
+    max_running_pips: Math.max(
+      asNumber(previousPayload.max_running_pips, 0) || 0,
+      asNumber(normalized.maxRunningPips, 0) || 0,
+      asNumber(normalized.runningPips, 0) || 0
+    ),
     touched_before_website_send: normalized.touchedBeforeWebsiteSend,
     is_fresh_candidate: normalized.isFreshCandidate,
     distance_to_price: normalized.distanceToPrice,
@@ -360,13 +387,22 @@ function buildSignalPatch(normalized, previous = {}) {
 
   if (!isHeartbeat) {
     patch.status = normalized.zoneStatus;
-    patch.running_point = normalized.runningPoint;
-    patch.max_running_point = normalized.maxRunningPoint;
+    if (shouldPreserveRunningActual(normalized, previous.running_point)) {
+      patch.running_point = previous.running_point;
+    } else if (normalized.runningPoint !== null && normalized.runningPoint !== undefined) {
+      patch.running_point = normalized.runningPoint;
+    } else {
+      patch.running_point = previous.running_point ?? null;
+    }
   } else {
     patch.status = previous.status || normalized.zoneStatus || "FRESH";
-    patch.running_point = previous.running_point ?? normalized.runningPoint;
-    patch.max_running_point = previous.max_running_point ?? normalized.maxRunningPoint;
+    patch.running_point = normalized.runningPoint !== null && normalized.runningPoint !== undefined
+      ? normalized.runningPoint
+      : (previous.running_point ?? null);
   }
+
+  const maxPoint = safeMaxRunningPoint(previous.max_running_point, normalized.maxRunningPoint, patch.running_point);
+  if (maxPoint !== null) patch.max_running_point = maxPoint;
 
   if (normalized.areaHigh !== null) patch.area_high = normalized.areaHigh;
   if (normalized.areaLow !== null) patch.area_low = normalized.areaLow;

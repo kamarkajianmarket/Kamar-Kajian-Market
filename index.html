@@ -144,7 +144,32 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @media(max-width:920px){.data-toolbar,.admin-member-card,.admin-detail-panel,.form-grid,.kamar-form-grid{grid-template-columns:1fr}.admin-member-actions{justify-content:flex-start}}
 @media(max-width:560px){input:not([type="checkbox"]):not([type="radio"]),select,textarea{font-size:16px!important;min-height:56px!important;padding:15px 16px!important}.admin-member-card{padding:16px}}
 </style>
-<link href="assets/css/kamar-full-online.css" rel="stylesheet"/><style id="kamar-hiatus-signal-cleanup-style">.simple-info-grid{margin-top:22px}.registration-focus-panel{margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:22px}.registration-focus-panel h3{margin:6px 0 8px;color:#fff3d8}.registration-focus-panel p{margin:0;color:rgba(245,240,230,.72);line-height:1.65}@media(max-width:900px){.registration-focus-panel{display:block}.registration-focus-panel .button-row{margin-top:16px}}</style></head>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/><style id="kamar-hiatus-signal-cleanup-style">.simple-info-grid{margin-top:22px}.registration-focus-panel{margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:22px}.registration-focus-panel h3{margin:6px 0 8px;color:#fff3d8}.registration-focus-panel p{margin:0;color:rgba(245,240,230,.72);line-height:1.65}@media(max-width:900px){.registration-focus-panel{display:block}.registration-focus-panel .button-row{margin-top:16px}}</style>
+<style id="kamar-step24av-ui-corrections">
+/* Step 24AV UI correction batch */
+.hero-copy>p{display:none!important}
+.hero-visual{display:flex;flex-direction:column;align-items:center;gap:18px}
+.hero-badges.hero-badges-under-visual{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:0 auto}
+.hero-badges.hero-badges-under-visual span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:9px 14px;border:1px solid rgba(238,206,122,.22);border-radius:999px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.015));color:rgba(245,240,230,.78);box-shadow:0 10px 35px rgba(0,0,0,.22);pointer-events:none}
+.hero-badges.hero-badges-under-visual span:nth-child(2){border-color:rgba(82,205,141,.32);color:#7ee0a3;background:linear-gradient(135deg,rgba(82,205,141,.10),rgba(255,255,255,.02))}
+.visual-card .note-top{display:none!important}
+.visual-card .note-bottom{left:auto;right:24px;bottom:24px}
+.facility-tab{cursor:pointer;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease,background .22s ease}
+.facility-tab:hover,.facility-tab.active{transform:translateY(-3px);border-color:rgba(238,206,122,.55);box-shadow:0 22px 70px rgba(0,0,0,.32),0 0 0 1px rgba(238,206,122,.10) inset;background:linear-gradient(135deg,rgba(238,206,122,.10),rgba(82,205,141,.045))}
+.facility-tab.active .facility-top span{background:rgba(238,206,122,.18);color:#ffe7a2}
+.facility-detail-wrap{margin-top:28px;position:relative}
+.facility-detail-card{border:1px solid rgba(238,206,122,.26);border-radius:32px;padding:30px;background:radial-gradient(circle at top left,rgba(238,206,122,.13),transparent 35%),linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:0 24px 90px rgba(0,0,0,.32);animation:facilityDetailIn .28s ease both}
+.facility-detail-card[hidden]{display:none!important}
+.facility-detail-card h3{font-size:clamp(34px,5vw,64px);line-height:.95;margin:10px 0 14px;color:#fff8e8}
+.facility-detail-card p{max-width:940px;color:rgba(245,240,230,.76);font-size:18px;line-height:1.7;margin:0 0 22px}
+.detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0}
+.detail-grid div{border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:18px;background:rgba(0,0,0,.18)}
+.detail-grid strong{display:block;color:#f4d98c;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
+.detail-grid span{display:block;color:rgba(245,240,230,.76);line-height:1.55}
+@keyframes facilityDetailIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.detail-grid{grid-template-columns:1fr}.facility-detail-card{padding:22px}.visual-card .note-bottom{right:14px;bottom:14px}.hero-badges.hero-badges-under-visual span{font-size:10px;padding:8px 11px}}
+</style>
+</head>
 <body>
 <div class="page-glow page-glow-1"></div>
 <div class="page-glow page-glow-2"></div>
@@ -157,7 +182,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <a href="#fasilitas">Fasilitas</a>
 <a href="#tentang">Tentang</a>
 <a href="#akses">Akses</a>
-<a href="#kamar-study">Kamar Study</a>
 <a href="#faq">FAQ</a>
 </nav>
 <div class="header-actions">
@@ -166,42 +190,33 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </div>
 </header>
 <div aria-label="Shortcut cepat" class="quick-mobile-nav">
-<a href="#kamar-study">Kamar Study</a>
-<a href="#study-running">Setup Running</a>
-<a href="#study-fresh">New Fresh</a>
+<a href="#fasilitas">Fasilitas</a>
+<a href="#akses">Akses</a>
+<a href="#faq">FAQ</a>
 </div>
 <main id="top">
 <section class="hero section-shell">
 <div class="hero-copy">
 <div class="eyebrow">Edukasi Trading Berbasis Market Logic</div>
 <h1>Belajar Membaca Market dengan Logika, Bukan Ramalan dan Harapan.</h1>
-<p>
-          Kamar Kajian Market adalah komunitas edukasi trading yang fokus pada price action,
-          struktur market, supply-demand, risk management, serta pembahasan chart menggunakan
-          hukum sebab-akibat market secara objektif.
-        </p>
 <div class="hero-actions">
 <a class="btn btn-primary" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>
 <a class="btn btn-secondary" href="#fasilitas">Lihat Fasilitas</a>
 <a class="btn btn-ghost" href="member.html">Daftar / Login Member</a>
 </div>
-<div aria-label="Fokus pembelajaran" class="hero-badges">
-<span>Market Logic</span>
-<span>Supply &amp; Demand</span>
-<span>Risk Management</span>
-</div>
 </div>
 <div aria-label="Visual karakter Kamar Kajian Market" class="hero-visual">
 <div class="visual-card">
 <img alt="Karakter bertopeng Kamar Kajian Market" class="hero-person" src="assets/hero-mask.jpeg"/>
-<div class="visual-note note-top">
+<div class="visual-note note-bottom">
 <span>Market Logic</span>
 <strong>Sebab • Reaksi • Risiko</strong>
 </div>
-<div class="visual-note note-bottom">
-<span>Kamar Study</span>
-<strong>Bahan Kajian Setup</strong>
 </div>
+<div aria-label="Fokus pembelajaran" class="hero-badges hero-badges-under-visual">
+<span>Market Logic</span>
+<span>Supply &amp; Demand</span>
+<span>Risk Management</span>
 </div>
 </div>
 </section>
@@ -210,9 +225,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <span class="eyebrow">Tentang Komunitas</span>
 <h2>Apa Itu Kamar Kajian Market?</h2>
 <p>
-          Kamar Kajian Market adalah ruang belajar dan diskusi trading yang membantu trader memahami
-          pergerakan harga melalui price action, struktur market, supply-demand, risk management,
-          dan hukum sebab-akibat market.
+          Kamar Kajian Market adalah komunitas edukasi trading sekaligus ruang belajar dan diskusi yang membantu trader memahami pergerakan harga melalui price action, struktur market, supply-demand, risk management, serta hukum sebab-akibat market secara objektif.
         </p>
 </div>
 <div class="stats-grid">
@@ -227,68 +240,89 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <span class="eyebrow">Fasilitas Kamar</span>
 <h2>Ekosistem Kamar untuk belajar, mengkaji, dan membaca market lebih objektif.</h2>
 </div>
-<div class="facility-grid modern-facilities">
-<article class="facility-card modern-card">
+<div class="facility-grid modern-facilities" id="facilitySelector">
+<article class="facility-card modern-card facility-tab" data-facility="edukasi" role="button" tabindex="0" aria-controls="facilityDetailPanel" aria-pressed="false">
 <div class="facility-top"><span>01</span><i></i></div>
 <h3>Kamar Edukasi</h3>
 <p>Price action, struktur, risk, dan hukum sebab-akibat market.</p>
 </article>
-<article class="facility-card modern-card highlight-card">
+<article class="facility-card modern-card highlight-card facility-tab active" data-facility="study" role="button" tabindex="0" aria-controls="facilityDetailPanel" aria-pressed="true">
 <div class="facility-top"><span>02</span><i></i></div>
 <h3>Kamar Study</h3>
-<p>Kajian signal/setup dengan entry, target, dan batas risiko.</p>
+<p>Kajian setup, area, target, invalidasi, dan diskusi Telegram.</p>
 </article>
-<article class="facility-card modern-card">
+<article class="facility-card modern-card facility-tab" data-facility="private" role="button" tabindex="0" aria-controls="facilityDetailPanel" aria-pressed="false">
 <div class="facility-top"><span>03</span><i></i></div>
 <h3>Kamar Private</h3>
 <p>Mentoring, grup khusus, rekaman, PDF, evaluasi, dan update.</p>
 </article>
-<article class="facility-card modern-card bottom-card first-bottom">
+<article class="facility-card modern-card bottom-card first-bottom facility-tab" data-facility="indikator" role="button" tabindex="0" aria-controls="facilityDetailPanel" aria-pressed="false">
 <div class="facility-top"><span>04</span><i></i></div>
 <h3>Kamar Indikator</h3>
 <p>Zona supply-demand otomatis untuk membaca reaksi market.</p>
 </article>
-<article class="facility-card modern-card bottom-card">
+<article class="facility-card modern-card bottom-card facility-tab" data-facility="robot" role="button" tabindex="0" aria-controls="facilityDetailPanel" aria-pressed="false">
 <div class="facility-top"><span>05</span><i></i></div>
 <h3>Kamar Robot</h3>
 <p>Robot berbasis setup Kamar Indikator dan Kamar Study.</p>
 </article>
 </div>
-</section>
-<section class="study section-shell compact-section" id="kamar-study">
-<div class="section-heading">
-<span class="eyebrow">Kamar Study</span>
-<h2>Pusat pendaftaran Kamar Study berbasis Telegram.</h2>
-<p>Kamar Study difokuskan sebagai fasilitas belajar dan kajian market: zona entry, level target, level invalidasi, cara membaca reaksi harga, dan diskusi edukatif di ekosistem Kamar. Tidak ada card signal live di halaman publik selama fitur signal website sedang hiatus.</p>
+<div class="facility-detail-wrap" id="facilityDetailPanel">
+<article class="facility-detail-card" data-detail="edukasi" hidden>
+<span class="eyebrow">Detail Fasilitas</span>
+<h3>Kamar Edukasi</h3>
+<p>Materi belajar untuk memahami price action, market structure, supply-demand, risk, dan cara membaca chart secara objektif.</p>
+<div class="detail-grid">
+<div><strong>Isi utama</strong><span>Materi QNA, pembahasan konsep, studi kasus market, dan dasar market logic.</span></div>
+<div><strong>Cocok untuk</strong><span>Trader pemula-menengah yang ingin membangun fondasi baca chart.</span></div>
+<div><strong>Arah belajar</strong><span>Memahami sebab, reaksi, dan risiko sebelum mengambil keputusan trading.</span></div>
 </div>
-<div class="facility-grid simple-info-grid">
-<article class="facility-card">
-<span class="card-number">01</span>
-<h3>Belajar Area Kajian</h3>
-<p>Fokus pada cara memahami zona entry, level target, level invalidasi, serta alasan market logic di balik sebuah skenario.</p>
+<a class="btn btn-secondary" href="register.html">Pilih Kamar Edukasi</a>
 </article>
-<article class="facility-card">
-<span class="card-number">02</span>
-<h3>Diskusi Berbasis Telegram</h3>
-<p>Aktivitas Kamar Study diarahkan ke Telegram agar komunikasi, update materi, dan diskusi komunitas tetap rapi.</p>
+<article class="facility-detail-card active" data-detail="study">
+<span class="eyebrow">Detail Fasilitas</span>
+<h3>Kamar Study</h3>
+<p>Pusat pendaftaran kajian setup berbasis Telegram. Fokus pada area kajian, level target, level invalidasi, dan diskusi edukatif tanpa janji profit.</p>
+<div class="detail-grid">
+<div><strong>Isi utama</strong><span>Kajian area, batas risiko, skenario market, dan alasan market logic di balik setup.</span></div>
+<div><strong>Cocok untuk</strong><span>Trader yang ingin mengikuti bahan kajian terstruktur dan diskusi komunitas.</span></div>
+<div><strong>Alur akses</strong><span>Daftar via website, konfirmasi pembayaran, lalu lanjut ke grup Telegram sesuai fasilitas.</span></div>
+</div>
+<a class="btn btn-primary" href="register.html">Daftar Kamar Study</a>
 </article>
-<article class="facility-card">
-<span class="card-number">03</span>
-<h3>Daftar &amp; Konfirmasi Akses</h3>
-<p>Pendaftaran, tambah fasilitas, dan konfirmasi pembayaran diarahkan melalui website agar data member lebih tertata.</p>
+<article class="facility-detail-card" data-detail="private" hidden>
+<span class="eyebrow">Detail Fasilitas</span>
+<h3>Kamar Private</h3>
+<p>Fasilitas pendampingan lebih intensif dengan ruang evaluasi, rekaman, PDF, update materi, dan pembahasan bersama.</p>
+<div class="detail-grid">
+<div><strong>Isi utama</strong><span>Mentoring, evaluasi, pembahasan market, video rekaman, PDF, dan update materi.</span></div>
+<div><strong>Cocok untuk</strong><span>Member yang ingin pendampingan lebih personal dan evaluasi berkala.</span></div>
+<div><strong>Catatan</strong><span>Fokus pada proses belajar, disiplin, risk management, dan evaluasi objektif.</span></div>
+</div>
+<a class="btn btn-secondary" href="register.html">Pilih Kamar Private</a>
 </article>
+<article class="facility-detail-card" data-detail="indikator" hidden>
+<span class="eyebrow">Detail Fasilitas</span>
+<h3>Kamar Indikator</h3>
+<p>Tools bantu visual untuk membaca zona supply-demand dan reaksi harga agar analisis lebih tertata.</p>
+<div class="detail-grid">
+<div><strong>Isi utama</strong><span>Zona supply-demand otomatis, bantuan struktur visual, dan area reaksi market.</span></div>
+<div><strong>Cocok untuk</strong><span>Trader yang ingin chart lebih rapi dan konsisten saat membaca zona.</span></div>
+<div><strong>Catatan</strong><span>Indikator adalah alat bantu analisis, bukan jaminan hasil trading.</span></div>
 </div>
-<div class="compact-panel registration-focus-panel">
-<div>
-<span class="mini-label">Fokus Pengembangan Terbaru</span>
-<h3>Website menjadi pusat informasi, pendaftaran, fasilitas, dan pembayaran.</h3>
-<p>Fitur signal live website sedang dihentikan sementara. Alur utama sekarang: baca informasi fasilitas, pilih akses, daftar, lakukan pembayaran, lalu lanjut ke Telegram sesuai fasilitas yang dipilih.</p>
+<a class="btn btn-secondary" href="register.html">Pilih Kamar Indikator</a>
+</article>
+<article class="facility-detail-card" data-detail="robot" hidden>
+<span class="eyebrow">Detail Fasilitas</span>
+<h3>Kamar Robot</h3>
+<p>Fasilitas robot trading berbasis sistem Kamar yang tetap membutuhkan pemahaman risiko dan pengaturan yang disiplin.</p>
+<div class="detail-grid">
+<div><strong>Isi utama</strong><span>Robot berbasis setup, parameter risiko, panduan penggunaan, dan pengelolaan akses.</span></div>
+<div><strong>Cocok untuk</strong><span>Member yang sudah memahami risiko dan ingin memakai tools otomatis secara terukur.</span></div>
+<div><strong>Catatan</strong><span>Tidak ada klaim profit pasti. Risiko tetap wajib dipahami dan dibatasi.</span></div>
 </div>
-<div class="button-row">
-<a class="btn primary" href="register.html">Daftar Kamar Study</a>
-<a class="btn secondary" href="member.html">Login Member</a>
-<a class="btn secondary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Hubungi Admin</a>
-</div>
+<a class="btn btn-secondary" href="register.html">Pilih Kamar Robot</a>
+</article>
 </div>
 </section>
 <section class="access section-shell compact-section" id="akses">
@@ -482,5 +516,34 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/kamar-config.js"></script>
 <script src="assets/js/kamar-supabase.js"></script>
+
+<script id="kamar-step24av-facility-tabs">
+(function(){
+  function setFacilityDetail(key){
+    var tabs=document.querySelectorAll('.facility-tab[data-facility]');
+    var details=document.querySelectorAll('.facility-detail-card[data-detail]');
+    tabs.forEach(function(tab){
+      var isActive=tab.getAttribute('data-facility')===key;
+      tab.classList.toggle('active',isActive);
+      tab.setAttribute('aria-pressed',isActive?'true':'false');
+    });
+    details.forEach(function(card){
+      var isActive=card.getAttribute('data-detail')===key;
+      card.toggleAttribute('hidden',!isActive);
+      card.classList.toggle('active',isActive);
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    var tabs=document.querySelectorAll('.facility-tab[data-facility]');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click',function(){setFacilityDetail(tab.getAttribute('data-facility'));});
+      tab.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){e.preventDefault();setFacilityDetail(tab.getAttribute('data-facility'));}
+      });
+    });
+    setFacilityDetail('study');
+  });
+})();
+</script>
 </body>
 </html>

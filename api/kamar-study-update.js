@@ -275,6 +275,43 @@ async function supabaseFetch(path, options = {}) {
   return json;
 }
 
+
+function parseSourcePayload(value) {
+  if (!value) return {};
+  if (typeof value === "object") return { ...value };
+  try { return JSON.parse(value); } catch (_) { return {}; }
+}
+
+async function hideOlderFreshSignals(normalized) {
+  // When EA publishes a new Fresh signal, older Fresh signals for the same pair/feed should not remain as the current public/member card.
+  const rows = await supabaseFetch(
+    `signals?select=id,id_zona,visibility,source_payload,status,is_active,is_published&pair=eq.${encodeURIComponent(normalized.pair)}&status=eq.FRESH&is_active=eq.true&is_published=eq.true&limit=100`,
+    { method: "GET" }
+  );
+  const list = Array.isArray(rows) ? rows : [];
+  for (const row of list) {
+    if (!row || row.id_zona === normalized.idZona) continue;
+    const sp = parseSourcePayload(row.source_payload);
+    let shouldPatch = false;
+    if (normalized.showPublic && (sp.show_public === true || String(row.visibility || "").toLowerCase() === "public")) {
+      sp.show_public = false; shouldPatch = true;
+    }
+    if (normalized.showMember && (sp.show_member === true || String(row.visibility || "").toLowerCase() === "member")) {
+      sp.show_member = false; shouldPatch = true;
+    }
+    if (!shouldPatch) continue;
+    sp.replaced_by_id_zona = normalized.idZona;
+    sp.replaced_at = normalized.now;
+    sp.replaced_reason = "Ada zona Fresh baru dari EA untuk pair/feed yang sama.";
+    const patch = { source_payload: sp, updated_at: normalized.now };
+    if (sp.show_public !== true && sp.show_member !== true) patch.is_published = false;
+    await supabaseFetch(`signals?id=eq.${encodeURIComponent(row.id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(patch),
+    });
+  }
+}
+
 function buildSourcePayload(normalized, previousPayload = {}) {
   return {
     ...(previousPayload || {}),
@@ -412,7 +449,8 @@ async function processEaPayload(req, res, body, transport = "POST") {
     );
     const existing = Array.isArray(existingRows) && existingRows.length ? existingRows[0] : null;
 
-    if (isNewZoneRequest(normalized, existing)) {
+    const incomingIsNewZone = isNewZoneRequest(normalized, existing);
+    if (incomingIsNewZone) {
       if (normalized.touchedBeforeWebsiteSend || normalized.isFreshCandidate === false) {
         return send(res, 200, {
           ok: true,
@@ -471,6 +509,10 @@ async function processEaPayload(req, res, body, transport = "POST") {
         method: "POST",
         body: JSON.stringify(insertPayload),
       });
+    }
+
+    if (incomingIsNewZone) {
+      try { await hideOlderFreshSignals(normalized); } catch (cleanupError) { console.warn("hideOlderFreshSignals", cleanupError); }
     }
 
     return send(res, 200, {

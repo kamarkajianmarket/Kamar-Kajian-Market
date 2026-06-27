@@ -535,7 +535,7 @@
     if(p==='admin-video.html') return renderContentPage('video');
     if(p==='admin-materials.html') return renderContentPage('materials');
     if(p==='admin-tools.html') return renderContentPage('tools');
-    if(p==='admin-study-control.html') return renderContentPage('study');
+    if(p==='admin-study-control.html') return; // Signal live hiatus: halaman ini memakai konten statis, tidak query tabel signals.
   }
   document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>boot().catch(e=>{main().innerHTML=`<section class="split-card">${statusBox(e.message,'error')}</section>`;}),250));
 })();

@@ -46,6 +46,59 @@ function pipsToPoint(value) {
   return round2(n / 10);
 }
 
+
+const DAILY_TARGET_POINT = 5.00;
+const PUBLIC_NORMAL_SIGNAL_LIMIT = 1;
+const MEMBER_NORMAL_SIGNAL_LIMIT = 3;
+const INVALID_LOCK_MIN_PIPS = 20;
+
+function normalizeEventType(value, progressCode, zoneStatus, isNewZone = false) {
+  const raw = asString(value, "").toUpperCase().replace(/[\s-]+/g, "_");
+  if (["NEW_ZONE", "ZONE_ACTIVE", "RUNNING_UPDATE", "HIT_TARGET_KAJIAN", "HIT_TARGET_LANJUTAN", "HIT_INVALIDASI"].includes(raw)) return raw;
+  const progress = asString(progressCode, "").toLowerCase();
+  if (isNewZone) return "NEW_ZONE";
+  if (progress === "invalidasi" || zoneStatus === "INVALID") return "HIT_INVALIDASI";
+  if (progress.includes("target_kajian")) return "HIT_TARGET_KAJIAN";
+  if (progress.includes("target_lanjutan")) return "HIT_TARGET_LANJUTAN";
+  if (zoneStatus === "ACTIVE") return "ZONE_ACTIVE";
+  return "RUNNING_UPDATE";
+}
+
+function getWibDayRange(date = new Date()) {
+  const wib = new Date(date.getTime() + 7 * 60 * 60 * 1000);
+  const y = wib.getUTCFullYear();
+  const m = wib.getUTCMonth();
+  const d = wib.getUTCDate();
+  const startUtc = new Date(Date.UTC(y, m, d, -7, 0, 0, 0));
+  const endUtc = new Date(startUtc.getTime() + 24 * 60 * 60 * 1000);
+  return { start: startUtc.toISOString(), end: endUtc.toISOString() };
+}
+
+function signalDailyContribution(row) {
+  const maxPoint = asNumber(row?.max_running_point, 0) || 0;
+  const runningPoint = asNumber(row?.running_point, 0) || 0;
+  if (maxPoint > 0) return maxPoint;
+  return runningPoint;
+}
+
+function isNewZoneRequest(normalized, existing) {
+  if (existing && existing.id) return false;
+  if (normalized.eventType === "NEW_ZONE") return true;
+  return normalized.zoneStatus === "FRESH" && !normalized.progressCode;
+}
+
+function isInvalidationRequest(normalized) {
+  return normalized.eventType === "HIT_INVALIDASI" || normalized.zoneStatus === "INVALID" || normalized.progressCode === "invalidasi";
+}
+
+function isInvalidationLocked(previous, normalized) {
+  const payload = previous?.source_payload && typeof previous.source_payload === "object" ? previous.source_payload : {};
+  const prevMaxPips = asNumber(payload.max_running_pips, 0) || 0;
+  const incomingMaxPips = asNumber(normalized.maxRunningPips, 0) || 0;
+  const tpHitLevel = Number(previous?.tp_hit_level || 0);
+  return tpHitLevel >= 1 || prevMaxPips >= INVALID_LOCK_MIN_PIPS || incomingMaxPips >= INVALID_LOCK_MIN_PIPS;
+}
+
 function normalizeStatus(input, payload) {
   const raw = asString(input || payload.zoneStatus || payload.jenis_zona_status || payload.status, "").toUpperCase();
   if (raw === "AKTIF") return "ACTIVE";
@@ -127,6 +180,7 @@ function normalizePayload(body) {
   const progressCode = normalizeProgressCode(body.progress_update || body.progress_code || body.progress_label || body.update_perkembangan || body.last_update);
   const progressLabel = asString(body.progress_label || progressLabelFromCode(progressCode), "");
   const zoneStatus = normalizeStatus(body.zone_status || body.status_zona || body.status, { ...body, progress_update: progressCode });
+  const eventType = normalizeEventType(body.event_type || body.eventType, progressCode, zoneStatus, false);
 
   const currentPrice = asNumber(body.current_price || body.harga_berjalan || body.price, null);
   const visibility = asString(body.visibility || body.website_visibility, "member").toLowerCase() === "public" ? "public" : "member";
@@ -140,6 +194,7 @@ function normalizePayload(body) {
     jenisZona,
     zoneStatus,
     visibility,
+    eventType,
     currentPrice,
     progressCode,
     progressLabel,
@@ -187,6 +242,7 @@ function buildSourcePayload(normalized, previousPayload = {}) {
     ...(previousPayload || {}),
     source: "ea",
     source_name: "Kamar Signal Advisor v2.05",
+    event_type: normalized.eventType || previousPayload.event_type || "",
     progress_update: normalized.progressCode || previousPayload.progress_update || "",
     progress_label: normalized.progressLabel || previousPayload.progress_label || "",
     progress_updated_at: normalized.progressCode ? normalized.now : previousPayload.progress_updated_at || null,
@@ -257,6 +313,28 @@ function buildSignalPatch(normalized, previous = {}) {
   return patch;
 }
 
+
+async function getDailySignalSummary(visibility, now = new Date()) {
+  const range = getWibDayRange(now);
+  const rows = await supabaseFetch(
+    `signals?select=id,visibility,status,running_point,max_running_point,created_at&visibility=eq.${encodeURIComponent(visibility)}&created_at=gte.${encodeURIComponent(range.start)}&created_at=lt.${encodeURIComponent(range.end)}`,
+    { method: "GET" }
+  );
+  const list = Array.isArray(rows) ? rows : [];
+  const totalPoint = round2(list.reduce((sum, row) => sum + signalDailyContribution(row), 0)) || 0;
+  const normalLimit = visibility === "public" ? PUBLIC_NORMAL_SIGNAL_LIMIT : MEMBER_NORMAL_SIGNAL_LIMIT;
+  return {
+    visibility,
+    signal_count: list.length,
+    normal_signal_limit: normalLimit,
+    target_point: DAILY_TARGET_POINT,
+    total_point: totalPoint,
+    target_reached: totalPoint >= DAILY_TARGET_POINT,
+    day_start_wib_as_utc: range.start,
+    day_end_wib_as_utc: range.end,
+  };
+}
+
 export default async function handler(req, res) {
   try {
     if (req.method !== "POST") {
@@ -280,6 +358,33 @@ export default async function handler(req, res) {
       { method: "GET" }
     );
     const existing = Array.isArray(existingRows) && existingRows.length ? existingRows[0] : null;
+
+    if (isNewZoneRequest(normalized, existing)) {
+      const daily = await getDailySignalSummary(normalized.visibility);
+      if (daily.target_reached) {
+        return send(res, 200, {
+          ok: true,
+          accepted: false,
+          blocked: true,
+          block_reason: "Target harian sudah tercapai. Signal baru tidak dipublish.",
+          id_zona: normalized.idZona,
+          visibility: normalized.visibility,
+          daily,
+        });
+      }
+    }
+
+    if (existing && isInvalidationRequest(normalized) && isInvalidationLocked(existing, normalized)) {
+      return send(res, 200, {
+        ok: true,
+        accepted: false,
+        ignored: true,
+        ignore_reason: "Invalidasi/loss diabaikan karena signal sudah pernah update running profit minimal 20 pips atau minimal HIT Target Kajian 1.",
+        id_zona: normalized.idZona,
+        status_kept: existing.status || "ACTIVE",
+      });
+    }
+
     const patch = buildSignalPatch(normalized, existing || {});
 
     let saved;
@@ -305,6 +410,7 @@ export default async function handler(req, res) {
 
     return send(res, 200, {
       ok: true,
+      accepted: true,
       message: existing ? "Signal website berhasil diupdate." : "Signal website berhasil dibuat.",
       id_zona: normalized.idZona,
       status: patch.status,

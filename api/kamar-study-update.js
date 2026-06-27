@@ -335,31 +335,17 @@ async function getDailySignalSummary(visibility, now = new Date()) {
   };
 }
 
-export default async function handler(req, res) {
-  try {
-    if (req.method === "GET") {
-      return send(res, 200, {
-        ok: true,
-        message: "API Kamar Study aktif. Endpoint ini menerima POST dari EA.",
-        endpoint: "/api/kamar-study-update",
-        expected_method: "POST"
-      });
-    }
-    if (req.method !== "POST") {
-      res.setHeader("Allow", "POST");
-      return send(res, 405, { ok: false, message: "Method tidak valid. Gunakan POST." });
-    }
+async function processEaPayload(req, res, body, transport = "POST") {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.KAMAR_EA_API_TOKEN) {
+    return send(res, 500, { ok: false, message: "Environment variable API belum lengkap." });
+  }
 
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.KAMAR_EA_API_TOKEN) {
-      return send(res, 500, { ok: false, message: "Environment variable API belum lengkap." });
-    }
+  const token = req.headers["x-kamar-ea-token"] || req.headers["authorization"]?.replace(/^Bearer\s+/i, "") || body?.api_token || req.query?.api_token;
+  if (!token || token !== process.env.KAMAR_EA_API_TOKEN) {
+    return send(res, 401, { ok: false, message: "Token EA tidak valid." });
+  }
 
-    const token = req.headers["x-kamar-ea-token"] || req.headers["authorization"]?.replace(/^Bearer\s+/i, "") || req.body?.api_token;
-    if (!token || token !== process.env.KAMAR_EA_API_TOKEN) {
-      return send(res, 401, { ok: false, message: "Token EA tidak valid." });
-    }
-
-    const normalized = normalizePayload(req.body || {});
+  const normalized = normalizePayload(body || {});
 
     const existingRows = await supabaseFetch(
       `signals?select=id,id_zona,source_payload,tp_hit_level,farthest_tp_level,tp1_hit_at,tp2_hit_at,tp3_hit_at,price_entered_area_at,first_reaction_at,invalidated_at,finished_at&id_zona=eq.${encodeURIComponent(normalized.idZona)}&limit=1`,
@@ -426,8 +412,39 @@ export default async function handler(req, res) {
       progress_label: normalized.progressLabel,
       running_actual_point: patch.running_point,
       running_terjauh_point: patch.max_running_point,
+      transport,
       saved,
     });
+}
+
+export default async function handler(req, res) {
+  try {
+    if (req.method === "GET") {
+      // Diagnostic GET biasa dari browser.
+      // Fallback khusus EA: jika POST berubah menjadi GET di MT5/domain redirect, EA mengirim payload JSON URL-encoded di query `payload`.
+      const payloadParam = req.query?.payload;
+      if (payloadParam) {
+        let parsed;
+        try {
+          parsed = typeof payloadParam === "string" ? JSON.parse(decodeURIComponent(payloadParam)) : JSON.parse(decodeURIComponent(payloadParam[0]));
+        } catch (error) {
+          return send(res, 400, { ok: false, message: "Payload fallback GET tidak valid.", detail: error.message });
+        }
+        return await processEaPayload(req, res, parsed, "GET_FALLBACK");
+      }
+      return send(res, 200, {
+        ok: true,
+        message: "API Kamar Study aktif. Endpoint ini menerima POST dari EA.",
+        endpoint: "/api/kamar-study-update",
+        expected_method: "POST",
+        fallback_supported: true
+      });
+    }
+    if (req.method !== "POST") {
+      res.setHeader("Allow", "GET, POST");
+      return send(res, 405, { ok: false, message: "Method tidak valid. Gunakan POST." });
+    }
+    return await processEaPayload(req, res, req.body || {}, "POST");
   } catch (error) {
     return send(res, 400, { ok: false, message: error.message || "Gagal memproses update EA." });
   }

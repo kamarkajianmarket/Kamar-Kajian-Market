@@ -169,6 +169,54 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @keyframes facilityDetailIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:900px){.detail-grid{grid-template-columns:1fr}.facility-detail-card{padding:22px}.visual-card .note-bottom{right:14px;bottom:14px}.hero-badges.hero-badges-under-visual span{font-size:10px;padding:8px 11px}}
 </style>
+
+<style id="kamar-step24aw-hero-image-and-cta-fix">
+/* Step 24AW — restore masked character visual + compact facility CTA labels */
+.hero-visual{width:100%;}
+.visual-card{
+  position:relative!important;
+  width:min(520px,100%)!important;
+  min-height:clamp(520px,58vw,720px)!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  border:1px solid rgba(238,206,122,.16)!important;
+  border-radius:34px!important;
+  background:radial-gradient(circle at 55% 34%,rgba(82,205,141,.10),transparent 42%),linear-gradient(145deg,rgba(255,255,255,.045),rgba(0,0,0,.18))!important;
+  box-shadow:0 28px 110px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.045)!important;
+}
+.visual-card::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.22));
+  pointer-events:none;z-index:2;
+}
+.visual-card::after{display:none!important;}
+.hero-person{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:inherit!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+  opacity:1!important;
+  filter:contrast(1.03) saturate(1.02)!important;
+}
+.visual-card .visual-note{z-index:3!important;}
+.visual-card .note-bottom{display:block!important;}
+.facility-detail-card .btn{
+  text-transform:uppercase!important;
+  letter-spacing:.035em!important;
+  font-weight:1000!important;
+}
+@media(max-width:900px){
+  .visual-card{width:min(430px,100%)!important;min-height:520px!important;border-radius:28px!important;}
+}
+@media(max-width:560px){
+  .visual-card{min-height:460px!important;}
+  .hero-person{object-position:center top!important;}
+}
+</style>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -277,7 +325,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div><strong>Cocok untuk</strong><span>Trader pemula-menengah yang ingin membangun fondasi baca chart.</span></div>
 <div><strong>Arah belajar</strong><span>Memahami sebab, reaksi, dan risiko sebelum mengambil keputusan trading.</span></div>
 </div>
-<a class="btn btn-secondary" href="register.html">Pilih Kamar Edukasi</a>
+<a class="btn btn-secondary" href="register.html">DAFTAR KAMAR EDUKASI</a>
 </article>
 <article class="facility-detail-card active" data-detail="study">
 <span class="eyebrow">Detail Fasilitas</span>
@@ -288,7 +336,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div><strong>Cocok untuk</strong><span>Trader yang ingin mengikuti bahan kajian terstruktur dan diskusi komunitas.</span></div>
 <div><strong>Alur akses</strong><span>Daftar via website, konfirmasi pembayaran, lalu lanjut ke grup Telegram sesuai fasilitas.</span></div>
 </div>
-<a class="btn btn-primary" href="register.html">Daftar Kamar Study</a>
+<a class="btn btn-primary" href="register.html">DAFTAR KAMAR STUDY</a>
 </article>
 <article class="facility-detail-card" data-detail="private" hidden>
 <span class="eyebrow">Detail Fasilitas</span>
@@ -299,7 +347,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div><strong>Cocok untuk</strong><span>Member yang ingin pendampingan lebih personal dan evaluasi berkala.</span></div>
 <div><strong>Catatan</strong><span>Fokus pada proses belajar, disiplin, risk management, dan evaluasi objektif.</span></div>
 </div>
-<a class="btn btn-secondary" href="register.html">Pilih Kamar Private</a>
+<a class="btn btn-secondary" href="register.html">DAFTAR KAMAR PRIVATE</a>
 </article>
 <article class="facility-detail-card" data-detail="indikator" hidden>
 <span class="eyebrow">Detail Fasilitas</span>
@@ -310,7 +358,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div><strong>Cocok untuk</strong><span>Trader yang ingin chart lebih rapi dan konsisten saat membaca zona.</span></div>
 <div><strong>Catatan</strong><span>Indikator adalah alat bantu analisis, bukan jaminan hasil trading.</span></div>
 </div>
-<a class="btn btn-secondary" href="register.html">Pilih Kamar Indikator</a>
+<a class="btn btn-secondary" href="register.html">DAFTAR KAMAR INDIKATOR</a>
 </article>
 <article class="facility-detail-card" data-detail="robot" hidden>
 <span class="eyebrow">Detail Fasilitas</span>
@@ -321,7 +369,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div><strong>Cocok untuk</strong><span>Member yang sudah memahami risiko dan ingin memakai tools otomatis secara terukur.</span></div>
 <div><strong>Catatan</strong><span>Tidak ada klaim profit pasti. Risiko tetap wajib dipahami dan dibatasi.</span></div>
 </div>
-<a class="btn btn-secondary" href="register.html">Pilih Kamar Robot</a>
+<a class="btn btn-secondary" href="register.html">DAFTAR KAMAR ROBOT</a>
 </article>
 </div>
 </section>

@@ -1,6 +1,6 @@
 /**
  * Kamar Kajian Market — EA Study Update API
- * Step 24AG
+ * Step 24AL
  *
  * Endpoint: POST /api/kamar-study-update
  * Runtime: Vercel Serverless Function / Node.js 18+
@@ -16,6 +16,30 @@
  */
 
 const ALLOWED_STATUS = new Set(["FRESH", "ACTIVE", "INVALID"]);
+
+function getEnvConfig() {
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SECRET_KEY || "";
+  const eaToken = process.env.KAMAR_EA_API_TOKEN || process.env.KAMAR_API_TOKEN || "";
+  const missing = [];
+  if (!supabaseUrl) missing.push("SUPABASE_URL");
+  if (!serviceRoleKey) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+  if (!eaToken) missing.push("KAMAR_EA_API_TOKEN");
+  return { supabaseUrl, serviceRoleKey, eaToken, missing, ok: missing.length === 0 };
+}
+
+function publicEnvStatus() {
+  const env = getEnvConfig();
+  return {
+    ok: env.ok,
+    missing_env: env.missing,
+    detected: {
+      SUPABASE_URL: Boolean(env.supabaseUrl),
+      SUPABASE_SERVICE_ROLE_KEY: Boolean(env.serviceRoleKey),
+      KAMAR_EA_API_TOKEN: Boolean(env.eaToken),
+    }
+  };
+}
 
 function send(res, statusCode, payload) {
   res.statusCode = statusCode;
@@ -216,10 +240,11 @@ function normalizePayload(body) {
 }
 
 async function supabaseFetch(path, options = {}) {
-  const url = `${process.env.SUPABASE_URL}/rest/v1/${path}`;
+  const env = getEnvConfig();
+  const url = `${env.supabaseUrl}/rest/v1/${path}`;
   const headers = {
-    apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: env.serviceRoleKey,
+    Authorization: `Bearer ${env.serviceRoleKey}`,
     "Content-Type": "application/json",
     Prefer: "return=representation",
     ...(options.headers || {}),
@@ -336,12 +361,13 @@ async function getDailySignalSummary(visibility, now = new Date()) {
 }
 
 async function processEaPayload(req, res, body, transport = "POST") {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.KAMAR_EA_API_TOKEN) {
-    return send(res, 500, { ok: false, message: "Environment variable API belum lengkap." });
+  const env = getEnvConfig();
+  if (!env.ok) {
+    return send(res, 500, { ok: false, message: "Environment variable API belum lengkap.", missing_env: env.missing, detected: publicEnvStatus().detected });
   }
 
   const token = req.headers["x-kamar-ea-token"] || req.headers["authorization"]?.replace(/^Bearer\s+/i, "") || body?.api_token || req.query?.api_token;
-  if (!token || token !== process.env.KAMAR_EA_API_TOKEN) {
+  if (!token || token !== env.eaToken) {
     return send(res, 401, { ok: false, message: "Token EA tidak valid." });
   }
 
@@ -437,7 +463,9 @@ export default async function handler(req, res) {
         message: "API Kamar Study aktif. Endpoint ini menerima POST dari EA.",
         endpoint: "/api/kamar-study-update",
         expected_method: "POST",
-        fallback_supported: true
+        fallback_supported: true,
+        env_status: publicEnvStatus(),
+        diagnostic_note: "Nilai rahasia tidak ditampilkan. Jika detected false, cek Environment Variables di Vercel Production."
       });
     }
     if (req.method !== "POST") {

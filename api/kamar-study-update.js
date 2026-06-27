@@ -1,6 +1,6 @@
 /**
  * Kamar Kajian Market — EA Study Update API
- * Step 24AR
+ * Step 24AS
  *
  * Endpoint: POST /api/kamar-study-update
  * Runtime: Vercel Serverless Function / Node.js 18+
@@ -75,6 +75,7 @@ const DAILY_TARGET_POINT = 5.00;
 const PUBLIC_NORMAL_SIGNAL_LIMIT = 1;
 const MEMBER_NORMAL_SIGNAL_LIMIT = 3;
 const INVALID_LOCK_MIN_PIPS = 20;
+const FRESH_PRIORITY_DISTANCE_PIPS = 100; // XAUUSD focus: 100 pips = 10.00 point website
 
 function normalizeEventType(value, progressCode, zoneStatus, isNewZone = false) {
   const raw = asString(value, "").toUpperCase().replace(/[\s-]+/g, "_");
@@ -233,6 +234,12 @@ function normalizePayload(body) {
   const touchedBeforeWebsiteSend = body.touched_before_website_send === true || String(body.touched_before_website_send || "").toLowerCase() === "true";
   const isFreshCandidate = body.is_fresh_candidate === undefined ? true : (body.is_fresh_candidate === true || String(body.is_fresh_candidate || "").toLowerCase() === "true");
   const distanceToPrice = asNumber(body.distance_to_price ?? body.zone_distance_to_price, null);
+  const distancePips = asNumber(body.distance_pips ?? body.zone_distance_pips, null);
+  const distancePoint = body.distance_point !== undefined ? round2(asNumber(body.distance_point, 0)) : pipsToPoint(distancePips);
+  const freshPriorityLimitPips = asNumber(body.fresh_priority_pips_limit, FRESH_PRIORITY_DISTANCE_PIPS) || FRESH_PRIORITY_DISTANCE_PIPS;
+  const freshPriorityEligible = body.fresh_priority_eligible === undefined
+    ? (distancePips === null ? true : distancePips <= freshPriorityLimitPips)
+    : (body.fresh_priority_eligible === true || String(body.fresh_priority_eligible || '').toLowerCase() === 'true');
 
   return {
     now,
@@ -270,6 +277,10 @@ function normalizePayload(body) {
     touchedBeforeWebsiteSend,
     isFreshCandidate,
     distanceToPrice,
+    distancePips,
+    distancePoint,
+    freshPriorityLimitPips,
+    freshPriorityEligible,
     raw: body,
   };
 }
@@ -356,6 +367,10 @@ function buildSourcePayload(normalized, previousPayload = {}) {
     touched_before_website_send: normalized.touchedBeforeWebsiteSend,
     is_fresh_candidate: normalized.isFreshCandidate,
     distance_to_price: normalized.distanceToPrice,
+    distance_pips: normalized.distancePips,
+    distance_point: normalized.distancePoint,
+    fresh_priority_pips_limit: normalized.freshPriorityLimitPips,
+    fresh_priority_eligible: normalized.freshPriorityEligible,
     current_price_heartbeat_at: normalized.eventType === "PRICE_HEARTBEAT" ? normalized.now : previousPayload.current_price_heartbeat_at || null,
     pips_to_point_formula: "website_point = ea_pips / 10",
     target_lanjutan_1: normalized.targetLanjutan1,
@@ -364,7 +379,6 @@ function buildSourcePayload(normalized, previousPayload = {}) {
     zone_is_fresh: normalized.zoneIsFresh,
     zone_was_touched: normalized.zoneWasTouched,
     zone_was_invalid: normalized.zoneWasInvalid,
-    distance_to_price: normalized.distanceToPrice,
     price_heartbeat: normalized.priceHeartbeat,
     last_ea_payload: normalized.raw,
     last_ea_update_at: normalized.now,
@@ -487,18 +501,8 @@ async function processEaPayload(req, res, body, transport = "POST") {
 
     const incomingIsNewZone = isNewZoneRequest(normalized, existing);
     if (incomingIsNewZone) {
-      if (normalized.touchedBeforeWebsiteSend || normalized.isFreshCandidate === false) {
-        return send(res, 200, {
-          ok: true,
-          accepted: false,
-          blocked: true,
-          block_reason: "Zona tidak diterima sebagai signal baru karena tidak Fresh / sudah pernah dimasuki harga.",
-          id_zona: normalized.idZona,
-          visibility: normalized.visibility,
-          touched_before_website_send: normalized.touchedBeforeWebsiteSend,
-          is_fresh_candidate: normalized.isFreshCandidate,
-        });
-      }
+      // Step24AS: touch cepat / jarak tidak memblokir NEW_ZONE.
+      // EA harus menyimpan fase Fresh lebih dulu; prioritas jarak dipakai di UI/admin, bukan untuk menolak data.
       const daily = await getDailySignalSummary(normalized.visibility);
       if (daily.target_reached) {
         return send(res, 200, {
@@ -561,6 +565,9 @@ async function processEaPayload(req, res, body, transport = "POST") {
       progress_label: normalized.progressLabel,
       running_actual_point: patch.running_point,
       running_terjauh_point: patch.max_running_point,
+      fresh_priority_eligible: normalized.freshPriorityEligible,
+      distance_pips: normalized.distancePips,
+      distance_point: normalized.distancePoint,
       transport,
       saved,
     });

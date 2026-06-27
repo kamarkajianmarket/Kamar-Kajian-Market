@@ -1,6 +1,6 @@
 /**
  * Kamar Kajian Market — EA Study Update API
- * Step 24AL
+ * Step 24AO
  *
  * Endpoint: POST /api/kamar-study-update
  * Runtime: Vercel Serverless Function / Node.js 18+
@@ -78,7 +78,7 @@ const INVALID_LOCK_MIN_PIPS = 20;
 
 function normalizeEventType(value, progressCode, zoneStatus, isNewZone = false) {
   const raw = asString(value, "").toUpperCase().replace(/[\s-]+/g, "_");
-  if (["NEW_ZONE", "ZONE_ACTIVE", "RUNNING_UPDATE", "HIT_TARGET_KAJIAN", "HIT_TARGET_LANJUTAN", "HIT_INVALIDASI"].includes(raw)) return raw;
+  if (["NEW_ZONE", "ZONE_ACTIVE", "RUNNING_UPDATE", "PRICE_HEARTBEAT", "HIT_TARGET_KAJIAN", "HIT_TARGET_LANJUTAN", "HIT_INVALIDASI"].includes(raw)) return raw;
   const progress = asString(progressCode, "").toLowerCase();
   if (isNewZone) return "NEW_ZONE";
   if (progress === "invalidasi" || zoneStatus === "INVALID") return "HIT_INVALIDASI";
@@ -208,6 +208,9 @@ function normalizePayload(body) {
 
   const currentPrice = asNumber(body.current_price || body.harga_berjalan || body.price, null);
   const visibility = asString(body.visibility || body.website_visibility, "member").toLowerCase() === "public" ? "public" : "member";
+  const touchedBeforeWebsiteSend = body.touched_before_website_send === true || String(body.touched_before_website_send || "").toLowerCase() === "true";
+  const isFreshCandidate = body.is_fresh_candidate === undefined ? true : (body.is_fresh_candidate === true || String(body.is_fresh_candidate || "").toLowerCase() === "true");
+  const distanceToPrice = asNumber(body.distance_to_price ?? body.zone_distance_to_price, null);
 
   return {
     now,
@@ -220,6 +223,11 @@ function normalizePayload(body) {
     visibility,
     showPublic: body.show_public !== undefined ? !!body.show_public : visibility === "public",
     showMember: body.show_member !== undefined ? !!body.show_member : visibility === "member",
+    zoneIsFresh: body.zone_is_fresh !== undefined ? !!body.zone_is_fresh : undefined,
+    zoneWasTouched: body.zone_was_touched !== undefined ? !!body.zone_was_touched : false,
+    zoneWasInvalid: body.zone_was_invalid !== undefined ? !!body.zone_was_invalid : false,
+    distanceToPrice: asNumber(body.distance_to_price ?? body.distance_to_current_price, null),
+    priceHeartbeat: body.price_heartbeat !== undefined ? !!body.price_heartbeat : false,
     eventType,
     currentPrice,
     progressCode,
@@ -237,6 +245,9 @@ function normalizePayload(body) {
     targetLanjutan1: asNumber(body.target_lanjutan_1 ?? body.hold1, null),
     targetLanjutan2: asNumber(body.target_lanjutan_2 ?? body.hold2, null),
     targetLanjutan3: asNumber(body.target_lanjutan_3 ?? body.hold3, null),
+    touchedBeforeWebsiteSend,
+    isFreshCandidate,
+    distanceToPrice,
     raw: body,
   };
 }
@@ -278,30 +289,47 @@ function buildSourcePayload(normalized, previousPayload = {}) {
     progress_updated_at: normalized.progressCode ? normalized.now : previousPayload.progress_updated_at || null,
     running_pips: normalized.runningPips,
     max_running_pips: normalized.maxRunningPips,
+    touched_before_website_send: normalized.touchedBeforeWebsiteSend,
+    is_fresh_candidate: normalized.isFreshCandidate,
+    distance_to_price: normalized.distanceToPrice,
+    current_price_heartbeat_at: normalized.eventType === "PRICE_HEARTBEAT" ? normalized.now : previousPayload.current_price_heartbeat_at || null,
     pips_to_point_formula: "website_point = ea_pips / 10",
     target_lanjutan_1: normalized.targetLanjutan1,
     target_lanjutan_2: normalized.targetLanjutan2,
     target_lanjutan_3: normalized.targetLanjutan3,
+    zone_is_fresh: normalized.zoneIsFresh,
+    zone_was_touched: normalized.zoneWasTouched,
+    zone_was_invalid: normalized.zoneWasInvalid,
+    distance_to_price: normalized.distanceToPrice,
+    price_heartbeat: normalized.priceHeartbeat,
     last_ea_payload: normalized.raw,
     last_ea_update_at: normalized.now,
   };
 }
 
 function buildSignalPatch(normalized, previous = {}) {
+  const isHeartbeat = normalized.eventType === "PRICE_HEARTBEAT";
   const patch = {
     pair: normalized.pair,
     timeframe: normalized.timeframe,
     jenis_zona: normalized.jenisZona,
     skenario: normalized.scenario,
-    status: normalized.zoneStatus,
     visibility: normalized.visibility,
     is_active: true,
     is_published: true,
     current_price: normalized.currentPrice,
-    running_point: normalized.runningPoint,
-    max_running_point: normalized.maxRunningPoint,
     updated_at: normalized.now,
   };
+
+  if (!isHeartbeat) {
+    patch.status = normalized.zoneStatus;
+    patch.running_point = normalized.runningPoint;
+    patch.max_running_point = normalized.maxRunningPoint;
+  } else {
+    patch.status = previous.status || normalized.zoneStatus || "FRESH";
+    patch.running_point = previous.running_point ?? normalized.runningPoint;
+    patch.max_running_point = previous.max_running_point ?? normalized.maxRunningPoint;
+  }
 
   if (normalized.areaHigh !== null) patch.area_high = normalized.areaHigh;
   if (normalized.areaLow !== null) patch.area_low = normalized.areaLow;
@@ -385,6 +413,18 @@ async function processEaPayload(req, res, body, transport = "POST") {
     const existing = Array.isArray(existingRows) && existingRows.length ? existingRows[0] : null;
 
     if (isNewZoneRequest(normalized, existing)) {
+      if (normalized.touchedBeforeWebsiteSend || normalized.isFreshCandidate === false) {
+        return send(res, 200, {
+          ok: true,
+          accepted: false,
+          blocked: true,
+          block_reason: "Zona tidak diterima sebagai signal baru karena tidak Fresh / sudah pernah dimasuki harga.",
+          id_zona: normalized.idZona,
+          visibility: normalized.visibility,
+          touched_before_website_send: normalized.touchedBeforeWebsiteSend,
+          is_fresh_candidate: normalized.isFreshCandidate,
+        });
+      }
       const daily = await getDailySignalSummary(normalized.visibility);
       if (daily.target_reached) {
         return send(res, 200, {

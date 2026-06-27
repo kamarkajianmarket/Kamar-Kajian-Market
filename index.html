@@ -264,14 +264,15 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
           Detail lengkap Kamar Study Member tersedia setelah login member.
         </p>
 </div>
-<div aria-label="Kategori Kamar Study" class="study-tabs">
-<a href="#study-fresh">New Setup Fresh</a>
-<a href="#study-running">Setup Aktif / Running</a>
-<a href="#study-recap">Rekap Kajian</a>
-<a href="#study-history">Riwayat Kajian</a>
+<div aria-label="Filter Kamar Study" class="study-tabs" id="publicStudyTabs">
+<button class="study-filter-btn active" data-study-filter="all" type="button">ALL</button>
+<button class="study-filter-btn" data-study-filter="fresh" type="button">New Setup Fresh</button>
+<button class="study-filter-btn" data-study-filter="running" type="button">Setup Aktif / Running</button>
+<button class="study-filter-btn" data-study-filter="recap" type="button">Rekap Kajian</button>
+<button class="study-filter-btn" data-study-filter="history" type="button">Riwayat Kajian</button>
 </div>
 <div class="study-layout-v3">
-<article class="study-panel study-card-v3 fresh-card" id="study-fresh">
+<article class="study-panel study-card-v3 fresh-card" data-study-card="fresh" id="study-fresh">
 <div class="panel-head">
 <div>
 <span class="mini-label">New Setup Fresh</span>
@@ -313,7 +314,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
             Setup baru/fresh sebagai bahan kajian skenario market. Bukan instruksi transaksi wajib.
           </p>
 </article>
-<article class="study-panel study-card-v3 running-card" id="study-running">
+<article class="study-panel study-card-v3 running-card" data-study-card="running" id="study-running">
 <div class="panel-head">
 <div>
 <span class="mini-label">Setup Aktif / Running</span>
@@ -362,7 +363,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
           </p>
 </article>
 <aside class="study-side-v3">
-<div class="study-panel compact-panel" id="study-recap">
+<div class="study-panel compact-panel" data-study-card="recap" id="study-recap">
 <div class="panel-head small-head">
 <span class="mini-label">Rekap Kajian</span>
 <span class="period-label">Demo</span>
@@ -383,7 +384,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </div>
 <p class="public-recap-note">Rekap hasil ditampilkan sebagai dokumentasi edukatif dari skenario yang sudah selesai. Detail area kajian member tetap berada di Member Area.</p>
 </div>
-<div class="study-panel compact-panel" id="study-history">
+<div class="study-panel compact-panel" data-study-card="history" id="study-history">
 <div class="panel-head small-head">
 <span class="mini-label">Riwayat Kajian</span>
 <span class="period-label">Terbaru</span>
@@ -614,45 +615,62 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <script src="assets/js/kamar-supabase.js"></script>
 <script id="kamar-public-study-feed">
 (function(){
+  var REFRESH_MS = 30000;
+  var lastSnapshot = "";
+  var activeFilter = "all";
+  var timer = null;
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});}
   function payload(x){var p=x&&x.source_payload;if(!p)return {};if(typeof p==='object')return p;try{return JSON.parse(p)}catch(e){return {};}}
   function showPublic(x){var p=payload(x); if(p.show_public!==undefined) return !!p.show_public; return String(x&&x.visibility||'').toLowerCase()==='public';}
   function price(v){var n=Number(v);return Number.isFinite(n)?n.toFixed(2):'-';}
   function point(v){var n=Number(v); if(!Number.isFinite(n)) return '-'; return (n>0?'+':'')+n.toFixed(2)+' Point';}
-  function pointClass(v){var n=Number(v); return Number.isFinite(n)&&n<0?'negative':'positive';}
+  function pointClass(v){var n=Number(v); if(!Number.isFinite(n)||n===0)return 'neutral'; return n<0?'negative':'positive';}
   function statusText(x){var st=String(x&&x.status||'').toUpperCase(); if(st==='INVALID'||x.invalidated_at||x.finished_at) return 'Invalid'; if(st==='FRESH'||!x.price_entered_area_at) return 'Fresh'; return 'Active';}
   function progressText(x){var p=payload(x), code=String(p.progress_update||'').toLowerCase(), label=String(p.progress_label||'').trim(); if(label) return label; var m=code.match(/target_kajian[_-]([123])/); if(m) return 'HIT Target Kajian '+m[1]; m=code.match(/target_lanjutan[_-]([123])/); if(m) return 'HIT Target Lanjutan '+m[1]; if(code==='invalidasi'||code==='hit_invalidasi') return 'HIT Invalidasi'; var tp=Number(x.tp_hit_level||0); if(tp>0) return 'HIT Target Kajian '+Math.min(3,tp); var far=Number(x.farthest_tp_level||0); if(far>3) return 'HIT Target Lanjutan '+Math.min(3,far-3); return statusText(x)==='Fresh'?'Menunggu Harga Masuk':'Update berjalan';}
+  function currentPrice(x){var p=payload(x); return x.current_price!==undefined&&x.current_price!==null?x.current_price:p.current_price;}
+  function distToPrice(x){var cp=Number(currentPrice(x)); var lo=Number(x.area_low), hi=Number(x.area_high); if(!Number.isFinite(cp)||!Number.isFinite(lo)||!Number.isFinite(hi)) return Number.MAX_VALUE; var low=Math.min(lo,hi), high=Math.max(lo,hi); if(cp>=low&&cp<=high)return 0; return Math.min(Math.abs(cp-low),Math.abs(cp-high));}
+  function sortRelevant(a,b){var sa=statusText(a), sb=statusText(b); if(sa==='Fresh'&&sb!=='Fresh')return -1; if(sa!=='Fresh'&&sb==='Fresh')return 1; var da=distToPrice(a), db=distToPrice(b); if(da!==db)return da-db; return new Date(b.updated_at||b.created_at||0)-new Date(a.updated_at||a.created_at||0);}
+  function flash(el){ if(!el) return; el.classList.remove('live-updated'); void el.offsetWidth; el.classList.add('live-updated'); }
+  function liveMeta(x){return '<div class="study-live-meta"><span>Harga Saat Ini: <strong class="live-price">'+price(currentPrice(x))+'</strong></span><span>Update: <strong>'+esc(progressText(x))+'</strong></span></div>';}
   function renderFresh(x){
-    var el=document.getElementById('study-fresh'); if(!el||!x)return;
+    var el=document.getElementById('study-fresh'); if(!el)return; if(!x){el.innerHTML='<div class="study-live-empty">Belum ada setup Fresh publik yang valid.</div>';return;}
     el.innerHTML='<div class="panel-head"><div><span class="mini-label">New Setup Fresh</span><h3>'+esc(x.pair||'-')+' · '+esc(x.timeframe||'-')+'</h3></div><span class="status-pill fresh">'+esc(statusText(x))+'</span></div>'+ 
-      '<div class="study-signal-title compact-title"><strong>'+esc((x.skenario||'-'))+' Study · '+esc(x.jenis_zona||'-')+'</strong><small>ID: '+esc(x.id_zona||'-')+'</small></div>'+ 
+      '<div class="study-signal-title compact-title"><strong>'+esc((x.skenario||'-'))+' Study · '+esc(x.jenis_zona||'-')+'</strong><small>ID: '+esc(x.id_zona||'-')+'</small></div>'+liveMeta(x)+
       '<div class="signal-two-rails"><div class="rail-card left-rail"><div><span>Area Kajian</span><strong>'+price(x.area_low)+' – '+price(x.area_high)+'</strong></div><div><span>Invalidasi</span><strong>'+price(x.invalidasi)+'</strong></div></div>'+ 
       '<div class="rail-card right-rail"><div><span>Status</span><strong>'+esc(progressText(x))+'</strong></div><div><span>Target Kajian</span><strong>'+price(x.tp1)+' · '+price(x.tp2)+' · '+price(x.tp3)+'</strong></div><div><span>Target Lanjutan</span><strong>'+price(payload(x).target_lanjutan_1)+' · '+price(payload(x).target_lanjutan_2)+' · '+price(payload(x).target_lanjutan_3)+'</strong></div></div></div>'+ 
       '<p class="study-note">Setup publik otomatis dari Kamar Study. Bahan kajian market, bukan instruksi transaksi wajib.</p>';
   }
   function renderRunning(x){
-    var el=document.getElementById('study-running'); if(!el||!x)return;
+    var el=document.getElementById('study-running'); if(!el)return; if(!x){el.innerHTML='<div class="study-live-empty">Belum ada setup Running publik.</div>';return;}
     var pc=pointClass(x.running_point), mc=pointClass(x.max_running_point);
     el.innerHTML='<div class="panel-head"><div><span class="mini-label">Setup Aktif / Running</span><h3>'+esc(x.pair||'-')+' · '+esc(x.timeframe||'-')+'</h3></div><span class="status-pill running">'+esc(statusText(x))+'</span></div>'+ 
-      '<div class="study-signal-title compact-title"><strong>'+esc((x.skenario||'-'))+' Study · '+esc(x.jenis_zona||'-')+'</strong><small>ID: '+esc(x.id_zona||'-')+'</small></div>'+ 
+      '<div class="study-signal-title compact-title"><strong>'+esc((x.skenario||'-'))+' Study · '+esc(x.jenis_zona||'-')+'</strong><small>ID: '+esc(x.id_zona||'-')+'</small></div>'+liveMeta(x)+
       '<div class="signal-two-rails"><div class="rail-card left-rail"><div><span>Area Kajian</span><strong>'+price(x.area_low)+' – '+price(x.area_high)+'</strong></div><div><span>Invalidasi</span><strong>'+price(x.invalidasi)+'</strong></div></div>'+ 
-      '<div class="rail-card right-rail progress-rail"><div><span>Update</span><strong>'+esc(progressText(x))+'</strong></div><div><span>Harga Berjalan</span><strong>'+price(x.current_price)+'</strong></div><div><span>Running Actual</span><strong class="'+pc+'">'+point(x.running_point)+'</strong></div><div><span>Running Terjauh</span><strong class="'+mc+'">'+point(x.max_running_point)+'</strong></div></div></div>'+ 
+      '<div class="rail-card right-rail progress-rail"><div><span>Running Actual</span><strong class="'+pc+' live-running">'+point(x.running_point)+'</strong></div><div><span>Running Terjauh</span><strong class="'+mc+' live-max">'+point(x.max_running_point)+'</strong></div></div></div>'+ 
       '<div class="target-row target-v3 target-stack"><div><span>Target Kajian</span><strong>'+price(x.tp1)+' · '+price(x.tp2)+' · '+price(x.tp3)+'</strong></div><div><span>Target Lanjutan</span><strong>'+price(payload(x).target_lanjutan_1)+' · '+price(payload(x).target_lanjutan_2)+' · '+price(payload(x).target_lanjutan_3)+'</strong></div></div>'+ 
       '<p class="study-note">Data publik otomatis dari Kamar Study. Bukan ajakan transaksi; keputusan dan risiko tetap pada masing-masing trader.</p>';
   }
+  function dailyRows(rows, vis){var now=new Date(); var wib=new Date(now.getTime()+7*3600000); var key=wib.toISOString().slice(0,10); return rows.filter(function(x){var p=payload(x); var ok=vis==='public'?showPublic(x):(p.show_member!==undefined?!!p.show_member:String(x.visibility||'').toLowerCase()==='member'); var d=new Date(x.created_at||x.updated_at||0); var dw=new Date(d.getTime()+7*3600000).toISOString().slice(0,10); return ok&&dw===key;});}
+  function contribution(x){var m=Number(x.max_running_point), r=Number(x.running_point); if(Number.isFinite(m)&&m>0)return m; return Number.isFinite(r)?r:0;}
+  function renderRecap(rows){var el=document.getElementById('study-recap'); if(!el)return; var pub=dailyRows(rows,'public'), mem=dailyRows(rows,'member'); var pubPoint=pub.reduce(function(s,x){return s+contribution(x)},0), memPoint=mem.reduce(function(s,x){return s+contribution(x)},0); el.innerHTML='<div class="panel-head small-head"><span class="mini-label">Rekap Kajian</span><span class="period-label">Real Data</span></div><div class="recap-grid recap-v3"><div><span>Target Evaluasi</span><strong class="positive">+5.00 Point</strong></div><div><span>Hasil Member</span><strong class="'+pointClass(memPoint)+'">'+point(memPoint)+'</strong></div><div><span>Hasil Publik</span><strong class="'+pointClass(pubPoint)+'">'+point(pubPoint)+'</strong></div></div><p class="public-recap-note">Rekap otomatis dari data Kamar Study yang sudah masuk ke website.</p>';}
+  function renderHistory(rows){var el=document.getElementById('study-history'); if(!el)return; var list=rows.slice().sort(function(a,b){return new Date(b.updated_at||0)-new Date(a.updated_at||0)}).slice(0,5); if(!list.length){el.innerHTML='<div class="panel-head small-head"><span class="mini-label">Riwayat Kajian</span><span class="period-label">Real Data</span></div><div class="history-list"><div><span>Belum ada riwayat real.</span><strong class="muted">-</strong></div></div>';return;} el.innerHTML='<div class="panel-head small-head"><span class="mini-label">Riwayat Kajian</span><span class="period-label">Real Data</span></div><div class="history-list">'+list.map(function(x){var label=(showPublic(x)?'Public':'Member')+' Study · '+(x.pair||'-')+' '+(x.timeframe||'-')+' · '+progressText(x); var p=contribution(x); return '<div><span>'+esc(label)+'</span><strong class="'+pointClass(p)+'">'+point(p)+'</strong></div>';}).join('')+'</div>';}
+  function applyFilter(){document.querySelectorAll('[data-study-filter-card]').forEach(function(card){var cat=card.getAttribute('data-study-filter-card'); var hide=activeFilter!=='all'&&activeFilter!==cat; card.classList.toggle('study-hidden',hide);}); document.querySelectorAll('[data-study-filter]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-study-filter')===activeFilter);});}
   async function load(){
     try{
+      if(document.hidden) return;
       var c=window.kamarSupabase; if(!c) return;
-      var res=await c.from('signals').select('id_zona,pair,timeframe,jenis_zona,skenario,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,setup_title,setup_description,visibility,source_payload,is_active,is_published,price_entered_area_at,current_price,invalidated_at,finished_at,tp_hit_level,farthest_tp_level,created_at,updated_at,display_order').eq('is_active',true).eq('is_published',true).order('updated_at',{ascending:false}).limit(30);
+      var res=await c.from('signals').select('id_zona,pair,timeframe,jenis_zona,skenario,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,setup_title,setup_description,visibility,source_payload,is_active,is_published,price_entered_area_at,current_price,invalidated_at,finished_at,tp_hit_level,farthest_tp_level,created_at,updated_at,display_order').eq('is_active',true).eq('is_published',true).order('updated_at',{ascending:false}).limit(60);
       if(res.error) throw res.error;
-      var rows=(res.data||[]).filter(showPublic);
-      if(!rows.length) return;
-      var fresh=rows.find(function(x){return statusText(x)==='Fresh';});
-      var running=rows.find(function(x){return statusText(x)!=='Fresh';}) || rows[0];
-      renderFresh(fresh || rows[0]); renderRunning(running || rows[0]);
+      var all=res.data||[]; var rows=all.filter(showPublic); var snap=JSON.stringify(rows.map(function(x){return [x.id_zona,x.current_price,x.running_point,x.max_running_point,x.status,payload(x).progress_update,x.updated_at]}));
+      var changed=lastSnapshot&&snap!==lastSnapshot; lastSnapshot=snap;
+      var sorted=rows.slice().sort(sortRelevant); var fresh=sorted.find(function(x){return statusText(x)==='Fresh';}); var running=sorted.find(function(x){return statusText(x)!=='Fresh';});
+      renderFresh(fresh); renderRunning(running); renderRecap(all); renderHistory(all);
+      if(changed){flash(document.getElementById('study-fresh'));flash(document.getElementById('study-running'));flash(document.getElementById('study-recap'));flash(document.getElementById('study-history'));}
+      applyFilter();
     }catch(e){console.warn('[Kamar Public Study]',e);}
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',load); else load();
+  function start(){document.querySelectorAll('[data-study-filter]').forEach(function(btn){btn.addEventListener('click',function(){activeFilter=btn.getAttribute('data-study-filter')||'all';applyFilter();});}); load(); if(timer)clearInterval(timer); timer=setInterval(load,REFRESH_MS); document.addEventListener('visibilitychange',function(){if(!document.hidden)load();});}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
 </script>
 

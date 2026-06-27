@@ -1,6 +1,11 @@
 (function () {
   "use strict";
 
+  const MEMBER_STUDY_AUTO_REFRESH_MS = 15000;
+  let memberStudyAutoRefreshStarted = false;
+
+  let kamarStudyAutoRefreshTimer = null;
+
   function client() {
     if (!window.kamarSupabase) {
       throw new Error(window.KAMAR_SUPABASE_ERROR || "Supabase client belum siap.");
@@ -255,6 +260,7 @@
 
     renderStatus("<strong>Data Kamar Study Aktif</strong><br/>Menampilkan kajian aktif yang dipublikasikan untuk member.", "info");
 
+    list.classList.remove("live-updated"); void list.offsetWidth; list.classList.add("live-updated");
     list.innerHTML = items.map(function (raw) {
       const item = normalizeItem(raw);
       const area = item.areaLow !== null || item.areaHigh !== null ? priceText(item.areaLow, item.pair) + " - " + priceText(item.areaHigh, item.pair) : "-";
@@ -282,6 +288,7 @@
             </div>
           </div>
           <div class="study-levels">
+            <div><span>Harga Saat Ini</span><strong>${escapeHtml(priceText(item.currentPrice, item.pair))}</strong></div>
             <div><span>Zona</span><strong>${escapeHtml(area)}</strong></div>
             <div><span>Invalidasi</span><strong>${escapeHtml(priceText(item.invalidasi, item.pair))}</strong></div>
             <div><span>TP 1</span><strong>${escapeHtml(priceText(item.tp1, item.pair))}</strong></div>
@@ -379,6 +386,18 @@
       const access = await getAccess(auth.profile.id);
       if (!isAllowed(auth.profile, access)) return;
       await loadFeed();
+      if (!kamarStudyAutoRefreshTimer) {
+        kamarStudyAutoRefreshTimer = setInterval(function () { if (!document.hidden) loadFeed().catch(function(error){ console.warn('[Kamar Study auto refresh]', error); }); }, 30000);
+        document.addEventListener('visibilitychange', function(){ if (!document.hidden) loadFeed().catch(function(error){ console.warn('[Kamar Study auto refresh]', error); }); });
+      }
+      if (!memberStudyAutoRefreshStarted) {
+        memberStudyAutoRefreshStarted = true;
+        window.setInterval(function () {
+          loadFeed().catch(function (error) {
+            console.warn("[Kamar Study Auto Refresh]", error);
+          });
+        }, MEMBER_STUDY_AUTO_REFRESH_MS);
+      }
     } catch (error) {
       console.error("[Kamar Study]", error);
       renderStatus("<strong>Gagal Memuat Kamar Study</strong><br/>" + escapeHtml(error.message || "Silakan refresh halaman atau login ulang."), "error");

@@ -1542,6 +1542,30 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 </style>
 
+
+<style id="kamar-step24bo-payment-video-polish">
+/* Step 24BO — video reference + Traktir Kamar + Mayar-ready payment blocks */
+.video-reference-grid,.traktir-grid,.member-payment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch;}
+.video-reference-card,.traktir-card,.member-payment-card{position:relative;overflow:hidden;border:1px solid rgba(238,206,122,.16);border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.016));padding:22px;box-shadow:0 18px 70px rgba(0,0,0,.18);}
+.video-reference-card::before,.traktir-card::before,.member-payment-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 0%,rgba(244,223,144,.13),transparent 36%);pointer-events:none;}
+.video-reference-card > *,.traktir-card > *,.member-payment-card > *{position:relative;z-index:1;}
+.video-thumb{height:150px;border-radius:22px;border:1px solid rgba(238,206,122,.16);background:linear-gradient(135deg,rgba(0,0,0,.42),rgba(212,166,63,.10)),radial-gradient(circle at 70% 34%,rgba(244,223,144,.22),transparent 30%);display:grid;place-items:center;margin-bottom:18px;}
+.video-play-icon{width:58px;height:58px;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);display:grid;place-items:center;color:#111;font-weight:1000;box-shadow:0 14px 40px rgba(212,166,63,.22);}
+.video-reference-card h3,.traktir-card h3,.member-payment-card h3{margin:0 0 10px;color:#fff3d8;font-size:clamp(20px,1.7vw,25px);line-height:1.15;letter-spacing:-.025em;}
+.video-reference-card p,.traktir-card p,.member-payment-card p{margin:0 0 16px;color:rgba(245,240,230,.70);line-height:1.62;font-size:15px;}
+.kamar-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:8px 12px;margin-bottom:12px;color:#e9d996;background:rgba(244,223,144,.07);font-size:12px;font-weight:1000;letter-spacing:.1em;text-transform:uppercase;}
+.traktir-grid{grid-template-columns:1.15fr .85fr;}
+.traktir-card.primary-traktir{padding:28px;}
+.traktir-list{display:grid;gap:12px;margin-top:14px;}
+.traktir-list span{display:flex;align-items:flex-start;gap:10px;color:rgba(245,240,230,.76);line-height:1.55;font-weight:750;}
+.traktir-list span::before{content:"";width:8px;height:8px;border-radius:99px;background:#f4df90;box-shadow:0 0 18px rgba(244,223,144,.45);margin-top:8px;flex:0 0 auto;}
+.payment-disclaimer{border:1px solid rgba(158,255,202,.20);background:rgba(28,97,65,.075);border-radius:22px;padding:16px;color:rgba(226,255,239,.80);font-size:14px;line-height:1.6;}
+.btn.disabled-payment,.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed;filter:saturate(.75);pointer-events:none;}
+.member-payment-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px;}
+.payment-note-box{border:1px solid rgba(238,206,122,.18);border-radius:22px;padding:16px;background:rgba(244,223,144,.055);color:rgba(245,240,230,.78);line-height:1.6;margin-top:14px;}
+@media(max-width:940px){.video-reference-grid,.traktir-grid,.member-payment-grid{grid-template-columns:1fr}.video-thumb{height:135px}}
+</style>
+
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -1554,7 +1578,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <nav aria-label="Navigasi utama" class="nav-links">
 <a href="#fasilitas">Fasilitas</a>
 <a href="#tentang">Tentang</a>
-<a href="#akses">Akses</a>
 <a href="#faq">FAQ</a>
 </nav>
 <div class="header-actions">
@@ -1564,7 +1587,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </header>
 <div aria-label="Shortcut cepat" class="quick-mobile-nav">
 <a href="#fasilitas">Fasilitas</a>
-<a href="#akses">Akses</a>
 <a href="#faq">FAQ</a>
 </div>
 <main id="top">
@@ -1581,10 +1603,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div aria-label="Visual karakter Kamar Kajian Market" class="hero-visual">
 <div class="visual-card">
 <img alt="Karakter bertopeng Kamar Kajian Market" class="hero-person" src="assets/hero-mask.jpeg"/>
-<div class="visual-note note-bottom">
-<span>Market Logic</span>
-<strong>Sebab • Reaksi • Risiko</strong>
-</div>
 </div>
 <div aria-label="Fokus pembelajaran" class="hero-badges hero-badges-under-visual">
 <span>Market Logic</span>
@@ -1608,6 +1626,38 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div><strong>Tanpa Janji Profit</strong><span>Edukasi objektif, disiplin, dan risk management.</span></div>
 </div>
 </section>
+
+<section class="section-shell compact-section" id="video-youtube">
+<div class="section-heading centered">
+<span class="eyebrow">Referensi Video</span>
+<h2>Kajian Video Pilihan dari YouTube Kamar.</h2>
+<p>Bagian ini disiapkan untuk menampilkan video edukasi pilihan. Link video bisa dipasang manual agar yang tampil tetap rapi, relevan, dan tidak bergantung pada sistem otomatis.</p>
+</div>
+<div class="video-reference-grid">
+<article class="video-reference-card">
+<div class="video-thumb"><span class="video-play-icon">▶</span></div>
+<span class="kamar-badge">Market Logic</span>
+<h3>Edukasi Market Logic</h3>
+<p>Referensi video untuk memahami cara membaca sebab, reaksi harga, struktur market, dan risiko secara objektif.</p>
+<a class="btn btn-secondary" href="https://www.youtube.com/@kamarkajianmarket" rel="noopener" target="_blank">Tonton di YouTube</a>
+</article>
+<article class="video-reference-card">
+<div class="video-thumb"><span class="video-play-icon">▶</span></div>
+<span class="kamar-badge">Breakdown Market</span>
+<h3>Analisis &amp; Kajian Chart</h3>
+<p>Tempat untuk menampilkan video breakdown market, pembahasan area penting, dan skenario edukatif berbasis chart.</p>
+<a class="btn btn-secondary" href="https://www.youtube.com/@kamarkajianmarket" rel="noopener" target="_blank">Tonton di YouTube</a>
+</article>
+<article class="video-reference-card">
+<div class="video-thumb"><span class="video-play-icon">▶</span></div>
+<span class="kamar-badge">Risk Management</span>
+<h3>Disiplin &amp; Risiko</h3>
+<p>Referensi video untuk menekankan bahwa trading perlu batas risiko, validasi, dan keputusan yang tidak emosional.</p>
+<a class="btn btn-secondary" href="https://www.youtube.com/@kamarkajianmarket" rel="noopener" target="_blank">Tonton di YouTube</a>
+</article>
+</div>
+</section>
+
 <section class="section-shell compact-section" id="fasilitas">
 <div class="section-heading">
 <span class="eyebrow">Fasilitas Kamar</span>
@@ -1642,7 +1692,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </div>
 <div class="facility-detail-wrap" id="facilityDetailPanel">
 <article class="facility-detail-card" data-detail="edukasi" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Edukasi</h3><p>Materi belajar untuk memahami price action, market structure, supply-demand, risk, dan cara membaca chart secara objektif.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Materi QNA, pembahasan konsep, studi kasus market, dan dasar market logic.</span></div><div><strong>Cocok untuk</strong><span>Trader pemula-menengah yang ingin membangun fondasi baca chart.</span></div><div><strong>Arah belajar</strong><span>Memahami sebab, reaksi, dan risiko sebelum mengambil keputusan trading.</span></div></div><div class="facility-status-row"><span class="facility-status-badge green">Gratis</span><span class="facility-status-badge muted">Coming Soon</span></div><a aria-disabled="true" class="btn btn-secondary btn-disabled" role="link">DAFTAR KAMAR EDUKASI</a></article>
-<article class="facility-detail-card active" data-detail="study"><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Study</h3><p>Kajian Setup Entry. Fokus pada area kajian, level target, level invalidasi, dan diskusi edukatif tanpa janji profit.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Kajian area, batas risiko, skenario market, dan alasan market logic di balik setup.</span></div><div><strong>Cocok untuk</strong><span>Trader yang ingin mengikuti bahan kajian terstruktur untuk membangun disiplin dan komitmen.</span></div><div><strong>Alur akses</strong><span>Daftar via website, konfirmasi pembayaran atau gunakan akses gratis melalui admin, lalu lanjut ke grup Telegram khusus "Kamar Study".</span></div></div><div class="facility-status-row"><span class="facility-status-badge green">Gratis / Berbayar</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR STUDY</a></article>
+<article class="facility-detail-card active" data-detail="study"><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Study</h3><p>Kajian Setup Entry. Fokus pada area kajian, level target, level invalidasi, dan diskusi edukatif tanpa janji profit.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Kajian area, batas risiko, skenario market, dan alasan market logic di balik setup.</span></div><div><strong>Cocok untuk</strong><span>Trader yang ingin mengikuti bahan kajian terstruktur untuk membangun disiplin dan komitmen.</span></div><div><strong>Alur akses</strong><span>Daftar via website, konfirmasi pembayaran atau gunakan akses gratis melalui admin, lalu lanjut ke grup Telegram khusus "Kamar Study".</span></div></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR STUDY</a></article>
 <article class="facility-detail-card" data-detail="private" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Private</h3><p>Fasilitas pendampingan 1 on 1 / perorangan untuk belajar lebih fokus, evaluasi, dan pengembangan pemahaman market sesuai kebutuhan peserta.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Mentoring, evaluasi, pembahasan market, video rekaman, PDF, dan update materi sesuai paket.</span></div><div><strong>Cocok untuk</strong><span>Member yang ingin pendampingan personal, evaluasi berkala, dan arah belajar yang lebih terstruktur.</span></div><div><strong>Catatan</strong><span>Fokus pada proses belajar, disiplin, risk management, dan evaluasi objektif.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge">Harga Variatif Sesuai Paket Materi</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR PRIVATE</a></article>
 <article class="facility-detail-card" data-detail="indikator" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Indikator</h3><p>Tools untuk membaca dan memvisualisasikan semua jenis zona analisis Kamar Kajian Market, seperti supply-demand Simple &amp; Dynamic, Trading Block, Liquidity, Equilibrium, Discount &amp; Premium, Indecision, dan masih banyak lagi.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Visualisasi zona analisis, area reaksi market, struktur zona, dan bantuan pembacaan chart agar lebih tertata.</span></div><div><strong>Cocok untuk</strong><span>Trader yang ingin membaca zona dengan tampilan lebih rapi, konsisten, dan sesuai kerangka analisis Kamar.</span></div><div><strong>Catatan</strong><span>Indikator adalah alat bantu analisis, bukan jaminan hasil trading.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge green">Gratis Untuk Member Kamar Private</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR INDIKATOR</a></article>
 <article class="facility-detail-card" data-detail="robot" hidden=""><span class="eyebrow">Detail Fasilitas</span><h3>Kamar Robot</h3><p>Tools alat bantu entry otomatis dari zona Kamar Indikator dan Kamar Study. Robot membantu eksekusi teknis berdasarkan zona yang sudah dikaji, bukan pengganti analisis, disiplin, dan risk management.</p><div class="detail-grid"><div><strong>Isi utama</strong><span>Alat bantu entry otomatis berbasis zona, parameter risiko, panduan penggunaan, dan pengelolaan akses.</span></div><div><strong>Cocok untuk</strong><span>Member yang sudah memahami risiko dan ingin memakai tools otomatis secara terukur.</span></div><div><strong>Catatan</strong><span>Bukan profit otomatis. Risiko tetap wajib dipahami, dibatasi, dan dipantau.</span></div></div><div class="facility-status-row"><span class="facility-status-badge">Berbayar</span><span class="facility-status-badge">Sewa atau Beli License</span></div><a class="btn btn-primary" href="register.html">DAFTAR KAMAR ROBOT</a></article>
@@ -1651,7 +1701,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <section class="access section-shell compact-section" id="akses">
 <div class="access-box access-split-box">
 <div class="access-intro">
-<span class="eyebrow">Gratis / Berbayar</span>
 <h2>Pilihan Akses Fasilitas</h2>
 <p>
             Beberapa fasilitas tersedia melalui dua pilihan akses. Detail lengkap tetap dikonfirmasi
@@ -1793,6 +1842,36 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </details>
 </div>
 </section>
+
+<section class="section-shell compact-section" id="traktir-kamar">
+<div class="section-heading centered">
+<span class="eyebrow">Traktir Kamar</span>
+<h2>Ruang dukungan sukarela untuk Kamar.</h2>
+<p>Jika edukasi, diskusi, dan kajian market di Kamar membantu proses belajar Anda, traktiran ini dapat menjadi dukungan sukarela untuk operasional komunitas.</p>
+</div>
+<div class="traktir-grid">
+<article class="traktir-card primary-traktir">
+<span class="kamar-badge">Support Sukarela</span>
+<h3>Traktir Kamar</h3>
+<p>Dukungan ini bukan pembayaran fasilitas, bukan sinyal trading, dan bukan jaminan profit. Traktiran hanya untuk membantu operasional edukasi, konten, website, dan ruang diskusi komunitas.</p>
+<div class="traktir-list">
+<span>Untuk mendukung konten edukasi dan pengembangan website.</span>
+<span>Bersifat sukarela, tidak wajib, dan tidak memengaruhi hasil trading.</span>
+<span>Payment akan diarahkan melalui Mayar setelah link resmi dipasang.</span>
+</div>
+<div class="hero-actions" style="margin-top:22px">
+<a class="btn btn-primary disabled-payment" data-mayar-key="traktir" href="#" aria-disabled="true">Kirim Traktiran</a>
+<a class="btn btn-secondary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Tanya Admin</a>
+</div>
+</article>
+<article class="traktir-card">
+<span class="kamar-badge">Catatan Penting</span>
+<h3>Bukan Pembayaran Sinyal</h3>
+<div class="payment-disclaimer">Kamar Kajian Market tidak menjanjikan profit, tidak menerima titip dana, dan tidak menjual hasil pasti. Semua dukungan bersifat sukarela dan tetap mengikuti prinsip edukasi market logic.</div>
+</article>
+</div>
+</section>
+
 <section class="social section-shell compact-section">
 <div class="social-box">
 <h2>Terhubung dengan Kamar</h2>
@@ -1932,5 +2011,35 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   });
 })();
 </script>
+
+<script id="kamar-mayar-payment-config">
+/* Isi link Mayar resmi di bagian ini saat link sudah dibuat. Biarkan kosong supaya tombol belum aktif. */
+window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
+  traktir: "",
+  study: "",
+  private: "",
+  indikator: "",
+  robot: ""
+};
+(function(){
+  const links = window.KAMAR_MAYAR_LINKS || {};
+  document.querySelectorAll('[data-mayar-key]').forEach((button) => {
+    const key = button.getAttribute('data-mayar-key');
+    const url = links[key];
+    if(url){
+      button.setAttribute('href', url);
+      button.setAttribute('target', '_blank');
+      button.setAttribute('rel', 'noopener');
+      button.removeAttribute('aria-disabled');
+      button.classList.remove('disabled-payment');
+    }else{
+      button.setAttribute('href', '#');
+      button.setAttribute('aria-disabled', 'true');
+      button.classList.add('disabled-payment');
+    }
+  });
+})();
+</script>
+
 </body>
 </html>

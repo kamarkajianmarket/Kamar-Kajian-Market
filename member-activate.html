@@ -262,6 +262,13 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .activate-row .btn{margin:0;min-width:170px;width:170px;height:58px;padding:0 18px;font-size:15px;letter-spacing:.02em;text-align:center;}
 .activate-coming-soon{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(238,206,122,.28);background:rgba(238,206,122,.10);color:#f1dda2;border-radius:999px;padding:11px 15px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;font-size:.76rem;}
 .member-payment-card.is-coming-soon{opacity:.88;}
+
+.activation-actions{align-items:center;gap:12px;margin-top:18px!important;}
+.activation-pay-btn{min-width:170px;height:56px;font-size:16px!important;letter-spacing:.03em;text-transform:uppercase;}
+.activation-muted-btn{min-width:150px;height:52px;background:rgba(255,255,255,.045)!important;color:#e9d99b!important;border:1px solid rgba(238,206,122,.18)!important;box-shadow:none!important;}
+.activation-muted-btn:hover{background:rgba(255,255,255,.07)!important;border-color:rgba(238,206,122,.32)!important;}
+.activation-note-box{font-size:15px;line-height:1.7;}
+@media(max-width:720px){.activation-actions .btn{width:100%;min-width:0;}}
 @media(max-width:920px){.member-payment-grid{grid-template-columns:1fr}}
 </style>
 
@@ -291,11 +298,12 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <textarea id="activationNote" placeholder="Tulis catatan singkat untuk admin jika ada"></textarea>
 </label>
 </div>
-<div class="button-row">
-<a class="btn" id="activationAdminLink" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
-<a class="btn secondary" href="member-renewal.html">Kembali ke Pilihan Fasilitas</a>
+<div class="button-row activation-actions">
+<a class="btn activation-pay-btn" id="activationPayLink" href="#" data-payment-placeholder="true">Bayar</a>
+<a class="btn secondary activation-muted-btn" id="activationAdminLink" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
+<a class="btn secondary activation-muted-btn" href="member-renewal.html">Kembali ke Pilihan Fasilitas</a>
 </div>
-<div class="payment-note-box" style="margin-top:18px"><strong>Catatan:</strong> pembayaran dan aktivasi fasilitas tetap dikonfirmasi admin setelah transaksi/konfirmasi selesai.</div>
+<div class="payment-note-box activation-note-box" style="margin-top:18px"><strong>Catatan:</strong> sebelum pembayaran, pastikan menghubungi admin lebih dulu untuk konfirmasi apakah layanan masih tersedia, detail layanan, atau promo yang sedang berjalan (jika ada) dan hal teknis lainnya.<br/><br/>Setelah pembayaran, pastikan untuk menghubungi admin supaya aktivasi fasilitas lebih cepat diproses.</div>
 </section>
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script>
@@ -322,6 +330,16 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
   function update(){ if(adminLink) adminLink.href=buildMessage(); }
   [need,duration,note].forEach(function(el){ if(el) el.addEventListener('input',update); });
+
+  const payLink=document.getElementById('activationPayLink');
+  if(payLink){
+    payLink.addEventListener('click',function(e){
+      if(payLink.getAttribute('href')==='#'){
+        e.preventDefault();
+        if(typeof toast==='function') toast('Link pembayaran Mayar fasilitas belum dipasang. Hubungi admin untuk konfirmasi pembayaran.');
+      }
+    });
+  }
   update();
 })();
 </script></body></html>

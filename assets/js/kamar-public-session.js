@@ -6,8 +6,6 @@
 
   function touch() { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
   function last() { try { return Number(localStorage.getItem(KEY) || Date.now()); } catch (e) { return Date.now(); } }
-  function page() { return (window.KAMAR_CONFIG && window.KAMAR_CONFIG.DEFAULT_MEMBER_REDIRECT) || "dashboard.html"; }
-
   async function getSession() {
     if (!window.kamarSupabase) return null;
     const { data } = await window.kamarSupabase.auth.getSession();
@@ -30,9 +28,11 @@
     if (!actions) return;
     if (!profile) return;
     const name = profile.full_name || "Kawan Kamar";
+
+    // Saat member masih login, tombol Daftar/Login diganti menjadi nama member.
+    // Nama member menjadi jalan cepat kembali ke dashboard, tanpa login ulang.
     actions.innerHTML = '<a class="header-cta" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>'+
-      '<a class="header-cta header-member-name" href="dashboard.html">'+escapeHtml(name)+'</a>'+
-      '<a class="header-cta header-member-cta" href="dashboard.html">Dashboard</a>';
+      '<a class="header-cta header-member-cta header-member-name" href="dashboard.html">'+escapeHtml(name)+'</a>';
   }
 
   function escapeHtml(v) {
@@ -40,13 +40,13 @@
   }
 
   function bindBrand(profile) {
+    // Logo/nama brand tetap menuju beranda utama, bukan dashboard.
+    // Status login hanya mengubah tombol kanan atas menjadi nama member.
     const brand = document.querySelector(".site-header .brand");
     if (!brand || !profile) return;
-    brand.setAttribute("href", "dashboard.html");
-    brand.addEventListener("click", function (event) {
-      event.preventDefault();
-      window.location.href = "dashboard.html";
-    });
+    if (!brand.getAttribute("href") || brand.getAttribute("href") === "dashboard.html") {
+      brand.setAttribute("href", "index.html");
+    }
   }
 
   async function boot() {

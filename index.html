@@ -64,6 +64,9 @@
   .hero .hero-copy h1{font-size:42px!important;}
   .split-main > .split-card:first-child{padding:20px!important;}
 }
+
+/* Step 24BN: facility click auto-scroll logic support */
+#facilityDetailPanel,.facility-detail-card{scroll-margin-top:120px;}
 </style>
 <style id="kamar-form-admin-cleanup">
 /* === KAMAR V4.3: Elegant readable form controls + admin data panels === */
@@ -1835,31 +1838,97 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/kamar-config.js"></script>
 <script src="assets/js/kamar-supabase.js"></script>
-<script id="kamar-step24av-facility-tabs">
+<script id="kamar-step24bn-facility-tabs-scroll">
 (function(){
-  function setFacilityDetail(key){
+  var facilityKeys=['edukasi','study','private','indikator','robot'];
+  var hashMap={
+    '#edukasi':'edukasi','#kamar-edukasi':'edukasi','#facility-edukasi':'edukasi',
+    '#study':'study','#kamar-study':'study','#facility-study':'study',
+    '#private':'private','#kamar-private':'private','#facility-private':'private',
+    '#indikator':'indikator','#kamar-indikator':'indikator','#facility-indikator':'indikator',
+    '#robot':'robot','#kamar-robot':'robot','#facility-robot':'robot'
+  };
+
+  function getHeaderOffset(){
+    var header=document.querySelector('.site-header');
+    return header ? header.offsetHeight + 24 : 24;
+  }
+
+  function scrollToElement(el){
+    if(!el) return;
+    var top=el.getBoundingClientRect().top + window.pageYOffset - getHeaderOffset();
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+
+  function setFacilityDetail(key, options){
+    if(facilityKeys.indexOf(key)===-1) key='study';
+    options=options||{};
     var tabs=document.querySelectorAll('.facility-tab[data-facility]');
     var details=document.querySelectorAll('.facility-detail-card[data-detail]');
+    var activeDetail=null;
+
     tabs.forEach(function(tab){
       var isActive=tab.getAttribute('data-facility')===key;
       tab.classList.toggle('active',isActive);
       tab.setAttribute('aria-pressed',isActive?'true':'false');
     });
+
     details.forEach(function(card){
       var isActive=card.getAttribute('data-detail')===key;
       card.toggleAttribute('hidden',!isActive);
       card.classList.toggle('active',isActive);
+      if(isActive) activeDetail=card;
     });
+
+    if(options.updateHash){
+      history.replaceState(null,'','#kamar-'+key);
+    }
+    if(options.scroll){
+      window.requestAnimationFrame(function(){
+        scrollToElement(activeDetail || document.getElementById('facilityDetailPanel'));
+      });
+    }
   }
+
+  function facilityFromHash(){
+    var hash=(window.location.hash||'').toLowerCase();
+    return hashMap[hash] || null;
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     var tabs=document.querySelectorAll('.facility-tab[data-facility]');
     tabs.forEach(function(tab){
-      tab.addEventListener('click',function(){setFacilityDetail(tab.getAttribute('data-facility'));});
+      tab.addEventListener('click',function(){
+        setFacilityDetail(tab.getAttribute('data-facility'),{scroll:true,updateHash:true});
+      });
       tab.addEventListener('keydown',function(e){
-        if(e.key==='Enter'||e.key===' '){e.preventDefault();setFacilityDetail(tab.getAttribute('data-facility'));}
+        if(e.key==='Enter'||e.key===' '){
+          e.preventDefault();
+          setFacilityDetail(tab.getAttribute('data-facility'),{scroll:true,updateHash:true});
+        }
       });
     });
-    setFacilityDetail('study');
+
+    document.querySelectorAll('a[href^="#kamar-"],a[href^="#facility-"],a[href="#edukasi"],a[href="#study"],a[href="#private"],a[href="#indikator"],a[href="#robot"]').forEach(function(link){
+      link.addEventListener('click',function(e){
+        var key=hashMap[(link.getAttribute('href')||'').toLowerCase()];
+        if(!key) return;
+        e.preventDefault();
+        setFacilityDetail(key,{scroll:true,updateHash:true});
+      });
+    });
+
+    var initial=facilityFromHash();
+    if(initial){
+      setFacilityDetail(initial,{scroll:true,updateHash:false});
+    }else{
+      setFacilityDetail('study');
+    }
+  });
+
+  window.addEventListener('hashchange',function(){
+    var key=facilityFromHash();
+    if(key) setFacilityDetail(key,{scroll:true,updateHash:false});
   });
 })();
 </script>

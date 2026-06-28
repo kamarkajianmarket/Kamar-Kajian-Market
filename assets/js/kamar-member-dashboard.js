@@ -34,32 +34,41 @@
     const box = document.getElementById("memberStatusBox");
     if (!box) return;
 
-    const active = profile && profile.account_status === "active" && profile.payment_status === "confirmed" && !isAccessExpired(profile) && !access.locked_by_expired;
+    const memberActive = profile && profile.account_status === "active";
+    const suspended = profile && profile.account_status === "suspended";
+    const expired = isAccessExpired(profile) || access.locked_by_expired;
+    const activeFacilities = FACILITIES.filter(function (facility) { return Boolean(access[facility.key]); });
+    const facilityNames = activeFacilities.map(function (facility) { return facility.label; }).join(", ");
+    const endDate = profile && profile.access_end_date ? formatDate(profile.access_end_date) : "belum ditentukan";
+
     box.classList.remove("expired-note", "page-note");
 
-    if (active) {
-      box.classList.add("page-note");
-      box.innerHTML = `<strong>Status Akses: Aktif</strong><br/>Masa akses sampai ${formatDate(profile.access_end_date)}.`;
+    if (suspended) {
+      box.classList.add("expired-note");
+      box.innerHTML = `<strong>Status Member Website: Ditangguhkan</strong><br/>Hubungi Admin Kamar untuk pengecekan akun.`;
       return;
     }
 
-    box.classList.add("expired-note");
     if (profile && profile.account_status === "pending_activation") {
-      box.innerHTML = `<strong>Status Akses: Menunggu Aktivasi</strong><br/>Akun sudah terdaftar. Akses fasilitas akan aktif setelah konfirmasi admin.`;
+      box.classList.add("expired-note");
+      box.innerHTML = `<strong>Status Member Website: Menunggu Aktivasi</strong><br/>Akun sudah terdaftar. Akses website member bersifat gratis, fasilitas berbayar aktif setelah konfirmasi admin.`;
       return;
     }
 
-    if (profile && profile.account_status === "suspended") {
-      box.innerHTML = `<strong>Status Akses: Ditangguhkan</strong><br/>Hubungi Admin Kamar untuk pengecekan akun.`;
+    if (memberActive && activeFacilities.length > 0 && !expired) {
+      box.classList.add("page-note");
+      box.innerHTML = `<strong>Member Website: Aktif Gratis</strong><br/>Fasilitas aktif: ${facilityNames}.<br/>Masa akses fasilitas sampai ${endDate}.`;
       return;
     }
 
-    if (isAccessExpired(profile) || access.locked_by_expired) {
-      box.innerHTML = `<strong>Status Akses: Expired</strong><br/>Masa akses sudah berakhir. Silakan perpanjang atau tambah fasilitas.`;
+    if (expired && activeFacilities.length > 0) {
+      box.classList.add("expired-note");
+      box.innerHTML = `<strong>Member Website: Aktif Gratis</strong><br/>Masa akses fasilitas ${facilityNames} sudah berakhir. Silakan perpanjang atau tambah fasilitas.`;
       return;
     }
 
-    box.innerHTML = `<strong>Status Akses: Belum Aktif</strong><br/>Akses fasilitas belum tersedia. Hubungi Admin Kamar untuk aktivasi.`;
+    box.classList.add("page-note");
+    box.innerHTML = `<strong>Member Website: Aktif Gratis</strong><br/>Belum ada fasilitas berbayar aktif. Pilih Perpanjangan / Tambah Fasilitas jika ingin mengaktifkan fasilitas Kamar.`;
   }
 
   function updateWelcome(profile) {
@@ -70,23 +79,12 @@
     if (text) {
       const memberId = profile && profile.member_id ? profile.member_id : "-";
       const endDate = profile && profile.access_end_date ? formatDate(profile.access_end_date) : "menunggu aktivasi";
-      text.textContent = `Member ID: ${memberId}. Masa akses: ${endDate}.`;
+      text.textContent = `ID: ${memberId}`;
     }
   }
 
   function updateSidebar(access, profile) {
-    const activeAccount = profile && profile.account_status === "active" && profile.payment_status === "confirmed" && !isAccessExpired(profile) && !access.locked_by_expired;
-    const links = Array.from(document.querySelectorAll(".split-sidebar a"));
-
-    FACILITIES.forEach(function (facility) {
-      const link = links.find(function (a) { return a.textContent.toLowerCase().includes(facility.label.toLowerCase()); });
-      if (!link) return;
-
-      const canAccess = Boolean(access[facility.key]) && activeAccount;
-      link.classList.toggle("disabled", !canAccess);
-      link.href = canAccess ? facility.page : "member-renewal.html";
-      link.textContent = canAccess ? facility.label : facility.label + " 🔒";
-    });
+    // Sidebar member dibuat ringkas. Akses detail fasilitas diarahkan dari menu Fasilitas Kamar.
   }
 
   function updateFacilitySummary(access, profile) {

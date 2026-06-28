@@ -3,7 +3,7 @@
 
   const FACILITY_LABELS = {
     access_kamar_study: "Kamar Study",
-    access_materi_edukasi: "Materi Edukasi",
+    access_materi_edukasi: "Kamar Edukasi",
     access_kamar_private: "Kamar Private",
     access_kamar_indikator: "Kamar Indikator",
     access_kamar_robot: "Kamar Robot"

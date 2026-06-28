@@ -251,39 +251,66 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 
 <style id="kamar-step24bo-member-payment">
 .member-payment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px;}
-.member-payment-card{border:1px solid rgba(238,206,122,.16);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.016));padding:18px;position:relative;overflow:hidden;}
+.member-payment-card{border:1px solid rgba(238,206,122,.16);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.016));padding:22px;position:relative;overflow:hidden;min-height:190px;display:flex;flex-direction:column;align-items:flex-start;}
 .member-payment-card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,rgba(244,223,144,.12),transparent 34%);pointer-events:none;}
 .member-payment-card>*{position:relative;z-index:1;}
-.member-payment-card h3{margin:0 0 8px;color:#fff3d8;}
-.member-payment-card p{margin:0 0 14px;color:rgba(245,240,230,.68);line-height:1.55;}
+.member-payment-card h3{margin:0 0 10px;color:#fff3d8;}
+.member-payment-card p{margin:0;color:rgba(245,240,230,.68);line-height:1.55;}
 .payment-note-box{border:1px solid rgba(158,255,202,.20);background:rgba(28,97,65,.075);border-radius:22px;padding:16px;color:rgba(226,255,239,.82);line-height:1.6;margin-top:14px;}
 .btn.disabled-payment,.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed;pointer-events:none;filter:saturate(.75);}
-.activate-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;}
-.activate-row .btn{margin:0;}
+.activate-row{display:flex;align-items:center;justify-content:flex-start;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:22px;width:100%;}
+.activate-row .btn{margin:0;min-width:145px;}
 .activate-coming-soon{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(238,206,122,.28);background:rgba(238,206,122,.10);color:#f1dda2;border-radius:999px;padding:11px 15px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;font-size:.76rem;}
 .member-payment-card.is-coming-soon{opacity:.88;}
 @media(max-width:920px){.member-payment-grid{grid-template-columns:1fr}}
 </style>
 
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a href="member-materials.html">Kamar Edukasi</a><a href="member-study.html">Kamar Study</a><a href="member-private.html">Kamar Private</a><a href="member-indicator.html">Kamar Indikator</a><a href="member-robot.html">Kamar Robot</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="dashboard.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a href="member-materials.html">Kamar Edukasi</a><a href="member-study.html">Kamar Study</a><a href="member-private.html">Kamar Private</a><a href="member-indicator.html">Kamar Indikator</a><a href="member-robot.html">Kamar Robot</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 <div class="split-card kamar-title-card"><h1>Perpanjangan &amp; Tambah Fasilitas</h1></div>
 
 <section class="split-card" id="payment-mayar">
-<span class="mini-label">Payment Mayar</span>
-<h2>Pembayaran Fasilitas Member</h2>
-<p>Bagian ini disiapkan untuk pembayaran fasilitas berbayar melalui Mayar. Untuk tahap awal, pembayaran tetap aman dengan konfirmasi admin setelah transaksi selesai.</p>
+<span class="mini-label">Aktivasi Fasilitas</span>
+<h2>Pilih Fasilitas Kamar</h2>
+<p>Pilih fasilitas yang ingin diaktifkan. Kamar Edukasi dan Kamar Study masih Coming Soon, jadi belum bisa diaktifkan dari dashboard member.</p>
 <div class="member-payment-grid">
 <article class="member-payment-card is-coming-soon"><h3>Kamar Edukasi</h3><p>Fasilitas edukasi gratis sedang disiapkan dan belum bisa diaktifkan dari dashboard member.</p><div class="activate-row"><a class="btn disabled-payment" href="#" aria-disabled="true">AKTIFKAN</a><span class="activate-coming-soon">Coming Soon</span></div></article>
 <article class="member-payment-card is-coming-soon"><h3>Kamar Study</h3><p>Fasilitas Kamar Study sedang disiapkan ulang dan belum bisa diaktifkan/perpanjang dari dashboard member.</p><div class="activate-row"><a class="btn disabled-payment" href="#" aria-disabled="true">AKTIFKAN</a><span class="activate-coming-soon">Coming Soon</span></div></article>
-<article class="member-payment-card"><h3>Kamar Private</h3><p>Untuk paket pendampingan, evaluasi, dan pembelajaran private.</p><div class="activate-row"><a class="btn" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">AKTIFKAN</a></div></article>
-<article class="member-payment-card"><h3>Kamar Indikator</h3><p>Untuk akses tools indikator sesuai ketentuan fasilitas.</p><div class="activate-row"><a class="btn" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">AKTIFKAN</a></div></article>
-<article class="member-payment-card"><h3>Kamar Robot</h3><p>Untuk sewa atau pembelian license tools robot.</p><div class="activate-row"><a class="btn" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">AKTIFKAN</a></div></article>
+<article class="member-payment-card"><h3>Kamar Private</h3><p>Untuk paket pendampingan, evaluasi, dan pembelajaran private.</p><div class="activate-row"><button class="btn" type="button" data-activate-facility="Kamar Private">AKTIFKAN</button></div></article>
+<article class="member-payment-card"><h3>Kamar Indikator</h3><p>Untuk akses tools indikator sesuai ketentuan fasilitas.</p><div class="activate-row"><button class="btn" type="button" data-activate-facility="Kamar Indikator">AKTIFKAN</button></div></article>
+<article class="member-payment-card"><h3>Kamar Robot</h3><p>Untuk sewa atau pembelian license tools robot.</p><div class="activate-row"><button class="btn" type="button" data-activate-facility="Kamar Robot">AKTIFKAN</button></div></article>
 </div>
-<div class="payment-note-box"><strong>Alur sederhana:</strong> pilih fasilitas, bayar melalui Mayar, lalu konfirmasi ke admin agar akses dicek dan diaktifkan. Link Mayar resmi akan dipasang setelah payment link dari Mayar sudah dibuat.</div>
-<div class="button-row"><a class="btn secondary" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Konfirmasi ke Admin</a></div>
+<div class="payment-note-box"><strong>Alur sederhana:</strong> pilih fasilitas, isi kebutuhan, lalu hubungi admin untuk konfirmasi aktivasi dan pembayaran.</div>
 </section>
 
-<section class="split-card"><div class="page-note" id="renewalStatusBox"><strong>Status Akun</strong><br/>Memuat status akun dan masa akses.</div><div class="grid-2" style="margin-top:18px"><label class="field">Kebutuhan<select><option>Perpanjang Langganan</option><option>Tambah Fasilitas</option><option>Perpanjang + Tambah Fasilitas</option></select></label><label class="field">Fasilitas<select><option disabled>Kamar Edukasi — Coming Soon</option><option disabled>Kamar Study — Coming Soon</option><option>Kamar Private</option><option>Kamar Indikator</option><option>Kamar Robot</option><option>Paket Lengkap</option></select></label><label class="field">Durasi<select><option>30 Hari</option><option>90 Hari</option><option>180 Hari</option><option>1 Tahun</option></select></label><label class="field">Catatan<textarea placeholder="Tulis kebutuhan akses atau catatan untuk admin"></textarea></label></div><div class="button-row"><a class="btn" href="https://t.me/kajianmarketkamar" target="_blank">Hubungi Admin</a><a class="btn secondary" href="dashboard.html">Kembali ke Dashboard</a></div></section>
+<section class="split-card hidden" id="facilityActivationFormCard">
+<span class="mini-label">Form Aktivasi</span>
+<h2 id="activationFormTitle">Aktifkan Fasilitas</h2>
+<p id="activationFormText">Isi kebutuhan aktivasi dengan singkat. Admin akan membantu proses berikutnya.</p>
+<div class="grid-2" style="margin-top:18px">
+<label class="field">Kebutuhan
+<select id="activationNeed">
+<option>Langganan Baru</option>
+<option>Perpanjangan Langganan</option>
+</select>
+</label>
+<label class="field">Durasi
+<select id="activationDuration">
+<option>30 Hari</option>
+<option>60 Hari</option>
+<option>90 Hari</option>
+<option>180 Hari</option>
+<option>Lifetime</option>
+</select>
+</label>
+<label class="field" style="grid-column:1/-1">Catatan
+<textarea id="activationNote" placeholder="Tulis catatan singkat untuk admin jika ada"></textarea>
+</label>
+</div>
+<div class="button-row">
+<a class="btn" id="activationAdminLink" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
+<button class="btn secondary" type="button" id="backToFacilityCards">Kembali ke Pilihan Fasilitas</button>
+</div>
+</section></section>
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
@@ -301,6 +328,43 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-member-renewal.js"></script>
+
+<script id="kamar-step24bu-activation-form-logic">
+(function(){
+  const formCard=document.getElementById('facilityActivationFormCard');
+  const title=document.getElementById('activationFormTitle');
+  const text=document.getElementById('activationFormText');
+  const adminLink=document.getElementById('activationAdminLink');
+  const need=document.getElementById('activationNeed');
+  const duration=document.getElementById('activationDuration');
+  const note=document.getElementById('activationNote');
+  let selectedFacility='';
+  function buildMessage(){
+    const lines=[
+      'Halo Admin Kamar, saya ingin aktivasi fasilitas.',
+      'Fasilitas: '+selectedFacility,
+      'Kebutuhan: '+(need?need.value:''),
+      'Durasi: '+(duration?duration.value:''),
+      note&&note.value.trim()?('Catatan: '+note.value.trim()):''
+    ].filter(Boolean);
+    return 'https://t.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
+  }
+  function updateLink(){ if(adminLink) adminLink.href=buildMessage(); }
+  document.querySelectorAll('[data-activate-facility]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      selectedFacility=btn.getAttribute('data-activate-facility')||'Fasilitas Kamar';
+      if(title) title.textContent='Aktifkan '+selectedFacility;
+      if(text) text.textContent='Pilih kebutuhan dan durasi untuk '+selectedFacility+'. Setelah itu hubungi admin untuk konfirmasi.';
+      if(formCard) formCard.classList.remove('hidden');
+      updateLink();
+      formCard&&formCard.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+  [need,duration,note].forEach(function(el){ if(el) el.addEventListener('input',updateLink); });
+  const back=document.getElementById('backToFacilityCards');
+  if(back) back.addEventListener('click',function(){ formCard&&formCard.classList.add('hidden'); document.getElementById('payment-mayar')?.scrollIntoView({behavior:'smooth',block:'start'}); });
+})();
+</script>
 <script id="kamar-mayar-member-payment-config">
 window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
   study: "",

@@ -2,7 +2,7 @@
   "use strict";
   const FACILITIES = [
     { key: "access_kamar_study", label: "Kamar Study" },
-    { key: "access_materi_edukasi", label: "Materi Edukasi" },
+    { key: "access_materi_edukasi", label: "Kamar Edukasi" },
     { key: "access_kamar_private", label: "Kamar Private" },
     { key: "access_kamar_indikator", label: "Kamar Indikator" },
     { key: "access_kamar_robot", label: "Kamar Robot" }

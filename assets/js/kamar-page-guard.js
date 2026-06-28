@@ -3,7 +3,7 @@
 
   const FACILITY_PAGES = {
     "member-study.html": { key: "access_kamar_study", label: "Kamar Study" },
-    "member-materials.html": { key: "access_materi_edukasi", label: "Materi Edukasi" },
+    "member-materials.html": { key: "access_materi_edukasi", label: "Kamar Edukasi" },
     "member-private.html": { key: "access_kamar_private", label: "Kamar Private" },
     "member-indicator.html": { key: "access_kamar_indikator", label: "Kamar Indikator" },
     "member-robot.html": { key: "access_kamar_robot", label: "Kamar Robot" }
@@ -45,7 +45,6 @@
     return Boolean(
       profile &&
       profile.account_status === "active" &&
-      profile.payment_status === "confirmed" &&
       !isExpired(profile) &&
       !(access && access.locked_by_expired)
     );

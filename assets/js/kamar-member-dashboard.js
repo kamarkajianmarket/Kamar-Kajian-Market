@@ -3,7 +3,7 @@
 
   const FACILITIES = [
     { key: "access_kamar_study", label: "Kamar Study", page: "member-renewal.html" },
-    { key: "access_materi_edukasi", label: "Materi Edukasi", page: "member-materials.html" },
+    { key: "access_materi_edukasi", label: "Kamar Edukasi", page: "member-materials.html" },
     { key: "access_kamar_private", label: "Kamar Private", page: "member-private.html" },
     { key: "access_kamar_indikator", label: "Kamar Indikator", page: "member-indicator.html" },
     { key: "access_kamar_robot", label: "Kamar Robot", page: "member-robot.html" }
@@ -56,8 +56,9 @@
     }
 
     if (memberActive && activeFacilities.length > 0 && !expired) {
+      const detail = activeFacilities.map(function (facility) { return facility.label + " — sampai " + endDate; }).join("<br/>");
       box.classList.add("page-note");
-      box.innerHTML = `<strong>Member Website: Aktif Gratis</strong><br/>Fasilitas aktif: ${facilityNames}.<br/>Masa akses fasilitas sampai ${endDate}.`;
+      box.innerHTML = `<strong>Member Website: Aktif Gratis</strong><br/>${detail}`;
       return;
     }
 
@@ -90,7 +91,7 @@
   function updateFacilitySummary(access, profile) {
     const card = document.getElementById("memberFacilitySummary");
     if (!card) return;
-    const activeAccount = profile && profile.account_status === "active" && profile.payment_status === "confirmed" && !isAccessExpired(profile) && !access.locked_by_expired;
+    const activeAccount = profile && profile.account_status === "active" && !isAccessExpired(profile) && !access.locked_by_expired;
     const activeFacilities = FACILITIES.filter(function (facility) { return Boolean(access[facility.key]) && activeAccount; });
 
     card.classList.toggle("facility-locked", activeFacilities.length === 0);

@@ -2,7 +2,7 @@
 (function(){
   "use strict";
   const FACILITIES=[
-    ["access_kamar_study","Kamar Study"],["access_materi_edukasi","Materi Edukasi"],["access_kamar_private","Kamar Private"],["access_kamar_indikator","Kamar Indikator"],["access_kamar_robot","Kamar Robot"]
+    ["access_kamar_study","Kamar Study"],["access_materi_edukasi","Kamar Edukasi"],["access_kamar_private","Kamar Private"],["access_kamar_indikator","Kamar Indikator"],["access_kamar_robot","Kamar Robot"]
   ];
   const STATUS={active:"Active",fresh:"Fresh",invalid:"Invalid",pending_activation:"Pending Aktivasi",expired:"Expired",suspended:"Suspended",confirmed:"Confirmed",pending:"Pending",rejected:"Rejected",done:"Done",new:"New",processing:"Processing"};
   function client(){ if(!window.kamarSupabase) throw new Error(window.KAMAR_SUPABASE_ERROR||"Supabase belum siap."); return window.kamarSupabase; }

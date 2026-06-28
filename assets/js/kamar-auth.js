@@ -3,6 +3,35 @@
 
   const UI = window.KamarUI;
 
+  const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
+  const LAST_ACTIVITY_KEY = "kamarLastActivityAt";
+
+  function touchActivity() {
+    try { localStorage.setItem(LAST_ACTIVITY_KEY, String(Date.now())); } catch (e) {}
+  }
+
+  function readLastActivity() {
+    try { return Number(localStorage.getItem(LAST_ACTIVITY_KEY) || Date.now()); } catch (e) { return Date.now(); }
+  }
+
+  async function logoutDueToInactivity() {
+    try { await client().auth.signOut(); } catch (e) {}
+    try { localStorage.removeItem(LAST_ACTIVITY_KEY); } catch (e) {}
+    window.location.href = (window.KAMAR_CONFIG && window.KAMAR_CONFIG.LOGIN_PAGE) || "member.html";
+  }
+
+  function startInactivityGuard() {
+    touchActivity();
+    ["click", "scroll", "keydown", "mousemove", "touchstart"].forEach(function (eventName) {
+      window.addEventListener(eventName, touchActivity, { passive: true });
+    });
+    setInterval(function () {
+      if (Date.now() - readLastActivity() > INACTIVITY_LIMIT_MS) {
+        logoutDueToInactivity();
+      }
+    }, 60 * 1000);
+  }
+
   function client() {
     if (!window.kamarSupabase) {
       throw new Error(window.KAMAR_SUPABASE_ERROR || "Supabase client belum siap.");
@@ -158,6 +187,7 @@
         }
 
         await loginWithEmail(email, password);
+        touchActivity();
         UI.setStatus(status, "Login berhasil. Mengalihkan halaman...", "success");
         await redirectByRole();
       } catch (error) {
@@ -189,6 +219,7 @@
         const referralCode = UI.qs("#registerReferral", form).value.trim();
         const agreeRisk = UI.qs("#registerAgreeRisk", form).checked;
         const agreeTerms = UI.qs("#registerAgreeTerms", form).checked;
+        const agreePolicy = UI.qs("#registerAgreePolicy", form) ? UI.qs("#registerAgreePolicy", form).checked : true;
 
         if (!fullName || !email || !whatsapp || !password || !confirmPassword) {
           throw new Error("Nama, email, WhatsApp, password, dan konfirmasi password wajib diisi.");
@@ -202,8 +233,8 @@
           throw new Error("Konfirmasi password tidak sama.");
         }
 
-        if (!agreeRisk || !agreeTerms) {
-          throw new Error("Centang pernyataan risiko dan ketentuan akses terlebih dahulu.");
+        if (!agreeRisk || !agreeTerms || !agreePolicy) {
+          throw new Error("Centang semua persetujuan wajib terlebih dahulu.");
         }
 
         const payload = {
@@ -242,12 +273,18 @@
     logout,
     requireAuth,
     initLoginPage,
-    initRegisterPage
+    initRegisterPage,
+    startInactivityGuard,
+    touchActivity
   };
 
   document.addEventListener("DOMContentLoaded", function () {
     initLoginPage();
     initRegisterPage();
+
+    if (!document.body.classList.contains("public-home")) {
+      startInactivityGuard();
+    }
 
     document.querySelectorAll("[data-kamar-logout]").forEach(function (button) {
       button.addEventListener("click", function (event) {

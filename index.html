@@ -1578,6 +1578,14 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .traktir-actions-simple{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px;}
 @media(max-width:640px){.traktir-card.simple-traktir-card{text-align:left!important}.traktir-actions-simple{justify-content:flex-start}.traktir-short-note{border-radius:18px;text-align:left;align-items:flex-start}}
 </style>
+
+<style id="kamar-step24BQ-traktir-header-fix">
+/* Step 24BQ — Traktir menu + simplified Traktir card cleanup */
+.nav-links{gap:clamp(22px,2.2vw,38px)!important;}
+#traktir-kamar .section-heading.centered{margin-bottom:28px!important;}
+#traktir-kamar .traktir-actions-simple .btn{min-width:220px;}
+@media(max-width:640px){#traktir-kamar .traktir-actions-simple .btn{width:100%;min-width:0;}}
+</style>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -1591,6 +1599,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <a href="#fasilitas">Fasilitas</a>
 <a href="#tentang">Tentang</a>
 <a href="#faq">FAQ</a>
+<a href="#traktir-kamar">Traktir Kamar</a>
 </nav>
 <div class="header-actions">
 <a class="header-cta" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>
@@ -1600,6 +1609,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div aria-label="Shortcut cepat" class="quick-mobile-nav">
 <a href="#fasilitas">Fasilitas</a>
 <a href="#faq">FAQ</a>
+<a href="#traktir-kamar">Traktir Kamar</a>
 </div>
 <main id="top">
 <section class="hero section-shell">
@@ -1857,7 +1867,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 
 <section class="section-shell compact-section" id="traktir-kamar">
 <div class="section-heading centered">
-<span class="eyebrow">Traktir Kamar</span>
 <h2>Traktir Kamar</h2>
 <p>Dukungan sukarela untuk membantu operasional edukasi, konten, website, dan ruang diskusi Kamar Kajian Market.</p>
 </div>
@@ -1869,7 +1878,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="traktir-short-note">Pembayaran diarahkan melalui Mayar.</div>
 <div class="traktir-actions-simple">
 <a class="btn btn-primary" data-mayar-key="traktir" href="https://mayar.to/kamar" rel="noopener" target="_blank">Kirim Traktiran</a>
-<a class="btn btn-secondary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Tanya Admin</a>
 </div>
 </article>
 </div>

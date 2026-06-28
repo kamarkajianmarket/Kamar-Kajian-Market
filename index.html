@@ -1566,6 +1566,18 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @media(max-width:940px){.video-reference-grid,.traktir-grid,.member-payment-grid{grid-template-columns:1fr}.video-thumb{height:135px}}
 </style>
 
+
+<style id="kamar-step24bp-traktir-simple-polish">
+/* Step 24BP — simplified Traktir Kamar + hidden video reference */
+#video-youtube{display:none!important;}
+.traktir-grid.simple-traktir-grid{display:block!important;max-width:860px;margin:0 auto;}
+.traktir-card.simple-traktir-card{padding:28px!important;text-align:center;border-color:rgba(238,206,122,.22)!important;background:linear-gradient(135deg,rgba(244,223,144,.075),rgba(255,255,255,.018))!important;}
+.traktir-card.simple-traktir-card h3{font-size:clamp(26px,3vw,38px)!important;margin-bottom:12px!important;}
+.traktir-card.simple-traktir-card p{max-width:680px;margin-left:auto!important;margin-right:auto!important;font-size:16px!important;line-height:1.65!important;}
+.traktir-short-note{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(158,255,202,.18);background:rgba(28,97,65,.07);color:rgba(226,255,239,.84);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:900;margin:12px 0 0;}
+.traktir-actions-simple{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px;}
+@media(max-width:640px){.traktir-card.simple-traktir-card{text-align:left!important}.traktir-actions-simple{justify-content:flex-start}.traktir-short-note{border-radius:18px;text-align:left;align-items:flex-start}}
+</style>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -1627,7 +1639,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </div>
 </section>
 
-<section class="section-shell compact-section" id="video-youtube">
+<section class="section-shell compact-section" id="video-youtube" hidden style="display:none!important;">
 <div class="section-heading centered">
 <span class="eyebrow">Referensi Video</span>
 <h2>Kajian Video Pilihan dari YouTube Kamar.</h2>
@@ -1846,28 +1858,19 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <section class="section-shell compact-section" id="traktir-kamar">
 <div class="section-heading centered">
 <span class="eyebrow">Traktir Kamar</span>
-<h2>Ruang dukungan sukarela untuk Kamar.</h2>
-<p>Jika edukasi, diskusi, dan kajian market di Kamar membantu proses belajar Anda, traktiran ini dapat menjadi dukungan sukarela untuk operasional komunitas.</p>
+<h2>Traktir Kamar</h2>
+<p>Dukungan sukarela untuk membantu operasional edukasi, konten, website, dan ruang diskusi Kamar Kajian Market.</p>
 </div>
-<div class="traktir-grid">
-<article class="traktir-card primary-traktir">
+<div class="traktir-grid simple-traktir-grid">
+<article class="traktir-card simple-traktir-card">
 <span class="kamar-badge">Support Sukarela</span>
-<h3>Traktir Kamar</h3>
-<p>Dukungan ini bukan pembayaran fasilitas, bukan sinyal trading, dan bukan jaminan profit. Traktiran hanya untuk membantu operasional edukasi, konten, website, dan ruang diskusi komunitas.</p>
-<div class="traktir-list">
-<span>Untuk mendukung konten edukasi dan pengembangan website.</span>
-<span>Bersifat sukarela, tidak wajib, dan tidak memengaruhi hasil trading.</span>
-<span>Payment akan diarahkan melalui Mayar setelah link resmi dipasang.</span>
-</div>
-<div class="hero-actions" style="margin-top:22px">
-<a class="btn btn-primary disabled-payment" data-mayar-key="traktir" href="#" aria-disabled="true">Kirim Traktiran</a>
+<h3>Kirim Traktiran</h3>
+<p>Jika edukasi Kamar membantu proses belajar Anda, traktiran ini bisa menjadi bentuk apresiasi sederhana. Tidak wajib, bukan pembayaran sinyal, dan bukan jaminan profit.</p>
+<div class="traktir-short-note">Pembayaran diarahkan melalui Mayar.</div>
+<div class="traktir-actions-simple">
+<a class="btn btn-primary" data-mayar-key="traktir" href="https://mayar.to/kamar" rel="noopener" target="_blank">Kirim Traktiran</a>
 <a class="btn btn-secondary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Tanya Admin</a>
 </div>
-</article>
-<article class="traktir-card">
-<span class="kamar-badge">Catatan Penting</span>
-<h3>Bukan Pembayaran Sinyal</h3>
-<div class="payment-disclaimer">Kamar Kajian Market tidak menjanjikan profit, tidak menerima titip dana, dan tidak menjual hasil pasti. Semua dukungan bersifat sukarela dan tetap mengikuti prinsip edukasi market logic.</div>
 </article>
 </div>
 </section>
@@ -2013,9 +2016,9 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </script>
 
 <script id="kamar-mayar-payment-config">
-/* Isi link Mayar resmi di bagian ini saat link sudah dibuat. Biarkan kosong supaya tombol belum aktif. */
+/* Link Mayar Traktir Kamar sudah aktif. Link fasilitas member lain dipasang setelah tersedia. */
 window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
-  traktir: "",
+  traktir: "https://mayar.to/kamar",
   study: "",
   private: "",
   indikator: "",

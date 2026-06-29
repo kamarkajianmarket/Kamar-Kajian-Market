@@ -1596,9 +1596,25 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .affiliate-main-card,.affiliate-note-card{border:1px solid rgba(238,206,122,.16);border-radius:26px;background:linear-gradient(135deg,rgba(255,255,255,.040),rgba(255,255,255,.014));padding:24px;}
 .affiliate-main-card h3,.affiliate-note-card h3{margin:0 0 12px;color:#fff3d8;font-size:clamp(24px,2.3vw,34px);line-height:1.1;letter-spacing:-.035em;}
 .affiliate-main-card p,.affiliate-note-card p{margin:0 0 16px;color:rgba(245,240,230,.72);font-size:15px;line-height:1.65;}
-.affiliate-commission{display:inline-flex;align-items:baseline;gap:8px;border:1px solid rgba(244,223,144,.24);border-radius:999px;background:rgba(244,223,144,.085);padding:12px 16px;margin:4px 0 16px;color:#f5df91;font-weight:950;letter-spacing:.02em;}
-.affiliate-commission strong{font-size:clamp(24px,3vw,42px);line-height:1;color:#fff1be;}
-.affiliate-commission small{font-size:12px;color:rgba(245,240,230,.72);font-weight:900;text-transform:uppercase;letter-spacing:.12em;}
+.affiliate-commission{
+  display:grid;
+  grid-template-columns:minmax(135px,.9fr) minmax(260px,1.25fr) minmax(130px,.75fr);
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  border:1px solid rgba(244,223,144,.24);
+  border-radius:999px;
+  background:rgba(244,223,144,.085);
+  padding:18px clamp(22px,3vw,38px);
+  margin:10px 0 22px;
+  color:#f5df91;
+  font-weight:950;
+  letter-spacing:.02em;
+  width:100%;
+  max-width:860px;
+}
+.affiliate-commission strong{font-size:clamp(38px,5.5vw,76px);line-height:.95;color:#fff1be;text-align:center;white-space:nowrap;}
+.affiliate-commission small{font-size:clamp(12px,1.25vw,17px);line-height:1.25;color:rgba(245,240,230,.76);font-weight:950;text-transform:uppercase;letter-spacing:.16em;text-align:center;}
 .affiliate-steps{display:grid;gap:10px;margin:14px 0 0;}
 .affiliate-steps span{display:flex;gap:10px;align-items:flex-start;color:rgba(245,240,230,.78);line-height:1.55;font-weight:800;}
 .affiliate-steps span::before{content:"★";color:#f5df91;font-size:12px;margin-top:2px;}
@@ -1611,7 +1627,19 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .affiliate-result{border:1px solid rgba(158,255,202,.22);border-radius:22px;background:rgba(28,97,65,.08);padding:18px;margin-top:18px;color:rgba(226,255,239,.88);line-height:1.55;}
 .affiliate-code-box{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid rgba(244,223,144,.22);background:rgba(244,223,144,.08);border-radius:18px;padding:13px 15px;margin-top:12px;color:#fff1be;font-weight:950;letter-spacing:.08em;}
 .affiliate-code-box code{font-family:inherit;font-size:18px;}
-@media(max-width:900px){.affiliate-program-grid{grid-template-columns:1fr}.affiliate-actions .btn{width:100%;}.affiliate-commission{border-radius:18px;align-items:flex-start;flex-direction:column;}}
+@media(max-width:900px){
+  .affiliate-program-grid{grid-template-columns:1fr}
+  .affiliate-actions .btn{width:100%;}
+  .affiliate-commission{
+    grid-template-columns:1fr;
+    gap:10px;
+    border-radius:28px;
+    padding:20px 18px;
+    max-width:100%;
+  }
+  .affiliate-commission strong{font-size:clamp(42px,12vw,72px);}
+  .affiliate-commission small{font-size:12px;letter-spacing:.14em;}
+}
 </style>
 
 </head>
@@ -1905,7 +1933,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <article class="affiliate-main-card">
 <span class="kamar-badge">Affiliate Program</span>
 <h3>Referensikan Kamar, dapatkan komisi.</h3>
-<div class="affiliate-commission"><small>Potensi reward hingga</small><strong>Rp3.000.000+</strong><small>/ referral*</small></div>
+<div class="affiliate-commission"><small>Potensi Reward<br>Hingga</small><strong>Rp3.000.000+</strong><small>/ Referral*</small></div>
 <p>Program ini disiapkan untuk kawan Kamar yang ingin membantu memperluas edukasi market logic secara sehat, profesional, dan tidak berlebihan.</p>
 <div class="affiliate-benefit-list">
 <div class="affiliate-benefit-item"><span>Referral Reward</span><small>Reward dari referral valid yang mendaftar dan mengaktifkan fasilitas Kamar.</small></div>

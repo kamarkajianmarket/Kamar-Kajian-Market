@@ -430,6 +430,8 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     if(!(q('registerAgreeRisk').checked && q('registerAgreeTerms').checked && q('registerAgreePolicy').checked)){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Centang semua persetujuan wajib terlebih dahulu.';} return; }
     var affiliates=getJSON('kamarAffiliateList',[]);
     var aff=referral?affiliates.find(function(a){return codeNorm(a.referralCode)===referral;}):null;
+    if(referral && !aff){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral tidak ditemukan. Pastikan kode berasal dari affiliator Kamar yang terdaftar.';} return; }
+    if(aff && String(aff.email||'').toLowerCase()===email){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral milik sendiri tidak bisa digunakan untuk akun sendiri.';} return; }
     var members=getJSON('kamarRegisteredMembers',[]);
     var existing=members.find(function(m){return String(m.email||'').toLowerCase()===email;});
     var data={memberId:(existing&&existing.memberId)||stableMemberId(email),fullName:name,email:email,whatsapp:wa,telegram:telegram,referralCode:referral||'',referrerName:aff?aff.fullName:'',status:'Member Website: Aktif Gratis',facilities:(existing&&existing.facilities)||[],createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};

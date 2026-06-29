@@ -248,6 +248,21 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 </style>
 
+
+<style id="kamar-step24CB-member-referral-profile">
+.referral-lock-card{margin-top:22px;border:1px solid rgba(238,206,122,.16);border-radius:26px;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.012));padding:clamp(20px,3vw,30px);}
+.referral-lock-card h2{margin:0 0 10px;color:#fff3d8;font-size:clamp(24px,2.4vw,34px);line-height:1.1;letter-spacing:-.035em;}
+.referral-lock-card p{margin:0 0 16px;color:rgba(245,240,230,.70);font-weight:750;line-height:1.65;}
+.referral-form-grid{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;margin-top:14px;}
+.referral-form-grid label{display:grid;gap:8px;color:#fff3d8;font-weight:900;}
+.referral-form-grid input{width:100%;border:1px solid rgba(238,206,122,.22);border-radius:18px;background:rgba(255,255,255,.045);color:#fff3d8;padding:15px 16px;font-size:16px;font-weight:850;outline:none;}
+.referral-form-grid input::placeholder{color:rgba(245,240,230,.38);}
+.referral-status-note{margin-top:14px;border:1px solid rgba(238,206,122,.14);border-radius:18px;background:rgba(255,255,255,.025);padding:14px 16px;color:rgba(245,240,230,.76);font-weight:800;line-height:1.55;}
+.referral-status-note.success{border-color:rgba(108,255,179,.24);background:rgba(28,97,65,.10);color:#dfffee;}
+.referral-status-note.error{border-color:rgba(255,110,110,.28);background:rgba(120,35,35,.12);color:#ffd6d6;}
+.referral-current-code{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(244,223,144,.24);border-radius:999px;background:rgba(244,223,144,.08);padding:10px 14px;color:#fff1be;font-weight:950;letter-spacing:.09em;margin:8px 0 12px;}
+@media(max-width:760px){.referral-form-grid{grid-template-columns:1fr}.referral-form-grid .btn{width:100%;}}
+</style>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Study 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a class="active" href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 <div class="split-card kamar-title-card"><h1>Profil Akun</h1></div>
 <section class="split-card profile-panel">
@@ -260,8 +275,27 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="profile-detail-row"><span>Status Akun</span><strong id="profileStatus">-</strong></div>
 <div class="profile-detail-row"><span>Masa Akses</span><strong id="profileAccessDate">-</strong></div>
 <div class="profile-detail-row"><span>Fasilitas Aktif</span><strong id="profileFacilities">-</strong></div>
+<div class="profile-detail-row"><span>Kode Referral</span><strong id="profileReferralCode">-</strong></div>
 </div>
 </section>
+
+<section class="split-card referral-lock-card" id="memberReferralProfileCard">
+  <span class="eyebrow">Kode Referral</span>
+  <h2>Referral Akun</h2>
+  <p>Jika akun Anda belum terhubung dengan kode referral, Anda bisa mengisinya satu kali dari halaman ini. Setelah tersimpan, perubahan hanya bisa dilakukan melalui admin.</p>
+  <div id="referralAlreadySet" hidden>
+    <div class="referral-current-code" id="profileReferralCurrentCode">REFERRAL: -</div>
+    <div class="referral-status-note success">Kode referral akun ini sudah terkunci. Untuk perubahan referral, hubungi admin.</div>
+  </div>
+  <form id="memberReferralForm" class="referral-form-grid">
+    <label>Kode Referral
+      <input id="memberReferralInput" name="referral_code" placeholder="Masukkan kode referral affiliator" autocomplete="off"/>
+    </label>
+    <button class="btn primary" type="submit">Simpan Referral</button>
+  </form>
+  <div class="referral-status-note" id="memberReferralStatus">Kosongkan bila Anda tidak memiliki kode referral. Pengisian hanya dapat dilakukan satu kali.</div>
+</section>
+
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
@@ -278,4 +312,87 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-member-profile.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-member-profile.js"></script>
+<script id="kamar-step24CB-member-referral-profile-logic">
+(function(){
+  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function norm(s){return String(s||'').trim();}
+  function codeNorm(s){return norm(s).toUpperCase();}
+  function byId(id){return document.getElementById(id);}
+  function setStatus(msg,type){var el=byId('memberReferralStatus'); if(!el) return; el.textContent=msg; el.className='referral-status-note '+(type||'');}
+  var form=byId('memberReferralForm'); if(!form) return;
+  var sess=getJSON('kamarMemberSession',null);
+  var members=getJSON('kamarRegisteredMembers',[]);
+  var affiliates=getJSON('kamarAffiliateList',[]);
+  var member=null;
+  if(sess){
+    member=members.find(function(m){return (sess.memberId && m.memberId===sess.memberId) || (sess.email && String(m.email||'').toLowerCase()===String(sess.email||'').toLowerCase());}) || null;
+  }
+  if(!member && sess){ member=sess; }
+  function render(){
+    var current=codeNorm(member&&member.referralCode);
+    var already=byId('referralAlreadySet');
+    var currentCode=byId('profileReferralCurrentCode');
+    if(current){
+      if(already) already.hidden=false;
+      if(currentCode) currentCode.textContent='REFERRAL: '+current;
+      form.hidden=true;
+      setStatus('Kode referral sudah tersimpan permanen untuk akun ini. Perubahan hanya melalui admin.','success');
+    }else{
+      if(already) already.hidden=true;
+      form.hidden=false;
+      setStatus('Masukkan kode referral affiliator bila ada. Setelah disimpan, kode tidak bisa diubah sendiri.','');
+    }
+  }
+  render();
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!member){setStatus('Sesi member tidak ditemukan. Silakan login ulang.','error'); return;}
+    if(codeNorm(member.referralCode)){render(); return;}
+    var code=codeNorm(byId('memberReferralInput')&&byId('memberReferralInput').value);
+    if(!code){setStatus('Kode referral belum diisi.','error'); return;}
+    var aff=affiliates.find(function(a){return codeNorm(a.referralCode)===code;});
+    if(!aff){setStatus('Kode referral tidak ditemukan. Pastikan kode berasal dari affiliator Kamar yang terdaftar.','error'); return;}
+    var memberEmail=String(member.email||sess.email||'').toLowerCase();
+    var affEmail=String(aff.email||'').toLowerCase();
+    if(memberEmail && affEmail && memberEmail===affEmail){
+      setStatus('Kode referral milik sendiri tidak bisa digunakan untuk akun sendiri. Anda tetap bisa menjadi affiliator untuk member lain.','error');
+      return;
+    }
+    var updated=false;
+    members=members.map(function(m){
+      var same=(member.memberId && m.memberId===member.memberId) || (memberEmail && String(m.email||'').toLowerCase()===memberEmail);
+      if(same){
+        if(codeNorm(m.referralCode)){return m;}
+        updated=true;
+        m.referralCode=code;
+        m.referrerName=aff.fullName||'';
+        m.updatedAt=new Date().toISOString();
+        member=m;
+      }
+      return m;
+    });
+    if(!updated && sess){
+      member.referralCode=code; member.referrerName=aff.fullName||''; member.updatedAt=new Date().toISOString();
+      members.push(member); updated=true;
+    }
+    setJSON('kamarRegisteredMembers',members);
+    if(sess){sess.referralCode=code; sess.referrerName=aff.fullName||''; sess.lastActivity=Date.now(); setJSON('kamarMemberSession',sess);}
+    setStatus('Kode referral berhasil disimpan. Referral akun ini sekarang terkunci.','success');
+    render();
+  });
+})();
+</script>
+
+<script id="kamar-step24CB-profile-referral-line">
+(function(){
+  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
+  var sess=getJSON('kamarMemberSession',null);
+  var members=getJSON('kamarRegisteredMembers',[]);
+  var m=sess&&sess.email?members.find(function(x){return String(x.email||'').toLowerCase()===String(sess.email||'').toLowerCase();}):null;
+  var data=m||sess||{};
+  var el=document.getElementById('profileReferralCode'); if(el) el.textContent=data.referralCode||'Tidak ada';
+})();
+</script>
+</body></html>

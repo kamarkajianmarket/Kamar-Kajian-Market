@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Login Member — Kamar Kajian Market</title>
+<title>Daftar Affiliate Kamar — Kamar Kajian Market</title>
 <meta content="Kamar Kajian Market — Market Logic Community. Ruang belajar dan diskusi trading berbasis market logic, price action, supply-demand, risk management, dan hukum sebab-akibat market." name="description"/>
 <meta content="#070707" name="theme-color"/>
 <link href="assets/favicon.png" rel="icon"/>
@@ -373,39 +373,41 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </nav>
 <div class="header-actions">
 <a class="header-cta" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>
-<a class="header-cta header-member-cta" href="index.html">Kembali ke Beranda</a>
+<a class="header-cta header-member-cta" href="member.html">Login Member</a>
 </div>
 </header>
+
 <main id="top">
-<section class="member-area section-shell compact-section" id="member-login">
+<section class="member-area section-shell compact-section" id="affiliate-register">
 <div class="section-heading centered">
-<span class="eyebrow">Member Area Kawan Kamar</span>
-<h2>Masuk ke ruang khusus member Kamar.</h2>
-<p>Login untuk membuka dashboard Kawan Kamar. Jika belum punya akun, daftar dulu. Aktivasi fasilitas dilakukan setelah konfirmasi admin.</p>
+<span class="eyebrow">Affiliate Kamar</span>
+<h2>Daftar Affiliate Kamar.</h2>
+<p>Isi data utama dengan benar. Setelah pendaftaran dikirim, kode referral akan dibuat dan tetap perlu diverifikasi oleh Admin Kamar.</p>
 </div>
 <div class="member-login-shell">
 <article class="member-login-card auth-card">
 <img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
-<span class="mini-label">Login Kawan Kamar</span>
-
-<p>Gunakan email terdaftar dan password akun Kawan Kamar.</p>
-<form class="member-login-form" id="kamarLoginForm">
-<label>Email Terdaftar<input aria-label="Email terdaftar" autocomplete="email" id="loginEmail" name="email" placeholder="email@domain.com" required="" type="email"/></label>
-<label>Password<input aria-label="Password member" autocomplete="current-password" id="loginPassword" name="password" placeholder="Masukkan password" required="" type="password"/></label>
-<button class="btn btn-primary" id="loginSubmitBtn" type="submit">Login ke Dashboard</button>
-<p class="form-note" hidden="" id="loginStatus"></p>
+<span class="mini-label">Form Affiliate</span>
+<form class="member-login-form" id="kamarAffiliateForm">
+<label>Nama Lengkap<input aria-label="Nama lengkap affiliate" autocomplete="name" id="affiliateFullName" name="full_name" placeholder="Nama lengkap sesuai identitas" required type="text"/></label>
+<label>Email<input aria-label="Email affiliate" autocomplete="email" id="affiliateEmail" name="email" placeholder="email@domain.com" required type="email"/></label>
+<label>Nomor WhatsApp<input aria-label="Nomor WhatsApp affiliate" autocomplete="tel" id="affiliateWhatsapp" name="whatsapp" placeholder="08xxxxxxxxxx" required type="tel"/></label>
+<label>Username Telegram<input aria-label="Username Telegram affiliate" id="affiliateTelegram" name="telegram_username" placeholder="@username" type="text"/></label>
+<label>Akun / Channel Promosi <span class="mini-label">Opsional</span><input aria-label="Akun promosi affiliate" id="affiliateChannel" name="promo_channel" placeholder="YouTube, TikTok, Instagram, Telegram, atau lainnya" type="text"/></label>
+<label class="check-row"><input id="affiliateAgreeEthic" required type="checkbox"/> Saya setuju mempromosikan Kamar secara jujur, tidak menjanjikan profit, dan tidak membuat klaim berlebihan.</label>
+<label class="check-row"><input id="affiliateAgreeTerms" required type="checkbox"/> Saya memahami bahwa komisi hanya berlaku untuk referral valid sesuai syarat dan ketentuan Team Kamar.</label>
+<button class="btn btn-primary" id="affiliateSubmitBtn" type="submit">Daftar Affiliate</button>
+<p class="form-note" hidden id="affiliateStatus"></p>
 </form>
-<div class="member-login-help">
-<span>Belum punya akun?</span>
-<a href="register.html">Daftar Sekarang</a>
+<div class="affiliate-result" hidden id="affiliateResult">
+<strong>Pendaftaran affiliate berhasil disiapkan.</strong>
+<p style="margin:8px 0 0;">Kode referral sementara Anda:</p>
+<div class="affiliate-code-box"><code id="affiliateCodeText">KAMAR-0000</code><button class="btn btn-ghost" id="copyAffiliateCode" type="button">Salin</button></div>
+<p style="margin:12px 0 0;font-size:13px;color:rgba(226,255,239,.72);">Simpan kode ini. Admin tetap perlu memverifikasi data sebelum kode digunakan secara resmi.</p>
 </div>
 <div class="member-login-help">
-<span>Ingin jadi affiliate?</span>
-<a href="affiliate.html">Daftar Affiliate</a>
-</div>
-<div class="member-login-help">
-<span>Butuh bantuan akses?</span>
-<a href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Chat Admin</a>
+<span>Sudah punya akun member?</span>
+<a href="member.html">Login Member</a>
 </div>
 </article>
 </div>
@@ -430,5 +432,53 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script></body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script>
+<script>
+(function(){
+  function qs(id){return document.getElementById(id);}
+  function normalizeName(name){return String(name||'').trim().replace(/\s+/g,' ');}
+  function initials(name){
+    var parts=normalizeName(name).split(' ').filter(Boolean).slice(0,2);
+    var out=parts.map(function(p){return p.charAt(0).toUpperCase();}).join('');
+    return out || 'KM';
+  }
+  function makeCode(name){
+    var num=Math.floor(1000+Math.random()*9000);
+    return 'KAMAR-' + initials(name) + '-' + num;
+  }
+  var form=qs('kamarAffiliateForm');
+  if(!form) return;
+  var status=qs('affiliateStatus');
+  var result=qs('affiliateResult');
+  var codeText=qs('affiliateCodeText');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var fullName=normalizeName(qs('affiliateFullName').value);
+    var email=String(qs('affiliateEmail').value||'').trim();
+    var whatsapp=String(qs('affiliateWhatsapp').value||'').trim();
+    var agreeEthic=qs('affiliateAgreeEthic').checked;
+    var agreeTerms=qs('affiliateAgreeTerms').checked;
+    if(!fullName || !email || !whatsapp){
+      status.hidden=false; status.textContent='Nama, email, dan WhatsApp wajib diisi.'; status.className='form-note error'; return;
+    }
+    if(!agreeEthic || !agreeTerms){
+      status.hidden=false; status.textContent='Centang persetujuan affiliate terlebih dahulu.'; status.className='form-note error'; return;
+    }
+    var code=makeCode(fullName);
+    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,referralCode:code,createdAt:new Date().toISOString()};
+    try{localStorage.setItem('kamarAffiliateDraft', JSON.stringify(data));}catch(err){}
+    codeText.textContent=code;
+    result.hidden=false;
+    status.hidden=false; status.textContent='Data affiliate berhasil dibuat sementara. Silakan simpan kode referral dan konfirmasi ke admin jika diperlukan.'; status.className='form-note success';
+    result.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  var copy=qs('copyAffiliateCode');
+  if(copy){copy.addEventListener('click', function(){
+    var text=codeText.textContent;
+    navigator.clipboard && navigator.clipboard.writeText(text).then(function(){copy.textContent='Tersalin'; setTimeout(function(){copy.textContent='Salin';},1200);});
+  });}
+})();
+</script>
+
+</body>
 </html>

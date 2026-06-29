@@ -402,7 +402,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="affiliate-result" hidden id="affiliateResult">
 <strong>Pendaftaran affiliate berhasil disiapkan.</strong>
 <p style="margin:8px 0 0;">Kode referral permanen Anda:</p>
-<div class="affiliate-code-box"><code id="affiliateCodeText">KMR-NAMA</code><button class="btn btn-ghost" id="copyAffiliateCode" type="button">Salin</button></div>
+<div class="affiliate-code-box"><code id="affiliateCodeText">KM00001C</code><button class="btn btn-ghost" id="copyAffiliateCode" type="button">Salin</button></div>
 <p style="margin:12px 0 0;font-size:13px;color:rgba(226,255,239,.72);">Simpan kode ini. Admin tetap perlu memverifikasi data sebelum kode digunakan secara resmi.</p>
 </div>
 <div class="member-login-help">
@@ -438,21 +438,26 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   function qs(id){return document.getElementById(id);}
   function normalizeName(name){return String(name||'').trim().replace(/\s+/g,' ');}
   function codeNorm(s){return String(s||'').trim().toUpperCase();}
-  function slugName(name){
-    var clean=normalizeName(name).split(' ')[0]||'KAWAN';
-    clean=clean.normalize?clean.normalize('NFD').replace(/[\u0300-\u036f]/g,''):clean;
-    clean=clean.replace(/[^a-zA-Z0-9]/g,'').toUpperCase().slice(0,12);
-    return clean || 'KAWAN';
+  function nameInitial(name){
+    var first=normalizeName(name).split(' ')[0]||'KAWAN';
+    first=first.normalize?first.normalize('NFD').replace(/[\u0300-\u036f]/g,''):first;
+    first=first.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+    return first.charAt(0)||'K';
   }
-  function makeCode(name,email,affiliates){
-    var base='KMR-' + slugName(name);
-    var code=base;
-    var n=2;
-    while((affiliates||[]).some(function(a){return codeNorm(a.referralCode)===codeNorm(code) && String(a.email||'').toLowerCase()!==String(email||'').toLowerCase();})){
-      code=base + '-' + String(n).padStart(2,'0');
-      n++;
-    }
-    return code;
+  function nextAffiliateNumber(email,affiliates){
+    var max=0;
+    (affiliates||[]).forEach(function(a){
+      if(String(a.email||'').toLowerCase()===String(email||'').toLowerCase())return;
+      var n=parseInt(a.affiliateNumber||0,10);
+      var m=String(a.referralCode||'').match(/^KM(\d{5})[A-Z0-9]$/i);
+      if(m)n=parseInt(m[1],10);
+      if(n>max)max=n;
+    });
+    return max+1;
+  }
+  function makeCode(name,email,affiliates,number){
+    var n=number||nextAffiliateNumber(email,affiliates);
+    return 'KM'+String(n).padStart(5,'0')+nameInitial(name);
   }
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
   function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -479,8 +484,17 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var affiliates=getJSON('kamarAffiliateList',[]);
     var existing=affiliates.find(function(a){return String(a.email||'').toLowerCase()===email;});
     var existingCode=existing&&existing.referralCode?String(existing.referralCode):'';
-    var code=(existingCode && codeNorm(existingCode).indexOf('KMR-')===0)?existingCode:makeCode(fullName,email,affiliates);
-    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,referralCode:code,status:'Aktif / Menunggu Verifikasi Admin',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString(),payoutAccount:(existing&&existing.payoutAccount)||null};
+    var oldIsNewFormat=/^KM\d{5}[A-Z0-9]$/i.test(existingCode);
+    var affiliateNumber=(existing&&existing.affiliateNumber)||0;
+    if(!affiliateNumber && oldIsNewFormat){affiliateNumber=parseInt(existingCode.match(/^KM(\d{5})[A-Z0-9]$/i)[1],10);}
+    if(!affiliateNumber){affiliateNumber=nextAffiliateNumber(email,affiliates);}
+    var code=oldIsNewFormat?existingCode:makeCode(fullName,email,affiliates,affiliateNumber);
+    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,affiliateNumber:affiliateNumber,referralCode:code,status:'Aktif / Menunggu Verifikasi Admin',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString(),payoutAccount:(existing&&existing.payoutAccount)||null};
+    if(existingCode && existingCode!==code){
+      var members=getJSON('kamarRegisteredMembers',[]);
+      members.forEach(function(m){if(codeNorm(m.referralCode)===codeNorm(existingCode)){m.referralCode=code;m.referrerName=fullName;}});
+      setJSON('kamarRegisteredMembers',members);
+    }
     if(existing){Object.assign(existing,data);data=existing;}else{affiliates.push(data);}
     setJSON('kamarAffiliateList', affiliates);
     setJSON('kamarAffiliateSession', data);

@@ -379,13 +379,13 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .referral-code-large{font-size:clamp(34px,5.3vw,76px)!important;line-height:1!important;letter-spacing:.035em!important;color:#fff1be!important;font-weight:1000!important;margin:12px 0 0!important;word-break:break-word;}
 .referral-code-format{display:inline-flex;align-items:center;border:1px solid rgba(244,223,144,.22);border-radius:999px;padding:8px 12px;background:rgba(244,223,144,.07);color:#f6e5ab;font-size:12px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;margin-top:14px;}
 .affiliate-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;justify-content:flex-start;}
-.affiliate-actions .btn{min-width:150px;}
+.affiliate-actions .btn{min-width:170px;font-size:16px!important;font-weight:1000!important;}
 .search-form-row{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:14px;align-items:end;margin-top:18px;}
 .search-form-row .btn.primary{min-height:58px;background:linear-gradient(135deg,#ffefad,#d4a63f)!important;color:#111!important;border-color:rgba(244,223,144,.48)!important;font-weight:1000!important;}
-.search-result-box{margin-top:16px;border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.026);padding:16px;color:rgba(245,240,230,.72);line-height:1.58;font-weight:780;}
-.search-result-box.success{border-color:rgba(158,255,202,.26);background:rgba(28,97,65,.11);color:#dfffe9;}
-.search-result-box.warn{border-color:rgba(255,213,130,.24);background:rgba(255,213,130,.07);color:#ffe7ac;}
-.search-result-box strong{color:#fff3d8;}
+.search-help{margin:14px 0 0!important;color:rgba(245,240,230,.68)!important;font-weight:800!important;line-height:1.55!important;}
+.search-help.success{color:#dfffe9!important;}
+.search-help.warn{color:#ffe7ac!important;}
+.search-help strong{color:#fff3d8;}
 .payout-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px;}
 .payout-alert,.payout-status-box{border-radius:20px;padding:15px 16px;line-height:1.58;font-weight:780;margin-top:16px;}
 .payout-alert{border:1px solid rgba(255,213,130,.24);background:rgba(255,213,130,.07);color:#ffe8ad;}
@@ -400,8 +400,14 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .referral-table td:first-child{border-left:1px solid rgba(238,206,122,.13);border-radius:16px 0 0 16px;color:#fff3d8;}
 .referral-table td:last-child{border-right:1px solid rgba(238,206,122,.13);border-radius:0 16px 16px 0;}
 .page-note{border:1px solid rgba(238,206,122,.12);border-radius:18px;background:rgba(255,255,255,.022);padding:14px 16px;color:rgba(245,240,230,.70);font-weight:780;line-height:1.55;margin-top:12px;}
+
+.payout-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px;}
+.payout-summary-grid div{border:1px solid rgba(238,206,122,.13);border-radius:18px;background:rgba(255,255,255,.026);padding:16px;}
+.payout-summary-grid span{display:block;color:rgba(245,240,230,.58);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:950;margin-bottom:8px;}
+.payout-summary-grid strong{display:block;color:#fff3d8;font-size:16px;line-height:1.35;word-break:break-word;}
+.payout-edit-card[hidden]{display:none!important;}
 @media(max-width:1040px){.affiliate-dashboard-shell{grid-template-columns:1fr}.affiliate-side-menu{position:relative;top:0}.affiliate-side-menu nav{grid-template-columns:repeat(2,minmax(0,1fr));}.referral-hero-card{grid-template-columns:1fr}}
-@media(max-width:760px){.affiliate-side-menu nav,.search-form-row,.payout-form-grid{grid-template-columns:1fr}.affiliate-panel{border-radius:24px}.referral-code-large{font-size:38px!important}.search-form-row .btn,.affiliate-actions .btn,.payout-actions .btn{width:100%;}.affiliate-dashboard-shell{gap:16px}.affiliate-side-menu{padding:16px;border-radius:22px}}
+@media(max-width:760px){.affiliate-side-menu nav,.search-form-row,.payout-form-grid,.payout-summary-grid{grid-template-columns:1fr}.affiliate-panel{border-radius:24px}.referral-code-large{font-size:38px!important}.search-form-row .btn,.affiliate-actions .btn,.payout-actions .btn{width:100%;}.affiliate-dashboard-shell{gap:16px}.affiliate-side-menu{padding:16px;border-radius:22px}}
 </style>
 
 </head>
@@ -422,7 +428,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
         <a href="#search-referral">Search Referral Tree</a>
         <a href="#akun-pembayaran">Akun Pembayaran</a>
         <a href="#daftar-referral">Daftar Referral</a>
-        <a href="affiliate.html">Daftar / Ganti Data</a>
       </nav>
     </aside>
 
@@ -435,20 +440,18 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 
       <section class="affiliate-panel referral-hero-card" id="kode-referral">
         <div>
-          <span class="mini-label">Kode Referral Permanen</span>
+          <span class="mini-label">Kode Referral</span>
           <h3 id="affiliateDashName">Affiliator Kamar</h3>
           <div class="referral-code-large" id="affiliateDashCode">-</div>
-          <span class="referral-code-format">Format baru: KMR-NAMA</span>
+          <span class="referral-code-format">Format: KM00001C</span>
           <p class="muted-note" style="margin-top:14px">Kode ini digunakan member saat mendaftar sebagai Kawan Kamar.</p>
         </div>
         <div class="affiliate-actions">
           <button class="btn primary" id="copyDashCode" type="button">Salin Kode</button>
-          <a class="btn secondary" href="affiliate.html">Daftar / Ganti Data</a>
         </div>
       </section>
 
       <section class="affiliate-panel" id="search-referral">
-        <span class="mini-label">Search Referral Tree</span>
         <h3>Search Referral Tree</h3>
         <p class="panel-text">Cari nama member untuk memastikan apakah member tersebut masuk ke daftar referral Anda. Hasil pencarian hanya menampilkan nama member dan fasilitas yang digunakan.</p>
         <div class="search-form-row">
@@ -457,20 +460,32 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
           </label>
           <button class="btn primary" id="affiliateSearchBtn" type="button">Search</button>
         </div>
-        <div class="search-result-box" id="affiliateSearchResult">Masukkan nama member, lalu klik Search.</div>
+        <p class="search-help" id="affiliateSearchResult">Masukkan nama member, lalu klik Search.</p>
       </section>
 
-      <section class="affiliate-panel" id="akun-pembayaran">
+      <section class="affiliate-panel payout-view-card" id="akun-pembayaran">
         <span class="mini-label">Akun Penerima Pembayaran</span>
-        <h3>Data pencairan komisi affiliate.</h3>
-        <p class="panel-text">Isi data rekening yang akan dipakai untuk pencairan komisi. Untuk keamanan, website ini tidak menyimpan upload KTP. Verifikasi identitas tetap dilakukan manual melalui admin resmi.</p>
+        <h3>Akun penerima pembayaran.</h3>
+        <p class="panel-text">Data rekening dipakai untuk pencairan komisi affiliate. Foto KTP tidak diunggah ke website; verifikasi identitas dilakukan manual melalui admin resmi bila dibutuhkan.</p>
+        <div class="payout-summary-grid" id="payoutSummaryGrid">
+          <div><span>Nama Rekening</span><strong id="payoutSummaryName">-</strong></div>
+          <div><span>Nomor Rekening</span><strong id="payoutSummaryNumber">-</strong></div>
+          <div><span>Nama Bank</span><strong id="payoutSummaryBank">-</strong></div>
+        </div>
+        <div class="payout-status-box" id="payoutStatusBox"><strong>Status:</strong> Belum ada data rekening tersimpan.</div>
+        <div class="payout-actions"><button class="btn primary" id="editPayoutAccount" type="button">Ganti Data Akun Penerima Pembayaran</button></div>
+      </section>
+
+      <section class="affiliate-panel payout-edit-card" id="akun-pembayaran-form" hidden>
+        <span class="mini-label">Ganti Data Akun Penerima Pembayaran</span>
+        <h3>Isi data rekening pencairan.</h3>
+        <p class="panel-text">Pastikan nama rekening sama dengan identitas yang digunakan untuk verifikasi affiliate.</p>
         <div class="payout-form-grid">
           <label class="field">Nama Lengkap Sesuai KTP<input id="payoutFullName" placeholder="Nama sesuai KTP" type="text"/></label>
           <label class="field">Nomor Rekening<input id="payoutAccountNumber" placeholder="Nomor rekening aktif" type="text" inputmode="numeric"/></label>
           <label class="field">Nama Bank<input id="payoutBankName" placeholder="Contoh: BCA / BRI / Mandiri" type="text"/></label>
         </div>
         <div class="payout-alert"><strong>Catatan keamanan:</strong> foto KTP tidak diunggah ke website. Kirim dokumen verifikasi hanya melalui admin resmi bila diminta untuk proses pencairan komisi.</div>
-        <div class="payout-status-box" id="payoutStatusBox"><strong>Status:</strong> Belum ada data rekening tersimpan.</div>
         <div class="payout-actions"><button class="btn primary" id="sendPayoutAccount" type="button">Kirim</button></div>
       </section>
 
@@ -507,28 +522,42 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   var members=getJSON('kamarRegisteredMembers',[]);
   var current=getJSON('kamarAffiliateSession',null);
 
-  function slugName(name){
-    var clean=String(name||'KAWAN').trim().split(/\s+/)[0]||'KAWAN';
-    clean=clean.normalize?clean.normalize('NFD').replace(/[\u0300-\u036f]/g,''):clean;
-    clean=clean.replace(/[^a-zA-Z0-9]/g,'').toUpperCase().slice(0,12);
-    return clean||'KAWAN';
+  function nameInitial(name){
+    var first=String(name||'Kawan').trim().split(/\s+/)[0]||'Kawan';
+    first=first.normalize?first.normalize('NFD').replace(/[\u0300-\u036f]/g,''):first;
+    first=first.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+    return (first.charAt(0)||'K');
   }
-  function makeReadableCode(name,excludeEmail){
-    var base='KMR-'+slugName(name);
-    var code=base,n=2;
-    while(affiliates.some(function(a){return normalize(a.referralCode)===normalize(code) && String(a.email||'').toLowerCase()!==String(excludeEmail||'').toLowerCase();})){code=base+'-'+String(n).padStart(2,'0');n++;}
-    return code;
+  function nextAffiliateNumber(excludeEmail){
+    var max=0;
+    affiliates.forEach(function(a){
+      if(String(a.email||'').toLowerCase()===String(excludeEmail||'').toLowerCase())return;
+      var n=parseInt(a.affiliateNumber||0,10);
+      var m=String(a.referralCode||'').match(/^KM(\d{5})[A-Z0-9]$/i);
+      if(m)n=parseInt(m[1],10);
+      if(n>max)max=n;
+    });
+    return max+1;
+  }
+  function makeReadableCode(name,excludeEmail,number){
+    var n=number||nextAffiliateNumber(excludeEmail);
+    return 'KM'+String(n).padStart(5,'0')+nameInitial(name);
   }
   function migrateOldLocalCodes(){
     var changed=false;
     affiliates.forEach(function(a){
-      if(a&&a.referralCode&&normalize(a.referralCode).indexOf('KAMAR-')===0){
+      if(a&&a.referralCode&&!/^KM\d{5}[A-Z0-9]$/i.test(String(a.referralCode||''))){
         var oldCode=a.referralCode;
-        var newCode=makeReadableCode(a.fullName||'KAWAN',a.email);
+        var existingNumber=parseInt(a.affiliateNumber||0,10)||nextAffiliateNumber(a.email);
+        a.affiliateNumber=existingNumber;
+        var newCode=makeReadableCode(a.fullName||'KAWAN',a.email,existingNumber);
         a.referralCode=newCode;
         members.forEach(function(m){if(normalize(m.referralCode)===normalize(oldCode)){m.referralCode=newCode;m.referrerName=a.fullName||m.referrerName||'';}});
-        if(current&&normalize(current.referralCode)===normalize(oldCode)){current.referralCode=newCode;}
+        if(current&&normalize(current.referralCode)===normalize(oldCode)){current.referralCode=newCode;current.affiliateNumber=existingNumber;}
         changed=true;
+      } else if(a && a.referralCode){
+        var match=String(a.referralCode||'').match(/^KM(\d{5})[A-Z0-9]$/i);
+        if(match && !a.affiliateNumber){a.affiliateNumber=parseInt(match[1],10);changed=true;}
       }
     });
     if(changed){setJSON('kamarAffiliateList',affiliates);setJSON('kamarRegisteredMembers',members);if(current)setJSON('kamarAffiliateSession',current);}
@@ -573,7 +602,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
   function renderSearchDefault(aff){
     var box=byId('affiliateSearchResult');
-    box.className='search-result-box';
+    box.className='search-help';
     if(!aff || !aff.referralCode){box.textContent='Daftar affiliate terlebih dahulu sebelum memakai fitur pencarian referral.';return;}
     box.textContent='Masukkan nama member, lalu klik Search.';
   }
@@ -581,25 +610,43 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var aff=currentAffiliate();
     var q=String(byId('referralNameSearch').value||'').trim().toLowerCase();
     var box=byId('affiliateSearchResult');
-    if(!aff || !aff.referralCode){box.className='search-result-box warn';box.textContent='Belum ada kode affiliate aktif. Daftar affiliate terlebih dahulu.';return;}
-    if(!q){box.className='search-result-box warn';box.textContent='Isi nama member yang ingin dicari.';return;}
+    if(!aff || !aff.referralCode){box.className='search-help warn';box.textContent='Belum ada kode affiliate aktif. Daftar affiliate terlebih dahulu.';return;}
+    if(!q){box.className='search-help warn';box.textContent='Isi nama member yang ingin dicari.';return;}
     var rows=referralRows(aff);
     var found=rows.filter(function(m){return String(m.fullName||'').toLowerCase().indexOf(q)>=0;});
-    if(!found.length){box.className='search-result-box warn';box.innerHTML='Tidak ditemukan member dengan nama <strong>'+escapeHtml(q)+'</strong> di daftar referral Anda.';return;}
-    box.className='search-result-box success';
+    if(!found.length){box.className='search-help warn';box.innerHTML='Tidak ditemukan member dengan nama <strong>'+escapeHtml(q)+'</strong> di daftar referral Anda.';return;}
+    box.className='search-help success';
     box.innerHTML=found.map(function(m){return '<div><strong>'+escapeHtml(m.fullName||'Member Kamar')+'</strong><br/>Fasilitas: '+escapeHtml(memberFacilities(m))+'</div>';}).join('<hr style="border:0;border-top:1px solid rgba(238,206,122,.16);margin:12px 0"/>');
+  }
+  function maskAccount(num){
+    num=String(num||'').trim();
+    if(!num)return '-';
+    if(num.length<=4)return num;
+    return '•••• '+num.slice(-4);
+  }
+  function showPayoutForm(show){
+    var view=byId('akun-pembayaran');
+    var form=byId('akun-pembayaran-form');
+    if(view)view.hidden=!!show;
+    if(form)form.hidden=!show;
+    if(show&&form){setTimeout(function(){form.scrollIntoView({behavior:'smooth',block:'start'});},60);}
   }
   function renderPayout(aff){
     var account=(aff&&aff.payoutAccount)||{};
     byId('payoutFullName').value=account.fullName||'';
     byId('payoutAccountNumber').value=account.accountNumber||'';
     byId('payoutBankName').value=account.bankName||'';
+    byId('payoutSummaryName').textContent=account.fullName||'-';
+    byId('payoutSummaryNumber').textContent=maskAccount(account.accountNumber);
+    byId('payoutSummaryBank').textContent=account.bankName||'-';
     var box=byId('payoutStatusBox');
-    if(!aff || !aff.referralCode){box.innerHTML='<strong>Status:</strong> Daftar affiliate terlebih dahulu sebelum mengirim data rekening.';return;}
+    if(!aff || !aff.referralCode){box.innerHTML='<strong>Status:</strong> Daftar affiliate terlebih dahulu sebelum mengisi akun pembayaran.';showPayoutForm(false);return;}
     if(account.fullName && account.accountNumber && account.bankName){
       box.innerHTML='<strong>Status:</strong> Data rekening tersimpan. Verifikasi identitas tetap melalui admin resmi sebelum pencairan komisi.';
+      showPayoutForm(false);
     }else{
-      box.innerHTML='<strong>Status:</strong> Belum lengkap. Isi nama sesuai KTP, nomor rekening, dan nama bank.';
+      box.innerHTML='<strong>Status:</strong> Belum lengkap. Klik tombol ganti data untuk mengisi akun penerima pembayaran.';
+      showPayoutForm(false);
     }
   }
   function sendPayout(){
@@ -630,6 +677,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   byId('affiliateSearchBtn').addEventListener('click',searchReferral);
   byId('referralNameSearch').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();searchReferral();}});
   byId('sendPayoutAccount').addEventListener('click',sendPayout);
+  byId('editPayoutAccount').addEventListener('click',function(){showPayoutForm(true);});
   render(currentAffiliate());
 })();
 </script>

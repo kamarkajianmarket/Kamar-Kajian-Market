@@ -475,8 +475,8 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var affiliates=getJSON('kamarAffiliateList',[]);
     var existing=affiliates.find(function(a){return String(a.email||'').toLowerCase()===email;});
     var code=existing&&existing.referralCode?existing.referralCode:makeCode(fullName,email);
-    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,referralCode:code,status:'Aktif / Menunggu Verifikasi Admin',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};
-    if(existing){Object.assign(existing,data);}else{affiliates.push(data);}
+    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,referralCode:code,status:'Aktif / Menunggu Verifikasi Admin',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString(),payoutAccount:(existing&&existing.payoutAccount)||null};
+    if(existing){Object.assign(existing,data);data=existing;}else{affiliates.push(data);}
     setJSON('kamarAffiliateList', affiliates);
     setJSON('kamarAffiliateSession', data);
     localStorage.setItem('kamarAffiliateDraft', JSON.stringify(data));

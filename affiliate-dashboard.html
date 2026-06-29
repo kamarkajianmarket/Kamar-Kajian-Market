@@ -358,7 +358,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 
 
 <style id="kamar-step24CA-affiliate-dashboard">
-.referral-table{width:100%;border-collapse:separate;border-spacing:0 10px;margin-top:16px}.referral-table th{color:#f1dda2;text-transform:uppercase;letter-spacing:.12em;font-size:12px;text-align:left;padding:0 14px 4px}.referral-table td{background:rgba(255,255,255,.035);border-top:1px solid rgba(238,206,122,.13);border-bottom:1px solid rgba(238,206,122,.13);padding:14px;color:rgba(245,240,230,.82);font-weight:800}.referral-table td:first-child{border-left:1px solid rgba(238,206,122,.13);border-radius:16px 0 0 16px;color:#fff3d8}.referral-table td:last-child{border-right:1px solid rgba(238,206,122,.13);border-radius:0 16px 16px 0}.referral-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.referral-code-large{font-size:clamp(24px,3vw,44px);letter-spacing:.08em;color:#fff1be;font-weight:1000;margin:8px 0 0}.simple-search{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-top:16px}.simple-search label{flex:1;min-width:240px}.muted-note{color:rgba(245,240,230,.64);line-height:1.6}@media(max-width:760px){.referral-card-grid{grid-template-columns:1fr}.referral-table{font-size:13px}.referral-table th:nth-child(3),.referral-table td:nth-child(3){display:none}}
+.referral-table{width:100%;border-collapse:separate;border-spacing:0 10px;margin-top:16px}.referral-table th{color:#f1dda2;text-transform:uppercase;letter-spacing:.12em;font-size:12px;text-align:left;padding:0 14px 4px}.referral-table td{background:rgba(255,255,255,.035);border-top:1px solid rgba(238,206,122,.13);border-bottom:1px solid rgba(238,206,122,.13);padding:14px;color:rgba(245,240,230,.82);font-weight:800}.referral-table td:first-child{border-left:1px solid rgba(238,206,122,.13);border-radius:16px 0 0 16px;color:#fff3d8}.referral-table td:last-child{border-right:1px solid rgba(238,206,122,.13);border-radius:0 16px 16px 0}.referral-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.referral-code-large{font-size:clamp(24px,3vw,44px);letter-spacing:.08em;color:#fff1be;font-weight:1000;margin:8px 0 0}.simple-search{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-top:16px}.simple-search label{flex:1;min-width:240px}.muted-note{color:rgba(245,240,230,.64);line-height:1.6}.payout-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}.payout-status-box{border:1px solid rgba(238,206,122,.15);border-radius:20px;background:rgba(255,255,255,.026);padding:14px;color:rgba(245,240,230,.70);line-height:1.55;font-weight:750;margin-top:16px}.payout-status-box strong{color:#fff1be}.payout-alert{border:1px solid rgba(255,213,130,.24);background:rgba(255,213,130,.07);color:#ffe8ad;border-radius:20px;padding:14px;margin-top:14px;line-height:1.55;font-weight:750}.payout-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}@media(max-width:900px){.payout-form-grid{grid-template-columns:1fr}}@media(max-width:760px){.referral-card-grid{grid-template-columns:1fr}.referral-table{font-size:13px}.referral-table th:nth-child(3),.referral-table td:nth-child(3){display:none}}
 </style>
 </head>
 <body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div>
@@ -375,6 +375,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="affiliate-main-card"><span class="mini-label">Kode Referral Permanen</span><h3 id="affiliateDashName">Affiliator Kamar</h3><div class="referral-code-large" id="affiliateDashCode">-</div><p class="muted-note">Kode ini digunakan member saat mendaftar sebagai Kawan Kamar.</p><div class="affiliate-actions"><button class="btn primary" id="copyDashCode" type="button">Salin Kode</button><a class="btn secondary" href="affiliate.html">Daftar / Ganti Data</a></div></div>
 <div class="affiliate-note-card"><span class="mini-label">Privasi Referral</span><h3>Data ditampilkan terbatas.</h3><p>Dashboard affiliate hanya menampilkan nama member dan fasilitas yang digunakan. Email, nomor WhatsApp, detail pembayaran, dan data pribadi lain tidak ditampilkan.</p><div class="simple-search"><label class="field">Masuk dengan Kode Referral<input id="affiliateCodeLookup" placeholder="Contoh: KAMAR-AB-1234" type="text"/></label><button class="btn secondary" id="affiliateLookupBtn" type="button">Buka</button></div></div>
 </div>
+<section class="split-card" style="margin-top:20px"><span class="eyebrow">Akun Penerima Pembayaran</span><h3>Data pencairan komisi affiliate.</h3><p class="muted-note">Isi data rekening yang akan dipakai untuk pencairan komisi. Untuk keamanan, website ini tidak menyimpan upload KTP. Verifikasi identitas tetap dilakukan manual melalui admin resmi.</p><div class="payout-form-grid"><label class="field">Nama Lengkap Sesuai KTP<input id="payoutFullName" placeholder="Nama sesuai KTP" type="text"/></label><label class="field">Nomor Rekening<input id="payoutAccountNumber" placeholder="Nomor rekening aktif" type="text" inputmode="numeric"/></label><label class="field">Nama Bank<input id="payoutBankName" placeholder="Contoh: BCA / BRI / Mandiri" type="text"/></label></div><div class="payout-alert"><strong>Catatan keamanan:</strong> foto KTP tidak diunggah ke website. Kirim dokumen verifikasi hanya melalui admin resmi bila diminta untuk proses pencairan komisi.</div><div class="payout-status-box" id="payoutStatusBox"><strong>Status:</strong> Belum ada data rekening tersimpan.</div><div class="payout-actions"><button class="btn primary" id="savePayoutAccount" type="button">Simpan Data Rekening</button><a class="btn secondary" id="sendPayoutVerification" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Kirim Verifikasi ke Admin</a></div></section>
 <section class="split-card" style="margin-top:20px"><span class="eyebrow">Daftar Referral</span><div class="page-note" id="affiliateReferralStatus">Memuat data referral...</div><table class="referral-table"><thead><tr><th>Nama Member</th><th>Fasilitas Digunakan</th><th>Status</th></tr></thead><tbody id="affiliateReferralBody"></tbody></table></section>
 </div>
 </section>
@@ -397,6 +398,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     if(!aff && current && current.referralCode) aff=findAffiliate(current.referralCode)||current;
     document.getElementById('affiliateDashName').textContent=aff&&aff.fullName?aff.fullName:'Affiliator Kamar';
     document.getElementById('affiliateDashCode').textContent=aff&&aff.referralCode?aff.referralCode:'-';
+    renderPayout(aff);
     var code=aff&&aff.referralCode?normalize(aff.referralCode):'';
     var rows=members.filter(function(m){return normalize(m.referralCode)===code;});
     var body=document.getElementById('affiliateReferralBody'); body.innerHTML='';
@@ -407,13 +409,49 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     rows.forEach(function(m){
       var tr=document.createElement('tr');
       var fasilitas=(m.facilities&&m.facilities.length?m.facilities.join(', '):'Belum ada fasilitas aktif');
-      tr.innerHTML='<td>'+escapeHtml(m.fullName||'Member Kamar')+'</td><td>'+escapeHtml(fasilitas)+'</td><td>'+(m.status||'Member Website')+'</td>';
+      tr.innerHTML='<td>'+escapeHtml(m.fullName||'Member Kamar')+'</td><td>'+escapeHtml(fasilitas)+'</td><td>'+escapeHtml(m.status||'Member Website')+'</td>';
       body.appendChild(tr);
     });
+  }
+  function renderPayout(aff){
+    var account=(aff&&aff.payoutAccount)||{};
+    document.getElementById('payoutFullName').value=account.fullName||'';
+    document.getElementById('payoutAccountNumber').value=account.accountNumber||'';
+    document.getElementById('payoutBankName').value=account.bankName||'';
+    var box=document.getElementById('payoutStatusBox');
+    if(!aff || !aff.referralCode){box.innerHTML='<strong>Status:</strong> Masukkan kode referral atau daftar affiliate lebih dulu sebelum menyimpan data rekening.';return;}
+    if(account.fullName && account.accountNumber && account.bankName){
+      box.innerHTML='<strong>Status:</strong> Data rekening tersimpan. Verifikasi identitas tetap melalui admin resmi sebelum pencairan komisi.';
+    }else{
+      box.innerHTML='<strong>Status:</strong> Belum lengkap. Isi nama sesuai KTP, nomor rekening, dan nama bank.';
+    }
+    updateAdminVerificationLink(aff);
+  }
+  function updateAdminVerificationLink(aff){
+    var account=(aff&&aff.payoutAccount)||{};
+    var lines=['Halo Admin Kamar, saya ingin verifikasi akun penerima pembayaran affiliate.','Nama Affiliate: '+(aff&&aff.fullName?aff.fullName:'-'),'Kode Referral: '+(aff&&aff.referralCode?aff.referralCode:'-'),'Nama Rekening/KTP: '+(account.fullName||'-'),'Bank: '+(account.bankName||'-'),'Nomor Rekening: '+(account.accountNumber||'-'),'Catatan: dokumen identitas akan saya kirim hanya ke admin resmi bila diminta.'];
+    document.getElementById('sendPayoutVerification').href='https://t.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
+  }
+  function savePayout(){
+    var aff=current&&current.referralCode?findAffiliate(current.referralCode)||current:null;
+    if(!aff || !aff.referralCode){alert('Masukkan kode referral atau daftar affiliate terlebih dahulu.');return;}
+    var fullName=document.getElementById('payoutFullName').value.trim();
+    var accountNumber=document.getElementById('payoutAccountNumber').value.trim();
+    var bankName=document.getElementById('payoutBankName').value.trim();
+    if(!fullName || !accountNumber || !bankName){alert('Lengkapi Nama Sesuai KTP, Nomor Rekening, dan Nama Bank.');return;}
+    aff.payoutAccount={fullName:fullName,accountNumber:accountNumber,bankName:bankName,verificationStatus:'Menunggu Verifikasi Admin',updatedAt:new Date().toISOString(),ktpUpload:false};
+    var idx=affiliates.findIndex(function(a){return normalize(a.referralCode)===normalize(aff.referralCode);});
+    if(idx>=0){affiliates[idx]=Object.assign({},affiliates[idx],aff);}else{affiliates.push(aff);}
+    current=aff;
+    setJSON('kamarAffiliateList',affiliates);
+    setJSON('kamarAffiliateSession',aff);
+    render(aff);
+    alert('Data rekening affiliate berhasil disimpan. Lanjut hubungi admin untuk verifikasi pencairan.');
   }
   function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   document.getElementById('copyDashCode').addEventListener('click',function(){var t=document.getElementById('affiliateDashCode').textContent;if(t&&t!=='-')navigator.clipboard&&navigator.clipboard.writeText(t);this.textContent='Tersalin';var b=this;setTimeout(function(){b.textContent='Salin Kode';},1200);});
   document.getElementById('affiliateLookupBtn').addEventListener('click',function(){var code=document.getElementById('affiliateCodeLookup').value;var aff=findAffiliate(code);if(!aff){alert('Kode referral belum ditemukan di data browser ini. Pastikan affiliator sudah daftar dari perangkat/browser yang sama atau data sudah masuk database.');return;}setJSON('kamarAffiliateSession',aff);current=aff;render(aff);});
+  document.getElementById('savePayoutAccount').addEventListener('click',savePayout);
   render(current);
 })();
 </script>

@@ -356,142 +356,65 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @media(max-width:900px){.affiliate-program-grid{grid-template-columns:1fr}.affiliate-actions .btn{width:100%;}.affiliate-commission{border-radius:18px;align-items:flex-start;flex-direction:column;}}
 </style>
 
-</head>
-<body>
-<div class="page-glow page-glow-1"></div>
-<div class="page-glow page-glow-2"></div>
-<header class="site-header">
-<a aria-label="Kamar Kajian Market" class="brand" href="index.html">
-<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
-<span>Kamar Kajian Market</span>
-</a>
-<nav aria-label="Navigasi utama" class="nav-links">
-<a href="index.html#fasilitas">Fasilitas</a>
-<a href="index.html#tentang">Tentang</a>
-<a href="index.html#akses">Akses</a>
-<a href="index.html#faq">FAQ</a>
-</nav>
-<div class="header-actions">
-<a class="header-cta" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>
-<a class="header-cta header-member-cta" href="member.html">Login Member</a>
-</div>
-</header>
 
+<style id="kamar-step24CA-affiliate-dashboard">
+.referral-table{width:100%;border-collapse:separate;border-spacing:0 10px;margin-top:16px}.referral-table th{color:#f1dda2;text-transform:uppercase;letter-spacing:.12em;font-size:12px;text-align:left;padding:0 14px 4px}.referral-table td{background:rgba(255,255,255,.035);border-top:1px solid rgba(238,206,122,.13);border-bottom:1px solid rgba(238,206,122,.13);padding:14px;color:rgba(245,240,230,.82);font-weight:800}.referral-table td:first-child{border-left:1px solid rgba(238,206,122,.13);border-radius:16px 0 0 16px;color:#fff3d8}.referral-table td:last-child{border-right:1px solid rgba(238,206,122,.13);border-radius:0 16px 16px 0}.referral-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.referral-code-large{font-size:clamp(24px,3vw,44px);letter-spacing:.08em;color:#fff1be;font-weight:1000;margin:8px 0 0}.simple-search{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-top:16px}.simple-search label{flex:1;min-width:240px}.muted-note{color:rgba(245,240,230,.64);line-height:1.6}@media(max-width:760px){.referral-card-grid{grid-template-columns:1fr}.referral-table{font-size:13px}.referral-table th:nth-child(3),.referral-table td:nth-child(3){display:none}}
+</style>
+</head>
+<body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div>
+<header class="site-header">
+<a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a>
+<nav aria-label="Navigasi utama" class="nav-links"><a href="index.html#fasilitas">Fasilitas</a><a href="index.html#tentang">Tentang</a><a href="index.html#faq">FAQ</a></nav>
+<div class="header-actions"><a class="header-cta" href="affiliate.html">Daftar Affiliate</a><a class="header-cta header-member-cta" href="member.html">Login Member</a></div>
+</header>
 <main id="top">
-<section class="member-area section-shell compact-section" id="affiliate-register">
-<div class="section-heading centered">
-<span class="eyebrow">Affiliate Kamar</span>
-<h2>Daftar Affiliate Kamar.</h2>
-<p>Isi data utama dengan benar. Setelah pendaftaran dikirim, kode referral akan dibuat dan tetap perlu diverifikasi oleh Admin Kamar.</p>
+<section class="member-area section-shell compact-section">
+<div class="section-heading centered"><span class="eyebrow">Dashboard Affiliate</span><h2>Dashboard Affiliate Kamar.</h2><p>Lihat kode referral permanen dan daftar referral Anda. Data referral ditampilkan terbatas untuk menjaga privasi member.</p></div>
+<div class="affiliate-program-box">
+<div class="referral-card-grid">
+<div class="affiliate-main-card"><span class="mini-label">Kode Referral Permanen</span><h3 id="affiliateDashName">Affiliator Kamar</h3><div class="referral-code-large" id="affiliateDashCode">-</div><p class="muted-note">Kode ini digunakan member saat mendaftar sebagai Kawan Kamar.</p><div class="affiliate-actions"><button class="btn primary" id="copyDashCode" type="button">Salin Kode</button><a class="btn secondary" href="affiliate.html">Daftar / Ganti Data</a></div></div>
+<div class="affiliate-note-card"><span class="mini-label">Privasi Referral</span><h3>Data ditampilkan terbatas.</h3><p>Dashboard affiliate hanya menampilkan nama member dan fasilitas yang digunakan. Email, nomor WhatsApp, detail pembayaran, dan data pribadi lain tidak ditampilkan.</p><div class="simple-search"><label class="field">Masuk dengan Kode Referral<input id="affiliateCodeLookup" placeholder="Contoh: KAMAR-AB-1234" type="text"/></label><button class="btn secondary" id="affiliateLookupBtn" type="button">Buka</button></div></div>
 </div>
-<div class="member-login-shell">
-<article class="member-login-card auth-card">
-<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
-<span class="mini-label">Form Affiliate</span>
-<form class="member-login-form" id="kamarAffiliateForm">
-<label>Nama Lengkap<input aria-label="Nama lengkap affiliate" autocomplete="name" id="affiliateFullName" name="full_name" placeholder="Nama lengkap sesuai identitas" required type="text"/></label>
-<label>Email<input aria-label="Email affiliate" autocomplete="email" id="affiliateEmail" name="email" placeholder="email@domain.com" required type="email"/></label>
-<label>Nomor WhatsApp<input aria-label="Nomor WhatsApp affiliate" autocomplete="tel" id="affiliateWhatsapp" name="whatsapp" placeholder="08xxxxxxxxxx" required type="tel"/></label>
-<label>Username Telegram<input aria-label="Username Telegram affiliate" id="affiliateTelegram" name="telegram_username" placeholder="@username" type="text"/></label>
-<label>Akun / Channel Promosi <span class="mini-label">Opsional</span><input aria-label="Akun promosi affiliate" id="affiliateChannel" name="promo_channel" placeholder="YouTube, TikTok, Instagram, Telegram, atau lainnya" type="text"/></label>
-<label class="check-row"><input id="affiliateAgreeEthic" required type="checkbox"/> Saya setuju mempromosikan Kamar secara jujur, tidak menjanjikan profit, dan tidak membuat klaim berlebihan.</label>
-<label class="check-row"><input id="affiliateAgreeTerms" required type="checkbox"/> Saya memahami bahwa komisi hanya berlaku untuk referral valid sesuai syarat dan ketentuan Team Kamar.</label>
-<button class="btn btn-primary" id="affiliateSubmitBtn" type="submit">Daftar Affiliate</button>
-<p class="form-note" hidden id="affiliateStatus"></p>
-</form>
-<div class="affiliate-result" hidden id="affiliateResult">
-<strong>Pendaftaran affiliate berhasil disiapkan.</strong>
-<p style="margin:8px 0 0;">Kode referral permanen Anda:</p>
-<div class="affiliate-code-box"><code id="affiliateCodeText">KAMAR-0000</code><button class="btn btn-ghost" id="copyAffiliateCode" type="button">Salin</button></div>
-<p style="margin:12px 0 0;font-size:13px;color:rgba(226,255,239,.72);">Simpan kode ini. Admin tetap perlu memverifikasi data sebelum kode digunakan secara resmi.</p>
-</div>
-<div class="member-login-help">
-<span>Sudah punya akun member?</span>
-<a href="member.html">Login Member</a>
-</div>
-</article>
+<section class="split-card" style="margin-top:20px"><span class="eyebrow">Daftar Referral</span><div class="page-note" id="affiliateReferralStatus">Memuat data referral...</div><table class="referral-table"><thead><tr><th>Nama Member</th><th>Fasilitas Digunakan</th><th>Status</th></tr></thead><tbody id="affiliateReferralBody"></tbody></table></section>
 </div>
 </section>
 </main>
 <footer class="site-footer">
-<p><strong>Disclaimer:</strong> Seluruh materi Kamar Kajian Market bersifat edukasi, diskusi, dan bahan kajian. Trading memiliki risiko. Tidak ada jaminan profit, sinyal pasti, hasil tetap, atau instruksi transaksi wajib. Setiap keputusan transaksi sepenuhnya menjadi tanggung jawab masing-masing trader.</p>
+<p><strong>Disclaimer:</strong> Seluruh materi Kamar Kajian Market bersifat edukasi, diskusi, dan bahan kajian. Trading memiliki risiko. Tidak ada jaminan profit, sinyal pasti, hasil tetap, atau instruksi transaksi wajib.</p>
 <small>© Kamar Kajian Market</small>
 </footer>
 <script>
 (function(){
-  document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
-    if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
-      var sw=document.createElement('span');
-      sw.className='toggle-switch';
-      sw.setAttribute('aria-hidden','true');
-      var dot=document.createElement('span');
-      dot.className='toggle-dot';
-      sw.appendChild(dot);
-      input.insertAdjacentElement('afterend', sw);
-    }
-  });
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script>
-<script>
-(function(){
-  function qs(id){return document.getElementById(id);}
-  function normalizeName(name){return String(name||'').trim().replace(/\s+/g,' ');}
-  function initials(name){
-    var parts=normalizeName(name).split(' ').filter(Boolean).slice(0,2);
-    var out=parts.map(function(p){return p.charAt(0).toUpperCase();}).join('');
-    return out || 'KM';
-  }
-  function stableNumber(seed){
-    var h=0; seed=String(seed||'KAMAR');
-    for(var i=0;i<seed.length;i++){h=((h<<5)-h)+seed.charCodeAt(i); h|=0;}
-    return String(Math.abs(h)%9000+1000);
-  }
-  function makeCode(name,email){
-    return 'KAMAR-' + initials(name) + '-' + stableNumber((email||name).toLowerCase());
-  }
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
   function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  var form=qs('kamarAffiliateForm');
-  if(!form) return;
-  var status=qs('affiliateStatus');
-  var result=qs('affiliateResult');
-  var codeText=qs('affiliateCodeText');
-  var help=result.querySelector('p:last-child');
-  if(help){help.innerHTML='Kode referral ini bersifat permanen untuk data affiliate ini. Gunakan dashboard affiliate untuk melihat daftar referral Anda. <br/><br/><a class="btn secondary" href="affiliate-dashboard.html" style="margin-top:10px">Buka Dashboard Affiliate</a>';}
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var fullName=normalizeName(qs('affiliateFullName').value);
-    var email=String(qs('affiliateEmail').value||'').trim().toLowerCase();
-    var whatsapp=String(qs('affiliateWhatsapp').value||'').trim();
-    var agreeEthic=qs('affiliateAgreeEthic').checked;
-    var agreeTerms=qs('affiliateAgreeTerms').checked;
-    if(!fullName || !email || !whatsapp){
-      status.hidden=false; status.textContent='Nama, email, dan WhatsApp wajib diisi.'; status.className='form-note error'; return;
-    }
-    if(!agreeEthic || !agreeTerms){
-      status.hidden=false; status.textContent='Centang persetujuan affiliate terlebih dahulu.'; status.className='form-note error'; return;
-    }
-    var affiliates=getJSON('kamarAffiliateList',[]);
-    var existing=affiliates.find(function(a){return String(a.email||'').toLowerCase()===email;});
-    var code=existing&&existing.referralCode?existing.referralCode:makeCode(fullName,email);
-    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,referralCode:code,status:'Aktif / Menunggu Verifikasi Admin',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};
-    if(existing){Object.assign(existing,data);}else{affiliates.push(data);}
-    setJSON('kamarAffiliateList', affiliates);
-    setJSON('kamarAffiliateSession', data);
-    localStorage.setItem('kamarAffiliateDraft', JSON.stringify(data));
-    codeText.textContent=code;
-    result.hidden=false;
-    status.hidden=false; status.textContent=existing?'Data affiliate ditemukan. Kode referral permanen Anda tetap sama.':'Data affiliate berhasil dibuat. Kode referral permanen sudah disiapkan.'; status.className='form-note success';
-    result.scrollIntoView({behavior:'smooth',block:'center'});
-  });
-  var copy=qs('copyAffiliateCode');
-  if(copy){copy.addEventListener('click', function(){
-    var text=codeText.textContent;
-    navigator.clipboard && navigator.clipboard.writeText(text).then(function(){copy.textContent='Tersalin'; setTimeout(function(){copy.textContent='Salin';},1200);});
-  });}
+  function normalize(s){return String(s||'').trim().toUpperCase();}
+  var affiliates=getJSON('kamarAffiliateList',[]);
+  var members=getJSON('kamarRegisteredMembers',[]);
+  var current=getJSON('kamarAffiliateSession',null);
+  function findAffiliate(code){code=normalize(code);return affiliates.find(function(a){return normalize(a.referralCode)===code;})||null;}
+  function sampleIfEmpty(code){return [];}
+  function render(aff){
+    if(!aff && current && current.referralCode) aff=findAffiliate(current.referralCode)||current;
+    document.getElementById('affiliateDashName').textContent=aff&&aff.fullName?aff.fullName:'Affiliator Kamar';
+    document.getElementById('affiliateDashCode').textContent=aff&&aff.referralCode?aff.referralCode:'-';
+    var code=aff&&aff.referralCode?normalize(aff.referralCode):'';
+    var rows=members.filter(function(m){return normalize(m.referralCode)===code;});
+    var body=document.getElementById('affiliateReferralBody'); body.innerHTML='';
+    var status=document.getElementById('affiliateReferralStatus');
+    if(!code){status.textContent='Belum ada kode affiliate aktif di browser ini. Masukkan kode referral di kolom kanan atau daftar affiliate terlebih dahulu.';return;}
+    if(!rows.length){status.textContent='Belum ada member yang terdaftar menggunakan kode referral ini.';return;}
+    status.textContent=rows.length+' referral terdaftar dengan kode '+code+'.';
+    rows.forEach(function(m){
+      var tr=document.createElement('tr');
+      var fasilitas=(m.facilities&&m.facilities.length?m.facilities.join(', '):'Belum ada fasilitas aktif');
+      tr.innerHTML='<td>'+escapeHtml(m.fullName||'Member Kamar')+'</td><td>'+escapeHtml(fasilitas)+'</td><td>'+(m.status||'Member Website')+'</td>';
+      body.appendChild(tr);
+    });
+  }
+  function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  document.getElementById('copyDashCode').addEventListener('click',function(){var t=document.getElementById('affiliateDashCode').textContent;if(t&&t!=='-')navigator.clipboard&&navigator.clipboard.writeText(t);this.textContent='Tersalin';var b=this;setTimeout(function(){b.textContent='Salin Kode';},1200);});
+  document.getElementById('affiliateLookupBtn').addEventListener('click',function(){var code=document.getElementById('affiliateCodeLookup').value;var aff=findAffiliate(code);if(!aff){alert('Kode referral belum ditemukan di data browser ini. Pastikan affiliator sudah daftar dari perangkat/browser yang sama atau data sudah masuk database.');return;}setJSON('kamarAffiliateSession',aff);current=aff;render(aff);});
+  render(current);
 })();
 </script>
-
-</body>
-</html>
+</body></html>

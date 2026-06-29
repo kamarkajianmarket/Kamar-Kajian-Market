@@ -405,5 +405,40 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script></body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script>
+<script id="kamar-step24CA-register-referral-logic">
+(function(){
+  function q(id){return document.getElementById(id);} 
+  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function norm(s){return String(s||'').trim();}
+  function codeNorm(s){return norm(s).toUpperCase();}
+  function stableMemberId(email){var h=0; email=String(email||Date.now()); for(var i=0;i<email.length;i++){h=((h<<5)-h)+email.charCodeAt(i);h|=0;} return 'KM-'+String(Math.abs(h)%90000+10000).padStart(5,'0');}
+  var form=q('kamarRegisterForm'); if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name=norm(q('registerFullName')&&q('registerFullName').value);
+    var email=norm(q('registerEmail')&&q('registerEmail').value).toLowerCase();
+    var wa=norm(q('registerWhatsapp')&&q('registerWhatsapp').value);
+    var telegram=norm(q('registerTelegram')&&q('registerTelegram').value);
+    var pass=q('registerPassword')&&q('registerPassword').value;
+    var pass2=q('registerPasswordConfirm')&&q('registerPasswordConfirm').value;
+    var referral=codeNorm(q('registerReferral')&&q('registerReferral').value);
+    var status=q('registerStatus');
+    if(!name || !email || !wa || !pass || !pass2){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Lengkapi data wajib terlebih dahulu.';} return; }
+    if(pass!==pass2){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Konfirmasi password belum sama.';} return; }
+    if(!(q('registerAgreeRisk').checked && q('registerAgreeTerms').checked && q('registerAgreePolicy').checked)){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Centang semua persetujuan wajib terlebih dahulu.';} return; }
+    var affiliates=getJSON('kamarAffiliateList',[]);
+    var aff=referral?affiliates.find(function(a){return codeNorm(a.referralCode)===referral;}):null;
+    var members=getJSON('kamarRegisteredMembers',[]);
+    var existing=members.find(function(m){return String(m.email||'').toLowerCase()===email;});
+    var data={memberId:(existing&&existing.memberId)||stableMemberId(email),fullName:name,email:email,whatsapp:wa,telegram:telegram,referralCode:referral||'',referrerName:aff?aff.fullName:'',status:'Member Website: Aktif Gratis',facilities:(existing&&existing.facilities)||[],createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};
+    if(existing){Object.assign(existing,data);}else{members.push(data);} setJSON('kamarRegisteredMembers',members);
+    setJSON('kamarMemberSession',{memberId:data.memberId,fullName:name,email:email,referralCode:data.referralCode,loginAt:Date.now(),lastActivity:Date.now()});
+    if(status){status.hidden=false;status.className='form-note success';status.textContent='Akun berhasil dibuat. Kode referral tersimpan'+(aff?' dari '+aff.fullName:'')+'. Mengalihkan ke dashboard...';}
+    setTimeout(function(){window.location.href='dashboard.html';},900);
+  });
+})();
+</script>
+</body>
 </html>

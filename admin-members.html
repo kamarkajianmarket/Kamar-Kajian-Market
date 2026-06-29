@@ -256,7 +256,11 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 }
 </style>
 
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div><a href="admin.html">Dashboard Admin</a><a class="active" href="admin-members.html">Data Member</a><a href="admin-activation.html">Aktivasi Akses</a><a href="admin-renewal.html">Renewal Member</a><a href="admin-maintenance.html">Maintenance Fasilitas</a><a href="admin-banner.html">Banner Pengumuman</a><a href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten &amp; Materi</a><a href="admin-tools.html">File Tools</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html">Pengaturan Umum</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
+
+<style id="kamar-step24CA-admin-referral-table">
+.referral-table th{color:#f1dda2;text-transform:uppercase;letter-spacing:.12em;font-size:12px;text-align:left;padding:0 14px 4px}.referral-table td{background:rgba(255,255,255,.035);border-top:1px solid rgba(238,206,122,.13);border-bottom:1px solid rgba(238,206,122,.13);padding:14px;color:rgba(245,240,230,.82);font-weight:800}.referral-table td:first-child{border-left:1px solid rgba(238,206,122,.13);border-radius:16px 0 0 16px;color:#fff3d8}.referral-table td:last-child{border-right:1px solid rgba(238,206,122,.13);border-radius:0 16px 16px 0}
+</style>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div><a href="admin.html">Dashboard Admin</a><a class="active" href="admin-members.html">Data Member</a><a href="admin-affiliate.html">Data Affiliate</a><a href="admin-activation.html">Aktivasi Akses</a><a href="admin-renewal.html">Renewal Member</a><a href="admin-maintenance.html">Maintenance Fasilitas</a><a href="admin-banner.html">Banner Pengumuman</a><a href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten &amp; Materi</a><a href="admin-tools.html">File Tools</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html">Pengaturan Umum</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 <div class="split-card kamar-title-card">
 <h1>Data Member</h1>
 </div>
@@ -296,6 +300,18 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 <div class="page-note" id="adminMembersStatus">Memuat data member dari Supabase...</div>
 <div class="admin-member-list" id="adminMembersList"></div>
 </section>
+
+<section class="split-card" id="adminReferralSummaryWrap">
+<span class="eyebrow">Referral Member</span>
+<p class="page-note">Detail member yang memiliki kode referral beserta nama affiliatornya. Data ini membantu admin melakukan validasi referral dan komisi.</p>
+<div class="button-row"><a class="btn secondary" href="admin-affiliate.html">Buka Dashboard Affiliate</a></div>
+<div style="overflow:auto;margin-top:16px">
+<table class="referral-table" style="width:100%;border-collapse:separate;border-spacing:0 10px">
+<thead><tr><th>Nama Member</th><th>Kode Referral</th><th>Nama Affiliator</th><th>Fasilitas</th><th>Status</th></tr></thead>
+<tbody id="adminMemberReferralBody"><tr><td colspan="5">Memuat data referral...</td></tr></tbody>
+</table>
+</div>
+</section>
 <section class="split-card hidden" id="adminMemberDetailWrap">
 <span class="eyebrow">Detail Member</span>
 <h2 id="adminMemberDetailTitle">Detail Member</h2>
@@ -317,4 +333,18 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-admin-members.js"></script><script src="assets/js/kamar-admin-core.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-admin-members.js"></script><script src="assets/js/kamar-admin-core.js"></script>
+<script id="kamar-step24CA-admin-member-referral-logic">
+(function(){
+  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
+  function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  var body=document.getElementById('adminMemberReferralBody'); if(!body) return;
+  var members=getJSON('kamarRegisteredMembers',[]).filter(function(m){return m.referralCode;});
+  var affs=getJSON('kamarAffiliateList',[]);
+  function findAff(code){code=String(code||'').toUpperCase();return affs.find(function(a){return String(a.referralCode||'').toUpperCase()===code;});}
+  if(!members.length){body.innerHTML='<tr><td colspan="5">Belum ada member dengan kode referral pada data browser ini.</td></tr>';return;}
+  body.innerHTML='';
+  members.forEach(function(m){var a=findAff(m.referralCode);var tr=document.createElement('tr');var fasilitas=(m.facilities&&m.facilities.length)?m.facilities.join(', '):'Belum ada fasilitas';tr.innerHTML='<td>'+esc(m.fullName||'Member Kamar')+'</td><td>'+esc(m.referralCode)+'</td><td>'+esc(a?a.fullName:'Kode belum terhubung')+'</td><td>'+esc(fasilitas)+'</td><td>'+esc(m.status||'Member Website')+'</td>';body.appendChild(tr);});
+})();
+</script>
+</body></html>

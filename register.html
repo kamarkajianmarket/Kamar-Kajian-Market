@@ -434,10 +434,10 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     if(aff && String(aff.email||'').toLowerCase()===email){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral milik sendiri tidak bisa digunakan untuk akun sendiri.';} return; }
     var members=getJSON('kamarRegisteredMembers',[]);
     var existing=members.find(function(m){return String(m.email||'').toLowerCase()===email;});
-    var data={memberId:(existing&&existing.memberId)||stableMemberId(email),fullName:name,email:email,whatsapp:wa,telegram:telegram,referralCode:referral||'',referrerName:aff?aff.fullName:'',status:'Member Website: Aktif Gratis',facilities:(existing&&existing.facilities)||[],createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};
+    var data={memberId:(existing&&existing.memberId)||stableMemberId(email),fullName:name,email:email,whatsapp:wa,telegram:telegram,referralCode:referral||'',referrerName:aff?aff.fullName:'',status:'Pending Aktivasi',statusKey:'pending_activation',accountActive:false,facilities:(existing&&existing.facilities)||[],createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};
     if(existing){Object.assign(existing,data);}else{members.push(data);} setJSON('kamarRegisteredMembers',members);
-    setJSON('kamarMemberSession',{memberId:data.memberId,fullName:name,email:email,referralCode:data.referralCode,loginAt:Date.now(),lastActivity:Date.now()});
-    if(status){status.hidden=false;status.className='form-note success';status.textContent='Akun berhasil dibuat. Kode referral tersimpan'+(aff?' dari '+aff.fullName:'')+'. Mengalihkan ke dashboard...';}
+    setJSON('kamarMemberSession',{memberId:data.memberId,fullName:name,email:email,referralCode:data.referralCode,status:data.status,statusKey:data.statusKey,accountActive:false,loginAt:Date.now(),lastActivity:Date.now()});
+    if(status){status.hidden=false;status.className='form-note success';status.textContent='Pendaftaran berhasil dikirim. Akun gratis menunggu persetujuan admin'+(aff?' dan kode referral tersimpan dari '+aff.fullName:'')+'. Mengalihkan ke dashboard...';}
     setTimeout(function(){window.location.href='dashboard.html';},900);
   });
 })();

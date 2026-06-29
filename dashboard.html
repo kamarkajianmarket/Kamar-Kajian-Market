@@ -296,7 +296,10 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   var status=document.getElementById('memberStatusBox');
   if(status){
     var facilities=(data.facilities&&data.facilities.length)?data.facilities.join(', '):'Belum ada fasilitas berbayar aktif.';
-    status.innerHTML='<strong>Member Website: Aktif Gratis</strong><br/>Fasilitas aktif: '+facilities+'<br/>Kode referral: '+ref;
+    var isActive=(data.accountActive===true)||String(data.statusKey||'')==='active'||/aktif gratis/i.test(data.status||'');
+    var title=isActive?'Member Website: Aktif Gratis':'Menunggu Persetujuan Admin';
+    var extra=isActive?'Fasilitas aktif: '+facilities:'Akun gratis Anda sudah terdaftar, tetapi belum disetujui admin.';
+    status.innerHTML='<strong>'+title+'</strong><br/>'+extra+'<br/>Kode referral: '+ref;
   }
 })();
 </script>

@@ -268,6 +268,9 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .activation-muted-btn{min-width:150px;height:52px;background:rgba(255,255,255,.045)!important;color:#e9d99b!important;border:1px solid rgba(238,206,122,.18)!important;box-shadow:none!important;}
 .activation-muted-btn:hover{background:rgba(255,255,255,.07)!important;border-color:rgba(238,206,122,.32)!important;}
 .activation-note-box{font-size:15px;line-height:1.7;}
+.activation-price-box{border-color:rgba(244,223,144,.22);background:rgba(244,223,144,.065);color:rgba(255,246,218,.88);margin-top:18px;}
+.activation-price-box strong{color:#fff3d8;}
+
 @media(max-width:720px){.activation-actions .btn{width:100%;min-width:0;}}
 @media(max-width:920px){.member-payment-grid{grid-template-columns:1fr}}
 </style>
@@ -328,10 +331,74 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     const lines=['Halo Admin Kamar, saya ingin aktivasi fasilitas.','Fasilitas: '+facility,'Kebutuhan: '+(need?need.value:''),'Durasi: '+(duration?duration.value:''),note&&note.value.trim()?('Catatan: '+note.value.trim()):''].filter(Boolean);
     return 'https://t.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
   }
-  function update(){ if(adminLink) adminLink.href=buildMessage(); }
+  const paymentLinks={
+    indikator:{
+      '30 Hari':'https://kamar.myr.id/pl/kamarindikator30hari',
+      '60 Hari':'https://kamar.myr.id/pl/kamarindikator60hari',
+      '90 Hari':'https://kamar.myr.id/pl/kamarindikator90hari',
+      '180 Hari':'https://kamar.myr.id/pl/kamarindikator180hari',
+      'Lifetime':'https://kamar.myr.id/pl/kamarindikatorlifetime'
+    },
+    robot:{
+      '30 Hari':'https://kamar.myr.id/pl/kamarrobot30haricore',
+      '60 Hari':'https://kamar.myr.id/pl/kamarrobot60haricore',
+      '90 Hari':'https://kamar.myr.id/pl/kamarrobot90haricore',
+      '180 Hari':'https://kamar.myr.id/pl/kamarrobot180haricore',
+      'Lifetime':'https://kamar.myr.id/pl/kamarrobotlifetime'
+    }
+  };
+  const priceInfo={
+    indikator:{
+      '30 Hari':{normal:'Rp3.150.000',promo:'Rp3.150.000',note:'Core access'},
+      '60 Hari':{normal:'Rp6.300.000',promo:'Rp5.750.000',note:'Hemat Rp550.000'},
+      '90 Hari':{normal:'Rp9.450.000',promo:'Rp7.950.000',note:'Best Value'},
+      '180 Hari':{normal:'Rp18.900.000',promo:'Rp13.500.000',note:'Hemat besar'},
+      'Lifetime':{normal:'Rp24.500.000',promo:'Rp17.900.000',note:'Promo terbatas'}
+    },
+    robot:{
+      '30 Hari':{normal:'Rp3.750.000',promo:'Rp3.500.000',note:'Launching price'},
+      '60 Hari':{normal:'Rp7.500.000',promo:'Rp6.500.000',note:'Hemat Rp1.000.000'},
+      '90 Hari':{normal:'Rp11.250.000',promo:'Rp8.950.000',note:'Best Value'},
+      '180 Hari':{normal:'Rp22.500.000',promo:'Rp15.500.000',note:'Hemat besar'},
+      'Lifetime':{normal:'Rp29.500.000',promo:'Rp22.500.000',note:'Promo terbatas'}
+    }
+  };
+  const payLink=document.getElementById('activationPayLink');
+  let priceBox=document.getElementById('activationPriceBox');
+  if(!priceBox){
+    priceBox=document.createElement('div');
+    priceBox.id='activationPriceBox';
+    priceBox.className='payment-note-box activation-price-box';
+    const actions=document.querySelector('.activation-actions');
+    if(actions&&actions.parentNode) actions.parentNode.insertBefore(priceBox,actions);
+  }
+  function updatePay(){
+    const selectedDuration=duration?duration.value:'';
+    const url=paymentLinks[key]&&paymentLinks[key][selectedDuration];
+    const info=priceInfo[key]&&priceInfo[key][selectedDuration];
+    if(payLink){
+      payLink.href=url||'#';
+      if(url){
+        payLink.removeAttribute('data-payment-placeholder');
+        payLink.setAttribute('aria-label','Bayar '+facility+' '+selectedDuration);
+      }else{
+        payLink.setAttribute('data-payment-placeholder','true');
+        payLink.setAttribute('aria-label','Link pembayaran belum tersedia');
+      }
+    }
+    if(priceBox){
+      if(info){
+        priceBox.innerHTML='<strong>Ringkasan Paket:</strong><br/>Durasi: '+selectedDuration+'<br/>Harga Normal: '+info.normal+'<br/>Harga Promo/Rekomendasi: <strong>'+info.promo+'</strong><br/>Catatan: '+info.note;
+        priceBox.style.display='block';
+      }else{
+        priceBox.innerHTML='<strong>Ringkasan Paket:</strong><br/>Link pembayaran fasilitas ini belum dipasang. Hubungi admin untuk konfirmasi detail pembayaran.';
+        priceBox.style.display='block';
+      }
+    }
+  }
+  function update(){ if(adminLink) adminLink.href=buildMessage(); updatePay(); }
   [need,duration,note].forEach(function(el){ if(el) el.addEventListener('input',update); });
 
-  const payLink=document.getElementById('activationPayLink');
   if(payLink){
     payLink.addEventListener('click',function(e){
       if(payLink.getAttribute('href')==='#'){

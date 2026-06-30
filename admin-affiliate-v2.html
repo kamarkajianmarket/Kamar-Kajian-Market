@@ -15,7 +15,7 @@
     @media(max-width:1120px){.admin-shell{grid-template-columns:1fr}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.stats,.affiliate-tabs,.overview-grid{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.aff-row{grid-template-columns:1fr 150px}.aff-row.head{display:none}.row-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}.ref-row,.reward-row{grid-template-columns:1fr}.ref-row.head,.reward-row.head{display:none}}
     @media(max-width:620px){.admin-shell{padding:28px 16px}.stats,.toolbar,.info-grid,.affiliate-tabs,.overview-grid{grid-template-columns:1fr}.card,.hero{padding:20px}.hero h1{font-size:34px}.btn{width:100%}.row-actions .btn,.detail-actions .btn,.confirm-actions .btn{width:auto}.pay-line{grid-template-columns:1fr}}
 
-    /* Step 24DO: compact submenu cards. Force small shape on every affiliate view. */
+    /* Step 24DP: compact submenu cards. Force small shape on every affiliate view. */
     .affiliate-tabs{
       grid-template-columns:repeat(3,minmax(0,1fr))!important;
       gap:10px!important;
@@ -72,17 +72,112 @@
     .overview-box .btn{margin-top:12px!important;padding:9px 12px!important;border-radius:13px!important;font-size:12px!important;}
     @media(max-width:1120px){.affiliate-tab{grid-template-columns:86px 1fr!important}.affiliate-tabs,.overview-grid{grid-template-columns:1fr!important}}
 
+
+    /* Step 24DP: unified submenu cards across overview, list, and reward views. */
+    .affiliate-tabs,
+    main.admin-main > .affiliate-tabs{
+      display:grid!important;
+      grid-template-columns:repeat(3,minmax(0,1fr))!important;
+      gap:14px!important;
+      align-items:stretch!important;
+      margin:0!important;
+      width:100%!important;
+    }
+    .affiliate-tab,
+    .affiliate-tabs > .affiliate-tab{
+      position:relative!important;
+      min-height:118px!important;
+      height:118px!important;
+      padding:22px 22px!important;
+      border-radius:24px!important;
+      border:1px solid rgba(238,206,122,.18)!important;
+      background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015))!important;
+      display:grid!important;
+      grid-template-columns:108px minmax(0,1fr)!important;
+      grid-template-rows:1fr!important;
+      column-gap:18px!important;
+      align-items:center!important;
+      overflow:hidden!important;
+      transform:none!important;
+    }
+    .affiliate-tab:hover{
+      border-color:rgba(232,201,111,.42)!important;
+      background:linear-gradient(145deg,rgba(232,201,111,.105),rgba(255,255,255,.018))!important;
+      transform:translateY(-1px)!important;
+    }
+    .affiliate-tab.active{
+      border-color:rgba(232,201,111,.58)!important;
+      background:linear-gradient(145deg,rgba(232,201,111,.135),rgba(255,255,255,.02))!important;
+      box-shadow:0 0 0 1px rgba(232,201,111,.08) inset!important;
+    }
+    .affiliate-tab span{
+      grid-row:auto!important;
+      width:96px!important;
+      min-width:96px!important;
+      height:50px!important;
+      margin:0!important;
+      padding:0!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      border:1px solid rgba(238,206,122,.20)!important;
+      border-radius:999px!important;
+      background:rgba(232,201,111,.055)!important;
+      color:var(--gold2)!important;
+      text-align:center!important;
+      font-size:10px!important;
+      line-height:1.25!important;
+      letter-spacing:.13em!important;
+      text-transform:uppercase!important;
+      font-weight:900!important;
+      white-space:normal!important;
+    }
+    .affiliate-tab strong,
+    .affiliate-tabs > .affiliate-tab strong{
+      display:block!important;
+      margin:0 0 9px 0!important;
+      font-size:20px!important;
+      line-height:1.08!important;
+      letter-spacing:-.035em!important;
+      color:var(--text)!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+    .affiliate-tab small,
+    .affiliate-tabs > .affiliate-tab small{
+      display:block!important;
+      margin:0!important;
+      color:rgba(247,241,226,.62)!important;
+      font-size:14px!important;
+      line-height:1.38!important;
+      font-weight:800!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+    @media(max-width:1120px){
+      .affiliate-tabs,main.admin-main > .affiliate-tabs{grid-template-columns:1fr!important;}
+      .affiliate-tab,.affiliate-tabs > .affiliate-tab{height:auto!important;min-height:104px!important;grid-template-columns:100px 1fr!important;padding:18px!important;}
+    }
+    @media(max-width:620px){
+      .affiliate-tab,.affiliate-tabs > .affiliate-tab{grid-template-columns:1fr!important;gap:12px!important;min-height:0!important;}
+      .affiliate-tab span{width:118px!important;min-width:118px!important;height:42px!important;}
+      .affiliate-tab strong{white-space:normal!important;}
+      .affiliate-tab small{white-space:normal!important;}
+    }
+
   </style>
 </head>
 <body>
 <div class="admin-shell">
   <aside class="admin-sidebar">
     <div class="brand-small">Admin Kamar</div>
-    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24do">Dashboard Admin</a>
-    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24do">Data Member</a><a href="admin-internal.html?v=24do">Data Internal</a><a href="admin-activation.html?v=24do">Aktivasi Akun & Fasilitas</a>
-    <div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&v=24do">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&v=24do">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&v=24do">Reward / Komisi</a>
-    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24do">Banner Pengumuman</a><a href="admin-video.html?v=24do">Konten Video</a><a href="admin-materials.html?v=24do">Konten & Materi</a><a href="admin-tools.html?v=24do">File Tools</a>
-    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24do">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24do">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24do">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24do">Payment Gateway</a><a href="admin-links.html?v=24do">Pengaturan Link</a><a href="admin-settings.html?v=24do">Pengaturan Umum</a>
+    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dp">Dashboard Admin</a>
+    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dp">Data Member</a><a href="admin-internal.html?v=24dp">Data Internal</a><a href="admin-activation.html?v=24dp">Aktivasi Akun & Fasilitas</a>
+    <div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&v=24dp">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&v=24dp">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&v=24dp">Reward / Komisi</a>
+    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dp">Banner Pengumuman</a><a href="admin-video.html?v=24dp">Konten Video</a><a href="admin-materials.html?v=24dp">Konten & Materi</a><a href="admin-tools.html?v=24dp">File Tools</a>
+    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dp">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dp">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dp">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dp">Payment Gateway</a><a href="admin-links.html?v=24dp">Pengaturan Link</a><a href="admin-settings.html?v=24dp">Pengaturan Umum</a>
     <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
   </aside>
   <main class="admin-main">
@@ -93,25 +188,25 @@
       </div>
     </section>
     <section class="affiliate-tabs">
-      <a class="affiliate-tab" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&v=24do"><span>Sub Menu 01</span><strong>Data Affiliate</strong><small>Ringkasan & statistik affiliate.</small></a>
-      <a class="affiliate-tab" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&v=24do"><span>Sub Menu 02</span><strong>Daftar Affiliator</strong><small>Kelola data, kode, rekening, dan aksi.</small></a>
-      <a class="affiliate-tab" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&v=24do"><span>Sub Menu 03</span><strong>Reward / Komisi</strong><small>Pantau status dan nominal komisi.</small></a>
+      <a class="affiliate-tab" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&v=24dp"><span>Sub Menu 01</span><strong>Data Affiliate</strong><small>Ringkasan & statistik affiliate.</small></a>
+      <a class="affiliate-tab" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&v=24dp"><span>Sub Menu 02</span><strong>Daftar Affiliator</strong><small>Kelola data, kode, rekening, dan aksi.</small></a>
+      <a class="affiliate-tab" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&v=24dp"><span>Sub Menu 03</span><strong>Reward / Komisi</strong><small>Pantau status dan nominal komisi.</small></a>
     </section>
     <section class="stats" id="overviewStats" data-view-section="overview">
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=all&v=24do" data-stat-filter="all"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua affiliator terdaftar.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=hasRef&v=24do" data-stat-filter="hasRef"><span>Total Referral</span><strong id="statRef">0</strong><small>Member yang memakai kode referral.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=verified&v=24do" data-stat-filter="verified"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=empty&v=24do" data-stat-filter="empty"><span>Belum Isi Rekening</span><strong id="statEmpty">0</strong><small>Rekening perlu dilengkapi.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=unpaid&v=24do" data-reward-filter="unpaid"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral yang belum ditandai dibayar.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=paid&v=24do" data-reward-filter="paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral yang sudah ditandai dibayar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=all&v=24dp" data-stat-filter="all"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua affiliator terdaftar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=hasRef&v=24dp" data-stat-filter="hasRef"><span>Total Referral</span><strong id="statRef">0</strong><small>Member yang memakai kode referral.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=verified&v=24dp" data-stat-filter="verified"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=empty&v=24dp" data-stat-filter="empty"><span>Belum Isi Rekening</span><strong id="statEmpty">0</strong><small>Rekening perlu dilengkapi.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=unpaid&v=24dp" data-reward-filter="unpaid"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral yang belum ditandai dibayar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=paid&v=24dp" data-reward-filter="paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral yang sudah ditandai dibayar.</small></a>
     </section>
     <section class="card" id="affiliateOverviewCard" data-view-section="overview">
       <h2 class="section-title">Struktur Menu Affiliate</h2>
       <p class="muted">Menu affiliate sekarang dipisah menjadi tiga bagian supaya admin tidak mencampur ringkasan, data affiliator, dan pembayaran reward dalam satu tampilan yang terlalu ramai.</p>
       <div class="overview-grid">
-        <div class="overview-box"><h3>Data Affiliate</h3><p>Ringkasan angka utama affiliate, referral, rekening, dan reward.</p><a class="btn secondary small" href="admin-affiliate-v2.html?view=overview&v=24do">Buka Ringkasan</a></div>
-        <div class="overview-box"><h3>Daftar Affiliator</h3><p>Operasional affiliator: detail, salin kode, verifikasi rekening, dan hapus.</p><a class="btn small" href="admin-affiliate-v2.html?view=list&v=24do">Buka Daftar</a></div>
-        <div class="overview-box"><h3>Reward / Komisi</h3><p>Pencatatan nominal reward dan status pembayaran komisi.</p><a class="btn small" href="admin-affiliate-v2.html?view=reward&v=24do">Buka Reward</a></div>
+        <div class="overview-box"><h3>Data Affiliate</h3><p>Ringkasan angka utama affiliate, referral, rekening, dan reward.</p><a class="btn secondary small" href="admin-affiliate-v2.html?view=overview&v=24dp">Buka Ringkasan</a></div>
+        <div class="overview-box"><h3>Daftar Affiliator</h3><p>Operasional affiliator: detail, salin kode, verifikasi rekening, dan hapus.</p><a class="btn small" href="admin-affiliate-v2.html?view=list&v=24dp">Buka Daftar</a></div>
+        <div class="overview-box"><h3>Reward / Komisi</h3><p>Pencatatan nominal reward dan status pembayaran komisi.</p><a class="btn small" href="admin-affiliate-v2.html?view=reward&v=24dp">Buka Reward</a></div>
       </div>
     </section>
     <section class="card" id="affiliateListCard" data-view-section="list">

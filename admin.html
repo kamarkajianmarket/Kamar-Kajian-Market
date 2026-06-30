@@ -260,12 +260,52 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .admin-detail-panel{display:grid;gap:18px}.admin-detail-box p{margin:8px 0 0;color:#cfc5ad;line-height:1.55}.admin-empty,.admin-empty-note{padding:18px;border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);color:#cfc5ad;font-weight:800}.danger{background:rgba(255,90,90,.13)!important;color:#ffd0d0!important;border:1px solid rgba(255,120,120,.30)!important}
 .admin-row.header{font-size:12px;text-transform:uppercase;letter-spacing:.15em;color:#f4df90;font-weight:1000;}
 @media(max-width:900px){.facility-toggle-grid{grid-template-columns:1fr}.admin-row{grid-template-columns:1fr!important}}
-</style></head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
+</style>
+<style id="kamar-step24CX-dashboard-clickable-final">
+/* Step 24CX — Dashboard Admin clickable cards */
+#adminSummaryCards .stat-card,
+.admin-dashboard-grid .admin-click-card,
+#adminTodoList .admin-row:not(.header),
+#adminPendingMembers .admin-row:not(.header){
+  cursor:pointer!important;
+  position:relative!important;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease!important;
+}
+#adminSummaryCards .stat-card:hover,
+.admin-dashboard-grid .admin-click-card:hover,
+#adminTodoList .admin-row:not(.header):hover,
+#adminPendingMembers .admin-row:not(.header):hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(244,223,144,.52)!important;
+  background:linear-gradient(135deg,rgba(244,223,144,.075),rgba(255,255,255,.018))!important;
+  box-shadow:0 14px 42px rgba(0,0,0,.22)!important;
+}
+#adminSummaryCards .stat-card::after{
+  content:'Lihat Detail';
+  display:inline-flex;
+  margin-top:12px;
+  border:1px solid rgba(238,206,122,.20);
+  border-radius:999px;
+  padding:7px 11px;
+  color:#f4df90;
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  background:rgba(255,255,255,.035);
+}
+#adminSummaryCards .stat-card:focus-visible,
+.admin-dashboard-grid .admin-click-card:focus-visible{
+  outline:3px solid rgba(244,223,144,.34)!important;
+  outline-offset:4px!important;
+}
+</style>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="active" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
 <a class="" href="admin-members.html">Data Member</a>
-<a class="" href="admin-activation.html?v=24cw">Aktivasi Akun & Fasilitas</a>
+<a class="" href="admin-activation.html?v=24cx">Aktivasi Akun & Fasilitas</a>
 <a class="" href="admin-data-check.html?v=24cu">Cek Data Admin</a>
 <div class="admin-menu-section">Affiliate</div>
 <a class="" href="admin-affiliate.html">Data Affiliate</a>
@@ -286,7 +326,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </aside><section class="split-main">
 <div class="split-card kamar-title-card"><h1>Dashboard Admin</h1><p>Ringkasan kontrol member, fasilitas, pembayaran, affiliate, dan konten Kamar.</p></div>
 <section class="split-card"><span class="mini-label">Ringkasan Hari Ini</span><div class="grid-4" id="adminSummaryCards"></div></section>
-<section class="split-card"><span class="mini-label">Menu Admin Kamar</span><p>Klik salah satu card untuk membuka menu admin terkait.</p><div class="admin-dashboard-grid"><a class="admin-click-card" href="admin-members.html"><h3>Data Member</h3><p>Lihat member, status akun, referral, dan fasilitas aktif.</p></a><a class="admin-click-card" href="admin-activation.html?v=24cw"><h3>Aktivasi Akun &amp; Fasilitas</h3><p>Setujui member gratis dan aktifkan fasilitas bila sudah valid.</p></a><a class="admin-click-card" href="admin-data-check.html?v=24cu"><h3>Cek Data Admin</h3><p>Diagnosis data member: localStorage, Supabase, tabel, dan jumlah member terbaca.</p></a><a class="admin-click-card" href="admin-affiliate.html"><h3>Data Affiliate</h3><p>Cek affiliator, kode referral, rekening, dan referral mereka.</p></a><a class="admin-click-card" href="admin-payment.html"><h3>Payment Gateway</h3><p>Kelola link pembayaran Mayar dan status pembayaran.</p></a><a class="admin-click-card" href="admin-maintenance.html"><h3>Maintenance</h3><p>Atur ON/OFF fasilitas dan status website.</p></a><a class="admin-click-card" href="admin-banner.html"><h3>Banner Pengumuman</h3><p>Atur banner dan pesan utama website.</p></a><a class="admin-click-card" href="admin-page-control.html"><h3>Kontrol Halaman Utama</h3><p>Atur section yang tampil di website publik.</p></a><a class="admin-click-card" href="admin-settings.html"><h3>Pengaturan Umum</h3><p>Kelola konfigurasi umum sistem admin.</p></a></div></section>
+<section class="split-card"><span class="mini-label">Menu Admin Kamar</span><p>Klik salah satu card untuk membuka menu admin terkait.</p><div class="admin-dashboard-grid"><a class="admin-click-card" href="admin-members.html"><h3>Data Member</h3><p>Lihat member, status akun, referral, dan fasilitas aktif.</p></a><a class="admin-click-card" href="admin-activation.html?v=24cx"><h3>Aktivasi Akun &amp; Fasilitas</h3><p>Setujui member gratis dan aktifkan fasilitas bila sudah valid.</p></a><a class="admin-click-card" href="admin-data-check.html?v=24cu"><h3>Cek Data Admin</h3><p>Diagnosis data member: localStorage, Supabase, tabel, dan jumlah member terbaca.</p></a><a class="admin-click-card" href="admin-affiliate.html"><h3>Data Affiliate</h3><p>Cek affiliator, kode referral, rekening, dan referral mereka.</p></a><a class="admin-click-card" href="admin-payment.html"><h3>Payment Gateway</h3><p>Kelola link pembayaran Mayar dan status pembayaran.</p></a><a class="admin-click-card" href="admin-maintenance.html"><h3>Maintenance</h3><p>Atur ON/OFF fasilitas dan status website.</p></a><a class="admin-click-card" href="admin-banner.html"><h3>Banner Pengumuman</h3><p>Atur banner dan pesan utama website.</p></a><a class="admin-click-card" href="admin-page-control.html"><h3>Kontrol Halaman Utama</h3><p>Atur section yang tampil di website publik.</p></a><a class="admin-click-card" href="admin-settings.html"><h3>Pengaturan Umum</h3><p>Kelola konfigurasi umum sistem admin.</p></a></div></section>
 <section class="split-card"><span class="mini-label">List To Do</span><p>Setiap tombol di bagian ini langsung memproses data lokal website. Untuk data real nanti disambungkan ke Supabase.</p><div class="admin-table-card" id="adminTodoList"></div></section>
 <section class="split-card"><span class="mini-label">Member Pending</span><p>Daftar pendaftar gratis yang belum disetujui admin.</p><div class="admin-table-card" id="adminPendingMembers"></div></section>
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
@@ -361,12 +401,64 @@ function render(){var A=window.KamarAdminLocal;if(!A)return;var ms=A.members();v
  var sum=byId('adminSummaryCards'); if(sum){sum.innerHTML=''
  +'<div class="stat-card" data-href="admin-members.html"><span>Total Member</span><strong>'+ms.length+'</strong><small>Klik untuk buka data member.</small></div>'
  +'<div class="stat-card" data-href="admin-members.html"><span>Member Aktif</span><strong>'+active.length+'</strong><small>Akun gratis yang sudah disetujui.</small></div>'
- +'<div class="stat-card" data-href="admin-activation.html?v=24cw"><span>Pending Aktivasi</span><strong>'+pending.length+'</strong><small>Klik untuk aktivasi gratis.</small></div>'
+ +'<div class="stat-card" data-href="admin-activation.html?v=24cx"><span>Pending Aktivasi</span><strong>'+pending.length+'</strong><small>Klik untuk aktivasi gratis.</small></div>'
  +'<div class="stat-card" data-href="admin-affiliate.html"><span>Total Affiliate</span><strong>'+aff.length+'</strong><small>Klik untuk kelola affiliate.</small></div>';}
- var todo=byId('adminTodoList'); if(todo){var h='<div class="admin-row header"><div>Tugas</div><div>Data</div><div>Status</div><div>Jenis</div><div>Aksi</div></div>';var any=false; pending.forEach(function(m){any=true;var id=A.idOf(m);h+='<div class="admin-row" data-click="member"><div><strong>Aktivasi member gratis</strong><small>'+A.esc(m.fullName||'-')+'<br>'+A.esc(id)+'</small></div><div>'+A.esc(m.email||'-')+'<small>WA: '+A.esc(m.whatsapp||'-')+'</small></div><div>'+A.labelStatus(m)+'</div><div>Member Website</div><div class="admin-row-actions"><button class="btn mini" data-approve="'+A.esc(id)+'">Aktifkan Gratis</button><a class="btn mini secondary" href="admin-activation.html?v=24cw">Detail</a></div></div>';}); payoutPending.forEach(function(a){any=true;h+='<div class="admin-row"><div><strong>Verifikasi rekening affiliate</strong><small>'+A.esc(a.fullName||'-')+'<br>'+A.esc(a.referralCode||'-')+'</small></div><div>'+A.esc(a.payout.bank||'-')+'<small>'+A.esc(a.payout.accountNumber||'-')+'</small></div><div><span class="status-pill warn">Menunggu Verifikasi</span></div><div>Affiliate</div><div><a class="btn mini" href="admin-affiliate.html">Buka</a></div></div>';}); if(!any)h+='<div class="admin-empty">Tidak ada To Do aktif.</div>'; todo.innerHTML=h;}
- var wrap=byId('adminPendingMembers'); if(wrap){var h2='<div class="admin-row header"><div>Member</div><div>Kontak</div><div>Status</div><div>Fasilitas</div><div>Aksi</div></div>'; if(!pending.length)h2+='<div class="admin-empty">Tidak ada member pending.</div>'; pending.forEach(function(m){var id=A.idOf(m);h2+='<div class="admin-row"><div><strong>'+A.esc(m.fullName||'Member Kamar')+'</strong><small>'+A.esc(id)+'</small></div><div>'+A.esc(m.email||'-')+'<small>WA: '+A.esc(m.whatsapp||'-')+' · TG: '+A.esc(m.telegram||'-')+'</small></div><div>'+A.labelStatus(m)+'</div><div>'+A.esc((m.facilities&&m.facilities.join(', '))||'Belum ada')+'</div><div class="admin-row-actions"><button class="btn mini" data-approve="'+A.esc(id)+'">Aktifkan Gratis</button><a class="btn mini secondary" href="admin-activation.html?v=24cw">Detail</a></div></div>';}); wrap.innerHTML=h2;}
+ var todo=byId('adminTodoList'); if(todo){var h='<div class="admin-row header"><div>Tugas</div><div>Data</div><div>Status</div><div>Jenis</div><div>Aksi</div></div>';var any=false; pending.forEach(function(m){any=true;var id=A.idOf(m);h+='<div class="admin-row" data-click="member"><div><strong>Aktivasi member gratis</strong><small>'+A.esc(m.fullName||'-')+'<br>'+A.esc(id)+'</small></div><div>'+A.esc(m.email||'-')+'<small>WA: '+A.esc(m.whatsapp||'-')+'</small></div><div>'+A.labelStatus(m)+'</div><div>Member Website</div><div class="admin-row-actions"><button class="btn mini" data-approve="'+A.esc(id)+'">Aktifkan Gratis</button><a class="btn mini secondary" href="admin-activation.html?v=24cx">Detail</a></div></div>';}); payoutPending.forEach(function(a){any=true;h+='<div class="admin-row"><div><strong>Verifikasi rekening affiliate</strong><small>'+A.esc(a.fullName||'-')+'<br>'+A.esc(a.referralCode||'-')+'</small></div><div>'+A.esc(a.payout.bank||'-')+'<small>'+A.esc(a.payout.accountNumber||'-')+'</small></div><div><span class="status-pill warn">Menunggu Verifikasi</span></div><div>Affiliate</div><div><a class="btn mini" href="admin-affiliate.html">Buka</a></div></div>';}); if(!any)h+='<div class="admin-empty">Tidak ada To Do aktif.</div>'; todo.innerHTML=h;}
+ var wrap=byId('adminPendingMembers'); if(wrap){var h2='<div class="admin-row header"><div>Member</div><div>Kontak</div><div>Status</div><div>Fasilitas</div><div>Aksi</div></div>'; if(!pending.length)h2+='<div class="admin-empty">Tidak ada member pending.</div>'; pending.forEach(function(m){var id=A.idOf(m);h2+='<div class="admin-row"><div><strong>'+A.esc(m.fullName||'Member Kamar')+'</strong><small>'+A.esc(id)+'</small></div><div>'+A.esc(m.email||'-')+'<small>WA: '+A.esc(m.whatsapp||'-')+' · TG: '+A.esc(m.telegram||'-')+'</small></div><div>'+A.labelStatus(m)+'</div><div>'+A.esc((m.facilities&&m.facilities.join(', '))||'Belum ada')+'</div><div class="admin-row-actions"><button class="btn mini" data-approve="'+A.esc(id)+'">Aktifkan Gratis</button><a class="btn mini secondary" href="admin-activation.html?v=24cx">Detail</a></div></div>';}); wrap.innerHTML=h2;}
  document.querySelectorAll('[data-approve]').forEach(function(b){b.onclick=function(){A.activateMember(b.getAttribute('data-approve'));render();};});}
 document.addEventListener('kamarAdminDataChanged',render); if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
 })();
 
-</script></body></html>
+</script>
+<script id="kamar-step24CX-dashboard-click-final">
+(function(){
+  var routeMap=[
+    {match:/total\s*member/i,href:'admin-members.html'},
+    {match:/member\s*aktif/i,href:'admin-members.html?filter=active'},
+    {match:/pending\s*aktivasi/i,href:'admin-activation.html?v=24cx'},
+    {match:/total\s*affiliate/i,href:'admin-affiliate.html'},
+    {match:/payment|pembayaran/i,href:'admin-payment.html'},
+    {match:/banner/i,href:'admin-banner.html'},
+    {match:/video/i,href:'admin-video.html'},
+    {match:/materi|konten/i,href:'admin-materials.html'},
+    {match:/tools|file/i,href:'admin-tools.html'},
+    {match:/maintenance/i,href:'admin-maintenance.html'},
+    {match:/halaman\s*utama/i,href:'admin-page-control.html'},
+    {match:/dashboard\s*member/i,href:'admin-dashboard-control.html'},
+    {match:/pengaturan\s*link/i,href:'admin-links.html'},
+    {match:/pengaturan\s*umum/i,href:'admin-settings.html'}
+  ];
+  function pickHref(el){
+    if(!el)return '';
+    var h=el.getAttribute('data-href')||el.getAttribute('href')||'';
+    if(h)return h;
+    var text=(el.textContent||'').replace(/\s+/g,' ').trim();
+    for(var i=0;i<routeMap.length;i++){if(routeMap[i].match.test(text))return routeMap[i].href;}
+    return '';
+  }
+  function enhance(){
+    document.querySelectorAll('#adminSummaryCards .stat-card,.action-card,.admin-click-card').forEach(function(el){
+      var h=pickHref(el);
+      if(h){el.setAttribute('data-href',h);el.setAttribute('role','link');el.setAttribute('tabindex','0');}
+    });
+  }
+  document.addEventListener('click',function(e){
+    if(e.target.closest('button,a,input,select,textarea,label'))return;
+    var card=e.target.closest('#adminSummaryCards .stat-card,.action-card[data-href],.admin-click-card[data-href]');
+    if(!card)return;
+    var href=pickHref(card);
+    if(href){window.location.href=href;}
+  },true);
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    var card=e.target.closest&&e.target.closest('#adminSummaryCards .stat-card,.action-card[data-href],.admin-click-card[data-href]');
+    if(!card)return;
+    var href=pickHref(card);
+    if(href){e.preventDefault();window.location.href=href;}
+  });
+  var obs=new MutationObserver(enhance);
+  if(document.body)obs.observe(document.body,{childList:true,subtree:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',enhance);else enhance();
+})();
+</script>
+</body></html>

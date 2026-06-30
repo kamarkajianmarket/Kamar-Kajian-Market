@@ -312,8 +312,8 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
-<a class="" href="admin-members.html?v=24dg">Data Member</a>
-<a class="active" href="admin-internal.html?v=24dg">Data Internal</a>
+<a class="" href="admin-members.html?v=24dh">Data Member</a>
+<a class="active" href="admin-internal.html?v=24dh">Data Internal</a>
 <a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
 <a class="" href="admin-affiliate.html">Data Affiliate</a>
@@ -438,7 +438,7 @@ function render(){
   setTitle();var sc=scope();var rows=baseRows();var list=filterRows(rows);
   var c=el('adminMemberCount');if(c)c.textContent=(sc==='internal'?'Akun Internal: ':'Total Member: ')+rows.length+' | Tampil: '+list.length;
   var pc=el('adminPendingCount');if(pc)pc.textContent='Pending: '+rows.filter(isPending).length;
-  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="admin-row header"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);h+='<div class="admin-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(expiryOf(m))+'</div><div>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="admin-row-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':'<a class="btn mini secondary" href="admin-activation.html?v=24dg">Kelola</a>')+'</div></div>'});wrap.innerHTML=h}
+  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="admin-row header"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);h+='<div class="admin-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(expiryOf(m))+'</div><div>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="admin-row-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':'<a class="btn mini secondary" href="admin-activation.html?v=24dh">Kelola</a>')+'</div></div>'});wrap.innerHTML=h}
   var rb=el('adminMemberReferralBody');if(rb){if(sc==='internal'){rb.innerHTML='<div class="admin-empty">Referral tidak ditampilkan untuk akun internal.</div>'}else{rb.innerHTML='<div class="admin-empty">Referral member akan dicek di menu Data Affiliate.</div>'}}
 }
 function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatusFilter');if(f&&st&&['active','pending','suspended'].indexOf(f)>=0)st.value=f}

@@ -308,12 +308,24 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 }
 </style>
 
+
+<style id="kamar-step24dh-member-actions-detail">
+.admin-row-actions{display:flex!important;gap:10px!important;align-items:center!important;justify-content:flex-end!important;flex-wrap:wrap!important;}
+.admin-row .btn.mini{min-width:86px!important;padding:9px 13px!important;font-size:12px!important;}
+.admin-detail-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px;}
+.admin-detail-box{border:1px solid rgba(238,206,122,.16);border-radius:20px;background:rgba(255,255,255,.025);padding:15px;min-height:78px;}
+.admin-detail-box span{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:1000;color:#d8cda9;margin-bottom:7px;}
+.admin-detail-box strong{display:block;color:#fff4db;font-size:15px;line-height:1.35;word-break:break-word;}
+.admin-detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.admin-note-soft{color:rgba(245,240,230,.68);line-height:1.6;}
+@media(max-width:900px){.admin-detail-card-grid{grid-template-columns:1fr}.admin-row-actions{justify-content:flex-start!important}}
+</style>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
-<a class="active" href="admin-members.html?v=24dg">Data Member</a>
-<a class="" href="admin-internal.html?v=24dg">Data Internal</a>
+<a class="active" href="admin-members.html?v=24dh">Data Member</a>
+<a class="" href="admin-internal.html?v=24dh">Data Internal</a>
 <a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
 <a class="" href="admin-affiliate.html">Data Affiliate</a>
@@ -368,7 +380,7 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 <script id="kamar-step24DC-admin-members-clean-split">
 (function(){
 'use strict';
-var state={client:null,rows:[],memberRows:[],internalRows:[]};
+var state={client:null,rows:[],memberRows:[],internalRows:[],affiliateRows:[],referralRows:[]};
 var FAC=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -420,12 +432,18 @@ function existingClient(){return window.kamarSupabaseClient||window.KamarSupabas
 function client(){if(state.client)return state.client;var ex=existingClient();if(ex){state.client=ex;return ex}var cfg=getConfig();if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){state.client=window.supabase.createClient(cfg.url,cfg.key);return state.client}return null}
 async function query(table){var c=client();if(!c)throw new Error('Supabase client tidak terbaca');var res=await c.from(table).select('*').limit(1000);if(res.error)throw res.error;return res.data||[]}
 function localMembers(){try{return JSON.parse(localStorage.getItem('kamarRegisteredMembers')||'[]')}catch(e){return []}}
+function localAffiliates(){try{return JSON.parse(localStorage.getItem('kamarAffiliateList')||'[]')}catch(e){return []}}
+function referralCodeOf(o){return String(pick(o,['referral_code','referralCode','used_referral_code','usedReferralCode','affiliate_code','affiliateCode','kode_referral','kodeReferral','referred_by_code','referredByCode'])||'').trim()}
+function referralNameOf(o){return String(pick(o,['affiliator_name','affiliate_name','referrer_name','referral_name','referred_by_name','study_partner_name'])||'').trim()}
+function findAffiliateByCode(code){code=norm(code); if(!code)return null; var all=(state.affiliateRows||[]).concat(localAffiliates()); return all.find(function(a){return norm(pick(a,['referral_code','referralCode','affiliate_code','affiliateCode','code','kode_referral','kodeReferral']))===code})||null}
+function affiliateNameFor(m){var direct=referralNameOf(m); if(direct)return direct; var a=findAffiliateByCode(referralCodeOf(m)); return a?String(pick(a,['full_name','fullName','name','display_name','affiliate_name','username'])||pick(a,['email','affiliate_email'])||'Affiliator'):''}
+
 function rowKey(r){return norm(emailOf(r)||pick(r,['user_id','profile_id','id','member_id','memberId'])||idOf(r))}
 function mergeRows(){var map={};function add(r){var k=rowKey(r);if(!k)return;if(!map[k])map[k]=Object.assign({},r);else map[k]=Object.assign(map[k],r)}Array.prototype.slice.call(arguments).forEach(function(arr){(arr||[]).forEach(add)});return Object.keys(map).map(function(k){var m=map[k];m._merge_key=k;return m})}
 async function load(){
   renderLoading();
-  try{var view=await query('admin_member_overview');var prof=await query('member_profiles');var access=[];try{access=await query('member_access')}catch(e){}state.rows=mergeRows(view,prof,access)}
-  catch(e){state.rows=localMembers()}
+  try{var view=await query('admin_member_overview');var prof=await query('member_profiles');var access=[];try{access=await query('member_access')}catch(e){}try{state.affiliateRows=await query('affiliates')}catch(e){state.affiliateRows=localAffiliates()}try{state.referralRows=await query('affiliate_referrals')}catch(e){state.referralRows=[]}state.rows=mergeRows(view,prof,access)}
+  catch(e){state.rows=localMembers();state.affiliateRows=localAffiliates();state.referralRows=[]}
   state.memberRows=state.rows.filter(function(m){return !isInternal(m)&&!isGhostAccount(m)&&hasRealIdentity(m)});
   state.internalRows=state.rows.filter(function(m){return isInternal(m)&&!isGhostAccount(m)});
   render();
@@ -438,9 +456,23 @@ function render(){
   setTitle();var sc=scope();var rows=baseRows();var list=filterRows(rows);
   var c=el('adminMemberCount');if(c)c.textContent=(sc==='internal'?'Akun Internal: ':'Total Member: ')+rows.length+' | Tampil: '+list.length;
   var pc=el('adminPendingCount');if(pc)pc.textContent='Pending: '+rows.filter(isPending).length;
-  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="admin-row header"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);h+='<div class="admin-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(expiryOf(m))+'</div><div>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="admin-row-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':'<a class="btn mini secondary" href="admin-activation.html?v=24dg">Kelola</a>')+'</div></div>'});wrap.innerHTML=h}
+  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="admin-row header"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);var mid=encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'');var mail=encodeURIComponent(emailOf(m)||'');var detailBtn='<button class="btn mini secondary" type="button" data-member-detail="'+esc(idOf(m)||emailOf(m)||m._merge_key||'')+'">Detail</button>';var manageBtn='<a class="btn mini" href="admin-activation.html?member='+mid+'&email='+mail+'&v=24dh">Kelola</a>';h+='<div class="admin-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(expiryOf(m))+'</div><div>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="admin-row-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':detailBtn+manageBtn)+'</div></div>'});wrap.innerHTML=h;wrap.querySelectorAll('[data-member-detail]').forEach(function(b){b.addEventListener('click',function(){showMemberDetail(b.getAttribute('data-member-detail'))})})}
   var rb=el('adminMemberReferralBody');if(rb){if(sc==='internal'){rb.innerHTML='<div class="admin-empty">Referral tidak ditampilkan untuk akun internal.</div>'}else{rb.innerHTML='<div class="admin-empty">Referral member akan dicek di menu Data Affiliate.</div>'}}
 }
+
+function findMember(rowId){var key=norm(rowId);return state.memberRows.find(function(m){return norm(idOf(m))===key||norm(emailOf(m))===key||norm(m._merge_key)===key})}
+function showMemberDetail(rowId){var m=findMember(rowId);if(!m){toast('Data member tidak ditemukan.');return}var wrap=el('adminMemberDetailWrap'), title=el('adminMemberDetailTitle'), body=el('adminMemberDetail');if(!wrap||!body)return;var fac=facilitiesOf(m);var code=referralCodeOf(m)||'-';var aff=affiliateNameFor(m)||'Belum terhubung / tidak ada data';if(title)title.textContent='Detail Member — '+nameOf(m);body.innerHTML='<p class="admin-note-soft">Detail ini hanya menampilkan data member yang dipilih. Untuk mengubah fasilitas, gunakan tombol <b>Kelola Akses</b>.</p><div class="admin-detail-card-grid">'
++'<div class="admin-detail-box"><span>Nama Member</span><strong>'+esc(nameOf(m))+'</strong></div>'
++'<div class="admin-detail-box"><span>ID Member</span><strong>'+esc(idOf(m)||'-')+'</strong></div>'
++'<div class="admin-detail-box"><span>Email</span><strong>'+esc(emailOf(m)||'-')+'</strong></div>'
++'<div class="admin-detail-box"><span>WhatsApp</span><strong>'+esc(waOf(m))+'</strong></div>'
++'<div class="admin-detail-box"><span>Telegram</span><strong>'+esc(tgOf(m))+'</strong></div>'
++'<div class="admin-detail-box"><span>Status Akun</span><strong>'+(isActive(m)?'Aktif':(isPending(m)?'Pending Aktivasi':(isSuspended(m)?'Suspended':'Belum Aktif')))+'</strong></div>'
++'<div class="admin-detail-box"><span>Akses Sampai</span><strong>'+esc(expiryOf(m))+'</strong></div>'
++'<div class="admin-detail-box"><span>Fasilitas</span><strong>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</strong></div>'
++'<div class="admin-detail-box"><span>Kode Referral Digunakan</span><strong>'+esc(code)+'</strong></div>'
++'<div class="admin-detail-box"><span>Affiliator Terhubung</span><strong>'+esc(aff)+'</strong></div>'
++'</div><div class="admin-detail-actions"><a class="btn" href="admin-activation.html?member='+encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'')+'&email='+encodeURIComponent(emailOf(m)||'')+'&v=24dh">Kelola Akses</a><button class="btn secondary" type="button" id="closeMemberDetail">Tutup Detail</button></div>';wrap.classList.remove('hidden');var close=el('closeMemberDetail');if(close)close.onclick=function(){wrap.classList.add('hidden')};wrap.scrollIntoView({behavior:'smooth',block:'start'})}
 function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatusFilter');if(f&&st&&['active','pending','suspended'].indexOf(f)>=0)st.value=f}
 ['adminMemberSearch','adminMemberStatusFilter','adminMemberFacilityFilter'].forEach(function(id){var x=el(id);if(x)x.addEventListener(id==='adminMemberSearch'?'input':'change',render)});var r=el('adminMemberRefresh');if(r)r.addEventListener('click',load);document.addEventListener('DOMContentLoaded',function(){applyInitial();load()});if(document.readyState!=='loading'){applyInitial();load()}
 })();

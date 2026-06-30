@@ -414,6 +414,18 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   function norm(s){return String(s||'').trim();}
   function codeNorm(s){return norm(s).toUpperCase();}
   function stableMemberId(email){var h=0; email=String(email||Date.now()); for(var i=0;i<email.length;i++){h=((h<<5)-h)+email.charCodeAt(i);h|=0;} return 'KM-'+String(Math.abs(h)%90000+10000).padStart(5,'0');}
+
+  function approvalStatusOf(a){
+    if(!a) return '';
+    var store=getJSON('kamarAffiliateApprovalStatus',{});
+    var key=String(a.referralCode||a.email||a.whatsapp||a.fullName||'').trim().toLowerCase();
+    var saved=store[key]&&store[key].status;
+    var raw=String(saved||a.approvalStatus||a.approval_status||a.statusKey||a.status||'').trim().toLowerCase().replace(/\s+/g,'_');
+    if(['approved','disetujui','active','aktif'].indexOf(raw)>=0) return 'approved';
+    if(['rejected','ditolak','tolak'].indexOf(raw)>=0) return 'rejected';
+    if(['pending','pending_approval','menunggu_approval','menunggu_verifikasi_admin'].indexOf(raw)>=0) return 'pending';
+    return 'incomplete';
+  }
   var form=q('kamarRegisterForm'); if(!form) return;
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -431,6 +443,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var affiliates=getJSON('kamarAffiliateList',[]);
     var aff=referral?affiliates.find(function(a){return codeNorm(a.referralCode)===referral;}):null;
     if(referral && !aff){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral tidak ditemukan. Pastikan kode berasal dari affiliator Kamar yang terdaftar.';} return; }
+    if(aff && approvalStatusOf(aff)!=='approved'){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral belum aktif. Kode hanya bisa digunakan setelah affiliator disetujui Admin Kamar.';} return; }
     if(aff && String(aff.email||'').toLowerCase()===email){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral milik sendiri tidak bisa digunakan untuk akun sendiri.';} return; }
     var members=getJSON('kamarRegisteredMembers',[]);
     var existing=members.find(function(m){return String(m.email||'').toLowerCase()===email;});

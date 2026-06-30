@@ -382,7 +382,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="section-heading centered">
 <span class="eyebrow">Affiliate Kamar</span>
 <h2>Daftar Affiliate Kamar.</h2>
-<p>Isi data utama dengan benar. Setelah pendaftaran dikirim, kode referral akan dibuat dan tetap perlu diverifikasi oleh Admin Kamar.</p>
+<p>Isi data utama dan akun penerima pembayaran dengan benar. Setelah pendaftaran dikirim, affiliator masuk status Menunggu Approval dan kode referral baru aktif setelah disetujui Admin Kamar.</p>
 </div>
 <div class="member-login-shell">
 <article class="member-login-card auth-card">
@@ -394,16 +394,19 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <label>Nomor WhatsApp<input aria-label="Nomor WhatsApp affiliate" autocomplete="tel" id="affiliateWhatsapp" name="whatsapp" placeholder="08xxxxxxxxxx" required type="tel"/></label>
 <label>Username Telegram<input aria-label="Username Telegram affiliate" id="affiliateTelegram" name="telegram_username" placeholder="@username" type="text"/></label>
 <label>Akun / Channel Promosi <span class="mini-label">Opsional</span><input aria-label="Akun promosi affiliate" id="affiliateChannel" name="promo_channel" placeholder="YouTube, TikTok, Instagram, Telegram, atau lainnya" type="text"/></label>
+<label>Nama Penerima Pembayaran<input aria-label="Nama penerima pembayaran" id="affiliatePayoutName" name="payout_name" placeholder="Nama sesuai rekening / e-wallet" required type="text"/></label>
+<label>Bank / E-Wallet<input aria-label="Bank atau e-wallet" id="affiliatePayoutBank" name="payout_bank" placeholder="BCA, BRI, Mandiri, Dana, OVO, dll" required type="text"/></label>
+<label>Nomor Rekening / E-Wallet<input aria-label="Nomor rekening atau e-wallet" id="affiliatePayoutNumber" name="payout_number" placeholder="Nomor rekening / e-wallet aktif" required type="text"/></label>
 <label class="check-row"><input id="affiliateAgreeEthic" required type="checkbox"/> Saya setuju mempromosikan Kamar secara jujur, tidak menjanjikan profit, dan tidak membuat klaim berlebihan.</label>
 <label class="check-row"><input id="affiliateAgreeTerms" required type="checkbox"/> Saya memahami bahwa reward hanya berlaku untuk referral valid sesuai syarat dan ketentuan Team Kamar.</label>
 <button class="btn btn-primary" id="affiliateSubmitBtn" type="submit">Daftar Affiliate</button>
 <p class="form-note" hidden id="affiliateStatus"></p>
 </form>
 <div class="affiliate-result" hidden id="affiliateResult">
-<strong>Pendaftaran affiliate berhasil disiapkan.</strong>
-<p style="margin:8px 0 0;">Kode referral permanen Anda:</p>
+<strong>Pendaftaran affiliate berhasil dikirim.</strong>
+<p style="margin:8px 0 0;">Kode referral Anda sudah disiapkan, tetapi belum aktif sampai admin approve:</p>
 <div class="affiliate-code-box"><code id="affiliateCodeText">KM00001C</code><button class="btn btn-ghost" id="copyAffiliateCode" type="button">Salin</button></div>
-<p style="margin:12px 0 0;font-size:13px;color:rgba(226,255,239,.72);">Simpan kode ini. Admin tetap perlu memverifikasi data sebelum kode digunakan secara resmi.</p>
+<p style="margin:12px 0 0;font-size:13px;color:rgba(226,255,239,.72);">Simpan kode ini. Kode referral baru aktif setelah Admin Kamar menyetujui pendaftaran affiliate Anda.</p>
 </div>
 <div class="member-login-help">
 <span>Sudah punya akun member?</span>
@@ -467,7 +470,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   var result=qs('affiliateResult');
   var codeText=qs('affiliateCodeText');
   var help=result.querySelector('p:last-child');
-  if(help){help.innerHTML='Kode referral ini bersifat permanen untuk data affiliate ini. Gunakan dashboard affiliate untuk melihat daftar referral Anda. <br/><br/><a class="btn secondary" href="affiliate-dashboard.html" style="margin-top:10px">Buka Dashboard Affiliate</a>';}
+  if(help){help.innerHTML='Kode referral ini disiapkan untuk data affiliate Anda, tetapi baru aktif setelah Admin Kamar memberi approval. Gunakan dashboard affiliate untuk melihat status. <br/><br/><a class="btn secondary" href="affiliate-dashboard.html" style="margin-top:10px">Buka Dashboard Affiliate</a>';}
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var fullName=normalizeName(qs('affiliateFullName').value);
@@ -475,8 +478,14 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var whatsapp=String(qs('affiliateWhatsapp').value||'').trim();
     var agreeEthic=qs('affiliateAgreeEthic').checked;
     var agreeTerms=qs('affiliateAgreeTerms').checked;
+    var payoutName=normalizeName(qs('affiliatePayoutName').value);
+    var payoutBank=normalizeName(qs('affiliatePayoutBank').value);
+    var payoutNumber=String(qs('affiliatePayoutNumber').value||'').trim();
     if(!fullName || !email || !whatsapp){
       status.hidden=false; status.textContent='Nama, email, dan WhatsApp wajib diisi.'; status.className='form-note error'; return;
+    }
+    if(!payoutName || !payoutBank || !payoutNumber){
+      status.hidden=false; status.textContent='Data akun penerima pembayaran wajib lengkap sebelum pendaftaran affiliate dikirim.'; status.className='form-note error'; return;
     }
     if(!agreeEthic || !agreeTerms){
       status.hidden=false; status.textContent='Centang persetujuan affiliate terlebih dahulu.'; status.className='form-note error'; return;
@@ -489,7 +498,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     if(!affiliateNumber && oldIsNewFormat){affiliateNumber=parseInt(existingCode.match(/^KM(\d{5})[A-Z0-9]$/i)[1],10);}
     if(!affiliateNumber){affiliateNumber=nextAffiliateNumber(email,affiliates);}
     var code=oldIsNewFormat?existingCode:makeCode(fullName,email,affiliates,affiliateNumber);
-    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,affiliateNumber:affiliateNumber,referralCode:code,status:'Aktif / Menunggu Verifikasi Admin',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString(),payoutAccount:(existing&&existing.payoutAccount)||null};
+    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,affiliateNumber:affiliateNumber,referralCode:code,status:'Menunggu Approval Admin',statusKey:'pending_approval',approvalStatus:'pending_approval',approval_status:'pending_approval',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString(),payoutAccount:{fullName:payoutName,bankName:payoutBank,accountNumber:payoutNumber,verificationStatus:'Menunggu Verifikasi'}};
     if(existingCode && existingCode!==code){
       var members=getJSON('kamarRegisteredMembers',[]);
       members.forEach(function(m){if(codeNorm(m.referralCode)===codeNorm(existingCode)){m.referralCode=code;m.referrerName=fullName;}});
@@ -501,7 +510,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     localStorage.setItem('kamarAffiliateDraft', JSON.stringify(data));
     codeText.textContent=code;
     result.hidden=false;
-    status.hidden=false; status.textContent=existing?'Data affiliate ditemukan. Kode referral permanen Anda tetap sama.':'Data affiliate berhasil dibuat. Kode referral permanen sudah disiapkan.'; status.className='form-note success';
+    status.hidden=false; status.textContent=existing?'Data affiliate diperbarui dan kembali menunggu approval admin.':'Pendaftaran affiliate berhasil dikirim. Status Anda menunggu approval admin.'; status.className='form-note success';
     result.scrollIntoView({behavior:'smooth',block:'center'});
   });
   var copy=qs('copyAffiliateCode');

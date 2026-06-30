@@ -14,17 +14,75 @@
 .reward-toolbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:end;margin:18px 0 20px}.reward-actions{display:flex;gap:10px;flex-wrap:wrap}.reward-table{display:grid;gap:12px}.reward-row{display:grid;grid-template-columns:minmax(220px,1fr) minmax(210px,1fr) minmax(150px,.65fr) minmax(160px,.75fr) minmax(160px,.75fr) minmax(230px,1fr);gap:14px;align-items:center;border:1px solid rgba(238,206,122,.13);border-radius:22px;padding:16px 18px;background:rgba(255,255,255,.023)}.reward-row.head{border:0;background:transparent;padding:0 18px 6px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:900}.money-input{max-width:160px}.note-line{font-size:12px;color:rgba(247,241,226,.55);line-height:1.45;margin-top:6px}.pill.paid{color:var(--ok);background:rgba(36,185,96,.1);border-color:rgba(159,240,189,.26)}.pill.unpaid{color:var(--warn);background:rgba(232,201,111,.11);border-color:rgba(232,201,111,.28)}
     @media(max-width:1120px){.admin-shell{grid-template-columns:1fr}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.stats,.affiliate-tabs,.overview-grid{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.aff-row{grid-template-columns:1fr 150px}.aff-row.head{display:none}.row-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}.ref-row,.reward-row{grid-template-columns:1fr}.ref-row.head,.reward-row.head{display:none}}
     @media(max-width:620px){.admin-shell{padding:28px 16px}.stats,.toolbar,.info-grid,.affiliate-tabs,.overview-grid{grid-template-columns:1fr}.card,.hero{padding:20px}.hero h1{font-size:34px}.btn{width:100%}.row-actions .btn,.detail-actions .btn,.confirm-actions .btn{width:auto}.pay-line{grid-template-columns:1fr}}
+
+    /* Step 24DO: compact submenu cards. Force small shape on every affiliate view. */
+    .affiliate-tabs{
+      grid-template-columns:repeat(3,minmax(0,1fr))!important;
+      gap:10px!important;
+      align-items:stretch!important;
+      margin:0!important;
+    }
+    .affiliate-tab{
+      min-height:0!important;
+      height:auto!important;
+      padding:13px 15px!important;
+      border-radius:18px!important;
+      display:grid!important;
+      grid-template-columns:92px minmax(0,1fr)!important;
+      grid-template-rows:auto auto!important;
+      column-gap:12px!important;
+      row-gap:2px!important;
+      align-items:center!important;
+    }
+    .affiliate-tab span{
+      grid-row:1 / span 2!important;
+      margin:0!important;
+      font-size:10px!important;
+      line-height:1.25!important;
+      letter-spacing:.13em!important;
+      padding:8px 9px!important;
+      border:1px solid rgba(238,206,122,.18)!important;
+      border-radius:999px!important;
+      background:rgba(232,201,111,.055)!important;
+      text-align:center!important;
+    }
+    .affiliate-tab strong{
+      font-size:16px!important;
+      line-height:1.1!important;
+      letter-spacing:-.02em!important;
+      margin:0!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+    .affiliate-tab small{
+      margin:0!important;
+      font-size:12px!important;
+      line-height:1.35!important;
+      color:rgba(247,241,226,.60)!important;
+      display:block!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+      white-space:nowrap!important;
+    }
+    .overview-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;}
+    .overview-box{min-height:0!important;padding:16px 17px!important;border-radius:20px!important;}
+    .overview-box h3{margin-bottom:7px!important;font-size:12px!important;}
+    .overview-box p{font-size:13px!important;line-height:1.45!important;}
+    .overview-box .btn{margin-top:12px!important;padding:9px 12px!important;border-radius:13px!important;font-size:12px!important;}
+    @media(max-width:1120px){.affiliate-tab{grid-template-columns:86px 1fr!important}.affiliate-tabs,.overview-grid{grid-template-columns:1fr!important}}
+
   </style>
 </head>
 <body>
 <div class="admin-shell">
   <aside class="admin-sidebar">
     <div class="brand-small">Admin Kamar</div>
-    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dn">Dashboard Admin</a>
-    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dn">Data Member</a><a href="admin-internal.html?v=24dn">Data Internal</a><a href="admin-activation.html?v=24dn">Aktivasi Akun & Fasilitas</a>
-    <div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&v=24dn">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&v=24dn">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&v=24dn">Reward / Komisi</a>
-    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dn">Banner Pengumuman</a><a href="admin-video.html?v=24dn">Konten Video</a><a href="admin-materials.html?v=24dn">Konten & Materi</a><a href="admin-tools.html?v=24dn">File Tools</a>
-    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dn">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dn">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dn">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dn">Payment Gateway</a><a href="admin-links.html?v=24dn">Pengaturan Link</a><a href="admin-settings.html?v=24dn">Pengaturan Umum</a>
+    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24do">Dashboard Admin</a>
+    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24do">Data Member</a><a href="admin-internal.html?v=24do">Data Internal</a><a href="admin-activation.html?v=24do">Aktivasi Akun & Fasilitas</a>
+    <div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&v=24do">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&v=24do">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&v=24do">Reward / Komisi</a>
+    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24do">Banner Pengumuman</a><a href="admin-video.html?v=24do">Konten Video</a><a href="admin-materials.html?v=24do">Konten & Materi</a><a href="admin-tools.html?v=24do">File Tools</a>
+    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24do">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24do">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24do">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24do">Payment Gateway</a><a href="admin-links.html?v=24do">Pengaturan Link</a><a href="admin-settings.html?v=24do">Pengaturan Umum</a>
     <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
   </aside>
   <main class="admin-main">
@@ -35,25 +93,25 @@
       </div>
     </section>
     <section class="affiliate-tabs">
-      <a class="affiliate-tab" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&v=24dn"><span>Sub Menu 01</span><strong>Data Affiliate</strong><small>Ringkasan, statistik, dan arah pengelolaan affiliate.</small></a>
-      <a class="affiliate-tab" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&v=24dn"><span>Sub Menu 02</span><strong>Daftar Affiliator</strong><small>Kelola nama affiliator, kode referral, rekening, detail, salin, dan hapus.</small></a>
-      <a class="affiliate-tab" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&v=24dn"><span>Sub Menu 03</span><strong>Reward / Komisi</strong><small>Pantau reward belum dibayar, sudah dibayar, dan nominal komisi.</small></a>
+      <a class="affiliate-tab" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&v=24do"><span>Sub Menu 01</span><strong>Data Affiliate</strong><small>Ringkasan & statistik affiliate.</small></a>
+      <a class="affiliate-tab" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&v=24do"><span>Sub Menu 02</span><strong>Daftar Affiliator</strong><small>Kelola data, kode, rekening, dan aksi.</small></a>
+      <a class="affiliate-tab" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&v=24do"><span>Sub Menu 03</span><strong>Reward / Komisi</strong><small>Pantau status dan nominal komisi.</small></a>
     </section>
     <section class="stats" id="overviewStats" data-view-section="overview">
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=all&v=24dn" data-stat-filter="all"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua affiliator terdaftar.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=hasRef&v=24dn" data-stat-filter="hasRef"><span>Total Referral</span><strong id="statRef">0</strong><small>Member yang memakai kode referral.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=verified&v=24dn" data-stat-filter="verified"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=empty&v=24dn" data-stat-filter="empty"><span>Belum Isi Rekening</span><strong id="statEmpty">0</strong><small>Rekening perlu dilengkapi.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=unpaid&v=24dn" data-reward-filter="unpaid"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral yang belum ditandai dibayar.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=paid&v=24dn" data-reward-filter="paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral yang sudah ditandai dibayar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=all&v=24do" data-stat-filter="all"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua affiliator terdaftar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=hasRef&v=24do" data-stat-filter="hasRef"><span>Total Referral</span><strong id="statRef">0</strong><small>Member yang memakai kode referral.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=verified&v=24do" data-stat-filter="verified"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=empty&v=24do" data-stat-filter="empty"><span>Belum Isi Rekening</span><strong id="statEmpty">0</strong><small>Rekening perlu dilengkapi.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=unpaid&v=24do" data-reward-filter="unpaid"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral yang belum ditandai dibayar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=paid&v=24do" data-reward-filter="paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral yang sudah ditandai dibayar.</small></a>
     </section>
     <section class="card" id="affiliateOverviewCard" data-view-section="overview">
       <h2 class="section-title">Struktur Menu Affiliate</h2>
       <p class="muted">Menu affiliate sekarang dipisah menjadi tiga bagian supaya admin tidak mencampur ringkasan, data affiliator, dan pembayaran reward dalam satu tampilan yang terlalu ramai.</p>
       <div class="overview-grid">
-        <div class="overview-box"><h3>Data Affiliate</h3><p>Dipakai untuk melihat kondisi umum: total affiliator, total referral, rekening valid, rekening belum lengkap, dan status reward.</p><a class="btn secondary small" href="admin-affiliate-v2.html?view=overview&v=24dn">Buka Ringkasan</a></div>
-        <div class="overview-box"><h3>Daftar Affiliator</h3><p>Dipakai untuk operasional data: detail affiliator, salin kode referral, verifikasi rekening, dan hapus data yang tidak digunakan.</p><a class="btn small" href="admin-affiliate-v2.html?view=list&v=24dn">Buka Daftar</a></div>
-        <div class="overview-box"><h3>Reward / Komisi</h3><p>Dipakai khusus untuk mencatat nominal reward dan membedakan status Belum Dibayar atau Sudah Dibayar.</p><a class="btn small" href="admin-affiliate-v2.html?view=reward&v=24dn">Buka Reward</a></div>
+        <div class="overview-box"><h3>Data Affiliate</h3><p>Ringkasan angka utama affiliate, referral, rekening, dan reward.</p><a class="btn secondary small" href="admin-affiliate-v2.html?view=overview&v=24do">Buka Ringkasan</a></div>
+        <div class="overview-box"><h3>Daftar Affiliator</h3><p>Operasional affiliator: detail, salin kode, verifikasi rekening, dan hapus.</p><a class="btn small" href="admin-affiliate-v2.html?view=list&v=24do">Buka Daftar</a></div>
+        <div class="overview-box"><h3>Reward / Komisi</h3><p>Pencatatan nominal reward dan status pembayaran komisi.</p><a class="btn small" href="admin-affiliate-v2.html?view=reward&v=24do">Buka Reward</a></div>
       </div>
     </section>
     <section class="card" id="affiliateListCard" data-view-section="list">
@@ -113,7 +171,7 @@ function wireRewardRows(){document.querySelectorAll('[data-pay-reward]').forEach
 
 function normalizeView(v){return ['overview','list','reward'].indexOf(v)>=0?v:'overview'}
 function setView(v){state.view=normalizeView(v);document.querySelectorAll('[data-view-section]').forEach(function(x){x.classList.toggle('view-hidden',x.getAttribute('data-view-section')!==state.view)});document.querySelectorAll('[data-aff-tab],[data-aff-menu]').forEach(function(x){var active=x.getAttribute('data-aff-tab')===state.view||x.getAttribute('data-aff-menu')===state.view;x.classList.toggle('active',active)});var title='Data Affiliate',desc='Ringkasan besar affiliate, referral, rekening, dan reward.';if(state.view==='list'){title='Daftar Affiliator';desc='Kelola nama affiliator, kode referral, detail, salin kode, verifikasi rekening, dan hapus affiliator.'}if(state.view==='reward'){title='Reward / Komisi Affiliate';desc='Pantau nominal reward, status belum dibayar, sudah dibayar, dan tanggal pembayaran reward.'}if(el('viewTitle'))el('viewTitle').textContent=title;if(el('viewDesc'))el('viewDesc').textContent=desc;}
-function goView(v,extra){var u=new URL(location.href);u.searchParams.set('view',v);u.searchParams.set('v','24dn');if(extra){Object.keys(extra).forEach(function(k){if(extra[k]==null)u.searchParams.delete(k);else u.searchParams.set(k,extra[k])})}history.replaceState(null,'',u.pathname+u.search);setView(v)}
+function goView(v,extra){var u=new URL(location.href);u.searchParams.set('view',v);u.searchParams.set('v','24do');if(extra){Object.keys(extra).forEach(function(k){if(extra[k]==null)u.searchParams.delete(k);else u.searchParams.set(k,extra[k])})}history.replaceState(null,'',u.pathname+u.search);setView(v)}
 async function load(){el('affiliateList').innerHTML='<div class="empty">Memuat data affiliate...</div>';try{var view=await query('admin_member_overview');var prof=await query('member_profiles');var acc=[];try{acc=await query('member_access')}catch(e){}state.members=mergeRows(view,prof,acc).filter(function(m){return hasIdentity(m)&&!isInternal(m)});try{var aff=await query('affiliates');state.affiliates=dedupeAffiliates(aff&&aff.length?aff:localAffiliates());state.source=aff&&aff.length?'supabase':'local'}catch(e){state.affiliates=dedupeAffiliates(localAffiliates());state.source='local'}try{state.referralRows=await query('affiliate_referrals')}catch(e){state.referralRows=[]}}catch(e){state.members=getJSON('kamarRegisteredMembers',[]).filter(hasIdentity);state.affiliates=dedupeAffiliates(localAffiliates());state.referralRows=[];state.source='local'}render()}
 function updateStats(){var totalRef=0,valid=0,empty=0;state.affiliates.forEach(function(a){totalRef+=refsFor(a.referralCode).length;var s=payoutState(a);if(s==='verified')valid++;if(s==='empty')empty++});el('statAff').textContent=state.affiliates.length;el('statRef').textContent=totalRef;el('statVerified').textContent=valid;el('statEmpty').textContent=empty}
 function filtered(){var q=norm(el('affiliateSearch').value), f=el('payoutFilter').value, sf=state.filterStat;return state.affiliates.filter(function(a){var text=norm([a.fullName,a.referralCode,a.email,a.whatsapp].join(' '));var ok=!q||text.indexOf(q)>=0;var ps=payoutState(a);if(f!=='all'&&ps!==f)ok=false;if(sf==='verified'&&ps!=='verified')ok=false;if(sf==='empty'&&ps!=='empty')ok=false;if(sf==='hasRef'&&refsFor(a.referralCode).length<1)ok=false;return ok})}

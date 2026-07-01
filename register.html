@@ -332,6 +332,36 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 </style>
 
+
+<style id="kamar-global-header-style">
+/* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
+.kamar-global-header{
+  position:sticky!important;top:0!important;z-index:99999!important;
+  min-height:86px!important;width:100%!important;
+  display:grid!important;grid-template-columns:minmax(260px,1fr) auto minmax(260px,1fr)!important;
+  align-items:center!important;gap:18px!important;
+  padding:16px 38px!important;
+  border-bottom:1px solid rgba(238,206,122,.12)!important;
+  background:rgba(7,7,6,.88)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;
+  box-shadow:0 18px 60px rgba(0,0,0,.28)!important;
+}
+.kamar-global-header *{box-sizing:border-box!important}
+.kamar-global-brand{display:inline-flex!important;align-items:center!important;gap:14px!important;text-decoration:none!important;color:#fff3d8!important;font-weight:1000!important;font-size:20px!important;line-height:1!important;min-width:0!important}
+.kamar-global-brand img{width:46px!important;height:46px!important;border-radius:14px!important;object-fit:cover!important;background:#050505!important;box-shadow:0 0 0 1px rgba(238,206,122,.16)!important;flex:0 0 auto!important}
+.kamar-global-center{display:flex!important;justify-content:center!important;align-items:center!important;min-width:120px!important}
+.kamar-global-center a{color:rgba(245,240,230,.82)!important;text-decoration:none!important;font-weight:950!important;font-size:16px!important;padding:10px 16px!important;border-radius:999px!important}
+.kamar-global-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:12px!important;min-width:0!important}
+.kamar-global-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:46px!important;padding:0 22px!important;border-radius:999px!important;text-decoration:none!important;font-weight:1000!important;color:#f6e5ad!important;background:rgba(255,255,255,.035)!important;border:1px solid rgba(238,206,122,.22)!important;white-space:nowrap!important;line-height:1!important}
+.kamar-global-btn:hover{border-color:rgba(244,223,144,.55)!important;background:rgba(244,223,144,.08)!important}
+.kamar-global-logout{color:#d7ffe3!important;border-color:rgba(109,255,166,.28)!important;background:rgba(32,128,79,.12)!important}
+.kamar-global-logout:hover{background:rgba(32,128,79,.20)!important}
+@media(max-width:860px){
+  .kamar-global-header{grid-template-columns:1fr!important;padding:14px 18px!important;gap:10px!important;text-align:center!important}
+  .kamar-global-brand{justify-content:center!important;font-size:18px!important}
+  .kamar-global-actions{justify-content:center!important;flex-wrap:wrap!important}
+}
+@media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
+</style>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -406,7 +436,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script>
-<script id="kamar-step24CA-register-referral-logic">
+<script id="kamar-step24DY-register-referral-supabase-logic">
 (function(){
   function q(id){return document.getElementById(id);} 
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
@@ -414,20 +444,15 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   function norm(s){return String(s||'').trim();}
   function codeNorm(s){return norm(s).toUpperCase();}
   function stableMemberId(email){var h=0; email=String(email||Date.now()); for(var i=0;i<email.length;i++){h=((h<<5)-h)+email.charCodeAt(i);h|=0;} return 'KM-'+String(Math.abs(h)%90000+10000).padStart(5,'0');}
-
-  function approvalStatusOf(a){
-    if(!a) return '';
-    var store=getJSON('kamarAffiliateApprovalStatus',{});
-    var key=String(a.referralCode||a.email||a.whatsapp||a.fullName||'').trim().toLowerCase();
-    var saved=store[key]&&store[key].status;
-    var raw=String(saved||a.approvalStatus||a.approval_status||a.statusKey||a.status||'').trim().toLowerCase().replace(/\s+/g,'_');
-    if(['approved','disetujui','active','aktif'].indexOf(raw)>=0) return 'approved';
-    if(['rejected','ditolak','tolak'].indexOf(raw)>=0) return 'rejected';
-    if(['pending','pending_approval','menunggu_approval','menunggu_verifikasi_admin'].indexOf(raw)>=0) return 'pending';
-    return 'incomplete';
-  }
+  function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''};}
+  function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null;}
+  function supa(){var ex=existingClient();if(ex)return ex;var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){return window.supabase.createClient(c.url,c.key);}return null;}
+  function localApprovalStatusOf(a){if(!a) return '';var store=getJSON('kamarAffiliateApprovalStatus',{});var key=String(a.referralCode||a.email||a.whatsapp||a.fullName||'').trim().toLowerCase();var saved=store[key]&&store[key].status;var raw=String(saved||a.approvalStatus||a.approval_status||a.statusKey||a.status||'').trim().toLowerCase().replace(/\s+/g,'_');if(['approved','disetujui','active','aktif'].indexOf(raw)>=0) return 'approved';if(['rejected','ditolak','tolak'].indexOf(raw)>=0) return 'rejected';if(['pending','pending_approval','menunggu_approval','menunggu_verifikasi_admin'].indexOf(raw)>=0) return 'pending';return 'incomplete';}
+  async function findApprovedAffiliate(code){code=codeNorm(code);if(!code)return null;var c=supa();if(c){try{var res=await c.from('affiliate_public_codes').select('id,affiliate_code,full_name,email,approval_status,is_active').eq('affiliate_code',code).maybeSingle();if(!res.error&&res.data)return {source:'supabase',id:res.data.id,referralCode:res.data.affiliate_code,fullName:res.data.full_name,email:res.data.email,approved:true};}catch(e){}}
+    var affiliates=getJSON('kamarAffiliateList',[]);var aff=affiliates.find(function(a){return codeNorm(a.referralCode)===code;})||null;if(aff&&localApprovalStatusOf(aff)==='approved')return Object.assign({source:'local',approved:true},aff);return null;}
+  async function saveReferralLink(aff,member){var c=supa();if(!c||!aff||!aff.id)return;try{var existing=await c.from('affiliate_referrals').select('id').eq('affiliate_code',aff.referralCode).eq('member_email',member.email).maybeSingle();var payload={affiliate_id:aff.id,affiliate_code:aff.referralCode,member_profile_id:null,member_name:member.fullName,member_email:member.email,member_phone:member.whatsapp,facility_key:'',referral_status:'PENDING',registration_source:'register.html',notes:'Referral tercatat saat pendaftaran member.'};if(existing&&!existing.error&&existing.data){await c.from('affiliate_referrals').update(payload).eq('id',existing.data.id);}else{await c.from('affiliate_referrals').insert(payload);}}catch(e){}}
   var form=q('kamarRegisterForm'); if(!form) return;
-  form.addEventListener('submit', function(e){
+  form.addEventListener('submit', async function(e){
     e.preventDefault();
     var name=norm(q('registerFullName')&&q('registerFullName').value);
     var email=norm(q('registerEmail')&&q('registerEmail').value).toLowerCase();
@@ -437,27 +462,70 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var pass2=q('registerPasswordConfirm')&&q('registerPasswordConfirm').value;
     var referral=codeNorm(q('registerReferral')&&q('registerReferral').value);
     var status=q('registerStatus');
-    if(!name || !email || !wa || !pass || !pass2){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Lengkapi data wajib terlebih dahulu.';} return; }
-    if(pass!==pass2){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Konfirmasi password belum sama.';} return; }
-    if(!(q('registerAgreeRisk').checked && q('registerAgreeTerms').checked && q('registerAgreePolicy').checked)){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Centang semua persetujuan wajib terlebih dahulu.';} return; }
-    var affiliates=getJSON('kamarAffiliateList',[]);
-    var aff=referral?affiliates.find(function(a){return codeNorm(a.referralCode)===referral;}):null;
-    if(referral && !aff){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral tidak ditemukan. Pastikan kode berasal dari affiliator Kamar yang terdaftar.';} return; }
-    if(aff && approvalStatusOf(aff)!=='approved'){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral belum aktif. Kode hanya bisa digunakan setelah affiliator disetujui Admin Kamar.';} return; }
-    if(aff && String(aff.email||'').toLowerCase()===email){ if(status){status.hidden=false;status.className='form-note error';status.textContent='Kode referral milik sendiri tidak bisa digunakan untuk akun sendiri.';} return; }
+    function setStatus(msg,cls){if(status){status.hidden=false;status.className='form-note '+(cls||'');status.textContent=msg;}}
+    if(!name || !email || !wa || !pass || !pass2){setStatus('Lengkapi data wajib terlebih dahulu.','error');return;}
+    if(pass!==pass2){setStatus('Konfirmasi password belum sama.','error');return;}
+    if(!(q('registerAgreeRisk').checked && q('registerAgreeTerms').checked && q('registerAgreePolicy').checked)){setStatus('Centang semua persetujuan wajib terlebih dahulu.','error');return;}
+    var aff=null;
+    if(referral){
+      setStatus('Memeriksa status kode referral ke Supabase...','');
+      aff=await findApprovedAffiliate(referral);
+      if(!aff){setStatus('Kode referral tidak ditemukan atau belum aktif. Kode hanya bisa digunakan setelah affiliator disetujui Admin Kamar.','error');return;}
+      if(String(aff.email||'').toLowerCase()===email){setStatus('Kode referral milik sendiri tidak bisa digunakan untuk akun sendiri.','error');return;}
+    }
     var members=getJSON('kamarRegisteredMembers',[]);
     var existing=members.find(function(m){return String(m.email||'').toLowerCase()===email;});
     var data={memberId:(existing&&existing.memberId)||stableMemberId(email),fullName:name,email:email,whatsapp:wa,telegram:telegram,referralCode:referral||'',referrerName:aff?aff.fullName:'',status:'Pending Aktivasi',statusKey:'pending_activation',accountActive:false,facilities:(existing&&existing.facilities)||[],createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};
     if(existing){Object.assign(existing,data);}else{members.push(data);} setJSON('kamarRegisteredMembers',members);
     setJSON('kamarMemberSession',{memberId:data.memberId,fullName:name,email:email,referralCode:data.referralCode,status:data.status,statusKey:data.statusKey,accountActive:false,loginAt:Date.now(),lastActivity:Date.now()});
-    if(status){status.hidden=false;status.className='form-note success';status.textContent='Pendaftaran berhasil dikirim. Akun gratis menunggu persetujuan admin'+(aff?' dan kode referral tersimpan dari '+aff.fullName:'')+'. Mengalihkan ke dashboard...';}
+    if(aff){await saveReferralLink(aff,data);}
+    setStatus('Pendaftaran berhasil dikirim. Akun gratis menunggu persetujuan admin'+(aff?' dan kode referral aktif tersimpan dari '+aff.fullName:'')+'. Mengalihkan ke dashboard...','success');
     setTimeout(function(){window.location.href='dashboard.html';},900);
   });
 })();
 </script>
+
 <script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
 
 (function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();
 
-</script></body>
+</script>
+<script id="kamar-global-header-script">
+(function(){
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+</body>
 </html>

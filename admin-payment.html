@@ -291,15 +291,12 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
 
-<style id="kamar-step24EA-global-loading-css">
-.kamar-loading-active{position:relative!important;pointer-events:none!important;opacity:.82!important;}
-.kamar-loading-active::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,10,10,.25);border-top-color:rgba(10,10,10,.85);display:inline-block;margin-right:8px;vertical-align:-3px;animation:kamarSpin24EA .72s linear infinite;}
-.kamar-loading-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:999px;padding:12px 18px;font-weight:950;box-shadow:0 18px 60px rgba(0,0,0,.44);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
-.kamar-loading-toast::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,223,144,.28);border-top-color:#f5df91;animation:kamarSpin24EA .72s linear infinite;}
-@keyframes kamarSpin24EA{to{transform:rotate(360deg)}}
+<style id="kamar-loading-style">
+.kamar-loading-overlay{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;background:rgba(4,4,3,.58);backdrop-filter:blur(8px)}
+.kamar-loading-overlay.show{display:flex}.kamar-loading-box{min-width:220px;border:1px solid rgba(238,206,122,.34);background:linear-gradient(135deg,rgba(18,17,13,.96),rgba(7,7,6,.96));border-radius:24px;padding:24px 28px;text-align:center;box-shadow:0 24px 90px rgba(0,0,0,.48)}
+.kamar-loading-spinner{width:42px;height:42px;margin:0 auto 14px;border-radius:50%;border:4px solid rgba(238,206,122,.20);border-top-color:#e8c45f;animation:kamarSpin .82s linear infinite}.kamar-loading-text{color:#fff4d8;font-weight:1000;letter-spacing:.05em}.is-loading{pointer-events:none!important;opacity:.78!important}.is-loading::after{content:' ';display:inline-block;width:.9em;height:.9em;margin-left:8px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;vertical-align:-.12em;animation:kamarSpin .75s linear infinite}@keyframes kamarSpin{to{transform:rotate(360deg)}}
 </style>
-
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
@@ -323,7 +320,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <a class="" href="admin-links.html">Pengaturan Link</a>
 <a class="" href="admin-settings.html">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div>
-<a class="" data-kamar-logout="" href="member.html">Logout</a>
+<a class="" data-kamar-logout="" href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a>
 </aside><section class="split-main"><section class="split-card kamar-title-card"><h1>Payment Gateway</h1></section><section class="split-card"><div class="page-note"><strong>Memuat Data Supabase</strong><br/>Halaman ini sedang membaca data real.</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
@@ -415,7 +412,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
       '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
       '<div class="kamar-global-actions">'+
         '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a>'+
       '</div>';
     document.body.insertBefore(header, document.body.firstChild);
     var out=header.querySelector('[data-kamar-logout]');
@@ -425,42 +422,249 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 })();
 </script>
 
-<script id="kamar-step24EA-global-loading-js">
+<script id="kamar-global-loading-script">
 (function(){
-  if(window.__kamarGlobalLoading24EA) return; window.__kamarGlobalLoading24EA=true;
-  function showToast(text){
-    var old=document.getElementById('kamarLoadingToast'); if(old) old.remove();
-    var t=document.createElement('div'); t.id='kamarLoadingToast'; t.className='kamar-loading-toast'; t.textContent=text||'Memproses...';
-    document.body.appendChild(t); setTimeout(function(){if(t&&t.parentNode)t.remove();},9000);
+  function ensureOverlay(){var o=document.getElementById('kamarLoadingOverlay');if(o)return o;o=document.createElement('div');o.id='kamarLoadingOverlay';o.className='kamar-loading-overlay';o.innerHTML='<div class="kamar-loading-box"><div class="kamar-loading-spinner"></div><div class="kamar-loading-text">Mohon tunggu...</div></div>';document.body.appendChild(o);return o;}
+  function showLoading(el,text){try{if(el){el.classList.add('is-loading');if(el.tagName==='BUTTON'||el.tagName==='INPUT')el.disabled=true;}var o=ensureOverlay();var t=o.querySelector('.kamar-loading-text');if(t)t.textContent=text||'Mohon tunggu...';o.classList.add('show');}catch(e){}}
+  window.KamarShowLoading=showLoading;
+  document.addEventListener('submit',function(e){var form=e.target;if(!form||form.hasAttribute('data-no-loading'))return;var btn=form.querySelector('button[type="submit"],input[type="submit"]');showLoading(btn,'Mohon tunggu...');},true);
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a,button');if(!a||a.hasAttribute('data-no-loading'))return;if(a.closest('[data-no-loading]'))return;if(a.tagName==='BUTTON'){if((a.type||'').toLowerCase()==='button' && !a.hasAttribute('data-loading'))return;showLoading(a,'Mohon tunggu...');return;}var href=a.getAttribute('href')||'';if(!href||href==='#'||href.indexOf('javascript:')===0||a.target==='_blank'||a.hasAttribute('download'))return;showLoading(a,'Membuka halaman...');},true);
+})();
+</script>
+
+<script id="kamar-global-logout-fix-24ec">
+(function(){
+  if(window.__KAMAR_LOGOUT_FIX_24EC__) return;
+  window.__KAMAR_LOGOUT_FIX_24EC__ = true;
+
+  function showLogoutLoading(){
+    try{
+      var old=document.getElementById('kamar-global-loading-overlay');
+      if(old){ old.classList.add('show'); return; }
+      var style=document.getElementById('kamar-global-loading-style');
+      if(!style){
+        style=document.createElement('style');
+        style.id='kamar-global-loading-style';
+        style.textContent='body.kamar-is-leaving{pointer-events:none}.kamar-loading-overlay{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.18s ease}.kamar-loading-overlay.show{opacity:1;visibility:visible}.kamar-loading-box{border:1px solid rgba(235,207,130,.35);border-radius:28px;padding:24px 32px;background:linear-gradient(135deg,rgba(18,18,18,.92),rgba(15,28,24,.88));box-shadow:0 22px 70px rgba(0,0,0,.45);color:#fff7dc;font-weight:900;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:14px}.kamar-loading-spinner{width:20px;height:20px;border-radius:50%;border:3px solid rgba(235,207,130,.28);border-top-color:#f2dc8e;animation:kamarSpin24EC .75s linear infinite}@keyframes kamarSpin24EC{to{transform:rotate(360deg)}}';
+        document.head.appendChild(style);
+      }
+      var ov=document.createElement('div');
+      ov.id='kamar-global-loading-overlay';
+      ov.className='kamar-loading-overlay show';
+      ov.innerHTML='<div class="kamar-loading-box"><span class="kamar-loading-spinner"></span><span>Memproses...</span></div>';
+      document.body.appendChild(ov);
+      document.body.classList.add('kamar-is-leaving');
+    }catch(e){}
   }
-  function setButtonLoading(btn,text){
-    if(!btn || btn.dataset.kamarLoading==='1') return;
-    btn.dataset.kamarLoading='1'; btn.dataset.kamarOriginalText=btn.textContent||'';
-    btn.classList.add('kamar-loading-active'); btn.disabled=true; btn.textContent=text||'Memproses...';
-    setTimeout(function(){resetButton(btn);},12000);
+
+  var explicitKeys = [
+    'kamarAdminSession','kamarMemberSession','kamarAffiliateSession',
+    'kamarSession','kamarAuthSession','kamarCurrentUser','kamarUserSession',
+    'kamarLoggedIn','kamarAdminLogin','kamarMemberLogin','kamarAffiliateLogin',
+    'kamarAuthRole','kamarUserRole','kamarLoginRole','kamarLastActivityAt'
+  ];
+  var sessionPattern = /^(kamar.*(session|login|auth|currentuser|current_user|role|token)|sb-.*auth-token|supabase\.auth\.token)$/i;
+
+  function clearStorage(store){
+    if(!store) return;
+    try{
+      explicitKeys.forEach(function(k){ try{store.removeItem(k);}catch(e){} });
+      var keys=[];
+      for(var i=0;i<store.length;i++){ keys.push(store.key(i)); }
+      keys.forEach(function(k){
+        if(!k) return;
+        if(sessionPattern.test(k)){
+          try{store.removeItem(k);}catch(e){}
+        }
+      });
+    }catch(e){}
   }
-  function resetButton(btn){
-    if(!btn || btn.dataset.kamarLoading!=='1') return;
-    btn.classList.remove('kamar-loading-active'); btn.disabled=false; btn.textContent=btn.dataset.kamarOriginalText||btn.textContent||'Lanjut';
-    delete btn.dataset.kamarLoading; delete btn.dataset.kamarOriginalText;
+
+  function clearCookies(){
+    try{
+      document.cookie.split(';').forEach(function(c){
+        var name=c.split('=')[0].trim();
+        if(!name) return;
+        if(/^kamar/i.test(name) || /^sb-/i.test(name)){
+          document.cookie=name+'=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+          document.cookie=name+'=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax';
+        }
+      });
+    }catch(e){}
   }
-  window.KamarLoading={show:showToast,setButton:setButtonLoading,resetButton:resetButton};
-  document.addEventListener('submit',function(e){
-    var form=e.target; if(!form || !form.querySelector) return;
-    var btn=e.submitter || form.querySelector('button[type="submit"],input[type="submit"]');
-    if(btn) setButtonLoading(btn, btn.dataset.loadingText || 'Memproses...');
-    else showToast('Memproses...');
-  },true);
-  document.addEventListener('click',function(e){
-    var el=e.target && e.target.closest ? e.target.closest('a,button') : null; if(!el) return;
-    if(el.matches('button[type="submit"], input[type="submit"]')) return;
-    if(el.matches('[data-no-loading], [data-affiliate-filter], #copyAffiliateCode, #copyDashCode, #affiliateSearchBtn, #editPayoutAccount, #sendPayoutAccount')) return;
-    var href=el.getAttribute('href')||'';
-    if(el.tagName==='A'){
-      if(!href || href.charAt(0)==='#' || href.indexOf('javascript:')===0 || el.target==='_blank') return;
-      showToast(el.dataset.loadingText || 'Memuat halaman...');
+
+  async function doLogout(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    showLogoutLoading();
+    try{
+      if(window.supabase && window.supabase.auth && typeof window.supabase.auth.signOut==='function'){
+        try{ await window.supabase.auth.signOut(); }catch(x){}
+      }
+      if(window.kamarSupabase && window.kamarSupabase.auth && typeof window.kamarSupabase.auth.signOut==='function'){
+        try{ await window.kamarSupabase.auth.signOut(); }catch(x){}
+      }
+    }catch(err){}
+    clearStorage(window.localStorage);
+    clearStorage(window.sessionStorage);
+    clearCookies();
+    setTimeout(function(){ window.location.replace('index.html?logout=1&v=24ec'); }, 180);
+  }
+
+  window.KamarLogoutAll = doLogout;
+
+  function normalizeLogoutLinks(){
+    try{
+      document.querySelectorAll('a,button').forEach(function(el){
+        var txt=(el.textContent||'').trim().toLowerCase();
+        var href=(el.getAttribute && el.getAttribute('href')) || '';
+        var hasLogoutAttr = el.hasAttribute && el.hasAttribute('data-kamar-logout');
+        var looksLogout = hasLogoutAttr || txt==='logout' || txt.indexOf('logout')>=0;
+        if(looksLogout){
+          el.setAttribute('data-kamar-logout','');
+          if(el.tagName && el.tagName.toLowerCase()==='a') el.setAttribute('href','index.html?logout=1&v=24ec');
+        }
+      });
+    }catch(e){}
+  }
+
+  document.addEventListener('click', function(e){
+    var t=e.target;
+    if(!t || !t.closest) return;
+    var el=t.closest('[data-kamar-logout], a, button');
+    if(!el) return;
+    var txt=(el.textContent||'').trim().toLowerCase();
+    if(el.hasAttribute('data-kamar-logout') || txt==='logout' || txt.indexOf('logout')>=0){
+      doLogout(e);
     }
-  },true);
+  }, true);
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', normalizeLogoutLinks);
+  else normalizeLogoutLinks();
+  setTimeout(normalizeLogoutLinks, 700);
+})();
+</script>
+
+
+<script id="kamar-universal-logout-hard-fix-24ec">
+(function(){
+  if(window.__KAMAR_UNIVERSAL_LOGOUT_24EC__) return;
+  window.__KAMAR_UNIVERSAL_LOGOUT_24EC__ = true;
+
+  var REDIRECT_URL = 'index.html?logout=1&v=24ec&t=' + Date.now();
+  var explicitKeys = [
+    'kamarAdminSession','kamarMemberSession','kamarAffiliateSession',
+    'kamarSession','kamarAuthSession','kamarUserSession','kamarCurrentUser',
+    'kamarLoggedIn','kamarAdminLogin','kamarMemberLogin','kamarAffiliateLogin',
+    'kamarAuthRole','kamarUserRole','kamarLoginRole','kamarLastActivityAt',
+    'kamarAdmin','kamarMember','kamarAffiliate','kamarUser',
+    'KAMAR_ADMIN_SESSION','KAMAR_MEMBER_SESSION','KAMAR_AFFILIATE_SESSION'
+  ];
+  var authKeyPattern = /(session|login|auth|token|currentuser|current_user|role|loggedin|logged_in)/i;
+
+  function safeRemove(store, key){ try{ store.removeItem(key); }catch(e){} }
+  function clearStore(store){
+    if(!store) return;
+    try{
+      explicitKeys.forEach(function(k){ safeRemove(store,k); });
+      var keys=[];
+      for(var i=0;i<store.length;i++){ var k=store.key(i); if(k) keys.push(k); }
+      keys.forEach(function(k){
+        var low=String(k||'').toLowerCase();
+        if(/^sb-/.test(low) || low==='supabase.auth.token' || low.indexOf('supabase')>=0 && authKeyPattern.test(low)) safeRemove(store,k);
+        else if(/^kamar/.test(low) && authKeyPattern.test(low)) safeRemove(store,k);
+      });
+    }catch(e){}
+  }
+  function clearCookies(){
+    try{
+      var names = document.cookie.split(';').map(function(c){return c.split('=')[0].trim();}).filter(Boolean);
+      names.forEach(function(name){
+        var low=name.toLowerCase();
+        if(low.indexOf('sb-')===0 || low.indexOf('supabase')>=0 || low.indexOf('kamar')===0){
+          ['/', location.pathname.replace(/\/[^\/]*$/,'/') || '/'].forEach(function(path){
+            document.cookie = name+'=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path='+path;
+          });
+        }
+      });
+    }catch(e){}
+  }
+  function showOverlay(){
+    try{
+      var style=document.getElementById('kamar-logout-hard-style-24ec');
+      if(!style){
+        style=document.createElement('style');
+        style.id='kamar-logout-hard-style-24ec';
+        style.textContent='body.kamar-logging-out{pointer-events:none!important}.kamar-logout-overlay{position:fixed;inset:0;z-index:2147483647;background:rgba(3,3,3,.74);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center}.kamar-logout-box{border:1px solid rgba(238,206,122,.38);border-radius:28px;padding:24px 32px;background:linear-gradient(135deg,rgba(14,14,13,.96),rgba(14,28,23,.92));box-shadow:0 24px 80px rgba(0,0,0,.55);color:#fff3d8;font-weight:1000;letter-spacing:.06em;display:flex;align-items:center;gap:14px}.kamar-logout-spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(238,206,122,.25);border-top-color:#f3df96;animation:kamarLogoutSpin24EC .7s linear infinite}@keyframes kamarLogoutSpin24EC{to{transform:rotate(360deg)}}';
+        document.head.appendChild(style);
+      }
+      var old=document.getElementById('kamarLogoutOverlay24EC');
+      if(old) return;
+      var ov=document.createElement('div');
+      ov.id='kamarLogoutOverlay24EC';
+      ov.className='kamar-logout-overlay';
+      ov.innerHTML='<div class="kamar-logout-box"><span class="kamar-logout-spinner"></span><span>Memproses...</span></div>';
+      document.body.appendChild(ov);
+      document.body.classList.add('kamar-logging-out');
+    }catch(e){}
+  }
+  function isLogoutEl(el){
+    if(!el || !el.getAttribute) return false;
+    var txt=(el.textContent||el.value||'').trim().toLowerCase();
+    var href=(el.getAttribute('href')||'').toLowerCase();
+    return el.hasAttribute('data-kamar-logout') || txt==='logout' || txt.indexOf('logout')>=0 || href.indexOf('logout=1')>=0;
+  }
+  function normalize(){
+    try{
+      document.querySelectorAll('a,button,input[type="button"],input[type="submit"]').forEach(function(el){
+        if(isLogoutEl(el)){
+          el.setAttribute('data-kamar-logout','true');
+          if(el.tagName && el.tagName.toLowerCase()==='a') el.setAttribute('href', REDIRECT_URL);
+          if(el.tagName && el.tagName.toLowerCase()==='button') el.setAttribute('type','button');
+        }
+      });
+    }catch(e){}
+  }
+  async function signOutSupabase(){
+    var candidates=[window.supabase, window.kamarSupabase, window.kamarSupabaseClient, window.KamarSupabaseClient];
+    for(var i=0;i<candidates.length;i++){
+      var c=candidates[i];
+      try{ if(c && c.auth && typeof c.auth.signOut==='function') await c.auth.signOut(); }catch(e){}
+    }
+  }
+  var running=false;
+  async function logout(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); if(e.stopImmediatePropagation) e.stopImmediatePropagation(); }
+    if(running) return false;
+    running=true;
+    showOverlay();
+    clearStore(window.localStorage);
+    clearStore(window.sessionStorage);
+    clearCookies();
+    try{ await signOutSupabase(); }catch(e){}
+    clearStore(window.localStorage);
+    clearStore(window.sessionStorage);
+    clearCookies();
+    setTimeout(function(){ window.location.replace(REDIRECT_URL); }, 250);
+    return false;
+  }
+  window.KamarLogoutAll = logout;
+  window.kamarLogoutAll = logout;
+
+  ['pointerdown','click','submit'].forEach(function(evt){
+    document.addEventListener(evt,function(e){
+      var t=e.target;
+      if(evt==='submit'){
+        var form=t;
+        if(form && form.querySelector && form.querySelector('[data-kamar-logout]')) logout(e);
+        return;
+      }
+      var el=t && t.closest ? t.closest('a,button,input') : null;
+      if(isLogoutEl(el)) logout(e);
+    }, true);
+  });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', normalize);
+  else normalize();
+  setInterval(normalize, 1000);
 })();
 </script>
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><script src="assets/js/kamar-auth-core-25.js"></script><script src="assets/js/kamar-page-guard-25.js"></script>
+<head><script src="assets/js/kamar-auth-core-25.js"></script><script src="assets/js/kamar-session-compat-25b.js"></script><script src="assets/js/kamar-page-guard-25.js"></script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -561,4 +561,4 @@ el('runBtn').onclick=run;el('copyBtn').onclick=function(){var txt=buildReport();
 })();
 </script>
 
-</body></html>
+<script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body></html>

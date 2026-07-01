@@ -1,112 +1,81 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Cek Data Admin — Kamar Kajian Market</title>
-<meta content="#070707" name="theme-color"/>
-<style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cek Data Admin — Kamar Kajian Market</title>
+  <meta name="theme-color" content="#070707" />
+  <style>
     :root{--bg:#070707;--panel:rgba(255,255,255,.035);--panel2:rgba(255,255,255,.055);--line:rgba(238,206,122,.18);--gold:#d4a63f;--gold2:#f4df90;--text:#f5f0e6;--muted:#aaa393;--green:#9effca;--red:#ffb4b4;--warn:#ffd582}
     *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0,rgba(212,166,63,.18),transparent 30%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.site-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(7,7,7,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff3d8;font-weight:1000}.brand-mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--gold2),var(--gold));display:grid;place-items:center;color:#111;font-weight:1000}.header-actions{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.1);color:#ffb4b4;border:1px solid rgba(255,96,96,.24)}.shell{max-width:1380px;margin:0 auto;padding:34px 22px 60px}.layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px}.sidebar{border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px;height:max-content;position:sticky;top:86px}.sidebar .label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:6px 0 14px}.sidebar a{display:flex;justify-content:space-between;gap:10px;color:#d8d0bd;text-decoration:none;padding:12px 14px;border-radius:16px;font-weight:850}.sidebar a:hover,.sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.main{display:grid;gap:18px}.card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));padding:24px}.card h1,.card h2,.card h3{margin:0 0 10px;color:#fff3d8;letter-spacing:-.03em}.card p{margin:0;color:var(--muted);line-height:1.65}.mini{display:inline-block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#e8d79d;font-weight:1000;margin-bottom:8px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.stat{border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:18px}.stat span{display:block;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#d8cda9;font-weight:1000}.stat strong{display:block;font-size:32px;margin:8px 0 4px;color:#fff}.stat small{color:var(--muted);line-height:1.45}.status{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.status.ok{color:var(--green);background:rgba(28,97,65,.12);border-color:rgba(158,255,202,.25)}.status.warn{color:var(--warn);background:rgba(255,198,86,.08);border-color:rgba(255,213,130,.28)}.status.bad{color:var(--red);background:rgba(255,96,96,.08);border-color:rgba(255,96,96,.24)}.status.off{color:#bbb;background:rgba(255,255,255,.04)}.table{display:grid;gap:10px;margin-top:14px}.row{display:grid;grid-template-columns:1.2fr .8fr .8fr 1.6fr;gap:12px;align-items:start;border:1px solid rgba(238,206,122,.14);border-radius:18px;background:rgba(255,255,255,.025);padding:13px}.row.header{background:transparent;border:0;color:#e8d79d;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:1000}.row strong{color:#fff3d8}.row small{display:block;color:var(--muted);line-height:1.45;margin-top:4px;word-break:break-word}.result-box{white-space:pre-wrap;border:1px dashed rgba(238,206,122,.25);border-radius:20px;background:rgba(0,0,0,.22);padding:16px;color:#d8d0bd;line-height:1.55;max-height:360px;overflow:auto}.note{border:1px solid rgba(255,213,130,.28);background:rgba(255,198,86,.08);border-radius:22px;padding:16px;color:#ffe2a0;line-height:1.6}.oknote{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1;line-height:1.6}.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:relative;top:auto}.grid,.row{grid-template-columns:1fr}.site-header{align-items:flex-start;gap:14px;flex-direction:column}}
   </style>
-<style id="kamar-global-header-style">
-/* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
-.kamar-global-header{
-  position:sticky!important;top:0!important;z-index:99999!important;
-  min-height:86px!important;width:100%!important;
-  display:grid!important;grid-template-columns:minmax(260px,1fr) auto minmax(260px,1fr)!important;
-  align-items:center!important;gap:18px!important;
-  padding:16px 38px!important;
-  border-bottom:1px solid rgba(238,206,122,.12)!important;
-  background:rgba(7,7,6,.88)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;
-  box-shadow:0 18px 60px rgba(0,0,0,.28)!important;
-}
-.kamar-global-header *{box-sizing:border-box!important}
-.kamar-global-brand{display:inline-flex!important;align-items:center!important;gap:14px!important;text-decoration:none!important;color:#fff3d8!important;font-weight:1000!important;font-size:20px!important;line-height:1!important;min-width:0!important}
-.kamar-global-brand img{width:46px!important;height:46px!important;border-radius:14px!important;object-fit:cover!important;background:#050505!important;box-shadow:0 0 0 1px rgba(238,206,122,.16)!important;flex:0 0 auto!important}
-.kamar-global-center{display:flex!important;justify-content:center!important;align-items:center!important;min-width:120px!important}
-.kamar-global-center a{color:rgba(245,240,230,.82)!important;text-decoration:none!important;font-weight:950!important;font-size:16px!important;padding:10px 16px!important;border-radius:999px!important}
-.kamar-global-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:12px!important;min-width:0!important}
-.kamar-global-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:46px!important;padding:0 22px!important;border-radius:999px!important;text-decoration:none!important;font-weight:1000!important;color:#f6e5ad!important;background:rgba(255,255,255,.035)!important;border:1px solid rgba(238,206,122,.22)!important;white-space:nowrap!important;line-height:1!important}
-.kamar-global-btn:hover{border-color:rgba(244,223,144,.55)!important;background:rgba(244,223,144,.08)!important}
-.kamar-global-logout{color:#d7ffe3!important;border-color:rgba(109,255,166,.28)!important;background:rgba(32,128,79,.12)!important}
-.kamar-global-logout:hover{background:rgba(32,128,79,.20)!important}
-@media(max-width:860px){
-  .kamar-global-header{grid-template-columns:1fr!important;padding:14px 18px!important;gap:10px!important;text-align:center!important}
-  .kamar-global-brand{justify-content:center!important;font-size:18px!important}
-  .kamar-global-actions{justify-content:center!important;flex-wrap:wrap!important}
-}
-@media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
-</style>
-<style id="kamar-step24EA-global-loading-css">
-.kamar-loading-active{position:relative!important;pointer-events:none!important;opacity:.82!important;}
-.kamar-loading-active::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,10,10,.25);border-top-color:rgba(10,10,10,.85);display:inline-block;margin-right:8px;vertical-align:-3px;animation:kamarSpin24EA .72s linear infinite;}
-.kamar-loading-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:999px;padding:12px 18px;font-weight:950;box-shadow:0 18px 60px rgba(0,0,0,.44);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
-.kamar-loading-toast::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,223,144,.28);border-top-color:#f5df91;animation:kamarSpin24EA .72s linear infinite;}
-@keyframes kamarSpin24EA{to{transform:rotate(360deg)}}
-</style>
-<script src="assets/js/kamar-session-guard-25c.js"></script></head>
+</head>
 <body>
-<header class="site-header">
-<a class="brand" href="admin.html"><span class="brand-mark">K</span><span>Kamar Kajian Market</span></a>
-<div class="header-actions"><a class="btn secondary" href="admin.html">Dashboard Admin</a><a class="btn secondary" href="admin-members.html">Data Member</a><a class="btn secondary" href="admin-activation.html?v=24dg">Aktivasi Akun</a></div>
-</header>
-<main class="shell">
-<div class="layout">
-<aside class="sidebar">
-<div class="label">ADMIN CHECK</div>
-<a href="admin.html">Dashboard Admin</a>
-<a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
-<a href="admin-activation.html?v=24dg">Aktivasi Akun</a>
-<a class="active" href="admin-data-check.html?v=24cu">Cek Data Admin</a>
-</aside>
-<section class="main">
-<section class="card">
-<span class="mini">DIAGNOSIS DATA MEMBER</span>
-<h1>Cek Sumber Data Admin</h1>
-<p>Halaman ini dibuat supaya tidak perlu pakai Console. Klik tombol cek, lalu screenshot hasilnya. Dari sini akan terlihat apakah data member terbaca dari localStorage, Supabase, atau tabel tertentu.</p>
-<div class="button-row">
-<button class="btn" id="runCheck">Cek Data Sekarang</button>
-<button class="btn secondary" id="copyResult">Copy Hasil</button>
-<a class="btn secondary" href="admin-members.html">Buka Data Member</a>
-<a class="btn secondary" href="admin-activation.html?v=24dg">Buka Aktivasi</a>
-</div>
-</section>
-<section class="grid" id="summaryCards">
-<div class="stat"><span>Status</span><strong>-</strong><small>Belum dicek.</small></div>
-<div class="stat"><span>LocalStorage</span><strong>-</strong><small>Belum dicek.</small></div>
-<div class="stat"><span>Supabase</span><strong>-</strong><small>Belum dicek.</small></div>
-<div class="stat"><span>Member</span><strong>-</strong><small>Belum dicek.</small></div>
-</section>
-<section class="card">
-<span class="mini">HASIL UTAMA</span>
-<h2>Kesimpulan Cepat</h2>
-<div class="note" id="diagnosis">Klik <b>Cek Data Sekarang</b> dulu.</div>
-</section>
-<section class="card">
-<span class="mini">LOCAL STORAGE</span>
-<h2>Data Lokal yang Terbaca</h2>
-<div class="table" id="localTable"><div class="result-box">Belum dicek.</div></div>
-</section>
-<section class="card">
-<span class="mini">SUPABASE</span>
-<h2>Koneksi &amp; Tabel Supabase</h2>
-<div class="table" id="supabaseTable"><div class="result-box">Belum dicek.</div></div>
-</section>
-<section class="card">
-<span class="mini">COPY</span>
-<h2>Ringkasan untuk Dikirim</h2>
-<div class="result-box" id="rawResult">Belum ada hasil.</div>
-</section>
-</section>
-</div>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/kamar-config.js"></script>
-<script src="assets/js/kamar-supabase.js"></script>
-<script src="assets/js/kamar-auth.js"></script>
-<script>
+  <header class="site-header">
+    <a class="brand" href="admin.html"><span class="brand-mark">K</span><span>Kamar Kajian Market</span></a>
+    <div class="header-actions"><a class="btn secondary" href="admin.html">Dashboard Admin</a><a class="btn secondary" href="admin-members.html">Data Member</a><a class="btn secondary" href="admin-activation.html?v=24dg">Aktivasi Akun</a></div>
+  </header>
+  <main class="shell">
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="label">ADMIN CHECK</div>
+        <a href="admin.html">Dashboard Admin</a>
+        <a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
+        <a href="admin-activation.html?v=24dg">Aktivasi Akun</a>
+        <a class="active" href="admin-data-check.html?v=24cu">Cek Data Admin</a>
+      </aside>
+      <section class="main">
+        <section class="card">
+          <span class="mini">DIAGNOSIS DATA MEMBER</span>
+          <h1>Cek Sumber Data Admin</h1>
+          <p>Halaman ini dibuat supaya tidak perlu pakai Console. Klik tombol cek, lalu screenshot hasilnya. Dari sini akan terlihat apakah data member terbaca dari localStorage, Supabase, atau tabel tertentu.</p>
+          <div class="button-row">
+            <button class="btn" id="runCheck">Cek Data Sekarang</button>
+            <button class="btn secondary" id="copyResult">Copy Hasil</button>
+            <a class="btn secondary" href="admin-members.html">Buka Data Member</a>
+            <a class="btn secondary" href="admin-activation.html?v=24dg">Buka Aktivasi</a>
+          </div>
+        </section>
+
+        <section class="grid" id="summaryCards">
+          <div class="stat"><span>Status</span><strong>-</strong><small>Belum dicek.</small></div>
+          <div class="stat"><span>LocalStorage</span><strong>-</strong><small>Belum dicek.</small></div>
+          <div class="stat"><span>Supabase</span><strong>-</strong><small>Belum dicek.</small></div>
+          <div class="stat"><span>Member</span><strong>-</strong><small>Belum dicek.</small></div>
+        </section>
+
+        <section class="card">
+          <span class="mini">HASIL UTAMA</span>
+          <h2>Kesimpulan Cepat</h2>
+          <div id="diagnosis" class="note">Klik <b>Cek Data Sekarang</b> dulu.</div>
+        </section>
+
+        <section class="card">
+          <span class="mini">LOCAL STORAGE</span>
+          <h2>Data Lokal yang Terbaca</h2>
+          <div id="localTable" class="table"><div class="result-box">Belum dicek.</div></div>
+        </section>
+
+        <section class="card">
+          <span class="mini">SUPABASE</span>
+          <h2>Koneksi & Tabel Supabase</h2>
+          <div id="supabaseTable" class="table"><div class="result-box">Belum dicek.</div></div>
+        </section>
+
+        <section class="card">
+          <span class="mini">COPY</span>
+          <h2>Ringkasan untuk Dikirim</h2>
+          <div id="rawResult" class="result-box">Belum ada hasil.</div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/kamar-config.js"></script>
+  <script src="assets/js/kamar-supabase.js"></script>
+  <script src="assets/js/kamar-auth.js"></script>
+  <script>
   (function(){
     var lastText='';
     function byId(id){return document.getElementById(id)}
@@ -211,10 +180,5 @@
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',runCheck);else setTimeout(runCheck,500);
   })();
   </script>
-
-
-
-
-
-<script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body>
+</body>
 </html>

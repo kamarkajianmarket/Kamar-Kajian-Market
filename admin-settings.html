@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Pengaturan Umum — Kamar Kajian Market</title><meta content="Pengaturan dasar brand, target harian, durasi default, dan disclaimer." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<html lang="id"><head>
+<script src="assets/js/kamar-session-guard-25d.js"></script>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Pengaturan Umum — Kamar Kajian Market</title><meta content="Pengaturan dasar brand, target harian, durasi default, dan disclaimer." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
 body{background:#070707;color:var(--text)}
@@ -247,7 +249,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
 }
 </style>
-
 <style id="kamar-step24CM-admin-complete-fix">
 .admin-menu-section{margin:16px 10px 8px;color:#f1dda2;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:1000;opacity:.82}.split-sidebar a{min-height:44px}.admin-dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.admin-click-card{display:block;text-decoration:none;color:inherit;border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.025);padding:18px;transition:.2s ease;cursor:pointer}.admin-click-card:hover{transform:translateY(-2px);border-color:rgba(244,223,144,.42);background:rgba(244,223,144,.045)}.admin-click-card h3{margin:0 0 8px;color:#fff3d8}.admin-table-card{display:grid;gap:12px}.admin-row{display:grid;grid-template-columns:minmax(220px,1.2fr) minmax(220px,1fr) 160px minmax(160px,.8fr) 170px;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:14px 16px}.admin-row.header{background:transparent;border:0;color:#f1dda2;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:1000}.admin-row strong{color:#fff3d8}.admin-row small{display:block;color:rgba(245,240,230,.62);line-height:1.45;margin-top:3px}.admin-row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.facility-toggle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.admin-detail-panel{display:grid;gap:14px}.admin-detail-box{border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}.admin-detail-box span{display:block;color:#d8cda9;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:1000;margin-bottom:6px}.admin-detail-box strong{display:block;color:#fff3d8;word-break:break-word}.admin-toolbar-grid{display:grid;grid-template-columns:minmax(0,1fr) 220px 220px auto;gap:12px;align-items:end}.admin-toolbar-grid label{font-weight:900;color:#d8d0bd}.admin-toolbar-grid input,.admin-toolbar-grid select{width:100%;box-sizing:border-box}.admin-empty{border:1px dashed rgba(238,206,122,.18);border-radius:22px;padding:18px;color:rgba(245,240,230,.68);font-weight:800}.admin-note-soft{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1}.admin-note-warn{border:1px solid rgba(255,213,130,.28);background:rgba(255,198,86,.08);border-radius:22px;padding:16px;color:#ffe2a0}.status-pill.ok{color:#bfffd9;background:rgba(28,97,65,.12);border-color:rgba(158,255,202,.25)}@media(max-width:1100px){.admin-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-row{grid-template-columns:1fr}.admin-row.header{display:none}.admin-row-actions{justify-content:flex-start}.admin-toolbar-grid{grid-template-columns:1fr 1fr}.facility-toggle-grid{grid-template-columns:1fr}}@media(max-width:720px){.admin-dashboard-grid,.admin-toolbar-grid{grid-template-columns:1fr}}
 </style>
@@ -290,31 +291,36 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
+<style id="kamar-loading-style">
+.kamar-loading-overlay{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;background:rgba(4,4,3,.58);backdrop-filter:blur(8px)}
+.kamar-loading-overlay.show{display:flex}.kamar-loading-box{min-width:220px;border:1px solid rgba(238,206,122,.34);background:linear-gradient(135deg,rgba(18,17,13,.96),rgba(7,7,6,.96));border-radius:24px;padding:24px 28px;text-align:center;box-shadow:0 24px 90px rgba(0,0,0,.48)}
+.kamar-loading-spinner{width:42px;height:42px;margin:0 auto 14px;border-radius:50%;border:4px solid rgba(238,206,122,.20);border-top-color:#e8c45f;animation:kamarSpin .82s linear infinite}.kamar-loading-text{color:#fff4d8;font-weight:1000;letter-spacing:.05em}.is-loading{pointer-events:none!important;opacity:.78!important}.is-loading::after{content:' ';display:inline-block;width:.9em;height:.9em;margin-left:8px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;vertical-align:-.12em;animation:kamarSpin .75s linear infinite}@keyframes kamarSpin{to{transform:rotate(360deg)}}
+</style>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html?v=25d"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html?v=25d">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html?v=25d">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html?logout=1&amp;v=25dd">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
-<a class="" href="admin.html">Dashboard Admin</a>
-<div class="admin-menu-section">Member & Akses</div>
-<a class="" href="admin-members.html">Data Member</a>
-<a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
+<a class="" href="admin.html?v=25d">Dashboard Admin</a>
+<div class="admin-menu-section">Member &amp; Akses</div>
+<a class="" href="admin-members.html?v=25d">Data Member</a>
+<a class="" href="admin-activation-v2.html">Aktivasi Akun &amp; Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<a href="admin-affiliate-v2.html?view=overview&amp;v=25d">Data Affiliate</a>
+<a href="admin-affiliate-v2.html?view=list&amp;v=25d">Daftar Affiliator</a>
+<a href="admin-affiliate-v2.html?view=reward&amp;v=25d">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div>
-<a class="" href="admin-banner.html">Banner Pengumuman</a>
-<a class="" href="admin-video.html">Konten Video</a>
-<a class="" href="admin-materials.html">Konten & Materi</a>
-<a class="" href="admin-tools.html">File Tools</a>
+<a class="" href="admin-banner.html?v=25d">Banner Pengumuman</a>
+<a class="" href="admin-video.html?v=25d">Konten Video</a>
+<a class="" href="admin-materials.html?v=25d">Konten &amp; Materi</a>
+<a class="" href="admin-tools.html?v=25d">File Tools</a>
 <div class="admin-menu-section">Kontrol Sistem</div>
-<a class="" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
-<a class="" href="admin-maintenance.html">Maintenance Fasilitas</a>
+<a class="" href="admin-connection-check.html?v=25d">Cek Koneksi DB</a>
+<a class="" href="admin-maintenance.html?v=25d">Maintenance Fasilitas</a>
 <a class="" href="admin-page-control.html">Kontrol Halaman Utama</a>
 <a class="" href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
-<a class="" href="admin-payment.html">Payment Gateway</a>
+<a class="" href="admin-payment.html?v=25d">Payment Gateway</a>
 <a class="" href="admin-links.html">Pengaturan Link</a>
-<a class="active" href="admin-settings.html">Pengaturan Umum</a>
+<a class="active" href="admin-settings.html?v=25d">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div>
-<a class="" data-kamar-logout="" href="member.html">Logout</a>
+<a class="" data-kamar-logout="" href="index.html?logout=1&amp;v=25dd">Logout</a>
 </aside><section class="split-main"><section class="split-card kamar-title-card"><h1>Pengaturan Umum</h1></section><section class="split-card"><div class="page-note"><strong>Memuat Data Supabase</strong><br/>Halaman ini sedang membaca data real.</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
@@ -332,87 +338,12 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-admin-core.js"></script>
-<script id="kamar-step24CM-admin-functional-logic">
-(function(){
-  var facilities=[['Kamar Edukasi','Kamar Edukasi'],['Kamar Study','Kamar Study'],['Kamar Private','Kamar Private'],['Kamar Indikator','Kamar Indikator'],['Kamar Robot','Kamar Robot']];
-  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  function esc(x){return String(x||'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
-  function norm(x){return String(x||'').trim().toLowerCase();}
-  function toast2(msg){if(window.toast){window.toast(msg);return;} alert(msg);}
-  function members(){return getJSON('kamarRegisteredMembers',[]);}
-  function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
-  function isActive(m){return m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|active/i.test(m.status||''));}
-  function isPending(m){return !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending/i.test(m.status||''));}
-  function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>';if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>';return '<span class="status-pill off">Belum Aktif</span>';}
-  function findMember(id){var ms=members();return [ms,ms.find(function(m){return String(m.memberId||m.email)===String(id);})];}
-  function activateMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=true;m.statusKey='active';m.status='Member Website: Aktif Gratis';m.activatedAt=new Date().toISOString();m.updatedAt=new Date().toISOString();saveMembers(ms);try{var sess=getJSON('kamarMemberSession',null);if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email).toLowerCase()===String(m.email||'').toLowerCase())){sess.accountActive=true;sess.statusKey='active';sess.status='Member Website: Aktif Gratis';sess.fullName=m.fullName||sess.fullName;sess.referralCode=m.referralCode||sess.referralCode||'';sess.lastActivity=Date.now();setJSON('kamarMemberSession',sess);}}catch(e){}toast2('Member sudah diaktifkan gratis.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-  function suspendMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=false;m.statusKey='suspended';m.status='Suspended';m.updatedAt=new Date().toISOString();saveMembers(ms);toast2('Status member disuspend.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-  function toggleFacility(id,fac,on){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.facilities=Array.isArray(m.facilities)?m.facilities:[]; if(on && m.facilities.indexOf(fac)<0)m.facilities.push(fac); if(!on)m.facilities=m.facilities.filter(function(x){return x!==fac;});m.updatedAt=new Date().toISOString();saveMembers(ms);toast2((on?'Aktif: ':'Nonaktif: ')+fac);document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-  window.KamarAdminLocal={facilities:facilities,getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,isActive:isActive,isPending:isPending,labelStatus:labelStatus,activateMember:activateMember,suspendMember:suspendMember,toggleFacility:toggleFacility};
-})();
-</script>
 
-<script id="kamar-step24CN-admin-click-guard">(function(){document.addEventListener('click',function(e){var c=e.target.closest('[data-href]');if(c){window.location.href=c.getAttribute('data-href');}});})();</script>
-<script id="kamar-step24CO-admin-stable-utils">
 
-(function(){
-  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  function esc(x){return String(x==null?'':x).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\\':'\\','\"':'&quot;'}[c]||c;});}
-  function norm(x){return String(x||'').trim().toLowerCase();}
-  function toast2(msg){if(window.toast){window.toast(msg);return;} try{alert(msg)}catch(e){}}
-  function members(){return getJSON('kamarRegisteredMembers',[]);}
-  function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
-  function idOf(m){return String((m&&m.memberId)||(m&&m.email)||'');}
-  function isActive(m){return !!(m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|member website: aktif|active/i.test(m.status||'')));}
-  function isPending(m){return !!(m && !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending|belum aktif/i.test(m.status||'')));}
-  function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>'; if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>'; if(m&&m.statusKey==='suspended')return '<span class="status-pill off">Suspended</span>'; return '<span class="status-pill off">Belum Aktif</span>';}
-  function findMember(id){var ms=members();var target=String(id||'').toLowerCase();return [ms,ms.find(function(m){return String(m.memberId||'').toLowerCase()===target || String(m.email||'').toLowerCase()===target;})];}
-  function activateMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.accountActive=true; m.statusKey='active'; m.status='Member Website: Aktif Gratis'; m.activatedAt=m.activatedAt||new Date().toISOString(); m.updatedAt=new Date().toISOString(); saveMembers(ms); try{var sess=getJSON('kamarMemberSession',null); if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email||'').toLowerCase()===String(m.email||'').toLowerCase())){Object.assign(sess,{accountActive:true,statusKey:'active',status:'Member Website: Aktif Gratis',fullName:m.fullName||sess.fullName,referralCode:m.referralCode||sess.referralCode||'',lastActivity:Date.now()}); setJSON('kamarMemberSession',sess);}}catch(e){} toast2('Member berhasil diaktifkan gratis.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  function suspendMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m)return false; m.accountActive=false; m.statusKey='suspended'; m.status='Suspended'; m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2('Member disuspend.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  var facilities=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
-  function toggleFacility(id,fac,on,duration,note){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.facilities=Array.isArray(m.facilities)?m.facilities:[]; m.facilityAccess=m.facilityAccess||{}; if(on){if(m.facilities.indexOf(fac)<0)m.facilities.push(fac); m.facilityAccess[fac]={active:true,duration:duration||'30',note:note||'',activatedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};}else{m.facilities=m.facilities.filter(function(x){return x!==fac;}); m.facilityAccess[fac]=Object.assign({},m.facilityAccess[fac]||{},{active:false,updatedAt:new Date().toISOString()});} m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+fac); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  window.KamarAdminLocal={getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,saveMembers:saveMembers,idOf:idOf,isActive:isActive,isPending:isPending,labelStatus:labelStatus,findMember:findMember,activateMember:activateMember,suspendMember:suspendMember,facilities:facilities,toggleFacility:toggleFacility};
-  document.addEventListener('click',function(e){var t=e.target.closest('[data-href]'); if(t && !e.target.closest('button,a,input,select,textarea')){location.href=t.getAttribute('data-href');}});
-})();
 
-</script>
-<script id="kamar-global-header-script">
-(function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
-})();
-</script>
-</body></html>
+
+
+
+
+
+<script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body></html>

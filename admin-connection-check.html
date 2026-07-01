@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cek Koneksi Database | Admin Kamar</title>
-  <style>
+<script src="assets/js/kamar-session-guard-25d.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cek Koneksi Database | Admin Kamar</title>
+<style>
     :root{--bg:#070706;--panel:#11100d;--line:rgba(238,206,122,.18);--gold:#f4df90;--gold2:#c69a39;--text:#f5f0e6;--muted:rgba(245,240,230,.66);--green:#bfffd9;--red:#ffb4b4;--warn:#ffd582;--blue:#b9d8ff;}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(198,154,57,.16),transparent 28%),radial-gradient(circle at 100% 20%,rgba(46,81,70,.14),transparent 28%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
     a{color:inherit}.site-header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 26px;border-bottom:1px solid rgba(238,206,122,.10);background:rgba(7,7,6,.78);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:1000;color:#fff3d8}.brand img{width:38px;height:38px;border-radius:12px;object-fit:cover}.header-cta{display:inline-flex;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;color:var(--gold);font-weight:900}.split-shell{max-width:1480px;margin:0 auto;padding:34px 24px 46px}.split-app{display:grid;grid-template-columns:290px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:92px;align-self:start;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.015));padding:18px}.brand-small{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:1000;margin:5px 0 18px}.admin-menu-section{margin:18px 10px 8px;color:#f1dda2;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:1000;opacity:.86}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:850;line-height:1.15}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.13);color:var(--gold)}.split-main{display:grid;gap:22px}.split-card{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px;overflow:hidden}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:end;min-height:220px}.eyebrow,.mini-label{display:inline-flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.20em;font-size:12px;color:#e9d79f;font-weight:1000;margin-bottom:12px}.eyebrow:before,.mini-label:before{content:"";width:54px;height:1px;background:rgba(244,223,144,.48)}h1{margin:0;color:#fff3d8;font-size:clamp(36px,5vw,68px);letter-spacing:-.055em;line-height:.94}p{color:var(--muted);line-height:1.65}.hero p{max-width:720px;font-size:17px}.hero-actions,.actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary{background:rgba(255,255,255,.055);color:var(--gold);border:1px solid var(--line)}.btn.danger{background:rgba(255,100,100,.12);color:#ffd4d4;border:1px solid rgba(255,100,100,.28)}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.stat-card{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.025);padding:18px;min-height:132px;cursor:pointer;transition:.18s ease}.stat-card:hover{transform:translateY(-2px);border-color:rgba(244,223,144,.48);background:rgba(244,223,144,.045)}.stat-card span{display:block;color:#d8cda9;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:1000}.stat-card strong{display:block;font-size:36px;color:#fff;margin:10px 0 4px}.stat-card small{display:block;color:var(--muted);line-height:1.5}.pill{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(238,206,122,.20);border-radius:999px;padding:7px 10px;color:#d8cda9;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.09em;background:rgba(255,255,255,.035);white-space:nowrap}.pill.ok{color:var(--green);border-color:rgba(158,255,202,.25);background:rgba(28,97,65,.12)}.pill.warn{color:var(--warn);border-color:rgba(255,213,130,.25);background:rgba(255,198,86,.08)}.pill.bad{color:var(--red);border-color:rgba(255,96,96,.28);background:rgba(255,96,96,.08)}.pill.info{color:var(--blue);border-color:rgba(155,199,255,.25);background:rgba(84,122,255,.08)}.toolbar{display:grid;grid-template-columns:minmax(0,1fr) 220px 220px auto;gap:12px;align-items:end}.field label{display:block;color:#d8d0bd;font-weight:950;margin-bottom:8px}.field input,.field select{width:100%;border:1px solid rgba(238,206,122,.20);border-radius:16px;background:rgba(255,255,255,.045);color:#fff;padding:12px 14px;font-weight:850}.matrix{display:grid;gap:12px;margin-top:16px}.matrix-row{display:grid;grid-template-columns:minmax(180px,1fr) minmax(160px,.85fr) minmax(260px,1.2fr) minmax(180px,.85fr) minmax(160px,.7fr);gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}.matrix-row.header{border:0;background:transparent;padding:0 16px 4px;color:#f1dda2;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:1000}.matrix-row strong{color:#fff3d8;display:block}.matrix-row small{display:block;color:var(--muted);line-height:1.45;margin-top:4px}.table-box{overflow:auto;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.02);margin-top:16px}table{width:100%;border-collapse:collapse;min-width:900px}th,td{padding:13px 14px;border-bottom:1px solid rgba(238,206,122,.10);vertical-align:top;text-align:left}th{color:#f1dda2;text-transform:uppercase;letter-spacing:.13em;font-size:11px}td{color:rgba(245,240,230,.82);font-weight:760}code{color:#ffe6a3;background:rgba(244,223,144,.08);border:1px solid rgba(244,223,144,.14);border-radius:8px;padding:2px 6px}.note{border:1px solid rgba(238,206,122,.16);border-radius:22px;background:rgba(255,255,255,.025);padding:16px;color:rgba(245,240,230,.75);line-height:1.65;font-weight:780}.priority-list{display:grid;gap:14px;margin-top:16px}.priority-row{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.015));padding:18px;display:grid;gap:14px;overflow:hidden}.priority-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.priority-head strong{display:block;color:#fff3d8;font-size:20px;line-height:1.15}.priority-head small{display:block;margin-top:7px}.priority-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:16px;align-items:center}.priority-body .priority-block{border:1px solid rgba(238,206,122,.10);border-radius:18px;background:rgba(255,255,255,.018);padding:12px 14px;min-height:72px}.priority-body span{display:block;color:#e9d79f;text-transform:uppercase;letter-spacing:.13em;font-size:10px;font-weight:1000;margin-bottom:5px}.priority-body small{display:block;color:var(--muted);line-height:1.45}.priority-actions{display:flex;justify-content:flex-end}.priority-actions .btn{white-space:nowrap}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:380px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}.hidden{display:none!important}@media(max-width:1180px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr 1fr}.matrix-row{grid-template-columns:1fr}.matrix-row.header{display:none}.hero{grid-template-columns:1fr}.priority-body{grid-template-columns:1fr}.priority-actions{justify-content:flex-start}}@media(max-width:880px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.grid-4,.toolbar{grid-template-columns:1fr}.split-shell{padding:22px 16px}h1{font-size:40px}}
   </style>
-
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -39,30 +40,37 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<style id="kamar-step24EA-global-loading-css">
+.kamar-loading-active{position:relative!important;pointer-events:none!important;opacity:.82!important;}
+.kamar-loading-active::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,10,10,.25);border-top-color:rgba(10,10,10,.85);display:inline-block;margin-right:8px;vertical-align:-3px;animation:kamarSpin24EA .72s linear infinite;}
+.kamar-loading-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:999px;padding:12px 18px;font-weight:950;box-shadow:0 18px 60px rgba(0,0,0,.44);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
+.kamar-loading-toast::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,223,144,.28);border-top-color:#f5df91;animation:kamarSpin24EA .72s linear infinite;}
+@keyframes kamarSpin24EA{to{transform:rotate(360deg)}}
+</style>
 </head>
 <body>
-<header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><div class="header-actions"><a class="header-cta" href="admin.html">Dashboard Admin</a></div></header>
+<header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html?v=25d"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><div class="header-actions"><a class="header-cta" href="admin.html?v=25d">Dashboard Admin</a></div></header>
 <main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
-<div class="admin-menu-section">Utama</div><a href="admin.html?v=24dv">Dashboard Admin</a>
-<div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dv">Data Member</a><a href="admin-internal.html?v=24dv">Data Internal</a><a href="admin-activation.html?v=24dv">Aktivasi Akun & Fasilitas</a>
-<div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a><a href="admin-affiliate-v2.html?view=list&v=24dv">Daftar Affiliator</a><a href="admin-affiliate-v2.html?view=reward&v=24dv">Reward / Komisi</a>
-<div class="admin-menu-section">Konten Website</div><a href="admin-banner.html">Banner Pengumuman</a><a href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten & Materi</a><a href="admin-tools.html">File Tools</a>
-<div class="admin-menu-section">Kontrol Sistem</div><a class="active" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a><a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-maintenance.html">Maintenance Fasilitas</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html">Pengaturan Umum</a>
-<div class="admin-menu-section">Akun</div><a data-kamar-logout href="member.html">Logout</a></aside>
+<div class="admin-menu-section">Utama</div><a href="admin.html?v=25d">Dashboard Admin</a>
+<div class="admin-menu-section">Member &amp; Akses</div><a href="admin-members.html?v=25d">Data Member</a><a href="admin-internal.html?v=25d">Data Internal</a><a href="admin-activation.html?v=25d">Aktivasi Akun &amp; Fasilitas</a>
+<div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-v2.html?view=overview&amp;v=25d">Data Affiliate</a><a href="admin-affiliate-v2.html?view=list&amp;v=25d">Daftar Affiliator</a><a href="admin-affiliate-v2.html?view=reward&amp;v=25d">Reward / Komisi</a>
+<div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=25d">Banner Pengumuman</a><a href="admin-video.html?v=25d">Konten Video</a><a href="admin-materials.html?v=25d">Konten &amp; Materi</a><a href="admin-tools.html?v=25d">File Tools</a>
+<div class="admin-menu-section">Kontrol Sistem</div><a class="active" href="admin-connection-check.html?v=25d">Cek Koneksi DB</a><a href="admin-data-check.html?v=25du">Cek Data Admin</a><a href="admin-maintenance.html?v=25d">Maintenance Fasilitas</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html?v=25d">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html?v=25d">Pengaturan Umum</a>
+<div class="admin-menu-section">Akun</div><a data-kamar-logout="" href="index.html?logout=1&amp;v=25dd">Logout</a></aside>
 <section class="split-main">
-  <section class="split-card hero"><div><span class="eyebrow">Database Connection Audit</span><h1>Cek Koneksi Supabase</h1><p>Halaman ini memeriksa dashboard utama, dashboard member, dashboard affiliator, dan dashboard admin: mana yang sudah membaca Supabase, mana yang masih fallback ke localStorage, dan tabel apa yang perlu diaktifkan supaya semua modul saling terhubung.</p><div class="hero-actions"><button class="btn" id="runBtn">Cek Sekarang</button><button class="btn secondary" id="copyBtn">Copy Report</button><button class="btn secondary" id="csvBtn">Export CSV</button></div></div><div class="note" id="connectionNote">Status awal: belum dicek.</div></section>
-  <section class="grid-4" id="summaryCards">
-    <div class="stat-card" data-filter="all"><span>Total Fitur Dicek</span><strong id="sumTotal">-</strong><small>Semua modul website dan dashboard.</small></div>
-    <div class="stat-card" data-filter="connected"><span>Konek Supabase</span><strong id="sumConnected">-</strong><small>Semua tabel utama tersedia.</small></div>
-    <div class="stat-card" data-filter="partial"><span>Sebagian Konek</span><strong id="sumPartial">-</strong><small>Masih ada tabel pendukung kosong/tidak ada.</small></div>
-    <div class="stat-card" data-filter="local"><span>Masih Local / Belum</span><strong id="sumLocal">-</strong><small>Perlu migrasi atau pembuatan tabel.</small></div>
-  </section>
-  <section class="split-card"><span class="mini-label">Filter Audit</span><div class="toolbar"><div class="field"><label>Cari fitur / tabel</label><input id="searchInput" placeholder="Contoh: affiliate, member_access, dashboard"/></div><div class="field"><label>Area</label><select id="areaFilter"><option value="all">Semua Area</option><option>Dashboard Utama</option><option>Dashboard Member</option><option>Dashboard Affiliator</option><option>Dashboard Admin</option></select></div><div class="field"><label>Status</label><select id="statusFilter"><option value="all">Semua Status</option><option value="connected">Konek Supabase</option><option value="partial">Sebagian Konek</option><option value="local">Local / Belum</option></select></div><button class="btn secondary" id="resetBtn">Reset</button></div><div class="matrix" id="featureMatrix"><div class="note">Klik <b>Cek Sekarang</b> untuk membaca status.</div></div></section>
-  <section class="split-card"><span class="mini-label">Tabel Supabase Terdeteksi</span><div class="table-box"><table><thead><tr><th>Tabel</th><th>Status</th><th>Jumlah Data</th><th>Dipakai Untuk</th><th>Catatan</th></tr></thead><tbody id="tableBody"><tr><td colspan="5">Belum dicek.</td></tr></tbody></table></div></section>
-  <section class="split-card"><span class="mini-label">LocalStorage / Fallback Browser</span><p>Jika data penting masih muncul di sini tetapi tabel Supabase belum ada, berarti data belum sepenuhnya tersambung lintas device/admin.</p><div class="table-box"><table><thead><tr><th>Key</th><th>Jumlah Row</th><th>Ukuran</th><th>Dipakai Untuk</th><th>Rekomendasi</th></tr></thead><tbody id="localBody"><tr><td colspan="5">Belum dicek.</td></tr></tbody></table></div></section>
-  <section class="split-card"><span class="mini-label">Prioritas Aktivasi Supabase</span><div id="priorityBox" class="matrix"><div class="note">Belum ada hasil audit.</div></div></section>
+<section class="split-card hero"><div><span class="eyebrow">Database Connection Audit</span><h1>Cek Koneksi Supabase</h1><p>Halaman ini memeriksa dashboard utama, dashboard member, dashboard affiliator, dan dashboard admin: mana yang sudah membaca Supabase, mana yang masih fallback ke localStorage, dan tabel apa yang perlu diaktifkan supaya semua modul saling terhubung.</p><div class="hero-actions"><button class="btn" id="runBtn">Cek Sekarang</button><button class="btn secondary" id="copyBtn">Copy Report</button><button class="btn secondary" id="csvBtn">Export CSV</button></div></div><div class="note" id="connectionNote">Status awal: belum dicek.</div></section>
+<section class="grid-4" id="summaryCards">
+<div class="stat-card" data-filter="all"><span>Total Fitur Dicek</span><strong id="sumTotal">-</strong><small>Semua modul website dan dashboard.</small></div>
+<div class="stat-card" data-filter="connected"><span>Konek Supabase</span><strong id="sumConnected">-</strong><small>Semua tabel utama tersedia.</small></div>
+<div class="stat-card" data-filter="partial"><span>Sebagian Konek</span><strong id="sumPartial">-</strong><small>Masih ada tabel pendukung kosong/tidak ada.</small></div>
+<div class="stat-card" data-filter="local"><span>Masih Local / Belum</span><strong id="sumLocal">-</strong><small>Perlu migrasi atau pembuatan tabel.</small></div>
+</section>
+<section class="split-card"><span class="mini-label">Filter Audit</span><div class="toolbar"><div class="field"><label>Cari fitur / tabel</label><input id="searchInput" placeholder="Contoh: affiliate, member_access, dashboard"/></div><div class="field"><label>Area</label><select id="areaFilter"><option value="all">Semua Area</option><option>Dashboard Utama</option><option>Dashboard Member</option><option>Dashboard Affiliator</option><option>Dashboard Admin</option></select></div><div class="field"><label>Status</label><select id="statusFilter"><option value="all">Semua Status</option><option value="connected">Konek Supabase</option><option value="partial">Sebagian Konek</option><option value="local">Local / Belum</option></select></div><button class="btn secondary" id="resetBtn">Reset</button></div><div class="matrix" id="featureMatrix"><div class="note">Klik <b>Cek Sekarang</b> untuk membaca status.</div></div></section>
+<section class="split-card"><span class="mini-label">Tabel Supabase Terdeteksi</span><div class="table-box"><table><thead><tr><th>Tabel</th><th>Status</th><th>Jumlah Data</th><th>Dipakai Untuk</th><th>Catatan</th></tr></thead><tbody id="tableBody"><tr><td colspan="5">Belum dicek.</td></tr></tbody></table></div></section>
+<section class="split-card"><span class="mini-label">LocalStorage / Fallback Browser</span><p>Jika data penting masih muncul di sini tetapi tabel Supabase belum ada, berarti data belum sepenuhnya tersambung lintas device/admin.</p><div class="table-box"><table><thead><tr><th>Key</th><th>Jumlah Row</th><th>Ukuran</th><th>Dipakai Untuk</th><th>Rekomendasi</th></tr></thead><tbody id="localBody"><tr><td colspan="5">Belum dicek.</td></tr></tbody></table></div></section>
+<section class="split-card"><span class="mini-label">Prioritas Aktivasi Supabase</span><div class="matrix" id="priorityBox"><div class="note">Belum ada hasil audit.</div></div></section>
 </section></div></main>
-<div id="toast" class="toast"></div>
+<div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script>
 <script>
@@ -110,41 +118,8 @@ el('runBtn').onclick=run;el('copyBtn').onclick=function(){var txt=buildReport();
 })();
 </script>
 
-<script id="kamar-global-header-script">
-(function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
-})();
-</script>
-</body></html>
+
+
+
+
+<script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body></html>

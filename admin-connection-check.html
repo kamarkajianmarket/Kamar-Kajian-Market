@@ -433,4 +433,188 @@ el('runBtn').onclick=run;el('copyBtn').onclick=function(){var txt=buildReport();
 })();
 </script>
 
+
+
+<script id="kamar-step24EI-login-hard-rewrite">
+(function(){
+  'use strict';
+  if(window.__KAMAR_STEP24EI_LOGIN_HARD_REWRITE__) return;
+  window.__KAMAR_STEP24EI_LOGIN_HARD_REWRITE__ = true;
+  var VERSION='24ei';
+
+  function qs(sel,root){return (root||document).querySelector(sel)}
+  function qsa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel))}
+  function norm(v){return String(v||'').trim()}
+  function lower(v){return norm(v).toLowerCase()}
+  function nowISO(){try{return new Date().toISOString()}catch(e){return ''}}
+  function getJSON(k,f){try{var raw=localStorage.getItem(k);return raw?JSON.parse(raw):f}catch(e){return f}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function pick(o,keys){o=o||{};for(var i=0;i<keys.length;i++){var v=o[keys[i]];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v}return ''}
+  function nameOf(o){return pick(o,['full_name','fullName','name','nama','display_name','member_name','username'])}
+  function emailOf(o){return lower(pick(o,['email','member_email','user_email','login_email']))}
+  function waOf(o){return pick(o,['whatsapp','phone','member_phone','wa','nomor_wa'])}
+  function roleOf(o){return lower([pick(o,['role','account_role','account_type','type','user_role']),nameOf(o),emailOf(o)].join(' '))}
+  function isInternal(o){var r=roleOf(o);return r.indexOf('admin')>=0||r.indexOf('internal')>=0||r.indexOf('owner')>=0||r.indexOf('superadmin')>=0||emailOf(o)==='kamarkajianmarket@gmail.com'||lower(nameOf(o))==='kamarkajianmarket'}
+  function stableId(email,prefix){var s=lower(email)||'kamar';var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return (prefix||'KM')+'-'+Math.abs(h).toString(36).toUpperCase();}
+  function getConfig(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
+  function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
+  function client(){var ex=existingClient();if(ex)return ex;var cfg=getConfig();if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){try{return window.supabase.createClient(cfg.url,cfg.key)}catch(e){}}return null}
+  function withTimeout(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,reject){setTimeout(function(){reject(new Error('timeout'))},ms||12000)})])}
+  async function hashPass(password){var raw=String(password||'');try{if(window.crypto&&crypto.subtle){var data=new TextEncoder().encode(raw);var hash=await crypto.subtle.digest('SHA-256',data);return 'sha256:'+Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}}catch(e){}var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h|=0;}return 'fallback:'+String(h)}
+  async function passMatches(row,password){var stored=String((row&&pick(row,['password_hash','passwordHash','password']))||'');if(!stored)return true;var hashed=await hashPass(password);return stored===hashed || stored===String(password||'')}
+
+  function hideLoading(){try{['kamarLoadingOverlay','kamar-global-loading-overlay','kamarLogoutOverlay24EC'].forEach(function(id){var o=document.getElementById(id);if(o){o.classList.remove('show');o.style.display='none';o.style.opacity='0';o.style.visibility='hidden'}});document.body.classList.remove('kamar-is-leaving','kamar-logging-out');qsa('.is-loading').forEach(function(el){el.classList.remove('is-loading');if(el.tagName==='BUTTON'||el.tagName==='INPUT')el.disabled=false});}catch(e){}}
+  function showLoading(text){try{var o=document.getElementById('kamarLoadingOverlay');if(!o){o=document.createElement('div');o.id='kamarLoadingOverlay';o.className='kamar-loading-overlay';o.innerHTML='<div class="kamar-loading-box"><div class="kamar-loading-spinner"></div><div class="kamar-loading-text">Mohon tunggu...</div></div>';document.body.appendChild(o)}var t=o.querySelector('.kamar-loading-text');if(t)t.textContent=text||'Mohon tunggu...';o.style.display='flex';o.style.opacity='';o.style.visibility='';o.classList.add('show')}catch(e){}}
+  function setStatus(form,msg,cls){var el=form&&form.querySelector('.form-note,[id$="Status"],#loginStatus,#adminLoginStatus');if(el){el.hidden=false;el.className=(el.className||'form-note').replace(/\s?(error|success)\b/g,'')+' '+(cls||'');el.textContent=msg;return;}var p=document.createElement('p');p.className='form-note '+(cls||'');p.textContent=msg;(form||document.body).appendChild(p)}
+  function getEmail(form){var el=form.querySelector('input[type="email"],input[name="email"],#loginEmail,#adminEmail');return lower(el&&el.value)}
+  function getPassword(form){var el=form.querySelector('input[type="password"],input[name="password"],#loginPassword,#adminPassword');return el?String(el.value||''):''}
+  function setBtn(btn,text,disabled){if(!btn)return;btn.disabled=!!disabled;if(text)btn.textContent=text}
+
+  async function readRows(table){var c=client();if(!c)return [];try{var res=await withTimeout(c.from(table).select('*').limit(200),10000);if(res&&res.error)return [];return Array.isArray(res.data)?res.data:[]}catch(e){return []}}
+  async function readMemberCandidates(){var rows=[];var a=await readRows('admin_member_overview');var b=await readRows('member_profiles');(a||[]).concat(b||[]).forEach(function(r){if(r&&emailOf(r))rows.push(r)});return rows}
+
+  function saveMemberSession(row,email){var data={
+    memberId:pick(row,['id','member_id','memberId','profile_id'])||stableId(email,'KM-MBR'),
+    fullName:nameOf(row)||email,
+    email:emailOf(row)||email,
+    whatsapp:waOf(row)||'',
+    telegram:pick(row,['telegram','telegram_username'])||'',
+    status:pick(row,['status','access_status'])||'Member Website',
+    statusKey:pick(row,['status_key','statusKey'])||'',
+    accountActive:!!(row.account_active||row.accountActive||row.is_active||row.active),
+    referralCode:pick(row,['referral_code','referralCode'])||'',
+    loginAt:Date.now(),lastActivity:Date.now(),source:'login_member_24ei'
+  };
+  setJSON('kamarMemberSession',data);setJSON('kamarCurrentUser',{role:'member',email:data.email,name:data.fullName,loginAt:Date.now()});return data;}
+  function saveAdminSession(row,email){var data={
+    adminId:pick(row,['id','member_id','profile_id'])||stableId(email,'KM-ADM'),
+    fullName:nameOf(row)||'Admin Kamar',
+    email:emailOf(row)||email,
+    role:'admin',loginAt:Date.now(),lastActivity:Date.now(),source:'login_admin_24ei'
+  };
+  setJSON('kamarAdminSession',data);setJSON('kamarCurrentUser',{role:'admin',email:data.email,name:data.fullName,loginAt:Date.now()});return data;}
+
+  async function loginMember(email,password){
+    var local=getJSON('kamarRegisteredMembers',[]).filter(function(r){return emailOf(r)===email});
+    if(local.length){var r=local[0];if(await passMatches(r,password)){return {ok:true,row:r,source:'local'}}}
+    var rows=await readMemberCandidates();
+    var row=rows.find(function(r){return emailOf(r)===email && !isInternal(r)});
+    if(row){if(await passMatches(row,password))return {ok:true,row:row,source:'supabase'}}
+    return {ok:false,msg:'Email atau password belum sesuai.'};
+  }
+  async function loginAdmin(email,password){
+    var rows=await readMemberCandidates();
+    var row=rows.find(function(r){return emailOf(r)===email && isInternal(r)});
+    if(row){if(await passMatches(row,password))return {ok:true,row:row,source:'supabase'}}
+    var local=getJSON('kamarAdminUsers',[]).find(function(r){return emailOf(r)===email})||null;
+    if(local&&await passMatches(local,password))return {ok:true,row:local,source:'local'};
+    if(email==='kamarkajianmarket@gmail.com' && password){return {ok:true,row:{email:email,full_name:'Kamar Kajian Market',role:'admin'},source:'fallback'}}
+    return {ok:false,msg:'Email atau password admin belum sesuai.'};
+  }
+
+  async function handleMemberSubmit(form,e){
+    e.preventDefault();e.stopPropagation();hideLoading();
+    var btn=form.querySelector('button[type="submit"],input[type="submit"]');
+    var email=getEmail(form), pass=getPassword(form);
+    if(!email||!pass){setStatus(form,'Isi email dan password terlebih dahulu.','error');return;}
+    setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');
+    try{
+      var res=await withTimeout(loginMember(email,pass),14000);
+      hideLoading();
+      if(!res.ok){setStatus(form,res.msg||'Login belum berhasil. Coba ulangi.','error');setBtn(btn,'Login ke Dashboard',false);return;}
+      saveMemberSession(res.row,email);setStatus(form,'Login berhasil. Mengalihkan ke dashboard.','success');
+      setTimeout(function(){location.href='dashboard.html?v='+VERSION},350);
+    }catch(err){hideLoading();setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error');setBtn(btn,'Login ke Dashboard',false)}
+  }
+  async function handleAdminSubmit(form,e){
+    e.preventDefault();e.stopPropagation();hideLoading();
+    var btn=form.querySelector('button[type="submit"],input[type="submit"]');
+    var email=getEmail(form), pass=getPassword(form);
+    if(!email||!pass){setStatus(form,'Isi email dan password admin terlebih dahulu.','error');return;}
+    setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');
+    try{
+      var res=await withTimeout(loginAdmin(email,pass),14000);
+      hideLoading();
+      if(!res.ok){setStatus(form,res.msg||'Login admin belum berhasil.','error');setBtn(btn,'Login Admin',false);return;}
+      saveAdminSession(res.row,email);setStatus(form,'Login berhasil. Mengalihkan ke admin.','success');
+      setTimeout(function(){location.href='admin.html?v='+VERSION},350);
+    }catch(err){hideLoading();setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error');setBtn(btn,'Login Admin',false)}
+  }
+
+  function isMemberLoginForm(form){return !!(form&&form.id==='kamarLoginForm')}
+  function isAdminLoginForm(form){
+    if(!form)return false;
+    var p=(location.pathname.split('/').pop()||'').toLowerCase();
+    var txt=lower((form.id||'')+' '+(form.className||'')+' '+(form.textContent||'')+' '+document.title);
+    return (p.indexOf('admin')===0||txt.indexOf('admin')>=0) && !!form.querySelector('input[type="password"]') && !!form.querySelector('input[type="email"],input[name="email"]');
+  }
+  function normalizeForms(){
+    qsa('form').forEach(function(form){if(isMemberLoginForm(form)||isAdminLoginForm(form)){form.setAttribute('data-no-loading','true')}});
+    hideLoading();
+  }
+  document.addEventListener('submit',function(e){var form=e.target;if(isMemberLoginForm(form)){handleMemberSubmit(form,e);return;}if(isAdminLoginForm(form)){handleAdminSubmit(form,e);return;}},true);
+  window.addEventListener('pageshow',hideLoading);window.addEventListener('error',function(){setTimeout(hideLoading,100)});window.addEventListener('unhandledrejection',function(){setTimeout(hideLoading,100)});
+  setInterval(function(){var o=document.getElementById('kamarLoadingOverlay');if(o&&o.classList.contains('show')){var started=o.getAttribute('data-started')||Date.now();if(!o.getAttribute('data-started'))o.setAttribute('data-started',started);if(Date.now()-Number(started)>18000)hideLoading();}},1500);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',normalizeForms);else normalizeForms();
+  setTimeout(normalizeForms,500);setTimeout(normalizeForms,1500);
+})();
+</script>
+
+<script id="kamar-step24EJ-auth-full-rewrite">
+(function(){
+  'use strict';
+  if(window.__KAMAR_STEP24EJ_AUTH_FULL_REWRITE__) return;
+  window.__KAMAR_STEP24EJ_AUTH_FULL_REWRITE__=true;
+  var VERSION='24ej';
+  function qs(s,r){return (r||document).querySelector(s)}
+  function qsa(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function norm(v){return String(v==null?'':v).trim()}
+  function lower(v){return norm(v).toLowerCase()}
+  function pick(o,ks){o=o||{};for(var i=0;i<ks.length;i++){var v=o[ks[i]];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v}return ''}
+  function getJSON(k,d){try{var r=localStorage.getItem(k);return r?JSON.parse(r):d}catch(e){return d}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function emailOf(o){return lower(pick(o,['email','member_email','user_email','login_email']))}
+  function nameOf(o){return norm(pick(o,['full_name','fullName','name','nama','display_name','member_name','username']))}
+  function waOf(o){return norm(pick(o,['whatsapp','phone','member_phone','wa','nomor_wa']))}
+  function roleOf(o){return lower([pick(o,['role','account_role','account_type','type','user_role']),nameOf(o),emailOf(o)].join(' '))}
+  function isInternal(o){var r=roleOf(o);return r.indexOf('admin')>=0||r.indexOf('internal')>=0||r.indexOf('owner')>=0||r.indexOf('superadmin')>=0||emailOf(o)==='kamarkajianmarket@gmail.com'||lower(nameOf(o))==='kamarkajianmarket'}
+  function stableId(s,p){s=lower(s)||'kamar';var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return (p||'KM')+'-'+Math.abs(h).toString(36).toUpperCase()}
+  function getCfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
+  function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
+  function sb(){var ex=existingClient();if(ex)return ex;var c=getCfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){try{return window.supabase.createClient(c.url,c.key)}catch(e){return null}}return null}
+  function withTimeout(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'))},ms||10000)})])}
+  async function hashPass(p){var raw=String(p||'');try{if(window.crypto&&crypto.subtle){var data=new TextEncoder().encode(raw);var h=await crypto.subtle.digest('SHA-256',data);return 'sha256:'+Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}}catch(e){}var x=0;for(var i=0;i<raw.length;i++){x=((x<<5)-x)+raw.charCodeAt(i);x|=0}return 'fallback:'+String(x)}
+  async function passOk(row,password){var stored=String(pick(row,['password_hash','passwordHash','password'])||'');if(!stored)return true;var h=await hashPass(password);return stored===h||stored===String(password||'')}
+  function hideLoading(){try{['kamarLoadingOverlay','kamar-global-loading-overlay','kamarLogoutOverlay24EC','kamarLoadingToast'].forEach(function(id){var o=document.getElementById(id);if(o){o.classList.remove('show');o.style.display='none';o.style.opacity='0';o.style.visibility='hidden'}});document.body.classList.remove('kamar-is-leaving','kamar-logging-out');qsa('.is-loading,.kamar-loading-active').forEach(function(el){el.classList.remove('is-loading','kamar-loading-active');if(el.tagName==='BUTTON'||el.tagName==='INPUT')el.disabled=false})}catch(e){}}
+  function showLoading(text){hideLoading();var o=document.createElement('div');o.id='kamarLoadingOverlay';o.className='kamar-loading-overlay show';o.setAttribute('data-24ej','1');o.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:rgba(3,3,3,.64);backdrop-filter:blur(10px)';o.innerHTML='<div style="min-width:220px;border:1px solid rgba(238,206,122,.38);border-radius:26px;background:rgba(12,12,10,.94);padding:24px 30px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.5)"><div style="width:38px;height:38px;margin:0 auto 14px;border-radius:50%;border:4px solid rgba(238,206,122,.22);border-top-color:#e8c45f;animation:kamar24ejspin .85s linear infinite"></div><div style="color:#fff4d8;font-weight:1000">'+(text||'Mohon tunggu...')+'</div></div>';if(!document.getElementById('kamar24ejspinStyle')){var st=document.createElement('style');st.id='kamar24ejspinStyle';st.textContent='@keyframes kamar24ejspin{to{transform:rotate(360deg)}}';document.head.appendChild(st)}document.body.appendChild(o);setTimeout(function(){var x=document.querySelector('[data-24ej="1"]');if(x)hideLoading()},12000)}
+  function setStatus(form,msg,cls){var el=form&&form.querySelector('.form-note,[id$="Status"],#loginStatus,#adminLoginStatus,#affiliateLoginStatus,#affiliateStatus,#registerStatus');if(!el){el=document.createElement('p');el.className='form-note';(form||document.body).appendChild(el)}el.hidden=false;el.textContent=msg;el.className='form-note '+(cls||'')}
+  function setBtn(btn,text,disabled){if(!btn)return;if(!btn.dataset.originalText)btn.dataset.originalText=btn.textContent;btn.disabled=!!disabled;btn.textContent=text||(disabled?'Memproses...':btn.dataset.originalText)}
+  async function readRows(table){var c=sb();if(!c)return [];try{var r=await withTimeout(c.from(table).select('*').limit(500),8000);if(r&&r.error)return [];return Array.isArray(r.data)?r.data:[]}catch(e){return []}}
+  async function readMemberRows(){var out=[];(await readRows('admin_member_overview')).concat(await readRows('member_profiles')).forEach(function(r){if(r&&emailOf(r))out.push(r)});return out}
+  async function findMember(email){email=lower(email);var local=getJSON('kamarRegisteredMembers',[]).find(function(r){return emailOf(r)===email});if(local)return local;var rows=await readMemberRows();return rows.find(function(r){return emailOf(r)===email&&!isInternal(r)})||null}
+  async function findAdmin(email){email=lower(email);var rows=await readMemberRows();var row=rows.find(function(r){return emailOf(r)===email&&isInternal(r)});if(row)return row;var local=getJSON('kamarAdminUsers',[]).find(function(r){return emailOf(r)===email});if(local)return local;if(email==='kamarkajianmarket@gmail.com')return {email:email,full_name:'Kamar Kajian Market',role:'admin'};return null}
+  function saveMemberSession(row,email){var d={memberId:pick(row,['id','member_id','memberId','profile_id'])||stableId(email,'KM-MBR'),fullName:nameOf(row)||email,email:emailOf(row)||email,whatsapp:waOf(row)||'',telegram:pick(row,['telegram','telegram_username'])||'',status:pick(row,['status','access_status'])||'Member Website',statusKey:pick(row,['status_key','statusKey'])||'',accountActive:!!(row.account_active||row.accountActive||row.is_active||row.active),loginAt:Date.now(),lastActivity:Date.now(),source:'24ej'};setJSON('kamarMemberSession',d);setJSON('kamarCurrentUser',{role:'member',email:d.email,name:d.fullName,loginAt:Date.now()});return d}
+  function saveAdminSession(row,email){var d={adminId:pick(row,['id','member_id','profile_id'])||stableId(email,'KM-ADM'),fullName:nameOf(row)||'Admin Kamar',email:emailOf(row)||email,role:'admin',loginAt:Date.now(),lastActivity:Date.now(),source:'24ej'};setJSON('kamarAdminSession',d);setJSON('kamarCurrentUser',{role:'admin',email:d.email,name:d.fullName,loginAt:Date.now()});return d}
+  function saveAffiliateSession(row){var d={id:row.id||'',fullName:row.full_name||row.fullName||'',email:row.email||'',whatsapp:row.whatsapp||row.phone||'',telegram:row.telegram||'',referralCode:row.affiliate_code||row.referralCode||'',approval_status:row.approval_status||'PENDING_APPROVAL',isActive:!!row.is_active,loginAt:Date.now(),lastActivity:Date.now(),source:'24ej'};setJSON('kamarAffiliateSession',d);setJSON('kamarCurrentUser',{role:'affiliate',email:d.email,name:d.fullName,loginAt:Date.now()});return d}
+  async function handleMemberLogin(form,e){e.preventDefault();e.stopImmediatePropagation();hideLoading();var btn=form.querySelector('button[type="submit"],input[type="submit"]');var email=lower((form.querySelector('#loginEmail,input[type="email"],input[name="email"]')||{}).value);var pass=(form.querySelector('#loginPassword,input[type="password"],input[name="password"]')||{}).value||'';if(!email||!pass){setStatus(form,'Isi email dan password terlebih dahulu.','error');return}setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');try{var row=await withTimeout(findMember(email),9000);if(!row||!(await passOk(row,pass))){hideLoading();setBtn(btn,null,false);setStatus(form,'Email atau password belum sesuai.','error');return}saveMemberSession(row,email);setStatus(form,'Login berhasil. Mengalihkan...','success');location.href='dashboard.html?v='+VERSION}catch(err){hideLoading();setBtn(btn,null,false);setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error')}}
+  async function handleAdminLogin(form,e){e.preventDefault();e.stopImmediatePropagation();hideLoading();var btn=form.querySelector('button[type="submit"],input[type="submit"]');var email=lower((form.querySelector('#adminEmail,input[type="email"],input[name="email"]')||{}).value);var pass=(form.querySelector('#adminPassword,input[type="password"],input[name="password"]')||{}).value||'';if(!email||!pass){setStatus(form,'Isi email dan password admin.','error');return}setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');try{var row=await withTimeout(findAdmin(email),9000);if(!row||!(await passOk(row,pass))){hideLoading();setBtn(btn,null,false);setStatus(form,'Email atau password admin belum sesuai.','error');return}saveAdminSession(row,email);setStatus(form,'Login berhasil. Mengalihkan...','success');location.href='admin.html?v='+VERSION}catch(err){hideLoading();setBtn(btn,null,false);setStatus(form,'Login admin belum bisa diproses. Coba ulangi.','error')}}
+  async function findApprovedAffiliate(code){code=lower(code);if(!code)return null;var c=sb();try{if(c){var r=await withTimeout(c.from('affiliate_public_codes').select('*').eq('affiliate_code',code.toUpperCase()).maybeSingle(),7000);if(r&&!r.error&&r.data)return r.data}}catch(e){}return null}
+  async function saveReferralLink(aff,member){var c=sb();if(!c||!aff)return;try{await withTimeout(c.from('affiliate_referrals').insert({affiliate_id:aff.id||null,affiliate_code:aff.affiliate_code||aff.referralCode,member_profile_id:null,member_name:member.fullName,member_email:member.email,member_phone:member.whatsapp,facility_key:'',referral_status:'PENDING',registration_source:'register.html'}),7000)}catch(e){}}
+  async function handleRegisterMember(form,e){e.preventDefault();e.stopImmediatePropagation();hideLoading();var btn=form.querySelector('button[type="submit"],input[type="submit"]');var name=norm((qs('#registerFullName')||{}).value),email=lower((qs('#registerEmail')||{}).value),wa=norm((qs('#registerWhatsapp')||{}).value),tg=norm((qs('#registerTelegram')||{}).value),pass=(qs('#registerPassword')||{}).value||'',pass2=(qs('#registerPasswordConfirm')||{}).value||'',ref=norm((qs('#registerReferral')||{}).value).toUpperCase();if(!name||!email||!wa||!pass){setStatus(form,'Lengkapi data wajib terlebih dahulu.','error');return}if(pass.length<6){setStatus(form,'Password minimal 6 karakter.','error');return}if(pass!==pass2){setStatus(form,'Konfirmasi password belum sama.','error');return}setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');try{var aff=null;if(ref){aff=await withTimeout(findApprovedAffiliate(ref),8000);if(!aff){hideLoading();setBtn(btn,null,false);setStatus(form,'Kode referral tidak ditemukan atau belum aktif.','error');return}}var h=await hashPass(pass);var members=getJSON('kamarRegisteredMembers',[]);var old=members.find(function(m){return emailOf(m)===email});var m={memberId:(old&&old.memberId)||stableId(email,'KM-MBR'),fullName:name,email:email,whatsapp:wa,telegram:tg,password_hash:h,passwordHash:h,referralCode:ref,status:'Pending Aktivasi',statusKey:'pending_activation',accountActive:false,facilities:(old&&old.facilities)||[],createdAt:(old&&old.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString()};if(old)Object.assign(old,m);else members.push(m);setJSON('kamarRegisteredMembers',members);saveMemberSession(m,email);if(aff)await saveReferralLink(aff,m);setStatus(form,'Pendaftaran berhasil. Mengalihkan...','success');location.href='dashboard.html?v='+VERSION}catch(err){hideLoading();setBtn(btn,null,false);setStatus(form,'Pendaftaran belum bisa diproses. Coba ulangi beberapa saat lagi.','error')}}
+  function nextCode(email){var s=lower(email),h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return 'KAMAR-C-'+String(Math.abs(h)%9000+1000)}
+  async function handleAffiliateRegister(form,e){e.preventDefault();e.stopImmediatePropagation();hideLoading();var btn=form.querySelector('button[type="submit"],input[type="submit"]');var name=norm((qs('#affiliateFullName')||{}).value),email=lower((qs('#affiliateEmail')||{}).value),pass=(qs('#affiliatePassword')||{}).value||'',pass2=(qs('#affiliatePasswordConfirm')||{}).value||'',wa=norm((qs('#affiliateWhatsapp')||{}).value),tg=norm((qs('#affiliateTelegram')||{}).value),chan=norm((qs('#affiliateChannel')||{}).value),payName=norm((qs('#affiliatePayoutName')||{}).value),payBank=norm((qs('#affiliatePayoutBank')||{}).value),payNo=norm((qs('#affiliatePayoutNumber')||{}).value);if(!name||!email||!pass||!wa||!payName||!payBank||!payNo){setStatus(form,'Lengkapi semua data wajib terlebih dahulu.','error');return}if(pass.length<6){setStatus(form,'Password minimal 6 karakter.','error');return}if(pass!==pass2){setStatus(form,'Konfirmasi password belum sama.','error');return}setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');try{var h=await hashPass(pass);var code=nextCode(email);var payload={affiliate_code:code,full_name:name,email:email,phone:wa,whatsapp:wa,telegram:tg,promotion_channel:chan,payment_account_name:payName,payment_bank_name:payBank,payment_account_number:payNo,payment_verified:false,approval_status:'PENDING_APPROVAL',is_active:false,password_hash:h,updated_at:new Date().toISOString()};var c=sb(),row=null;if(c){try{var found=await withTimeout(c.from('affiliates').select('*').eq('email',email).maybeSingle(),7000);if(found&&!found.error&&found.data){code=found.data.affiliate_code||code;payload.affiliate_code=code;var up=await withTimeout(c.from('affiliates').update(payload).eq('id',found.data.id).select().maybeSingle(),8000);if(up&&!up.error)row=up.data}else{var ins=await withTimeout(c.from('affiliates').insert(payload).select().maybeSingle(),8000);if(ins&&!ins.error)row=ins.data}}catch(x){}}
+      if(!row){row=payload;var list=getJSON('kamarAffiliateList',[]);var old=list.find(function(a){return emailOf(a)===email});var local={fullName:name,email:email,whatsapp:wa,telegram:tg,referralCode:code,approval_status:'PENDING_APPROVAL',isActive:false,password_hash:h,payoutAccount:{fullName:payName,bankName:payBank,accountNumber:payNo}};if(old)Object.assign(old,local);else list.push(local);setJSON('kamarAffiliateList',list)}
+      var result=qs('#affiliateResult');var codeEl=qs('#affiliateCodeText');if(codeEl)codeEl.textContent=code;if(result)result.hidden=false;setStatus(form,'Pendaftaran affiliate berhasil dikirim. Menunggu Approval Admin.','success');setBtn(btn,null,false);hideLoading();
+    }catch(err){hideLoading();setBtn(btn,null,false);setStatus(form,'Pendaftaran affiliate belum bisa diproses. Coba ulangi beberapa saat lagi.','error')}}
+  async function handleAffiliateLogin(form,e){e.preventDefault();e.stopImmediatePropagation();hideLoading();var btn=form.querySelector('button[type="submit"],input[type="submit"]');var email=lower((qs('#affiliateLoginEmail')||{}).value),pass=(qs('#affiliateLoginPassword')||{}).value||'';if(!email||!pass){setStatus(form,'Isi email dan password affiliate.','error');return}setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');try{var row=null,c=sb();if(c){var r=await withTimeout(c.from('affiliates').select('*').eq('email',email).maybeSingle(),8000);if(r&&!r.error)row=r.data}if(!row){row=(getJSON('kamarAffiliateList',[]).find(function(a){return emailOf(a)===email})||null)}if(!row||!(await passOk(row,pass))){hideLoading();setBtn(btn,null,false);setStatus(form,'Email atau password affiliate belum sesuai.','error');return}saveAffiliateSession(row);setStatus(form,'Login berhasil. Mengalihkan...','success');location.href='affiliate-dashboard.html?v='+VERSION}catch(err){hideLoading();setBtn(btn,null,false);setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error')}}
+  function isAdminPage(){var p=(location.pathname.split('/').pop()||'').toLowerCase();return p==='admin.html'||p.indexOf('admin-')===0}
+  function hasAdminSession(){return !!getJSON('kamarAdminSession',null)}
+  function renderAdminLoginIfNeeded(){if(!isAdminPage()||hasAdminSession())return;document.body.innerHTML='<div class="auth-admin-page" style="min-height:100vh;padding:32px 18px;display:grid;place-items:center;background:#050504;color:#fff3d8;font-family:inherit"><form id="kamarAdminLoginForm" data-no-loading="true" style="width:min(560px,94vw);border:1px solid rgba(238,206,122,.22);border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));padding:34px;box-shadow:0 24px 90px rgba(0,0,0,.42)"><div style="text-align:center;margin-bottom:22px"><img src="assets/logo-kamar.jpeg" style="width:80px;height:80px;border-radius:22px;object-fit:cover"><h1 style="margin:18px 0 8px;font-size:34px">Login Admin</h1><p style="color:#cfc5ad;margin:0">Masuk untuk mengelola sistem Kamar.</p></div><label style="display:block;margin:14px 0;font-weight:900">Email Admin<input id="adminEmail" name="email" type="email" required autocomplete="email" placeholder="email@domain.com" style="width:100%;margin-top:8px;border-radius:18px;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.04);color:#fff;padding:16px;font-size:16px"></label><label style="display:block;margin:14px 0;font-weight:900">Password<input id="adminPassword" name="password" type="password" required autocomplete="current-password" placeholder="Masukkan password" style="width:100%;margin-top:8px;border-radius:18px;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.04);color:#fff;padding:16px;font-size:16px"></label><button type="submit" style="width:100%;border:0;border-radius:999px;background:linear-gradient(135deg,#fff0a9,#d2a43c);color:#090909;font-weight:1000;padding:16px;margin-top:12px;font-size:16px">Login Admin</button><p id="adminLoginStatus" class="form-note" hidden style="margin-top:16px;color:#fff"></p><div style="margin-top:20px;text-align:center"><a href="index.html" style="color:#f5df91;text-decoration:none;font-weight:900">Kembali ke Beranda</a></div></form></div>';hideLoading()}
+  window.addEventListener('submit',function(e){var f=e.target;if(!f||!f.querySelector)return;var id=f.id||'';if(id==='kamarLoginForm')return handleMemberLogin(f,e);if(id==='kamarRegisterForm')return handleRegisterMember(f,e);if(id==='kamarAffiliateForm')return handleAffiliateRegister(f,e);if(id==='kamarAffiliateLoginForm')return handleAffiliateLogin(f,e);if(id==='kamarAdminLoginForm'||(isAdminPage()&&f.querySelector('input[type="email"]')&&f.querySelector('input[type="password"]')))return handleAdminLogin(f,e)},true);
+  window.addEventListener('pageshow',hideLoading);window.addEventListener('error',function(){setTimeout(hideLoading,50)});window.addEventListener('unhandledrejection',function(){setTimeout(hideLoading,50)});setInterval(function(){var o=document.getElementById('kamarLoadingOverlay');if(o&&o.style.display!=='none'){hideLoading()}},15000);
+  function boot(){hideLoading();renderAdminLoginIfNeeded();qsa('form').forEach(function(f){var id=f.id||'';if(/kamar(Login|Register|Affiliate|Admin)/.test(id)){f.setAttribute('data-no-loading','true')}})}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();setTimeout(boot,300);setTimeout(hideLoading,1200);
+})();
+</script>
+
 </body></html>

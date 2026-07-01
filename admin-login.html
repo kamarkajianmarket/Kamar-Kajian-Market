@@ -1,37 +1,10 @@
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login Admin — Kamar Kajian Market</title>
-  <script src="assets/js/kamar-auth-inline-24em.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/kamar-config.js"></script>
-  <script src="assets/js/kamar-supabase.js"></script>
-  <style>
-    :root{--bg:#050504;--card:#10100e;--line:rgba(238,206,122,.22);--gold:#f0d879;--text:#fff3d8;--muted:#cfc5ad;--dark:#090909}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#173328 0,#080806 46%,#030303 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif;display:flex;flex-direction:column}.top{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,64px);border-bottom:1px solid rgba(238,206,122,.12);background:rgba(5,5,4,.72);backdrop-filter:blur(14px)}.brand{display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none;font-weight:1000;letter-spacing:.03em}.brand img{width:44px;height:44px;border-radius:14px;object-fit:cover}.actions{display:flex;gap:10px;flex-wrap:wrap}.actions a{border:1px solid rgba(238,206,122,.24);border-radius:999px;padding:10px 14px;color:var(--text);text-decoration:none;font-weight:900;font-size:13px;background:rgba(255,255,255,.04)}main{flex:1;display:grid;place-items:center;padding:34px 18px}.card{width:min(560px,100%);border:1px solid var(--line);border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025));padding:34px;box-shadow:0 24px 90px rgba(0,0,0,.5)}.head{text-align:center;margin-bottom:22px}.head img{width:84px;height:84px;border-radius:24px;object-fit:cover;box-shadow:0 12px 36px rgba(0,0,0,.36)}h1{font-size:clamp(30px,4.5vw,42px);margin:18px 0 8px;letter-spacing:-.04em}.head p{margin:0;color:var(--muted);line-height:1.55}.mini{display:inline-flex;margin-top:14px;border:1px solid rgba(238,206,122,.24);border-radius:999px;padding:8px 12px;color:var(--gold);font-size:12px;text-transform:uppercase;font-weight:1000;letter-spacing:.1em}label{display:block;margin:14px 0;font-weight:900;color:#fff6dc}input{width:100%;margin-top:8px;border-radius:18px;border:1px solid rgba(238,206,122,.28);background:rgba(255,255,255,.045);color:#fff;padding:16px;font-size:16px;outline:none}input:focus{border-color:rgba(240,216,121,.7);box-shadow:0 0 0 4px rgba(240,216,121,.08)}button{width:100%;border:0;border-radius:999px;background:linear-gradient(135deg,#fff0a9,#d2a43c);color:#090909;font-weight:1000;padding:16px;margin-top:12px;font-size:16px;cursor:pointer}button:disabled{opacity:.7;cursor:not-allowed}.form-note{margin-top:14px}.foot{margin-top:20px;text-align:center}.foot a{color:var(--gold);text-decoration:none;font-weight:900}@media(max-width:560px){.top{height:auto;padding:14px 16px;align-items:flex-start}.brand span{font-size:14px}.actions{justify-content:flex-end}.card{padding:24px;border-radius:26px}}
-  </style>
-</head>
-<body>
-  <header class="top">
-    <a class="brand" href="index.html"><img src="assets/logo-kamar.jpeg" alt="Logo Kamar"><span>Kamar Kajian Market</span></a>
-    <div class="actions"><a href="member.html?v=24em">Login Member</a><a href="index.html">Kembali ke Beranda</a></div>
-  </header>
-  <main>
-    <form id="kamarAdminLoginForm" class="card" data-no-loading="true">
-      <div class="head">
-        <img src="assets/logo-kamar.jpeg" alt="Logo Kamar">
-        <div class="mini">Admin Area</div>
-        <h1>Login Admin</h1>
-        <p>Masuk untuk mengelola data member, affiliate, fasilitas, dan kontrol sistem Kamar.</p>
-      </div>
-      <label>Email Admin<input id="adminEmail" name="email" type="email" required autocomplete="email" placeholder="email@domain.com"></label>
-      <label>Password Admin<input id="adminPassword" name="password" type="password" required autocomplete="current-password" placeholder="Masukkan password"></label>
-      <button type="submit">Login Admin</button>
-      <p id="adminLoginStatus" class="form-note" hidden></p>
-      <div class="foot"><a href="index.html">Kembali ke Beranda</a></div>
-    </form>
-  </main>
-</body>
-</html>
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login Admin | Kamar Kajian Market</title>
+<link rel="stylesheet" href="assets/css/kamar-auth-25.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-auth-core-25.js"></script>
+</head><body>
+<header class="auth-top"><a class="brand" href="index.html?v=25"><span class="brand-badge">K</span><span>Kamar Kajian Market</span></a><div class="top-center"><a class="pill" href="index.html?v=25">Beranda</a></div><nav class="top-actions"><a class="pill" href="member.html?v=25">Login Member</a><a class="pill" href="affiliate-login.html?v=25">Login Affiliate</a></nav></header>
+<main class="shell"><div class="auth-grid"><section class="auth-hero"><div><span class="kicker">Admin Area</span><h1>Login Admin</h1><p>Halaman khusus admin untuk mengelola member, affiliate, aktivasi fasilitas, konten, dan kontrol sistem.</p><div class="chips"><span class="chip">Admin Dashboard</span><span class="chip">Kontrol Sistem</span><span class="chip">Data Member</span></div></div><div class="notice">Admin tidak login melalui halaman member. Gunakan pintu login khusus ini agar role akses tidak bercampur.</div></section>
+<section class="auth-card"><h2>Login Admin</h2><p class="desc">Masukkan email dan password admin.</p><form id="adminLoginForm" class="form"><label>Email Admin<input name="email" type="email" required autocomplete="email" placeholder="admin@domain.com"></label><label>Password Admin<input name="password" type="password" required autocomplete="current-password" placeholder="Password admin"></label><button class="btn" type="submit">Login Admin</button><div class="processing" data-processing-line hidden></div><p class="auth-status" hidden></p></form><div class="auth-switch"><div class="switch-row"><span>Login sebagai member?</span><a class="pill" href="member.html?v=25">Login Member</a></div><div class="switch-row"><span>Login sebagai affiliate?</span><a class="pill" href="affiliate-login.html?v=25">Login Affiliate</a></div></div></section></div></main><footer class="footer">© Kamar Kajian Market</footer>
+<script>KamarAuth25.bindForm('adminLoginForm',function(f){return KamarAuth25.loginAdmin(f.email.value,f.password.value)},'admin.html?v=25');</script></body></html>

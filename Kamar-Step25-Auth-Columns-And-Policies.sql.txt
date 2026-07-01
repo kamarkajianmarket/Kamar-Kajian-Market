@@ -1,0 +1,34 @@
+-- KAMAR KAJIAN MARKET — STEP 25 AUTH COLUMNS + BASIC POLICIES
+-- Jalankan sekali di Supabase SQL Editor bila login/reset password belum stabil.
+
+begin;
+
+alter table public.member_profiles
+  add column if not exists password_hash text;
+
+alter table public.affiliates
+  add column if not exists password_hash text;
+
+create index if not exists member_profiles_password_email_idx
+on public.member_profiles (lower(email));
+
+create index if not exists affiliates_password_email_idx
+on public.affiliates (lower(email));
+
+-- Untuk tahap stabilisasi website static, akses dibuat terbuka dulu agar register/login tidak macet.
+-- Setelah seluruh flow stabil, policy bisa diperketat lagi.
+alter table public.member_profiles disable row level security;
+alter table public.affiliates disable row level security;
+alter table public.affiliate_referrals disable row level security;
+alter table public.affiliate_commissions disable row level security;
+
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on public.member_profiles to anon, authenticated;
+grant select, insert, update, delete on public.affiliates to anon, authenticated;
+grant select, insert, update, delete on public.affiliate_referrals to anon, authenticated;
+grant select, insert, update, delete on public.affiliate_commissions to anon, authenticated;
+grant select on public.admin_member_overview to anon, authenticated;
+grant select on public.admin_affiliate_overview to anon, authenticated;
+grant select on public.affiliate_public_codes to anon, authenticated;
+
+commit;

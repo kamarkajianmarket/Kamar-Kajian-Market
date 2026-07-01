@@ -479,7 +479,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <script id="kamar-step24EE-affiliate-dashboard-login-redirect">
 (function(){
   function hasSession(){try{var s=JSON.parse(localStorage.getItem('kamarAffiliateSession')||'null');return !!(s&&(s.email||s.referralCode));}catch(e){return false;}}
-  if(!hasSession() && !/affiliate-login\.html/i.test(location.pathname)){location.replace('affiliate-login.html?v=24ej');}
+  if(!hasSession() && !/affiliate-login\.html/i.test(location.pathname)){location.replace('affiliate-login.html?v=24em');}
 })();
 </script>
 </head>
@@ -503,7 +503,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     </form>
     <div class="kamar-affiliate-login-help">
       <span>Belum punya akun affiliate?</span>
-      <a href="affiliate.html?v=24ej">Daftar Affiliate</a>
+      <a href="affiliate.html?v=24em">Daftar Affiliate</a>
     </div>
   </article>
 </section>
@@ -1120,7 +1120,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
       setStatus('Memproses login. Mohon tunggu...','');
       var res=await login(email,pass);
       if(!res.ok){setStatus('Login belum berhasil. Periksa email dan password.','error');if(btn){btn.disabled=false;btn.textContent='Login Affiliate';}return;}
-      setStatus('Login berhasil. Mengalihkan ke dashboard affiliate...','success');setTimeout(function(){location.href='affiliate-dashboard.html?v=24ej';},500);
+      setStatus('Login berhasil. Mengalihkan ke dashboard affiliate...','success');setTimeout(function(){location.href='affiliate-dashboard.html?v=24em';},500);
     });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();

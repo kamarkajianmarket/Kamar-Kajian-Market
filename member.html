@@ -1,21 +1,19 @@
-<!DOCTYPE html><html lang="id"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <title>Login Member | Kamar Kajian Market</title>
-<link rel="stylesheet" href="assets/css/kamar-auth-25.css">
+<link href="assets/css/kamar-auth-25.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/kamar-config.js"></script>
 <script src="assets/js/kamar-supabase.js"></script>
-<script src="assets/js/kamar-auth-core-25.js"></script><script src="assets/js/kamar-session-compat-25b.js"></script>
-</head><body>
-<header class="auth-top"><a class="brand" href="index.html?v=25"><span class="brand-badge">K</span><span>Kamar Kajian Market</span></a><div class="top-center"><a class="pill" href="index.html?v=25">Beranda</a></div><nav class="top-actions"><a class="pill" href="affiliate-login.html?v=25b">Login Affiliate</a><a class="pill" href="admin-login.html?v=25b">Login Admin</a></nav></header>
+<script src="assets/js/kamar-auth-core-25c.js"></script></head><body>
+<header class="auth-top"><a class="brand" href="index.html?v=25c"><span class="brand-badge">K</span><span>Kamar Kajian Market</span></a><div class="top-center"><a class="pill" href="index.html?v=25c">Beranda</a></div><nav class="top-actions"><a class="pill" href="affiliate-login.html?v=25c">Login Affiliate</a><a class="pill" href="admin-login.html?v=25c">Login Admin</a></nav></header>
 <main class="shell"><div class="auth-grid">
 <section class="auth-hero"><div><span class="kicker">Member Area</span><h1>Login Member</h1><p>Masuk ke dashboard member untuk melihat fasilitas, materi, akses aktif, dan informasi akun Kamar.</p><div class="chips"><span class="chip">Member Dashboard</span><span class="chip">Akses Fasilitas</span><span class="chip">Data Akun</span></div></div><div class="notice">Gunakan email dan password yang dipakai saat mendaftar. Untuk akun lama yang belum punya password, gunakan fitur <b>Atur Password Member</b>.</div></section>
 <section class="auth-card"><h2>Login Member</h2><p class="desc">Masukkan data akun member Anda.</p>
-<form id="memberLoginForm" class="form" autocomplete="on"><label>Email Member<input name="email" type="email" required autocomplete="email" placeholder="email@domain.com"></label><label>Password<input name="password" type="password" required autocomplete="current-password" placeholder="Password member"></label><button class="btn" type="submit">Login Member</button><div class="processing" data-processing-line hidden></div><p class="auth-status" hidden></p></form>
-<div class="auth-switch"><div class="switch-row"><span>Belum punya akun member?</span><a class="pill" href="register.html?v=25b">Daftar Member</a></div><div class="switch-row"><span>Akun affiliate?</span><a class="pill" href="affiliate-login.html?v=25b">Login Affiliate</a></div><div class="switch-row"><span>Admin Kamar?</span><a class="pill" href="admin-login.html?v=25b">Login Admin</a></div></div>
-<div class="notice"><details><summary style="cursor:pointer;color:#f4df90;font-weight:1000">Atur Password Member</summary><form id="memberResetForm" class="form" style="margin-top:14px"><label>Email Member<input name="email" type="email" required placeholder="email@domain.com"></label><label>Password Baru<input name="password" type="password" required minlength="6" placeholder="Minimal 6 karakter"></label><label>Konfirmasi Password<input name="confirm" type="password" required minlength="6" placeholder="Ulangi password"></label><button class="btn secondary" type="submit">Simpan Password</button><div class="processing" data-processing-line hidden></div><p class="auth-status" hidden></p></form></details></div>
+<form autocomplete="on" class="form" id="memberLoginForm"><label>Email Member<input autocomplete="email" name="email" placeholder="email@domain.com" required="" type="email"/></label><label>Password<input autocomplete="current-password" name="password" placeholder="Password member" required="" type="password"/></label><button class="btn" type="submit">Login Member</button><div class="processing" data-processing-line="" hidden=""></div><p class="auth-status" hidden=""></p></form>
+<div class="auth-switch"><div class="switch-row"><span>Belum punya akun member?</span><a class="pill" href="register.html?v=25c">Daftar Member</a></div><div class="switch-row"><span>Akun affiliate?</span><a class="pill" href="affiliate-login.html?v=25c">Login Affiliate</a></div><div class="switch-row"><span>Admin Kamar?</span><a class="pill" href="admin-login.html?v=25c">Login Admin</a></div></div>
+<div class="notice"><details><summary style="cursor:pointer;color:#f4df90;font-weight:1000">Atur Password Member</summary><form class="form" id="memberResetForm" style="margin-top:14px"><label>Email Member<input name="email" placeholder="email@domain.com" required="" type="email"/></label><label>Password Baru<input minlength="6" name="password" placeholder="Minimal 6 karakter" required="" type="password"/></label><label>Konfirmasi Password<input minlength="6" name="confirm" placeholder="Ulangi password" required="" type="password"/></label><button class="btn secondary" type="submit">Simpan Password</button><div class="processing" data-processing-line="" hidden=""></div><p class="auth-status" hidden=""></p></form></details></div>
 </section></div></main><footer class="footer">© Kamar Kajian Market</footer>
-<script>
-KamarAuth25.bindForm('memberLoginForm',function(f){return KamarAuth25.loginMember(f.email.value,f.password.value)},'dashboard.html?v=25b');
-KamarAuth25.bindForm('memberResetForm',async function(f){await KamarAuth25.setMemberPassword(f.email.value,f.password.value); var st=f.querySelector('.auth-status'); KamarAuth25.status(st,'Password berhasil disimpan. Silakan login dengan password baru.','ok');},'member.html?v=25b');
-</script></body></html>
+</body></html>

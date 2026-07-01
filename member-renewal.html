@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="id"><head><script src="assets/js/kamar-auth-core-25.js"></script><script src="assets/js/kamar-session-compat-25b.js"></script><script src="assets/js/kamar-page-guard-25.js"></script>
+<html lang="id"><head>
 <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Perpanjangan / Tambah Fasilitas — Kamar Kajian Market</title><meta content="Renewal dan tambah fasilitas member." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
@@ -248,8 +248,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
 }
 </style>
-
-
 <style id="kamar-step24bo-member-payment">
 .member-payment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px;}
 .member-payment-card{border:1px solid rgba(238,206,122,.16);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.016));padding:22px;position:relative;overflow:hidden;min-height:190px;display:flex;flex-direction:column;align-items:flex-start;}
@@ -265,8 +263,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .member-payment-card.is-coming-soon{opacity:.88;}
 @media(max-width:920px){.member-payment-grid{grid-template-columns:1fr}}
 </style>
-
-
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -296,31 +292,28 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-
 <style id="kamar-loading-style">
 .kamar-loading-overlay{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;background:rgba(4,4,3,.58);backdrop-filter:blur(8px)}
 .kamar-loading-overlay.show{display:flex}.kamar-loading-box{min-width:220px;border:1px solid rgba(238,206,122,.34);background:linear-gradient(135deg,rgba(18,17,13,.96),rgba(7,7,6,.96));border-radius:24px;padding:24px 28px;text-align:center;box-shadow:0 24px 90px rgba(0,0,0,.48)}
 .kamar-loading-spinner{width:42px;height:42px;margin:0 auto 14px;border-radius:50%;border:4px solid rgba(238,206,122,.20);border-top-color:#e8c45f;animation:kamarSpin .82s linear infinite}.kamar-loading-text{color:#fff4d8;font-weight:1000;letter-spacing:.05em}.is-loading{pointer-events:none!important;opacity:.78!important}.is-loading::after{content:' ';display:inline-block;width:.9em;height:.9em;margin-left:8px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;vertical-align:-.12em;animation:kamarSpin .75s linear infinite}@keyframes kamarSpin{to{transform:rotate(360deg)}}
 </style>
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Study 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a></aside><section class="split-main">
+<script src="assets/js/kamar-session-guard-25c.js"></script></head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html?logout=1&amp;v=25c">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a aria-disabled="true" class="disabled" href="member-materials.html">Kamar Edukasi 🔒</a><a aria-disabled="true" class="disabled" href="member-study.html">Kamar Study 🔒</a><a aria-disabled="true" class="disabled" href="member-private.html">Kamar Private 🔒</a><a aria-disabled="true" class="disabled" href="member-indicator.html">Kamar Indikator 🔒</a><a aria-disabled="true" class="disabled" href="member-robot.html">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="index.html?logout=1&amp;v=25c">Logout</a></aside><section class="split-main">
 <div class="split-card kamar-title-card"><h1>Perpanjangan &amp; Tambah Fasilitas</h1></div>
-
 <section class="split-card" id="payment-mayar">
 <span class="mini-label">Aktivasi Fasilitas</span>
 <h2>Pilih Fasilitas Kamar</h2>
 <p>Pilih fasilitas yang ingin diaktifkan. Kamar Edukasi dan Kamar Study masih Coming Soon, jadi belum bisa diaktifkan dari dashboard member.</p>
 <div class="member-payment-grid">
-<article class="member-payment-card is-coming-soon"><h3>Kamar Edukasi</h3><p>Fasilitas edukasi gratis sedang disiapkan dan belum bisa diaktifkan dari dashboard member.</p><div class="activate-row"><a class="btn disabled-payment" href="#" aria-disabled="true">AKTIFKAN</a><span class="activate-coming-soon">Coming Soon</span></div></article>
-<article class="member-payment-card is-coming-soon"><h3>Kamar Study</h3><p>Fasilitas Kamar Study sedang disiapkan ulang dan belum bisa diaktifkan/perpanjang dari dashboard member.</p><div class="activate-row"><a class="btn disabled-payment" href="#" aria-disabled="true">AKTIFKAN</a><span class="activate-coming-soon">Coming Soon</span></div></article>
+<article class="member-payment-card is-coming-soon"><h3>Kamar Edukasi</h3><p>Fasilitas edukasi gratis sedang disiapkan dan belum bisa diaktifkan dari dashboard member.</p><div class="activate-row"><a aria-disabled="true" class="btn disabled-payment" href="#">AKTIFKAN</a><span class="activate-coming-soon">Coming Soon</span></div></article>
+<article class="member-payment-card is-coming-soon"><h3>Kamar Study</h3><p>Fasilitas Kamar Study sedang disiapkan ulang dan belum bisa diaktifkan/perpanjang dari dashboard member.</p><div class="activate-row"><a aria-disabled="true" class="btn disabled-payment" href="#">AKTIFKAN</a><span class="activate-coming-soon">Coming Soon</span></div></article>
 <article class="member-payment-card"><h3>Kamar Private</h3><p>Untuk paket pendampingan, evaluasi, dan pembelajaran private.</p><div class="activate-row"><a class="btn" href="member-activate.html?facility=private">AKTIFKAN</a></div></article>
 <article class="member-payment-card"><h3>Kamar Indikator</h3><p>Untuk akses tools indikator sesuai ketentuan fasilitas.</p><div class="activate-row"><a class="btn" href="member-activate.html?facility=indikator">AKTIFKAN</a></div></article>
 <article class="member-payment-card"><h3>Kamar Robot</h3><p>Untuk sewa atau pembelian license tools robot.</p><div class="activate-row"><a class="btn" href="member-activate.html?facility=robot">AKTIFKAN</a></div></article>
 </div>
 <div class="payment-note-box"><strong>Alur sederhana:</strong> pilih fasilitas, isi kebutuhan, lalu hubungi admin untuk konfirmasi aktivasi dan pembayaran.</div>
 </section>
-
 </section>
-</section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
+</div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
   document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
@@ -337,7 +330,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js"></script><script src="assets/js/kamar-supabase.js"></script><script src="assets/js/kamar-ui.js"></script><script src="assets/js/kamar-auth.js"></script><script src="assets/js/kamar-page-guard.js"></script><script src="assets/js/kamar-member-renewal.js"></script>
-
 <script id="kamar-mayar-member-payment-config">
 window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
   study: "",
@@ -365,420 +357,9 @@ window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
 })();
 </script>
 
-<script id="kamar-step24CO-maintenance-notice">
-
-(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();
-
-</script>
-<script id="kamar-global-header-script">
-(function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
-})();
-</script>
-
-<script id="kamar-global-loading-script">
-(function(){
-  function ensureOverlay(){var o=document.getElementById('kamarLoadingOverlay');if(o)return o;o=document.createElement('div');o.id='kamarLoadingOverlay';o.className='kamar-loading-overlay';o.innerHTML='<div class="kamar-loading-box"><div class="kamar-loading-spinner"></div><div class="kamar-loading-text">Mohon tunggu...</div></div>';document.body.appendChild(o);return o;}
-  function showLoading(el,text){try{if(el){el.classList.add('is-loading');if(el.tagName==='BUTTON'||el.tagName==='INPUT')el.disabled=true;}var o=ensureOverlay();var t=o.querySelector('.kamar-loading-text');if(t)t.textContent=text||'Mohon tunggu...';o.classList.add('show');}catch(e){}}
-  window.KamarShowLoading=showLoading;
-  document.addEventListener('submit',function(e){var form=e.target;if(!form||form.hasAttribute('data-no-loading'))return;var btn=form.querySelector('button[type="submit"],input[type="submit"]');showLoading(btn,'Mohon tunggu...');},true);
-  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a,button');if(!a||a.hasAttribute('data-no-loading'))return;if(a.closest('[data-no-loading]'))return;if(a.tagName==='BUTTON'){if((a.type||'').toLowerCase()==='button' && !a.hasAttribute('data-loading'))return;showLoading(a,'Mohon tunggu...');return;}var href=a.getAttribute('href')||'';if(!href||href==='#'||href.indexOf('javascript:')===0||a.target==='_blank'||a.hasAttribute('download'))return;showLoading(a,'Membuka halaman...');},true);
-})();
-</script>
-
-<script id="kamar-global-logout-fix-24ec">
-(function(){
-  if(window.__KAMAR_LOGOUT_FIX_24EC__) return;
-  window.__KAMAR_LOGOUT_FIX_24EC__ = true;
-
-  function showLogoutLoading(){
-    try{
-      var old=document.getElementById('kamar-global-loading-overlay');
-      if(old){ old.classList.add('show'); return; }
-      var style=document.getElementById('kamar-global-loading-style');
-      if(!style){
-        style=document.createElement('style');
-        style.id='kamar-global-loading-style';
-        style.textContent='body.kamar-is-leaving{pointer-events:none}.kamar-loading-overlay{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.18s ease}.kamar-loading-overlay.show{opacity:1;visibility:visible}.kamar-loading-box{border:1px solid rgba(235,207,130,.35);border-radius:28px;padding:24px 32px;background:linear-gradient(135deg,rgba(18,18,18,.92),rgba(15,28,24,.88));box-shadow:0 22px 70px rgba(0,0,0,.45);color:#fff7dc;font-weight:900;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:14px}.kamar-loading-spinner{width:20px;height:20px;border-radius:50%;border:3px solid rgba(235,207,130,.28);border-top-color:#f2dc8e;animation:kamarSpin24EC .75s linear infinite}@keyframes kamarSpin24EC{to{transform:rotate(360deg)}}';
-        document.head.appendChild(style);
-      }
-      var ov=document.createElement('div');
-      ov.id='kamar-global-loading-overlay';
-      ov.className='kamar-loading-overlay show';
-      ov.innerHTML='<div class="kamar-loading-box"><span class="kamar-loading-spinner"></span><span>Memproses...</span></div>';
-      document.body.appendChild(ov);
-      document.body.classList.add('kamar-is-leaving');
-    }catch(e){}
-  }
-
-  var explicitKeys = [
-    'kamarAdminSession','kamarMemberSession','kamarAffiliateSession',
-    'kamarSession','kamarAuthSession','kamarCurrentUser','kamarUserSession',
-    'kamarLoggedIn','kamarAdminLogin','kamarMemberLogin','kamarAffiliateLogin',
-    'kamarAuthRole','kamarUserRole','kamarLoginRole','kamarLastActivityAt'
-  ];
-  var sessionPattern = /^(kamar.*(session|login|auth|currentuser|current_user|role|token)|sb-.*auth-token|supabase\.auth\.token)$/i;
-
-  function clearStorage(store){
-    if(!store) return;
-    try{
-      explicitKeys.forEach(function(k){ try{store.removeItem(k);}catch(e){} });
-      var keys=[];
-      for(var i=0;i<store.length;i++){ keys.push(store.key(i)); }
-      keys.forEach(function(k){
-        if(!k) return;
-        if(sessionPattern.test(k)){
-          try{store.removeItem(k);}catch(e){}
-        }
-      });
-    }catch(e){}
-  }
-
-  function clearCookies(){
-    try{
-      document.cookie.split(';').forEach(function(c){
-        var name=c.split('=')[0].trim();
-        if(!name) return;
-        if(/^kamar/i.test(name) || /^sb-/i.test(name)){
-          document.cookie=name+'=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-          document.cookie=name+'=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax';
-        }
-      });
-    }catch(e){}
-  }
-
-  async function doLogout(e){
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    showLogoutLoading();
-    try{
-      if(window.supabase && window.supabase.auth && typeof window.supabase.auth.signOut==='function'){
-        try{ await window.supabase.auth.signOut(); }catch(x){}
-      }
-      if(window.kamarSupabase && window.kamarSupabase.auth && typeof window.kamarSupabase.auth.signOut==='function'){
-        try{ await window.kamarSupabase.auth.signOut(); }catch(x){}
-      }
-    }catch(err){}
-    clearStorage(window.localStorage);
-    clearStorage(window.sessionStorage);
-    clearCookies();
-    setTimeout(function(){ window.location.replace('index.html?logout=1&v=24ec'); }, 180);
-  }
-
-  window.KamarLogoutAll = doLogout;
-
-  function normalizeLogoutLinks(){
-    try{
-      document.querySelectorAll('a,button').forEach(function(el){
-        var txt=(el.textContent||'').trim().toLowerCase();
-        var href=(el.getAttribute && el.getAttribute('href')) || '';
-        var hasLogoutAttr = el.hasAttribute && el.hasAttribute('data-kamar-logout');
-        var looksLogout = hasLogoutAttr || txt==='logout' || txt.indexOf('logout')>=0;
-        if(looksLogout){
-          el.setAttribute('data-kamar-logout','');
-          if(el.tagName && el.tagName.toLowerCase()==='a') el.setAttribute('href','index.html?logout=1&v=24ec');
-        }
-      });
-    }catch(e){}
-  }
-
-  document.addEventListener('click', function(e){
-    var t=e.target;
-    if(!t || !t.closest) return;
-    var el=t.closest('[data-kamar-logout], a, button');
-    if(!el) return;
-    var txt=(el.textContent||'').trim().toLowerCase();
-    if(el.hasAttribute('data-kamar-logout') || txt==='logout' || txt.indexOf('logout')>=0){
-      doLogout(e);
-    }
-  }, true);
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', normalizeLogoutLinks);
-  else normalizeLogoutLinks();
-  setTimeout(normalizeLogoutLinks, 700);
-})();
-</script>
-
-
-<script id="kamar-universal-logout-hard-fix-24ec">
-(function(){
-  if(window.__KAMAR_UNIVERSAL_LOGOUT_24EC__) return;
-  window.__KAMAR_UNIVERSAL_LOGOUT_24EC__ = true;
-
-  var REDIRECT_URL = 'index.html?logout=1&v=24ec&t=' + Date.now();
-  var explicitKeys = [
-    'kamarAdminSession','kamarMemberSession','kamarAffiliateSession',
-    'kamarSession','kamarAuthSession','kamarUserSession','kamarCurrentUser',
-    'kamarLoggedIn','kamarAdminLogin','kamarMemberLogin','kamarAffiliateLogin',
-    'kamarAuthRole','kamarUserRole','kamarLoginRole','kamarLastActivityAt',
-    'kamarAdmin','kamarMember','kamarAffiliate','kamarUser',
-    'KAMAR_ADMIN_SESSION','KAMAR_MEMBER_SESSION','KAMAR_AFFILIATE_SESSION'
-  ];
-  var authKeyPattern = /(session|login|auth|token|currentuser|current_user|role|loggedin|logged_in)/i;
-
-  function safeRemove(store, key){ try{ store.removeItem(key); }catch(e){} }
-  function clearStore(store){
-    if(!store) return;
-    try{
-      explicitKeys.forEach(function(k){ safeRemove(store,k); });
-      var keys=[];
-      for(var i=0;i<store.length;i++){ var k=store.key(i); if(k) keys.push(k); }
-      keys.forEach(function(k){
-        var low=String(k||'').toLowerCase();
-        if(/^sb-/.test(low) || low==='supabase.auth.token' || low.indexOf('supabase')>=0 && authKeyPattern.test(low)) safeRemove(store,k);
-        else if(/^kamar/.test(low) && authKeyPattern.test(low)) safeRemove(store,k);
-      });
-    }catch(e){}
-  }
-  function clearCookies(){
-    try{
-      var names = document.cookie.split(';').map(function(c){return c.split('=')[0].trim();}).filter(Boolean);
-      names.forEach(function(name){
-        var low=name.toLowerCase();
-        if(low.indexOf('sb-')===0 || low.indexOf('supabase')>=0 || low.indexOf('kamar')===0){
-          ['/', location.pathname.replace(/\/[^\/]*$/,'/') || '/'].forEach(function(path){
-            document.cookie = name+'=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path='+path;
-          });
-        }
-      });
-    }catch(e){}
-  }
-  function showOverlay(){
-    try{
-      var style=document.getElementById('kamar-logout-hard-style-24ec');
-      if(!style){
-        style=document.createElement('style');
-        style.id='kamar-logout-hard-style-24ec';
-        style.textContent='body.kamar-logging-out{pointer-events:none!important}.kamar-logout-overlay{position:fixed;inset:0;z-index:2147483647;background:rgba(3,3,3,.74);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center}.kamar-logout-box{border:1px solid rgba(238,206,122,.38);border-radius:28px;padding:24px 32px;background:linear-gradient(135deg,rgba(14,14,13,.96),rgba(14,28,23,.92));box-shadow:0 24px 80px rgba(0,0,0,.55);color:#fff3d8;font-weight:1000;letter-spacing:.06em;display:flex;align-items:center;gap:14px}.kamar-logout-spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(238,206,122,.25);border-top-color:#f3df96;animation:kamarLogoutSpin24EC .7s linear infinite}@keyframes kamarLogoutSpin24EC{to{transform:rotate(360deg)}}';
-        document.head.appendChild(style);
-      }
-      var old=document.getElementById('kamarLogoutOverlay24EC');
-      if(old) return;
-      var ov=document.createElement('div');
-      ov.id='kamarLogoutOverlay24EC';
-      ov.className='kamar-logout-overlay';
-      ov.innerHTML='<div class="kamar-logout-box"><span class="kamar-logout-spinner"></span><span>Memproses...</span></div>';
-      document.body.appendChild(ov);
-      document.body.classList.add('kamar-logging-out');
-    }catch(e){}
-  }
-  function isLogoutEl(el){
-    if(!el || !el.getAttribute) return false;
-    var txt=(el.textContent||el.value||'').trim().toLowerCase();
-    var href=(el.getAttribute('href')||'').toLowerCase();
-    return el.hasAttribute('data-kamar-logout') || txt==='logout' || txt.indexOf('logout')>=0 || href.indexOf('logout=1')>=0;
-  }
-  function normalize(){
-    try{
-      document.querySelectorAll('a,button,input[type="button"],input[type="submit"]').forEach(function(el){
-        if(isLogoutEl(el)){
-          el.setAttribute('data-kamar-logout','true');
-          if(el.tagName && el.tagName.toLowerCase()==='a') el.setAttribute('href', REDIRECT_URL);
-          if(el.tagName && el.tagName.toLowerCase()==='button') el.setAttribute('type','button');
-        }
-      });
-    }catch(e){}
-  }
-  async function signOutSupabase(){
-    var candidates=[window.supabase, window.kamarSupabase, window.kamarSupabaseClient, window.KamarSupabaseClient];
-    for(var i=0;i<candidates.length;i++){
-      var c=candidates[i];
-      try{ if(c && c.auth && typeof c.auth.signOut==='function') await c.auth.signOut(); }catch(e){}
-    }
-  }
-  var running=false;
-  async function logout(e){
-    if(e){ e.preventDefault(); e.stopPropagation(); if(e.stopImmediatePropagation) e.stopImmediatePropagation(); }
-    if(running) return false;
-    running=true;
-    showOverlay();
-    clearStore(window.localStorage);
-    clearStore(window.sessionStorage);
-    clearCookies();
-    try{ await signOutSupabase(); }catch(e){}
-    clearStore(window.localStorage);
-    clearStore(window.sessionStorage);
-    clearCookies();
-    setTimeout(function(){ window.location.replace(REDIRECT_URL); }, 250);
-    return false;
-  }
-  window.KamarLogoutAll = logout;
-  window.kamarLogoutAll = logout;
-
-  ['pointerdown','click','submit'].forEach(function(evt){
-    document.addEventListener(evt,function(e){
-      var t=e.target;
-      if(evt==='submit'){
-        var form=t;
-        if(form && form.querySelector && form.querySelector('[data-kamar-logout]')) logout(e);
-        return;
-      }
-      var el=t && t.closest ? t.closest('a,button,input') : null;
-      if(isLogoutEl(el)) logout(e);
-    }, true);
-  });
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', normalize);
-  else normalize();
-  setInterval(normalize, 1000);
-})();
-</script>
 
 
 
-<script id="kamar-step24EI-login-hard-rewrite">
-(function(){
-  'use strict';
-  if(window.__KAMAR_STEP24EI_LOGIN_HARD_REWRITE__) return;
-  window.__KAMAR_STEP24EI_LOGIN_HARD_REWRITE__ = true;
-  var VERSION='24ei';
 
-  function qs(sel,root){return (root||document).querySelector(sel)}
-  function qsa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel))}
-  function norm(v){return String(v||'').trim()}
-  function lower(v){return norm(v).toLowerCase()}
-  function nowISO(){try{return new Date().toISOString()}catch(e){return ''}}
-  function getJSON(k,f){try{var raw=localStorage.getItem(k);return raw?JSON.parse(raw):f}catch(e){return f}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-  function pick(o,keys){o=o||{};for(var i=0;i<keys.length;i++){var v=o[keys[i]];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v}return ''}
-  function nameOf(o){return pick(o,['full_name','fullName','name','nama','display_name','member_name','username'])}
-  function emailOf(o){return lower(pick(o,['email','member_email','user_email','login_email']))}
-  function waOf(o){return pick(o,['whatsapp','phone','member_phone','wa','nomor_wa'])}
-  function roleOf(o){return lower([pick(o,['role','account_role','account_type','type','user_role']),nameOf(o),emailOf(o)].join(' '))}
-  function isInternal(o){var r=roleOf(o);return r.indexOf('admin')>=0||r.indexOf('internal')>=0||r.indexOf('owner')>=0||r.indexOf('superadmin')>=0||emailOf(o)==='kamarkajianmarket@gmail.com'||lower(nameOf(o))==='kamarkajianmarket'}
-  function stableId(email,prefix){var s=lower(email)||'kamar';var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return (prefix||'KM')+'-'+Math.abs(h).toString(36).toUpperCase();}
-  function getConfig(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
-  function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
-  function client(){var ex=existingClient();if(ex)return ex;var cfg=getConfig();if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){try{return window.supabase.createClient(cfg.url,cfg.key)}catch(e){}}return null}
-  function withTimeout(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,reject){setTimeout(function(){reject(new Error('timeout'))},ms||12000)})])}
-  async function hashPass(password){var raw=String(password||'');try{if(window.crypto&&crypto.subtle){var data=new TextEncoder().encode(raw);var hash=await crypto.subtle.digest('SHA-256',data);return 'sha256:'+Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}}catch(e){}var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h|=0;}return 'fallback:'+String(h)}
-  async function passMatches(row,password){var stored=String((row&&pick(row,['password_hash','passwordHash','password']))||'');if(!stored)return true;var hashed=await hashPass(password);return stored===hashed || stored===String(password||'')}
-
-  function hideLoading(){try{['kamarLoadingOverlay','kamar-global-loading-overlay','kamarLogoutOverlay24EC'].forEach(function(id){var o=document.getElementById(id);if(o){o.classList.remove('show');o.style.display='none';o.style.opacity='0';o.style.visibility='hidden'}});document.body.classList.remove('kamar-is-leaving','kamar-logging-out');qsa('.is-loading').forEach(function(el){el.classList.remove('is-loading');if(el.tagName==='BUTTON'||el.tagName==='INPUT')el.disabled=false});}catch(e){}}
-  function showLoading(text){try{var o=document.getElementById('kamarLoadingOverlay');if(!o){o=document.createElement('div');o.id='kamarLoadingOverlay';o.className='kamar-loading-overlay';o.innerHTML='<div class="kamar-loading-box"><div class="kamar-loading-spinner"></div><div class="kamar-loading-text">Mohon tunggu...</div></div>';document.body.appendChild(o)}var t=o.querySelector('.kamar-loading-text');if(t)t.textContent=text||'Mohon tunggu...';o.style.display='flex';o.style.opacity='';o.style.visibility='';o.classList.add('show')}catch(e){}}
-  function setStatus(form,msg,cls){var el=form&&form.querySelector('.form-note,[id$="Status"],#loginStatus,#adminLoginStatus');if(el){el.hidden=false;el.className=(el.className||'form-note').replace(/\s?(error|success)\b/g,'')+' '+(cls||'');el.textContent=msg;return;}var p=document.createElement('p');p.className='form-note '+(cls||'');p.textContent=msg;(form||document.body).appendChild(p)}
-  function getEmail(form){var el=form.querySelector('input[type="email"],input[name="email"],#loginEmail,#adminEmail');return lower(el&&el.value)}
-  function getPassword(form){var el=form.querySelector('input[type="password"],input[name="password"],#loginPassword,#adminPassword');return el?String(el.value||''):''}
-  function setBtn(btn,text,disabled){if(!btn)return;btn.disabled=!!disabled;if(text)btn.textContent=text}
-
-  async function readRows(table){var c=client();if(!c)return [];try{var res=await withTimeout(c.from(table).select('*').limit(200),10000);if(res&&res.error)return [];return Array.isArray(res.data)?res.data:[]}catch(e){return []}}
-  async function readMemberCandidates(){var rows=[];var a=await readRows('admin_member_overview');var b=await readRows('member_profiles');(a||[]).concat(b||[]).forEach(function(r){if(r&&emailOf(r))rows.push(r)});return rows}
-
-  function saveMemberSession(row,email){var data={
-    memberId:pick(row,['id','member_id','memberId','profile_id'])||stableId(email,'KM-MBR'),
-    fullName:nameOf(row)||email,
-    email:emailOf(row)||email,
-    whatsapp:waOf(row)||'',
-    telegram:pick(row,['telegram','telegram_username'])||'',
-    status:pick(row,['status','access_status'])||'Member Website',
-    statusKey:pick(row,['status_key','statusKey'])||'',
-    accountActive:!!(row.account_active||row.accountActive||row.is_active||row.active),
-    referralCode:pick(row,['referral_code','referralCode'])||'',
-    loginAt:Date.now(),lastActivity:Date.now(),source:'login_member_24ei'
-  };
-  setJSON('kamarMemberSession',data);setJSON('kamarCurrentUser',{role:'member',email:data.email,name:data.fullName,loginAt:Date.now()});return data;}
-  function saveAdminSession(row,email){var data={
-    adminId:pick(row,['id','member_id','profile_id'])||stableId(email,'KM-ADM'),
-    fullName:nameOf(row)||'Admin Kamar',
-    email:emailOf(row)||email,
-    role:'admin',loginAt:Date.now(),lastActivity:Date.now(),source:'login_admin_24ei'
-  };
-  setJSON('kamarAdminSession',data);setJSON('kamarCurrentUser',{role:'admin',email:data.email,name:data.fullName,loginAt:Date.now()});return data;}
-
-  async function loginMember(email,password){
-    var local=getJSON('kamarRegisteredMembers',[]).filter(function(r){return emailOf(r)===email});
-    if(local.length){var r=local[0];if(await passMatches(r,password)){return {ok:true,row:r,source:'local'}}}
-    var rows=await readMemberCandidates();
-    var row=rows.find(function(r){return emailOf(r)===email && !isInternal(r)});
-    if(row){if(await passMatches(row,password))return {ok:true,row:row,source:'supabase'}}
-    return {ok:false,msg:'Email atau password belum sesuai.'};
-  }
-  async function loginAdmin(email,password){
-    var rows=await readMemberCandidates();
-    var row=rows.find(function(r){return emailOf(r)===email && isInternal(r)});
-    if(row){if(await passMatches(row,password))return {ok:true,row:row,source:'supabase'}}
-    var local=getJSON('kamarAdminUsers',[]).find(function(r){return emailOf(r)===email})||null;
-    if(local&&await passMatches(local,password))return {ok:true,row:local,source:'local'};
-    if(email==='kamarkajianmarket@gmail.com' && password){return {ok:true,row:{email:email,full_name:'Kamar Kajian Market',role:'admin'},source:'fallback'}}
-    return {ok:false,msg:'Email atau password admin belum sesuai.'};
-  }
-
-  async function handleMemberSubmit(form,e){
-    e.preventDefault();e.stopPropagation();hideLoading();
-    var btn=form.querySelector('button[type="submit"],input[type="submit"]');
-    var email=getEmail(form), pass=getPassword(form);
-    if(!email||!pass){setStatus(form,'Isi email dan password terlebih dahulu.','error');return;}
-    setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');
-    try{
-      var res=await withTimeout(loginMember(email,pass),14000);
-      hideLoading();
-      if(!res.ok){setStatus(form,res.msg||'Login belum berhasil. Coba ulangi.','error');setBtn(btn,'Login ke Dashboard',false);return;}
-      saveMemberSession(res.row,email);setStatus(form,'Login berhasil. Mengalihkan ke dashboard.','success');
-      setTimeout(function(){location.href='dashboard.html?v='+VERSION},350);
-    }catch(err){hideLoading();setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error');setBtn(btn,'Login ke Dashboard',false)}
-  }
-  async function handleAdminSubmit(form,e){
-    e.preventDefault();e.stopPropagation();hideLoading();
-    var btn=form.querySelector('button[type="submit"],input[type="submit"]');
-    var email=getEmail(form), pass=getPassword(form);
-    if(!email||!pass){setStatus(form,'Isi email dan password admin terlebih dahulu.','error');return;}
-    setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');
-    try{
-      var res=await withTimeout(loginAdmin(email,pass),14000);
-      hideLoading();
-      if(!res.ok){setStatus(form,res.msg||'Login admin belum berhasil.','error');setBtn(btn,'Login Admin',false);return;}
-      saveAdminSession(res.row,email);setStatus(form,'Login berhasil. Mengalihkan ke admin.','success');
-      setTimeout(function(){location.href='admin.html?v='+VERSION},350);
-    }catch(err){hideLoading();setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error');setBtn(btn,'Login Admin',false)}
-  }
-
-  function isMemberLoginForm(form){return !!(form&&form.id==='kamarLoginForm')}
-  function isAdminLoginForm(form){
-    if(!form)return false;
-    var p=(location.pathname.split('/').pop()||'').toLowerCase();
-    var txt=lower((form.id||'')+' '+(form.className||'')+' '+(form.textContent||'')+' '+document.title);
-    return (p.indexOf('admin')===0||txt.indexOf('admin')>=0) && !!form.querySelector('input[type="password"]') && !!form.querySelector('input[type="email"],input[name="email"]');
-  }
-  function normalizeForms(){
-    qsa('form').forEach(function(form){if(isMemberLoginForm(form)||isAdminLoginForm(form)){form.setAttribute('data-no-loading','true')}});
-    hideLoading();
-  }
-  document.addEventListener('submit',function(e){var form=e.target;if(isMemberLoginForm(form)){handleMemberSubmit(form,e);return;}if(isAdminLoginForm(form)){handleAdminSubmit(form,e);return;}},true);
-  window.addEventListener('pageshow',hideLoading);window.addEventListener('error',function(){setTimeout(hideLoading,100)});window.addEventListener('unhandledrejection',function(){setTimeout(hideLoading,100)});
-  setInterval(function(){var o=document.getElementById('kamarLoadingOverlay');if(o&&o.classList.contains('show')){var started=o.getAttribute('data-started')||Date.now();if(!o.getAttribute('data-started'))o.setAttribute('data-started',started);if(Date.now()-Number(started)>18000)hideLoading();}},1500);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',normalizeForms);else normalizeForms();
-  setTimeout(normalizeForms,500);setTimeout(normalizeForms,1500);
-})();
-</script>
 
 <script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body></html>

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
-<head><script src="assets/js/kamar-auth-core-25.js"></script><script src="assets/js/kamar-session-compat-25b.js"></script><script src="assets/js/kamar-page-guard-25.js"></script>
 
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Affiliate Admin — Kamar Kajian Market</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
-  <style>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Affiliate Admin — Kamar Kajian Market</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet">
+<style>
     :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;}
     *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
     .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
@@ -27,7 +27,6 @@
     @media(max-width:1220px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.aff-row.head,.reward-row.head,.ref-row.head{display:none}.aff-row:not(.head),.reward-row,.ref-row{grid-template-columns:1fr}.cell-label{display:block}.row-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}}
     @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.submenu-grid,.stats{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}}
   </style>
-
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -57,7 +56,6 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-
 <style id="kamar-step24EA-global-loading-css">
 .kamar-loading-active{position:relative!important;pointer-events:none!important;opacity:.82!important;}
 .kamar-loading-active::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,10,10,.25);border-top-color:rgba(10,10,10,.85);display:inline-block;margin-right:8px;vertical-align:-3px;animation:kamarSpin24EA .72s linear infinite;}
@@ -65,73 +63,67 @@
 .kamar-loading-toast::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,223,144,.28);border-top-color:#f5df91;animation:kamarSpin24EA .72s linear infinite;}
 @keyframes kamarSpin24EA{to{transform:rotate(360deg)}}
 </style>
-
-</head>
+</link><script src="assets/js/kamar-session-guard-25c.js"></script></head>
 <body>
 <div class="admin-shell">
-  <aside class="admin-sidebar">
-    <div class="brand-small">Admin Kamar</div>
-    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
-    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
-    <div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
-    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dx">Banner Pengumuman</a><a href="admin-video.html?v=24dx">Konten Video</a><a href="admin-materials.html?v=24dx">Konten & Materi</a><a href="admin-tools.html?v=24dx">File Tools</a>
-    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
-    <div class="admin-menu-section">Akun</div><a href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a>
-  </aside>
-  <main class="admin-main">
-    <section class="card hero">
-      <div class="hero-inner">
-        <div><span class="eyebrow">Affiliate Admin</span><h1 id="viewTitle">Data Affiliate</h1><p id="viewDesc">Kelola affiliator, approval admin, kode referral aktif, rekening pembayaran, dan reward affiliate dalam struktur 3 submenu yang rapi.</p></div>
-        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button><button class="btn" id="exportBtn" type="button">Export CSV</button></div>
-      </div>
-    </section>
-
-    <section class="card" id="affiliateSubmenuCard">
-      <h2 class="section-title">Struktur Menu Affiliate</h2>
-      <p class="muted">Affiliator baru wajib mengisi data pembayaran lengkap dan menunggu approval admin. Kode referral baru aktif setelah status affiliator disetujui.</p>
-      <div class="submenu-grid">
-        <a class="submenu-card" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&v=24dx"><h3>Data Affiliate</h3><strong>Ringkasan Affiliate</strong><p>Statistik approval, referral, rekening, dan reward.</p><span class="btn secondary small">Buka Ringkasan</span></a>
-        <a class="submenu-card" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&v=24dx"><h3>Daftar Affiliator</h3><strong>Kelola Affiliator</strong><p>Detail, salin kode, approve, tolak, verifikasi rekening, dan hapus.</p><span class="btn small">Buka Daftar</span></a>
-        <a class="submenu-card" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&v=24dx"><h3>Reward / Komisi</h3><strong>Status Pembayaran</strong><p>Nominal reward, belum dibayar, sudah dibayar, dan catatan komisi.</p><span class="btn small">Buka Reward</span></a>
-      </div>
-    </section>
-
-    <section class="stats" id="overviewStats" data-view-section="overview">
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=all&v=24dx" data-stat-filter="all"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua pendaftar affiliate.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=pending&v=24dx" data-stat-filter="pending"><span>Menunggu Approval</span><strong id="statPending">0</strong><small>Rekening lengkap, perlu disetujui admin.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=approved&v=24dx" data-stat-filter="approved"><span>Disetujui</span><strong id="statApproved">0</strong><small>Kode referral aktif dan bisa digunakan.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=incomplete&v=24dx" data-stat-filter="incomplete"><span>Belum Lengkap</span><strong id="statIncomplete">0</strong><small>Data rekening belum lengkap.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=rejected&v=24dx" data-stat-filter="rejected"><span>Ditolak</span><strong id="statRejected">0</strong><small>Affiliator yang ditolak admin.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=verified&v=24dx" data-stat-filter="verified"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=unpaid&v=24dx" data-reward-filter="unpaid"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral belum dibayar.</small></a>
-      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=paid&v=24dx" data-reward-filter="paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral sudah dibayar.</small></a>
-    </section>
-
-    <section class="card" id="affiliateListCard" data-view-section="list">
-      <h2 class="section-title">Daftar Affiliator</h2>
-      <p class="muted">Kode referral hanya bisa disalin dan dianggap aktif jika status approval sudah <b>Disetujui</b>. Pendaftar dengan rekening belum lengkap tidak bisa di-approve.</p>
-      <div class="toolbar">
-        <label class="field">Cari Affiliate / Kode Referral<input id="affiliateSearch" placeholder="Cari nama, kode, email, atau WA"></label>
-        <label class="field">Status Approval<select id="approvalFilter"><option value="all">Semua Approval</option><option value="incomplete">Belum Lengkap</option><option value="pending">Menunggu Approval</option><option value="approved">Disetujui</option><option value="rejected">Ditolak</option></select></label>
-        <label class="field">Status Rekening<select id="payoutFilter"><option value="all">Semua Rekening</option><option value="empty">Belum Isi Rekening</option><option value="ready">Menunggu Verifikasi</option><option value="verified">Terverifikasi</option></select></label>
-        <button class="btn" id="applyAffiliateFilter" type="button">Cari</button>
-        <button class="btn secondary" id="resetAffiliateFilter" type="button">Reset</button>
-      </div>
-      <div class="affiliate-table" id="affiliateList"></div>
-    </section>
-
-    <section class="card" id="rewardCard" data-view-section="reward">
-      <h2 class="section-title">Reward / Komisi Affiliate</h2>
-      <p class="muted">Reward hanya dihitung dari affiliator yang sudah <b>Disetujui</b>. Affiliator pending, ditolak, atau belum lengkap tidak masuk perhitungan reward aktif.</p>
-      <div class="reward-toolbar">
-        <label class="field">Filter Status Reward<select id="rewardFilter"><option value="all">Semua Status</option><option value="unpaid">Belum Dibayar</option><option value="paid">Sudah Dibayar</option></select></label>
-        <button class="btn secondary" id="resetRewardFilter" type="button">Reset</button>
-      </div>
-      <div class="reward-table" id="rewardList"></div>
-    </section>
-
-    <section class="card detail-card" id="detailCard" data-view-section="list"></section>
-  </main>
+<aside class="admin-sidebar">
+<div class="brand-small">Admin Kamar</div>
+<div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
+<div class="admin-menu-section">Member &amp; Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun &amp; Fasilitas</a>
+<div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&amp;v=24dx">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&amp;v=24dx">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&amp;v=24dx">Reward / Komisi</a>
+<div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dx">Banner Pengumuman</a><a href="admin-video.html?v=24dx">Konten Video</a><a href="admin-materials.html?v=24dx">Konten &amp; Materi</a><a href="admin-tools.html?v=24dx">File Tools</a>
+<div class="admin-menu-section">Kontrol Sistem</div><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
+<div class="admin-menu-section">Akun</div><a data-kamar-logout="" href="index.html?logout=1&amp;v=25c">Logout</a>
+</aside>
+<main class="admin-main">
+<section class="card hero">
+<div class="hero-inner">
+<div><span class="eyebrow">Affiliate Admin</span><h1 id="viewTitle">Data Affiliate</h1><p id="viewDesc">Kelola affiliator, approval admin, kode referral aktif, rekening pembayaran, dan reward affiliate dalam struktur 3 submenu yang rapi.</p></div>
+<div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button><button class="btn" id="exportBtn" type="button">Export CSV</button></div>
+</div>
+</section>
+<section class="card" id="affiliateSubmenuCard">
+<h2 class="section-title">Struktur Menu Affiliate</h2>
+<p class="muted">Affiliator baru wajib mengisi data pembayaran lengkap dan menunggu approval admin. Kode referral baru aktif setelah status affiliator disetujui.</p>
+<div class="submenu-grid">
+<a class="submenu-card" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&amp;v=24dx"><h3>Data Affiliate</h3><strong>Ringkasan Affiliate</strong><p>Statistik approval, referral, rekening, dan reward.</p><span class="btn secondary small">Buka Ringkasan</span></a>
+<a class="submenu-card" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&amp;v=24dx"><h3>Daftar Affiliator</h3><strong>Kelola Affiliator</strong><p>Detail, salin kode, approve, tolak, verifikasi rekening, dan hapus.</p><span class="btn small">Buka Daftar</span></a>
+<a class="submenu-card" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&amp;v=24dx"><h3>Reward / Komisi</h3><strong>Status Pembayaran</strong><p>Nominal reward, belum dibayar, sudah dibayar, dan catatan komisi.</p><span class="btn small">Buka Reward</span></a>
+</div>
+</section>
+<section class="stats" data-view-section="overview" id="overviewStats">
+<a class="stat-card" data-stat-filter="all" href="admin-affiliate-v2.html?view=list&amp;filter=all&amp;v=24dx"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua pendaftar affiliate.</small></a>
+<a class="stat-card" data-stat-filter="pending" href="admin-affiliate-v2.html?view=list&amp;filter=pending&amp;v=24dx"><span>Menunggu Approval</span><strong id="statPending">0</strong><small>Rekening lengkap, perlu disetujui admin.</small></a>
+<a class="stat-card" data-stat-filter="approved" href="admin-affiliate-v2.html?view=list&amp;filter=approved&amp;v=24dx"><span>Disetujui</span><strong id="statApproved">0</strong><small>Kode referral aktif dan bisa digunakan.</small></a>
+<a class="stat-card" data-stat-filter="incomplete" href="admin-affiliate-v2.html?view=list&amp;filter=incomplete&amp;v=24dx"><span>Belum Lengkap</span><strong id="statIncomplete">0</strong><small>Data rekening belum lengkap.</small></a>
+<a class="stat-card" data-stat-filter="rejected" href="admin-affiliate-v2.html?view=list&amp;filter=rejected&amp;v=24dx"><span>Ditolak</span><strong id="statRejected">0</strong><small>Affiliator yang ditolak admin.</small></a>
+<a class="stat-card" data-stat-filter="verified" href="admin-affiliate-v2.html?view=list&amp;filter=verified&amp;v=24dx"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
+<a class="stat-card" data-reward-filter="unpaid" href="admin-affiliate-v2.html?view=reward&amp;reward=unpaid&amp;v=24dx"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral belum dibayar.</small></a>
+<a class="stat-card" data-reward-filter="paid" href="admin-affiliate-v2.html?view=reward&amp;reward=paid&amp;v=24dx"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral sudah dibayar.</small></a>
+</section>
+<section class="card" data-view-section="list" id="affiliateListCard">
+<h2 class="section-title">Daftar Affiliator</h2>
+<p class="muted">Kode referral hanya bisa disalin dan dianggap aktif jika status approval sudah <b>Disetujui</b>. Pendaftar dengan rekening belum lengkap tidak bisa di-approve.</p>
+<div class="toolbar">
+<label class="field">Cari Affiliate / Kode Referral<input id="affiliateSearch" placeholder="Cari nama, kode, email, atau WA"/></label>
+<label class="field">Status Approval<select id="approvalFilter"><option value="all">Semua Approval</option><option value="incomplete">Belum Lengkap</option><option value="pending">Menunggu Approval</option><option value="approved">Disetujui</option><option value="rejected">Ditolak</option></select></label>
+<label class="field">Status Rekening<select id="payoutFilter"><option value="all">Semua Rekening</option><option value="empty">Belum Isi Rekening</option><option value="ready">Menunggu Verifikasi</option><option value="verified">Terverifikasi</option></select></label>
+<button class="btn" id="applyAffiliateFilter" type="button">Cari</button>
+<button class="btn secondary" id="resetAffiliateFilter" type="button">Reset</button>
+</div>
+<div class="affiliate-table" id="affiliateList"></div>
+</section>
+<section class="card" data-view-section="reward" id="rewardCard">
+<h2 class="section-title">Reward / Komisi Affiliate</h2>
+<p class="muted">Reward hanya dihitung dari affiliator yang sudah <b>Disetujui</b>. Affiliator pending, ditolak, atau belum lengkap tidak masuk perhitungan reward aktif.</p>
+<div class="reward-toolbar">
+<label class="field">Filter Status Reward<select id="rewardFilter"><option value="all">Semua Status</option><option value="unpaid">Belum Dibayar</option><option value="paid">Sudah Dibayar</option></select></label>
+<button class="btn secondary" id="resetRewardFilter" type="button">Reset</button>
+</div>
+<div class="reward-table" id="rewardList"></div>
+</section>
+<section class="card detail-card" data-view-section="list" id="detailCard"></section>
+</main>
 </div>
 <div class="toast" id="toast"></div>
 <div class="confirm" id="confirmModal"><div class="confirm-box"><h3 id="confirmTitle">Konfirmasi</h3><p id="confirmText"></p><div class="confirm-actions"><button class="btn secondary" id="cancelConfirm" type="button">Batal</button><button class="btn danger" id="confirmAction" type="button">Ya, Lanjutkan</button></div></div></div>
@@ -223,446 +215,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<script id="kamar-global-header-script">
-(function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html?logout=1&v=24ec" data-kamar-logout>Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
-})();
-</script>
-
-<script id="kamar-step24EA-global-loading-js">
-(function(){
-  if(window.__kamarGlobalLoading24EA) return; window.__kamarGlobalLoading24EA=true;
-  function showToast(text){
-    var old=document.getElementById('kamarLoadingToast'); if(old) old.remove();
-    var t=document.createElement('div'); t.id='kamarLoadingToast'; t.className='kamar-loading-toast'; t.textContent=text||'Memproses...';
-    document.body.appendChild(t); setTimeout(function(){if(t&&t.parentNode)t.remove();},9000);
-  }
-  function setButtonLoading(btn,text){
-    if(!btn || btn.dataset.kamarLoading==='1') return;
-    btn.dataset.kamarLoading='1'; btn.dataset.kamarOriginalText=btn.textContent||'';
-    btn.classList.add('kamar-loading-active'); btn.disabled=true; btn.textContent=text||'Memproses...';
-    setTimeout(function(){resetButton(btn);},12000);
-  }
-  function resetButton(btn){
-    if(!btn || btn.dataset.kamarLoading!=='1') return;
-    btn.classList.remove('kamar-loading-active'); btn.disabled=false; btn.textContent=btn.dataset.kamarOriginalText||btn.textContent||'Lanjut';
-    delete btn.dataset.kamarLoading; delete btn.dataset.kamarOriginalText;
-  }
-  window.KamarLoading={show:showToast,setButton:setButtonLoading,resetButton:resetButton};
-  document.addEventListener('submit',function(e){
-    var form=e.target; if(!form || !form.querySelector) return;
-    var btn=e.submitter || form.querySelector('button[type="submit"],input[type="submit"]');
-    if(btn) setButtonLoading(btn, btn.dataset.loadingText || 'Memproses...');
-    else showToast('Memproses...');
-  },true);
-  document.addEventListener('click',function(e){
-    var el=e.target && e.target.closest ? e.target.closest('a,button') : null; if(!el) return;
-    if(el.matches('button[type="submit"], input[type="submit"]')) return;
-    if(el.matches('[data-no-loading], [data-affiliate-filter], #copyAffiliateCode, #copyDashCode, #affiliateSearchBtn, #editPayoutAccount, #sendPayoutAccount')) return;
-    var href=el.getAttribute('href')||'';
-    if(el.tagName==='A'){
-      if(!href || href.charAt(0)==='#' || href.indexOf('javascript:')===0 || el.target==='_blank') return;
-      showToast(el.dataset.loadingText || 'Memuat halaman...');
-    }
-  },true);
-})();
-</script>
-
-
-<script id="kamar-global-logout-fix-24ec">
-(function(){
-  if(window.__KAMAR_LOGOUT_FIX_24EC__) return;
-  window.__KAMAR_LOGOUT_FIX_24EC__ = true;
-
-  function showLogoutLoading(){
-    try{
-      var old=document.getElementById('kamar-global-loading-overlay');
-      if(old){ old.classList.add('show'); return; }
-      var style=document.getElementById('kamar-global-loading-style');
-      if(!style){
-        style=document.createElement('style');
-        style.id='kamar-global-loading-style';
-        style.textContent='body.kamar-is-leaving{pointer-events:none}.kamar-loading-overlay{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.18s ease}.kamar-loading-overlay.show{opacity:1;visibility:visible}.kamar-loading-box{border:1px solid rgba(235,207,130,.35);border-radius:28px;padding:24px 32px;background:linear-gradient(135deg,rgba(18,18,18,.92),rgba(15,28,24,.88));box-shadow:0 22px 70px rgba(0,0,0,.45);color:#fff7dc;font-weight:900;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:14px}.kamar-loading-spinner{width:20px;height:20px;border-radius:50%;border:3px solid rgba(235,207,130,.28);border-top-color:#f2dc8e;animation:kamarSpin24EC .75s linear infinite}@keyframes kamarSpin24EC{to{transform:rotate(360deg)}}';
-        document.head.appendChild(style);
-      }
-      var ov=document.createElement('div');
-      ov.id='kamar-global-loading-overlay';
-      ov.className='kamar-loading-overlay show';
-      ov.innerHTML='<div class="kamar-loading-box"><span class="kamar-loading-spinner"></span><span>Memproses...</span></div>';
-      document.body.appendChild(ov);
-      document.body.classList.add('kamar-is-leaving');
-    }catch(e){}
-  }
-
-  var explicitKeys = [
-    'kamarAdminSession','kamarMemberSession','kamarAffiliateSession',
-    'kamarSession','kamarAuthSession','kamarCurrentUser','kamarUserSession',
-    'kamarLoggedIn','kamarAdminLogin','kamarMemberLogin','kamarAffiliateLogin',
-    'kamarAuthRole','kamarUserRole','kamarLoginRole','kamarLastActivityAt'
-  ];
-  var sessionPattern = /^(kamar.*(session|login|auth|currentuser|current_user|role|token)|sb-.*auth-token|supabase\.auth\.token)$/i;
-
-  function clearStorage(store){
-    if(!store) return;
-    try{
-      explicitKeys.forEach(function(k){ try{store.removeItem(k);}catch(e){} });
-      var keys=[];
-      for(var i=0;i<store.length;i++){ keys.push(store.key(i)); }
-      keys.forEach(function(k){
-        if(!k) return;
-        if(sessionPattern.test(k)){
-          try{store.removeItem(k);}catch(e){}
-        }
-      });
-    }catch(e){}
-  }
-
-  function clearCookies(){
-    try{
-      document.cookie.split(';').forEach(function(c){
-        var name=c.split('=')[0].trim();
-        if(!name) return;
-        if(/^kamar/i.test(name) || /^sb-/i.test(name)){
-          document.cookie=name+'=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-          document.cookie=name+'=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax';
-        }
-      });
-    }catch(e){}
-  }
-
-  async function doLogout(e){
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    showLogoutLoading();
-    try{
-      if(window.supabase && window.supabase.auth && typeof window.supabase.auth.signOut==='function'){
-        try{ await window.supabase.auth.signOut(); }catch(x){}
-      }
-      if(window.kamarSupabase && window.kamarSupabase.auth && typeof window.kamarSupabase.auth.signOut==='function'){
-        try{ await window.kamarSupabase.auth.signOut(); }catch(x){}
-      }
-    }catch(err){}
-    clearStorage(window.localStorage);
-    clearStorage(window.sessionStorage);
-    clearCookies();
-    setTimeout(function(){ window.location.replace('index.html?logout=1&v=24ec'); }, 180);
-  }
-
-  window.KamarLogoutAll = doLogout;
-
-  function normalizeLogoutLinks(){
-    try{
-      document.querySelectorAll('a,button').forEach(function(el){
-        var txt=(el.textContent||'').trim().toLowerCase();
-        var href=(el.getAttribute && el.getAttribute('href')) || '';
-        var hasLogoutAttr = el.hasAttribute && el.hasAttribute('data-kamar-logout');
-        var looksLogout = hasLogoutAttr || txt==='logout' || txt.indexOf('logout')>=0;
-        if(looksLogout){
-          el.setAttribute('data-kamar-logout','');
-          if(el.tagName && el.tagName.toLowerCase()==='a') el.setAttribute('href','index.html?logout=1&v=24ec');
-        }
-      });
-    }catch(e){}
-  }
-
-  document.addEventListener('click', function(e){
-    var t=e.target;
-    if(!t || !t.closest) return;
-    var el=t.closest('[data-kamar-logout], a, button');
-    if(!el) return;
-    var txt=(el.textContent||'').trim().toLowerCase();
-    if(el.hasAttribute('data-kamar-logout') || txt==='logout' || txt.indexOf('logout')>=0){
-      doLogout(e);
-    }
-  }, true);
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', normalizeLogoutLinks);
-  else normalizeLogoutLinks();
-  setTimeout(normalizeLogoutLinks, 700);
-})();
-</script>
-
-
-<script id="kamar-universal-logout-hard-fix-24ec">
-(function(){
-  if(window.__KAMAR_UNIVERSAL_LOGOUT_24EC__) return;
-  window.__KAMAR_UNIVERSAL_LOGOUT_24EC__ = true;
-
-  var REDIRECT_URL = 'index.html?logout=1&v=24ec&t=' + Date.now();
-  var explicitKeys = [
-    'kamarAdminSession','kamarMemberSession','kamarAffiliateSession',
-    'kamarSession','kamarAuthSession','kamarUserSession','kamarCurrentUser',
-    'kamarLoggedIn','kamarAdminLogin','kamarMemberLogin','kamarAffiliateLogin',
-    'kamarAuthRole','kamarUserRole','kamarLoginRole','kamarLastActivityAt',
-    'kamarAdmin','kamarMember','kamarAffiliate','kamarUser',
-    'KAMAR_ADMIN_SESSION','KAMAR_MEMBER_SESSION','KAMAR_AFFILIATE_SESSION'
-  ];
-  var authKeyPattern = /(session|login|auth|token|currentuser|current_user|role|loggedin|logged_in)/i;
-
-  function safeRemove(store, key){ try{ store.removeItem(key); }catch(e){} }
-  function clearStore(store){
-    if(!store) return;
-    try{
-      explicitKeys.forEach(function(k){ safeRemove(store,k); });
-      var keys=[];
-      for(var i=0;i<store.length;i++){ var k=store.key(i); if(k) keys.push(k); }
-      keys.forEach(function(k){
-        var low=String(k||'').toLowerCase();
-        if(/^sb-/.test(low) || low==='supabase.auth.token' || low.indexOf('supabase')>=0 && authKeyPattern.test(low)) safeRemove(store,k);
-        else if(/^kamar/.test(low) && authKeyPattern.test(low)) safeRemove(store,k);
-      });
-    }catch(e){}
-  }
-  function clearCookies(){
-    try{
-      var names = document.cookie.split(';').map(function(c){return c.split('=')[0].trim();}).filter(Boolean);
-      names.forEach(function(name){
-        var low=name.toLowerCase();
-        if(low.indexOf('sb-')===0 || low.indexOf('supabase')>=0 || low.indexOf('kamar')===0){
-          ['/', location.pathname.replace(/\/[^\/]*$/,'/') || '/'].forEach(function(path){
-            document.cookie = name+'=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path='+path;
-          });
-        }
-      });
-    }catch(e){}
-  }
-  function showOverlay(){
-    try{
-      var style=document.getElementById('kamar-logout-hard-style-24ec');
-      if(!style){
-        style=document.createElement('style');
-        style.id='kamar-logout-hard-style-24ec';
-        style.textContent='body.kamar-logging-out{pointer-events:none!important}.kamar-logout-overlay{position:fixed;inset:0;z-index:2147483647;background:rgba(3,3,3,.74);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center}.kamar-logout-box{border:1px solid rgba(238,206,122,.38);border-radius:28px;padding:24px 32px;background:linear-gradient(135deg,rgba(14,14,13,.96),rgba(14,28,23,.92));box-shadow:0 24px 80px rgba(0,0,0,.55);color:#fff3d8;font-weight:1000;letter-spacing:.06em;display:flex;align-items:center;gap:14px}.kamar-logout-spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(238,206,122,.25);border-top-color:#f3df96;animation:kamarLogoutSpin24EC .7s linear infinite}@keyframes kamarLogoutSpin24EC{to{transform:rotate(360deg)}}';
-        document.head.appendChild(style);
-      }
-      var old=document.getElementById('kamarLogoutOverlay24EC');
-      if(old) return;
-      var ov=document.createElement('div');
-      ov.id='kamarLogoutOverlay24EC';
-      ov.className='kamar-logout-overlay';
-      ov.innerHTML='<div class="kamar-logout-box"><span class="kamar-logout-spinner"></span><span>Memproses...</span></div>';
-      document.body.appendChild(ov);
-      document.body.classList.add('kamar-logging-out');
-    }catch(e){}
-  }
-  function isLogoutEl(el){
-    if(!el || !el.getAttribute) return false;
-    var txt=(el.textContent||el.value||'').trim().toLowerCase();
-    var href=(el.getAttribute('href')||'').toLowerCase();
-    return el.hasAttribute('data-kamar-logout') || txt==='logout' || txt.indexOf('logout')>=0 || href.indexOf('logout=1')>=0;
-  }
-  function normalize(){
-    try{
-      document.querySelectorAll('a,button,input[type="button"],input[type="submit"]').forEach(function(el){
-        if(isLogoutEl(el)){
-          el.setAttribute('data-kamar-logout','true');
-          if(el.tagName && el.tagName.toLowerCase()==='a') el.setAttribute('href', REDIRECT_URL);
-          if(el.tagName && el.tagName.toLowerCase()==='button') el.setAttribute('type','button');
-        }
-      });
-    }catch(e){}
-  }
-  async function signOutSupabase(){
-    var candidates=[window.supabase, window.kamarSupabase, window.kamarSupabaseClient, window.KamarSupabaseClient];
-    for(var i=0;i<candidates.length;i++){
-      var c=candidates[i];
-      try{ if(c && c.auth && typeof c.auth.signOut==='function') await c.auth.signOut(); }catch(e){}
-    }
-  }
-  var running=false;
-  async function logout(e){
-    if(e){ e.preventDefault(); e.stopPropagation(); if(e.stopImmediatePropagation) e.stopImmediatePropagation(); }
-    if(running) return false;
-    running=true;
-    showOverlay();
-    clearStore(window.localStorage);
-    clearStore(window.sessionStorage);
-    clearCookies();
-    try{ await signOutSupabase(); }catch(e){}
-    clearStore(window.localStorage);
-    clearStore(window.sessionStorage);
-    clearCookies();
-    setTimeout(function(){ window.location.replace(REDIRECT_URL); }, 250);
-    return false;
-  }
-  window.KamarLogoutAll = logout;
-  window.kamarLogoutAll = logout;
-
-  ['pointerdown','click','submit'].forEach(function(evt){
-    document.addEventListener(evt,function(e){
-      var t=e.target;
-      if(evt==='submit'){
-        var form=t;
-        if(form && form.querySelector && form.querySelector('[data-kamar-logout]')) logout(e);
-        return;
-      }
-      var el=t && t.closest ? t.closest('a,button,input') : null;
-      if(isLogoutEl(el)) logout(e);
-    }, true);
-  });
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', normalize);
-  else normalize();
-  setInterval(normalize, 1000);
-})();
-</script>
 
 
 
-<script id="kamar-step24EI-login-hard-rewrite">
-(function(){
-  'use strict';
-  if(window.__KAMAR_STEP24EI_LOGIN_HARD_REWRITE__) return;
-  window.__KAMAR_STEP24EI_LOGIN_HARD_REWRITE__ = true;
-  var VERSION='24ei';
-
-  function qs(sel,root){return (root||document).querySelector(sel)}
-  function qsa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel))}
-  function norm(v){return String(v||'').trim()}
-  function lower(v){return norm(v).toLowerCase()}
-  function nowISO(){try{return new Date().toISOString()}catch(e){return ''}}
-  function getJSON(k,f){try{var raw=localStorage.getItem(k);return raw?JSON.parse(raw):f}catch(e){return f}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-  function pick(o,keys){o=o||{};for(var i=0;i<keys.length;i++){var v=o[keys[i]];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v}return ''}
-  function nameOf(o){return pick(o,['full_name','fullName','name','nama','display_name','member_name','username'])}
-  function emailOf(o){return lower(pick(o,['email','member_email','user_email','login_email']))}
-  function waOf(o){return pick(o,['whatsapp','phone','member_phone','wa','nomor_wa'])}
-  function roleOf(o){return lower([pick(o,['role','account_role','account_type','type','user_role']),nameOf(o),emailOf(o)].join(' '))}
-  function isInternal(o){var r=roleOf(o);return r.indexOf('admin')>=0||r.indexOf('internal')>=0||r.indexOf('owner')>=0||r.indexOf('superadmin')>=0||emailOf(o)==='kamarkajianmarket@gmail.com'||lower(nameOf(o))==='kamarkajianmarket'}
-  function stableId(email,prefix){var s=lower(email)||'kamar';var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return (prefix||'KM')+'-'+Math.abs(h).toString(36).toUpperCase();}
-  function getConfig(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
-  function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
-  function client(){var ex=existingClient();if(ex)return ex;var cfg=getConfig();if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){try{return window.supabase.createClient(cfg.url,cfg.key)}catch(e){}}return null}
-  function withTimeout(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,reject){setTimeout(function(){reject(new Error('timeout'))},ms||12000)})])}
-  async function hashPass(password){var raw=String(password||'');try{if(window.crypto&&crypto.subtle){var data=new TextEncoder().encode(raw);var hash=await crypto.subtle.digest('SHA-256',data);return 'sha256:'+Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}}catch(e){}var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h|=0;}return 'fallback:'+String(h)}
-  async function passMatches(row,password){var stored=String((row&&pick(row,['password_hash','passwordHash','password']))||'');if(!stored)return true;var hashed=await hashPass(password);return stored===hashed || stored===String(password||'')}
-
-  function hideLoading(){try{['kamarLoadingOverlay','kamar-global-loading-overlay','kamarLogoutOverlay24EC'].forEach(function(id){var o=document.getElementById(id);if(o){o.classList.remove('show');o.style.display='none';o.style.opacity='0';o.style.visibility='hidden'}});document.body.classList.remove('kamar-is-leaving','kamar-logging-out');qsa('.is-loading').forEach(function(el){el.classList.remove('is-loading');if(el.tagName==='BUTTON'||el.tagName==='INPUT')el.disabled=false});}catch(e){}}
-  function showLoading(text){try{var o=document.getElementById('kamarLoadingOverlay');if(!o){o=document.createElement('div');o.id='kamarLoadingOverlay';o.className='kamar-loading-overlay';o.innerHTML='<div class="kamar-loading-box"><div class="kamar-loading-spinner"></div><div class="kamar-loading-text">Mohon tunggu...</div></div>';document.body.appendChild(o)}var t=o.querySelector('.kamar-loading-text');if(t)t.textContent=text||'Mohon tunggu...';o.style.display='flex';o.style.opacity='';o.style.visibility='';o.classList.add('show')}catch(e){}}
-  function setStatus(form,msg,cls){var el=form&&form.querySelector('.form-note,[id$="Status"],#loginStatus,#adminLoginStatus');if(el){el.hidden=false;el.className=(el.className||'form-note').replace(/\s?(error|success)\b/g,'')+' '+(cls||'');el.textContent=msg;return;}var p=document.createElement('p');p.className='form-note '+(cls||'');p.textContent=msg;(form||document.body).appendChild(p)}
-  function getEmail(form){var el=form.querySelector('input[type="email"],input[name="email"],#loginEmail,#adminEmail');return lower(el&&el.value)}
-  function getPassword(form){var el=form.querySelector('input[type="password"],input[name="password"],#loginPassword,#adminPassword');return el?String(el.value||''):''}
-  function setBtn(btn,text,disabled){if(!btn)return;btn.disabled=!!disabled;if(text)btn.textContent=text}
-
-  async function readRows(table){var c=client();if(!c)return [];try{var res=await withTimeout(c.from(table).select('*').limit(200),10000);if(res&&res.error)return [];return Array.isArray(res.data)?res.data:[]}catch(e){return []}}
-  async function readMemberCandidates(){var rows=[];var a=await readRows('admin_member_overview');var b=await readRows('member_profiles');(a||[]).concat(b||[]).forEach(function(r){if(r&&emailOf(r))rows.push(r)});return rows}
-
-  function saveMemberSession(row,email){var data={
-    memberId:pick(row,['id','member_id','memberId','profile_id'])||stableId(email,'KM-MBR'),
-    fullName:nameOf(row)||email,
-    email:emailOf(row)||email,
-    whatsapp:waOf(row)||'',
-    telegram:pick(row,['telegram','telegram_username'])||'',
-    status:pick(row,['status','access_status'])||'Member Website',
-    statusKey:pick(row,['status_key','statusKey'])||'',
-    accountActive:!!(row.account_active||row.accountActive||row.is_active||row.active),
-    referralCode:pick(row,['referral_code','referralCode'])||'',
-    loginAt:Date.now(),lastActivity:Date.now(),source:'login_member_24ei'
-  };
-  setJSON('kamarMemberSession',data);setJSON('kamarCurrentUser',{role:'member',email:data.email,name:data.fullName,loginAt:Date.now()});return data;}
-  function saveAdminSession(row,email){var data={
-    adminId:pick(row,['id','member_id','profile_id'])||stableId(email,'KM-ADM'),
-    fullName:nameOf(row)||'Admin Kamar',
-    email:emailOf(row)||email,
-    role:'admin',loginAt:Date.now(),lastActivity:Date.now(),source:'login_admin_24ei'
-  };
-  setJSON('kamarAdminSession',data);setJSON('kamarCurrentUser',{role:'admin',email:data.email,name:data.fullName,loginAt:Date.now()});return data;}
-
-  async function loginMember(email,password){
-    var local=getJSON('kamarRegisteredMembers',[]).filter(function(r){return emailOf(r)===email});
-    if(local.length){var r=local[0];if(await passMatches(r,password)){return {ok:true,row:r,source:'local'}}}
-    var rows=await readMemberCandidates();
-    var row=rows.find(function(r){return emailOf(r)===email && !isInternal(r)});
-    if(row){if(await passMatches(row,password))return {ok:true,row:row,source:'supabase'}}
-    return {ok:false,msg:'Email atau password belum sesuai.'};
-  }
-  async function loginAdmin(email,password){
-    var rows=await readMemberCandidates();
-    var row=rows.find(function(r){return emailOf(r)===email && isInternal(r)});
-    if(row){if(await passMatches(row,password))return {ok:true,row:row,source:'supabase'}}
-    var local=getJSON('kamarAdminUsers',[]).find(function(r){return emailOf(r)===email})||null;
-    if(local&&await passMatches(local,password))return {ok:true,row:local,source:'local'};
-    if(email==='kamarkajianmarket@gmail.com' && password){return {ok:true,row:{email:email,full_name:'Kamar Kajian Market',role:'admin'},source:'fallback'}}
-    return {ok:false,msg:'Email atau password admin belum sesuai.'};
-  }
-
-  async function handleMemberSubmit(form,e){
-    e.preventDefault();e.stopPropagation();hideLoading();
-    var btn=form.querySelector('button[type="submit"],input[type="submit"]');
-    var email=getEmail(form), pass=getPassword(form);
-    if(!email||!pass){setStatus(form,'Isi email dan password terlebih dahulu.','error');return;}
-    setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');
-    try{
-      var res=await withTimeout(loginMember(email,pass),14000);
-      hideLoading();
-      if(!res.ok){setStatus(form,res.msg||'Login belum berhasil. Coba ulangi.','error');setBtn(btn,'Login ke Dashboard',false);return;}
-      saveMemberSession(res.row,email);setStatus(form,'Login berhasil. Mengalihkan ke dashboard.','success');
-      setTimeout(function(){location.href='dashboard.html?v='+VERSION},350);
-    }catch(err){hideLoading();setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error');setBtn(btn,'Login ke Dashboard',false)}
-  }
-  async function handleAdminSubmit(form,e){
-    e.preventDefault();e.stopPropagation();hideLoading();
-    var btn=form.querySelector('button[type="submit"],input[type="submit"]');
-    var email=getEmail(form), pass=getPassword(form);
-    if(!email||!pass){setStatus(form,'Isi email dan password admin terlebih dahulu.','error');return;}
-    setBtn(btn,'Memproses...',true);showLoading('Mohon tunggu...');
-    try{
-      var res=await withTimeout(loginAdmin(email,pass),14000);
-      hideLoading();
-      if(!res.ok){setStatus(form,res.msg||'Login admin belum berhasil.','error');setBtn(btn,'Login Admin',false);return;}
-      saveAdminSession(res.row,email);setStatus(form,'Login berhasil. Mengalihkan ke admin.','success');
-      setTimeout(function(){location.href='admin.html?v='+VERSION},350);
-    }catch(err){hideLoading();setStatus(form,'Login belum bisa diproses. Coba ulangi beberapa saat lagi.','error');setBtn(btn,'Login Admin',false)}
-  }
-
-  function isMemberLoginForm(form){return !!(form&&form.id==='kamarLoginForm')}
-  function isAdminLoginForm(form){
-    if(!form)return false;
-    var p=(location.pathname.split('/').pop()||'').toLowerCase();
-    var txt=lower((form.id||'')+' '+(form.className||'')+' '+(form.textContent||'')+' '+document.title);
-    return (p.indexOf('admin')===0||txt.indexOf('admin')>=0) && !!form.querySelector('input[type="password"]') && !!form.querySelector('input[type="email"],input[name="email"]');
-  }
-  function normalizeForms(){
-    qsa('form').forEach(function(form){if(isMemberLoginForm(form)||isAdminLoginForm(form)){form.setAttribute('data-no-loading','true')}});
-    hideLoading();
-  }
-  document.addEventListener('submit',function(e){var form=e.target;if(isMemberLoginForm(form)){handleMemberSubmit(form,e);return;}if(isAdminLoginForm(form)){handleAdminSubmit(form,e);return;}},true);
-  window.addEventListener('pageshow',hideLoading);window.addEventListener('error',function(){setTimeout(hideLoading,100)});window.addEventListener('unhandledrejection',function(){setTimeout(hideLoading,100)});
-  setInterval(function(){var o=document.getElementById('kamarLoadingOverlay');if(o&&o.classList.contains('show')){var started=o.getAttribute('data-started')||Date.now();if(!o.getAttribute('data-started'))o.setAttribute('data-started',started);if(Date.now()-Number(started)>18000)hideLoading();}},1500);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',normalizeForms);else normalizeForms();
-  setTimeout(normalizeForms,500);setTimeout(normalizeForms,1500);
-})();
-</script>
 
 <script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body>
 </html>

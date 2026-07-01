@@ -441,83 +441,97 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   function qs(id){return document.getElementById(id);}
   function normalizeName(name){return String(name||'').trim().replace(/\s+/g,' ');}
   function codeNorm(s){return String(s||'').trim().toUpperCase();}
-  function nameInitial(name){
-    var first=normalizeName(name).split(' ')[0]||'KAWAN';
-    first=first.normalize?first.normalize('NFD').replace(/[\u0300-\u036f]/g,''):first;
-    first=first.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
-    return first.charAt(0)||'K';
-  }
-  function nextAffiliateNumber(email,affiliates){
-    var max=0;
-    (affiliates||[]).forEach(function(a){
-      if(String(a.email||'').toLowerCase()===String(email||'').toLowerCase())return;
-      var n=parseInt(a.affiliateNumber||0,10);
-      var m=String(a.referralCode||'').match(/^KM(\d{5})[A-Z0-9]$/i);
-      if(m)n=parseInt(m[1],10);
-      if(n>max)max=n;
-    });
-    return max+1;
-  }
-  function makeCode(name,email,affiliates,number){
-    var n=number||nextAffiliateNumber(email,affiliates);
-    return 'KM'+String(n).padStart(5,'0')+nameInitial(name);
-  }
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
   function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function now(){return new Date().toISOString();}
+  function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''};}
+  function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null;}
+  function supa(){var ex=existingClient();if(ex)return ex;var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){return window.supabase.createClient(c.url,c.key);}return null;}
+  function nameInitial(name){var first=normalizeName(name).split(' ')[0]||'KAWAN';first=first.normalize?first.normalize('NFD').replace(/[\u0300-\u036f]/g,''):first;first=first.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();return first.charAt(0)||'K';}
+  function numberFromCode(code){var m=String(code||'').match(/^KM(\d{5})[A-Z0-9]$/i);return m?parseInt(m[1],10):0;}
+  function nextAffiliateNumber(email,items){var max=0;(items||[]).forEach(function(a){if(String(a.email||'').toLowerCase()===String(email||'').toLowerCase())return;var n=parseInt(a.affiliateNumber||0,10)||numberFromCode(a.referralCode||a.affiliate_code);if(n>max)max=n;});return max+1;}
+  function makeCode(name,email,items,number){var n=number||nextAffiliateNumber(email,items);return 'KM'+String(n).padStart(5,'0')+nameInitial(name);}
+  function rowToLocal(row){return {id:row.id,fullName:row.full_name||row.fullName||'',email:row.email||'',whatsapp:row.whatsapp||row.phone||'',telegram:row.telegram||'',channel:row.promotion_channel||row.channel||'',referralCode:row.affiliate_code||row.referralCode||'',affiliateNumber:numberFromCode(row.affiliate_code||row.referralCode),status:'Menunggu Approval Admin',statusKey:'pending_approval',approvalStatus:'pending_approval',approval_status:'PENDING_APPROVAL',isActive:false,createdAt:row.created_at||now(),updatedAt:row.updated_at||now(),payoutAccount:{fullName:row.payment_account_name||'',bankName:row.payment_bank_name||'',accountNumber:row.payment_account_number||'',verificationStatus:row.payment_verified?'Terverifikasi':'Menunggu Verifikasi'}};}
+  async function loadSupabaseAffiliates(){var c=supa();if(!c)return {ok:false,rows:[],error:'Supabase client tidak terbaca'};try{var res=await c.from('affiliates').select('id,affiliate_code,full_name,email,phone,whatsapp,telegram,promotion_channel,payment_account_name,payment_bank_name,payment_account_number,payment_verified,approval_status,is_active,created_at,updated_at').order('created_at',{ascending:true});if(res.error)return {ok:false,rows:[],error:res.error.message||String(res.error)};return {ok:true,rows:res.data||[],error:''};}catch(e){return {ok:false,rows:[],error:e.message||String(e)};}}
+  async function persistAffiliate(payload,existingId){var c=supa();if(!c)return {ok:false,error:'Supabase client tidak terbaca'};try{var res=existingId?await c.from('affiliates').update(payload).eq('id',existingId).select().maybeSingle():await c.from('affiliates').insert(payload).select().maybeSingle();if(res.error)return {ok:false,error:res.error.message||String(res.error)};return {ok:true,row:res.data};}catch(e){return {ok:false,error:e.message||String(e)};}}
+  function saveLocal(data){var list=getJSON('kamarAffiliateList',[]);var key=String(data.email||'').toLowerCase();var idx=list.findIndex(function(a){return String(a.email||'').toLowerCase()===key||codeNorm(a.referralCode)===codeNorm(data.referralCode);});if(idx>=0)list[idx]=Object.assign({},list[idx],data);else list.push(data);setJSON('kamarAffiliateList',list);setJSON('kamarAffiliateSession',data);localStorage.setItem('kamarAffiliateDraft',JSON.stringify(data));}
+
   var form=qs('kamarAffiliateForm');
   if(!form) return;
   var status=qs('affiliateStatus');
   var result=qs('affiliateResult');
   var codeText=qs('affiliateCodeText');
-  var help=result.querySelector('p:last-child');
-  if(help){help.innerHTML='Kode referral ini disiapkan untuk data affiliate Anda, tetapi baru aktif setelah Admin Kamar memberi approval. Gunakan dashboard affiliate untuk melihat status. <br/><br/><a class="btn secondary" href="affiliate-dashboard.html" style="margin-top:10px">Buka Dashboard Affiliate</a>';}
-  form.addEventListener('submit', function(e){
+  var help=result&&result.querySelector('p:last-child');
+  if(help){help.innerHTML='Pendaftaran affiliate sudah dikirim ke database Kamar. Kode referral baru aktif setelah Admin Kamar menyetujui akun affiliate. <br/><br/><a class="btn secondary" href="affiliate-dashboard.html" style="margin-top:10px">Buka Dashboard Affiliate</a>';}
+  function setStatus(msg,cls){if(status){status.hidden=false;status.textContent=msg;status.className='form-note '+(cls||'');}}
+
+  form.addEventListener('submit', async function(e){
     e.preventDefault();
     var fullName=normalizeName(qs('affiliateFullName').value);
     var email=String(qs('affiliateEmail').value||'').trim().toLowerCase();
     var whatsapp=String(qs('affiliateWhatsapp').value||'').trim();
+    var telegram=String(qs('affiliateTelegram').value||'').trim();
+    var channel=String(qs('affiliateChannel').value||'').trim();
     var agreeEthic=qs('affiliateAgreeEthic').checked;
     var agreeTerms=qs('affiliateAgreeTerms').checked;
     var payoutName=normalizeName(qs('affiliatePayoutName').value);
     var payoutBank=normalizeName(qs('affiliatePayoutBank').value);
     var payoutNumber=String(qs('affiliatePayoutNumber').value||'').trim();
-    if(!fullName || !email || !whatsapp){
-      status.hidden=false; status.textContent='Nama, email, dan WhatsApp wajib diisi.'; status.className='form-note error'; return;
+    if(!fullName || !email || !whatsapp){setStatus('Nama, email, dan WhatsApp wajib diisi.','error');return;}
+    if(!payoutName || !payoutBank || !payoutNumber){setStatus('Data akun penerima pembayaran wajib lengkap sebelum pendaftaran affiliate dikirim.','error');return;}
+    if(!agreeEthic || !agreeTerms){setStatus('Centang persetujuan affiliate terlebih dahulu.','error');return;}
+
+    setStatus('Mengirim pendaftaran affiliate ke Supabase...','');
+    var localList=getJSON('kamarAffiliateList',[]);
+    var supaLoad=await loadSupabaseAffiliates();
+    var supaRows=supaLoad.rows||[];
+    var combined=localList.concat(supaRows.map(rowToLocal));
+    var existingRow=supaRows.find(function(a){return String(a.email||'').toLowerCase()===email;})||null;
+    var existingLocal=localList.find(function(a){return String(a.email||'').toLowerCase()===email;})||null;
+    var oldCode=(existingRow&&existingRow.affiliate_code)||(existingLocal&&existingLocal.referralCode)||'';
+    var code=oldCode||makeCode(fullName,email,combined);
+
+    var payload={
+      affiliate_code:code,
+      full_name:fullName,
+      email:email,
+      phone:whatsapp,
+      whatsapp:whatsapp,
+      telegram:telegram,
+      promotion_channel:channel,
+      payment_account_name:payoutName,
+      payment_bank_name:payoutBank,
+      payment_account_number:payoutNumber,
+      payment_verified:false,
+      approval_status:'PENDING_APPROVAL',
+      is_active:false,
+      source:'affiliate.html',
+      notes:'Pendaftaran affiliate website. Menunggu approval admin.'
+    };
+
+    var saved=await persistAffiliate(payload,existingRow&&existingRow.id);
+    if(!saved.ok && /duplicate|unique/i.test(saved.error||'')){
+      code='KM'+String(Date.now()).slice(-5)+nameInitial(fullName);
+      payload.affiliate_code=code;
+      saved=await persistAffiliate(payload,null);
     }
-    if(!payoutName || !payoutBank || !payoutNumber){
-      status.hidden=false; status.textContent='Data akun penerima pembayaran wajib lengkap sebelum pendaftaran affiliate dikirim.'; status.className='form-note error'; return;
-    }
-    if(!agreeEthic || !agreeTerms){
-      status.hidden=false; status.textContent='Centang persetujuan affiliate terlebih dahulu.'; status.className='form-note error'; return;
-    }
-    var affiliates=getJSON('kamarAffiliateList',[]);
-    var existing=affiliates.find(function(a){return String(a.email||'').toLowerCase()===email;});
-    var existingCode=existing&&existing.referralCode?String(existing.referralCode):'';
-    var oldIsNewFormat=/^KM\d{5}[A-Z0-9]$/i.test(existingCode);
-    var affiliateNumber=(existing&&existing.affiliateNumber)||0;
-    if(!affiliateNumber && oldIsNewFormat){affiliateNumber=parseInt(existingCode.match(/^KM(\d{5})[A-Z0-9]$/i)[1],10);}
-    if(!affiliateNumber){affiliateNumber=nextAffiliateNumber(email,affiliates);}
-    var code=oldIsNewFormat?existingCode:makeCode(fullName,email,affiliates,affiliateNumber);
-    var data={fullName:fullName,email:email,whatsapp:whatsapp,telegram:qs('affiliateTelegram').value,channel:qs('affiliateChannel').value,affiliateNumber:affiliateNumber,referralCode:code,status:'Menunggu Approval Admin',statusKey:'pending_approval',approvalStatus:'pending_approval',approval_status:'pending_approval',createdAt:(existing&&existing.createdAt)||new Date().toISOString(),updatedAt:new Date().toISOString(),payoutAccount:{fullName:payoutName,bankName:payoutBank,accountNumber:payoutNumber,verificationStatus:'Menunggu Verifikasi'}};
-    if(existingCode && existingCode!==code){
-      var members=getJSON('kamarRegisteredMembers',[]);
-      members.forEach(function(m){if(codeNorm(m.referralCode)===codeNorm(existingCode)){m.referralCode=code;m.referrerName=fullName;}});
-      setJSON('kamarRegisteredMembers',members);
-    }
-    if(existing){Object.assign(existing,data);data=existing;}else{affiliates.push(data);}
-    setJSON('kamarAffiliateList', affiliates);
-    setJSON('kamarAffiliateSession', data);
-    localStorage.setItem('kamarAffiliateDraft', JSON.stringify(data));
+
+    var data=rowToLocal(saved.row||Object.assign({},payload,{created_at:now(),updated_at:now()}));
+    data.supabaseSaved=!!saved.ok;
+    data.supabaseError=saved.ok?'':saved.error;
+    saveLocal(data);
     codeText.textContent=code;
     result.hidden=false;
-    status.hidden=false; status.textContent=existing?'Data affiliate diperbarui dan kembali menunggu approval admin.':'Pendaftaran affiliate berhasil dikirim. Status Anda menunggu approval admin.'; status.className='form-note success';
+    if(saved.ok){
+      setStatus((existingRow?'Data affiliate diperbarui':'Pendaftaran affiliate berhasil dikirim')+'. Status: Menunggu Approval Admin. Kode referral belum aktif sebelum disetujui.','success');
+    }else{
+      setStatus('Supabase belum bisa menerima data: '+saved.error+'. Data disimpan sementara di browser, tetapi belum aman lintas device.','error');
+    }
     result.scrollIntoView({behavior:'smooth',block:'center'});
   });
+
   var copy=qs('copyAffiliateCode');
-  if(copy){copy.addEventListener('click', function(){
-    var text=codeText.textContent;
-    navigator.clipboard && navigator.clipboard.writeText(text).then(function(){copy.textContent='Tersalin'; setTimeout(function(){copy.textContent='Salin';},1200);});
-  });}
+  if(copy){copy.addEventListener('click', function(){var text=codeText.textContent;navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){copy.textContent='Tersalin';setTimeout(function(){copy.textContent='Salin';},1200);});});}
 })();
 </script>
 

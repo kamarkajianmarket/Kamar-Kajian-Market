@@ -427,8 +427,14 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 .affiliate-login-link-box a:hover{background:rgba(244,223,144,.14)!important;border-color:rgba(244,223,144,.58)!important;}
 @media(max-width:760px){#affiliate-register .member-login-shell{max-width:100%!important}.affiliate-login-link-box{justify-content:center!important;text-align:center!important}}
 </style>
+
+<style id="kamar-step24eg-affiliate-clean-links">
+/* Step 24EG: halaman daftar affiliate hanya untuk affiliate. Tidak ada akses Login Member di halaman ini. */
+#affiliate-register .member-login-help{display:none!important;}
+body.affiliate-page .header-member-cta{display:none!important;}
+</style>
 </head>
-<body>
+<body class="affiliate-page">
 <div class="page-glow page-glow-1"></div>
 <div class="page-glow page-glow-2"></div>
 <header class="site-header">
@@ -444,7 +450,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </nav>
 <div class="header-actions">
 <a class="header-cta" href="https://t.me/kamarkajianmarket" rel="noopener" target="_blank">Join Grup Telegram</a>
-<a class="header-cta header-member-cta" href="member.html">Login Member</a>
 </div>
 </header>
 
@@ -481,13 +486,9 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <div class="affiliate-code-box"><code id="affiliateCodeText">KM00001C</code><button class="btn btn-ghost" id="copyAffiliateCode" type="button">Salin</button></div>
 <p style="margin:12px 0 0;font-size:13px;color:rgba(226,255,239,.72);">Simpan kode ini. Kode referral baru aktif setelah Admin Kamar menyetujui pendaftaran affiliate Anda.</p>
 </div>
-<div class="member-login-help">
-<span>Sudah punya akun member?</span>
-<a href="member.html">Login Member</a>
-</div>
 <div class="affiliate-login-link-box">
 <span>Sudah punya akun affiliate?</span>
-<a href="affiliate-login.html?v=24ef">Login Affiliate</a>
+<a href="affiliate-login.html?v=24eh">Login Affiliate</a>
 </div>
 </article>
 
@@ -554,7 +555,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   var result=qs('affiliateResult');
   var codeText=qs('affiliateCodeText');
   var help=result&&result.querySelector('p:last-child');
-  if(help){help.innerHTML='Pendaftaran affiliate sudah dikirim ke database Kamar. Kode referral baru aktif setelah Admin Kamar menyetujui akun affiliate. <br/><br/><a class="btn secondary" href="affiliate-login.html?v=24ef" style="margin-top:10px">Login Affiliate</a>';}
+  if(help){help.innerHTML='Pendaftaran affiliate sudah dikirim ke database Kamar. Kode referral baru aktif setelah Admin Kamar menyetujui akun affiliate. <br/><br/><a class="btn secondary" href="affiliate-login.html?v=24eh" style="margin-top:10px">Login Affiliate</a>';}
   function setStatus(msg,cls){if(status){status.hidden=false;status.textContent=msg;status.className='form-note '+(cls||'');}}
 
   form.addEventListener('submit', async function(e){
@@ -648,7 +649,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var res=await loginAffiliate(email,password);
     if(!res.ok){loginStatus('Login belum berhasil. Periksa email dan password.','error');return;}
     loginStatus('Login berhasil. Mengalihkan ke dashboard affiliate...','success');
-    setTimeout(function(){window.location.href='affiliate-login.html?v=24ef';},650);
+    setTimeout(function(){window.location.href='affiliate-login.html?v=24eh';},650);
   });}
 
   var copy=qs('copyAffiliateCode');

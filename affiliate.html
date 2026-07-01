@@ -493,6 +493,18 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
   function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
   function now(){return new Date().toISOString();}
+  async function kamarPasswordHash24ED(password){
+    var raw=String(password||'');
+    try{
+      if(window.crypto&&crypto.subtle){
+        var data=new TextEncoder().encode(raw);
+        var hash=await crypto.subtle.digest('SHA-256',data);
+        return 'sha256:'+Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+      }
+    }catch(e){}
+    var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h|=0;}
+    return 'fallback:'+String(h);
+  }
   function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''};}
   function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null;}
   function supa(){var ex=existingClient();if(ex)return ex;var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){return window.supabase.createClient(c.url,c.key);}return null;}
@@ -548,6 +560,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var code=oldCode||makeCode(fullName,email,combined);
     var auth=await signUpAffiliate(email,pass,fullName);
 
+    var affiliatePasswordHash=await kamarPasswordHash24ED(pass);
     var payload={
       affiliate_code:code,
       full_name:fullName,
@@ -563,11 +576,16 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
       approval_status:'PENDING_APPROVAL',
       is_active:false,
       user_id:(auth&&auth.userId)||((existingRow&&existingRow.user_id)||null),
+      password_hash:affiliatePasswordHash,
       source:'affiliate.html',
       notes:'Pendaftaran affiliate website. Menunggu approval admin.'
     };
 
     var saved=await persistAffiliate(payload,existingRow&&existingRow.id);
+    if(!saved.ok && /password_hash|column/i.test(saved.error||'')){
+      delete payload.password_hash;
+      saved=await persistAffiliate(payload,existingRow&&existingRow.id);
+    }
     if(!saved.ok && /duplicate|unique/i.test(saved.error||'')){
       code='KM'+String(Date.now()).slice(-5)+nameInitial(fullName);
       payload.affiliate_code=code;
@@ -601,7 +619,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
     var res=await loginAffiliate(email,password);
     if(!res.ok){loginStatus('Login belum berhasil. Periksa email dan password.','error');return;}
     loginStatus('Login berhasil. Mengalihkan ke dashboard affiliate...','success');
-    setTimeout(function(){window.location.href='affiliate-dashboard.html?v=24ea';},650);
+    setTimeout(function(){window.location.href='affiliate-dashboard.html?v=24ed';},650);
   });}
 
   var copy=qs('copyAffiliateCode');

@@ -1,0 +1,92 @@
+/* Step 38 — Public Header + Hero Badge Position Fix
+   Hanya menyentuh tampilan publik index.html. Tidak menyentuh auth, Supabase, admin, dashboard, atau session. */
+
+/* Header: dorong Join Telegram ke ujung kanan card */
+@media (min-width: 901px){
+  body.public-home .site-header{
+    grid-template-columns: auto auto minmax(220px,1fr)!important;
+    column-gap: clamp(22px, 3vw, 56px)!important;
+    align-items: center!important;
+  }
+  body.public-home .site-header .brand{
+    justify-self:start!important;
+  }
+  body.public-home .site-header .nav-links{
+    justify-self:center!important;
+  }
+  body.public-home .site-header .header-actions{
+    width:100%!important;
+    justify-self:stretch!important;
+    margin-left:0!important;
+    display:flex!important;
+    justify-content:flex-end!important;
+    align-items:center!important;
+  }
+  body.public-home .site-header .telegram-main-cta{
+    margin-left:auto!important;
+    min-width:220px!important;
+  }
+}
+
+/* Hero: pindahkan badge Supply/Risk ke dalam foto, bersama Market Logic */
+body.public-home .visual-card{
+  position:relative!important;
+  overflow:hidden!important;
+}
+body.public-home .visual-card:after{
+  content:none!important;
+  display:none!important;
+}
+body.public-home .hero-badges.hero-badges-on-visual{
+  position:absolute!important;
+  left:20px!important;
+  right:20px!important;
+  bottom:20px!important;
+  z-index:4!important;
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:10px!important;
+  flex-wrap:wrap!important;
+  margin:0!important;
+  pointer-events:none!important;
+}
+body.public-home .hero-badges.hero-badges-on-visual span{
+  min-height:38px!important;
+  padding:0 16px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(238,206,122,.30)!important;
+  background:rgba(8,8,7,.68)!important;
+  color:#f4dc8f!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+  box-shadow:0 14px 40px rgba(0,0,0,.28)!important;
+  font-size:11px!important;
+  font-weight:1000!important;
+  letter-spacing:.18em!important;
+  text-transform:uppercase!important;
+  line-height:1!important;
+}
+body.public-home .hero-badges.hero-badges-on-visual span:nth-child(2){
+  border-color:rgba(244,223,144,.32)!important;
+}
+body.public-home .hero-badges.hero-badges-on-visual span:nth-child(3){
+  color:#bfffd9!important;
+  border-color:rgba(126,224,163,.36)!important;
+  background:rgba(20,72,47,.46)!important;
+}
+
+@media (max-width: 900px){
+  body.public-home .hero-badges.hero-badges-on-visual{
+    left:14px!important;
+    right:14px!important;
+    bottom:14px!important;
+    gap:8px!important;
+  }
+  body.public-home .hero-badges.hero-badges-on-visual span{
+    min-height:32px!important;
+    padding:0 11px!important;
+    font-size:9.5px!important;
+    letter-spacing:.13em!important;
+  }
+}

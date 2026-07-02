@@ -1,0 +1,11 @@
+
+/* KAMAR STEP36 - Hide public member login/register temporarily. Does not touch Supabase/Auth/Admin logic. */
+.kamar-member-access-hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
+.kamar-access-closed{max-width:760px;margin:80px auto;padding:42px 34px;border:1px solid rgba(238,206,122,.28);border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(212,166,63,.045));box-shadow:0 24px 80px rgba(0,0,0,.34);text-align:center;color:#f6f0df}
+.kamar-access-closed img{width:86px;height:86px;object-fit:contain;border-radius:22px;background:#050505;border:1px solid rgba(238,206,122,.32);padding:10px;margin-bottom:20px}
+.kamar-access-closed .eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;color:#f1d98c;letter-spacing:.28em;text-transform:uppercase;font-weight:900;font-size:13px}
+.kamar-access-closed h1,.kamar-access-closed h2{font-size:clamp(28px,4vw,46px);line-height:1.05;margin:0 0 16px;color:#fff1d6;letter-spacing:-.04em}
+.kamar-access-closed p{margin:0 auto 24px;max-width:620px;color:rgba(245,240,230,.74);font-weight:750;line-height:1.6;font-size:16px}
+.kamar-access-closed .closed-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.kamar-access-closed .closed-actions a{min-width:190px;text-align:center;text-decoration:none}
+@media(max-width:680px){.kamar-access-closed{margin:38px 16px;padding:30px 20px}.kamar-access-closed .closed-actions a{width:100%;min-width:0}}

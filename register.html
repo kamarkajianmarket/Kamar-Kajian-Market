@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Daftar Kawan Kamar — Kamar Kajian Market</title>
+<title>Pendaftaran Member Ditutup Sementara — Kamar Kajian Market</title>
 <meta content="Kamar Kajian Market — Market Logic Community. Ruang belajar dan diskusi trading berbasis market logic, price action, supply-demand, risk management, dan hukum sebab-akibat market." name="description"/>
 <meta content="#070707" name="theme-color"/>
 <link href="assets/favicon.png" rel="icon"/>
@@ -365,6 +365,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <link href="assets/css/kamar-design-lock-24dz.css" rel="stylesheet"/>
 <link href="assets/css/kamar-premium-v29.css?v=30" rel="stylesheet"/>
 <link href="assets/css/kamar-polish-v30.css?v=30" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -386,37 +387,17 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </div>
 </header>
 <main id="top">
-<section class="member-area section-shell compact-section" id="register-member">
-<div class="section-heading centered">
-<span class="eyebrow">Daftar Kawan Kamar</span>
-<h2>Buat akun Kawan Kamar.</h2>
-<p>Isi data utama dengan benar. Setelah akun dibuat, aktivasi fasilitas akan dikonfirmasi oleh Admin Kamar.</p>
-</div>
-<div class="member-login-shell">
-<article class="member-login-card auth-card">
-<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
-<span class="mini-label">Form Pendaftaran</span>
-
-<form class="member-login-form" id="kamarRegisterForm">
-<label>Nama Lengkap<input aria-label="Nama lengkap" autocomplete="name" id="registerFullName" name="full_name" placeholder="Nama lengkap sesuai identitas" required="" type="text"/></label>
-<label>Email<input aria-label="Email pendaftaran" autocomplete="email" id="registerEmail" name="email" placeholder="email@domain.com" required="" type="email"/></label>
-<label>Nomor WhatsApp<input aria-label="Nomor WhatsApp" autocomplete="tel" id="registerWhatsapp" name="whatsapp" placeholder="08xxxxxxxxxx" required="" type="tel"/></label>
-<label>Username Telegram<input aria-label="Username Telegram" id="registerTelegram" name="telegram_username" placeholder="@username" type="text"/></label>
-<label>Password<input aria-label="Password pendaftaran" autocomplete="new-password" id="registerPassword" name="password" placeholder="Buat password" required="" type="password"/></label>
-<label>Konfirmasi Password<input aria-label="Konfirmasi password" autocomplete="new-password" id="registerPasswordConfirm" name="password_confirm" placeholder="Ulangi password" required="" type="password"/></label>
-<label>Kode Referral <span class="mini-label">Opsional</span><input aria-label="Kode referral" id="registerReferral" name="referral_code" placeholder="Kosongkan jika tidak ada" type="text"/></label>
-<label class="check-row"><input id="registerAgreeRisk" required="" type="checkbox"/> Saya memahami bahwa Kamar Kajian Market adalah fasilitas edukasi dan kajian market, bukan layanan jaminan profit.</label>
-<label class="check-row"><input id="registerAgreeTerms" required="" type="checkbox"/> Saya setuju mengikuti ketentuan akses, pembayaran, dan penggunaan fasilitas Kamar Kajian Market.</label>
-<label class="check-row"><input id="registerAgreePolicy" required="" type="checkbox"/> Dengan bergabung, Anda menyetujui persyaratan layanan dan kebijakan privasi kami.</label>
-<button class="btn btn-primary" id="registerSubmitBtn" type="submit">Daftar Akun</button>
-<p class="form-note" hidden="" id="registerStatus"></p>
-</form>
-<div class="member-login-help">
-<span>Sudah punya akun?</span>
-<a href="member.html">Login Member</a>
-</div>
-</article>
-</div>
+<section class="section-shell compact-section">
+  <article class="kamar-access-closed">
+    <img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
+    <span class="eyebrow">Akses Member Ditutup Sementara</span>
+    <h1>Pendaftaran Member Sedang Dinonaktifkan.</h1>
+    <p>Fasilitas login dan pendaftaran member sedang disembunyikan sementara untuk proses perapihan sistem. Akses admin, database Supabase, dan dashboard internal tidak diubah.</p>
+    <div class="closed-actions">
+      <a class="btn btn-primary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Chat Admin</a>
+      <a class="btn btn-ghost" href="index.html">Kembali ke Beranda</a>
+    </div>
+  </article>
 </section>
 </main>
 <footer class="site-footer">

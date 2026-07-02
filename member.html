@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Login Member — Kamar Kajian Market</title>
+<title>Login Member Ditutup Sementara — Kamar Kajian Market</title>
 <meta content="Kamar Kajian Market — Market Logic Community. Ruang belajar dan diskusi trading berbasis market logic, price action, supply-demand, risk management, dan hukum sebab-akibat market." name="description"/>
 <meta content="#070707" name="theme-color"/>
 <link href="assets/favicon.png" rel="icon"/>
@@ -389,6 +389,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <link href="assets/css/kamar-design-lock-24dz.css" rel="stylesheet"/>
 <link href="assets/css/kamar-premium-v29.css?v=30" rel="stylesheet"/>
 <link href="assets/css/kamar-polish-v30.css?v=30" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -410,38 +411,17 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </div>
 </header>
 <main id="top">
-<section class="member-area section-shell compact-section" id="member-login">
-<div class="section-heading centered">
-<span class="eyebrow">Member Area Kawan Kamar</span>
-<h2>Masuk ke ruang khusus member Kamar.</h2>
-<p>Login untuk membuka dashboard Kawan Kamar. Jika belum punya akun, daftar dulu. Aktivasi fasilitas dilakukan setelah konfirmasi admin.</p>
-</div>
-<div class="member-login-shell">
-<article class="member-login-card auth-card">
-<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
-<span class="mini-label">Login Kawan Kamar</span>
-
-<p>Gunakan email terdaftar dan password akun Kawan Kamar.</p>
-<form class="member-login-form" id="kamarLoginForm">
-<label>Email Terdaftar<input aria-label="Email terdaftar" autocomplete="email" id="loginEmail" name="email" placeholder="email@domain.com" required="" type="email"/></label>
-<label>Password<input aria-label="Password member" autocomplete="current-password" id="loginPassword" name="password" placeholder="Masukkan password" required="" type="password"/></label>
-<button class="btn btn-primary" id="loginSubmitBtn" type="submit">Login ke Dashboard</button>
-<p class="form-note" hidden="" id="loginStatus"></p>
-</form>
-<div class="member-login-help">
-<span>Belum punya akun?</span>
-<a href="register.html">Daftar Sekarang</a>
-</div>
-<div class="member-login-help">
-<span>Ingin jadi affiliate?</span>
-<a href="affiliate.html">Daftar Affiliate</a>
-</div>
-<div class="member-login-help">
-<span>Butuh bantuan akses?</span>
-<a href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Chat Admin</a>
-</div>
-</article>
-</div>
+<section class="section-shell compact-section">
+  <article class="kamar-access-closed">
+    <img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
+    <span class="eyebrow">Akses Member Ditutup Sementara</span>
+    <h1>Login Member Sedang Dinonaktifkan.</h1>
+    <p>Fasilitas login dan pendaftaran member sedang disembunyikan sementara untuk proses perapihan sistem. Akses admin, database Supabase, dan dashboard internal tidak diubah.</p>
+    <div class="closed-actions">
+      <a class="btn btn-primary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Chat Admin</a>
+      <a class="btn btn-ghost" href="index.html">Kembali ke Beranda</a>
+    </div>
+  </article>
 </section>
 </main>
 <footer class="site-footer">

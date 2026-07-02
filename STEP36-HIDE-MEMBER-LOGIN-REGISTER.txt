@@ -1,0 +1,17 @@
+KAMAR STEP36 - Hide Member Login/Register Temporarily
+
+Basis: Step35 rollback stabil / Step30 Supabase stable.
+Perubahan hanya tampilan akses publik member:
+- Link Daftar/Login Member di index disembunyikan.
+- Link register.html di index disembunyikan.
+- member.html menampilkan pemberitahuan akses ditutup sementara.
+- register.html menampilkan pemberitahuan pendaftaran ditutup sementara.
+- Admin logout diarahkan ke index.html agar tidak masuk halaman member yang sedang ditutup.
+
+Tidak mengubah:
+- Supabase config
+- Supabase Auth
+- Admin login
+- Dashboard admin
+- Data online
+- Member protected pages/session guard

@@ -354,6 +354,7 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 <link href="assets/css/kamar-premium-v29.css?v=32" rel="stylesheet"/>
 <link href="assets/css/kamar-polish-v30.css?v=32" rel="stylesheet"/>
 <link rel="stylesheet" href="assets/css/kamar-step32-admin-fix.css?v=32">
+<link rel="stylesheet" href="assets/css/kamar-step33-admin-member-list.css?v=33">
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
@@ -490,11 +491,62 @@ function baseRows(){return scope()==='internal'?state.internalRows:state.memberR
 function renderLoading(){setTitle();var wrap=el('adminMembersList');if(wrap)wrap.innerHTML='<div class="admin-empty">Memuat data...</div>';var c=el('adminMemberCount');if(c)c.textContent='Memuat data...';var pc=el('adminPendingCount');if(pc)pc.textContent='Pending: -'}
 function filterRows(rows){var q=norm(el('adminMemberSearch')&&el('adminMemberSearch').value);var st=(el('adminMemberStatusFilter')||{}).value||'all';var ff=(el('adminMemberFacilityFilter')||{}).value||'all';return rows.filter(function(m){var txt=norm([nameOf(m),emailOf(m),idOf(m),waOf(m),tgOf(m),pick(m,['referral_code','referralCode'])].join(' '));var ok=!q||txt.indexOf(q)>=0;if(st==='active')ok=ok&&isActive(m);if(st==='pending')ok=ok&&isPending(m);if(st==='suspended')ok=ok&&isSuspended(m);var fac=facilitiesOf(m);if(ff==='none')ok=ok&&!fac.length;else if(ff!=='all')ok=ok&&fac.indexOf(ff)>=0;return ok})}
 function render(){
-  setTitle();var sc=scope();var rows=baseRows();var list=filterRows(rows);
-  var c=el('adminMemberCount');if(c)c.textContent=(sc==='internal'?'Akun Internal: ':'Total Member: ')+rows.length+' | Tampil: '+list.length;
-  var pc=el('adminPendingCount');if(pc)pc.textContent='Pending: '+rows.filter(isPending).length;
-  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="kamar-admin-list-v32"><div class="kamar-member-list-head"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);var rawId=idOf(m)||emailOf(m)||m._merge_key||'';var mid=encodeURIComponent(rawId);var mail=encodeURIComponent(emailOf(m)||'');var detailBtn='<button class="btn mini secondary" type="button" data-member-detail="'+esc(rawId)+'">Detail</button>';var manageBtn='<a class="btn mini" href="admin-activation.html?member='+mid+'&email='+mail+'&v=32">Kelola</a>';var deleteBtn='<button class="btn mini danger" type="button" data-member-delete="'+esc(rawId)+'">Hapus</button>';h+='<div class="kamar-member-list-row"><div class="kamar-cell"><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div class="kamar-cell">'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div class="kamar-cell">'+statusLabel(m)+'</div><div class="kamar-cell">'+esc(expiryOf(m))+'</div><div class="kamar-cell">'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="kamar-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':detailBtn+manageBtn+deleteBtn)+'</div></div>'});h+='</div>';wrap.innerHTML=h;wrap.querySelectorAll('[data-member-detail]').forEach(function(b){b.addEventListener('click',function(){showMemberDetail(b.getAttribute('data-member-detail'))})});wrap.querySelectorAll('[data-member-delete]').forEach(function(b){b.addEventListener('click',function(){deleteMember(b.getAttribute('data-member-delete'))})})}
-  var rb=el('adminMemberReferralBody');if(rb){if(sc==='internal'){rb.innerHTML='<div class="admin-empty">Referral tidak ditampilkan untuk akun internal.</div>'}else{rb.innerHTML='<div class="admin-empty">Referral member akan dicek di menu Data Affiliate.</div>'}}
+  setTitle();
+  var sc=scope();
+  var rows=baseRows();
+  var list=filterRows(rows);
+  var c=el('adminMemberCount');
+  if(c)c.textContent=(sc==='internal'?'Akun Internal: ':'Total Member: ')+rows.length+' | Tampil: '+list.length;
+  var pc=el('adminPendingCount');
+  if(pc)pc.textContent='Pending: '+rows.filter(isPending).length;
+
+  var wrap=el('adminMembersList');
+  if(wrap){
+    var title=sc==='internal'?'Akun Internal':'Member';
+    var h='<div class="kamar-member-list-v33" role="table" aria-label="'+title+' Kamar">'+
+      '<div class="kamar-member-head-v33" role="row">'+
+        '<div>Member</div><div>Kontak</div><div>Status</div><div>Akses</div><div>Fasilitas</div><div>Aksi</div>'+ 
+      '</div>';
+    if(!list.length){
+      h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';
+    }
+    list.forEach(function(m){
+      var fac=facilitiesOf(m);
+      var rawId=idOf(m)||emailOf(m)||m._merge_key||'';
+      var mid=encodeURIComponent(rawId);
+      var mail=encodeURIComponent(emailOf(m)||'');
+      var memberName=esc(nameOf(m));
+      var memberId=esc(idOf(m)||'-');
+      var contact=esc(emailOf(m)||'-');
+      var wa=esc(waOf(m));
+      var tg=esc(tgOf(m));
+      var manageHref='admin-activation.html?member='+mid+'&email='+mail+'&v=33';
+      var detailBtn='<button class="btn mini secondary" type="button" data-member-detail="'+esc(rawId)+'">Detail</button>';
+      var manageBtn='<a class="btn mini" href="'+manageHref+'">Kelola</a>';
+      var deleteBtn='<button class="btn mini danger" type="button" data-member-delete="'+esc(rawId)+'">Hapus</button>';
+      h+='<div class="kamar-member-row-v33" role="row">'+
+          '<div class="kamar-list-cell member" data-label="Member"><strong>'+memberName+'</strong><small>'+memberId+'</small></div>'+ 
+          '<div class="kamar-list-cell kontak" data-label="Kontak"><span>'+contact+'</span><small>WA: '+wa+' · TG: '+tg+'</small></div>'+ 
+          '<div class="kamar-list-cell status" data-label="Status">'+statusLabel(m)+'</div>'+ 
+          '<div class="kamar-list-cell akses" data-label="Akses Sampai"><span>'+esc(expiryOf(m))+'</span></div>'+ 
+          '<div class="kamar-list-cell fasilitas" data-label="Fasilitas"><span>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</span></div>'+ 
+          '<div class="kamar-list-actions" data-label="Aksi">'+(sc==='internal'?'<span class="status-pill">Internal</span>':detailBtn+manageBtn+deleteBtn)+'</div>'+ 
+        '</div>';
+    });
+    h+='</div>';
+    wrap.innerHTML=h;
+    wrap.querySelectorAll('[data-member-detail]').forEach(function(b){b.addEventListener('click',function(){showMemberDetail(b.getAttribute('data-member-detail'))})});
+    wrap.querySelectorAll('[data-member-delete]').forEach(function(b){b.addEventListener('click',function(){deleteMember(b.getAttribute('data-member-delete'))})});
+  }
+
+  var rb=el('adminMemberReferralBody');
+  if(rb){
+    if(sc==='internal'){
+      rb.innerHTML='<div class="admin-empty">Referral tidak ditampilkan untuk akun internal.</div>';
+    }else{
+      rb.innerHTML='<div class="admin-empty">Referral member akan dicek di menu Data Affiliate.</div>';
+    }
+  }
 }
 
 
@@ -513,7 +565,7 @@ function showMemberDetail(rowId){var m=findMember(rowId);if(!m){toast('Data memb
 +'<div class="admin-detail-box"><span>Fasilitas</span><strong>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</strong></div>'
 +'<div class="admin-detail-box"><span>Kode Referral Digunakan</span><strong>'+esc(code)+'</strong></div>'
 +'<div class="admin-detail-box"><span>Affiliator Terhubung</span><strong>'+esc(aff)+'</strong></div>'
-+'</div><div class="admin-detail-actions"><a class="btn" href="admin-activation.html?member='+encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'')+'&email='+encodeURIComponent(emailOf(m)||'')+'&v=32">Kelola Akses</a><button class="btn secondary" type="button" id="closeMemberDetail">Tutup Detail</button></div>';wrap.classList.remove('hidden');var close=el('closeMemberDetail');if(close)close.onclick=function(){wrap.classList.add('hidden')};wrap.scrollIntoView({behavior:'smooth',block:'start'})}
++'</div><div class="admin-detail-actions"><a class="btn" href="admin-activation.html?member='+encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'')+'&email='+encodeURIComponent(emailOf(m)||'')+'&v=33">Kelola Akses</a><button class="btn secondary" type="button" id="closeMemberDetail">Tutup Detail</button></div>';wrap.classList.remove('hidden');var close=el('closeMemberDetail');if(close)close.onclick=function(){wrap.classList.add('hidden')};wrap.scrollIntoView({behavior:'smooth',block:'start'})}
 function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatusFilter');if(f&&st&&['active','pending','suspended'].indexOf(f)>=0)st.value=f}
 ['adminMemberSearch','adminMemberStatusFilter','adminMemberFacilityFilter'].forEach(function(id){var x=el(id);if(x)x.addEventListener(id==='adminMemberSearch'?'input':'change',render)});var sb=el('adminMemberSearchBtn');if(sb)sb.addEventListener('click',render);var r=el('adminMemberRefresh');if(r)r.addEventListener('click',load);document.addEventListener('DOMContentLoaded',function(){applyInitial();load()});if(document.readyState!=='loading'){applyInitial();load()}
 })();

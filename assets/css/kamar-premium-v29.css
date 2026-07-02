@@ -550,3 +550,31 @@ body:not(.public-home) .split-main .kamar-title-card{order:-9}
   background:#0d0e0b!important;
   border-radius:14px!important;
 }
+
+/* === KAMAR STEP 29C FIX: use uploaded official Kamar logo, not mask icon === */
+.site-header .brand img,
+.kamar-global-brand img,
+.auth-top .brand img,
+.auth-brand img,
+.topbar-brand img,
+.dashboard-topbar img,
+.admin-topbar img,
+.member-topbar img,
+.brand img{
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#000!important;
+  padding:4px!important;
+  border-radius:16px!important;
+}
+.brand-badge,
+.split-sidebar:before{
+  background-image:url('../logo-kamar.jpeg')!important;
+  background-size:contain!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-color:#000!important;
+}
+@media (min-width:769px){
+  .quick-mobile-nav{display:none!important;visibility:hidden!important;position:absolute!important;left:-9999px!important;top:auto!important;width:0!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;opacity:0!important;pointer-events:none!important;}
+}

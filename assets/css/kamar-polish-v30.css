@@ -1,0 +1,290 @@
+/* =========================================================
+   KAMAR STEP 30 — Responsive Premium UI Polish
+   Tujuan: mencegah teks/card/tabel terpotong, membuat spacing simetris,
+   dan menjaga fungsi/tombol/card existing tetap utuh.
+   ========================================================= */
+:root{
+  --km30-max: 1380px;
+  --km30-page: min(calc(100vw - 36px), var(--km30-max));
+  --km30-line: rgba(238,206,122,.20);
+  --km30-line-strong: rgba(244,223,144,.42);
+  --km30-panel: linear-gradient(145deg,rgba(255,255,255,.052),rgba(255,255,255,.018));
+  --km30-panel-soft: linear-gradient(145deg,rgba(244,223,144,.075),rgba(255,255,255,.018));
+  --km30-text: #fff6e6;
+  --km30-muted: rgba(245,240,230,.70);
+  --km30-gold: #f1d686;
+  --km30-green: #88efbd;
+  --km30-radius-xl: 34px;
+  --km30-radius-lg: 26px;
+  --km30-radius-md: 18px;
+}
+
+html, body{max-width:100%;overflow-x:hidden!important;}
+body{font-size:16px!important;text-rendering:geometricPrecision;-webkit-font-smoothing:antialiased;}
+body *{min-width:0;}
+a,button,input,select,textarea{font:inherit;}
+
+/* ===== Main containers: lebih lega dan rata tengah ===== */
+.site-header,.auth-top,.kamar-global-header,
+.section-shell,.split-shell,.shell,.site-footer,.footer{
+  width:var(--km30-page)!important;
+  max-width:var(--km30-max)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.kamar-global-header,.site-header,.auth-top{
+  border-radius:28px!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+}
+.split-shell,.shell{padding-left:0!important;padding-right:0!important;}
+.split-app{
+  grid-template-columns:minmax(250px,285px) minmax(0,1fr)!important;
+  gap:22px!important;
+  align-items:start!important;
+}
+.split-main,.member-main{min-width:0!important;width:100%!important;display:grid!important;gap:22px!important;}
+
+/* ===== Card system: tidak clipping, proporsional, mewah ===== */
+.split-card,.member-page-panel,.card,.stat,.stat-card,.admin-click-card,.action-card,.member-card,
+.todo-item,.setting-card,.video-card,.facility-card,.auth-card,.member-login-card,.priority-row,
+.table,.admin-table-card,.table-box,.result-box,.note,.oknote,.admin-empty,.admin-empty-state{
+  border-color:var(--km30-line)!important;
+  border-radius:var(--km30-radius-xl)!important;
+  background:var(--km30-panel)!important;
+  box-shadow:0 20px 70px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035)!important;
+  overflow:visible!important;
+}
+.split-card,.member-page-panel,.card{padding:clamp(20px,2.1vw,32px)!important;}
+.split-card:hover,.member-page-panel:hover,.card:hover,.admin-click-card:hover,.action-card:hover,.member-card:hover,.setting-card:hover,.video-card:hover{
+  border-color:var(--km30-line-strong)!important;
+}
+
+/* Judul dan teks: tidak terlalu besar, tidak patah aneh */
+h1,h2,h3,p,span,strong,small,div,td,th,label,a,button{overflow-wrap:anywhere;}
+.kamar-title-card h1,.split-card h1,.member-page-panel h1,.dashboard-hero h1,.member-hero-card h1{
+  font-size:clamp(30px,3.6vw,52px)!important;
+  line-height:1.05!important;
+  letter-spacing:-.045em!important;
+  text-wrap:balance;
+}
+.split-card h2,.member-page-panel h2,.card h2,.section-heading h2{
+  font-size:clamp(24px,2.35vw,38px)!important;
+  line-height:1.12!important;
+  letter-spacing:-.035em!important;
+  text-wrap:balance;
+}
+.split-card p,.member-page-panel p,.card p,.note,.result-box,small{
+  line-height:1.58!important;
+}
+.eyebrow,.mini,.mini-label,.kicker,.section-kicker,.section-label,.panel-kicker,.form-kicker,.card-kicker{
+  width:100%!important;
+  max-width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  line-height:1.25!important;
+  letter-spacing:.18em!important;
+}
+.eyebrow:before,.mini:before,.mini-label:before,.kicker:before,.section-kicker:before,.section-label:before,.panel-kicker:before,.form-kicker:before,.card-kicker:before{
+  flex:0 0 54px!important;
+  width:54px!important;
+  max-width:54px!important;
+}
+
+/* ===== Buttons: tidak terpotong dan konsisten ===== */
+.btn,.admin-button,button,.header-cta,.pill,.kamar-global-btn,.status-pill,.kamar-chip,.chip{
+  white-space:normal!important;
+  text-align:center!important;
+  line-height:1.15!important;
+  max-width:100%!important;
+}
+.btn,.admin-button,button{
+  min-height:46px!important;
+  border-radius:999px!important;
+  padding:11px 18px!important;
+}
+.btn.mini,.admin-row .btn.mini{min-height:38px!important;min-width:88px!important;padding:8px 13px!important;}
+.button-row,.actions,.hero-actions,.admin-member-actions,.admin-row-actions{
+  display:flex!important;
+  gap:10px!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+}
+
+/* ===== Form controls ===== */
+input:not([type="checkbox"]):not([type="radio"]),select,textarea{
+  width:100%!important;
+  max-width:100%!important;
+  min-height:56px!important;
+  border-radius:18px!important;
+  box-sizing:border-box!important;
+}
+.form-grid,.kamar-form-grid,.admin-toolbar-grid,.toolbar,.data-toolbar{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important;
+  gap:14px!important;
+  align-items:end!important;
+}
+.admin-toolbar-grid .btn,.toolbar .btn,.data-toolbar .btn{width:100%!important;}
+
+/* =========================================================
+   ADMIN/MEMBER ROWS — ubah tabel sempit menjadi card-grid rapi.
+   Ini mencegah kolom kanan terpotong seperti gambar upload.
+   ========================================================= */
+.admin-table-card,.table{
+  display:grid!important;
+  gap:14px!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow:visible!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.admin-row.header,.table .row.header,.matrix-row.header{display:none!important;}
+.admin-row,.table .row,.matrix-row{
+  width:100%!important;
+  max-width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:16px!important;
+  align-items:stretch!important;
+  min-height:0!important;
+  padding:18px!important;
+  border:1px solid var(--km30-line)!important;
+  border-radius:26px!important;
+  background:var(--km30-panel)!important;
+  box-shadow:0 16px 46px rgba(0,0,0,.18)!important;
+}
+.admin-row > div,.table .row > div,.matrix-row > div{
+  min-width:0!important;
+  max-width:100%!important;
+  padding:12px 14px!important;
+  border:1px solid rgba(238,206,122,.10)!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.022)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:5px!important;
+}
+.admin-row > div:before,.table .row > div:before,.matrix-row > div:before{
+  display:block!important;
+  color:var(--km30-gold)!important;
+  font-size:10px!important;
+  line-height:1.15!important;
+  letter-spacing:.14em!important;
+  text-transform:uppercase!important;
+  font-weight:1000!important;
+  margin-bottom:4px!important;
+}
+.admin-row > div:nth-child(1):before{content:"Member";}
+.admin-row > div:nth-child(2):before{content:"Kontak";}
+.admin-row > div:nth-child(3):before{content:"Status";}
+.admin-row > div:nth-child(4):before{content:"Akses Sampai";}
+.admin-row > div:nth-child(5):before{content:"Fasilitas";}
+.admin-row > div:nth-child(6):before{content:"Aksi";}
+.table .row > div:nth-child(1):before{content:"Data";}
+.table .row > div:nth-child(2):before{content:"Status / Ukuran";}
+.table .row > div:nth-child(3):before{content:"Jumlah";}
+.table .row > div:nth-child(4):before{content:"Catatan";}
+.matrix-row > div:nth-child(1):before{content:"Fitur / Tabel";}
+.matrix-row > div:nth-child(2):before{content:"Status";}
+.matrix-row > div:nth-child(3):before{content:"Keterangan";}
+.matrix-row > div:nth-child(4):before{content:"Catatan";}
+.matrix-row > div:nth-child(5):before{content:"Aksi";}
+.admin-row strong,.table .row strong,.matrix-row strong{
+  color:var(--km30-text)!important;
+  font-size:clamp(16px,1.15vw,20px)!important;
+  line-height:1.22!important;
+  margin:0!important;
+}
+.admin-row small,.table .row small,.matrix-row small{
+  color:var(--km30-muted)!important;
+  font-size:14px!important;
+  line-height:1.45!important;
+  margin:0!important;
+}
+.admin-row-actions{justify-content:flex-start!important;}
+.admin-row .status-pill,.table .row .status,.table .row .status-pill,.matrix-row .pill{
+  align-self:flex-start!important;
+  width:auto!important;
+  max-width:100%!important;
+}
+
+/* table biasa tetap boleh scroll, tapi rapi dan tidak memotong konten */
+.table-box{overflow:auto!important;padding:10px!important;}
+table{width:100%!important;min-width:760px!important;border-collapse:separate!important;border-spacing:0 10px!important;}
+th{white-space:normal!important;line-height:1.25!important;}
+td{white-space:normal!important;line-height:1.45!important;word-break:normal!important;overflow-wrap:anywhere!important;}
+
+/* ===== Priority rows / connection checker ===== */
+.priority-list{display:grid!important;gap:16px!important;}
+.priority-row{padding:20px!important;display:grid!important;gap:16px!important;}
+.priority-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;}
+.priority-body{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(160px,.35fr)!important;
+  gap:14px!important;
+  align-items:stretch!important;
+}
+.priority-block,.priority-actions{
+  border:1px solid rgba(238,206,122,.12)!important;
+  border-radius:20px!important;
+  background:rgba(255,255,255,.022)!important;
+  padding:14px!important;
+}
+.priority-actions{display:flex!important;align-items:center!important;justify-content:center!important;}
+.priority-actions .btn{width:100%!important;min-width:150px!important;}
+
+/* ===== Stats / Dashboard cards ===== */
+.grid-2,.grid-3,.grid-4,.stats-grid,.about-stats-grid,.admin-dashboard-grid,.simple-info-grid,.video-reference-grid,.facility-grid,.modern-facilities{
+  display:grid!important;
+  gap:16px!important;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important;
+}
+.stat,.stat-card,.admin-click-card,.action-card,.setting-card,.member-card,.video-card,.facility-card{
+  min-height:unset!important;
+  padding:20px!important;
+}
+.stat strong,.stat-card strong{font-size:clamp(28px,2.8vw,40px)!important;}
+
+/* ===== Sidebar: tidak memakan ruang dan tidak memotong teks ===== */
+.split-sidebar{overflow:visible!important;}
+.split-sidebar a,.split-sidebar summary{
+  white-space:normal!important;
+  line-height:1.22!important;
+  align-items:center!important;
+}
+
+/* ===== Auth / login card: center dan elegan ===== */
+.member-login-card,.auth-card{margin-left:auto!important;margin-right:auto!important;}
+.member-login-help,.auth-switch,.switch-row{gap:14px!important;}
+.member-login-help a,.auth-switch a,.switch-row a{white-space:normal!important;text-align:right!important;}
+
+/* ===== Breakpoints ===== */
+@media(max-width:1280px){
+  :root{--km30-page:min(calc(100vw - 28px), 1180px);}
+  .split-app{grid-template-columns:1fr!important;}
+  .split-sidebar{position:relative!important;top:auto!important;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important;gap:8px!important;}
+  .split-sidebar:before,.split-sidebar .brand-small{grid-column:1/-1!important;}
+  .admin-row,.table .row,.matrix-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media(max-width:760px){
+  :root{--km30-page:calc(100vw - 20px);}
+  .kamar-global-header,.site-header,.auth-top{border-radius:22px!important;}
+  .split-card,.member-page-panel,.card{padding:18px!important;border-radius:24px!important;}
+  .admin-row,.table .row,.matrix-row,.priority-body{grid-template-columns:1fr!important;}
+  .admin-row > div,.table .row > div,.matrix-row > div{padding:12px!important;}
+  .priority-head{align-items:flex-start!important;}
+  .btn,.admin-button,button{width:100%!important;}
+  .admin-row-actions,.button-row,.actions,.hero-actions{width:100%!important;}
+  .admin-row-actions .btn,.button-row .btn,.actions .btn,.hero-actions .btn{flex:1 1 160px!important;}
+  h1{font-size:34px!important;}
+  .eyebrow:before,.mini:before,.mini-label:before{flex-basis:34px!important;width:34px!important;}
+}

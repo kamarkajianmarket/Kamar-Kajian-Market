@@ -1,0 +1,1 @@
+Step 37: Minor public homepage changes only. Header Telegram CTA styled/right, Market Logic hero label removed, affiliate Daftar Sekarang removed and replaced by Tanya Admin only. No auth/Supabase/admin/member logic changed.

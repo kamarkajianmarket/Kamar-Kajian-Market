@@ -1,0 +1,57 @@
+/* Step 37 — Public Homepage Minor Polish Only
+   Tidak menyentuh auth, Supabase, admin, member dashboard, atau logic database. */
+
+/* Header: Telegram CTA kanan + lebih eye catching */
+.site-header .header-actions{
+  justify-self:end!important;
+  margin-left:auto!important;
+  width:auto!important;
+}
+.site-header .telegram-main-cta{
+  color:#07140d!important;
+  border-color:rgba(126,224,163,.68)!important;
+  background:
+    linear-gradient(135deg,#70f0a6 0%,#f6dc78 52%,#c99a35 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(255,239,170,.18) inset,
+    0 14px 42px rgba(126,224,163,.18),
+    0 12px 38px rgba(201,154,53,.22)!important;
+  font-weight:950!important;
+}
+.site-header .telegram-main-cta:hover{
+  transform:translateY(-1px)!important;
+  filter:saturate(1.08) brightness(1.04)!important;
+}
+@media(min-width:901px){
+  .site-header{
+    grid-template-columns:minmax(260px,1fr) auto minmax(260px,1fr)!important;
+  }
+  .site-header .header-actions{
+    justify-content:flex-end!important;
+  }
+}
+
+/* Hero badge: setelah Market Logic dihapus, badge yang tersisa tetap center rapi */
+.hero-badges.hero-badges-under-visual{
+  justify-content:center!important;
+  margin-top:14px!important;
+}
+.hero-badges.hero-badges-under-visual span{
+  text-align:center!important;
+}
+
+/* Affiliate CTA: hanya Tanya Admin, dibuat solid dan profesional */
+.affiliate-actions-admin-only{
+  justify-content:flex-start!important;
+  margin-top:22px!important;
+}
+.affiliate-actions-admin-only .btn{
+  min-width:190px!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+@media(max-width:720px){
+  .affiliate-actions-admin-only .btn{
+    width:100%!important;
+  }
+}

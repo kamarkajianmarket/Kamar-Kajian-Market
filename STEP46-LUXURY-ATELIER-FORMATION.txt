@@ -1,0 +1,1 @@
+Step 46 Luxury Atelier Formation: visual redesign only. Preserves FAQ details, facility tabs, links, admin/member/Supabase logic. Main files: index.html, assets/css/kamar-luxury-atelier-v46.css

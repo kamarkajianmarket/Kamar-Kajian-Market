@@ -1,0 +1,189 @@
+/* =========================================================
+   KAMAR KAJIAN MARKET — STEP 45
+   Design Variant: Onyx Mint Executive Grid
+   Scope: visual-only homepage redesign. Do not change logic.
+   ========================================================= */
+
+:root{
+  --v45-bg:#060b10;
+  --v45-bg2:#0b1117;
+  --v45-panel:#0f1720;
+  --v45-panel2:#121d27;
+  --v45-ink:#edf6f2;
+  --v45-muted:#93a7a3;
+  --v45-soft:#c6d5ce;
+  --v45-mint:#4dffc3;
+  --v45-emerald:#13b981;
+  --v45-amber:#e0b45c;
+  --v45-line:rgba(168,229,209,.18);
+  --v45-line2:rgba(224,180,92,.22);
+  --v45-shadow:0 28px 90px rgba(0,0,0,.34);
+  --v45-radius:22px;
+}
+
+html{scroll-behavior:smooth!important;}
+body.public-home.kamar-v45-onyx{
+  background:
+    radial-gradient(circle at 14% 0%, rgba(77,255,195,.14), transparent 28%),
+    radial-gradient(circle at 84% 10%, rgba(224,180,92,.12), transparent 30%),
+    linear-gradient(180deg,#05080c 0%,#081019 46%,#05080c 100%)!important;
+  color:var(--v45-ink)!important;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif!important;
+}
+body.public-home.kamar-v45-onyx::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:56px 56px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.76),transparent 85%);
+}
+.public-home.kamar-v45-onyx .page-glow{display:none!important;}
+.public-home.kamar-v45-onyx .section-shell{
+  width:min(1180px,calc(100% - 36px))!important;
+  margin-inline:auto!important;
+  box-sizing:border-box!important;
+}
+.public-home.kamar-v45-onyx .compact-section{padding-block:34px!important;}
+
+/* Header: executive card, Telegram fixed right */
+.public-home.kamar-v45-onyx .site-header{
+  width:min(1180px,calc(100% - 32px))!important;
+  margin:18px auto 0!important;
+  position:sticky!important;top:14px!important;z-index:90!important;
+  display:grid!important;grid-template-columns:minmax(220px,auto) 1fr auto!important;
+  gap:18px!important;align-items:center!important;
+  min-height:72px!important;padding:12px 14px 12px 16px!important;
+  border:1px solid var(--v45-line)!important;border-radius:26px!important;
+  background:linear-gradient(135deg,rgba(8,15,22,.92),rgba(15,25,34,.84))!important;
+  backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;
+  box-shadow:var(--v45-shadow), inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+.public-home.kamar-v45-onyx .brand{display:flex!important;align-items:center!important;gap:12px!important;text-decoration:none!important;min-width:0!important;color:#fff!important;}
+.public-home.kamar-v45-onyx .brand img{width:50px!important;height:50px!important;border-radius:16px!important;object-fit:contain!important;padding:5px!important;background:#030608!important;border:1px solid rgba(77,255,195,.22)!important;box-shadow:0 0 0 6px rgba(77,255,195,.035)!important;}
+.public-home.kamar-v45-onyx .brand span{font-weight:1000!important;font-size:17px!important;letter-spacing:-.035em!important;line-height:1.05!important;color:#f6fff9!important;}
+.public-home.kamar-v45-onyx .nav-links{justify-content:center!important;display:flex!important;gap:8px!important;background:rgba(255,255,255,.035)!important;border:1px solid rgba(255,255,255,.06)!important;border-radius:999px!important;padding:7px!important;width:max-content!important;margin:auto!important;}
+.public-home.kamar-v45-onyx .nav-links a{height:38px!important;display:inline-flex!important;align-items:center!important;padding:0 14px!important;border-radius:999px!important;color:rgba(237,246,242,.68)!important;text-decoration:none!important;font-size:13px!important;font-weight:900!important;letter-spacing:.01em!important;transition:.18s ease!important;}
+.public-home.kamar-v45-onyx .nav-links a:hover{background:rgba(77,255,195,.10)!important;color:#f9fffd!important;}
+.public-home.kamar-v45-onyx .header-actions{display:flex!important;justify-content:flex-end!important;align-items:center!important;margin:0!important;}
+.public-home.kamar-v45-onyx .telegram-main-cta,.public-home.kamar-v45-onyx .header-cta{
+  min-height:50px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  padding:0 22px!important;border-radius:999px!important;border:1px solid rgba(77,255,195,.34)!important;
+  background:linear-gradient(135deg,#4dffc3 0%,#14c789 54%,#d9ae55 100%)!important;
+  color:#04100d!important;text-decoration:none!important;font-size:13px!important;font-weight:1000!important;letter-spacing:.045em!important;text-transform:uppercase!important;
+  box-shadow:0 18px 45px rgba(19,185,129,.20), inset 0 1px 0 rgba(255,255,255,.45)!important;
+}
+.public-home.kamar-v45-onyx .quick-mobile-nav{display:none!important;}
+
+/* Hero: asymmetric command deck */
+.public-home.kamar-v45-onyx .hero{
+  margin-top:26px!important;padding:26px!important;min-height:auto!important;
+  display:grid!important;grid-template-columns:minmax(0,1.02fr) minmax(320px,.82fr)!important;gap:24px!important;align-items:stretch!important;
+  border:1px solid var(--v45-line)!important;border-radius:34px!important;
+  background:
+    linear-gradient(90deg,rgba(77,255,195,.10),transparent 42%),
+    linear-gradient(135deg,rgba(13,21,30,.96),rgba(10,15,22,.92))!important;
+  box-shadow:var(--v45-shadow)!important;position:relative!important;overflow:hidden!important;
+}
+.public-home.kamar-v45-onyx .hero::before{content:"KAMAR / MARKET LOGIC";position:absolute;right:26px;top:18px;color:rgba(77,255,195,.12);font-weight:1000;letter-spacing:.22em;font-size:12px;}
+.public-home.kamar-v45-onyx .hero-copy{padding:34px 26px 34px 10px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;text-align:left!important;}
+.public-home.kamar-v45-onyx .eyebrow{display:inline-flex!important;align-items:center!important;gap:8px!important;width:max-content!important;max-width:100%!important;padding:8px 12px!important;border:1px solid rgba(77,255,195,.22)!important;border-radius:999px!important;background:rgba(77,255,195,.07)!important;color:#92ffe1!important;font-weight:1000!important;font-size:11px!important;letter-spacing:.14em!important;text-transform:uppercase!important;margin-bottom:18px!important;}
+.public-home.kamar-v45-onyx .hero-copy h1{font-size:clamp(42px,6vw,76px)!important;line-height:.94!important;letter-spacing:-.07em!important;margin:0!important;color:#f4fff9!important;text-wrap:balance!important;max-width:850px!important;}
+.public-home.kamar-v45-onyx .hero-actions{margin-top:28px!important;display:flex!important;gap:12px!important;flex-wrap:wrap!important;}
+.public-home.kamar-v45-onyx .btn{border-radius:999px!important;min-height:48px!important;padding:0 20px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;font-weight:1000!important;font-size:13px!important;letter-spacing:.035em!important;text-transform:uppercase!important;border:1px solid rgba(255,255,255,.12)!important;transition:.18s ease!important;}
+.public-home.kamar-v45-onyx .btn-primary{background:linear-gradient(135deg,#4dffc3,#16b982)!important;color:#03100d!important;border-color:rgba(77,255,195,.35)!important;box-shadow:0 16px 44px rgba(77,255,195,.16)!important;}
+.public-home.kamar-v45-onyx .btn-secondary{background:rgba(255,255,255,.045)!important;color:#e9fff8!important;border-color:rgba(168,229,209,.18)!important;}
+.public-home.kamar-v45-onyx .btn:hover{transform:translateY(-2px)!important;}
+.public-home.kamar-v45-onyx .hero-visual{display:block!important;min-width:0!important;}
+.public-home.kamar-v45-onyx .visual-card{height:100%!important;min-height:470px!important;border-radius:28px!important;overflow:hidden!important;position:relative!important;border:1px solid rgba(224,180,92,.22)!important;background:linear-gradient(180deg,#151b21,#070b0f)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 22px 70px rgba(0,0,0,.36)!important;}
+.public-home.kamar-v45-onyx .hero-person{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;filter:saturate(1.02) contrast(1.05)!important;}
+.public-home.kamar-v45-onyx .hero-badges-on-visual{position:absolute!important;left:18px!important;right:18px!important;bottom:18px!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important;justify-content:flex-start!important;margin:0!important;}
+.public-home.kamar-v45-onyx .hero-badges-on-visual span{display:inline-flex!important;align-items:center!important;min-height:34px!important;padding:0 12px!important;border-radius:999px!important;border:1px solid rgba(77,255,195,.25)!important;background:rgba(3,9,12,.72)!important;color:#d9fff5!important;font-size:11px!important;font-weight:1000!important;letter-spacing:.08em!important;text-transform:uppercase!important;backdrop-filter:blur(10px)!important;}
+
+/* Sections: clean slabs */
+.public-home.kamar-v45-onyx .about,
+.public-home.kamar-v45-onyx #fasilitas,
+.public-home.kamar-v45-onyx #akses,
+.public-home.kamar-v45-onyx #faq,
+.public-home.kamar-v45-onyx #affiliate-kamar,
+.public-home.kamar-v45-onyx #traktir-kamar,
+.public-home.kamar-v45-onyx .social{
+  margin-top:22px!important;padding:28px!important;border-radius:34px!important;border:1px solid var(--v45-line)!important;
+  background:linear-gradient(135deg,rgba(14,22,31,.90),rgba(7,12,18,.92))!important;box-shadow:0 24px 74px rgba(0,0,0,.24)!important;overflow:hidden!important;
+}
+.public-home.kamar-v45-onyx .section-heading{margin:0 0 22px!important;display:grid!important;gap:10px!important;}
+.public-home.kamar-v45-onyx .section-heading.centered{text-align:left!important;align-items:start!important;}
+.public-home.kamar-v45-onyx .section-heading h2{color:#f5fff9!important;font-size:clamp(30px,4vw,52px)!important;line-height:1!important;letter-spacing:-.055em!important;margin:0!important;text-wrap:balance!important;}
+.public-home.kamar-v45-onyx .section-heading p{max-width:860px!important;color:var(--v45-muted)!important;font-size:15.5px!important;line-height:1.7!important;margin:0!important;}
+.public-home.kamar-v45-onyx .stats-grid,.public-home.kamar-v45-onyx .about-stats-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;margin-top:22px!important;}
+.public-home.kamar-v45-onyx .stats-grid>div{border:1px solid rgba(168,229,209,.16)!important;border-radius:24px!important;padding:20px!important;background:linear-gradient(135deg,rgba(77,255,195,.06),rgba(255,255,255,.025))!important;}
+.public-home.kamar-v45-onyx .stats-grid strong{display:block!important;color:#f7fff9!important;font-size:24px!important;letter-spacing:-.035em!important;line-height:1.05!important;margin-bottom:8px!important;}
+.public-home.kamar-v45-onyx .stats-grid span{color:var(--v45-muted)!important;line-height:1.55!important;}
+
+/* Facilities: modular card-to-card bento */
+.public-home.kamar-v45-onyx .facility-grid.modern-facilities{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:14px!important;margin-top:18px!important;}
+.public-home.kamar-v45-onyx .facility-grid.modern-facilities>.facility-card{grid-column:span 4!important;min-height:190px!important;border:1px solid rgba(168,229,209,.18)!important;border-radius:26px!important;padding:22px!important;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(77,255,195,.035) 50%,rgba(0,0,0,.10))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important;position:relative!important;overflow:hidden!important;}
+.public-home.kamar-v45-onyx .facility-grid.modern-facilities>.facility-card:nth-child(4){grid-column:span 6!important;}
+.public-home.kamar-v45-onyx .facility-grid.modern-facilities>.facility-card:nth-child(5){grid-column:span 6!important;}
+.public-home.kamar-v45-onyx .facility-card::after{content:"";position:absolute;right:-40px;bottom:-40px;width:130px;height:130px;border-radius:999px;background:rgba(77,255,195,.07)!important;}
+.public-home.kamar-v45-onyx .facility-top{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-bottom:20px!important;}
+.public-home.kamar-v45-onyx .facility-top span{width:44px!important;height:44px!important;border-radius:16px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#07100f!important;border:1px solid rgba(77,255,195,.25)!important;color:#6fffd5!important;font-weight:1000!important;}
+.public-home.kamar-v45-onyx .facility-top i{display:block!important;width:64px!important;height:1px!important;background:linear-gradient(90deg,transparent,#4dffc3)!important;}
+.public-home.kamar-v45-onyx .facility-card h3{font-size:clamp(22px,2.2vw,32px)!important;line-height:1!important;letter-spacing:-.045em!important;color:#f5fff9!important;margin:0 0 10px!important;}
+.public-home.kamar-v45-onyx .facility-card p{color:#9fb4af!important;line-height:1.6!important;margin:0!important;}
+.public-home.kamar-v45-onyx .facility-tab:hover,.public-home.kamar-v45-onyx .facility-tab.active{transform:translateY(-4px)!important;border-color:rgba(77,255,195,.55)!important;background:linear-gradient(145deg,rgba(77,255,195,.12),rgba(255,255,255,.06))!important;box-shadow:0 24px 65px rgba(77,255,195,.10)!important;}
+.public-home.kamar-v45-onyx .facility-detail-card{border-radius:30px!important;border:1px solid rgba(224,180,92,.24)!important;background:linear-gradient(135deg,rgba(224,180,92,.08),rgba(255,255,255,.035))!important;padding:26px!important;}
+.public-home.kamar-v45-onyx .facility-detail-card h3{color:#fff7df!important;font-size:clamp(32px,4.6vw,58px)!important;}
+.public-home.kamar-v45-onyx .detail-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;}
+.public-home.kamar-v45-onyx .detail-grid div{border:1px solid rgba(168,229,209,.13)!important;border-radius:22px!important;background:rgba(5,10,14,.45)!important;padding:18px!important;}
+.public-home.kamar-v45-onyx .detail-grid strong{color:#6fffd5!important;}
+.public-home.kamar-v45-onyx .detail-grid span{color:#aebfba!important;}
+
+/* Access, affiliate, traktir, social */
+.public-home.kamar-v45-onyx .access-panel,
+.public-home.kamar-v45-onyx .affiliate-program-box,
+.public-home.kamar-v45-onyx .social-box,
+.public-home.kamar-v45-onyx .traktir-card,
+.public-home.kamar-v45-onyx .affiliate-main-card,
+.public-home.kamar-v45-onyx .affiliate-note-card{
+  border:1px solid rgba(168,229,209,.16)!important;border-radius:28px!important;background:rgba(255,255,255,.035)!important;box-shadow:none!important;
+}
+.public-home.kamar-v45-onyx .access-action,.public-home.kamar-v45-onyx .affiliate-actions,.public-home.kamar-v45-onyx .traktir-actions-simple{justify-content:flex-start!important;}
+.public-home.kamar-v45-onyx .kamar-badge,.public-home.kamar-v45-onyx .facility-status-badge,.public-home.kamar-v45-onyx .traktir-short-note{border-color:rgba(77,255,195,.24)!important;background:rgba(77,255,195,.075)!important;color:#a5ffe5!important;}
+
+/* FAQ: keep native clickable details, redesign only */
+.public-home.kamar-v45-onyx #faq .faq-accordion{display:grid!important;gap:14px!important;margin-top:20px!important;}
+.public-home.kamar-v45-onyx #faq .faq-category{border-radius:24px!important;border:1px solid rgba(168,229,209,.16)!important;background:rgba(255,255,255,.035)!important;box-shadow:none!important;overflow:hidden!important;}
+.public-home.kamar-v45-onyx #faq .faq-category>summary{display:grid!important;grid-template-columns:minmax(0,1fr) 44px!important;gap:14px!important;align-items:center!important;padding:20px 22px!important;background:linear-gradient(135deg,rgba(77,255,195,.06),rgba(255,255,255,.02))!important;color:#f3fff9!important;cursor:pointer!important;}
+.public-home.kamar-v45-onyx #faq .faq-category>summary span{font-size:18px!important;font-weight:1000!important;letter-spacing:-.02em!important;}
+.public-home.kamar-v45-onyx #faq .faq-category>summary small{color:#8fa5a0!important;line-height:1.5!important;font-weight:700!important;}
+.public-home.kamar-v45-onyx #faq .faq-category>summary::after{content:"+"!important;width:40px!important;height:40px!important;border-radius:14px!important;background:#06100f!important;border:1px solid rgba(77,255,195,.22)!important;color:#74ffd8!important;display:flex!important;align-items:center!important;justify-content:center!important;font-weight:1000!important;font-size:22px!important;}
+.public-home.kamar-v45-onyx #faq .faq-category[open]>summary::after{content:"−"!important;}
+.public-home.kamar-v45-onyx #faq .faq-items{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;padding:16px!important;background:rgba(0,0,0,.12)!important;}
+.public-home.kamar-v45-onyx #faq .faq-item{border-radius:18px!important;border:1px solid rgba(168,229,209,.12)!important;background:rgba(5,10,14,.45)!important;overflow:hidden!important;}
+.public-home.kamar-v45-onyx #faq .faq-item>summary{cursor:pointer!important;color:#eafff8!important;font-weight:900!important;padding:16px 18px!important;line-height:1.35!important;}
+.public-home.kamar-v45-onyx #faq .faq-item p{color:#98ada7!important;padding:0 18px 18px!important;line-height:1.62!important;margin:0!important;}
+
+/* Footer */
+.public-home.kamar-v45-onyx .site-footer{width:min(1180px,calc(100% - 36px))!important;margin:28px auto!important;border-radius:28px!important;border:1px solid rgba(168,229,209,.14)!important;background:rgba(255,255,255,.035)!important;color:#8fa5a0!important;padding:24px!important;}
+
+@media(max-width:980px){
+  .public-home.kamar-v45-onyx .site-header{grid-template-columns:1fr auto!important;}
+  .public-home.kamar-v45-onyx .nav-links{display:none!important;}
+  .public-home.kamar-v45-onyx .hero{grid-template-columns:1fr!important;}
+  .public-home.kamar-v45-onyx .visual-card{min-height:420px!important;}
+  .public-home.kamar-v45-onyx .stats-grid,.public-home.kamar-v45-onyx .about-stats-grid{grid-template-columns:1fr!important;}
+  .public-home.kamar-v45-onyx .facility-grid.modern-facilities{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .public-home.kamar-v45-onyx .facility-grid.modern-facilities>.facility-card,.public-home.kamar-v45-onyx .facility-grid.modern-facilities>.facility-card:nth-child(4),.public-home.kamar-v45-onyx .facility-grid.modern-facilities>.facility-card:nth-child(5){grid-column:span 1!important;}
+  .public-home.kamar-v45-onyx .detail-grid,.public-home.kamar-v45-onyx #faq .faq-items{grid-template-columns:1fr!important;}
+}
+@media(max-width:640px){
+  .public-home.kamar-v45-onyx .section-shell{width:min(100% - 24px,1180px)!important;}
+  .public-home.kamar-v45-onyx .site-header{width:calc(100% - 20px)!important;grid-template-columns:1fr!important;text-align:center!important;}
+  .public-home.kamar-v45-onyx .brand{justify-content:center!important;}
+  .public-home.kamar-v45-onyx .header-actions{justify-content:center!important;}
+  .public-home.kamar-v45-onyx .telegram-main-cta{width:100%!important;}
+  .public-home.kamar-v45-onyx .hero{padding:16px!important;border-radius:26px!important;}
+  .public-home.kamar-v45-onyx .hero-copy{padding:18px 8px!important;}
+  .public-home.kamar-v45-onyx .hero-copy h1{font-size:38px!important;}
+  .public-home.kamar-v45-onyx .hero-actions .btn{width:100%!important;}
+  .public-home.kamar-v45-onyx .facility-grid.modern-facilities{grid-template-columns:1fr!important;}
+  .public-home.kamar-v45-onyx .about,.public-home.kamar-v45-onyx #fasilitas,.public-home.kamar-v45-onyx #akses,.public-home.kamar-v45-onyx #faq,.public-home.kamar-v45-onyx #affiliate-kamar,.public-home.kamar-v45-onyx #traktir-kamar,.public-home.kamar-v45-onyx .social{padding:20px!important;border-radius:26px!important;}
+}

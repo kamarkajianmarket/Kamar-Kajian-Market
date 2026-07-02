@@ -104,9 +104,9 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/kamar-config.js?v=29E"></script>
-  <script src="assets/js/kamar-supabase.js?v=29E"></script><script src="assets/js/kamar-data-online-25e.js?v=28"></script>
-  <script src="assets/js/kamar-auth.js?v=29E"></script>
+  <script src="assets/js/kamar-config.js?v=29F"></script>
+  <script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script>
+  <script src="assets/js/kamar-auth.js?v=29F"></script>
   <script>
   (function(){
     var lastText='';
@@ -154,8 +154,13 @@
     function initClient(){
       var ex=existingClient(); if(ex)return {client:ex,mode:'existing'};
       var cfg=getConfig();
-      if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){return {client:window.supabase.createClient(cfg.url,cfg.key),mode:'created_from_config'}}
+      if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){return {client:window.supabase.createClient(String(cfg.url).replace(/\/rest\/v1\/?$/,''),cfg.key),mode:'created_from_config'}}
       return {client:null,mode:'not_found'};
+    }
+    async function initClientReady(){
+      try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+      try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c=await window.KamarSupabase.ready(); if(c) return {client:c,mode:'KamarSupabase.ready'}; } }catch(e){}
+      return initClient();
     }
     async function queryTable(client,table){
       try{
@@ -200,7 +205,7 @@
     async function runCheck(){
       byId('diagnosis').className='note'; byId('diagnosis').innerHTML='Sedang mengecek data...';
       var local=collectLocal(); renderLocal(local);
-      var cfg=getConfig(); var info=initClient(); var results=[];
+      var info=await initClientReady(); var cfg=getConfig(); var results=[];
       if(info.client){
         var tables=['admin_member_overview','member_profiles','member_access','profiles','users','members','payments','admin_pending_todos'];
         for(var i=0;i<tables.length;i++){results.push(await queryTable(info.client,tables[i]));}
@@ -250,6 +255,7 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
-<script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=29E"></script>
+<script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=29F"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
 </body>
 </html>

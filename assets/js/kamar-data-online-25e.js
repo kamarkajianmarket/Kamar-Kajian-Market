@@ -2,7 +2,7 @@
   'use strict';
   if(window.__KAMAR_DATA_ONLINE_25E__) return;
   window.__KAMAR_DATA_ONLINE_25E__ = true;
-  var VERSION='26F';
+  var VERSION='29F';
   var FAC=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
   var state={client:null, viewRows:[], profileRows:[], accessRows:[], affiliateRows:[], members:[], internal:[], source:'init', error:''};
 
@@ -42,9 +42,10 @@
   }
   function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
   function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
-  function client(){if(state.client)return state.client; var ex=existingClient(); if(ex){state.client=ex; return ex} var c=cfg(); if(window.supabase&&window.supabase.createClient&&c.url&&c.key){try{state.client=window.supabase.createClient(c.url,c.key); window.kamarSupabaseClient=state.client; return state.client}catch(e){state.error='Gagal membuat Supabase client: '+e.message}} if(!c.url||!c.key) state.error='Supabase config tidak terbaca di browser.'; return null}
+  function client(){if(state.client)return state.client; var ex=existingClient(); if(ex){state.client=ex; return ex} var c=cfg(); if(window.supabase&&window.supabase.createClient&&c.url&&c.key){try{state.client=window.supabase.createClient(c.url.replace(/\/rest\/v1\/?$/,''),c.key); window.kamarSupabaseClient=state.client; return state.client}catch(e){state.error='Gagal membuat Supabase client: '+e.message}} if(!c.url||!c.key) state.error='Supabase config tidak terbaca di browser.'; return null}
+  async function clientReady(){try{if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY;}catch(e){} try{if(window.KamarSupabase&&window.KamarSupabase.ready){var c=await window.KamarSupabase.ready(); if(c){state.client=c; return c;}}}catch(e){state.error='KamarSupabase.ready gagal: '+(e.message||e)} return client();}
   function timeout(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'))},ms||12000)})])}
-  async function query(table){var c=client(); if(!c) throw new Error(state.error||'Supabase client tidak tersedia'); var res=await timeout(c.from(table).select('*').limit(1000),14000); if(res.error) throw res.error; return res.data||[]}
+  async function query(table){var c=await clientReady(); if(!c) throw new Error(state.error||'Supabase client tidak tersedia'); var res=await timeout(c.from(table).select('*').limit(1000),14000); if(res.error) throw res.error; return res.data||[]}
   function rowKey(r){return norm(emailOf(r)||pick(r,['user_id','profile_id','id','member_id','memberId'])||idOf(r))}
   function merge(){var map={}; function add(r,src){if(!r)return; var k=rowKey(r); if(!k)return; if(!map[k])map[k]=Object.assign({_sources:[]},r); else Object.assign(map[k],r); map[k]._sources.push(src)}; Array.prototype.slice.call(arguments).forEach(function(arg){(arg.rows||[]).forEach(function(r){add(r,arg.src)})}); return Object.keys(map).map(function(k){var m=map[k]; m._merge_key=k; return m})}
   async function loadAll(){

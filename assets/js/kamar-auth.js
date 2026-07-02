@@ -1,8 +1,8 @@
 (function(){
   'use strict';
-  if(window.__KAMAR_AUTH_29E__) return;
-  window.__KAMAR_AUTH_29E__ = true;
-  var VERSION = '29E';
+  if(window.__KAMAR_AUTH_29F__) return;
+  window.__KAMAR_AUTH_29F__ = true;
+  var VERSION = '29F';
   var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com'];
 
   function qs(s,r){ return (r||document).querySelector(s); }
@@ -83,7 +83,7 @@
       role: role,
       loginAt: new Date().toISOString(),
       lastActivity: Date.now(),
-      source: 'supabase_auth_29E'
+      source: 'supabase_auth_29F'
     });
   }
   function saveRole(role,s){
@@ -217,5 +217,5 @@
     bind('kamarAffiliateForm',registerAffiliate);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-  window.KamarAuthFinal29E = {login:doLogin,client:client,config:cfg,ready:ensureReady};
+  window.KamarAuthFinal29F = {login:doLogin,client:client,config:cfg,ready:ensureReady};
 })();

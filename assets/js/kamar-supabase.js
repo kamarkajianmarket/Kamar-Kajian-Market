@@ -1,35 +1,114 @@
 (function(){
   'use strict';
-  if(window.__KAMAR_SUPABASE_29D__) return;
-  window.__KAMAR_SUPABASE_29D__ = true;
+  if(window.__KAMAR_SUPABASE_29F__) return;
+  window.__KAMAR_SUPABASE_29F__ = true;
 
-  function cfg(){
-    var c = window.KAMAR_CONFIG || window.KamarConfig || window.kamarConfig || window.kamarConfigPublic || {};
-    return {
-      url: c.supabaseUrl || c.SUPABASE_URL || c.url || window.KAMAR_SUPABASE_URL || window.SUPABASE_URL || '',
-      key: c.supabaseAnonKey || c.SUPABASE_ANON_KEY || c.anonKey || c.key || window.KAMAR_SUPABASE_ANON_KEY || window.SUPABASE_ANON_KEY || ''
-    };
+  function trim(v){ return String(v == null ? '' : v).trim(); }
+  function normalizeUrl(url){
+    url = trim(url);
+    url = url.replace(/\/+$/,'');
+    url = url.replace(/\/rest\/v1$/,'');
+    return url;
   }
-  function create(){
+  function readConfig(){
+    var c = window.KAMAR_CONFIG || window.KamarConfig || window.kamarConfig || window.kamarConfigPublic || {};
+    var url = c.supabaseUrl || c.SUPABASE_URL || c.url || window.KAMAR_SUPABASE_URL || window.SUPABASE_URL || '';
+    var key = c.supabaseAnonKey || c.SUPABASE_ANON_KEY || c.anonKey || c.key || window.KAMAR_SUPABASE_ANON_KEY || window.SUPABASE_ANON_KEY || '';
+    return { url: normalizeUrl(url), key: trim(key), hasConfig: !!(normalizeUrl(url) && trim(key)) };
+  }
+  function applyConfig(cfg){
+    cfg = cfg || readConfig();
+    window.KAMAR_CONFIG = window.KAMAR_CONFIG || {};
+    window.KAMAR_CONFIG.supabaseUrl = cfg.url;
+    window.KAMAR_CONFIG.supabaseAnonKey = cfg.key;
+    window.KAMAR_CONFIG.SUPABASE_URL = cfg.url;
+    window.KAMAR_CONFIG.SUPABASE_ANON_KEY = cfg.key;
+    window.KAMAR_SUPABASE_URL = cfg.url;
+    window.KAMAR_SUPABASE_ANON_KEY = cfg.key;
+    return cfg;
+  }
+  function createClientFromConfig(cfg){
+    cfg = applyConfig(cfg || readConfig());
     if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
-    var c = cfg();
-    if(window.supabase && window.supabase.createClient && c.url && c.key){
-      window.kamarSupabaseClient = window.supabase.createClient(c.url, c.key, {
-        auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
-      });
-      window.KamarSupabase.client = window.kamarSupabaseClient;
-      return window.kamarSupabaseClient;
+    if(!(window.supabase && window.supabase.createClient)) return null;
+    if(!cfg.url || !cfg.key) return null;
+    window.kamarSupabaseClient = window.supabase.createClient(cfg.url, cfg.key, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    });
+    window.KamarSupabase.client = window.kamarSupabaseClient;
+    window.KamarSupabaseClient = window.kamarSupabaseClient;
+    return window.kamarSupabaseClient;
+  }
+  async function fetchConfigFallback(){
+    var endpoints = ['/api/kamar-config', '/supabase-config.json', '/kamar-config.json'];
+    for(var i=0;i<endpoints.length;i++){
+      try{
+        var res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache: 'no-store' });
+        if(!res.ok) continue;
+        var data = await res.json();
+        var cfg = {
+          url: normalizeUrl(data.supabaseUrl || data.SUPABASE_URL || data.url || data.projectUrl || ''),
+          key: trim(data.supabaseAnonKey || data.SUPABASE_ANON_KEY || data.anonKey || data.key || '')
+        };
+        cfg.hasConfig = !!(cfg.url && cfg.key);
+        if(cfg.hasConfig) return applyConfig(cfg);
+      }catch(e){}
     }
-    return null;
+    return applyConfig(readConfig());
   }
   async function ready(){
+    if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
     try { if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; } catch(e) {}
-    return create();
+    var cfg = readConfig();
+    if(!cfg.hasConfig) cfg = await fetchConfigFallback();
+    var client = createClientFromConfig(cfg);
+    window.dispatchEvent(new CustomEvent('kamar:supabase-ready', { detail: { ok: !!client, config: cfg } }));
+    return client;
+  }
+  async function select(table, options){
+    options = options || {};
+    var client = await ready();
+    if(!client) throw new Error('Client Supabase tidak terbaca. Config URL/key belum siap atau Supabase SDK gagal dimuat.');
+    var q = client.from(table).select(options.columns || '*', options.count ? { count: options.count } : undefined);
+    if(options.eq){ Object.keys(options.eq).forEach(function(k){ q = q.eq(k, options.eq[k]); }); }
+    if(options.order){ q = q.order(options.order, { ascending: options.ascending !== false }); }
+    if(options.limit) q = q.limit(options.limit);
+    var res = await q;
+    if(res.error) throw res.error;
+    return res;
+  }
+  async function insert(table, row){
+    var client = await ready();
+    if(!client) throw new Error('Client Supabase tidak terbaca.');
+    var res = await client.from(table).insert(row).select();
+    if(res.error) throw res.error;
+    return res.data || [];
+  }
+  async function update(table, values, eq){
+    var client = await ready();
+    if(!client) throw new Error('Client Supabase tidak terbaca.');
+    var q = client.from(table).update(values);
+    Object.keys(eq || {}).forEach(function(k){ q = q.eq(k, eq[k]); });
+    var res = await q.select();
+    if(res.error) throw res.error;
+    return res.data || [];
+  }
+  async function upsert(table, row, options){
+    var client = await ready();
+    if(!client) throw new Error('Client Supabase tidak terbaca.');
+    var res = await client.from(table).upsert(row, options || {}).select();
+    if(res.error) throw res.error;
+    return res.data || [];
   }
 
   window.KamarSupabase = window.KamarSupabase || {};
-  window.KamarSupabase.getConfig = cfg;
-  window.KamarSupabase.getClient = create;
+  window.KamarSupabase.getConfig = readConfig;
+  window.KamarSupabase.getClient = function(){ return window.kamarSupabaseClient || createClientFromConfig(readConfig()); };
   window.KamarSupabase.ready = ready;
-  window.KamarSupabase.client = create();
+  window.KamarSupabase.select = select;
+  window.KamarSupabase.insert = insert;
+  window.KamarSupabase.update = update;
+  window.KamarSupabase.upsert = upsert;
+  window.KamarSupabase.client = createClientFromConfig(readConfig());
+  window.KAMAR_DB_READY = ready();
 })();

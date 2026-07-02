@@ -1,42 +1,221 @@
 (function(){
-'use strict';
-if(window.__KAMAR_AUTH_29D__) return; window.__KAMAR_AUTH_29D__=true;
-var VERSION='29D';
+  'use strict';
+  if(window.__KAMAR_AUTH_29E__) return;
+  window.__KAMAR_AUTH_29E__ = true;
+  var VERSION = '29E';
+  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com'];
 
-function qs(s,r){return (r||document).querySelector(s)}
-function norm(v){return String(v||'').trim().toLowerCase()}
-function pick(o,ks){o=o||{};for(var i=0;i<ks.length;i++){var k=ks[i];if(o[k]!=null&&String(o[k]).trim()!=='')return o[k]}return ''}
-function emailOf(o){return String(pick(o,['email','member_email','user_email','account_email','login_email','affiliate_email'])||'').trim()}
-function nameOf(o){return String(pick(o,['full_name','fullName','name','nama','display_name','member_name','affiliate_name'])||emailOf(o)||'Kamar User').trim()}
-function passOf(o){return String(pick(o,['password','member_password','account_password','login_password','affiliate_password','admin_password','pass'])||'')}
-function idOf(o){return String(pick(o,['member_id','memberId','affiliate_id','affiliateId','id','user_id','profile_id','code','member_code','affiliate_code','referral_code'])||emailOf(o)||'').trim()}
-function roleRaw(o){return norm([pick(o,['role','user_role','account_role','type','account_type','member_type','category','level','status','approval_status']),pick(o,['is_admin','admin','is_internal','internal']),emailOf(o),nameOf(o)].join(' '))}
-function isAdmin(o){var r=roleRaw(o);return /admin|internal|owner|superadmin|staff|team/.test(r)||norm(emailOf(o))==='kamarkajianmarket@gmail.com'||norm(nameOf(o))==='kamarkajianmarket'}
-function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
-async function ensureReady(){try{if(window.KAMAR_CONFIG_READY)await window.KAMAR_CONFIG_READY;if(window.KamarSupabase&&window.KamarSupabase.ready)await window.KamarSupabase.ready()}catch(e){}return cfg()}
-function client(){if(window.kamarSupabaseClient)return window.kamarSupabaseClient;if(window.KamarSupabase&&window.KamarSupabase.getClient){var x=window.KamarSupabase.getClient();if(x)return x;}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){window.kamarSupabaseClient=window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});return window.kamarSupabaseClient}return null}
-function status(form,msg,ok){var e=qs('.auth-status',form)||qs('.form-note',form)||document.getElementById('loginStatus')||document.getElementById('registerStatus')||document.getElementById('affiliateStatus');if(!e)return;e.hidden=false;e.className=(e.className||'').replace(/\b(ok|err|success|error)\b/g,'').trim()+' '+(ok?'success ok':'error err');e.textContent=msg}
-function processing(form,msg,on){var e=qs('[data-processing-line]',form);if(e){e.hidden=!on;e.textContent=msg||'Memproses...'}var b=form.querySelector('button[type="submit"]');if(b){b.disabled=!!on;b.dataset.oldText=b.dataset.oldText||b.textContent;if(on)b.textContent=msg||'Memproses...';else b.textContent=b.dataset.oldText}}
-function val(form,n){var e=form.elements[n]||document.getElementById(n);if(!e&&n==='confirm')e=form.elements.password_confirm||document.getElementById('registerPasswordConfirm');if(!e&&n==='full_name')e=form.elements.name||document.getElementById('registerFullName');if(!e&&n==='telegram')e=form.elements.telegram_username||document.getElementById('registerTelegram');return e?String(e.value||'').trim():''}
-function timeout(p,ms){return Promise.race([Promise.resolve(p),new Promise(function(_,rej){setTimeout(function(){rej(new Error('Timeout koneksi database.'))},ms||12000)})])}
-function configError(){return 'Database Supabase belum terkoneksi. Isi Environment Variables di Vercel: KAMAR_SUPABASE_URL dan KAMAR_SUPABASE_ANON_KEY, lalu Redeploy project.'}
-async function rowsFrom(table){var c=client();if(!c)throw new Error(configError());var r=await timeout(c.from(table).select('*').limit(1000),12000);if(r.error)throw r.error;return (r.data||[]).map(function(x){x.__table=table;return x})}
-async function allRows(tables){var out=[],errs=[];for(var i=0;i<tables.length;i++){try{out=out.concat(await rowsFrom(tables[i]))}catch(e){errs.push(tables[i]+': '+(e.message||e))}}if(!out.length&&errs.length){throw new Error('Data akun belum terbaca dari Supabase. Pastikan URL/key benar, table akun tersedia, dan policy SELECT mengizinkan anon/auth.')}return out}
-function sessionFrom(row,role){row=row||{};return Object.assign({},row,{role:role,fullName:nameOf(row),email:emailOf(row),memberId:idOf(row),loginAt:new Date().toISOString(),lastActivity:Date.now(),source:row.source||'supabase'});}
-function saveRole(role,s){if(role==='admin'){localStorage.setItem('kamarAdminSession',JSON.stringify(s));localStorage.setItem('KAMAR_ADMIN_SESSION',JSON.stringify(s));localStorage.setItem('kamarCurrentAdmin',JSON.stringify(s));}
-if(role==='member'){localStorage.setItem('kamarMemberSession',JSON.stringify(s));localStorage.setItem('KAMAR_MEMBER_SESSION',JSON.stringify(s));localStorage.setItem('kamarCurrentMember',JSON.stringify(s));}
-if(role==='affiliate'){localStorage.setItem('kamarAffiliateSession',JSON.stringify(s));localStorage.setItem('kamarCurrentAffiliate',JSON.stringify(s));}
-localStorage.setItem('kamarCurrentUser',JSON.stringify(s));}
-function localFallback(email,password,role){var stores=role==='affiliate'?['kamarAffiliateList']:['kamarRegisteredMembers','kamarMemberList','kamarMembers','kamarAdminUsers','kamarInternalUsers'];for(var i=0;i<stores.length;i++){try{var arr=JSON.parse(localStorage.getItem(stores[i])||'[]');if(!Array.isArray(arr))continue;var row=arr.find(function(r){return norm(emailOf(r))===norm(email)&&(!passOf(r)||passOf(r)===password)});if(row){row.source='localStorage:'+stores[i];if(role==='admin'&&!isAdmin(row))continue;if(role==='member'&&isAdmin(row))continue;return row}}catch(e){}}return null}
-async function authSignIn(email,password,role){var c=client();if(!c||!c.auth||!c.auth.signInWithPassword)return null;try{var res=await timeout(c.auth.signInWithPassword({email:email,password:password}),12000);if(res.error||!res.data||!res.data.user)return null;var u=res.data.user;var meta=Object.assign({},u.user_metadata||{},u.app_metadata||{id:u.id,email:u.email,source:'supabase_auth'});try{var rows=await allRows(['member_profiles','admin_member_overview','members','profiles','users','admin_users','internal_users']);var matched=rows.find(function(r){return norm(emailOf(r))===norm(u.email)});if(matched)meta=Object.assign(meta,matched,{source:'supabase_auth+profile'})}catch(e){}
-if(role==='admin'&&!isAdmin(meta))return null;if(role==='member'&&isAdmin(meta))return null;return meta}catch(e){return null}}
-function matchPlain(rows,email,password,role){email=norm(email);return rows.find(function(r){var em=norm(emailOf(r));if(!em||em!==email)return false;var p=passOf(r);if(p&&String(p)===String(password)){if(role==='admin')return isAdmin(r);if(role==='member')return !isAdmin(r);return true}return false})||null}
-async function doLogin(form,role){var email=val(form,'email')||val(form,'loginEmail'), password=val(form,'password')||val(form,'loginPassword');if(!email||!password){status(form,'Email dan password wajib diisi.',false);return}processing(form,'Mengecek akun...',true);status(form,'Mengecek akun ke database...',true);try{await ensureReady();var c=cfg();if(!c.url||!c.key)throw new Error(configError());var row=await authSignIn(email,password,role);if(!row){var tables=role==='affiliate'?['affiliates','affiliate_profiles']:['admin_member_overview','member_profiles','members','profiles','users','admin_users','internal_users'];var rows=await allRows(tables);row=matchPlain(rows,email,password,role)}if(!row){row=localFallback(email,password,role)}if(!row)throw new Error('Login gagal. Email/password tidak cocok, role akun tidak sesuai, atau akun belum aktif di database.');var s=sessionFrom(row,role);saveRole(role,s);status(form,'Login berhasil. Membuka dashboard...',true);setTimeout(function(){location.href=role==='admin'?'admin.html?v='+VERSION:role==='affiliate'?'affiliate-dashboard.html?v='+VERSION:'dashboard.html?v='+VERSION},300)}catch(e){status(form,e.message||'Login gagal.',false)}finally{processing(form,'',false)}}
-async function insertAny(tables,payload){await ensureReady();var c=client();if(!c)throw new Error(configError());var last=null;for(var i=0;i<tables.length;i++){try{var r=await timeout(c.from(tables[i]).insert(payload).select().maybeSingle(),12000);if(!r.error)return r.data||payload;last=r.error}catch(e){last=e}}throw last||new Error('Gagal menyimpan ke Supabase')}
-async function registerMember(form){var p=val(form,'password')||val(form,'registerPassword'),cfm=val(form,'confirm')||val(form,'password_confirm')||val(form,'registerPasswordConfirm');if(p!==cfm){status(form,'Konfirmasi password tidak sama.',false);return}processing(form,'Menyimpan member...',true);try{var payload={full_name:val(form,'full_name')||val(form,'registerFullName'),email:(val(form,'email')||val(form,'registerEmail')).toLowerCase(),whatsapp:val(form,'whatsapp')||val(form,'registerWhatsapp'),telegram:val(form,'telegram')||val(form,'registerTelegram'),password:p,referral_code:val(form,'referral_code')||val(form,'registerReferral'),status:'pending',created_at:new Date().toISOString()};await insertAny(['member_profiles','members'],payload);status(form,'Pendaftaran berhasil tersimpan. Silakan login setelah akun siap/diaktivasi.',true);form.reset()}catch(e){status(form,'Gagal daftar: '+(e.message||e),false)}finally{processing(form,'',false)}}
-async function registerAffiliate(form){var p=val(form,'password'),cfm=val(form,'confirm')||val(form,'password_confirm');if(p!==cfm){status(form,'Konfirmasi password tidak sama.',false);return}processing(form,'Menyimpan affiliate...',true);try{var payload={full_name:val(form,'full_name'),email:val(form,'email').toLowerCase(),whatsapp:val(form,'whatsapp'),telegram:val(form,'telegram'),promotion_channel:val(form,'promotion_channel'),payment_account_name:val(form,'payment_account_name'),payment_bank_name:val(form,'payment_bank_name'),payment_account_number:val(form,'payment_account_number'),password:p,approval_status:'PENDING',created_at:new Date().toISOString()};await insertAny(['affiliates','affiliate_profiles'],payload);status(form,'Pendaftaran affiliate berhasil tersimpan. Tunggu approval admin.',true);form.reset()}catch(e){status(form,'Gagal daftar affiliate: '+(e.message||e),false)}finally{processing(form,'',false)}}
-function bind(id,fn){var f=document.getElementById(id);if(!f||f.__kamarBound29D)return;f.__kamarBound29D=true;f.addEventListener('submit',function(e){e.preventDefault();if(e.stopImmediatePropagation)e.stopImmediatePropagation();else e.stopPropagation();fn(f)},true)}
-function run(){bind('adminLoginForm',function(f){doLogin(f,'admin')});bind('memberLoginForm',function(f){doLogin(f,'member')});bind('kamarLoginForm',function(f){doLogin(f,'member')});bind('affiliateLoginForm',function(f){doLogin(f,'affiliate')});bind('memberRegisterForm',registerMember);bind('kamarRegisterForm',registerMember);bind('affiliateRegisterForm',registerAffiliate);bind('kamarAffiliateForm',registerAffiliate)}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
-window.KamarAuthFinal29D={login:doLogin,client:client,config:cfg,ready:ensureReady};
+  function qs(s,r){ return (r||document).querySelector(s); }
+  function norm(v){ return String(v||'').trim().toLowerCase(); }
+  function pick(o,ks){ o=o||{}; for(var i=0;i<ks.length;i++){ var k=ks[i]; if(o[k]!=null && String(o[k]).trim()!=='') return o[k]; } return ''; }
+  function val(form,n){
+    var e = form.elements[n] || document.getElementById(n);
+    if(!e && n==='email') e = qs('input[type="email"]',form);
+    if(!e && n==='password') e = qs('input[type="password"]',form);
+    if(!e && n==='confirm') e = form.elements.password_confirm || document.getElementById('registerPasswordConfirm');
+    if(!e && n==='full_name') e = form.elements.name || document.getElementById('registerFullName');
+    if(!e && n==='telegram') e = form.elements.telegram_username || document.getElementById('registerTelegram');
+    return e ? String(e.value||'').trim() : '';
+  }
+  function status(form,msg,ok){
+    var e = qs('.auth-status',form) || qs('.form-note',form) || document.getElementById('loginStatus') || document.getElementById('registerStatus') || document.getElementById('affiliateStatus');
+    if(!e) return;
+    e.hidden = false;
+    e.className = (e.className||'').replace(/\b(ok|err|success|error)\b/g,'').trim() + ' ' + (ok?'success ok':'error err');
+    e.textContent = msg;
+  }
+  function processing(form,msg,on){
+    var e = qs('[data-processing-line]',form);
+    if(e){ e.hidden = !on; e.textContent = msg || 'Memproses...'; }
+    var b = form.querySelector('button[type="submit"]');
+    if(b){
+      b.disabled = !!on;
+      b.dataset.oldText = b.dataset.oldText || b.textContent;
+      b.textContent = on ? (msg || 'Memproses...') : b.dataset.oldText;
+    }
+  }
+  function timeout(p,ms){
+    return Promise.race([
+      Promise.resolve(p),
+      new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('Timeout koneksi Supabase. Coba ulang atau cek koneksi.')); }, ms||15000); })
+    ]);
+  }
+  function configError(){ return 'Database Supabase belum terkoneksi. Cek KAMAR_SUPABASE_URL dan KAMAR_SUPABASE_ANON_KEY di Vercel, lalu Redeploy tanpa cache.'; }
+  function cfg(){
+    var c = window.KAMAR_CONFIG || window.KamarConfig || window.kamarConfig || window.kamarConfigPublic || {};
+    return {
+      url: c.supabaseUrl || c.SUPABASE_URL || c.url || window.KAMAR_SUPABASE_URL || window.SUPABASE_URL || '',
+      key: c.supabaseAnonKey || c.SUPABASE_ANON_KEY || c.anonKey || c.key || window.KAMAR_SUPABASE_ANON_KEY || window.SUPABASE_ANON_KEY || ''
+    };
+  }
+  async function ensureReady(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready) await window.KamarSupabase.ready(); }catch(e){}
+    return cfg();
+  }
+  function client(){
+    if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
+    if(window.KamarSupabase && window.KamarSupabase.getClient){ var x = window.KamarSupabase.getClient(); if(x) return x; }
+    var c = cfg();
+    if(window.supabase && window.supabase.createClient && c.url && c.key){
+      window.kamarSupabaseClient = window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      return window.kamarSupabaseClient;
+    }
+    return null;
+  }
+  function isOfficialAdmin(email,meta){
+    email = norm(email);
+    if(ADMIN_EMAILS.indexOf(email)>=0) return true;
+    var text = norm([meta&&meta.role, meta&&meta.user_role, meta&&meta.account_role, meta&&meta.type, meta&&meta.level, meta&&meta.status, meta&&meta.full_name, meta&&meta.name].join(' '));
+    return /admin|owner|superadmin|internal|staff|team/.test(text);
+  }
+  function sessionFromAuthUser(user,role,extra){
+    extra = extra || {};
+    var meta = Object.assign({}, user && user.user_metadata || {}, user && user.app_metadata || {}, extra || {});
+    var email = String(user && user.email || meta.email || '').trim().toLowerCase();
+    var name = pick(meta,['full_name','fullName','name','nama','display_name','member_name','affiliate_name']) || email || 'Kamar User';
+    return Object.assign({}, meta, {
+      id: user && user.id || meta.id || meta.user_id || email,
+      user_id: user && user.id || meta.user_id || meta.id || '',
+      email: email,
+      fullName: name,
+      full_name: name,
+      role: role,
+      loginAt: new Date().toISOString(),
+      lastActivity: Date.now(),
+      source: 'supabase_auth_29E'
+    });
+  }
+  function saveRole(role,s){
+    if(role==='admin'){
+      localStorage.setItem('kamarAdminSession',JSON.stringify(s));
+      localStorage.setItem('KAMAR_ADMIN_SESSION',JSON.stringify(s));
+      localStorage.setItem('kamarCurrentAdmin',JSON.stringify(s));
+      localStorage.removeItem('kamarMemberSession');
+    }
+    if(role==='member'){
+      localStorage.setItem('kamarMemberSession',JSON.stringify(s));
+      localStorage.setItem('KAMAR_MEMBER_SESSION',JSON.stringify(s));
+      localStorage.setItem('kamarCurrentMember',JSON.stringify(s));
+    }
+    if(role==='affiliate'){
+      localStorage.setItem('kamarAffiliateSession',JSON.stringify(s));
+      localStorage.setItem('KAMAR_AFFILIATE_SESSION',JSON.stringify(s));
+      localStorage.setItem('kamarCurrentAffiliate',JSON.stringify(s));
+    }
+    localStorage.setItem('kamarCurrentUser',JSON.stringify(s));
+  }
+  async function tryProfile(email){
+    var c = client();
+    if(!c) return {};
+    var tables = ['member_profiles','member_access','admin_member_overview','member_dashboard_overview','affiliates'];
+    for(var i=0;i<tables.length;i++){
+      try{
+        var r = await timeout(c.from(tables[i]).select('*').or('email.eq.'+email+',member_email.eq.'+email+',user_email.eq.'+email).limit(1),6000);
+        if(!r.error && r.data && r.data[0]) return Object.assign({__profileTable:tables[i]}, r.data[0]);
+      }catch(e){}
+    }
+    return {};
+  }
+  function authMessage(err){
+    var m = String(err && (err.message || err.error_description) || err || 'Login gagal.');
+    if(/invalid login credentials/i.test(m)) return 'Login gagal. Email atau password Supabase Auth tidak cocok.';
+    if(/email not confirmed/i.test(m)) return 'Login gagal. Email akun Supabase belum dikonfirmasi.';
+    if(/fetch|network|failed to fetch/i.test(m)) return 'Login gagal. Koneksi ke Supabase bermasalah atau domain belum diizinkan.';
+    return m;
+  }
+  async function doLogin(form,requestedRole){
+    var email = (val(form,'email') || val(form,'loginEmail')).toLowerCase();
+    var password = val(form,'password') || val(form,'loginPassword');
+    if(!email || !password){ status(form,'Email dan password wajib diisi.',false); return; }
+    processing(form,'Login...',true);
+    status(form,'Mengecek Supabase Auth...',true);
+    try{
+      await ensureReady();
+      var c = client();
+      var cc = cfg();
+      if(!c || !cc.url || !cc.key) throw new Error(configError());
+
+      var res = await timeout(c.auth.signInWithPassword({email:email,password:password}),15000);
+      if(res.error) throw res.error;
+      if(!res.data || !res.data.user) throw new Error('Login gagal. Supabase Auth tidak mengembalikan user.');
+
+      var user = res.data.user;
+      var baseMeta = Object.assign({}, user.user_metadata||{}, user.app_metadata||{});
+      var profile = await tryProfile(email);
+      var admin = isOfficialAdmin(email, Object.assign({}, baseMeta, profile));
+
+      var finalRole = requestedRole;
+      if(admin) finalRole = 'admin';
+      if(requestedRole==='admin' && !admin) throw new Error('Akun ini berhasil login, tapi tidak terdaftar sebagai admin. Gunakan akun admin resmi.');
+      if(requestedRole==='affiliate' && !admin){ finalRole = 'affiliate'; }
+      if(requestedRole==='member' && !admin){ finalRole = 'member'; }
+
+      var s = sessionFromAuthUser(user,finalRole,profile);
+      saveRole(finalRole,s);
+      status(form,'Login berhasil. Membuka dashboard...',true);
+      setTimeout(function(){
+        location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;
+      },300);
+    }catch(e){
+      status(form,authMessage(e),false);
+    }finally{
+      processing(form,'',false);
+    }
+  }
+  async function registerMember(form){
+    var email = (val(form,'email') || val(form,'registerEmail')).toLowerCase();
+    var password = val(form,'password') || val(form,'registerPassword');
+    var confirm = val(form,'confirm') || val(form,'password_confirm') || val(form,'registerPasswordConfirm');
+    if(!email || !password){ status(form,'Email dan password wajib diisi.',false); return; }
+    if(confirm && password !== confirm){ status(form,'Konfirmasi password tidak sama.',false); return; }
+    processing(form,'Mendaftarkan akun...',true);
+    try{
+      await ensureReady();
+      var c = client(); if(!c) throw new Error(configError());
+      var fullName = val(form,'full_name') || val(form,'registerFullName') || val(form,'name') || email;
+      var r = await timeout(c.auth.signUp({email:email,password:password,options:{data:{full_name:fullName,role:'member'}}}),15000);
+      if(r.error) throw r.error;
+      try{ await c.from('member_profiles').insert({email:email,full_name:fullName,whatsapp:val(form,'whatsapp')||val(form,'registerWhatsapp'),telegram:val(form,'telegram')||val(form,'registerTelegram'),status:'pending',created_at:new Date().toISOString()}); }catch(e){}
+      status(form,'Pendaftaran berhasil. Jika email confirmation aktif, cek email. Jika tidak, silakan login.',true);
+      form.reset();
+    }catch(e){ status(form,'Gagal daftar: '+authMessage(e),false); }
+    finally{ processing(form,'',false); }
+  }
+  async function registerAffiliate(form){
+    var email = val(form,'email').toLowerCase();
+    var password = val(form,'password');
+    var confirm = val(form,'confirm') || val(form,'password_confirm');
+    if(confirm && password !== confirm){ status(form,'Konfirmasi password tidak sama.',false); return; }
+    processing(form,'Mendaftarkan affiliate...',true);
+    try{
+      await ensureReady();
+      var c = client(); if(!c) throw new Error(configError());
+      var fullName = val(form,'full_name') || email;
+      var r = await timeout(c.auth.signUp({email:email,password:password,options:{data:{full_name:fullName,role:'affiliate'}}}),15000);
+      if(r.error) throw r.error;
+      try{ await c.from('affiliates').insert({email:email,full_name:fullName,whatsapp:val(form,'whatsapp'),telegram:val(form,'telegram'),approval_status:'PENDING',created_at:new Date().toISOString()}); }catch(e){}
+      status(form,'Pendaftaran affiliate berhasil. Tunggu approval admin bila diperlukan.',true);
+      form.reset();
+    }catch(e){ status(form,'Gagal daftar affiliate: '+authMessage(e),false); }
+    finally{ processing(form,'',false); }
+  }
+  function bind(id,fn){
+    var f = document.getElementById(id);
+    if(!f || f.__kamarBound29E) return;
+    f.__kamarBound29E = true;
+    f.addEventListener('submit',function(e){ e.preventDefault(); if(e.stopImmediatePropagation) e.stopImmediatePropagation(); else e.stopPropagation(); fn(f); },true);
+  }
+  function run(){
+    bind('adminLoginForm',function(f){ doLogin(f,'admin'); });
+    bind('memberLoginForm',function(f){ doLogin(f,'member'); });
+    bind('kamarLoginForm',function(f){ doLogin(f,'member'); });
+    bind('affiliateLoginForm',function(f){ doLogin(f,'affiliate'); });
+    bind('memberRegisterForm',registerMember);
+    bind('kamarRegisterForm',registerMember);
+    bind('affiliateRegisterForm',registerAffiliate);
+    bind('kamarAffiliateForm',registerAffiliate);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+  window.KamarAuthFinal29E = {login:doLogin,client:client,config:cfg,ready:ensureReady};
 })();

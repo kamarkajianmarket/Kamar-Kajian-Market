@@ -578,3 +578,21 @@ body:not(.public-home) .split-main .kamar-title-card{order:-9}
 @media (min-width:769px){
   .quick-mobile-nav{display:none!important;visibility:hidden!important;position:absolute!important;left:-9999px!important;top:auto!important;width:0!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;opacity:0!important;pointer-events:none!important;}
 }
+/* Step 29D: compact login database status */
+.auth-status,.form-note,#loginStatus,#registerStatus,#affiliateStatus{
+  max-height: 180px !important;
+  overflow: auto !important;
+  line-height: 1.55 !important;
+  word-break: normal !important;
+  white-space: normal !important;
+}
+.auth-status.error,.form-note.error,.auth-status.err,.form-note.err{
+  border-color: rgba(255,92,92,.35) !important;
+  background: rgba(85,19,19,.20) !important;
+  color: #ffe1d6 !important;
+}
+.auth-status.success,.form-note.success,.auth-status.ok,.form-note.ok{
+  border-color: rgba(236,202,112,.35) !important;
+  background: rgba(236,202,112,.10) !important;
+  color: #fff1c6 !important;
+}

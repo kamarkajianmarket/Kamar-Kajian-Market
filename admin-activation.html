@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
-<script src="assets/js/kamar-session-guard-25d.js"></script>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Aktivasi Akun &amp; Fasilitas — Kamar Kajian Market</title>
-<meta content="Aktivasi akun member dan fasilitas Kamar." name="description"/>
-<meta content="#070707" name="theme-color"/>
-<link href="assets/favicon.png" rel="icon"/>
-<link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
-<link href="manifest.webmanifest" rel="manifest"/>
-<link href="style.css" rel="stylesheet"/>
-<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
-<style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aktivasi Akun & Fasilitas — Kamar Kajian Market</title>
+  <meta name="description" content="Aktivasi akun member dan fasilitas Kamar." />
+  <meta name="theme-color" content="#070707" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/css/kamar-full-online.css" />
+  <style>
     :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4;--warn:#ffd582}
     body{background:#070707;color:var(--text)}
     .split-shell{max-width:1380px;margin:0 auto;padding:48px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:32px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.menu-section{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#e7d391;font-weight:1000;margin:20px 10px 8px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:900}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.14);color:#f4df90}.split-main{display:grid;gap:22px}.split-card{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card.hero{padding:44px 32px}.split-card h1{margin:0;color:#fff3d8;font-size:clamp(34px,4vw,58px);line-height:1;letter-spacing:-.055em}.split-card h2,.split-card h3{margin:0 0 12px;color:#fff3d8}.split-card p{color:var(--muted);line-height:1.65}.mini-label{display:inline-block;text-transform:uppercase;letter-spacing:.22em;font-size:13px;color:#f1dda2;font-weight:1000;margin-bottom:12px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.28)}.btn.mini{padding:8px 12px;font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}.toolbar{display:grid;grid-template-columns:minmax(260px,1.4fr) .7fr .7fr auto;gap:14px;align-items:end}.field{display:flex;flex-direction:column;gap:8px;color:#e8ddc7;font-size:14px;font-weight:1000}input,select,textarea{width:100%;box-sizing:border-box;border:1px solid rgba(238,206,122,.24);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025));color:#fff4db;border-radius:18px;padding:15px 17px;font:inherit;font-weight:800;outline:none}select option{background:#11100d;color:#fff4db}.summary{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.chip{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:7px 11px;color:#e7d391;background:rgba(255,255,255,.035);font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.chip.ok{color:#bfffd9;border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)}.chip.warn{color:#ffd582;border-color:rgba(255,213,130,.28);background:rgba(255,213,130,.08)}.chip.bad{color:#ffb4b4;border-color:rgba(255,96,96,.25);background:rgba(255,96,96,.08)}.member-list{display:grid;gap:14px}.row{display:grid;grid-template-columns:1.25fr 1.35fr .75fr 1.1fr auto;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}.row.header{border:0;background:transparent;padding:10px 16px;color:#e7d391;text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:1000}.row strong{display:block;color:#fff3d8}.row small{display:block;color:rgba(245,240,230,.62);line-height:1.4;margin-top:5px}.actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.empty{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:22px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.info-box{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:16px}.info-box span{display:block;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:1000;color:#e7d391}.info-box strong{display:block;margin-top:7px;color:#fff4db}.toggle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.toggle-card{display:grid;grid-template-columns:minmax(0,1fr) 86px;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.16);border-radius:22px;padding:16px;background:rgba(255,255,255,.025)}.toggle-card strong{color:#fff4db}.toggle-card small{display:block;color:var(--muted);line-height:1.45;margin-top:5px}.toggle-card input{display:none}.switch{position:relative;width:86px;height:42px;border-radius:999px;border:1px solid rgba(238,206,122,.24);background:rgba(255,255,255,.065);cursor:pointer}.switch:before{content:'OFF';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:1000;color:#b8b0a0}.switch:after{content:'';position:absolute;width:30px;height:30px;border-radius:50%;left:5px;top:5px;background:#8d8473;transition:.2s ease}.toggle-card input:checked + .switch{background:linear-gradient(135deg,#f4df90,#c69a39)}.toggle-card input:checked + .switch:before{content:'ON';left:16px;right:auto;color:#111}.toggle-card input:checked + .switch:after{left:49px;background:#111}.note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1;line-height:1.6}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:380px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}
@@ -22,6 +20,7 @@
     .activation-hero > *{position:relative;z-index:1}.hero-copy{max-width:650px}.hero-copy p{max-width:620px;margin:14px 0 0;font-size:16px}.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.hero-panel{border:1px solid rgba(238,206,122,.18);border-radius:24px;background:rgba(0,0,0,.22);padding:18px;display:grid;gap:12px}.hero-panel-row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid rgba(238,206,122,.11);padding-bottom:10px}.hero-panel-row:last-child{border-bottom:0;padding-bottom:0}.hero-panel-row span{color:#aaa393;font-size:13px;font-weight:800}.hero-panel-row strong{color:#fff3d8;text-align:right}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
     @media(max-width:980px){.split-app,.toolbar,.row,.detail-grid,.toggle-grid{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.actions{justify-content:flex-start}.split-shell{padding:24px 16px}}
   </style>
+
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -51,127 +50,123 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-<style id="kamar-step24EA-global-loading-css">
-.kamar-loading-active{position:relative!important;pointer-events:none!important;opacity:.82!important;}
-.kamar-loading-active::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,10,10,.25);border-top-color:rgba(10,10,10,.85);display:inline-block;margin-right:8px;vertical-align:-3px;animation:kamarSpin24EA .72s linear infinite;}
-.kamar-loading-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:999px;padding:12px 18px;font-weight:950;box-shadow:0 18px 60px rgba(0,0,0,.44);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
-.kamar-loading-toast::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,223,144,.28);border-top-color:#f5df91;animation:kamarSpin24EA .72s linear infinite;}
-@keyframes kamarSpin24EA{to{transform:rotate(360deg)}}
-</style>
-<link href="assets/css/kamar-data-online-25e.css" rel="stylesheet"/>
 </head>
 <body>
-<main class="split-shell">
-<div class="split-app">
-<aside class="split-sidebar">
-<div class="brand-small">Admin Kamar</div>
-<div class="menu-section">Utama</div>
-<a href="admin.html?v=25e">Dashboard Admin</a>
-<div class="menu-section">Member &amp; Akses</div>
-<a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
-<a class="active" href="admin-activation.html?v=24dg">Aktivasi Akun &amp; Fasilitas</a>
-<a href="admin-data-check.html?v=25eu">Cek Data Admin</a><a href="admin-connection-check.html?v=25e">Cek Koneksi DB</a>
-<div class="menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&amp;v=25e">Data Affiliate</a>
-<div class="menu-section">Konten Website</div>
-<a href="admin-banner.html?v=25e">Banner Pengumuman</a>
-<a href="admin-video.html?v=25e">Konten Video</a>
-<a href="admin-materials.html?v=25e">Konten &amp; Materi</a>
-<a href="admin-tools.html?v=25e">File Tools</a>
-<div class="menu-section">Kontrol Sistem</div>
-<a href="admin-maintenance.html?v=25e">Maintenance Fasilitas</a>
-<a href="admin-page-control.html">Kontrol Halaman Utama</a>
-<a href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
-<a href="admin-payment.html?v=25e">Payment Gateway</a>
-<a href="admin-links.html">Pengaturan Link</a>
-<a href="admin-settings.html?v=25e">Pengaturan Umum</a>
-<div class="menu-section">Akun</div>
-<a data-kamar-logout="" href="index.html?logout=1&amp;v=25e">Logout</a>
-</aside>
-<section class="split-main">
-<section class="split-card hero activation-hero">
-<div class="hero-copy">
-<span class="mini-label">Kontrol Akses Member</span>
-<h1>Aktivasi Akun &amp; Fasilitas</h1>
-<p>Kelola status akun member, masa akses, dan fasilitas yang digunakan. Aktivasi akun gratis hanya membuka akses member website, sedangkan fasilitas tetap diatur terpisah.</p>
-<div class="hero-badges">
-<span class="chip ok">Akun Gratis</span>
-<span class="chip">Fasilitas Terpisah</span>
-<span class="chip warn">Admin Control</span>
-</div>
-<div class="hero-actions">
-<a class="btn" href="#activationSearch">Cari Member</a>
-<button class="btn secondary" id="heroRefreshBtn" type="button">Refresh Data</button>
-</div>
-</div>
-<div class="hero-panel">
-<div class="hero-panel-row"><span>Fungsi Utama</span><strong>Aktivasi &amp; Akses</strong></div>
-<div class="hero-panel-row"><span>Mode Kontrol</span><strong>Manual Admin</strong></div>
-<div class="hero-panel-row"><span>Fasilitas</span><strong>Toggle ON/OFF</strong></div>
-</div>
-</section>
-<section class="split-card" id="activationSearch">
-<span class="mini-label">Cari Member</span>
-<p>Cari berdasarkan nama, email, nomor WA, Telegram, atau ID member. Kosongkan pencarian untuk menampilkan semua member.</p>
-<div class="toolbar">
-<label class="field">Cari Member
-              <input id="searchInput" placeholder="Contoh: Budi / email / WA / KM-00001"/>
-</label>
-<label class="field">Status Akun
+  <main class="split-shell">
+    <div class="split-app">
+      <aside class="split-sidebar">
+        <div class="brand-small">Admin Kamar</div>
+        <div class="menu-section">Utama</div>
+        <a href="admin.html">Dashboard Admin</a>
+        <div class="menu-section">Member & Akses</div>
+        <a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
+        <a class="active" href="admin-activation.html?v=24dg">Aktivasi Akun & Fasilitas</a>
+        <a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+        <div class="menu-section">Affiliate</div>
+        <a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
+        <div class="menu-section">Konten Website</div>
+        <a href="admin-banner.html">Banner Pengumuman</a>
+        <a href="admin-video.html">Konten Video</a>
+        <a href="admin-materials.html">Konten & Materi</a>
+        <a href="admin-tools.html">File Tools</a>
+        <div class="menu-section">Kontrol Sistem</div>
+        <a href="admin-maintenance.html">Maintenance Fasilitas</a>
+        <a href="admin-page-control.html">Kontrol Halaman Utama</a>
+        <a href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
+        <a href="admin-payment.html">Payment Gateway</a>
+        <a href="admin-links.html">Pengaturan Link</a>
+        <a href="admin-settings.html">Pengaturan Umum</a>
+        <div class="menu-section">Akun</div>
+        <a href="member.html">Logout</a>
+      </aside>
+
+      <section class="split-main">
+        <section class="split-card hero activation-hero">
+          <div class="hero-copy">
+            <span class="mini-label">Kontrol Akses Member</span>
+            <h1>Aktivasi Akun & Fasilitas</h1>
+            <p>Kelola status akun member, masa akses, dan fasilitas yang digunakan. Aktivasi akun gratis hanya membuka akses member website, sedangkan fasilitas tetap diatur terpisah.</p>
+            <div class="hero-badges">
+              <span class="chip ok">Akun Gratis</span>
+              <span class="chip">Fasilitas Terpisah</span>
+              <span class="chip warn">Admin Control</span>
+            </div>
+            <div class="hero-actions">
+              <a class="btn" href="#activationSearch">Cari Member</a>
+              <button class="btn secondary" id="heroRefreshBtn" type="button">Refresh Data</button>
+            </div>
+          </div>
+          <div class="hero-panel">
+            <div class="hero-panel-row"><span>Fungsi Utama</span><strong>Aktivasi & Akses</strong></div>
+            <div class="hero-panel-row"><span>Mode Kontrol</span><strong>Manual Admin</strong></div>
+            <div class="hero-panel-row"><span>Fasilitas</span><strong>Toggle ON/OFF</strong></div>
+          </div>
+        </section>
+
+        <section class="split-card" id="activationSearch">
+          <span class="mini-label">Cari Member</span>
+          <p>Cari berdasarkan nama, email, nomor WA, Telegram, atau ID member. Kosongkan pencarian untuk menampilkan semua member.</p>
+          <div class="toolbar">
+            <label class="field">Cari Member
+              <input id="searchInput" placeholder="Contoh: Budi / email / WA / KM-00001" />
+            </label>
+            <label class="field">Status Akun
               <select id="statusFilter">
-<option value="all">Semua Member</option>
-<option value="pending">Pending Aktivasi</option>
-<option value="active">Active / Confirmed</option>
-<option value="suspended">Suspended</option>
-</select>
-</label>
-<label class="field">Fasilitas
+                <option value="all">Semua Member</option>
+                <option value="pending">Pending Aktivasi</option>
+                <option value="active">Active / Confirmed</option>
+                <option value="suspended">Suspended</option>
+              </select>
+            </label>
+            <label class="field">Fasilitas
               <select id="facilityFilter">
-<option value="all">Semua Fasilitas</option>
-<option value="none">Belum Ada Fasilitas</option>
-<option value="Kamar Edukasi">Kamar Edukasi</option>
-<option value="Kamar Study">Kamar Study</option>
-<option value="Kamar Private">Kamar Private</option>
-<option value="Kamar Indikator">Kamar Indikator</option>
-<option value="Kamar Robot">Kamar Robot</option>
-</select>
-</label>
-<button class="btn" id="refreshBtn">Refresh</button>
-</div>
-<div class="summary" id="summary"><span class="chip">Memuat data...</span></div>
-<div class="member-list" id="memberList"></div>
-</section>
-<section class="split-card" id="detailPanel" style="display:none">
-<span class="mini-label">Detail Member</span>
-<h2 id="detailTitle">Detail Member</h2>
-<div class="detail-grid" id="detailInfo"></div>
-<div class="summary">
-<label class="field" style="min-width:220px">Durasi Fasilitas
+                <option value="all">Semua Fasilitas</option>
+                <option value="none">Belum Ada Fasilitas</option>
+                <option value="Kamar Edukasi">Kamar Edukasi</option>
+                <option value="Kamar Study">Kamar Study</option>
+                <option value="Kamar Private">Kamar Private</option>
+                <option value="Kamar Indikator">Kamar Indikator</option>
+                <option value="Kamar Robot">Kamar Robot</option>
+              </select>
+            </label>
+            <button class="btn" id="refreshBtn">Refresh</button>
+          </div>
+          <div id="summary" class="summary"><span class="chip">Memuat data...</span></div>
+          <div id="memberList" class="member-list"></div>
+        </section>
+
+        <section class="split-card" id="detailPanel" style="display:none">
+          <span class="mini-label">Detail Member</span>
+          <h2 id="detailTitle">Detail Member</h2>
+          <div id="detailInfo" class="detail-grid"></div>
+          <div class="summary">
+            <label class="field" style="min-width:220px">Durasi Fasilitas
               <select id="durationSelect">
-<option value="30">30 Hari</option>
-<option value="60">60 Hari</option>
-<option value="90">90 Hari</option>
-<option value="180">180 Hari</option>
-<option value="lifetime">Lifetime</option>
-</select>
-</label>
-<label class="field" style="min-width:280px">Catatan Admin
-              <input id="adminNote" placeholder="Opsional: catatan aktivasi / fasilitas"/>
-</label>
-</div>
-<div class="note">Gunakan tombol <b>Aktifkan Member Gratis</b> untuk aktivasi akun website saja. Gunakan toggle fasilitas hanya jika akses fasilitas memang sudah valid.</div>
-<div class="summary" id="detailActions"></div>
-<h3 style="margin-top:18px">Toggle Fasilitas</h3>
-<div class="toggle-grid" id="facilityToggles"></div>
-</section>
-</section>
-</div>
-</main>
-<div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/kamar-config.js"></script>
-<script src="assets/js/kamar-supabase.js"></script>
-<script>
+                <option value="30">30 Hari</option>
+                <option value="60">60 Hari</option>
+                <option value="90">90 Hari</option>
+                <option value="180">180 Hari</option>
+                <option value="lifetime">Lifetime</option>
+              </select>
+            </label>
+            <label class="field" style="min-width:280px">Catatan Admin
+              <input id="adminNote" placeholder="Opsional: catatan aktivasi / fasilitas" />
+            </label>
+          </div>
+          <div class="note">Gunakan tombol <b>Aktifkan Member Gratis</b> untuk aktivasi akun website saja. Gunakan toggle fasilitas hanya jika akses fasilitas memang sudah valid.</div>
+          <div id="detailActions" class="summary"></div>
+          <h3 style="margin-top:18px">Toggle Fasilitas</h3>
+          <div id="facilityToggles" class="toggle-grid"></div>
+        </section>
+      </section>
+    </div>
+  </main>
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/kamar-config.js"></script>
+  <script src="assets/js/kamar-supabase.js"></script>
+  <script>
   (function(){
     'use strict';
     var TABLE_VIEW='admin_member_overview';
@@ -224,10 +219,42 @@
   })();
   </script>
 
-
-
-
-
-<script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script><script src="assets/js/kamar-data-online-25e.js?v=25e"></script>
+<script id="kamar-global-header-script">
+(function(){
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
 </body>
 </html>

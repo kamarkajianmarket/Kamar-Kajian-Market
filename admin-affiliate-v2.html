@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
-<script src="assets/js/kamar-session-guard-25d.js"></script>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Affiliate Admin — Kamar Kajian Market</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="assets/css/kamar-full-online.css" rel="stylesheet">
-<style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Affiliate Admin — Kamar Kajian Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
+  <style>
     :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;}
     *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
     .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
@@ -28,6 +26,7 @@
     @media(max-width:1220px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.aff-row.head,.reward-row.head,.ref-row.head{display:none}.aff-row:not(.head),.reward-row,.ref-row{grid-template-columns:1fr}.cell-label{display:block}.row-actions{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}}
     @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.submenu-grid,.stats{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}}
   </style>
+
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -57,74 +56,72 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-<style id="kamar-step24EA-global-loading-css">
-.kamar-loading-active{position:relative!important;pointer-events:none!important;opacity:.82!important;}
-.kamar-loading-active::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,10,10,.25);border-top-color:rgba(10,10,10,.85);display:inline-block;margin-right:8px;vertical-align:-3px;animation:kamarSpin24EA .72s linear infinite;}
-.kamar-loading-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:999px;padding:12px 18px;font-weight:950;box-shadow:0 18px 60px rgba(0,0,0,.44);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
-.kamar-loading-toast::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,223,144,.28);border-top-color:#f5df91;animation:kamarSpin24EA .72s linear infinite;}
-@keyframes kamarSpin24EA{to{transform:rotate(360deg)}}
-</style>
-</link></head>
+</head>
 <body>
 <div class="admin-shell">
-<aside class="admin-sidebar">
-<div class="brand-small">Admin Kamar</div>
-<div class="admin-menu-section">Utama</div><a href="admin.html?v=25d">Dashboard Admin</a>
-<div class="admin-menu-section">Member &amp; Akses</div><a href="admin-members.html?v=25d">Data Member</a><a href="admin-internal.html?v=25d">Data Internal</a><a href="admin-activation.html?v=25d">Aktivasi Akun &amp; Fasilitas</a>
-<div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&amp;v=25d">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&amp;v=25d">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&amp;v=25d">Reward / Komisi</a>
-<div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=25d">Banner Pengumuman</a><a href="admin-video.html?v=25d">Konten Video</a><a href="admin-materials.html?v=25d">Konten &amp; Materi</a><a href="admin-tools.html?v=25d">File Tools</a>
-<div class="admin-menu-section">Kontrol Sistem</div><a href="admin-connection-check.html?v=25d">Cek Koneksi DB</a><a href="admin-maintenance.html?v=25d">Maintenance Fasilitas</a><a href="admin-page-control.html?v=25d">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=25d">Kontrol Dashboard Member</a><a href="admin-payment.html?v=25d">Payment Gateway</a><a href="admin-links.html?v=25d">Pengaturan Link</a><a href="admin-settings.html?v=25d">Pengaturan Umum</a>
-<div class="admin-menu-section">Akun</div><a data-kamar-logout="" href="index.html?logout=1&amp;v=25dd">Logout</a>
-</aside>
-<main class="admin-main">
-<section class="card hero">
-<div class="hero-inner">
-<div><span class="eyebrow">Affiliate Admin</span><h1 id="viewTitle">Data Affiliate</h1><p id="viewDesc">Kelola affiliator, approval admin, kode referral aktif, rekening pembayaran, dan reward affiliate dalam struktur 3 submenu yang rapi.</p></div>
-<div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button><button class="btn" id="exportBtn" type="button">Export CSV</button></div>
-</div>
-</section>
-<section class="card" id="affiliateSubmenuCard">
-<h2 class="section-title">Struktur Menu Affiliate</h2>
-<p class="muted">Affiliator baru wajib mengisi data pembayaran lengkap dan menunggu approval admin. Kode referral baru aktif setelah status affiliator disetujui.</p>
-<div class="submenu-grid">
-<a class="submenu-card" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&amp;v=25d"><h3>Data Affiliate</h3><strong>Ringkasan Affiliate</strong><p>Statistik approval, referral, rekening, dan reward.</p><span class="btn secondary small">Buka Ringkasan</span></a>
-<a class="submenu-card" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&amp;v=25d"><h3>Daftar Affiliator</h3><strong>Kelola Affiliator</strong><p>Detail, salin kode, approve, tolak, verifikasi rekening, dan hapus.</p><span class="btn small">Buka Daftar</span></a>
-<a class="submenu-card" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&amp;v=25d"><h3>Reward / Komisi</h3><strong>Status Pembayaran</strong><p>Nominal reward, belum dibayar, sudah dibayar, dan catatan komisi.</p><span class="btn small">Buka Reward</span></a>
-</div>
-</section>
-<section class="stats" data-view-section="overview" id="overviewStats">
-<a class="stat-card" data-stat-filter="all" href="admin-affiliate-v2.html?view=list&amp;filter=all&amp;v=25d"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua pendaftar affiliate.</small></a>
-<a class="stat-card" data-stat-filter="pending" href="admin-affiliate-v2.html?view=list&amp;filter=pending&amp;v=25d"><span>Menunggu Approval</span><strong id="statPending">0</strong><small>Rekening lengkap, perlu disetujui admin.</small></a>
-<a class="stat-card" data-stat-filter="approved" href="admin-affiliate-v2.html?view=list&amp;filter=approved&amp;v=25d"><span>Disetujui</span><strong id="statApproved">0</strong><small>Kode referral aktif dan bisa digunakan.</small></a>
-<a class="stat-card" data-stat-filter="incomplete" href="admin-affiliate-v2.html?view=list&amp;filter=incomplete&amp;v=25d"><span>Belum Lengkap</span><strong id="statIncomplete">0</strong><small>Data rekening belum lengkap.</small></a>
-<a class="stat-card" data-stat-filter="rejected" href="admin-affiliate-v2.html?view=list&amp;filter=rejected&amp;v=25d"><span>Ditolak</span><strong id="statRejected">0</strong><small>Affiliator yang ditolak admin.</small></a>
-<a class="stat-card" data-stat-filter="verified" href="admin-affiliate-v2.html?view=list&amp;filter=verified&amp;v=25d"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
-<a class="stat-card" data-reward-filter="unpaid" href="admin-affiliate-v2.html?view=reward&amp;reward=unpaid&amp;v=25d"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral belum dibayar.</small></a>
-<a class="stat-card" data-reward-filter="paid" href="admin-affiliate-v2.html?view=reward&amp;reward=paid&amp;v=25d"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral sudah dibayar.</small></a>
-</section>
-<section class="card" data-view-section="list" id="affiliateListCard">
-<h2 class="section-title">Daftar Affiliator</h2>
-<p class="muted">Kode referral hanya bisa disalin dan dianggap aktif jika status approval sudah <b>Disetujui</b>. Pendaftar dengan rekening belum lengkap tidak bisa di-approve.</p>
-<div class="toolbar">
-<label class="field">Cari Affiliate / Kode Referral<input id="affiliateSearch" placeholder="Cari nama, kode, email, atau WA"/></label>
-<label class="field">Status Approval<select id="approvalFilter"><option value="all">Semua Approval</option><option value="incomplete">Belum Lengkap</option><option value="pending">Menunggu Approval</option><option value="approved">Disetujui</option><option value="rejected">Ditolak</option></select></label>
-<label class="field">Status Rekening<select id="payoutFilter"><option value="all">Semua Rekening</option><option value="empty">Belum Isi Rekening</option><option value="ready">Menunggu Verifikasi</option><option value="verified">Terverifikasi</option></select></label>
-<button class="btn" id="applyAffiliateFilter" type="button">Cari</button>
-<button class="btn secondary" id="resetAffiliateFilter" type="button">Reset</button>
-</div>
-<div class="affiliate-table" id="affiliateList"></div>
-</section>
-<section class="card" data-view-section="reward" id="rewardCard">
-<h2 class="section-title">Reward / Komisi Affiliate</h2>
-<p class="muted">Reward hanya dihitung dari affiliator yang sudah <b>Disetujui</b>. Affiliator pending, ditolak, atau belum lengkap tidak masuk perhitungan reward aktif.</p>
-<div class="reward-toolbar">
-<label class="field">Filter Status Reward<select id="rewardFilter"><option value="all">Semua Status</option><option value="unpaid">Belum Dibayar</option><option value="paid">Sudah Dibayar</option></select></label>
-<button class="btn secondary" id="resetRewardFilter" type="button">Reset</button>
-</div>
-<div class="reward-table" id="rewardList"></div>
-</section>
-<section class="card detail-card" data-view-section="list" id="detailCard"></section>
-</main>
+  <aside class="admin-sidebar">
+    <div class="brand-small">Admin Kamar</div>
+    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
+    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
+    <div class="admin-menu-section">Affiliate</div><a data-aff-menu="overview" href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a><a data-aff-menu="list" href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a><a data-aff-menu="reward" href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dx">Banner Pengumuman</a><a href="admin-video.html?v=24dx">Konten Video</a><a href="admin-materials.html?v=24dx">Konten & Materi</a><a href="admin-tools.html?v=24dx">File Tools</a>
+    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
+    <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
+  </aside>
+  <main class="admin-main">
+    <section class="card hero">
+      <div class="hero-inner">
+        <div><span class="eyebrow">Affiliate Admin</span><h1 id="viewTitle">Data Affiliate</h1><p id="viewDesc">Kelola affiliator, approval admin, kode referral aktif, rekening pembayaran, dan reward affiliate dalam struktur 3 submenu yang rapi.</p></div>
+        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button><button class="btn" id="exportBtn" type="button">Export CSV</button></div>
+      </div>
+    </section>
+
+    <section class="card" id="affiliateSubmenuCard">
+      <h2 class="section-title">Struktur Menu Affiliate</h2>
+      <p class="muted">Affiliator baru wajib mengisi data pembayaran lengkap dan menunggu approval admin. Kode referral baru aktif setelah status affiliator disetujui.</p>
+      <div class="submenu-grid">
+        <a class="submenu-card" data-aff-tab="overview" href="admin-affiliate-v2.html?view=overview&v=24dx"><h3>Data Affiliate</h3><strong>Ringkasan Affiliate</strong><p>Statistik approval, referral, rekening, dan reward.</p><span class="btn secondary small">Buka Ringkasan</span></a>
+        <a class="submenu-card" data-aff-tab="list" href="admin-affiliate-v2.html?view=list&v=24dx"><h3>Daftar Affiliator</h3><strong>Kelola Affiliator</strong><p>Detail, salin kode, approve, tolak, verifikasi rekening, dan hapus.</p><span class="btn small">Buka Daftar</span></a>
+        <a class="submenu-card" data-aff-tab="reward" href="admin-affiliate-v2.html?view=reward&v=24dx"><h3>Reward / Komisi</h3><strong>Status Pembayaran</strong><p>Nominal reward, belum dibayar, sudah dibayar, dan catatan komisi.</p><span class="btn small">Buka Reward</span></a>
+      </div>
+    </section>
+
+    <section class="stats" id="overviewStats" data-view-section="overview">
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=all&v=24dx" data-stat-filter="all"><span>Total Affiliator</span><strong id="statAff">0</strong><small>Semua pendaftar affiliate.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=pending&v=24dx" data-stat-filter="pending"><span>Menunggu Approval</span><strong id="statPending">0</strong><small>Rekening lengkap, perlu disetujui admin.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=approved&v=24dx" data-stat-filter="approved"><span>Disetujui</span><strong id="statApproved">0</strong><small>Kode referral aktif dan bisa digunakan.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=incomplete&v=24dx" data-stat-filter="incomplete"><span>Belum Lengkap</span><strong id="statIncomplete">0</strong><small>Data rekening belum lengkap.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=rejected&v=24dx" data-stat-filter="rejected"><span>Ditolak</span><strong id="statRejected">0</strong><small>Affiliator yang ditolak admin.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=list&filter=verified&v=24dx" data-stat-filter="verified"><span>Rekening Valid</span><strong id="statVerified">0</strong><small>Akun pembayaran terverifikasi.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=unpaid&v=24dx" data-reward-filter="unpaid"><span>Reward Belum Dibayar</span><strong id="statRewardUnpaid">0</strong><small>Komisi referral belum dibayar.</small></a>
+      <a class="stat-card" href="admin-affiliate-v2.html?view=reward&reward=paid&v=24dx" data-reward-filter="paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral sudah dibayar.</small></a>
+    </section>
+
+    <section class="card" id="affiliateListCard" data-view-section="list">
+      <h2 class="section-title">Daftar Affiliator</h2>
+      <p class="muted">Kode referral hanya bisa disalin dan dianggap aktif jika status approval sudah <b>Disetujui</b>. Pendaftar dengan rekening belum lengkap tidak bisa di-approve.</p>
+      <div class="toolbar">
+        <label class="field">Cari Affiliate / Kode Referral<input id="affiliateSearch" placeholder="Cari nama, kode, email, atau WA"></label>
+        <label class="field">Status Approval<select id="approvalFilter"><option value="all">Semua Approval</option><option value="incomplete">Belum Lengkap</option><option value="pending">Menunggu Approval</option><option value="approved">Disetujui</option><option value="rejected">Ditolak</option></select></label>
+        <label class="field">Status Rekening<select id="payoutFilter"><option value="all">Semua Rekening</option><option value="empty">Belum Isi Rekening</option><option value="ready">Menunggu Verifikasi</option><option value="verified">Terverifikasi</option></select></label>
+        <button class="btn" id="applyAffiliateFilter" type="button">Cari</button>
+        <button class="btn secondary" id="resetAffiliateFilter" type="button">Reset</button>
+      </div>
+      <div class="affiliate-table" id="affiliateList"></div>
+    </section>
+
+    <section class="card" id="rewardCard" data-view-section="reward">
+      <h2 class="section-title">Reward / Komisi Affiliate</h2>
+      <p class="muted">Reward hanya dihitung dari affiliator yang sudah <b>Disetujui</b>. Affiliator pending, ditolak, atau belum lengkap tidak masuk perhitungan reward aktif.</p>
+      <div class="reward-toolbar">
+        <label class="field">Filter Status Reward<select id="rewardFilter"><option value="all">Semua Status</option><option value="unpaid">Belum Dibayar</option><option value="paid">Sudah Dibayar</option></select></label>
+        <button class="btn secondary" id="resetRewardFilter" type="button">Reset</button>
+      </div>
+      <div class="reward-table" id="rewardList"></div>
+    </section>
+
+    <section class="card detail-card" id="detailCard" data-view-section="list"></section>
+  </main>
 </div>
 <div class="toast" id="toast"></div>
 <div class="confirm" id="confirmModal"><div class="confirm-box"><h3 id="confirmTitle">Konfirmasi</h3><p id="confirmText"></p><div class="confirm-actions"><button class="btn secondary" id="cancelConfirm" type="button">Batal</button><button class="btn danger" id="confirmAction" type="button">Ya, Lanjutkan</button></div></div></div>
@@ -216,9 +213,42 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-
-
-
-
-<script>if(window.KamarSessionCompat25B){KamarSessionCompat25B.sync();document.addEventListener("click",function(){KamarSessionCompat25B.sync()},true);}</script></body>
+<script id="kamar-global-header-script">
+(function(){
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+</body>
 </html>

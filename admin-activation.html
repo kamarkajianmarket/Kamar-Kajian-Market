@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<script src="assets/js/kamar-session-final-26.js?v=26F"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aktivasi Akun & Fasilitas — Kamar Kajian Market</title>
@@ -51,7 +50,6 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-<link href="assets/css/kamar-data-online-25e.css?v=26F" rel="stylesheet"/>
 </head>
 <body>
   <main class="split-shell">
@@ -61,11 +59,11 @@
         <div class="menu-section">Utama</div>
         <a href="admin.html">Dashboard Admin</a>
         <div class="menu-section">Member & Akses</div>
-        <a href="admin-members.html?v=26F">Data Member</a><a href="admin-internal.html?v=26F">Data Internal</a>
-        <a class="active" href="admin-activation.html?v=26F">Aktivasi Akun & Fasilitas</a>
-        <a href="admin-data-check.html?v=26F">Cek Data Admin</a><a href="admin-connection-check.html?v=26F">Cek Koneksi DB</a>
+        <a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
+        <a class="active" href="admin-activation.html?v=24dg">Aktivasi Akun & Fasilitas</a>
+        <a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
         <div class="menu-section">Affiliate</div>
-        <a href="admin-affiliate-v2.html?view=overview&v=26F">Data Affiliate</a>
+        <a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
         <div class="menu-section">Konten Website</div>
         <a href="admin-banner.html">Banner Pengumuman</a>
         <a href="admin-video.html">Konten Video</a>
@@ -166,8 +164,8 @@
   <div id="toast" class="toast"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/kamar-config.js?v=26F"></script>
-  <script src="assets/js/kamar-supabase.js?v=26F"></script>
+  <script src="assets/js/kamar-config.js"></script>
+  <script src="assets/js/kamar-supabase.js"></script>
   <script>
   (function(){
     'use strict';
@@ -233,7 +231,7 @@
   }
   function clearSessionAndLogout(e){
     try{
-      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
     }catch(err){}
   }
   function buildHeader(){
@@ -258,6 +256,5 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
-<script src="assets/js/kamar-data-online-25e.js?v=26F"></script>
 </body>
 </html>

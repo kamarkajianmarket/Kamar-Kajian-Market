@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<script src="assets/js/kamar-session-final-26.js?v=26F"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cek Data Admin — Kamar Kajian Market</title>
@@ -40,21 +39,20 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-<link href="assets/css/kamar-data-online-25e.css?v=26F" rel="stylesheet"/>
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="admin.html"><span class="brand-mark">K</span><span>Kamar Kajian Market</span></a>
-    <div class="header-actions"><a class="btn secondary" href="admin.html">Dashboard Admin</a><a class="btn secondary" href="admin-members.html">Data Member</a><a class="btn secondary" href="admin-activation.html?v=26F">Aktivasi Akun</a></div>
+    <div class="header-actions"><a class="btn secondary" href="admin.html">Dashboard Admin</a><a class="btn secondary" href="admin-members.html">Data Member</a><a class="btn secondary" href="admin-activation.html?v=24dg">Aktivasi Akun</a></div>
   </header>
   <main class="shell">
     <div class="layout">
       <aside class="sidebar">
         <div class="label">ADMIN CHECK</div>
         <a href="admin.html">Dashboard Admin</a>
-        <a href="admin-members.html?v=26F">Data Member</a><a href="admin-internal.html?v=26F">Data Internal</a>
-        <a href="admin-activation.html?v=26F">Aktivasi Akun</a>
-        <a class="active" href="admin-data-check.html?v=26F">Cek Data Admin</a>
+        <a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
+        <a href="admin-activation.html?v=24dg">Aktivasi Akun</a>
+        <a class="active" href="admin-data-check.html?v=24cu">Cek Data Admin</a>
       </aside>
       <section class="main">
         <section class="card">
@@ -65,7 +63,7 @@
             <button class="btn" id="runCheck">Cek Data Sekarang</button>
             <button class="btn secondary" id="copyResult">Copy Hasil</button>
             <a class="btn secondary" href="admin-members.html">Buka Data Member</a>
-            <a class="btn secondary" href="admin-activation.html?v=26F">Buka Aktivasi</a>
+            <a class="btn secondary" href="admin-activation.html?v=24dg">Buka Aktivasi</a>
           </div>
         </section>
 
@@ -104,9 +102,9 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/kamar-config.js?v=26F"></script>
-  <script src="assets/js/kamar-supabase.js?v=26F"></script>
-  <script src="assets/js/kamar-auth.js?v=26F"></script>
+  <script src="assets/js/kamar-config.js"></script>
+  <script src="assets/js/kamar-supabase.js"></script>
+  <script src="assets/js/kamar-auth.js"></script>
   <script>
   (function(){
     var lastText='';
@@ -225,7 +223,7 @@
   }
   function clearSessionAndLogout(e){
     try{
-      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
     }catch(err){}
   }
   function buildHeader(){
@@ -250,6 +248,5 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
-<script src="assets/js/kamar-data-online-25e.js?v=26F"></script>
 </body>
 </html>

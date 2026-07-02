@@ -2,7 +2,6 @@
 
 <html lang="id">
 <head>
-<script src="assets/js/kamar-session-final-26.js?v=26F"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Dashboard Affiliate Kamar — Kamar Kajian Market</title>
@@ -462,7 +461,6 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
-<link href="assets/css/kamar-data-online-25e.css?v=26F" rel="stylesheet"/>
 </head>
 <body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div>
 <header class="site-header">
@@ -783,7 +781,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
   function clearSessionAndLogout(e){
     try{
-      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
     }catch(err){}
   }
   function buildHeader(){
@@ -808,5 +806,4 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=26F"></script><script src="assets/js/kamar-supabase.js?v=26F"></script><script src="assets/js/kamar-auth.js?v=26F"></script>
 </body></html>

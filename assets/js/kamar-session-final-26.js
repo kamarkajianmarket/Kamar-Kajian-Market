@@ -2,7 +2,7 @@
   'use strict';
   if(window.__KAMAR_SESSION_FINAL_26__) return;
   window.__KAMAR_SESSION_FINAL_26__ = true;
-  var VERSION='26';
+  var VERSION='26F';
   function file(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
   function get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
   function set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}

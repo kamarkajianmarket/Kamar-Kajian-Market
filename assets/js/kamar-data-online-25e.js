@@ -2,7 +2,7 @@
   'use strict';
   if(window.__KAMAR_DATA_ONLINE_25E__) return;
   window.__KAMAR_DATA_ONLINE_25E__ = true;
-  var VERSION='26';
+  var VERSION='26F';
   var FAC=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
   var state={client:null, viewRows:[], profileRows:[], accessRows:[], affiliateRows:[], members:[], internal:[], source:'init', error:''};
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script src="assets/js/kamar-session-final-26.js?v=26"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aktivasi Akun & Fasilitas — Kamar Kajian Market</title>
@@ -50,6 +51,7 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<link href="assets/css/kamar-data-online-25e.css?v=26" rel="stylesheet"/>
 </head>
 <body>
   <main class="split-shell">
@@ -59,11 +61,11 @@
         <div class="menu-section">Utama</div>
         <a href="admin.html">Dashboard Admin</a>
         <div class="menu-section">Member & Akses</div>
-        <a href="admin-members.html?v=24dh">Data Member</a><a href="admin-internal.html?v=24dh">Data Internal</a>
-        <a class="active" href="admin-activation.html?v=24dh">Aktivasi Akun & Fasilitas</a>
-        <a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+        <a href="admin-members.html?v=26">Data Member</a><a href="admin-internal.html?v=26">Data Internal</a>
+        <a class="active" href="admin-activation.html?v=26">Aktivasi Akun & Fasilitas</a>
+        <a href="admin-data-check.html?v=26">Cek Data Admin</a><a href="admin-connection-check.html?v=26">Cek Koneksi DB</a>
         <div class="menu-section">Affiliate</div>
-        <a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
+        <a href="admin-affiliate-v2.html?view=overview&v=26">Data Affiliate</a>
         <div class="menu-section">Konten Website</div>
         <a href="admin-banner.html">Banner Pengumuman</a>
         <a href="admin-video.html">Konten Video</a>
@@ -231,7 +233,7 @@
   }
   function clearSessionAndLogout(e){
     try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
     }catch(err){}
   }
   function buildHeader(){
@@ -256,5 +258,6 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
+<script src="assets/js/kamar-data-online-25e.js?v=26"></script>
 </body>
 </html>

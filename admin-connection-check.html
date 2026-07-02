@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script src="assets/js/kamar-session-final-26.js?v=26"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cek Koneksi Database | Admin Kamar</title>
@@ -39,15 +40,16 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<link href="assets/css/kamar-data-online-25e.css?v=26" rel="stylesheet"/>
 </head>
 <body>
 <header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><div class="header-actions"><a class="header-cta" href="admin.html">Dashboard Admin</a></div></header>
 <main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
-<div class="admin-menu-section">Utama</div><a href="admin.html?v=24dv">Dashboard Admin</a>
-<div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dv">Data Member</a><a href="admin-internal.html?v=24dv">Data Internal</a><a href="admin-activation.html?v=24dv">Aktivasi Akun & Fasilitas</a>
-<div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a><a href="admin-affiliate-v2.html?view=list&v=24dv">Daftar Affiliator</a><a href="admin-affiliate-v2.html?view=reward&v=24dv">Reward / Komisi</a>
+<div class="admin-menu-section">Utama</div><a href="admin.html?v=26">Dashboard Admin</a>
+<div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=26">Data Member</a><a href="admin-internal.html?v=26">Data Internal</a><a href="admin-activation.html?v=26">Aktivasi Akun & Fasilitas</a>
+<div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-v2.html?view=overview&v=26">Data Affiliate</a><a href="admin-affiliate-v2.html?view=list&v=26">Daftar Affiliator</a><a href="admin-affiliate-v2.html?view=reward&v=26">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html">Banner Pengumuman</a><a href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten & Materi</a><a href="admin-tools.html">File Tools</a>
-<div class="admin-menu-section">Kontrol Sistem</div><a class="active" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a><a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-maintenance.html">Maintenance Fasilitas</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html">Pengaturan Umum</a>
+<div class="admin-menu-section">Kontrol Sistem</div><a class="active" href="admin-connection-check.html?v=26">Cek Koneksi DB</a><a href="admin-data-check.html?v=26">Cek Data Admin</a><a href="admin-maintenance.html">Maintenance Fasilitas</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div><a data-kamar-logout href="member.html">Logout</a></aside>
 <section class="split-main">
   <section class="split-card hero"><div><span class="eyebrow">Database Connection Audit</span><h1>Cek Koneksi Supabase</h1><p>Halaman ini memeriksa dashboard utama, dashboard member, dashboard affiliator, dan dashboard admin: mana yang sudah membaca Supabase, mana yang masih fallback ke localStorage, dan tabel apa yang perlu diaktifkan supaya semua modul saling terhubung.</p><div class="hero-actions"><button class="btn" id="runBtn">Cek Sekarang</button><button class="btn secondary" id="copyBtn">Copy Report</button><button class="btn secondary" id="csvBtn">Export CSV</button></div></div><div class="note" id="connectionNote">Status awal: belum dicek.</div></section>
@@ -122,7 +124,7 @@ el('runBtn').onclick=run;el('copyBtn').onclick=function(){var txt=buildReport();
   }
   function clearSessionAndLogout(e){
     try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
     }catch(err){}
   }
   function buildHeader(){
@@ -147,4 +149,5 @@ el('runBtn').onclick=run;el('copyBtn').onclick=function(){var txt=buildReport();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
+<script src="assets/js/kamar-data-online-25e.js?v=26"></script>
 </body></html>

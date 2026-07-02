@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Data Member — Kamar Kajian Market</title><meta content="Cari, buka, dan ubah data member secara ringkas." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<html lang="id"><head>
+<script src="assets/js/kamar-session-final-26.js?v=26"></script><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Data Member — Kamar Kajian Market</title><meta content="Cari, buka, dan ubah data member secara ringkas." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
 body{background:#070707;color:var(--text)}
@@ -350,24 +351,25 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<link href="assets/css/kamar-data-online-25e.css?v=26" rel="stylesheet"/>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
-<a class="active" href="admin-members.html?v=24dh">Data Member</a>
-<a class="" href="admin-internal.html?v=24dh">Data Internal</a>
+<a class="active" href="admin-members.html?v=26">Data Member</a>
+<a class="" href="admin-internal.html?v=26">Data Internal</a>
 <a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<a href="admin-affiliate-v2.html?view=overview&v=26">Data Affiliate</a>
+<a href="admin-affiliate-v2.html?view=list&v=26">Daftar Affiliator</a>
+<a href="admin-affiliate-v2.html?view=reward&v=26">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div>
 <a class="" href="admin-banner.html">Banner Pengumuman</a>
 <a class="" href="admin-video.html">Konten Video</a>
 <a class="" href="admin-materials.html">Konten & Materi</a>
 <a class="" href="admin-tools.html">File Tools</a>
 <div class="admin-menu-section">Kontrol Sistem</div>
-<a class="" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+<a class="" href="admin-connection-check.html?v=26">Cek Koneksi DB</a>
 <a class="" href="admin-maintenance.html">Maintenance Fasilitas</a>
 <a class="" href="admin-page-control.html">Kontrol Halaman Utama</a>
 <a class="" href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
@@ -489,7 +491,7 @@ function render(){
   setTitle();var sc=scope();var rows=baseRows();var list=filterRows(rows);
   var c=el('adminMemberCount');if(c)c.textContent=(sc==='internal'?'Akun Internal: ':'Total Member: ')+rows.length+' | Tampil: '+list.length;
   var pc=el('adminPendingCount');if(pc)pc.textContent='Pending: '+rows.filter(isPending).length;
-  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="admin-row header"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);var mid=encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'');var mail=encodeURIComponent(emailOf(m)||'');var detailBtn='<button class="btn mini secondary" type="button" data-member-detail="'+esc(idOf(m)||emailOf(m)||m._merge_key||'')+'">Detail</button>';var manageBtn='<a class="btn mini" href="admin-activation.html?member='+mid+'&email='+mail+'&v=24dh">Kelola</a>';h+='<div class="admin-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(expiryOf(m))+'</div><div>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="admin-row-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':detailBtn+manageBtn)+'</div></div>'});wrap.innerHTML=h;wrap.querySelectorAll('[data-member-detail]').forEach(function(b){b.addEventListener('click',function(){showMemberDetail(b.getAttribute('data-member-detail'))})})}
+  var wrap=el('adminMembersList');if(wrap){var title=sc==='internal'?'Akun Internal':'Member';var h='<div class="admin-row header"><div>'+title+'</div><div>Kontak</div><div>Status</div><div>Akses Sampai</div><div>Fasilitas</div><div>Aksi</div></div>';if(!list.length)h+='<div class="admin-empty">Tidak ada data sesuai filter.</div>';list.forEach(function(m){var fac=facilitiesOf(m);var mid=encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'');var mail=encodeURIComponent(emailOf(m)||'');var detailBtn='<button class="btn mini secondary" type="button" data-member-detail="'+esc(idOf(m)||emailOf(m)||m._merge_key||'')+'">Detail</button>';var manageBtn='<a class="btn mini" href="admin-activation.html?member='+mid+'&email='+mail+'&v=26">Kelola</a>';h+='<div class="admin-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(idOf(m)||'-')+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(expiryOf(m))+'</div><div>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</div><div class="admin-row-actions">'+(sc==='internal'?'<span class="status-pill">Internal</span>':detailBtn+manageBtn)+'</div></div>'});wrap.innerHTML=h;wrap.querySelectorAll('[data-member-detail]').forEach(function(b){b.addEventListener('click',function(){showMemberDetail(b.getAttribute('data-member-detail'))})})}
   var rb=el('adminMemberReferralBody');if(rb){if(sc==='internal'){rb.innerHTML='<div class="admin-empty">Referral tidak ditampilkan untuk akun internal.</div>'}else{rb.innerHTML='<div class="admin-empty">Referral member akan dicek di menu Data Affiliate.</div>'}}
 }
 
@@ -505,7 +507,7 @@ function showMemberDetail(rowId){var m=findMember(rowId);if(!m){toast('Data memb
 +'<div class="admin-detail-box"><span>Fasilitas</span><strong>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</strong></div>'
 +'<div class="admin-detail-box"><span>Kode Referral Digunakan</span><strong>'+esc(code)+'</strong></div>'
 +'<div class="admin-detail-box"><span>Affiliator Terhubung</span><strong>'+esc(aff)+'</strong></div>'
-+'</div><div class="admin-detail-actions"><a class="btn" href="admin-activation.html?member='+encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'')+'&email='+encodeURIComponent(emailOf(m)||'')+'&v=24dh">Kelola Akses</a><button class="btn secondary" type="button" id="closeMemberDetail">Tutup Detail</button></div>';wrap.classList.remove('hidden');var close=el('closeMemberDetail');if(close)close.onclick=function(){wrap.classList.add('hidden')};wrap.scrollIntoView({behavior:'smooth',block:'start'})}
++'</div><div class="admin-detail-actions"><a class="btn" href="admin-activation.html?member='+encodeURIComponent(idOf(m)||emailOf(m)||m._merge_key||'')+'&email='+encodeURIComponent(emailOf(m)||'')+'&v=26">Kelola Akses</a><button class="btn secondary" type="button" id="closeMemberDetail">Tutup Detail</button></div>';wrap.classList.remove('hidden');var close=el('closeMemberDetail');if(close)close.onclick=function(){wrap.classList.add('hidden')};wrap.scrollIntoView({behavior:'smooth',block:'start'})}
 function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatusFilter');if(f&&st&&['active','pending','suspended'].indexOf(f)>=0)st.value=f}
 ['adminMemberSearch','adminMemberStatusFilter','adminMemberFacilityFilter'].forEach(function(id){var x=el(id);if(x)x.addEventListener(id==='adminMemberSearch'?'input':'change',render)});var r=el('adminMemberRefresh');if(r)r.addEventListener('click',load);document.addEventListener('DOMContentLoaded',function(){applyInitial();load()});if(document.readyState!=='loading'){applyInitial();load()}
 })();
@@ -523,7 +525,7 @@ function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatu
   }
   function clearSessionAndLogout(e){
     try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
     }catch(err){}
   }
   function buildHeader(){
@@ -548,4 +550,5 @@ function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatu
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
+<script src="assets/js/kamar-data-online-25e.js?v=26"></script>
 </body></html>

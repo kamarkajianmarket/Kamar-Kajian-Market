@@ -1,2 +1,1 @@
-// Step 25D neutral public session shim. No redirect, no logout.
-(function(){window.KamarPublicSession=window.KamarPublicSession||{};})();
+// Kamar Step 26 compatibility file. Public pages do not require session guard.

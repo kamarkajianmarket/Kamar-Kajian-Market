@@ -2,6 +2,7 @@
 
 <html lang="id">
 <head>
+<script src="assets/js/kamar-session-final-26.js?v=26"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Kamar Kajian Market — Market Logic Community</title>
@@ -1690,6 +1691,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<link href="assets/css/kamar-data-online-25e.css?v=26" rel="stylesheet"/>
 </head>
 <body class="public-home">
 <div class="page-glow page-glow-1"></div>
@@ -2215,7 +2217,7 @@ window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
   }
   function clearSessionAndLogout(e){
     try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
     }catch(err){}
   }
   function buildHeader(){

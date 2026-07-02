@@ -1,1 +1,2 @@
-// Kamar 25E: no hard redirect guard. Logout only is handled by kamar-data-online-25e.js.
+// Kamar Step 26: neutralized Step 25D guard. Final guard: kamar-session-final-26.js.
+window.KamarLegacySessionGuard25DNeutralized=true;

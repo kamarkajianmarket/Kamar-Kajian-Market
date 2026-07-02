@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Konten &amp; Materi — Kamar Kajian Market</title><meta content="Kelola link PDF, video rekaman, dan materi belajar." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<html lang="id"><head>
+<script src="assets/js/kamar-session-final-26.js?v=26"></script><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Konten &amp; Materi — Kamar Kajian Market</title><meta content="Kelola link PDF, video rekaman, dan materi belajar." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
 body{background:#070707;color:var(--text)}
@@ -290,6 +291,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<link href="assets/css/kamar-data-online-25e.css?v=26" rel="stylesheet"/>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
@@ -297,16 +299,16 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 <a class="" href="admin-members.html">Data Member</a>
 <a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<a href="admin-affiliate-v2.html?view=overview&v=26">Data Affiliate</a>
+<a href="admin-affiliate-v2.html?view=list&v=26">Daftar Affiliator</a>
+<a href="admin-affiliate-v2.html?view=reward&v=26">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div>
 <a class="" href="admin-banner.html">Banner Pengumuman</a>
 <a class="" href="admin-video.html">Konten Video</a>
 <a class="active" href="admin-materials.html">Konten & Materi</a>
 <a class="" href="admin-tools.html">File Tools</a>
 <div class="admin-menu-section">Kontrol Sistem</div>
-<a class="" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+<a class="" href="admin-connection-check.html?v=26">Cek Koneksi DB</a>
 <a class="" href="admin-maintenance.html">Maintenance Fasilitas</a>
 <a class="" href="admin-page-control.html">Kontrol Halaman Utama</a>
 <a class="" href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
@@ -390,7 +392,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
   function clearSessionAndLogout(e){
     try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
     }catch(err){}
   }
   function buildHeader(){
@@ -415,4 +417,5 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
+<script src="assets/js/kamar-data-online-25e.js?v=26"></script>
 </body></html>

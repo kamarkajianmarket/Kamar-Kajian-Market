@@ -1,4 +1,5 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=admin-affiliate-v2.html?view=overview&v=24dx"><script>location.replace("admin-affiliate-v2.html?view=overview&v=24dx")</script>
+<!DOCTYPE html><html><head>
+<script src="assets/js/kamar-session-final-26.js?v=26"></script><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=admin-affiliate-v2.html?view=overview&v=26"><script>location.replace("admin-affiliate-v2.html?view=overview&v=26")</script>
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -28,6 +29,7 @@
 }
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
+<link href="assets/css/kamar-data-online-25e.css?v=26" rel="stylesheet"/>
 </head><body>
 <script id="kamar-global-header-script">
 (function(){
@@ -41,7 +43,7 @@
   }
   function clearSessionAndLogout(e){
     try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+      if(window.KamarSessionFinal26){window.KamarSessionFinal26.logout();return;}
     }catch(err){}
   }
   function buildHeader(){
@@ -66,4 +68,8 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js?v=26"></script>
+<script src="assets/js/kamar-supabase.js?v=26"></script>
+<script src="assets/js/kamar-data-online-25e.js?v=26"></script>
 </body></html>

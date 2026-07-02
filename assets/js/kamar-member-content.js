@@ -1,1 +1,1 @@
-(function(){'use strict';/* Step 25D safe shim: old feature script disabled to prevent session redirect conflicts. */})();
+// Kamar Step 26 compatibility file. Member online data is handled by kamar-data-online-25e.js.

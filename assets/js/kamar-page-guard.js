@@ -1,1 +1,2 @@
-// Kamar 25E compatibility no-op. No automatic redirect on protected content pages.
+// Kamar Step 26: neutralized legacy page guard. Final guard: kamar-session-final-26.js.
+window.KamarLegacyPageGuardNeutralized=true;

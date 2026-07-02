@@ -248,6 +248,8 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
   }
 }
 </style>
+
+
 <style id="kamar-step24bo-member-payment">
 .member-payment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px;}
 .member-payment-card{border:1px solid rgba(238,206,122,.16);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.016));padding:22px;position:relative;overflow:hidden;min-height:190px;display:flex;flex-direction:column;align-items:flex-start;}
@@ -273,6 +275,8 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @media(max-width:720px){.activation-actions .btn{width:100%;min-width:0;}}
 @media(max-width:920px){.member-payment-grid{grid-template-columns:1fr}}
 </style>
+
+
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -303,7 +307,7 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
 <link href="assets/css/kamar-data-online-25e.css?v=26F" rel="stylesheet"/>
-<link href="assets/css/kamar-redesign-27.css?v=27" rel="stylesheet"/></head><body class="kkm-step27"><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a aria-disabled="true" class="disabled" href="member-materials.html">Kamar Edukasi 🔒</a><a aria-disabled="true" class="disabled" href="member-study.html">Kamar Study 🔒</a><a aria-disabled="true" class="disabled" href="member-private.html">Kamar Private 🔒</a><a aria-disabled="true" class="disabled" href="member-indicator.html">Kamar Indikator 🔒</a><a aria-disabled="true" class="disabled" href="member-robot.html">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Study 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 <div class="split-card kamar-title-card"><h1 id="facilityPageTitle">Aktivasi Fasilitas</h1></div>
 <section class="split-card" id="activationPageCard">
 <span class="mini-label">Form Aktivasi</span>
@@ -330,8 +334,8 @@ select option{background:#11100d!important;color:#fff4db!important;font-size:16p
 </label>
 </div>
 <div class="button-row activation-actions">
-<a class="btn activation-pay-btn" data-payment-placeholder="true" href="#" id="activationPayLink">Bayar</a>
-<a class="btn secondary activation-muted-btn" href="https://t.me/kajianmarketkamar" id="activationAdminLink" rel="noopener" target="_blank">Hubungi Admin</a>
+<a class="btn activation-pay-btn" id="activationPayLink" href="#" data-payment-placeholder="true">Bayar</a>
+<a class="btn secondary activation-muted-btn" id="activationAdminLink" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
 <a class="btn secondary activation-muted-btn" href="member-renewal.html">Kembali ke Pilihan Fasilitas</a>
 </div>
 <div class="payment-note-box activation-note-box" style="margin-top:18px"><strong>Catatan:</strong> sebelum pembayaran, pastikan menghubungi admin lebih dulu untuk konfirmasi apakah layanan masih tersedia, detail layanan, atau promo yang sedang berjalan (jika ada) dan hal teknis lainnya.<br/><br/>Setelah pembayaran, pastikan untuk menghubungi admin supaya aktivasi fasilitas lebih cepat diproses.</div>

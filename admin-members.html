@@ -256,6 +256,8 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
   }
 }
 </style>
+
+
 <style id="kamar-step24CA-admin-referral-table">
 .referral-table th{color:#f1dda2;text-transform:uppercase;letter-spacing:.12em;font-size:12px;text-align:left;padding:0 14px 4px}.referral-table td{background:rgba(255,255,255,.035);border-top:1px solid rgba(238,206,122,.13);border-bottom:1px solid rgba(238,206,122,.13);padding:14px;color:rgba(245,240,230,.82);font-weight:800}.referral-table td:first-child{border-left:1px solid rgba(238,206,122,.13);border-radius:16px 0 0 16px;color:#fff3d8}.referral-table td:last-child{border-right:1px solid rgba(238,206,122,.13);border-radius:0 16px 16px 0}
 </style>
@@ -306,6 +308,8 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
   .admin-row-actions{justify-content:flex-start!important;}
 }
 </style>
+
+
 <style id="kamar-step24dh-member-actions-detail">
 .admin-row-actions{display:flex!important;gap:10px!important;align-items:center!important;justify-content:flex-end!important;flex-wrap:wrap!important;}
 .admin-row .btn.mini{min-width:86px!important;padding:9px 13px!important;font-size:12px!important;}
@@ -317,6 +321,7 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 .admin-note-soft{color:rgba(245,240,230,.68);line-height:1.6;}
 @media(max-width:900px){.admin-detail-card-grid{grid-template-columns:1fr}.admin-row-actions{justify-content:flex-start!important}}
 </style>
+
 <style id="kamar-global-header-style">
 /* === KAMAR STEP 24DZ: Global Header Uniform — Admin / Member / Affiliate === */
 .kamar-global-header{
@@ -347,21 +352,21 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
 @media(max-width:480px){.kamar-global-brand span{font-size:16px!important}.kamar-global-btn{min-height:42px!important;padding:0 16px!important;font-size:14px!important}}
 </style>
 <link href="assets/css/kamar-data-online-25e.css?v=26F" rel="stylesheet"/>
-<link href="assets/css/kamar-redesign-27.css?v=27" rel="stylesheet"/></head><body class="kkm-step27"><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
-<div class="admin-menu-section">Member &amp; Akses</div>
+<div class="admin-menu-section">Member & Akses</div>
 <a class="active" href="admin-members.html?v=26F">Data Member</a>
 <a class="" href="admin-internal.html?v=26F">Data Internal</a>
-<a class="" href="admin-activation-v2.html">Aktivasi Akun &amp; Fasilitas</a>
+<a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&amp;v=26F">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&amp;v=26F">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&amp;v=26F">Reward / Komisi</a>
+<a href="admin-affiliate-v2.html?view=overview&v=26F">Data Affiliate</a>
+<a href="admin-affiliate-v2.html?view=list&v=26F">Daftar Affiliator</a>
+<a href="admin-affiliate-v2.html?view=reward&v=26F">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div>
 <a class="" href="admin-banner.html">Banner Pengumuman</a>
 <a class="" href="admin-video.html">Konten Video</a>
-<a class="" href="admin-materials.html">Konten &amp; Materi</a>
+<a class="" href="admin-materials.html">Konten & Materi</a>
 <a class="" href="admin-tools.html">File Tools</a>
 <div class="admin-menu-section">Kontrol Sistem</div>
 <a class="" href="admin-connection-check.html?v=26F">Cek Koneksi DB</a>
@@ -405,6 +410,8 @@ button:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.
   members.forEach(function(m){var a=findAff(m.referralCode);var tr=document.createElement('tr');var fasilitas=(m.facilities&&m.facilities.length)?m.facilities.join(', '):'Belum ada fasilitas';tr.innerHTML='<td>'+esc(m.fullName||'Member Kamar')+'</td><td>'+esc(m.referralCode)+'</td><td>'+esc(a?a.fullName:'Kode belum terhubung')+'</td><td>'+esc(fasilitas)+'</td><td>'+esc(m.status||'Member Website')+'</td>';body.appendChild(tr);});
 })();
 </script>
+
+
 <script id="kamar-step24DC-admin-members-clean-split">
 (function(){
 'use strict';
@@ -505,6 +512,7 @@ function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatu
 ['adminMemberSearch','adminMemberStatusFilter','adminMemberFacilityFilter'].forEach(function(id){var x=el(id);if(x)x.addEventListener(id==='adminMemberSearch'?'input':'change',render)});var r=el('adminMemberRefresh');if(r)r.addEventListener('click',load);document.addEventListener('DOMContentLoaded',function(){applyInitial();load()});if(document.readyState!=='loading'){applyInitial();load()}
 })();
 </script>
+
 <script id="kamar-global-header-script">
 (function(){
   function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}

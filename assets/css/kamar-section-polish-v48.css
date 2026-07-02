@@ -1,0 +1,428 @@
+/* KAMAR STEP 48 — Affiliate + Traktir Precision Polish
+   Fokus: memperbaiki section affiliate dan traktir agar rapi, simetris, readable, tanpa overlap. */
+
+/* ===== AFFILIATE SECTION — PREMIUM READABLE FORMATION ===== */
+body.public-home #affiliate-kamar.section-shell{
+  padding: clamp(26px, 4vw, 54px) !important;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(201,157,81,.14), transparent 24rem),
+    linear-gradient(135deg, #ffffff 0%, #fbf7ef 54%, #f2eadc 100%) !important;
+  border: 1px solid rgba(20,24,28,.10) !important;
+  box-shadow: 0 26px 80px rgba(22,24,25,.10) !important;
+  overflow: visible !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-program-box{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: clamp(20px, 3vw, 34px) !important;
+  width: 100% !important;
+}
+
+body.public-home #affiliate-kamar .section-heading.centered{
+  max-width: 920px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  align-items: center !important;
+}
+
+body.public-home #affiliate-kamar .section-heading h2{
+  color: #101418 !important;
+  font-size: clamp(34px, 5vw, 64px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.075em !important;
+  text-wrap: balance !important;
+}
+
+body.public-home #affiliate-kamar .section-heading p{
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  color: #59636c !important;
+  font-size: clamp(15px, 1.6vw, 18px) !important;
+  line-height: 1.72 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-program-grid{
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr) !important;
+  gap: clamp(18px, 2.6vw, 28px) !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card,
+body.public-home #affiliate-kamar .affiliate-note-card{
+  min-height: unset !important;
+  height: auto !important;
+  overflow: visible !important;
+  border-radius: 30px !important;
+  padding: clamp(24px, 3vw, 36px) !important;
+  box-shadow: 0 18px 54px rgba(17,20,23,.10) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card{
+  position: relative !important;
+  display: grid !important;
+  gap: 20px !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(215,180,109,.28), transparent 20rem),
+    linear-gradient(145deg, #14191f 0%, #1e2931 58%, #0f151a 100%) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  color: #fff !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card::after{
+  content:"";
+  position:absolute;
+  inset:16px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.08);
+  pointer-events:none;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card .kamar-badge{
+  background: rgba(215,180,109,.15) !important;
+  color: #ffe2a4 !important;
+  border-color: rgba(215,180,109,.28) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card h3{
+  margin: 0 !important;
+  max-width: 620px !important;
+  color: #fff7e8 !important;
+  font-size: clamp(28px, 3.2vw, 46px) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.06em !important;
+  text-wrap: balance !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission{
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, auto) minmax(220px, 1fr) minmax(0, auto) !important;
+  gap: clamp(10px, 2vw, 18px) !important;
+  align-items: center !important;
+  padding: clamp(18px, 3vw, 28px) !important;
+  border-radius: 28px !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.055)),
+    radial-gradient(circle at 50% 50%, rgba(215,180,109,.18), transparent 22rem) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09) !important;
+  text-align: center !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small{
+  margin:0 !important;
+  color: #e7ddc8 !important;
+  font-size: clamp(11px, 1.1vw, 13px) !important;
+  line-height: 1.35 !important;
+  font-weight: 900 !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission strong{
+  display: block !important;
+  color: #ffd979 !important;
+  font-size: clamp(42px, 6vw, 76px) !important;
+  line-height: .92 !important;
+  letter-spacing: -0.08em !important;
+  font-weight: 1000 !important;
+  text-shadow: 0 12px 36px rgba(215,180,109,.25) !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card p{
+  position: relative !important;
+  z-index: 1 !important;
+  margin: 0 !important;
+  color: #d9d0bf !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-list{
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item{
+  display: grid !important;
+  grid-template-columns: minmax(150px, .42fr) minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+  padding: 16px 18px !important;
+  border-radius: 20px !important;
+  background: rgba(255,255,255,.075) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item span{
+  color: #ffdf8f !important;
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  font-weight: 950 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item small{
+  color: #d8d0c2 !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-actions,
+body.public-home #affiliate-kamar .affiliate-actions-admin-only{
+  position: relative !important;
+  z-index: 1 !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-footnote{
+  color: #bfb5a5 !important;
+  font-size: 12.8px !important;
+  line-height: 1.65 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card{
+  display: grid !important;
+  align-content: start !important;
+  gap: 18px !important;
+  background: #fff !important;
+  border: 1px solid rgba(17,20,23,.10) !important;
+  color: #111417 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card h3{
+  margin: 0 !important;
+  color: #101418 !important;
+  font-size: clamp(28px, 3.6vw, 48px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.06em !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card p{
+  margin: 0 !important;
+  color: #56616b !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps{
+  counter-reset: affiliateStep !important;
+  display: grid !important;
+  gap: 12px !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps span{
+  counter-increment: affiliateStep !important;
+  display: grid !important;
+  grid-template-columns: 38px minmax(0,1fr) !important;
+  gap: 12px !important;
+  align-items: center !important;
+  min-height: 58px !important;
+  padding: 12px 14px !important;
+  border-radius: 18px !important;
+  background: #f7f1e7 !important;
+  border: 1px solid rgba(17,20,23,.08) !important;
+  color: #1b2228 !important;
+  font-weight: 850 !important;
+  line-height: 1.4 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps span::before{
+  content: counter(affiliateStep, decimal-leading-zero);
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background: #111820;
+  color:#ffda83;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+/* ===== TRAKTIR SECTION — SYMMETRIC PREMIUM CTA ===== */
+body.public-home #traktir-kamar.section-shell{
+  padding: clamp(26px, 4vw, 54px) !important;
+  background:
+    radial-gradient(circle at 82% 10%, rgba(14,95,84,.10), transparent 24rem),
+    linear-gradient(135deg, #101820 0%, #1b2831 62%, #10151a 100%) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 28px 90px rgba(16,21,26,.20) !important;
+  color:#fff !important;
+}
+
+body.public-home #traktir-kamar .section-heading.centered{
+  margin: 0 auto 28px !important;
+  text-align:center !important;
+  align-items:center !important;
+  max-width: 860px !important;
+}
+
+body.public-home #traktir-kamar .section-heading h2{
+  color:#fff8e8 !important;
+  font-size: clamp(38px, 5vw, 70px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.075em !important;
+}
+
+body.public-home #traktir-kamar .section-heading p{
+  color:#cfc6b7 !important;
+  max-width: 820px !important;
+  font-size: clamp(15px, 1.6vw, 18px) !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid,
+body.public-home #traktir-kamar .simple-traktir-grid{
+  display: grid !important;
+  grid-template-columns: minmax(0,.88fr) minmax(420px,1.12fr) !important;
+  gap: clamp(18px, 3vw, 30px) !important;
+  align-items: stretch !important;
+  max-width: 1040px !important;
+  margin: 0 auto !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid::before{
+  content: "Dukungan ini bersifat sukarela. Fokus Kamar tetap pada edukasi, ruang diskusi, dan pengembangan fasilitas komunitas secara sehat.";
+  display: flex !important;
+  align-items: end !important;
+  min-height: 100% !important;
+  padding: clamp(24px, 3vw, 34px) !important;
+  border-radius: 30px !important;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.035)),
+    radial-gradient(circle at 0% 0%, rgba(215,180,109,.20), transparent 18rem) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  color: #eadfcf !important;
+  font-size: clamp(18px, 2vw, 26px) !important;
+  line-height: 1.35 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.035em !important;
+}
+
+body.public-home #traktir-kamar .traktir-card,
+body.public-home #traktir-kamar .simple-traktir-card{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  display: grid !important;
+  justify-items: center !important;
+  align-content: center !important;
+  gap: 18px !important;
+  min-height: 420px !important;
+  padding: clamp(26px, 4vw, 46px) !important;
+  border-radius: 34px !important;
+  text-align: center !important;
+  background: linear-gradient(180deg, #fffaf1 0%, #f3e7d0 100%) !important;
+  border: 1px solid rgba(255,255,255,.36) !important;
+  box-shadow: 0 28px 70px rgba(0,0,0,.20) !important;
+  color: #111417 !important;
+}
+
+body.public-home #traktir-kamar .traktir-card .kamar-badge{
+  background:#ead6ad !important;
+  color:#70501a !important;
+  border-color: rgba(112,80,26,.16) !important;
+}
+
+body.public-home #traktir-kamar .traktir-card h3{
+  margin:0 !important;
+  color:#101418 !important;
+  font-size: clamp(36px, 4.8vw, 66px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.08em !important;
+  text-wrap: balance !important;
+}
+
+body.public-home #traktir-kamar .traktir-card p{
+  margin:0 !important;
+  max-width: 720px !important;
+  color:#535d66 !important;
+  font-size: clamp(15px, 1.5vw, 18px) !important;
+  line-height:1.72 !important;
+}
+
+body.public-home #traktir-kamar .traktir-short-note{
+  margin-top:4px !important;
+  padding: 12px 18px !important;
+  border-radius: 999px !important;
+  background: rgba(184,138,61,.12) !important;
+  border: 1px solid rgba(184,138,61,.18) !important;
+  color:#73521b !important;
+  font-size: clamp(15px, 1.4vw, 18px) !important;
+  font-weight: 950 !important;
+  line-height:1.3 !important;
+}
+
+body.public-home #traktir-kamar .traktir-actions-simple{
+  margin-top: 4px !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+
+body.public-home #traktir-kamar .traktir-actions-simple .btn,
+body.public-home #traktir-kamar .traktir-actions-simple .btn-primary{
+  min-height: 54px !important;
+  padding: 15px 28px !important;
+  color:#13110b !important;
+  background: linear-gradient(135deg, #c69a4b 0%, #f5d98b 55%, #bb8d3d 100%) !important;
+  border: 1px solid rgba(255,255,255,.55) !important;
+  box-shadow: 0 18px 40px rgba(187,141,61,.32) !important;
+}
+
+/* ===== RESPONSIVE SAFETY ===== */
+@media (max-width: 960px){
+  body.public-home #affiliate-kamar .affiliate-program-grid,
+  body.public-home #traktir-kamar .traktir-grid,
+  body.public-home #traktir-kamar .simple-traktir-grid{
+    grid-template-columns: 1fr !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission{
+    grid-template-columns: 1fr !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-benefit-item{
+    grid-template-columns: 1fr !important;
+  }
+  body.public-home #traktir-kamar .traktir-grid::before{
+    min-height: 180px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 560px){
+  body.public-home #affiliate-kamar.section-shell,
+  body.public-home #traktir-kamar.section-shell{
+    padding: 20px !important;
+    border-radius: 26px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-main-card,
+  body.public-home #affiliate-kamar .affiliate-note-card,
+  body.public-home #traktir-kamar .traktir-card{
+    padding: 22px !important;
+    border-radius: 24px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission strong{
+    font-size: clamp(34px, 13vw, 50px) !important;
+  }
+}

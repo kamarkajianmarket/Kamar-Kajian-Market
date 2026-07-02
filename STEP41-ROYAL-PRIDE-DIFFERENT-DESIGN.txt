@@ -1,0 +1,1 @@
+Step 41: desain visual dibuat berbeda. Logic auth/session/Supabase tidak diubah. Tombol login/daftar member publik dihapus. Join Grup Telegram dipaksa pojok kanan header.

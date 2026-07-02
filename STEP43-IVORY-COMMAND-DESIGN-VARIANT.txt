@@ -1,0 +1,1 @@
+Step 43: Imperial Ivory Command Design Variant. Homepage rewritten directly. Logic files untouched. Member login/register public CTA tetap tidak ditampilkan.

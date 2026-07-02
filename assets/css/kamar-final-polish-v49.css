@@ -1,0 +1,297 @@
+/* KAMAR STEP 49 — Final Visual Readability Polish
+   Fokus: hero lebih readable, affiliate reward tidak overlap, traktir lebih simple-simetris.
+   Hanya CSS override; tidak mengubah JS, link, FAQ, atau logic card. */
+
+/* ===== HERO READABILITY FIX ===== */
+body.public-home .hero{
+  grid-template-columns: minmax(0, .98fr) minmax(360px, 1.02fr) !important;
+  gap: clamp(14px, 2vw, 22px) !important;
+  padding: clamp(12px, 1.8vw, 20px) !important;
+}
+
+body.public-home .hero-copy{
+  justify-content: center !important;
+  min-height: clamp(500px, 62vh, 650px) !important;
+  padding: clamp(32px, 4.4vw, 56px) !important;
+}
+
+body.public-home .hero h1{
+  max-width: 720px !important;
+  font-size: clamp(42px, 5.05vw, 68px) !important;
+  line-height: 1.07 !important;
+  letter-spacing: -0.055em !important;
+  text-wrap: balance !important;
+  word-spacing: .01em !important;
+}
+
+body.public-home .hero .eyebrow{
+  max-width: 100% !important;
+  white-space: normal !important;
+  text-align: left !important;
+}
+
+body.public-home .hero-actions{
+  margin-top: 8px !important;
+}
+
+body.public-home .hero-visual,
+body.public-home .hero-person{
+  min-height: clamp(500px, 62vh, 650px) !important;
+}
+
+body.public-home .hero-badges-on-visual{
+  gap: 10px !important;
+  padding: 12px 14px !important;
+}
+
+body.public-home .hero-badges-on-visual span{
+  min-width: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+}
+
+/* ===== AFFILIATE: REWARD MUST NOT OVERLAP ===== */
+body.public-home #affiliate-kamar .affiliate-program-grid{
+  grid-template-columns: minmax(0, 1fr) minmax(360px, .86fr) !important;
+  align-items: stretch !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card{
+  gap: 18px !important;
+  padding: clamp(26px, 3vw, 34px) !important;
+  overflow: hidden !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card::after{
+  inset: 14px !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card h3{
+  max-width: 580px !important;
+  font-size: clamp(30px, 3.15vw, 44px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.052em !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: clamp(20px, 2.6vw, 28px) !important;
+  border-radius: 26px !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.055)),
+    linear-gradient(90deg, rgba(215,180,109,.18), rgba(215,180,109,.06)) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small{
+  display: block !important;
+  width: 100% !important;
+  color: #f0e6d5 !important;
+  font-size: clamp(11px, .95vw, 13px) !important;
+  line-height: 1.35 !important;
+  letter-spacing: .16em !important;
+  text-align: center !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small:first-child{
+  opacity: .92 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small:last-child{
+  color: #ffdf91 !important;
+  opacity: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission strong{
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  color: #ffdb78 !important;
+  font-size: clamp(42px, 4.45vw, 62px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.055em !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  text-shadow: 0 10px 30px rgba(215,180,109,.26) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item{
+  grid-template-columns: minmax(132px, .36fr) minmax(0, 1fr) !important;
+  padding: 15px 16px !important;
+  gap: 12px !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item span,
+body.public-home #affiliate-kamar .affiliate-benefit-item small{
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-footnote{
+  color: rgba(236,228,216,.82) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card{
+  border-radius: 30px !important;
+  padding: clamp(26px, 3vw, 36px) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card h3{
+  font-size: clamp(32px, 3.4vw, 46px) !important;
+  line-height: 1.06 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps span{
+  min-height: 54px !important;
+  padding: 12px 14px !important;
+  line-height: 1.34 !important;
+  font-size: 14.5px !important;
+}
+
+/* ===== TRAKTIR: SIMPLE, SYMMETRIC, ELEGANT ===== */
+body.public-home #traktir-kamar.section-shell{
+  padding: clamp(28px, 4.2vw, 58px) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(215,180,109,.14), transparent 30rem),
+    linear-gradient(135deg, #101820 0%, #18252d 58%, #101418 100%) !important;
+  border-radius: clamp(28px, 3vw, 42px) !important;
+  overflow: hidden !important;
+}
+
+body.public-home #traktir-kamar .section-heading.centered{
+  margin-bottom: clamp(22px, 3vw, 34px) !important;
+  max-width: 860px !important;
+}
+
+body.public-home #traktir-kamar .section-heading h2{
+  font-size: clamp(40px, 5vw, 64px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.065em !important;
+}
+
+body.public-home #traktir-kamar .section-heading p{
+  max-width: 780px !important;
+  line-height: 1.65 !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid,
+body.public-home #traktir-kamar .simple-traktir-grid{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  gap: 0 !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid::before,
+body.public-home #traktir-kamar .simple-traktir-grid::before{
+  content: none !important;
+  display: none !important;
+}
+
+body.public-home #traktir-kamar .traktir-card,
+body.public-home #traktir-kamar .simple-traktir-card{
+  min-height: 0 !important;
+  max-width: 760px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: clamp(28px, 4vw, 46px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  border-radius: 32px !important;
+  background:
+    linear-gradient(180deg, #fffaf1 0%, #f6ecd9 100%) !important;
+  box-shadow: 0 22px 60px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.8) !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+}
+
+body.public-home #traktir-kamar .traktir-card .kamar-badge{
+  margin-bottom: 2px !important;
+}
+
+body.public-home #traktir-kamar .traktir-card h3{
+  font-size: clamp(34px, 4.2vw, 56px) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.065em !important;
+}
+
+body.public-home #traktir-kamar .traktir-card p{
+  max-width: 620px !important;
+  font-size: clamp(15px, 1.35vw, 17px) !important;
+  line-height: 1.72 !important;
+}
+
+body.public-home #traktir-kamar .traktir-short-note{
+  max-width: 100% !important;
+  margin-top: 2px !important;
+  padding: 10px 16px !important;
+  font-size: clamp(14px, 1.25vw, 16px) !important;
+  line-height: 1.35 !important;
+  border-radius: 16px !important;
+}
+
+body.public-home #traktir-kamar .traktir-actions-simple .btn,
+body.public-home #traktir-kamar .traktir-actions-simple .btn-primary{
+  min-height: 50px !important;
+  padding: 14px 24px !important;
+  border-radius: 999px !important;
+}
+
+/* ===== RESPONSIVE REBALANCE ===== */
+@media (max-width: 980px){
+  body.public-home .hero,
+  body.public-home #affiliate-kamar .affiliate-program-grid{
+    grid-template-columns: 1fr !important;
+  }
+
+  body.public-home .hero-copy,
+  body.public-home .hero-visual,
+  body.public-home .hero-person{
+    min-height: auto !important;
+  }
+
+  body.public-home .hero h1{
+    font-size: clamp(38px, 9vw, 60px) !important;
+    line-height: 1.06 !important;
+  }
+
+  body.public-home #affiliate-kamar .affiliate-benefit-item{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 560px){
+  body.public-home .hero h1{
+    font-size: clamp(34px, 12vw, 48px) !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  body.public-home #affiliate-kamar .affiliate-commission strong{
+    font-size: clamp(34px, 10.8vw, 48px) !important;
+    letter-spacing: -0.045em !important;
+  }
+
+  body.public-home #affiliate-kamar .affiliate-steps span{
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    font-size: 13.5px !important;
+  }
+
+  body.public-home #traktir-kamar .traktir-card,
+  body.public-home #traktir-kamar .simple-traktir-card{
+    padding: 24px !important;
+    border-radius: 26px !important;
+  }
+}

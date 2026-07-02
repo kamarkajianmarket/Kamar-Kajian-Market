@@ -1,0 +1,18 @@
+KAMAR STEP 39 — ROYAL PRIDE FULL VISUAL REDESIGN
+
+Basis: Step 38 / Step 36 stabil.
+Perubahan hanya layer visual CSS.
+Tidak mengubah:
+- Supabase config
+- Supabase Auth
+- session guard
+- admin/member/affiliate logic
+- tulisan/materi komunikasi
+- logo Kamar
+- karakter bertopeng
+- jenis fasilitas/traktir/affiliate
+
+File utama:
+- assets/css/kamar-royal-pride-v39.css
+
+CSS ini dipasang di semua HTML sebagai layer visual terakhir.

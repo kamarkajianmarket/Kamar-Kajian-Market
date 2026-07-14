@@ -271,7 +271,7 @@
     var lines=['Halo Admin Kamar, saya ingin mengirim data akun penerima pembayaran affiliate.','Nama Affiliate: '+(aff.fullName||'-'),'Kode Referral: '+(aff.referralCode||'-'),'Nama Rekening/KTP: '+fullName,'Bank: '+bankName,'Nomor Rekening: '+accountNumber,'Catatan: dokumen identitas tidak saya unggah ke website dan akan saya kirim hanya melalui admin resmi bila diminta.'];
     try{navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n'));}catch(e){}
     alert('Data rekening tersimpan. Pesan verifikasi sudah disiapkan/salin manual jika dibutuhkan. Lanjut hubungi admin resmi.');
-    window.open('https://t.me/kajianmarketkamar','_blank','noopener');
+    window.open('https://telegram.me/kajianmarketkamar','_blank','noopener');
   }
 
   byId('copyDashCode').addEventListener('click',function(){

@@ -40,7 +40,7 @@ body{background:#070707;color:var(--text)}
 <div class="button-row" style="margin-top:18px">
 <a class="btn primary disabled-soft" href="#" aria-disabled="true">Kamar Study Coming Soon</a>
 <a class="btn secondary" href="dashboard.html">Kembali ke Dashboard</a>
-<a class="btn secondary" href="https://t.me/kajianmarketkamar" rel="noopener" target="_blank">Hubungi Admin</a>
+<a class="btn secondary" href="https://telegram.me/kajianmarketkamar" rel="noopener" target="_blank">Hubungi Admin</a>
 </div>
 </section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>

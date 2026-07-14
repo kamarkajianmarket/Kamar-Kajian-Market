@@ -54,7 +54,7 @@ body{background:#070707;color:var(--text)}
 </div>
 <div class="button-row activation-actions">
 <a class="btn activation-pay-btn" id="activationPayLink" href="#" data-payment-placeholder="true">Bayar</a>
-<a class="btn secondary activation-muted-btn" id="activationAdminLink" href="https://t.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
+<a class="btn secondary activation-muted-btn" id="activationAdminLink" href="https://telegram.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
 <a class="btn secondary activation-muted-btn" href="member-renewal.html">Kembali ke Pilihan Fasilitas</a>
 </div>
 <div class="payment-note-box activation-note-box" style="margin-top:18px"><strong>Catatan:</strong> sebelum pembayaran, pastikan menghubungi admin lebih dulu untuk konfirmasi apakah layanan masih tersedia, detail layanan, atau promo yang sedang berjalan (jika ada) dan hal teknis lainnya.<br/><br/>Setelah pembayaran, pastikan untuk menghubungi admin supaya aktivasi fasilitas lebih cepat diproses.</div>
@@ -80,7 +80,7 @@ body{background:#070707;color:var(--text)}
   if(text) text.textContent='Pilih kebutuhan dan durasi untuk '+facility+'. Setelah itu hubungi admin untuk konfirmasi.';
   function buildMessage(){
     const lines=['Halo Admin Kamar, saya ingin aktivasi fasilitas.','Fasilitas: '+facility,'Kebutuhan: '+(need?need.value:''),'Durasi: '+(duration?duration.value:''),note&&note.value.trim()?('Catatan: '+note.value.trim()):''].filter(Boolean);
-    return 'https://t.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
+    return 'https://telegram.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
   }
   const paymentLinks={
     indikator:{

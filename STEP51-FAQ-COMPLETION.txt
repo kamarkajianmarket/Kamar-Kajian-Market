@@ -1,0 +1,14 @@
+KAMAR V5 STEP 51 — FAQ COMPLETION
+
+Perubahan terbatas pada FAQ homepage:
+- Menambahkan kategori Kamar Study (5 FAQ)
+- Menambahkan kategori Telegram & Keamanan (5 FAQ)
+- Menambahkan kategori Affiliate & Traktir (5 FAQ)
+
+Tidak diubah:
+- desain homepage
+- Supabase/Auth/session
+- admin/member/affiliate dashboard
+- JavaScript logic
+- link Telegram kompatibel telegram.me
+- card fasilitas dan FAQ click behavior

@@ -1,0 +1,18 @@
+STEP 54 — KAMAR PRIVATE CURRICULUM
+
+File berubah:
+- index.html
+- assets/css/kamar-facilities-v2.css
+- assets/js/kamar-facilities-v2.js
+- assets/facilities/private/chapters/chapter-01.png sampai chapter-20.png
+
+Perubahan:
+- Benefit + Dijelaskan secara langsung
+- Free Belajar Ulang Lifetime
+- 20 chapter interaktif dengan roadmap, navigasi horizontal, deskripsi, cakupan materi, tujuan, dan lightbox
+- Graduation & Continuous Mentoring
+- Market Assessment minimal 90%, remedial/belajar ulang
+- Stop Loss/Cut Loss kontekstual
+- Money/Risk Management dan Psikologi melalui treatment personal
+
+Tidak mengubah Supabase, Auth, Admin, Member, Affiliate, database, atau logic internal lain.

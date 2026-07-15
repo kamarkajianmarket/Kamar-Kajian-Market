@@ -1,0 +1,12 @@
+STEP 53 — INTERACTIVE FACILITY FINAL
+Basis: Step 52 Sprint 1
+Changes limited to public homepage facilities:
+- 5 facilities only: Edukasi, Signal, Private, Indikator, Robot.
+- One dynamic detail panel; standalone Study/Indicator showcase sections removed from page flow.
+- Added Private chapter previews and Robot MT5 preview.
+- Added Kamar Edukasi 2x/week, 100 active participants, slot retention, waiting list.
+- Kamar Study renamed Kamar Signal on public homepage.
+- Kamar Private: lifetime mentoring, flexible material/budget, weekly evaluation, free Kamar AI.
+- Kamar Indikator: TradingView + MT5, all timeframe + all pair wording.
+- Kamar Robot: main Auto Entry Normal/Perfect SnD; Telegram Notification under Add-On.
+- Admin/member/affiliate/Supabase logic not changed.

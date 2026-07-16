@@ -1,0 +1,11 @@
+STEP 55 — Premium Motion + Kamar Signal Source
+
+Files changed/added:
+- index.html
+- assets/css/kamar-premium-motion-v55.css
+- assets/js/kamar-premium-motion-v55.js
+
+Changes:
+1. Adds restrained premium scroll reveal, card depth, pointer glow, gallery lift, button sheen, and smoother chapter transitions.
+2. Adds explicit Kamar Signal copy: signal comes from Kamar AI and zones from Indikator Kamar Auto Zone.
+3. No Supabase, Auth, Admin, Member, Affiliate dashboard, database, or facility business logic changed.

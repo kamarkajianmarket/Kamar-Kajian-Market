@@ -1,0 +1,31 @@
+/* Step 55 — premium motion layer. Visual only; no business logic changes. */
+:root{--motion-ease:cubic-bezier(.22,1,.36,1)}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:no-preference){
+  .premium-reveal{opacity:0;transform:translateY(28px) scale(.985);filter:blur(7px);transition:opacity .85s var(--motion-ease),transform .85s var(--motion-ease),filter .85s var(--motion-ease)}
+  .premium-reveal.is-visible{opacity:1;transform:none;filter:none}
+  .premium-reveal[data-delay="1"]{transition-delay:.08s}.premium-reveal[data-delay="2"]{transition-delay:.16s}.premium-reveal[data-delay="3"]{transition-delay:.24s}
+}
+.facility-selector-v2 .facility-card{isolation:isolate;will-change:transform;transform-style:preserve-3d}
+.facility-selector-v2 .facility-card::after{content:"";position:absolute;inset:-45%;z-index:-1;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--card-accent,#184d3a) 18%,transparent),transparent 36%);opacity:0;transition:opacity .35s ease;pointer-events:none}
+.facility-selector-v2 .facility-card:hover::after,.facility-selector-v2 .facility-card.active::after{opacity:1}
+.facility-selector-v2 .facility-card:hover{transform:perspective(900px) translateY(-7px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))!important}
+.facility-panel-v2{position:relative;isolation:isolate}
+.facility-panel-v2::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(650px circle at var(--px,78%) var(--py,18%),color-mix(in srgb,var(--panel-accent) 12%,transparent),transparent 58%);transition:background-position .5s ease}
+.facility-panel-v2.active:not([hidden]){animation:premiumPanelIn .62s var(--motion-ease) both}
+.gallery-stage{transition:transform .5s var(--motion-ease),box-shadow .5s var(--motion-ease)}
+.gallery-stage:hover{transform:translateY(-4px) scale(1.008);box-shadow:0 28px 66px rgba(22,29,38,.23)}
+.gallery-stage img{transition:opacity .28s ease,transform .7s var(--motion-ease),filter .45s ease!important}
+.gallery-stage:hover img{transform:scale(1.018)}
+.btn{position:relative;overflow:hidden;isolation:isolate;transition:transform .3s var(--motion-ease),box-shadow .3s ease!important}
+.btn::after{content:"";position:absolute;inset:-1px;z-index:-1;background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.34) 47%,transparent 69%);transform:translateX(-125%);transition:transform .8s var(--motion-ease)}
+.btn:hover{transform:translateY(-2px)}.btn:hover::after{transform:translateX(125%)}
+.facility-category,.facility-pill{transition:transform .3s var(--motion-ease),box-shadow .3s ease}.facility-panel-v2.active .facility-category{box-shadow:0 10px 26px color-mix(in srgb,var(--panel-accent) 24%,transparent)}
+.chapter-visual img.is-changing{opacity:0!important;filter:blur(10px)!important;transform:scale(.975)!important}
+.chapter-visual img{transition:opacity .36s ease,filter .42s ease,transform .65s var(--motion-ease)!important}
+@keyframes premiumPanelIn{0%{opacity:0;transform:translateY(14px) scale(.992);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
+@media(max-width:720px){
+  .facility-selector-v2 .facility-card:hover{transform:translateY(-3px)!important}
+  .premium-reveal{filter:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

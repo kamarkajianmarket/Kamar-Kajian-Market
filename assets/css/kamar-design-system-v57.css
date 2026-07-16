@@ -1,0 +1,225 @@
+/* =========================================================
+   KAMAR KAJIAN MARKET — DESIGN SYSTEM V57
+   Premium typography, contrast, card and interaction polish
+   Homepage-only visual layer. No business logic changes.
+   ========================================================= */
+
+:root{
+  --kamar-bg:#f4f1eb;
+  --kamar-surface:#fffdf9;
+  --kamar-surface-soft:#f8f5ef;
+  --kamar-ink:#171b22;
+  --kamar-text:#2f3742;
+  --kamar-text-secondary:#505a67;
+  --kamar-text-muted:#66717e;
+  --kamar-caption:#7a8490;
+  --kamar-border:rgba(27,35,48,.11);
+  --kamar-border-strong:rgba(27,35,48,.18);
+  --kamar-radius-sm:14px;
+  --kamar-radius-md:20px;
+  --kamar-radius-lg:28px;
+  --kamar-shadow-sm:0 8px 22px rgba(34,28,19,.06);
+  --kamar-shadow-md:0 18px 48px rgba(34,28,19,.09);
+  --kamar-shadow-hover:0 24px 64px rgba(34,28,19,.14);
+  --kamar-ease:cubic-bezier(.22,.61,.36,1);
+  --kamar-transition:320ms var(--kamar-ease);
+}
+
+/* ---------- Core reading contrast ---------- */
+.facility-panel-v2,
+.facility-detail-card,
+.private-course-panel{
+  color:var(--kamar-text)!important;
+}
+
+/* Main explanatory paragraph below every facility title */
+.facility-lead,
+.facility-panel-v2 > p:not([class]),
+.facility-detail-card > p:not([class]),
+.facility-system-heading p,
+.continuous-heading p,
+.private-course-panel .facility-lead{
+  color:var(--kamar-text-secondary)!important;
+  opacity:1!important;
+  font-weight:600!important;
+  font-size:clamp(.98rem,1.15vw,1.08rem)!important;
+  line-height:1.8!important;
+  letter-spacing:.002em!important;
+  text-wrap:pretty;
+  max-width:860px!important;
+}
+
+/* Supporting copy throughout facility content */
+.chapter-description,
+.chapter-objective p,
+.facility-detail-card p,
+.facility-panel-v2 p,
+.facility-detail-card li,
+.facility-panel-v2 li,
+.facility-benefit-card p,
+.facility-info-card p,
+.facility-note,
+.facility-note p,
+.course-note,
+.course-note p,
+.private-course-panel small{
+  color:var(--kamar-text-secondary)!important;
+  opacity:1!important;
+}
+
+.chapter-description{
+  font-size:.96rem!important;
+  line-height:1.78!important;
+  font-weight:550!important;
+  max-width:72ch;
+}
+
+.chapter-objective p{
+  font-size:.88rem!important;
+  line-height:1.72!important;
+  font-weight:550!important;
+}
+
+/* ---------- Typography hierarchy ---------- */
+.facility-panel-v2 h2,
+.facility-panel-v2 h3,
+.facility-detail-card h2,
+.facility-detail-card h3,
+.private-course-panel h2,
+.private-course-panel h3{
+  color:var(--kamar-ink)!important;
+  text-wrap:balance;
+}
+
+.chapter-copy-card h4{
+  color:var(--kamar-ink)!important;
+  font-weight:800!important;
+  letter-spacing:-.025em!important;
+  text-wrap:balance;
+}
+
+.chapter-detail-grid h5,
+.chapter-objective strong,
+.facility-system-heading strong,
+.facility-panel-v2 .eyebrow,
+.facility-panel-v2 .section-label{
+  color:#343d49!important;
+  opacity:1!important;
+  font-weight:850!important;
+  letter-spacing:.075em!important;
+}
+
+/* ---------- Cards ---------- */
+.facility-detail-card,
+.facility-panel-v2,
+.chapter-copy-card,
+.chapter-detail-grid section,
+.chapter-objective,
+.curriculum-stage-card,
+.facility-benefit-card,
+.facility-info-card{
+  border-color:var(--kamar-border)!important;
+}
+
+.chapter-copy-card,
+.chapter-detail-grid section,
+.facility-benefit-card,
+.facility-info-card{
+  box-shadow:var(--kamar-shadow-sm)!important;
+  transition:transform var(--kamar-transition),box-shadow var(--kamar-transition),border-color var(--kamar-transition),background var(--kamar-transition)!important;
+}
+
+.chapter-copy-card:hover,
+.chapter-detail-grid section:hover,
+.facility-benefit-card:hover,
+.facility-info-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--kamar-shadow-md)!important;
+  border-color:var(--kamar-border-strong)!important;
+}
+
+.chapter-detail-grid section{
+  background:linear-gradient(180deg,#fffdfa 0%,#f8f5f0 100%)!important;
+}
+
+.chapter-objective{
+  background:linear-gradient(135deg,rgba(116,71,168,.075),rgba(255,255,255,.82))!important;
+}
+
+/* ---------- Premium chips / badges ---------- */
+.chapter-meta span,
+.facility-panel-v2 .badge,
+.facility-panel-v2 .chip,
+.curriculum-stage-card .badge{
+  opacity:1!important;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 5px 14px rgba(35,26,18,.06);
+  transition:transform var(--kamar-transition),box-shadow var(--kamar-transition),filter var(--kamar-transition)!important;
+}
+
+.chapter-meta span:hover,
+.facility-panel-v2 .badge:hover,
+.facility-panel-v2 .chip:hover{
+  transform:translateY(-1px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 8px 18px rgba(35,26,18,.1);
+  filter:saturate(1.06);
+}
+
+/* ---------- Image frame ---------- */
+.chapter-cover,
+.chapter-cover-wrap,
+.facility-gallery-main,
+.facility-preview-image{
+  border-color:var(--kamar-border)!important;
+  box-shadow:var(--kamar-shadow-md)!important;
+}
+
+/* ---------- Buttons ---------- */
+.facility-panel-v2 .btn,
+.facility-detail-card .btn,
+.facility-panel-v2 a[class*="btn"],
+.facility-detail-card a[class*="btn"]{
+  transition:transform var(--kamar-transition),box-shadow var(--kamar-transition),filter var(--kamar-transition)!important;
+}
+.facility-panel-v2 .btn:hover,
+.facility-detail-card .btn:hover,
+.facility-panel-v2 a[class*="btn"]:hover,
+.facility-detail-card a[class*="btn"]:hover{
+  transform:translateY(-2px);
+  filter:saturate(1.04);
+}
+
+/* ---------- Better readability on tinted/dark cards ---------- */
+[class*="dark"] .facility-lead,
+[class*="theme-"] [class*="dark"] p,
+.facility-panel-v2[style*="background: rgb(1"] p{
+  color:rgba(255,255,255,.82)!important;
+}
+
+/* ---------- Responsive typography ---------- */
+@media (max-width:760px){
+  .facility-lead,
+  .facility-panel-v2 > p:not([class]),
+  .facility-detail-card > p:not([class]){
+    font-size:.96rem!important;
+    line-height:1.72!important;
+    font-weight:600!important;
+  }
+  .chapter-description{font-size:.9rem!important;line-height:1.7!important}
+  .chapter-objective p{font-size:.84rem!important}
+  .chapter-copy-card,
+  .chapter-detail-grid section{box-shadow:0 8px 20px rgba(34,28,19,.055)!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .chapter-copy-card,
+  .chapter-detail-grid section,
+  .facility-benefit-card,
+  .facility-info-card,
+  .chapter-meta span,
+  .facility-panel-v2 .badge,
+  .facility-panel-v2 .chip{
+    transition:none!important;
+    transform:none!important;
+  }
+}

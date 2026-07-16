@@ -1,0 +1,19 @@
+STEP 56 — Curriculum Navigation & Contrast Polish
+
+File berubah:
+- index.html
+- assets/css/kamar-facilities-v2.css
+- assets/js/kamar-facilities-v2.js
+
+Perubahan:
+1. Kontras subtitle/deskripsi diperjelas di seluruh panel fasilitas dan chapter.
+2. Struktur kurikulum Private menjadi:
+   - Foundation: Chapter 1–6
+   - Core Entry: Chapter 7–10
+   - Advanced Foundation: Chapter 11–12
+   - Advanced Core Entry: Chapter 13–16
+   - Professional: Chapter 17–18
+   - Master Framework: Chapter 19–20
+3. Enam card kurikulum dapat diklik dan langsung membuka chapter pertama kategori terkait.
+4. Card aktif, hover, badge, heading, dan card content mendapat premium polish.
+5. Tidak mengubah Supabase, auth, admin, member, database, affiliate, atau logic fasilitas lain.

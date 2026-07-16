@@ -1,0 +1,22 @@
+KAMAR KAJIAN MARKET — STEP 58
+AMBIENT MARKET MOTION & APPLE-STYLE POLISH
+
+FILE YANG BERUBAH:
+1. index.html
+2. assets/css/kamar-ambient-market-v58.css
+3. assets/js/kamar-ambient-market-v58.js
+
+PERUBAHAN:
+- Ambient background market abstraction berbasis CSS.
+- Glow ungu, emas, dan emerald bergerak sangat halus.
+- Motif candlestick abstrak dengan opacity rendah.
+- Scroll reveal fade + blur + scale yang terkendali.
+- Micro-interaction card, tab, gallery, image frame, dan CTA.
+- Transisi aktif fasilitas/chapter lebih lembut.
+- Mendukung prefers-reduced-motion.
+
+TIDAK DIUBAH:
+- Isi homepage.
+- Struktur fasilitas.
+- Logic fasilitas dan chapter.
+- Supabase/Auth/Admin/Member/Affiliate/Database.

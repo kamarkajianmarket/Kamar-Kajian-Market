@@ -1,0 +1,199 @@
+/* =========================================================
+   KAMAR KAJIAN MARKET — AMBIENT MARKET MOTION V58
+   Homepage-only atmospheric and micro-interaction layer.
+   No business logic or content changes.
+   ========================================================= */
+
+:root{
+  --ambient-x:50%;
+  --ambient-y:28%;
+  --ambient-scroll:0px;
+  --ambient-violet:rgba(108,73,170,.14);
+  --ambient-gold:rgba(190,145,67,.13);
+  --ambient-emerald:rgba(29,113,88,.10);
+}
+
+html{scroll-behavior:smooth}
+body{
+  position:relative;
+  isolation:isolate;
+  overflow-x:hidden;
+}
+
+/* Atmospheric canvas: fixed, non-interactive and intentionally subtle. */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-18vh -12vw;
+  z-index:-3;
+  pointer-events:none;
+  background:
+    radial-gradient(34rem 28rem at var(--ambient-x) var(--ambient-y),var(--ambient-violet),transparent 72%),
+    radial-gradient(30rem 24rem at 82% 16%,var(--ambient-gold),transparent 74%),
+    radial-gradient(32rem 26rem at 10% 72%,var(--ambient-emerald),transparent 76%);
+  filter:saturate(.92);
+  transform:translate3d(0,var(--ambient-scroll),0) scale(1.02);
+  transition:background-position 900ms cubic-bezier(.22,.61,.36,1);
+}
+
+/* Abstract chart / structure grid. Pure CSS; no external media. */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:.19;
+  background-image:
+    linear-gradient(rgba(38,44,55,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(38,44,55,.045) 1px,transparent 1px),
+    linear-gradient(118deg,transparent 0 44%,rgba(119,82,177,.055) 44.2% 44.55%,transparent 44.75% 100%),
+    linear-gradient(64deg,transparent 0 59%,rgba(181,134,57,.05) 59.2% 59.5%,transparent 59.7% 100%);
+  background-size:64px 64px,64px 64px,720px 520px,860px 600px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,.34) 72%,transparent 100%);
+}
+
+/* Ambient candlestick motif, kept behind content. */
+.kamar-ambient-market{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  overflow:hidden;
+  opacity:.34;
+}
+.kamar-ambient-market span{
+  position:absolute;
+  width:1px;
+  height:clamp(38px,6vw,92px);
+  left:var(--x);
+  top:var(--y);
+  background:linear-gradient(to bottom,transparent,rgba(109,77,159,.28) 18% 82%,transparent);
+  transform:translate3d(0,calc(var(--ambient-scroll) * -.32),0);
+  animation:kamarAmbientFloat var(--speed) ease-in-out infinite alternate;
+}
+.kamar-ambient-market span::after{
+  content:"";
+  position:absolute;
+  left:-3px;
+  top:var(--body);
+  width:7px;
+  height:var(--height);
+  border-radius:2px;
+  background:linear-gradient(180deg,rgba(188,144,72,.23),rgba(91,62,138,.22));
+  box-shadow:0 0 26px rgba(117,78,173,.08);
+}
+@keyframes kamarAmbientFloat{
+  from{translate:0 -7px;opacity:.42}
+  to{translate:0 9px;opacity:.9}
+}
+
+/* Premium section rhythm and optical separation. */
+main > section,
+body > section{
+  position:relative;
+}
+main > section::before,
+body > section::before{
+  content:"";
+  position:absolute;
+  inset:8% 3%;
+  z-index:-1;
+  border-radius:42px;
+  background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.05));
+  opacity:.4;
+  pointer-events:none;
+}
+
+/* Apple-like image presentation: calm depth, not exaggerated. */
+.facility-gallery-frame,
+.chapter-visual-card,
+.showcase-preview,
+.hero-visual,
+.facility-panel-v2 img{
+  transform:translateZ(0);
+  transition:transform 680ms cubic-bezier(.16,1,.3,1),filter 680ms cubic-bezier(.16,1,.3,1),box-shadow 680ms cubic-bezier(.16,1,.3,1)!important;
+}
+.facility-gallery-frame:hover,
+.chapter-visual-card:hover,
+.showcase-preview:hover,
+.hero-visual:hover{
+  transform:translate3d(0,-4px,0) scale(1.008)!important;
+  filter:saturate(1.025) contrast(1.012)!important;
+}
+
+/* Refined active-state motion for facilities and curriculum. */
+.facility-card-v2,
+.curriculum-stage-card,
+.chapter-tab{
+  will-change:transform;
+  transition:
+    transform 430ms cubic-bezier(.16,1,.3,1),
+    box-shadow 430ms cubic-bezier(.16,1,.3,1),
+    border-color 430ms ease,
+    background-color 430ms ease!important;
+}
+.facility-card-v2:hover,
+.curriculum-stage-card:hover,
+.chapter-tab:hover{
+  transform:translate3d(0,-3px,0)!important;
+}
+.facility-card-v2.is-active,
+.curriculum-stage-card.is-active,
+.chapter-tab.is-active,
+.chapter-tab[aria-selected="true"]{
+  animation:kamarActivePulse 620ms cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes kamarActivePulse{
+  0%{transform:scale(.985)}
+  55%{transform:scale(1.012)}
+  100%{transform:scale(1)}
+}
+
+/* Button sheen is restrained and runs only on interaction. */
+a.btn,button.btn,.facility-cta,.telegram-cta{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+a.btn::after,button.btn::after,.facility-cta::after,.telegram-cta::after{
+  content:"";
+  position:absolute;
+  inset:-50% auto -50% -55%;
+  width:38%;
+  z-index:-1;
+  transform:skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.34),transparent);
+  transition:left 720ms cubic-bezier(.16,1,.3,1);
+}
+a.btn:hover::after,button.btn:hover::after,.facility-cta:hover::after,.telegram-cta:hover::after{left:120%}
+
+/* Reveal states for new page visits. Existing V55 motion remains compatible. */
+[data-kamar-ambient-reveal]{
+  opacity:0;
+  transform:translate3d(0,22px,0) scale(.992);
+  filter:blur(7px);
+  transition:
+    opacity 820ms cubic-bezier(.16,1,.3,1),
+    transform 820ms cubic-bezier(.16,1,.3,1),
+    filter 820ms cubic-bezier(.16,1,.3,1);
+}
+[data-kamar-ambient-reveal].is-visible{
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+
+@media (max-width:900px){
+  body::after{background-size:48px 48px,48px 48px,520px 420px,620px 460px;opacity:.14}
+  .kamar-ambient-market{opacity:.22}
+  main > section::before,body > section::before{inset:5% 1%;border-radius:28px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  body::before,.kamar-ambient-market span{animation:none!important;transform:none!important}
+  [data-kamar-ambient-reveal]{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+  .facility-card-v2,.curriculum-stage-card,.chapter-tab,.facility-gallery-frame,.chapter-visual-card,.showcase-preview,.hero-visual{transition:none!important}
+  a.btn::after,button.btn::after,.facility-cta::after,.telegram-cta::after{display:none!important}
+}

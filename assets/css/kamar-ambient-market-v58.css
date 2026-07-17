@@ -197,3 +197,22 @@ a.btn:hover::after,button.btn:hover::after,.facility-cta:hover::after,.telegram-
   .facility-card-v2,.curriculum-stage-card,.chapter-tab,.facility-gallery-frame,.chapter-visual-card,.showcase-preview,.hero-visual{transition:none!important}
   a.btn::after,button.btn::after,.facility-cta::after,.telegram-cta::after{display:none!important}
 }
+
+/* Step 58.1 — targeted readability fix for Graduation & Continuous Mentoring only. */
+.private-continuous-section .continuous-heading > p{
+  color:#d8d4df!important;
+  opacity:1!important;
+}
+.private-continuous-section .continuous-grid article > p{
+  color:#d4cfda!important;
+  opacity:1!important;
+}
+.private-continuous-section .continuous-grid article > h5,
+.private-continuous-section .learning-philosophy > strong{
+  color:#fff!important;
+  opacity:1!important;
+}
+.private-continuous-section .learning-philosophy > p{
+  color:#d8d4df!important;
+  opacity:1!important;
+}

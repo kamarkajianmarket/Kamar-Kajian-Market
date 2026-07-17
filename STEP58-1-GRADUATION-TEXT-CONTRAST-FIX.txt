@@ -1,0 +1,8 @@
+STEP 58.1 — Graduation Text Contrast Fix
+
+Perubahan hanya pada warna/opacity teks di card Graduation & Continuous Mentoring:
+- deskripsi pembuka
+- isi lima card
+- judul dan isi Filosofi Pembelajaran
+
+Tidak mengubah layout, desain card, animasi, HTML, JavaScript, maupun logic lain.

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Login Member Ditutup Sementara — Kamar Kajian Market</title>
+<title>Login Member — Kamar Kajian Market</title>
 <meta content="Kamar Kajian Market — Market Logic Community. Ruang belajar dan diskusi trading berbasis market logic, price action, supply-demand, risk management, dan hukum sebab-akibat market." name="description"/>
 <meta content="#070707" name="theme-color"/>
 <link href="assets/favicon.png" rel="icon"/>
@@ -14,7 +14,8 @@
 <link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 <link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
-<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<link href="assets/css/kamar-auth-25.css?v=1" rel="stylesheet"/>
+<meta name="kamar-step" content="57-login-register-live"/>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -37,16 +38,34 @@
 </header>
 <main id="top">
 <section class="section-shell compact-section">
-  <article class="kamar-access-closed">
-    <img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/>
-    <span class="eyebrow">Akses Member Ditutup Sementara</span>
-    <h1>Login Member Sedang Dinonaktifkan.</h1>
-    <p>Fasilitas login dan pendaftaran member sedang disembunyikan sementara untuk proses perapihan sistem. Akses admin, database Supabase, dan dashboard internal tidak diubah.</p>
-    <div class="closed-actions">
-      <a class="btn btn-primary" href="https://telegram.me/kajianmarketkamar" rel="noopener" target="_blank">Chat Admin</a>
-      <a class="btn btn-ghost" href="index.html">Kembali ke Beranda</a>
+<div class="shell">
+  <div class="auth-grid">
+    <div class="auth-hero">
+      <div>
+        <span class="kicker">Kamar Kajian Market</span>
+        <h1>Login Member</h1>
+        <p class="desc">Masuk ke akun member untuk mengakses dashboard, materi, dan fasilitas Kamar Kajian Market.</p>
+      </div>
+      <div class="notice">Belum punya akun? <a class="pill" href="register.html">Daftar member baru</a></div>
     </div>
-  </article>
+    <div class="auth-card">
+      <h2>Form Login</h2>
+      <form autocomplete="on" class="form" id="memberLoginForm">
+        <label class="full">Email
+          <input autocomplete="email" name="email" required type="email"/>
+        </label>
+        <label class="full">Password
+          <input autocomplete="current-password" name="password" required type="password"/>
+        </label>
+        <div class="auth-status" hidden=""></div>
+        <button class="btn" type="submit">Masuk</button>
+        <div class="auth-switch">
+          <div class="switch-row">Belum punya akun? <a class="pill" href="register.html">Daftar di sini</a></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 </section>
 </main>
 <footer class="site-footer">
@@ -68,7 +87,7 @@
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=30G"></script><script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
 
 (function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();
 

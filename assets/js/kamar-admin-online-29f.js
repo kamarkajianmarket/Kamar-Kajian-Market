@@ -5,19 +5,29 @@
 
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var VERSION = '29F';
+  // FIXED (2026-07-29): table/field names below now match the real Supabase schema.
+  // Previously this pointed at tables that don't exist (file_tools, app_settings) or
+  // used column names that don't exist on the real tables (message/link_url on
+  // banners, video_url/platform on videos, file_url on materials, key/enabled on
+  // maintenance_settings) - inserts from these admin pages were failing silently
+  // or with a Postgres "column does not exist" error.
+  //
+  // admin-links.html, admin-payment.html, admin-page-control.html and
+  // admin-dashboard-control.html now point at real tables created on 2026-07-29
+  // (link_settings, payment_gateways, homepage_settings, dashboard_settings).
   var MAP = {
-    'admin-banner.html': { table:'banners', title:'Banner Pengumuman Online', fields:['title','message','image_url','link_url','is_active'] },
-    'admin-video.html': { table:'videos', title:'Video Konten Online', fields:['title','platform','video_url','youtube_url','description','is_active'] },
-    'admin-materials.html': { table:'materials', title:'Materi / PDF Online', fields:['title','category','description','file_url','is_active'] },
-    'admin-tools.html': { table:'file_tools', title:'File Tools Online', fields:['name','type','file_url','description','is_active'] },
+    'admin-banner.html': { table:'banners', title:'Banner Pengumuman Online', fields:['title','body','image_url','cta_label','cta_url','is_active'] },
+    'admin-video.html': { table:'videos', title:'Video Konten Online', fields:['title','youtube_url','category','description','is_active'] },
+    'admin-materials.html': { table:'materials', title:'Materi / PDF Online', fields:['title','category','description','material_url','version_label','is_active'] },
+    'admin-tools.html': { table:'tools_files', title:'File Tools Online', fields:['title','file_url','version_label','changelog','admin_notes','is_active'] },
+    'admin-maintenance.html': { table:'maintenance_settings', title:'Maintenance Online', fields:['maintenance_key','title','message','is_active'] },
+    'admin-settings.html': { table:'site_settings', title:'Pengaturan Umum Online', fields:['setting_key','setting_value','description','is_active'], jsonFields:['setting_value'] },
     'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway Online', fields:['name','bank_name','account_name','account_number','instructions','is_active'] },
     'admin-links.html': { table:'link_settings', title:'Link Official Online', fields:['key','label','url','is_active'] },
-    'admin-settings.html': { table:'app_settings', title:'Pengaturan Umum Online', fields:['key','value','description'] },
-    'admin-maintenance.html': { table:'maintenance_settings', title:'Maintenance Online', fields:['key','enabled','message'] },
-    'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama Online', fields:['key','value','is_active'] },
-    'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member Online', fields:['key','value','is_active'] }
+    'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama Online', fields:['key','value','description','is_active'], jsonFields:['value'] },
+    'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member Online', fields:['key','value','description','is_active'], jsonFields:['value'] }
   };
-  var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','file_tools','homepage_settings','dashboard_settings','maintenance_settings','payment_gateways','link_settings','app_settings','admin_pending_todos'];
+  var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','tools_files','site_settings','maintenance_settings','payment_gateways','link_settings','homepage_settings','dashboard_settings','admin_pending_todos'];
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
@@ -58,7 +68,7 @@
   function getMain(){ return qs('.split-main') || qs('main') || document.body; }
   function fieldInput(name){
     var type = /url|link|file|image|youtube/i.test(name) ? 'url' : /enabled|is_active|active/i.test(name) ? 'checkbox' : 'text';
-    if(/message|description|instructions|value/i.test(name)) type='textarea';
+    if(/message|description|instructions|value|changelog|notes/i.test(name)) type='textarea';
     if(type==='textarea') return '<label class="field"><span>'+esc(name)+'</span><textarea name="'+esc(name)+'" placeholder="'+esc(name)+'"></textarea></label>';
     if(type==='checkbox') return '<label class="toggle-row"><span><strong>'+esc(name)+'</strong><small>Aktif / nonaktif</small></span><input type="checkbox" name="'+esc(name)+'"></label>';
     return '<label class="field"><span>'+esc(name)+'</span><input type="'+type+'" name="'+esc(name)+'" placeholder="'+esc(name)+'"></label>';
@@ -94,11 +104,23 @@
     qs('#onlineForm29F', box).addEventListener('submit', async function(e){
       e.preventDefault();
       var row = {};
+      var jsonFields = cfg.jsonFields || [];
       cfg.fields.forEach(function(f){
         var input = e.target.elements[f];
         if(!input) return;
         if(input.type === 'checkbox') row[f] = input.checked;
-        else row[f] = String(input.value||'').trim();
+        else {
+          var raw = String(input.value||'').trim();
+          if(jsonFields.indexOf(f) >= 0){
+            // jsonb columns (e.g. site_settings.setting_value) need valid JSON.
+            // If the admin typed plain text, store it as a JSON string instead
+            // of letting the insert fail with an "invalid input syntax" error.
+            try{ JSON.parse(raw); row[f] = raw === '' ? null : JSON.parse(raw); }
+            catch(e2){ row[f] = raw; }
+          } else {
+            row[f] = raw;
+          }
+        }
       });
       if(!('created_at' in row)) row.created_at = new Date().toISOString();
       if(!('updated_at' in row)) row.updated_at = new Date().toISOString();

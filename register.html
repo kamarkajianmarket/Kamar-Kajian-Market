@@ -15,7 +15,8 @@
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 <link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
 <link href="assets/css/kamar-auth-25.css?v=1" rel="stylesheet"/>
-<meta name="kamar-step" content="57-login-register-live"/>
+<style>.auth-card-solo{max-width:560px;margin:0 auto}</style>
+<meta name="kamar-step" content="58-register-form-only"/>
 </head>
 <body>
 <div class="page-glow page-glow-1"></div>
@@ -39,50 +40,36 @@
 <main id="top">
 <section class="section-shell compact-section">
 <div class="shell">
-  <div class="auth-grid">
-    <div class="auth-hero">
-      <div>
-        <span class="kicker">Kamar Kajian Market</span>
-        <h1>Daftar Member</h1>
-        <p class="desc">Buat akun member untuk mengakses materi, Kamar Study, dan fasilitas Kamar Kajian Market lainnya.</p>
-        <div class="chips">
-          <span class="chip">Edukasi Trading</span>
-          <span class="chip">Kamar Study</span>
-          <span class="chip">Kamar Private</span>
-        </div>
+  <div class="auth-card auth-card-solo">
+    <h2>Daftar Member</h2>
+    <p class="desc">Lengkapi data di bawah ini untuk membuat akun member Kamar Kajian Market. Data profil lainnya bisa dilengkapi lagi nanti di halaman Profil Akun.</p>
+    <form autocomplete="on" class="form" id="kamarRegisterForm">
+      <div class="form-grid">
+        <label class="full">Nama Lengkap
+          <input autocomplete="name" name="full_name" required type="text"/>
+        </label>
+        <label class="full">Email
+          <input autocomplete="email" name="email" required type="email"/>
+        </label>
+        <label class="full">WhatsApp
+          <input autocomplete="tel" name="whatsapp" placeholder="08xxxxxxxxxx" required type="tel"/>
+        </label>
+        <label>Password
+          <input autocomplete="new-password" minlength="6" name="password" required type="password"/>
+        </label>
+        <label>Konfirmasi Password
+          <input autocomplete="new-password" minlength="6" name="confirm" required type="password"/>
+        </label>
+        <label class="full">Kode Referral (opsional)
+          <input autocomplete="off" name="referral" placeholder="Isi jika ada kode referral affiliate" type="text"/>
+        </label>
       </div>
-      <div class="notice">Akun baru berstatus <strong>Pending Aktivasi</strong>. Admin akan mengaktifkan akses fasilitas setelah verifikasi pembayaran/keanggotaan.</div>
-    </div>
-    <div class="auth-card">
-      <h2>Form Pendaftaran</h2>
-      <form autocomplete="on" class="form" id="kamarRegisterForm">
-        <div class="form-grid">
-          <label class="full">Nama Lengkap
-            <input autocomplete="name" name="full_name" required type="text"/>
-          </label>
-          <label class="full">Email
-            <input autocomplete="email" name="email" required type="email"/>
-          </label>
-          <label>WhatsApp
-            <input autocomplete="tel" name="whatsapp" placeholder="08xxxxxxxxxx" required type="tel"/>
-          </label>
-          <label>Telegram (opsional)
-            <input autocomplete="off" name="telegram" placeholder="@username" type="text"/>
-          </label>
-          <label>Password
-            <input autocomplete="new-password" minlength="6" name="password" required type="password"/>
-          </label>
-          <label>Konfirmasi Password
-            <input autocomplete="new-password" minlength="6" name="confirm" required type="password"/>
-          </label>
-        </div>
-        <div class="auth-status" hidden=""></div>
-        <button class="btn" type="submit">Daftar Sekarang</button>
-        <div class="auth-switch">
-          <div class="switch-row">Sudah punya akun? <a class="pill" href="member.html">Login di sini</a></div>
-        </div>
-      </form>
-    </div>
+      <div class="auth-status" hidden=""></div>
+      <button class="btn" type="submit">Daftar Sekarang</button>
+      <div class="auth-switch">
+        <div class="switch-row">Sudah punya akun? <a class="pill" href="member.html">Login di sini</a></div>
+      </div>
+    </form>
   </div>
 </div>
 </section>
@@ -106,7 +93,7 @@
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=30G"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=31H"></script>
 <script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
 
 (function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();

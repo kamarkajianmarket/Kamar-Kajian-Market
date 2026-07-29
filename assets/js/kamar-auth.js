@@ -214,7 +214,14 @@
     bind('memberRegisterForm',registerMember);
     bind('kamarRegisterForm',registerMember);
     bind('affiliateRegisterForm',registerAffiliate);
-    bind('kamarAffiliateForm',registerAffiliate);
+    // FIXED (2026-07-29): intentionally NOT binding 'kamarAffiliateForm' here.
+    // affiliate.html has its own dedicated submit handler for that exact form id,
+    // which correctly writes the full application (payout account, approval_status,
+    // etc.) into the "affiliates" table. This generic handler instead called
+    // supabase.auth.signUp() expecting a password field that doesn't exist on that
+    // form, so both handlers were firing on every submit and this one always failed,
+    // showing a confusing "Gagal daftar affiliate" error even when the real
+    // registration (from the other handler) had actually succeeded.
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
   window.KamarAuthFinal29F = {login:doLogin,client:client,config:cfg,ready:ensureReady};

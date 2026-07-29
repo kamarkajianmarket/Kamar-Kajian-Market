@@ -1,0 +1,1921 @@
+/* ============================================================
+   KAMAR BUNDLE CSS — gabungan 11 file stylesheet homepage
+   Urutan file di bawah ini PERSIS SAMA seperti urutan <link> asli
+   di index.html, supaya hasil tampilan identik (tidak ada yang
+   berubah, cuma jumlah file yang dimuat browser jadi 1 bukan 11).
+   ============================================================ */
+
+/* ===== 1/11: style.css ===== */
+:root{--bg:#070707;--panel:#11100d;--line:rgba(238,206,122,.18);--gold:#f4df90;--text:#fff3d8;--muted:#cfc5ad;--green:#bfffd9}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 18% -8%,rgba(244,223,144,.13),transparent 34%),radial-gradient(circle at 82% 8%,rgba(44,116,74,.14),transparent 31%),#070707;color:var(--text);font-family:Inter,Arial,sans-serif}a{color:inherit}.site-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 28px;border-bottom:1px solid var(--line);background:rgba(7,7,7,.84);backdrop-filter:blur(14px);position:sticky;top:0;z-index:30}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:1000}.brand img{width:46px;height:46px;border-radius:14px;object-fit:cover}.header-actions,.nav-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.header-cta,.btn,.pill{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);text-decoration:none;color:var(--gold);font-weight:900;background:rgba(255,255,255,.035)}.btn-primary,.btn.btn-primary{background:linear-gradient(135deg,#f4df90,#b88928);color:#090806;border:0}.section-shell,.split-shell,.shell{width:min(1180px,calc(100% - 36px));margin:0 auto;padding:44px 0}.compact-section{padding-top:34px;padding-bottom:34px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px}.split-sidebar,.split-card,.member-page-panel,.auth-card,.facility-detail-card,.dashboard-card,.card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:0 20px 80px rgba(0,0,0,.28);padding:22px}.split-sidebar{display:flex;flex-direction:column;gap:8px;height:max-content;position:sticky;top:92px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid transparent;border-radius:16px;padding:12px 14px;text-decoration:none;color:var(--muted);font-weight:900}.split-sidebar a.active,.split-sidebar a:hover{border-color:var(--line);background:rgba(244,223,144,.06);color:var(--gold)}.brand-small,.eyebrow,.mini-label,.form-kicker{display:inline-flex;color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:.13em;font-weight:1000}h1,h2,h3{color:var(--text);letter-spacing:-.035em}h1{font-size:clamp(34px,4.8vw,64px);line-height:.98;margin:10px 0 14px}h2{font-size:clamp(26px,3vw,42px);line-height:1.05}p{color:var(--muted);line-height:1.65}.grid,.dashboard-grid,.facility-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.btn-row,.button-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.member-login-shell{display:grid;grid-template-columns:1fr;gap:18px}.member-login-form,.form{display:grid;gap:14px}label{display:grid;gap:8px;color:var(--gold);font-weight:900}input,select,textarea{width:100%;min-height:48px;border-radius:16px;border:1px solid rgba(238,206,122,.20);background:rgba(0,0,0,.24);color:var(--text);padding:0 14px;font:inherit}.form-note{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 14px;color:var(--muted)}.footer,footer{text-align:center;color:rgba(245,240,230,.55);padding:28px}.hidden,[hidden]{display:none!important}@media(max-width:900px){.site-header{flex-direction:column;text-align:center}.split-app{grid-template-columns:1fr}.split-sidebar{position:static}.grid,.dashboard-grid,.facility-grid{grid-template-columns:1fr}.section-shell,.split-shell,.shell{width:min(100% - 24px,1180px)}}
+
+/* ===== 2/11: kamar-full-online.css ===== */
+/* Kamar Step 26 compatibility stylesheet */
+
+/* ===== 3/11: kamar-step36-hide-member-access.css ===== */
+
+/* KAMAR STEP36 - Hide public member login/register temporarily. Does not touch Supabase/Auth/Admin logic. */
+.kamar-member-access-hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
+.kamar-access-closed{max-width:760px;margin:80px auto;padding:42px 34px;border:1px solid rgba(238,206,122,.28);border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(212,166,63,.045));box-shadow:0 24px 80px rgba(0,0,0,.34);text-align:center;color:#f6f0df}
+.kamar-access-closed img{width:86px;height:86px;object-fit:contain;border-radius:22px;background:#050505;border:1px solid rgba(238,206,122,.32);padding:10px;margin-bottom:20px}
+.kamar-access-closed .eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;color:#f1d98c;letter-spacing:.28em;text-transform:uppercase;font-weight:900;font-size:13px}
+.kamar-access-closed h1,.kamar-access-closed h2{font-size:clamp(28px,4vw,46px);line-height:1.05;margin:0 0 16px;color:#fff1d6;letter-spacing:-.04em}
+.kamar-access-closed p{margin:0 auto 24px;max-width:620px;color:rgba(245,240,230,.74);font-weight:750;line-height:1.6;font-size:16px}
+.kamar-access-closed .closed-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.kamar-access-closed .closed-actions a{min-width:190px;text-align:center;text-decoration:none}
+@media(max-width:680px){.kamar-access-closed{margin:38px 16px;padding:30px 20px}.kamar-access-closed .closed-actions a{width:100%;min-width:0}}
+
+/* ===== 4/11: kamar-neo-minimal-palace-v47.css ===== */
+/* KAMAR STEP 47 — Neo Minimal Palace Grid
+   Tujuan: desain bersih, simetris, proporsional, tanpa overlap/teks terpotong.
+   Tidak mengubah JS, auth, Supabase, atau logic clickable. */
+:root{
+  --km-bg:#f5f1e8;
+  --km-bg-2:#ebe4d6;
+  --km-ink:#111417;
+  --km-ink-2:#1f2a31;
+  --km-panel:#ffffff;
+  --km-panel-2:#fbf7ee;
+  --km-line:rgba(17,20,23,.12);
+  --km-line-strong:rgba(17,20,23,.22);
+  --km-muted:#606973;
+  --km-gold:#b88a3d;
+  --km-gold-2:#d7b46d;
+  --km-emerald:#0e5f54;
+  --km-deep:#111820;
+  --km-deep-2:#17252d;
+  --km-shadow:0 20px 70px rgba(17,20,23,.10);
+  --km-radius-xl:34px;
+  --km-radius-lg:26px;
+  --km-radius-md:18px;
+  --km-max:1180px;
+}
+
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;background:var(--km-bg)}
+body.public-home,
+body.kamar-v46-atelier{
+  margin:0!important;
+  min-height:100vh;
+  overflow-x:hidden!important;
+  color:var(--km-ink)!important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(184,138,61,.18), transparent 34rem),
+    radial-gradient(circle at 90% 14%, rgba(14,95,84,.12), transparent 30rem),
+    linear-gradient(180deg,#f9f5ed 0%,#eee6d7 48%,#f6f1e8 100%)!important;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif!important;
+  line-height:1.55!important;
+}
+body.public-home::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background-image:linear-gradient(rgba(17,20,23,.035) 1px, transparent 1px),linear-gradient(90deg, rgba(17,20,23,.035) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.58),transparent 76%);
+}
+.page-glow{display:none!important}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+p,h1,h2,h3,small,span,strong,summary{overflow:visible!important;text-overflow:clip!important;white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important}
+
+/* ===== TOP CARD HEADER ===== */
+.site-header{
+  position:sticky!important;
+  top:16px!important;
+  z-index:50!important;
+  width:min(calc(100% - 32px),var(--km-max))!important;
+  margin:16px auto 0!important;
+  padding:12px 14px!important;
+  display:grid!important;
+  grid-template-columns:minmax(230px,auto) 1fr minmax(180px,auto)!important;
+  align-items:center!important;
+  gap:14px!important;
+  border:1px solid rgba(17,20,23,.13)!important;
+  border-radius:28px!important;
+  background:rgba(255,255,255,.86)!important;
+  backdrop-filter:blur(18px)!important;
+  box-shadow:0 18px 50px rgba(17,20,23,.10)!important;
+}
+.brand{display:flex!important;align-items:center!important;gap:12px!important;color:var(--km-ink)!important;font-weight:900!important;letter-spacing:-.03em!important;font-size:16px!important}
+.brand img{width:44px!important;height:44px!important;border-radius:14px!important;object-fit:cover!important;border:1px solid rgba(184,138,61,.35)!important;box-shadow:0 10px 24px rgba(17,20,23,.12)!important}
+.nav-links{display:flex!important;justify-content:center!important;align-items:center!important;gap:6px!important;flex-wrap:wrap!important}
+.nav-links a,.quick-mobile-nav a{
+  padding:10px 13px!important;
+  border-radius:999px!important;
+  color:#37414a!important;
+  font-size:13px!important;
+  font-weight:850!important;
+  background:transparent!important;
+  border:1px solid transparent!important;
+}
+.nav-links a:hover{background:#f2eadc!important;border-color:rgba(184,138,61,.25)!important;color:#101418!important}
+.header-actions{display:flex!important;justify-content:flex-end!important;align-items:center!important;gap:10px!important}
+.header-cta,.telegram-main-cta{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:46px!important;
+  padding:12px 18px!important;
+  border-radius:999px!important;
+  color:#fffaf0!important;
+  background:linear-gradient(135deg,#0e5f54,#17483f 58%,#b88a3d)!important;
+  border:1px solid rgba(255,255,255,.45)!important;
+  box-shadow:0 14px 32px rgba(14,95,84,.22)!important;
+  font-weight:950!important;
+  letter-spacing:.01em!important;
+  white-space:nowrap!important;
+}
+.quick-mobile-nav{display:none!important}
+
+/* ===== UNIVERSAL SECTION SYSTEM ===== */
+main{width:100%!important;padding:22px 16px 80px!important}
+.section-shell{
+  width:min(100%,var(--km-max))!important;
+  margin:24px auto!important;
+  padding:34px!important;
+  border-radius:var(--km-radius-xl)!important;
+  background:rgba(255,255,255,.72)!important;
+  border:1px solid rgba(17,20,23,.10)!important;
+  box-shadow:var(--km-shadow)!important;
+  overflow:visible!important;
+}
+.compact-section{padding:32px!important}
+.section-heading{max-width:860px!important;margin:0 0 24px!important;display:flex!important;flex-direction:column!important;gap:8px!important}
+.section-heading.centered{margin-left:auto!important;margin-right:auto!important;text-align:center!important;align-items:center!important}
+.eyebrow,.kamar-badge{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:7px 12px!important;
+  border-radius:999px!important;
+  background:#efe3ca!important;
+  color:#7a561e!important;
+  border:1px solid rgba(184,138,61,.22)!important;
+  font-size:11px!important;
+  font-weight:950!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+}
+.section-heading h2,.access h2,.social h2,.traktir-card h3,.facility-detail-card h3{
+  margin:0!important;
+  color:var(--km-ink)!important;
+  letter-spacing:-.055em!important;
+  line-height:1.08!important;
+}
+.section-heading h2{font-size:clamp(28px,4vw,48px)!important;max-width:900px!important}
+.section-heading p,.hero-copy p,.about p,.access p,.social p,.traktir-card p,.facility-detail-card p,.facility-card p,.detail-grid span,.stats-grid span,.faq-item p,.faq-category small{
+  color:var(--km-muted)!important;
+  font-size:15px!important;
+  line-height:1.72!important;
+}
+
+/* ===== HERO: TWO BALANCED CARDS, NO OVERLAP ===== */
+.hero{
+  margin-top:22px!important;
+  padding:18px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.12fr) minmax(330px,.88fr)!important;
+  gap:18px!important;
+  align-items:stretch!important;
+  background:linear-gradient(135deg,#111820 0%,#17252d 58%,#23333a 100%)!important;
+  border-color:rgba(255,255,255,.10)!important;
+  color:#fff!important;
+}
+.hero-copy{
+  min-height:560px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:22px!important;
+  padding:clamp(28px,5vw,58px)!important;
+  border-radius:28px!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025)),
+    radial-gradient(circle at 0% 10%,rgba(184,138,61,.22),transparent 34rem)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+}
+.hero .eyebrow{background:rgba(215,180,109,.14)!important;color:#f2d69a!important;border-color:rgba(215,180,109,.28)!important}
+.hero h1{
+  max-width:760px!important;
+  margin:0!important;
+  color:#fffaf0!important;
+  font-size:clamp(40px,6.7vw,82px)!important;
+  line-height:.96!important;
+  letter-spacing:-.08em!important;
+  font-weight:950!important;
+}
+.hero-actions{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;margin-top:4px!important}
+.btn,.btn-primary,.btn-secondary{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:48px!important;
+  padding:13px 18px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(17,20,23,.12)!important;
+  font-weight:950!important;
+  font-size:14px!important;
+  line-height:1.1!important;
+  text-align:center!important;
+  white-space:normal!important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease!important;
+}
+.btn:hover{transform:translateY(-2px)!important}
+.btn-primary{background:linear-gradient(135deg,#c99d51,#f1d893)!important;color:#15120b!important;box-shadow:0 16px 40px rgba(184,138,61,.24)!important}
+.btn-secondary{background:rgba(255,255,255,.08)!important;color:#fff6e8!important;border-color:rgba(255,255,255,.18)!important}
+.section-shell:not(.hero) .btn-secondary{background:#fff!important;color:#192027!important;border-color:rgba(17,20,23,.12)!important}
+.hero-visual{min-height:560px!important;display:flex!important}
+.visual-card{
+  position:relative!important;
+  width:100%!important;
+  min-height:100%!important;
+  border-radius:28px!important;
+  overflow:hidden!important;
+  background:#0f171e!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)!important;
+}
+.hero-person{width:100%!important;height:100%!important;min-height:560px!important;object-fit:cover!important;object-position:center top!important;filter:saturate(1.03) contrast(1.03)!important}
+.hero-badges-on-visual{
+  position:absolute!important;
+  left:18px!important;
+  right:18px!important;
+  bottom:18px!important;
+  z-index:2!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+  padding:12px!important;
+  border-radius:22px!important;
+  background:rgba(15,22,28,.66)!important;
+  backdrop-filter:blur(16px)!important;
+  border:1px solid rgba(255,255,255,.15)!important;
+}
+.hero-badges-on-visual span{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:34px!important;
+  padding:8px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.11)!important;
+  color:#fff7e6!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  font-size:12px!important;
+  font-weight:950!important;
+}
+
+/* ===== ABOUT / STATS ===== */
+.stats-grid,.about-stats-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+.stats-grid>div{
+  padding:22px!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  border:1px solid rgba(17,20,23,.10)!important;
+  box-shadow:0 10px 30px rgba(17,20,23,.06)!important;
+}
+.stats-grid strong{display:block!important;margin-bottom:8px!important;color:#101418!important;font-size:21px!important;line-height:1.15!important}
+
+/* ===== FACILITY FORMATION ===== */
+.facility-grid,.modern-facilities{
+  display:grid!important;
+  grid-template-columns:repeat(12,minmax(0,1fr))!important;
+  gap:14px!important;
+  align-items:stretch!important;
+}
+.facility-card{
+  grid-column:span 4!important;
+  min-height:210px!important;
+  cursor:pointer!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  padding:24px!important;
+  border-radius:28px!important;
+  background:#fff!important;
+  border:1px solid rgba(17,20,23,.10)!important;
+  box-shadow:0 14px 42px rgba(17,20,23,.07)!important;
+  transition:transform .2s ease, border-color .2s ease, background .2s ease!important;
+  overflow:visible!important;
+}
+.facility-card:nth-child(4){grid-column:span 6!important}
+.facility-card:nth-child(5){grid-column:span 6!important}
+.facility-card:hover,.facility-card.active{transform:translateY(-4px)!important;border-color:rgba(184,138,61,.42)!important;background:linear-gradient(180deg,#fff,#fbf4e7)!important}
+.facility-card.active{box-shadow:0 22px 58px rgba(184,138,61,.16)!important}
+.facility-top{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:12px!important}
+.facility-top span{
+  display:inline-flex!important;
+  width:44px!important;height:44px!important;
+  align-items:center!important;justify-content:center!important;
+  border-radius:15px!important;
+  background:#111820!important;
+  color:#f0d491!important;
+  font-weight:950!important;
+}
+.facility-top i{display:block!important;width:42px!important;height:2px!important;background:linear-gradient(90deg,var(--km-gold),transparent)!important}
+.facility-card h3{margin:0!important;color:#12171b!important;font-size:clamp(22px,2.1vw,30px)!important;line-height:1.05!important;letter-spacing:-.05em!important}
+.facility-card p{margin:0!important}
+.facility-detail-wrap{margin-top:16px!important}
+.facility-detail-card{
+  padding:28px!important;
+  border-radius:30px!important;
+  background:linear-gradient(135deg,#111820,#1d2a31)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:0 18px 50px rgba(17,20,23,.14)!important;
+  overflow:visible!important;
+}
+.facility-detail-card[hidden]{display:none!important}
+.facility-detail-card h3{color:#fffaf0!important;font-size:clamp(30px,4vw,52px)!important;margin:10px 0!important}
+.facility-detail-card p{color:#d9d1c2!important;max-width:850px!important}
+.detail-grid{
+  margin-top:20px!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+.detail-grid>div{
+  padding:18px!important;
+  border-radius:22px!important;
+  background:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(255,255,255,.11)!important;
+}
+.detail-grid strong{display:block!important;color:#f4d694!important;margin-bottom:8px!important}
+.detail-grid span{display:block!important;color:#d9d1c2!important}
+.facility-status-row{display:flex!important;flex-wrap:wrap!important;gap:10px!important;margin-top:18px!important}
+.facility-status-badge{display:inline-flex!important;align-items:center!important;padding:9px 12px!important;border-radius:999px!important;background:rgba(255,255,255,.10)!important;color:#fff5df!important;border:1px solid rgba(255,255,255,.14)!important;font-weight:900!important;font-size:12px!important}
+.facility-status-badge.green{background:rgba(14,95,84,.24)!important;color:#dff8ef!important}
+
+/* ===== ACCESS ===== */
+.access-box,.access-split-box,.social-box,.traktir-card{
+  display:grid!important;
+  gap:18px!important;
+  padding:28px!important;
+  border-radius:30px!important;
+  background:#fff!important;
+  border:1px solid rgba(17,20,23,.10)!important;
+  box-shadow:0 12px 38px rgba(17,20,23,.07)!important;
+}
+.access-split-box{grid-template-columns:1fr 1.1fr!important;align-items:stretch!important}
+.access-intro{align-self:center!important}
+.access-options{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.access-option{padding:22px!important;border-radius:24px!important;background:#f6efe2!important;border:1px solid rgba(17,20,23,.08)!important}
+.access-option span{display:inline-flex!important;margin-bottom:28px!important;color:#8a611f!important;font-weight:950!important}
+.access-option h3{margin:0 0 8px!important;font-size:24px!important;letter-spacing:-.04em!important;color:#111820!important}
+.access-action{grid-column:1/-1!important;display:flex!important;justify-content:space-between!important;align-items:center!important;gap:16px!important;flex-wrap:wrap!important;padding-top:16px!important;border-top:1px solid rgba(17,20,23,.10)!important}
+.access-action .btn-primary{color:#fff!important;background:linear-gradient(135deg,#111820,#0e5f54)!important}
+
+/* ===== FAQ: readable, not cut, clickable ===== */
+.faq-accordion{display:grid!important;gap:14px!important;width:100%!important}
+.faq-category,.faq-item{
+  display:block!important;
+  width:100%!important;
+  border-radius:24px!important;
+  border:1px solid rgba(17,20,23,.10)!important;
+  background:#fff!important;
+  box-shadow:0 10px 32px rgba(17,20,23,.055)!important;
+  overflow:visible!important;
+}
+.faq-category{padding:0!important}
+.faq-category>summary,.faq-item>summary{
+  cursor:pointer!important;
+  list-style:none!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  padding:20px 22px!important;
+  color:#111820!important;
+  font-weight:950!important;
+}
+.faq-category>summary::-webkit-details-marker,.faq-item>summary::-webkit-details-marker{display:none!important}
+.faq-category>summary::after,.faq-item>summary::after{
+  content:"+";
+  flex:0 0 auto;
+  width:30px;height:30px;
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:999px;
+  background:#f1e5cf;
+  color:#845d22;
+  font-weight:950;
+}
+.faq-category[open]>summary::after,.faq-item[open]>summary::after{content:"–"}
+.faq-category>summary span{display:block!important;font-size:21px!important;line-height:1.18!important;letter-spacing:-.035em!important}
+.faq-category>summary small{display:block!important;margin-top:6px!important;max-width:720px!important;font-weight:650!important;color:#6b747c!important}
+.faq-items{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;padding:0 14px 14px!important}
+.faq-item{border-radius:18px!important;background:#fbf7ef!important;box-shadow:none!important}
+.faq-item>summary{padding:16px 18px!important;font-size:15px!important;line-height:1.35!important}
+.faq-item p{margin:0!important;padding:0 18px 18px!important;color:#4e5963!important}
+
+/* ===== TRAKTIR / SOCIAL / FOOTER ===== */
+.traktir-grid,.simple-traktir-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+.traktir-card{max-width:820px!important;margin:0 auto!important;text-align:center!important;align-items:center!important}
+.traktir-card h3{font-size:clamp(28px,4vw,48px)!important}
+.traktir-short-note{color:#7b612e!important;font-weight:900!important}
+.traktir-actions-simple,.social-links{display:flex!important;justify-content:center!important;gap:12px!important;flex-wrap:wrap!important}
+.social-box{text-align:center!important;align-items:center!important;background:linear-gradient(135deg,#111820,#203039)!important;color:#fff!important}
+.social-box h2{color:#fffaf0!important;font-size:clamp(30px,4vw,52px)!important;letter-spacing:-.055em!important;margin:0!important}
+.social-box p{color:#d8d0c0!important;max-width:720px!important;margin:0 auto!important}
+.social-link{
+  min-height:48px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  padding:12px 16px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.08)!important;
+  color:#fff6e6!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  font-weight:950!important;
+}
+.social-icon svg{width:18px!important;height:18px!important;fill:currentColor!important;display:block!important}
+.site-footer{
+  width:min(calc(100% - 32px),var(--km-max))!important;
+  margin:0 auto 28px!important;
+  padding:24px!important;
+  border-radius:28px!important;
+  background:#111820!important;
+  color:#dcd3c2!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  text-align:center!important;
+}
+.site-footer p{margin:0 0 10px!important;color:#dcd3c2!important;line-height:1.7!important}
+.site-footer small{color:#f0d491!important;font-weight:900!important}
+
+/* hidden/public member access */
+a[href="member.html"],a[href="register.html"],.kamar-member-access-hidden{display:none!important}
+
+@media (max-width:980px){
+  .site-header{grid-template-columns:1fr!important;gap:10px!important;text-align:center!important;top:8px!important;border-radius:24px!important}
+  .brand,.nav-links,.header-actions{justify-content:center!important}
+  .nav-links{display:none!important}
+  .quick-mobile-nav{display:flex!important;position:sticky!important;top:92px!important;z-index:40!important;width:min(calc(100% - 32px),var(--km-max))!important;margin:10px auto!important;justify-content:center!important;gap:8px!important;flex-wrap:wrap!important;padding:8px!important;border-radius:22px!important;background:rgba(255,255,255,.82)!important;border:1px solid rgba(17,20,23,.10)!important;backdrop-filter:blur(12px)!important}
+  main{padding-top:12px!important}
+  .hero{grid-template-columns:1fr!important}
+  .hero-copy,.hero-visual,.hero-person{min-height:auto!important}
+  .hero-copy{padding:32px!important}
+  .hero-person{height:auto!important;max-height:620px!important;object-fit:cover!important}
+  .stats-grid,.about-stats-grid,.detail-grid,.access-split-box,.access-options{grid-template-columns:1fr!important}
+  .facility-grid,.modern-facilities{grid-template-columns:1fr!important}
+  .facility-card,.facility-card:nth-child(4),.facility-card:nth-child(5){grid-column:1/-1!important;min-height:auto!important}
+}
+@media (max-width:640px){
+  .site-header{width:min(calc(100% - 20px),var(--km-max))!important;margin-top:10px!important;padding:10px!important}
+  .brand span{font-size:14px!important}
+  .header-cta{width:100%!important}
+  main{padding-left:10px!important;padding-right:10px!important}
+  .section-shell{padding:20px!important;border-radius:24px!important;margin:14px auto!important}
+  .hero{padding:10px!important}
+  .hero-copy{padding:24px!important;border-radius:22px!important;gap:16px!important}
+  .hero h1{font-size:clamp(36px,13vw,54px)!important;letter-spacing:-.07em!important}
+  .hero-actions .btn{width:100%!important}
+  .hero-badges-on-visual{position:static!important;margin:10px!important;background:#111820!important}
+  .facility-card,.facility-detail-card,.access-box,.social-box,.traktir-card{padding:20px!important;border-radius:22px!important}
+  .faq-category>summary{display:block!important}
+  .faq-category>summary::after{float:right;margin-left:10px}
+  .access-action{display:grid!important}
+  .access-action .btn{width:100%!important}
+}
+
+/* ===== 5/11: kamar-section-polish-v48.css ===== */
+/* KAMAR STEP 48 — Affiliate + Traktir Precision Polish
+   Fokus: memperbaiki section affiliate dan traktir agar rapi, simetris, readable, tanpa overlap. */
+
+/* ===== AFFILIATE SECTION — PREMIUM READABLE FORMATION ===== */
+body.public-home #affiliate-kamar.section-shell{
+  padding: clamp(26px, 4vw, 54px) !important;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(201,157,81,.14), transparent 24rem),
+    linear-gradient(135deg, #ffffff 0%, #fbf7ef 54%, #f2eadc 100%) !important;
+  border: 1px solid rgba(20,24,28,.10) !important;
+  box-shadow: 0 26px 80px rgba(22,24,25,.10) !important;
+  overflow: visible !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-program-box{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: clamp(20px, 3vw, 34px) !important;
+  width: 100% !important;
+}
+
+body.public-home #affiliate-kamar .section-heading.centered{
+  max-width: 920px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  align-items: center !important;
+}
+
+body.public-home #affiliate-kamar .section-heading h2{
+  color: #101418 !important;
+  font-size: clamp(34px, 5vw, 64px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.075em !important;
+  text-wrap: balance !important;
+}
+
+body.public-home #affiliate-kamar .section-heading p{
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  color: #59636c !important;
+  font-size: clamp(15px, 1.6vw, 18px) !important;
+  line-height: 1.72 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-program-grid{
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr) !important;
+  gap: clamp(18px, 2.6vw, 28px) !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card,
+body.public-home #affiliate-kamar .affiliate-note-card{
+  min-height: unset !important;
+  height: auto !important;
+  overflow: visible !important;
+  border-radius: 30px !important;
+  padding: clamp(24px, 3vw, 36px) !important;
+  box-shadow: 0 18px 54px rgba(17,20,23,.10) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card{
+  position: relative !important;
+  display: grid !important;
+  gap: 20px !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(215,180,109,.28), transparent 20rem),
+    linear-gradient(145deg, #14191f 0%, #1e2931 58%, #0f151a 100%) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  color: #fff !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card::after{
+  content:"";
+  position:absolute;
+  inset:16px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.08);
+  pointer-events:none;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card .kamar-badge{
+  background: rgba(215,180,109,.15) !important;
+  color: #ffe2a4 !important;
+  border-color: rgba(215,180,109,.28) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card h3{
+  margin: 0 !important;
+  max-width: 620px !important;
+  color: #fff7e8 !important;
+  font-size: clamp(28px, 3.2vw, 46px) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.06em !important;
+  text-wrap: balance !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission{
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, auto) minmax(220px, 1fr) minmax(0, auto) !important;
+  gap: clamp(10px, 2vw, 18px) !important;
+  align-items: center !important;
+  padding: clamp(18px, 3vw, 28px) !important;
+  border-radius: 28px !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.055)),
+    radial-gradient(circle at 50% 50%, rgba(215,180,109,.18), transparent 22rem) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09) !important;
+  text-align: center !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small{
+  margin:0 !important;
+  color: #e7ddc8 !important;
+  font-size: clamp(11px, 1.1vw, 13px) !important;
+  line-height: 1.35 !important;
+  font-weight: 900 !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission strong{
+  display: block !important;
+  color: #ffd979 !important;
+  font-size: clamp(42px, 6vw, 76px) !important;
+  line-height: .92 !important;
+  letter-spacing: -0.08em !important;
+  font-weight: 1000 !important;
+  text-shadow: 0 12px 36px rgba(215,180,109,.25) !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card p{
+  position: relative !important;
+  z-index: 1 !important;
+  margin: 0 !important;
+  color: #d9d0bf !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-list{
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item{
+  display: grid !important;
+  grid-template-columns: minmax(150px, .42fr) minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+  padding: 16px 18px !important;
+  border-radius: 20px !important;
+  background: rgba(255,255,255,.075) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item span{
+  color: #ffdf8f !important;
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  font-weight: 950 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item small{
+  color: #d8d0c2 !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-actions,
+body.public-home #affiliate-kamar .affiliate-actions-admin-only{
+  position: relative !important;
+  z-index: 1 !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-footnote{
+  color: #bfb5a5 !important;
+  font-size: 12.8px !important;
+  line-height: 1.65 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card{
+  display: grid !important;
+  align-content: start !important;
+  gap: 18px !important;
+  background: #fff !important;
+  border: 1px solid rgba(17,20,23,.10) !important;
+  color: #111417 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card h3{
+  margin: 0 !important;
+  color: #101418 !important;
+  font-size: clamp(28px, 3.6vw, 48px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.06em !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card p{
+  margin: 0 !important;
+  color: #56616b !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps{
+  counter-reset: affiliateStep !important;
+  display: grid !important;
+  gap: 12px !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps span{
+  counter-increment: affiliateStep !important;
+  display: grid !important;
+  grid-template-columns: 38px minmax(0,1fr) !important;
+  gap: 12px !important;
+  align-items: center !important;
+  min-height: 58px !important;
+  padding: 12px 14px !important;
+  border-radius: 18px !important;
+  background: #f7f1e7 !important;
+  border: 1px solid rgba(17,20,23,.08) !important;
+  color: #1b2228 !important;
+  font-weight: 850 !important;
+  line-height: 1.4 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps span::before{
+  content: counter(affiliateStep, decimal-leading-zero);
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background: #111820;
+  color:#ffda83;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+/* ===== TRAKTIR SECTION — SYMMETRIC PREMIUM CTA ===== */
+body.public-home #traktir-kamar.section-shell{
+  padding: clamp(26px, 4vw, 54px) !important;
+  background:
+    radial-gradient(circle at 82% 10%, rgba(14,95,84,.10), transparent 24rem),
+    linear-gradient(135deg, #101820 0%, #1b2831 62%, #10151a 100%) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 28px 90px rgba(16,21,26,.20) !important;
+  color:#fff !important;
+}
+
+body.public-home #traktir-kamar .section-heading.centered{
+  margin: 0 auto 28px !important;
+  text-align:center !important;
+  align-items:center !important;
+  max-width: 860px !important;
+}
+
+body.public-home #traktir-kamar .section-heading h2{
+  color:#fff8e8 !important;
+  font-size: clamp(38px, 5vw, 70px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.075em !important;
+}
+
+body.public-home #traktir-kamar .section-heading p{
+  color:#cfc6b7 !important;
+  max-width: 820px !important;
+  font-size: clamp(15px, 1.6vw, 18px) !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid,
+body.public-home #traktir-kamar .simple-traktir-grid{
+  display: grid !important;
+  grid-template-columns: minmax(0,.88fr) minmax(420px,1.12fr) !important;
+  gap: clamp(18px, 3vw, 30px) !important;
+  align-items: stretch !important;
+  max-width: 1040px !important;
+  margin: 0 auto !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid::before{
+  content: "Dukungan ini bersifat sukarela. Fokus Kamar tetap pada edukasi, ruang diskusi, dan pengembangan fasilitas komunitas secara sehat.";
+  display: flex !important;
+  align-items: end !important;
+  min-height: 100% !important;
+  padding: clamp(24px, 3vw, 34px) !important;
+  border-radius: 30px !important;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.035)),
+    radial-gradient(circle at 0% 0%, rgba(215,180,109,.20), transparent 18rem) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  color: #eadfcf !important;
+  font-size: clamp(18px, 2vw, 26px) !important;
+  line-height: 1.35 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.035em !important;
+}
+
+body.public-home #traktir-kamar .traktir-card,
+body.public-home #traktir-kamar .simple-traktir-card{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  display: grid !important;
+  justify-items: center !important;
+  align-content: center !important;
+  gap: 18px !important;
+  min-height: 420px !important;
+  padding: clamp(26px, 4vw, 46px) !important;
+  border-radius: 34px !important;
+  text-align: center !important;
+  background: linear-gradient(180deg, #fffaf1 0%, #f3e7d0 100%) !important;
+  border: 1px solid rgba(255,255,255,.36) !important;
+  box-shadow: 0 28px 70px rgba(0,0,0,.20) !important;
+  color: #111417 !important;
+}
+
+body.public-home #traktir-kamar .traktir-card .kamar-badge{
+  background:#ead6ad !important;
+  color:#70501a !important;
+  border-color: rgba(112,80,26,.16) !important;
+}
+
+body.public-home #traktir-kamar .traktir-card h3{
+  margin:0 !important;
+  color:#101418 !important;
+  font-size: clamp(36px, 4.8vw, 66px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.08em !important;
+  text-wrap: balance !important;
+}
+
+body.public-home #traktir-kamar .traktir-card p{
+  margin:0 !important;
+  max-width: 720px !important;
+  color:#535d66 !important;
+  font-size: clamp(15px, 1.5vw, 18px) !important;
+  line-height:1.72 !important;
+}
+
+body.public-home #traktir-kamar .traktir-short-note{
+  margin-top:4px !important;
+  padding: 12px 18px !important;
+  border-radius: 999px !important;
+  background: rgba(184,138,61,.12) !important;
+  border: 1px solid rgba(184,138,61,.18) !important;
+  color:#73521b !important;
+  font-size: clamp(15px, 1.4vw, 18px) !important;
+  font-weight: 950 !important;
+  line-height:1.3 !important;
+}
+
+body.public-home #traktir-kamar .traktir-actions-simple{
+  margin-top: 4px !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+
+body.public-home #traktir-kamar .traktir-actions-simple .btn,
+body.public-home #traktir-kamar .traktir-actions-simple .btn-primary{
+  min-height: 54px !important;
+  padding: 15px 28px !important;
+  color:#13110b !important;
+  background: linear-gradient(135deg, #c69a4b 0%, #f5d98b 55%, #bb8d3d 100%) !important;
+  border: 1px solid rgba(255,255,255,.55) !important;
+  box-shadow: 0 18px 40px rgba(187,141,61,.32) !important;
+}
+
+/* ===== RESPONSIVE SAFETY ===== */
+@media (max-width: 960px){
+  body.public-home #affiliate-kamar .affiliate-program-grid,
+  body.public-home #traktir-kamar .traktir-grid,
+  body.public-home #traktir-kamar .simple-traktir-grid{
+    grid-template-columns: 1fr !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission{
+    grid-template-columns: 1fr !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-benefit-item{
+    grid-template-columns: 1fr !important;
+  }
+  body.public-home #traktir-kamar .traktir-grid::before{
+    min-height: 180px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 560px){
+  body.public-home #affiliate-kamar.section-shell,
+  body.public-home #traktir-kamar.section-shell{
+    padding: 20px !important;
+    border-radius: 26px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-main-card,
+  body.public-home #affiliate-kamar .affiliate-note-card,
+  body.public-home #traktir-kamar .traktir-card{
+    padding: 22px !important;
+    border-radius: 24px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission strong{
+    font-size: clamp(34px, 13vw, 50px) !important;
+  }
+}
+
+/* ===== 6/11: kamar-final-polish-v49.css ===== */
+/* KAMAR STEP 49 — Final Visual Readability Polish
+   Fokus: hero lebih readable, affiliate reward tidak overlap, traktir lebih simple-simetris.
+   Hanya CSS override; tidak mengubah JS, link, FAQ, atau logic card. */
+
+/* ===== HERO READABILITY FIX ===== */
+body.public-home .hero{
+  grid-template-columns: minmax(0, .98fr) minmax(360px, 1.02fr) !important;
+  gap: clamp(14px, 2vw, 22px) !important;
+  padding: clamp(12px, 1.8vw, 20px) !important;
+}
+
+body.public-home .hero-copy{
+  justify-content: center !important;
+  min-height: clamp(500px, 62vh, 650px) !important;
+  padding: clamp(32px, 4.4vw, 56px) !important;
+}
+
+body.public-home .hero h1{
+  max-width: 720px !important;
+  font-size: clamp(42px, 5.05vw, 68px) !important;
+  line-height: 1.07 !important;
+  letter-spacing: -0.055em !important;
+  text-wrap: balance !important;
+  word-spacing: .01em !important;
+}
+
+body.public-home .hero .eyebrow{
+  max-width: 100% !important;
+  white-space: normal !important;
+  text-align: left !important;
+}
+
+body.public-home .hero-actions{
+  margin-top: 8px !important;
+}
+
+body.public-home .hero-visual,
+body.public-home .hero-person{
+  min-height: clamp(500px, 62vh, 650px) !important;
+}
+
+body.public-home .hero-badges-on-visual{
+  gap: 10px !important;
+  padding: 12px 14px !important;
+}
+
+body.public-home .hero-badges-on-visual span{
+  min-width: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+}
+
+/* ===== AFFILIATE: REWARD MUST NOT OVERLAP ===== */
+body.public-home #affiliate-kamar .affiliate-program-grid{
+  grid-template-columns: minmax(0, 1fr) minmax(360px, .86fr) !important;
+  align-items: stretch !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card{
+  gap: 18px !important;
+  padding: clamp(26px, 3vw, 34px) !important;
+  overflow: hidden !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card::after{
+  inset: 14px !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-main-card h3{
+  max-width: 580px !important;
+  font-size: clamp(30px, 3.15vw, 44px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.052em !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: clamp(20px, 2.6vw, 28px) !important;
+  border-radius: 26px !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.055)),
+    linear-gradient(90deg, rgba(215,180,109,.18), rgba(215,180,109,.06)) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small{
+  display: block !important;
+  width: 100% !important;
+  color: #f0e6d5 !important;
+  font-size: clamp(11px, .95vw, 13px) !important;
+  line-height: 1.35 !important;
+  letter-spacing: .16em !important;
+  text-align: center !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small:first-child{
+  opacity: .92 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission small:last-child{
+  color: #ffdf91 !important;
+  opacity: 1 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-commission strong{
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  color: #ffdb78 !important;
+  font-size: clamp(42px, 4.45vw, 62px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.055em !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  text-shadow: 0 10px 30px rgba(215,180,109,.26) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item{
+  grid-template-columns: minmax(132px, .36fr) minmax(0, 1fr) !important;
+  padding: 15px 16px !important;
+  gap: 12px !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-benefit-item span,
+body.public-home #affiliate-kamar .affiliate-benefit-item small{
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-footnote{
+  color: rgba(236,228,216,.82) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card{
+  border-radius: 30px !important;
+  padding: clamp(26px, 3vw, 36px) !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-note-card h3{
+  font-size: clamp(32px, 3.4vw, 46px) !important;
+  line-height: 1.06 !important;
+}
+
+body.public-home #affiliate-kamar .affiliate-steps span{
+  min-height: 54px !important;
+  padding: 12px 14px !important;
+  line-height: 1.34 !important;
+  font-size: 14.5px !important;
+}
+
+/* ===== TRAKTIR: SIMPLE, SYMMETRIC, ELEGANT ===== */
+body.public-home #traktir-kamar.section-shell{
+  padding: clamp(28px, 4.2vw, 58px) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(215,180,109,.14), transparent 30rem),
+    linear-gradient(135deg, #101820 0%, #18252d 58%, #101418 100%) !important;
+  border-radius: clamp(28px, 3vw, 42px) !important;
+  overflow: hidden !important;
+}
+
+body.public-home #traktir-kamar .section-heading.centered{
+  margin-bottom: clamp(22px, 3vw, 34px) !important;
+  max-width: 860px !important;
+}
+
+body.public-home #traktir-kamar .section-heading h2{
+  font-size: clamp(40px, 5vw, 64px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.065em !important;
+}
+
+body.public-home #traktir-kamar .section-heading p{
+  max-width: 780px !important;
+  line-height: 1.65 !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid,
+body.public-home #traktir-kamar .simple-traktir-grid{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  gap: 0 !important;
+}
+
+body.public-home #traktir-kamar .traktir-grid::before,
+body.public-home #traktir-kamar .simple-traktir-grid::before{
+  content: none !important;
+  display: none !important;
+}
+
+body.public-home #traktir-kamar .traktir-card,
+body.public-home #traktir-kamar .simple-traktir-card{
+  min-height: 0 !important;
+  max-width: 760px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: clamp(28px, 4vw, 46px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  border-radius: 32px !important;
+  background:
+    linear-gradient(180deg, #fffaf1 0%, #f6ecd9 100%) !important;
+  box-shadow: 0 22px 60px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.8) !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+}
+
+body.public-home #traktir-kamar .traktir-card .kamar-badge{
+  margin-bottom: 2px !important;
+}
+
+body.public-home #traktir-kamar .traktir-card h3{
+  font-size: clamp(34px, 4.2vw, 56px) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.065em !important;
+}
+
+body.public-home #traktir-kamar .traktir-card p{
+  max-width: 620px !important;
+  font-size: clamp(15px, 1.35vw, 17px) !important;
+  line-height: 1.72 !important;
+}
+
+body.public-home #traktir-kamar .traktir-short-note{
+  max-width: 100% !important;
+  margin-top: 2px !important;
+  padding: 10px 16px !important;
+  font-size: clamp(14px, 1.25vw, 16px) !important;
+  line-height: 1.35 !important;
+  border-radius: 16px !important;
+}
+
+body.public-home #traktir-kamar .traktir-actions-simple .btn,
+body.public-home #traktir-kamar .traktir-actions-simple .btn-primary{
+  min-height: 50px !important;
+  padding: 14px 24px !important;
+  border-radius: 999px !important;
+}
+
+/* ===== RESPONSIVE REBALANCE ===== */
+@media (max-width: 980px){
+  body.public-home .hero,
+  body.public-home #affiliate-kamar .affiliate-program-grid{
+    grid-template-columns: 1fr !important;
+  }
+
+  body.public-home .hero-copy,
+  body.public-home .hero-visual,
+  body.public-home .hero-person{
+    min-height: auto !important;
+  }
+
+  body.public-home .hero h1{
+    font-size: clamp(38px, 9vw, 60px) !important;
+    line-height: 1.06 !important;
+  }
+
+  body.public-home #affiliate-kamar .affiliate-benefit-item{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 560px){
+  body.public-home .hero h1{
+    font-size: clamp(34px, 12vw, 48px) !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  body.public-home #affiliate-kamar .affiliate-commission strong{
+    font-size: clamp(34px, 10.8vw, 48px) !important;
+    letter-spacing: -0.045em !important;
+  }
+
+  body.public-home #affiliate-kamar .affiliate-steps span{
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    font-size: 13.5px !important;
+  }
+
+  body.public-home #traktir-kamar .traktir-card,
+  body.public-home #traktir-kamar .simple-traktir-card{
+    padding: 24px !important;
+    border-radius: 26px !important;
+  }
+}
+
+/* ===== 7/11: kamar-homepage-v2-sprint1.css ===== */
+/* Kamar Homepage V2 — Sprint 1: Hero, Market Study, Indicator */
+:root{
+  --v2-ink:#0b0d12;
+  --v2-navy:#111826;
+  --v2-cream:#f4efe5;
+  --v2-paper:#fffdf8;
+  --v2-gold:#c9a45d;
+  --v2-gold-soft:#e6d4a9;
+  --v2-emerald:#184d42;
+  --v2-line:rgba(20,24,35,.12);
+  --v2-shadow:0 24px 70px rgba(14,18,28,.12);
+}
+
+.public-home .hero.section-shell{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr)!important;
+  align-items:stretch!important;
+  gap:clamp(22px,4vw,58px)!important;
+  padding:clamp(34px,5vw,72px)!important;
+  min-height:620px!important;
+  background:
+    radial-gradient(circle at 13% 14%,rgba(201,164,93,.18),transparent 32%),
+    linear-gradient(135deg,#0c111b 0%,#121a29 54%,#1a2733 100%)!important;
+  border:1px solid rgba(230,212,169,.24)!important;
+  box-shadow:0 34px 100px rgba(6,9,15,.35)!important;
+  overflow:hidden!important;
+}
+.public-home .hero-copy{display:flex!important;flex-direction:column!important;justify-content:center!important;min-width:0!important}
+.public-home .hero-copy .eyebrow{color:var(--v2-gold-soft)!important;letter-spacing:.16em!important}
+.public-home .hero-copy h1{
+  max-width:760px!important;
+  margin:18px 0 28px!important;
+  font-size:clamp(2.65rem,5.4vw,5.75rem)!important;
+  line-height:.98!important;
+  letter-spacing:-.045em!important;
+  color:#fffaf0!important;
+  text-wrap:balance!important;
+  overflow:visible!important;
+}
+.public-home .hero-actions{display:flex!important;flex-wrap:wrap!important;gap:12px!important}
+.public-home .hero-actions .btn{min-width:180px!important;justify-content:center!important}
+.public-home .hero-visual{min-width:0!important;display:flex!important;align-items:stretch!important}
+.public-home .visual-card{
+  position:relative!important;
+  width:100%!important;
+  min-height:500px!important;
+  border-radius:30px!important;
+  overflow:hidden!important;
+  background:#090d14!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  box-shadow:0 24px 72px rgba(0,0,0,.4)!important;
+}
+.public-home .hero-person{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;display:block!important}
+.public-home .hero-badges-on-visual{
+  position:absolute!important;
+  left:20px!important;right:20px!important;bottom:20px!important;
+  display:flex!important;flex-wrap:wrap!important;gap:8px!important;
+  padding:14px!important;border-radius:18px!important;
+  background:rgba(7,10,15,.74)!important;
+  backdrop-filter:blur(14px)!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+}
+.public-home .hero-badges-on-visual span{
+  color:#fff8e8!important;background:rgba(255,255,255,.08)!important;
+  border:1px solid rgba(230,212,169,.3)!important;border-radius:999px!important;
+  padding:8px 12px!important;font-size:.78rem!important;line-height:1!important;
+}
+
+.kamar-sprint1-showcase{
+  margin-top:clamp(42px,7vw,92px)!important;
+  padding:clamp(28px,4vw,58px)!important;
+  border:1px solid var(--v2-line)!important;
+  border-radius:32px!important;
+  background:linear-gradient(180deg,rgba(255,253,248,.98),rgba(244,239,229,.98))!important;
+  box-shadow:var(--v2-shadow)!important;
+  overflow:hidden!important;
+}
+.showcase-heading-row,.indicator-title-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.38fr);gap:28px;align-items:end;margin-bottom:34px
+}
+.kamar-sprint1-showcase .section-heading{margin:0!important;max-width:820px!important}
+.kamar-sprint1-showcase .section-heading h2{
+  color:var(--v2-ink)!important;font-size:clamp(2rem,4vw,4rem)!important;
+  line-height:1.04!important;letter-spacing:-.035em!important;text-wrap:balance!important;margin-bottom:16px!important
+}
+.kamar-sprint1-showcase .section-heading p{color:#5c6270!important;max-width:760px!important;font-size:1rem!important;line-height:1.8!important}
+.showcase-note{
+  align-self:end;padding:16px 18px;border-radius:18px;background:#111826;color:#f4e8cf;
+  border:1px solid rgba(201,164,93,.3);font-size:.84rem;line-height:1.55
+}
+.product-showcase{
+  display:grid;grid-template-columns:minmax(290px,.78fr) minmax(0,1.4fr);gap:22px;
+  padding:18px;border-radius:28px;background:#101722;border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 28px 78px rgba(10,15,24,.24)
+}
+.showcase-control{padding:clamp(20px,3vw,36px);display:flex;flex-direction:column;justify-content:center;min-width:0}
+.product-kicker{display:inline-flex;width:max-content;max-width:100%;padding:7px 10px;border-radius:999px;background:rgba(201,164,93,.14);color:#e8d5ab;border:1px solid rgba(201,164,93,.28);font-size:.72rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.showcase-control h3{color:#fffaf0;font-size:clamp(1.55rem,2.7vw,2.65rem);line-height:1.1;letter-spacing:-.025em;margin:18px 0 12px;text-wrap:balance}
+.showcase-control p{color:#aeb6c3;line-height:1.75;margin:0 0 22px}
+.showcase-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.showcase-tab{
+  appearance:none;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.045);color:#d6dbe3;
+  border-radius:999px;padding:10px 13px;font:inherit;font-weight:800;font-size:.78rem;cursor:pointer;transition:.22s ease
+}
+.showcase-tab:hover,.showcase-tab.active{background:var(--v2-gold);border-color:var(--v2-gold);color:#10131a;transform:translateY(-1px)}
+.study-feature-list,.indicator-capabilities{display:flex;flex-wrap:wrap;gap:8px}
+.study-feature-list span,.indicator-capabilities span{padding:8px 10px;border-radius:10px;background:rgba(24,77,66,.22);border:1px solid rgba(95,190,166,.22);color:#b9e6da;font-size:.74rem;font-weight:800}
+.showcase-stage{
+  position:relative;display:block;width:100%;min-height:440px;padding:0;border:0;border-radius:20px;overflow:hidden;
+  background:#05070a;cursor:zoom-in;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)
+}
+.showcase-stage img{width:100%;height:100%;min-height:440px;max-height:660px;object-fit:contain;display:block;background:#05070a;transition:opacity .18s ease,transform .35s ease}
+.showcase-stage:hover img{transform:scale(1.01)}
+.stage-caption{position:absolute;left:16px;right:16px;bottom:16px;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:rgba(6,9,13,.78);backdrop-filter:blur(12px);color:white;border:1px solid rgba(255,255,255,.11)}
+.stage-caption strong{font-size:.88rem}.stage-caption small{color:#c9ced7}
+.recap-block{display:grid;grid-template-columns:minmax(250px,.8fr) repeat(2,minmax(0,1fr));gap:18px;margin-top:22px}
+.recap-copy,.recap-card{border-radius:22px;border:1px solid var(--v2-line);background:rgba(255,255,255,.76);min-width:0}
+.recap-copy{padding:24px}.recap-copy h3{color:var(--v2-ink);font-size:1.45rem;line-height:1.2;margin:14px 0 10px}.recap-copy p{color:#626876;line-height:1.7;margin:0}
+.recap-card{padding:10px;cursor:zoom-in;overflow:hidden;text-align:left;color:var(--v2-ink);font:inherit}
+.recap-card img{width:100%;aspect-ratio:16/10;object-fit:contain;background:#0c1017;border-radius:15px;display:block}
+.recap-card span{display:block;padding:12px 6px 4px;font-weight:900}
+.indicator-section{background:linear-gradient(150deg,#f8f5ed 0%,#e9eee9 100%)!important}
+.all-market-callout{padding:20px 22px;border-radius:22px;background:linear-gradient(135deg,#153d36,#0e2824);color:white;box-shadow:0 18px 50px rgba(20,77,66,.2)}
+.all-market-callout strong,.all-market-callout span{display:block}.all-market-callout strong{font-size:clamp(1.25rem,2.2vw,2rem);color:#fff5dc;letter-spacing:.04em}.all-market-callout span{font-size:1rem;font-weight:900;color:#bde8d9;margin-top:4px}.all-market-callout small{display:block;color:#bed0ca;line-height:1.55;margin-top:10px}
+.indicator-showcase{background:linear-gradient(140deg,#0b1118,#102119)}
+.indicator-badges{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.indicator-badges article{padding:18px;border-radius:18px;background:rgba(255,255,255,.82);border:1px solid var(--v2-line)}
+.indicator-badges strong{display:block;color:var(--v2-emerald);font-size:.83rem;letter-spacing:.08em;margin-bottom:8px}.indicator-badges span{display:block;color:#626876;line-height:1.55;font-size:.86rem}
+.showcase-lightbox{position:fixed;inset:0;z-index:999999;background:rgba(3,5,8,.94);display:grid;place-items:center;padding:28px}
+.showcase-lightbox[hidden]{display:none!important}
+.showcase-lightbox figure{margin:0;max-width:min(94vw,1500px);max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:12px}
+.showcase-lightbox figure img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:16px;box-shadow:0 28px 90px rgba(0,0,0,.55)}
+.showcase-lightbox figcaption{color:#f3ead7;font-weight:800;text-align:center}
+.lightbox-close,.lightbox-nav{position:fixed;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:white;cursor:pointer;backdrop-filter:blur(12px)}
+.lightbox-close{right:22px;top:22px;width:48px;height:48px;border-radius:50%;font-size:2rem;line-height:1}
+.lightbox-nav{top:50%;transform:translateY(-50%);width:48px;height:64px;border-radius:16px;font-size:2rem}.lightbox-prev{left:20px}.lightbox-next{right:20px}
+
+@media(max-width:980px){
+ .public-home .hero.section-shell{grid-template-columns:1fr!important;min-height:0!important}
+ .public-home .visual-card{min-height:480px!important}
+ .showcase-heading-row,.indicator-title-grid,.product-showcase{grid-template-columns:1fr}
+ .showcase-note{align-self:start}
+ .recap-block{grid-template-columns:1fr 1fr}.recap-copy{grid-column:1/-1}
+ .indicator-badges{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+ .public-home .hero.section-shell,.kamar-sprint1-showcase{padding:22px!important;border-radius:24px!important}
+ .public-home .hero-copy h1{font-size:clamp(2.2rem,12vw,3.7rem)!important}
+ .public-home .visual-card{min-height:390px!important;border-radius:22px!important}
+ .product-showcase{padding:10px;border-radius:22px}
+ .showcase-control{padding:18px 14px}
+ .showcase-stage,.showcase-stage img{min-height:280px}
+ .stage-caption{position:static;border-radius:0;background:#0d131d}
+ .recap-block,.indicator-badges{grid-template-columns:1fr}
+ .showcase-lightbox{padding:14px}.lightbox-nav{display:none}.lightbox-close{right:12px;top:12px}
+}
+
+/* ===== 8/11: kamar-facilities-v2.css ===== */
+/* Kamar Facilities V2 — isolated homepage layer */
+#showcase-study,#showcase-indikator{display:none!important}
+.facility-system-v2{--accent:#184d3a;--soft:#edf6f1;overflow:visible}
+.facility-system-heading{max-width:820px;margin-inline:auto}
+.facility-selector-v2{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:14px!important;margin-top:30px!important}
+.facility-selector-v2 .facility-card{min-height:168px!important;padding:22px!important;border:1px solid rgba(29,36,45,.12)!important;border-radius:22px!important;background:#fff!important;box-shadow:0 12px 34px rgba(25,34,43,.07)!important;overflow:hidden!important;position:relative!important;transition:.28s ease!important}
+.facility-selector-v2 .facility-card:before{content:"";position:absolute;inset:auto 0 0;height:4px;background:var(--card-accent,#184d3a);opacity:.34}
+.facility-selector-v2 .facility-card:hover,.facility-selector-v2 .facility-card.active{transform:translateY(-5px)!important;border-color:var(--card-accent,#184d3a)!important;box-shadow:0 18px 44px rgba(25,34,43,.13)!important}
+.facility-selector-v2 .facility-card.active:before{height:7px;opacity:1}
+.facility-selector-v2 .facility-card h3{font-size:1.08rem!important;line-height:1.25!important;margin:18px 0 8px!important}
+.facility-selector-v2 .facility-card p{font-size:.84rem!important;line-height:1.55!important;color:#58616d!important;margin:0!important}
+.facility-edukasi{--card-accent:#147b5b}.facility-signal{--card-accent:#235fbd}.facility-private{--card-accent:#7447a8}.facility-indikator{--card-accent:#b08123}.facility-robot{--card-accent:#a63d48}
+.facility-detail-v2{margin-top:22px!important}
+.facility-panel-v2{display:grid!important;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr)!important;gap:28px!important;padding:30px!important;border-radius:30px!important;border:1px solid color-mix(in srgb,var(--panel-accent) 38%,transparent)!important;background:linear-gradient(145deg,#fff 0%,var(--panel-soft) 100%)!important;box-shadow:0 24px 70px rgba(26,33,42,.10)!important;overflow:hidden!important;min-height:600px!important;animation:facilityIn .28s ease both}
+.facility-panel-v2[hidden]{display:none!important}
+.theme-edukasi{--panel-accent:#147b5b;--panel-soft:#eef8f3}.theme-signal{--panel-accent:#235fbd;--panel-soft:#eef4fc}.theme-private{--panel-accent:#7447a8;--panel-soft:#f5f0fa}.theme-indikator{--panel-accent:#b08123;--panel-soft:#fbf7ec}.theme-robot{--panel-accent:#a63d48;--panel-soft:#fbf0f1}
+.facility-copy-v2{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.facility-panel-header{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.facility-category,.facility-pill{display:inline-flex;padding:8px 12px;border-radius:999px;font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.facility-category{background:var(--panel-accent);color:white}.facility-pill{background:white;color:var(--panel-accent);border:1px solid color-mix(in srgb,var(--panel-accent) 25%,transparent)}
+.facility-panel-v2 h3{font-size:clamp(2rem,3.2vw,3.5rem)!important;line-height:1.04!important;letter-spacing:-.04em!important;margin:0 0 16px!important;color:#18202a!important;max-width:760px!important}
+.facility-lead{font-size:1rem!important;line-height:1.75!important;color:#4e5966!important;margin:0 0 22px!important;max-width:780px!important}
+.facility-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;margin:8px 0 16px}
+.facility-info-grid section{background:rgba(255,255,255,.78);border:1px solid rgba(29,36,45,.09);padding:18px;border-radius:18px;min-width:0}
+.facility-info-grid h4{margin:0 0 10px;font-size:.92rem;color:#202a35}.facility-info-grid ul{margin:0;padding-left:19px;color:#56616c}.facility-info-grid li{margin:7px 0;line-height:1.45;font-size:.86rem}
+.facility-note{width:100%;padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--panel-accent) 10%,white);border-left:4px solid var(--panel-accent);font-size:.83rem;line-height:1.55;color:#46515d;margin:0 0 18px}
+.facility-panel-v2 .btn{margin-top:auto}
+.mechanism-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;margin-bottom:16px}.mechanism-grid div{background:#fff;border:1px solid rgba(29,36,45,.09);padding:15px 10px;border-radius:16px;text-align:center}.mechanism-grid strong{display:block;color:var(--panel-accent);font-size:1.35rem}.mechanism-grid span{font-size:.72rem;color:#5e6873}
+.education-path{display:grid;gap:12px;align-content:center}.education-path div{display:grid;grid-template-columns:44px 1fr;column-gap:12px;padding:18px;border-radius:18px;background:#13251f;color:#fff;box-shadow:0 14px 34px rgba(20,123,91,.16)}.education-path span{grid-row:1/3;font-size:1.35rem;font-weight:900;color:#79d8b5}.education-path strong{font-size:1rem}.education-path small{color:#bed2ca;line-height:1.45}
+.facility-gallery{display:flex;flex-direction:column;min-width:0;align-self:stretch}.gallery-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.gallery-tabs button{border:1px solid rgba(29,36,45,.12);background:#fff;color:#46515d;border-radius:999px;padding:8px 12px;font-size:.75rem;font-weight:800;cursor:pointer}.gallery-tabs button.active{background:var(--panel-accent);color:#fff;border-color:var(--panel-accent)}
+.gallery-stage{position:relative;display:flex;width:100%;flex:1;min-height:470px;padding:0;border:0;border-radius:24px;overflow:hidden;background:#10151b;cursor:zoom-in;box-shadow:0 18px 44px rgba(22,29,38,.18)}.gallery-stage img{width:100%;height:100%;object-fit:contain;background:#0f151c;transition:opacity .16s ease}.portrait-stage img{object-fit:contain;background:#eef0f3}.gallery-stage>span{position:absolute;left:14px;right:14px;bottom:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 14px;border-radius:14px;background:rgba(9,14,19,.76);color:#fff;backdrop-filter:blur(12px)}.gallery-stage strong{font-size:.86rem}.gallery-stage small{color:#d2d8de;font-size:.72rem}
+.compatibility-callout{width:100%;padding:18px;border-radius:18px;background:#1c2027;color:#fff;margin-bottom:12px}.compatibility-callout strong,.compatibility-callout span{display:block}.compatibility-callout strong{font-size:1.5rem;color:#e4bd61}.compatibility-callout span{font-size:1rem;font-weight:800}.compatibility-callout small{display:block;margin-top:6px;color:#c9ced5;line-height:1.45}
+.robot-flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}.robot-flow span{padding:8px 11px;border-radius:999px;background:#fff;border:1px solid rgba(166,61,72,.2);font-size:.75rem;font-weight:800;color:#7a3038}.robot-flow i{font-style:normal;color:#a63d48}
+@keyframes facilityIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:1100px){.facility-selector-v2{grid-template-columns:repeat(3,1fr)!important}.facility-panel-v2{grid-template-columns:1fr!important}.gallery-stage{min-height:430px}.education-path{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.facility-selector-v2{grid-template-columns:1fr!important}.facility-selector-v2 .facility-card{min-height:auto!important}.facility-panel-v2{padding:18px!important;border-radius:22px!important;min-height:0!important}.facility-panel-v2 h3{font-size:2rem!important}.facility-info-grid,.mechanism-grid{grid-template-columns:1fr!important}.education-path{grid-template-columns:1fr}.gallery-stage{min-height:340px}.gallery-stage>span{align-items:flex-start;flex-direction:column}.facility-system-heading{text-align:left!important}}
+
+
+/* Step 54 — Kamar Private curriculum explorer */
+.private-course-panel{grid-template-columns:minmax(0,.95fr) minmax(520px,1.05fr)!important;align-items:start}
+.private-copy-v3{position:sticky;top:20px}
+.private-benefit-grid section:first-child{background:linear-gradient(145deg,#fff,#f8f4fc)}
+.private-course-explorer{display:flex;flex-direction:column;gap:14px;min-width:0;padding:18px;border:1px solid rgba(116,71,168,.18);border-radius:26px;background:rgba(255,255,255,.72);box-shadow:0 22px 55px rgba(73,46,105,.10)}
+.private-course-topbar{display:flex;align-items:center;justify-content:space-between;gap:18px}.private-course-topbar>div:first-child{display:flex;flex-direction:column;gap:3px}.course-eyebrow{font-size:.69rem;letter-spacing:.13em;text-transform:uppercase;color:#7447a8;font-weight:900}.private-course-topbar strong{font-size:1.05rem;color:#1c2430}.course-nav-arrows{display:flex;gap:8px}.course-nav-arrows button{width:38px;height:38px;border-radius:50%;border:1px solid rgba(116,71,168,.2);background:#fff;color:#7447a8;font-size:1.1rem;font-weight:900;cursor:pointer;transition:.2s}.course-nav-arrows button:hover{background:#7447a8;color:#fff;transform:translateY(-2px)}
+.learning-roadmap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}.learning-roadmap button{appearance:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:64px;padding:9px 8px;border-radius:12px;background:#f4f2f7;color:#4f5966;font-family:inherit;font-size:.64rem;font-weight:850;line-height:1.25;text-align:center;border:1px solid rgba(29,36,45,.08);cursor:pointer;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease,background .22s ease,color .22s ease}.learning-roadmap button:hover{transform:translateY(-3px);background:#fff;border-color:rgba(116,71,168,.34);box-shadow:0 10px 24px rgba(73,46,105,.12)}.learning-roadmap b{font-size:.6rem;font-weight:750;opacity:.82}.learning-roadmap button.active{background:linear-gradient(145deg,#7447a8,#8c58c2);color:#fff;border-color:#7447a8;box-shadow:0 10px 24px rgba(116,71,168,.28)}
+.chapter-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 7px;scrollbar-width:thin;scroll-snap-type:x proximity}.chapter-tabs button{flex:0 0 auto;scroll-snap-align:center;border:1px solid rgba(29,36,45,.12);background:#fff;color:#4d5662;border-radius:999px;padding:8px 13px;font-size:.72rem;font-weight:850;cursor:pointer}.chapter-tabs button.active{background:#7447a8;color:#fff;border-color:#7447a8}
+.chapter-visual{position:relative;width:100%;height:360px;padding:0;border:0;border-radius:20px;overflow:hidden;background:#f0f1f4;cursor:zoom-in;box-shadow:0 14px 35px rgba(22,29,38,.13)}.chapter-visual img{width:100%;height:100%;object-fit:contain;background:#fff;transition:opacity .28s ease,transform .28s ease,filter .28s ease}.chapter-visual img.is-changing{opacity:.15;transform:scale(.985);filter:blur(4px)}.chapter-visual-caption{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:14px;align-items:center;padding:10px 13px;border-radius:13px;background:rgba(24,28,34,.80);color:#fff;backdrop-filter:blur(10px)}.chapter-visual-caption strong{font-size:.82rem}.chapter-visual-caption small{font-size:.69rem;color:#ddd7e7;text-align:right}
+.chapter-copy-card{padding:19px;border-radius:20px;background:#fff;border:1px solid rgba(29,36,45,.08)}.chapter-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.chapter-meta span{padding:6px 9px;border-radius:999px;font-size:.63rem;font-weight:900;letter-spacing:.04em}.chapter-level{background:#7447a8;color:#fff}.chapter-framework{background:#efe8f6;color:#633b91}.chapter-category{background:#f2f3f5;color:#59626d}.chapter-copy-card h4{margin:0 0 9px!important;font-size:1.45rem!important;line-height:1.18!important;color:#1b2330!important}.chapter-description{margin:0 0 15px;color:#555f6c;font-size:.84rem;line-height:1.65}.chapter-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.chapter-detail-grid section{padding:14px;border-radius:15px;background:#f8f7fa;border:1px solid rgba(116,71,168,.09)}.chapter-detail-grid h5,.chapter-objective strong{display:block;margin:0 0 8px;font-size:.75rem;color:#2c3440;text-transform:uppercase;letter-spacing:.06em}.chapter-detail-grid ul{margin:0;padding-left:17px;color:#5b6570}.chapter-detail-grid li{font-size:.73rem;line-height:1.45;margin:5px 0}.chapter-objective{margin-top:11px;padding:13px 15px;border-left:4px solid #7447a8;border-radius:12px;background:#f4eff8}.chapter-objective p{margin:0;color:#535d68;font-size:.78rem;line-height:1.55}
+.private-continuous-section{grid-column:1/-1;margin-top:4px;padding:28px;border-radius:25px;background:linear-gradient(135deg,#18131f,#2d2038);color:#fff}.continuous-heading{max-width:850px;margin-bottom:20px}.continuous-heading span{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.09);color:#d8c5eb;font-size:.68rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.continuous-heading h4{font-size:clamp(1.7rem,3vw,2.7rem)!important;line-height:1.08!important;margin:12px 0 9px!important;color:#fff!important}.continuous-heading p{margin:0;color:#cfc6d7;line-height:1.65;font-size:.9rem}.continuous-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}.continuous-grid article{padding:17px;border-radius:17px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09)}.continuous-grid article>span{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:50%;background:#7447a8;color:#fff;font-size:.7rem;font-weight:900}.continuous-grid h5{margin:12px 0 7px;color:#fff;font-size:.84rem}.continuous-grid p{margin:0;color:#cfc7d5;font-size:.72rem;line-height:1.55}.learning-philosophy{margin:18px 0 0;padding:18px 20px;border:0;border-radius:17px;background:linear-gradient(90deg,rgba(116,71,168,.38),rgba(255,255,255,.06))}.learning-philosophy strong{display:block;margin-bottom:6px;color:#fff}.learning-philosophy p{margin:0;color:#d7cfdd;font-size:.8rem;line-height:1.6}
+@media(max-width:1200px){.private-course-panel{grid-template-columns:1fr!important}.private-copy-v3{position:static}.continuous-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chapter-visual{height:430px}}
+@media(max-width:720px){.learning-roadmap{grid-template-columns:1fr 1fr}.learning-roadmap button:last-child{grid-column:auto}.chapter-visual{height:310px}.chapter-detail-grid,.continuous-grid{grid-template-columns:1fr}.chapter-visual-caption{align-items:flex-start;flex-direction:column}.chapter-visual-caption small{text-align:left}.private-continuous-section{padding:19px}.private-course-explorer{padding:12px}.private-course-topbar{align-items:flex-start}.private-course-topbar strong{font-size:.92rem}}
+
+
+/* Step 56 — contrast, hierarchy and clickable curriculum polish */
+.facility-lead,.chapter-description,.continuous-heading p,.chapter-objective p,.facility-system-heading p{color:#4b5563!important;opacity:1!important}
+.chapter-description{font-size:.9rem!important;line-height:1.72!important;font-weight:500!important}
+.chapter-detail-grid h5,.chapter-objective strong{font-weight:900!important;letter-spacing:.075em!important;color:#202936!important}
+.chapter-meta span{border:1px solid rgba(29,36,45,.06);box-shadow:0 5px 14px rgba(35,29,47,.06);transition:transform .22s ease,box-shadow .22s ease}
+.chapter-meta span:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(73,46,105,.12)}
+.chapter-copy-card,.chapter-detail-grid section,.facility-info-grid section{transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease}
+.chapter-copy-card:hover,.chapter-detail-grid section:hover,.facility-info-grid section:hover{transform:translateY(-3px);border-color:rgba(116,71,168,.20);box-shadow:0 12px 28px rgba(45,35,58,.08)}
+@media(max-width:1100px){.learning-roadmap{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.learning-roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}.learning-roadmap button{min-height:58px;font-size:.62rem}}
+@media(prefers-reduced-motion:reduce){.learning-roadmap button,.chapter-copy-card,.chapter-detail-grid section,.facility-info-grid section,.chapter-meta span{transition:none!important;transform:none!important}}
+
+/* ===== 9/11: kamar-premium-motion-v55.css ===== */
+/* Step 55 — premium motion layer. Visual only; no business logic changes. */
+:root{--motion-ease:cubic-bezier(.22,1,.36,1)}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:no-preference){
+  .premium-reveal{opacity:0;transform:translateY(28px) scale(.985);filter:blur(7px);transition:opacity .85s var(--motion-ease),transform .85s var(--motion-ease),filter .85s var(--motion-ease)}
+  .premium-reveal.is-visible{opacity:1;transform:none;filter:none}
+  .premium-reveal[data-delay="1"]{transition-delay:.08s}.premium-reveal[data-delay="2"]{transition-delay:.16s}.premium-reveal[data-delay="3"]{transition-delay:.24s}
+}
+.facility-selector-v2 .facility-card{isolation:isolate;will-change:transform;transform-style:preserve-3d}
+.facility-selector-v2 .facility-card::after{content:"";position:absolute;inset:-45%;z-index:-1;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--card-accent,#184d3a) 18%,transparent),transparent 36%);opacity:0;transition:opacity .35s ease;pointer-events:none}
+.facility-selector-v2 .facility-card:hover::after,.facility-selector-v2 .facility-card.active::after{opacity:1}
+.facility-selector-v2 .facility-card:hover{transform:perspective(900px) translateY(-7px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))!important}
+.facility-panel-v2{position:relative;isolation:isolate}
+.facility-panel-v2::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(650px circle at var(--px,78%) var(--py,18%),color-mix(in srgb,var(--panel-accent) 12%,transparent),transparent 58%);transition:background-position .5s ease}
+.facility-panel-v2.active:not([hidden]){animation:premiumPanelIn .62s var(--motion-ease) both}
+.gallery-stage{transition:transform .5s var(--motion-ease),box-shadow .5s var(--motion-ease)}
+.gallery-stage:hover{transform:translateY(-4px) scale(1.008);box-shadow:0 28px 66px rgba(22,29,38,.23)}
+.gallery-stage img{transition:opacity .28s ease,transform .7s var(--motion-ease),filter .45s ease!important}
+.gallery-stage:hover img{transform:scale(1.018)}
+.btn{position:relative;overflow:hidden;isolation:isolate;transition:transform .3s var(--motion-ease),box-shadow .3s ease!important}
+.btn::after{content:"";position:absolute;inset:-1px;z-index:-1;background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.34) 47%,transparent 69%);transform:translateX(-125%);transition:transform .8s var(--motion-ease)}
+.btn:hover{transform:translateY(-2px)}.btn:hover::after{transform:translateX(125%)}
+.facility-category,.facility-pill{transition:transform .3s var(--motion-ease),box-shadow .3s ease}.facility-panel-v2.active .facility-category{box-shadow:0 10px 26px color-mix(in srgb,var(--panel-accent) 24%,transparent)}
+.chapter-visual img.is-changing{opacity:0!important;filter:blur(10px)!important;transform:scale(.975)!important}
+.chapter-visual img{transition:opacity .36s ease,filter .42s ease,transform .65s var(--motion-ease)!important}
+@keyframes premiumPanelIn{0%{opacity:0;transform:translateY(14px) scale(.992);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
+@media(max-width:720px){
+  .facility-selector-v2 .facility-card:hover{transform:translateY(-3px)!important}
+  .premium-reveal{filter:none!important}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* ===== 10/11: kamar-design-system-v57.css ===== */
+/* =========================================================
+   KAMAR KAJIAN MARKET — DESIGN SYSTEM V57
+   Premium typography, contrast, card and interaction polish
+   Homepage-only visual layer. No business logic changes.
+   ========================================================= */
+
+:root{
+  --kamar-bg:#f4f1eb;
+  --kamar-surface:#fffdf9;
+  --kamar-surface-soft:#f8f5ef;
+  --kamar-ink:#171b22;
+  --kamar-text:#2f3742;
+  --kamar-text-secondary:#505a67;
+  --kamar-text-muted:#66717e;
+  --kamar-caption:#7a8490;
+  --kamar-border:rgba(27,35,48,.11);
+  --kamar-border-strong:rgba(27,35,48,.18);
+  --kamar-radius-sm:14px;
+  --kamar-radius-md:20px;
+  --kamar-radius-lg:28px;
+  --kamar-shadow-sm:0 8px 22px rgba(34,28,19,.06);
+  --kamar-shadow-md:0 18px 48px rgba(34,28,19,.09);
+  --kamar-shadow-hover:0 24px 64px rgba(34,28,19,.14);
+  --kamar-ease:cubic-bezier(.22,.61,.36,1);
+  --kamar-transition:320ms var(--kamar-ease);
+}
+
+/* ---------- Core reading contrast ---------- */
+.facility-panel-v2,
+.facility-detail-card,
+.private-course-panel{
+  color:var(--kamar-text)!important;
+}
+
+/* Main explanatory paragraph below every facility title */
+.facility-lead,
+.facility-panel-v2 > p:not([class]),
+.facility-detail-card > p:not([class]),
+.facility-system-heading p,
+.continuous-heading p,
+.private-course-panel .facility-lead{
+  color:var(--kamar-text-secondary)!important;
+  opacity:1!important;
+  font-weight:600!important;
+  font-size:clamp(.98rem,1.15vw,1.08rem)!important;
+  line-height:1.8!important;
+  letter-spacing:.002em!important;
+  text-wrap:pretty;
+  max-width:860px!important;
+}
+
+/* Supporting copy throughout facility content */
+.chapter-description,
+.chapter-objective p,
+.facility-detail-card p,
+.facility-panel-v2 p,
+.facility-detail-card li,
+.facility-panel-v2 li,
+.facility-benefit-card p,
+.facility-info-card p,
+.facility-note,
+.facility-note p,
+.course-note,
+.course-note p,
+.private-course-panel small{
+  color:var(--kamar-text-secondary)!important;
+  opacity:1!important;
+}
+
+.chapter-description{
+  font-size:.96rem!important;
+  line-height:1.78!important;
+  font-weight:550!important;
+  max-width:72ch;
+}
+
+.chapter-objective p{
+  font-size:.88rem!important;
+  line-height:1.72!important;
+  font-weight:550!important;
+}
+
+/* ---------- Typography hierarchy ---------- */
+.facility-panel-v2 h2,
+.facility-panel-v2 h3,
+.facility-detail-card h2,
+.facility-detail-card h3,
+.private-course-panel h2,
+.private-course-panel h3{
+  color:var(--kamar-ink)!important;
+  text-wrap:balance;
+}
+
+.chapter-copy-card h4{
+  color:var(--kamar-ink)!important;
+  font-weight:800!important;
+  letter-spacing:-.025em!important;
+  text-wrap:balance;
+}
+
+.chapter-detail-grid h5,
+.chapter-objective strong,
+.facility-system-heading strong,
+.facility-panel-v2 .eyebrow,
+.facility-panel-v2 .section-label{
+  color:#343d49!important;
+  opacity:1!important;
+  font-weight:850!important;
+  letter-spacing:.075em!important;
+}
+
+/* ---------- Cards ---------- */
+.facility-detail-card,
+.facility-panel-v2,
+.chapter-copy-card,
+.chapter-detail-grid section,
+.chapter-objective,
+.curriculum-stage-card,
+.facility-benefit-card,
+.facility-info-card{
+  border-color:var(--kamar-border)!important;
+}
+
+.chapter-copy-card,
+.chapter-detail-grid section,
+.facility-benefit-card,
+.facility-info-card{
+  box-shadow:var(--kamar-shadow-sm)!important;
+  transition:transform var(--kamar-transition),box-shadow var(--kamar-transition),border-color var(--kamar-transition),background var(--kamar-transition)!important;
+}
+
+.chapter-copy-card:hover,
+.chapter-detail-grid section:hover,
+.facility-benefit-card:hover,
+.facility-info-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--kamar-shadow-md)!important;
+  border-color:var(--kamar-border-strong)!important;
+}
+
+.chapter-detail-grid section{
+  background:linear-gradient(180deg,#fffdfa 0%,#f8f5f0 100%)!important;
+}
+
+.chapter-objective{
+  background:linear-gradient(135deg,rgba(116,71,168,.075),rgba(255,255,255,.82))!important;
+}
+
+/* ---------- Premium chips / badges ---------- */
+.chapter-meta span,
+.facility-panel-v2 .badge,
+.facility-panel-v2 .chip,
+.curriculum-stage-card .badge{
+  opacity:1!important;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 5px 14px rgba(35,26,18,.06);
+  transition:transform var(--kamar-transition),box-shadow var(--kamar-transition),filter var(--kamar-transition)!important;
+}
+
+.chapter-meta span:hover,
+.facility-panel-v2 .badge:hover,
+.facility-panel-v2 .chip:hover{
+  transform:translateY(-1px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 8px 18px rgba(35,26,18,.1);
+  filter:saturate(1.06);
+}
+
+/* ---------- Image frame ---------- */
+.chapter-cover,
+.chapter-cover-wrap,
+.facility-gallery-main,
+.facility-preview-image{
+  border-color:var(--kamar-border)!important;
+  box-shadow:var(--kamar-shadow-md)!important;
+}
+
+/* ---------- Buttons ---------- */
+.facility-panel-v2 .btn,
+.facility-detail-card .btn,
+.facility-panel-v2 a[class*="btn"],
+.facility-detail-card a[class*="btn"]{
+  transition:transform var(--kamar-transition),box-shadow var(--kamar-transition),filter var(--kamar-transition)!important;
+}
+.facility-panel-v2 .btn:hover,
+.facility-detail-card .btn:hover,
+.facility-panel-v2 a[class*="btn"]:hover,
+.facility-detail-card a[class*="btn"]:hover{
+  transform:translateY(-2px);
+  filter:saturate(1.04);
+}
+
+/* ---------- Better readability on tinted/dark cards ---------- */
+[class*="dark"] .facility-lead,
+[class*="theme-"] [class*="dark"] p,
+.facility-panel-v2[style*="background: rgb(1"] p{
+  color:rgba(255,255,255,.82)!important;
+}
+
+/* ---------- Responsive typography ---------- */
+@media (max-width:760px){
+  .facility-lead,
+  .facility-panel-v2 > p:not([class]),
+  .facility-detail-card > p:not([class]){
+    font-size:.96rem!important;
+    line-height:1.72!important;
+    font-weight:600!important;
+  }
+  .chapter-description{font-size:.9rem!important;line-height:1.7!important}
+  .chapter-objective p{font-size:.84rem!important}
+  .chapter-copy-card,
+  .chapter-detail-grid section{box-shadow:0 8px 20px rgba(34,28,19,.055)!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .chapter-copy-card,
+  .chapter-detail-grid section,
+  .facility-benefit-card,
+  .facility-info-card,
+  .chapter-meta span,
+  .facility-panel-v2 .badge,
+  .facility-panel-v2 .chip{
+    transition:none!important;
+    transform:none!important;
+  }
+}
+
+/* ===== 11/11: kamar-ambient-market-v58.css ===== */
+/* =========================================================
+   KAMAR KAJIAN MARKET — AMBIENT MARKET MOTION V58
+   Homepage-only atmospheric and micro-interaction layer.
+   No business logic or content changes.
+   ========================================================= */
+
+:root{
+  --ambient-x:50%;
+  --ambient-y:28%;
+  --ambient-scroll:0px;
+  --ambient-violet:rgba(108,73,170,.14);
+  --ambient-gold:rgba(190,145,67,.13);
+  --ambient-emerald:rgba(29,113,88,.10);
+}
+
+html{scroll-behavior:smooth}
+body{
+  position:relative;
+  isolation:isolate;
+  overflow-x:hidden;
+}
+
+/* Atmospheric canvas: fixed, non-interactive and intentionally subtle. */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-18vh -12vw;
+  z-index:-3;
+  pointer-events:none;
+  background:
+    radial-gradient(34rem 28rem at var(--ambient-x) var(--ambient-y),var(--ambient-violet),transparent 72%),
+    radial-gradient(30rem 24rem at 82% 16%,var(--ambient-gold),transparent 74%),
+    radial-gradient(32rem 26rem at 10% 72%,var(--ambient-emerald),transparent 76%);
+  filter:saturate(.92);
+  transform:translate3d(0,var(--ambient-scroll),0) scale(1.02);
+  transition:background-position 900ms cubic-bezier(.22,.61,.36,1);
+}
+
+/* Abstract chart / structure grid. Pure CSS; no external media. */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:.19;
+  background-image:
+    linear-gradient(rgba(38,44,55,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(38,44,55,.045) 1px,transparent 1px),
+    linear-gradient(118deg,transparent 0 44%,rgba(119,82,177,.055) 44.2% 44.55%,transparent 44.75% 100%),
+    linear-gradient(64deg,transparent 0 59%,rgba(181,134,57,.05) 59.2% 59.5%,transparent 59.7% 100%);
+  background-size:64px 64px,64px 64px,720px 520px,860px 600px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,.34) 72%,transparent 100%);
+}
+
+/* Ambient candlestick motif, kept behind content. */
+.kamar-ambient-market{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  overflow:hidden;
+  opacity:.34;
+}
+.kamar-ambient-market span{
+  position:absolute;
+  width:1px;
+  height:clamp(38px,6vw,92px);
+  left:var(--x);
+  top:var(--y);
+  background:linear-gradient(to bottom,transparent,rgba(109,77,159,.28) 18% 82%,transparent);
+  transform:translate3d(0,calc(var(--ambient-scroll) * -.32),0);
+  animation:kamarAmbientFloat var(--speed) ease-in-out infinite alternate;
+}
+.kamar-ambient-market span::after{
+  content:"";
+  position:absolute;
+  left:-3px;
+  top:var(--body);
+  width:7px;
+  height:var(--height);
+  border-radius:2px;
+  background:linear-gradient(180deg,rgba(188,144,72,.23),rgba(91,62,138,.22));
+  box-shadow:0 0 26px rgba(117,78,173,.08);
+}
+@keyframes kamarAmbientFloat{
+  from{translate:0 -7px;opacity:.42}
+  to{translate:0 9px;opacity:.9}
+}
+
+/* Premium section rhythm and optical separation. */
+main > section,
+body > section{
+  position:relative;
+}
+main > section::before,
+body > section::before{
+  content:"";
+  position:absolute;
+  inset:8% 3%;
+  z-index:-1;
+  border-radius:42px;
+  background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.05));
+  opacity:.4;
+  pointer-events:none;
+}
+
+/* Apple-like image presentation: calm depth, not exaggerated. */
+.facility-gallery-frame,
+.chapter-visual-card,
+.showcase-preview,
+.hero-visual,
+.facility-panel-v2 img{
+  transform:translateZ(0);
+  transition:transform 680ms cubic-bezier(.16,1,.3,1),filter 680ms cubic-bezier(.16,1,.3,1),box-shadow 680ms cubic-bezier(.16,1,.3,1)!important;
+}
+.facility-gallery-frame:hover,
+.chapter-visual-card:hover,
+.showcase-preview:hover,
+.hero-visual:hover{
+  transform:translate3d(0,-4px,0) scale(1.008)!important;
+  filter:saturate(1.025) contrast(1.012)!important;
+}
+
+/* Refined active-state motion for facilities and curriculum. */
+.facility-card-v2,
+.curriculum-stage-card,
+.chapter-tab{
+  will-change:transform;
+  transition:
+    transform 430ms cubic-bezier(.16,1,.3,1),
+    box-shadow 430ms cubic-bezier(.16,1,.3,1),
+    border-color 430ms ease,
+    background-color 430ms ease!important;
+}
+.facility-card-v2:hover,
+.curriculum-stage-card:hover,
+.chapter-tab:hover{
+  transform:translate3d(0,-3px,0)!important;
+}
+.facility-card-v2.is-active,
+.curriculum-stage-card.is-active,
+.chapter-tab.is-active,
+.chapter-tab[aria-selected="true"]{
+  animation:kamarActivePulse 620ms cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes kamarActivePulse{
+  0%{transform:scale(.985)}
+  55%{transform:scale(1.012)}
+  100%{transform:scale(1)}
+}
+
+/* Button sheen is restrained and runs only on interaction. */
+a.btn,button.btn,.facility-cta,.telegram-cta{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+a.btn::after,button.btn::after,.facility-cta::after,.telegram-cta::after{
+  content:"";
+  position:absolute;
+  inset:-50% auto -50% -55%;
+  width:38%;
+  z-index:-1;
+  transform:skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.34),transparent);
+  transition:left 720ms cubic-bezier(.16,1,.3,1);
+}
+a.btn:hover::after,button.btn:hover::after,.facility-cta:hover::after,.telegram-cta:hover::after{left:120%}
+
+/* Reveal states for new page visits. Existing V55 motion remains compatible. */
+[data-kamar-ambient-reveal]{
+  opacity:0;
+  transform:translate3d(0,22px,0) scale(.992);
+  filter:blur(7px);
+  transition:
+    opacity 820ms cubic-bezier(.16,1,.3,1),
+    transform 820ms cubic-bezier(.16,1,.3,1),
+    filter 820ms cubic-bezier(.16,1,.3,1);
+}
+[data-kamar-ambient-reveal].is-visible{
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+
+@media (max-width:900px){
+  body::after{background-size:48px 48px,48px 48px,520px 420px,620px 460px;opacity:.14}
+  .kamar-ambient-market{opacity:.22}
+  main > section::before,body > section::before{inset:5% 1%;border-radius:28px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  body::before,.kamar-ambient-market span{animation:none!important;transform:none!important}
+  [data-kamar-ambient-reveal]{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+  .facility-card-v2,.curriculum-stage-card,.chapter-tab,.facility-gallery-frame,.chapter-visual-card,.showcase-preview,.hero-visual{transition:none!important}
+  a.btn::after,button.btn::after,.facility-cta::after,.telegram-cta::after{display:none!important}
+}
+
+/* Step 58.1 — targeted readability fix for Graduation & Continuous Mentoring only. */
+.private-continuous-section .continuous-heading > p{
+  color:#d8d4df!important;
+  opacity:1!important;
+}
+.private-continuous-section .continuous-grid article > p{
+  color:#d4cfda!important;
+  opacity:1!important;
+}
+.private-continuous-section .continuous-grid article > h5,
+.private-continuous-section .learning-philosophy > strong{
+  color:#fff!important;
+  opacity:1!important;
+}
+.private-continuous-section .learning-philosophy > p{
+  color:#d8d4df!important;
+  opacity:1!important;
+}

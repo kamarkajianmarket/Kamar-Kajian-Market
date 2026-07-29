@@ -176,7 +176,26 @@
       var fullName = val(form,'full_name') || val(form,'registerFullName') || val(form,'name') || email;
       var r = await timeout(c.auth.signUp({email:email,password:password,options:{data:{full_name:fullName,role:'member'}}}),15000);
       if(r.error) throw r.error;
-      try{ await c.from('member_profiles').insert({email:email,full_name:fullName,whatsapp:val(form,'whatsapp')||val(form,'registerWhatsapp'),telegram:val(form,'telegram')||val(form,'registerTelegram'),status:'pending',created_at:new Date().toISOString()}); }catch(e){}
+      // FIXED (2026-07-30): the previous insert used column names that do not
+      // exist on member_profiles ("status" -> real column is "account_status",
+      // "telegram" -> real column is "telegram_username"), and never set
+      // "user_id" at all. Because this call is wrapped in try/catch, every one
+      // of those mistakes failed silently and no profile row was ever created
+      // during registration. This also requires a matching Supabase RLS INSERT
+      // policy ("Member can self-register profile") so a fresh auth user is
+      // allowed to insert exactly one row for themselves.
+      try{
+        var newUserId = r.data && r.data.user && r.data.user.id;
+        await c.from('member_profiles').insert({
+          user_id: newUserId,
+          email: email,
+          full_name: fullName,
+          whatsapp: val(form,'whatsapp')||val(form,'registerWhatsapp'),
+          telegram_username: val(form,'telegram')||val(form,'registerTelegram'),
+          account_status: 'pending_activation',
+          created_at: new Date().toISOString()
+        });
+      }catch(e){}
       status(form,'Pendaftaran berhasil. Jika email confirmation aktif, cek email. Jika tidak, silakan login.',true);
       form.reset();
     }catch(e){ status(form,'Gagal daftar: '+authMessage(e),false); }

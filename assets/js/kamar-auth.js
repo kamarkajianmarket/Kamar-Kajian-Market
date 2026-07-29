@@ -37,10 +37,14 @@
   function timeout(p,ms){
     return Promise.race([
       Promise.resolve(p),
-      new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('Timeout koneksi Supabase. Coba ulang atau cek koneksi.')); }, ms||15000); })
+      new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('Waktu koneksi habis. Coba ulang atau cek koneksi internet kamu.')); }, ms||15000); })
     ]);
   }
-  function configError(){ return 'Database Supabase belum terkoneksi. Cek KAMAR_SUPABASE_URL dan KAMAR_SUPABASE_ANON_KEY di Vercel, lalu Redeploy tanpa cache.'; }
+  // GENERALIZED (2026-07-30): removed backend/provider names from every
+  // user-facing message in this file. These are shown directly in the
+  // .auth-status box on register/login forms, so they must never mention
+  // internal infrastructure.
+  function configError(){ return 'Sistem belum siap. Coba muat ulang halaman ini, atau hubungi admin jika masih bermasalah.'; }
   function cfg(){
     var c = window.KAMAR_CONFIG || window.KamarConfig || window.kamarConfig || window.kamarConfigPublic || {};
     return {
@@ -117,19 +121,33 @@
     }
     return {};
   }
+  async function findApprovedAffiliate(c,rawCode){
+    var code = String(rawCode||'').trim().toUpperCase();
+    if(!code || !c) return null;
+    try{
+      var r = await timeout(c.from('affiliate_public_codes').select('id,affiliate_code,full_name').eq('affiliate_code',code).maybeSingle(),8000);
+      if(!r.error && r.data) return r.data;
+    }catch(e){}
+    return null;
+  }
   function authMessage(err){
     var m = String(err && (err.message || err.error_description) || err || 'Login gagal.');
-    if(/invalid login credentials/i.test(m)) return 'Login gagal. Email atau password Supabase Auth tidak cocok.';
-    if(/email not confirmed/i.test(m)) return 'Login gagal. Email akun Supabase belum dikonfirmasi.';
-    if(/fetch|network|failed to fetch/i.test(m)) return 'Login gagal. Koneksi ke Supabase bermasalah atau domain belum diizinkan.';
+    if(/invalid login credentials/i.test(m)) return 'Login gagal. Email atau password tidak cocok.';
+    if(/email not confirmed/i.test(m)) return 'Login gagal. Email akun belum dikonfirmasi. Silakan cek email kamu.';
+    if(/fetch|network|failed to fetch/i.test(m)) return 'Gagal terhubung ke server. Cek koneksi internet kamu lalu coba lagi.';
+    if(/already registered|already exists|user already/i.test(m)) return 'Email ini sudah terdaftar. Silakan login menggunakan email tersebut.';
+    if(/rate limit/i.test(m)) return 'Terlalu banyak percobaan dalam waktu singkat. Coba lagi dalam beberapa menit.';
+    var pw = m.match(/password should be at least (\d+)/i);
+    if(pw) return 'Password minimal '+pw[1]+' karakter.';
+    if(/is invalid$/i.test(m) && /email/i.test(m)) return 'Format email tidak valid. Coba pakai alamat email lain.';
     return m;
   }
   async function doLogin(form,requestedRole){
     var email = (val(form,'email') || val(form,'loginEmail')).toLowerCase();
     var password = val(form,'password') || val(form,'loginPassword');
     if(!email || !password){ status(form,'Email dan password wajib diisi.',false); return; }
-    processing(form,'Login...',true);
-    status(form,'Mengecek Supabase Auth...',true);
+    processing(form,'Memproses login...',true);
+    status(form,'Memeriksa akun...',true);
     try{
       await ensureReady();
       var c = client();
@@ -138,7 +156,7 @@
 
       var res = await timeout(c.auth.signInWithPassword({email:email,password:password}),15000);
       if(res.error) throw res.error;
-      if(!res.data || !res.data.user) throw new Error('Login gagal. Supabase Auth tidak mengembalikan user.');
+      if(!res.data || !res.data.user) throw new Error('Login gagal. Silakan coba lagi.');
 
       var user = res.data.user;
       var baseMeta = Object.assign({}, user.user_metadata||{}, user.app_metadata||{});
@@ -169,13 +187,34 @@
     var confirm = val(form,'confirm') || val(form,'password_confirm') || val(form,'registerPasswordConfirm');
     if(!email || !password){ status(form,'Email dan password wajib diisi.',false); return; }
     if(confirm && password !== confirm){ status(form,'Konfirmasi password tidak sama.',false); return; }
+    var referralInput = val(form,'referral') || val(form,'registerReferral');
     processing(form,'Mendaftarkan akun...',true);
     try{
       await ensureReady();
       var c = client(); if(!c) throw new Error(configError());
       var fullName = val(form,'full_name') || val(form,'registerFullName') || val(form,'name') || email;
+
+      // Optional referral code: validated against the public approved-affiliate
+      // view BEFORE creating the account, so a bad code fails fast instead of
+      // creating an orphaned account with no referral attached.
+      var affiliate = null;
+      if(referralInput){
+        status(form,'Memeriksa kode referral...',true);
+        affiliate = await findApprovedAffiliate(c, referralInput);
+        if(!affiliate){
+          status(form,'Kode referral tidak ditemukan atau belum aktif. Kosongkan kolom ini jika kamu tidak punya kode referral, lalu coba lagi.',false);
+          return;
+        }
+      }
+
+      status(form,'Mendaftarkan akun...',true);
       var r = await timeout(c.auth.signUp({email:email,password:password,options:{data:{full_name:fullName,role:'member'}}}),15000);
       if(r.error) throw r.error;
+
+      var newUserId = r.data && r.data.user && r.data.user.id;
+      var whatsapp = val(form,'whatsapp')||val(form,'registerWhatsapp');
+      var telegram = val(form,'telegram')||val(form,'registerTelegram');
+
       // FIXED (2026-07-30): the previous insert used column names that do not
       // exist on member_profiles ("status" -> real column is "account_status",
       // "telegram" -> real column is "telegram_username"), and never set
@@ -184,19 +223,43 @@
       // during registration. This also requires a matching Supabase RLS INSERT
       // policy ("Member can self-register profile") so a fresh auth user is
       // allowed to insert exactly one row for themselves.
+      var profileRow = null;
       try{
-        var newUserId = r.data && r.data.user && r.data.user.id;
-        await c.from('member_profiles').insert({
+        var ins = await c.from('member_profiles').insert({
           user_id: newUserId,
           email: email,
           full_name: fullName,
-          whatsapp: val(form,'whatsapp')||val(form,'registerWhatsapp'),
-          telegram_username: val(form,'telegram')||val(form,'registerTelegram'),
+          whatsapp: whatsapp,
+          telegram_username: telegram,
+          referral_code: affiliate ? affiliate.affiliate_code : null,
           account_status: 'pending_activation',
           created_at: new Date().toISOString()
-        });
+        }).select('id').maybeSingle();
+        if(!ins.error) profileRow = ins.data;
       }catch(e){}
-      status(form,'Pendaftaran berhasil. Jika email confirmation aktif, cek email. Jika tidak, silakan login.',true);
+
+      // If a valid referral code was used, also log it against the affiliate so
+      // it shows up for approval/commission tracking on their side.
+      if(affiliate){
+        try{
+          await c.from('affiliate_referrals').insert({
+            affiliate_id: affiliate.id,
+            affiliate_code: affiliate.affiliate_code,
+            member_profile_id: profileRow ? profileRow.id : null,
+            member_name: fullName,
+            member_email: email,
+            member_phone: whatsapp,
+            facility_key: '',
+            referral_status: 'PENDING',
+            registration_source: 'register.html',
+            notes: 'Referral tercatat otomatis saat pendaftaran member.'
+          });
+        }catch(e){}
+      }
+
+      status(form, affiliate
+        ? ('Pendaftaran berhasil dengan kode referral dari '+affiliate.full_name+'. Jika email konfirmasi aktif, cek email kamu. Jika tidak, silakan login.')
+        : 'Pendaftaran berhasil. Jika email konfirmasi aktif, cek email kamu. Jika tidak, silakan login.', true);
       form.reset();
     }catch(e){ status(form,'Gagal daftar: '+authMessage(e),false); }
     finally{ processing(form,'',false); }

@@ -208,44 +208,47 @@
       }
 
       status(form,'Mendaftarkan akun...',true);
-      var r = await timeout(c.auth.signUp({email:email,password:password,options:{data:{full_name:fullName,role:'member'}}}),15000);
-      if(r.error) throw r.error;
-
-      var newUserId = r.data && r.data.user && r.data.user.id;
       var whatsapp = val(form,'whatsapp')||val(form,'registerWhatsapp');
       var telegram = val(form,'telegram')||val(form,'registerTelegram');
 
-      // FIXED (2026-07-30): the previous insert used column names that do not
-      // exist on member_profiles ("status" -> real column is "account_status",
-      // "telegram" -> real column is "telegram_username"), and never set
-      // "user_id" at all. Because this call is wrapped in try/catch, every one
-      // of those mistakes failed silently and no profile row was ever created
-      // during registration. This also requires a matching Supabase RLS INSERT
-      // policy ("Member can self-register profile") so a fresh auth user is
-      // allowed to insert exactly one row for themselves.
-      var profileRow = null;
-      try{
-        var ins = await c.from('member_profiles').insert({
-          user_id: newUserId,
-          email: email,
-          full_name: fullName,
-          whatsapp: whatsapp,
-          telegram_username: telegram,
-          referral_code: affiliate ? affiliate.affiliate_code : null,
-          account_status: 'pending_activation',
-          created_at: new Date().toISOString()
-        }).select('id').maybeSingle();
-        if(!ins.error) profileRow = ins.data;
-      }catch(e){}
+      // FIXED (2026-07-30): member_profiles (plus member_access and an
+      // admin_todos entry) is already created automatically by a database
+      // trigger the instant the auth user is created below (on_auth_user_created
+      // -> handle_new_auth_user). That trigger reads full_name / whatsapp /
+      // telegram_username / referral_code directly out of THIS signUp() call's
+      // metadata -- it does not read a separate insert from this file. An
+      // earlier version of this function tried to insert into member_profiles
+      // itself right after signUp(), which always failed silently (the row
+      // already existed, created by the trigger a moment earlier) and was why
+      // whatsapp/telegram never actually got saved even though the request body
+      // clearly had them. Do not add a manual member_profiles insert here again
+      // -- pass the data through signUp's metadata instead and let the trigger
+      // do the rest.
+      var r = await timeout(c.auth.signUp({
+        email:email,
+        password:password,
+        options:{data:{
+          full_name:fullName,
+          role:'member',
+          whatsapp:whatsapp,
+          telegram_username:telegram,
+          referral_code: affiliate ? affiliate.affiliate_code : ''
+        }}
+      }),15000);
+      if(r.error) throw r.error;
 
       // If a valid referral code was used, also log it against the affiliate so
-      // it shows up for approval/commission tracking on their side.
+      // it shows up for approval/commission tracking on their side. (The trigger
+      // above only stores the code on member_profiles; it doesn't touch
+      // affiliate_referrals.)
       if(affiliate){
         try{
+          var newUserId = r.data && r.data.user && r.data.user.id;
+          var prof = newUserId ? await c.from('member_profiles').select('id').eq('user_id', newUserId).maybeSingle() : null;
           await c.from('affiliate_referrals').insert({
             affiliate_id: affiliate.id,
             affiliate_code: affiliate.affiliate_code,
-            member_profile_id: profileRow ? profileRow.id : null,
+            member_profile_id: (prof && prof.data) ? prof.data.id : null,
             member_name: fullName,
             member_email: email,
             member_phone: whatsapp,

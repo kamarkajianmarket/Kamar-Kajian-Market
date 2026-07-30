@@ -97,7 +97,7 @@
 <option value="all">Semua Fasilitas</option>
 <option value="none">Belum Ada Fasilitas</option>
 <option value="Kamar Edukasi">Kamar Edukasi</option>
-<option value="Kamar Study">Kamar Study</option>
+<option value="Kamar Signal">Kamar Signal</option>
 <option value="Kamar Private">Kamar Private</option>
 <option value="Kamar Indikator">Kamar Indikator</option>
 <option value="Kamar Robot">Kamar Robot</option>
@@ -151,7 +151,7 @@
     var TABLE_VIEW='admin_member_overview';
     var TABLE_PROFILE='member_profiles';
     var TABLE_ACCESS='member_access';
-    var FACILITIES=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
+    var FACILITIES=['Kamar Edukasi','Kamar Signal','Kamar Private','Kamar Indikator','Kamar Robot'];
     // FIXED (2026-07-30): member_access is ONE row per profile_id with a
     // boolean column per facility (access_kamar_study, access_materi_edukasi,
     // access_kamar_private, access_kamar_indikator, access_kamar_robot) - it
@@ -159,9 +159,14 @@
     // code assumed. That mismatch meant every facility toggle click here
     // silently failed with "Baris fasilitas ... belum ditemukan". FACILITY_COLUMN
     // maps each display label to its real column name.
+    // RENAMED (2026-07-31): "Kamar Study" is now displayed as "Kamar Signal" to
+    // match the facility name shown on the public homepage - only the on-screen
+    // label changed, the underlying database column stays access_kamar_study
+    // (renaming the real column would be a much bigger, riskier change and
+    // isn't needed just to fix the label).
     var FACILITY_COLUMN={
       'Kamar Edukasi':'access_materi_edukasi',
-      'Kamar Study':'access_kamar_study',
+      'Kamar Signal':'access_kamar_study',
       'Kamar Private':'access_kamar_private',
       'Kamar Indikator':'access_kamar_indikator',
       'Kamar Robot':'access_kamar_robot'

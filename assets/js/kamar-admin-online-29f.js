@@ -143,12 +143,12 @@
     var style = document.createElement('style');
     style.id = 'kamarAdminSharedStyle29F';
     style.textContent =
-      '.split-sidebar details{margin:4px 0}'+
-      '.split-sidebar summary{list-style:none;cursor:pointer;padding:12px 14px;border-radius:16px;font-weight:1000;color:#f1dda2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;opacity:.9}'+
-      '.split-sidebar summary::-webkit-details-marker{display:none}'+
-      '.split-sidebar summary:after{content:"\\25BE";font-size:11px;opacity:.7;transition:.2s ease}'+
-      '.split-sidebar details[open] summary:after{content:"\\25B4"}'+
-      '.split-sidebar summary:hover{background:rgba(212,166,63,.10);color:#f4df90}'+
+      '.split-sidebar details,.admin-sidebar details{margin:4px 0}'+
+      '.split-sidebar summary,.admin-sidebar summary{list-style:none;cursor:pointer;padding:12px 14px;border-radius:16px;font-weight:1000;color:#f1dda2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;opacity:.9}'+
+      '.split-sidebar summary::-webkit-details-marker,.admin-sidebar summary::-webkit-details-marker{display:none}'+
+      '.split-sidebar summary:after,.admin-sidebar summary:after{content:"\\25BE";font-size:11px;opacity:.7;transition:.2s ease}'+
+      '.split-sidebar details[open] summary:after,.admin-sidebar details[open] summary:after{content:"\\25B4"}'+
+      '.split-sidebar summary:hover,.admin-sidebar summary:hover{background:rgba(212,166,63,.10);color:#f4df90}'+
       '.online-card-list{display:grid;gap:14px}'+
       '.online-card{border:1px solid rgba(238,206,122,.16);border-radius:20px;background:rgba(255,255,255,.03);padding:16px 18px}'+
       '.online-card-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid rgba(238,206,122,.08)}'+
@@ -190,7 +190,7 @@
     return '<a'+(isActive?' class="active"':'')+(isLogout?' data-kamar-logout':'')+' href="'+esc(href)+'">'+esc(label)+'</a>';
   }
   function rebuildSidebar(){
-    var sidebar = qs('.split-sidebar');
+    var sidebar = qs('.split-sidebar, .admin-sidebar');
     if(!sidebar || sidebar.getAttribute('data-kamar-sidebar-online-29h')) return;
     sidebar.setAttribute('data-kamar-sidebar-online-29h','1');
     var html = '<div class="brand-small">ADMIN KAMAR</div>';

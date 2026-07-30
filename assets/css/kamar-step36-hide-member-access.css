@@ -9,3 +9,44 @@
 .kamar-access-closed .closed-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px}
 .kamar-access-closed .closed-actions a{min-width:190px;text-align:center;text-decoration:none}
 @media(max-width:680px){.kamar-access-closed{margin:38px 16px;padding:30px 20px}.kamar-access-closed .closed-actions a{width:100%;min-width:0}}
+
+/* Kamar Step 61: universal fix for the JS-injected global header
+   (dashboard.html, admin*.html, member-*.html, affiliate-dashboard.html).
+   This stylesheet is loaded on every page in the site, so putting the
+   fix here guarantees the header logo/menu never renders unstyled,
+   regardless of which other stylesheets a given page does or doesn't
+   include. Without this, the logo shows at its raw 1536x1536 size. */
+.kamar-global-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:#f5f0e6;
+  font-weight:1000;
+}
+.kamar-global-brand img{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  object-fit:cover;
+}
+.kamar-global-center,
+.kamar-global-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.kamar-global-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:0 16px;
+  border-radius:999px;
+  border:1px solid rgba(238,206,122,.18);
+  text-decoration:none;
+  color:#d4a63f;
+  font-weight:900;
+  background:rgba(255,255,255,.035);
+}

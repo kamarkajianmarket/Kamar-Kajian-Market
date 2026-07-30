@@ -4,52 +4,108 @@
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  var VERSION = '29I';
+
+  // RENAMED (2026-07-31): "kamar_study" is the internal technical key (matches
+  // the real DB column/enum value and existing payment records) - only the
+  // text admin actually SEES has changed, to match the homepage's facility
+  // name. Do not rename the FACILITY_COLUMN key below; it would break lookups
+  // against existing payments/todos already stored with the old slug.
+  var FACILITY_COLUMN = {
+    kamar_study:'access_kamar_study',
+    materi_edukasi:'access_materi_edukasi',
+    kamar_private:'access_kamar_private',
+    kamar_indikator:'access_kamar_indikator',
+    kamar_robot:'access_kamar_robot'
+  };
+  var FACILITY_LABEL = {
+    kamar_study:'Kamar Signal',
+    materi_edukasi:'Kamar Edukasi',
+    kamar_private:'Kamar Private',
+    kamar_indikator:'Kamar Indikator',
+    kamar_robot:'Kamar Robot'
+  };
+
   // FIXED (2026-07-30): table/column names below verified directly against the
   // live Supabase schema. Every admin content page below now points at a table
-  // and column set that actually exists, including link_settings, payment_gateways,
-  // homepage_settings and dashboard_settings (these tables DO exist in the
-  // database - a previous draft of this file incorrectly assumed they didn't).
-  // Enum columns (display_area, access_required, publish_status, file_type) are
-  // rendered as dropdowns with the real Postgres enum values instead of free
-  // text, so inserts no longer fail with an "invalid input value for enum" error.
+  // and column set that actually exists.
+  // UPDATED (2026-07-31, Tahap 1 - bersihkan bahasa teknis): enum values below
+  // are still the real database values (must stay exactly as-is so writes keep
+  // working) but are now shown to admin through ENUM_LABELS as plain Indonesian
+  // text instead of raw values like "kamar_study" or "public".
   var ENUM_FIELDS = {
     'display_area': ['public','member','admin','both','global'],
     'access_required': ['public','member','kamar_study','materi_edukasi','kamar_private','kamar_indikator','kamar_robot','all_paid'],
     'publish_status': ['draft','published','hidden'],
     'file_type': ['indicator','robot','template','pdf','other']
   };
-  var MAP = {
-    'admin-banner.html': { table:'banners', title:'Banner Pengumuman Online', fields:['title','body','image_url','cta_label','cta_url','display_area','is_active'] },
-    'admin-video.html': { table:'videos', title:'Video Konten Online', fields:['title','youtube_url','category','description','display_area','access_required','publish_status','is_active'] },
-    'admin-materials.html': { table:'materials', title:'Materi / PDF Online', fields:['title','category','description','material_url','version_label','access_required','publish_status','admin_notes','is_active'] },
-    'admin-tools.html': { table:'tools_files', title:'File Tools Online', fields:['title','file_type','file_url','version_label','changelog','access_required','publish_status','admin_notes','is_active'] },
-    'admin-maintenance.html': { table:'maintenance_settings', title:'Maintenance Online', fields:['maintenance_key','title','message','is_active'] },
-    'admin-settings.html': { table:'site_settings', title:'Pengaturan Umum Online', fields:['setting_key','setting_value','description','is_active'], jsonFields:['setting_value'] },
-    'admin-links.html': { table:'link_settings', title:'Link Official Online', fields:['key','label','url','is_active'] },
-    'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway Online', fields:['name','bank_name','account_name','account_number','instructions','is_active'] },
-    'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama Online', fields:['key','value','description','is_active'], jsonFields:['value'] },
-    'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member Online', fields:['key','value','description','is_active'], jsonFields:['value'] }
+  var ENUM_LABELS = {
+    display_area:{ public:'Halaman Publik (Semua Pengunjung)', member:'Khusus Member', admin:'Khusus Admin', both:'Member & Pengunjung', global:'Semua Halaman' },
+    access_required:{ public:'Bebas, Semua Orang', member:'Member Terdaftar', kamar_study:FACILITY_LABEL.kamar_study, materi_edukasi:FACILITY_LABEL.materi_edukasi, kamar_private:FACILITY_LABEL.kamar_private, kamar_indikator:FACILITY_LABEL.kamar_indikator, kamar_robot:FACILITY_LABEL.kamar_robot, all_paid:'Semua Member Berbayar' },
+    publish_status:{ draft:'Draft (Belum Tayang)', published:'Tayang', hidden:'Disembunyikan' },
+    file_type:{ indicator:'Indikator', robot:'Robot Trading', template:'Template', pdf:'PDF / Dokumen', other:'Lainnya' }
   };
-  var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','tools_files','site_settings','maintenance_settings','link_settings','payment_gateways','homepage_settings','dashboard_settings','admin_pending_todos'];
-  var NO_STATUS_PAGES = ['admin-login.html'];
+  var FIELD_LABELS = {
+    title:'Judul', body:'Isi Pesan', image_url:'Link Gambar (opsional)', cta_label:'Teks Tombol (opsional)',
+    cta_url:'Link Tombol (opsional)', display_area:'Tampil di Mana', is_active:'Aktifkan',
+    youtube_url:'Link Video YouTube', category:'Kategori', description:'Deskripsi', material_url:'Link File Materi',
+    version_label:'Versi', access_required:'Untuk Siapa', publish_status:'Status Tayang',
+    admin_notes:'Catatan Internal (tidak tampil ke member)', file_type:'Jenis File', file_url:'Link File',
+    changelog:'Catatan Perubahan', maintenance_key:'Kode Fasilitas', message:'Pesan', setting_key:'Nama Pengaturan',
+    setting_value:'Isi Pengaturan', key:'Kode', label:'Nama Tampilan', url:'Link', name:'Nama',
+    bank_name:'Nama Bank', account_name:'Nama Pemilik Rekening', account_number:'Nomor Rekening',
+    instructions:'Petunjuk Pembayaran', value:'Isi'
+  };
+
+  // NOTE (2026-07-31): 'admin-maintenance.html' sengaja TIDAK dimasukkan ke MAP
+  // ini - halaman itu sudah punya tampilan toggle ON/OFF sendiri, jadi kalau
+  // ditambahkan di sini akan muncul dua form yang membingungkan di halaman
+  // yang sama.
+  var MAP = {
+    'admin-banner.html': { table:'banners', title:'Banner Pengumuman', fields:['title','body','image_url','cta_label','cta_url','display_area','is_active'],
+      help:'Buat pengumuman yang tampil di bagian atas halaman utama atau dashboard member.',
+      steps:['Isi judul dan pesan pengumuman di form di bawah.','Pilih mau tampil di halaman mana.','Klik Simpan untuk menayangkan (atau biarkan nonaktif dulu kalau belum mau tampil).'] },
+    'admin-video.html': { table:'videos', title:'Konten Video', fields:['title','youtube_url','category','description','display_area','access_required','publish_status','is_active'],
+      help:'Tambahkan video edukasi yang bisa ditonton member.',
+      steps:['Tempel link video YouTube di form.','Pilih siapa yang boleh menonton video ini.','Pilih status Tayang supaya video langsung terlihat member.'] },
+    'admin-materials.html': { table:'materials', title:'Konten & Materi', fields:['title','category','description','material_url','version_label','access_required','publish_status','admin_notes','is_active'],
+      help:'Unggah materi belajar seperti PDF atau dokumen untuk member.',
+      steps:['Tempel link file materi (Google Drive/tempat penyimpanan lain).','Tentukan fasilitas mana yang boleh mengakses materi ini.','Pilih status Tayang agar materi langsung muncul di dashboard member.'] },
+    'admin-tools.html': { table:'tools_files', title:'File Tools', fields:['title','file_type','file_url','version_label','changelog','access_required','publish_status','admin_notes','is_active'],
+      help:'Kelola file tools, indikator, atau robot trading yang bisa diunduh member.',
+      steps:['Tempel link file tools.','Tentukan untuk siapa file ini (fasilitas mana).','Pilih status Tayang agar file bisa diunduh member.'] },
+    'admin-settings.html': { table:'site_settings', title:'Pengaturan Umum', fields:['setting_key','setting_value','description','is_active'], jsonFields:['setting_value'],
+      help:'Atur pengaturan umum website, seperti nama produk atau kontak.',
+      steps:['Isi nama pengaturan dan isinya di form.','Klik Simpan.','Pengaturan baru langsung dipakai website setelah disimpan.'] },
+    'admin-links.html': { table:'link_settings', title:'Pengaturan Link', fields:['key','label','url','is_active'],
+      help:'Atur link-link penting seperti Telegram, WhatsApp admin, atau link pembayaran.',
+      steps:['Isi kode link, contoh: telegram atau whatsapp.','Isi nama tampilan dan link aslinya.','Klik Simpan lalu aktifkan link tersebut.'] },
+    'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway', fields:['name','bank_name','account_name','account_number','instructions','is_active'],
+      help:'Atur rekening/metode pembayaran yang muncul ke member.',
+      steps:['Isi nama bank/metode pembayaran.','Isi nama & nomor rekening, plus petunjuk transfer.','Aktifkan metode ini supaya muncul ke member.'] },
+    'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama', fields:['key','value','description','is_active'], jsonFields:['value'],
+      help:'Atur bagian mana saja yang tampil di halaman utama (landing page) website.',
+      steps:['Isi kode bagian yang mau diatur.','Isi keterangan singkat.','Aktifkan/nonaktifkan sesuai kebutuhan.'] },
+    'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member', fields:['key','value','description','is_active'], jsonFields:['value'],
+      help:'Atur tampilan dan akses dashboard member.',
+      steps:['Isi kode pengaturan dashboard.','Isi keterangan singkat.','Aktifkan/nonaktifkan sesuai kebutuhan.'] }
+  };
 
   // NEW (2026-07-30): every admin-*.html file has always had its OWN
   // copy-pasted <aside class="split-sidebar"> markup, and over time these
-  // copies drifted out of sync - some pages are missing "Data Internal",
-  // "Cek Data Admin", or "Cek Koneksi DB" entirely because those links were
-  // added to admin.html later but never back-ported to the other pages.
-  // SIDEBAR_SECTIONS below is now the single source of truth for the admin
-  // menu; rebuildSidebar() regenerates the sidebar identically on every
-  // admin page so new/renamed menu items only ever need to be edited here.
+  // copies drifted out of sync. SIDEBAR_SECTIONS below is the single source
+  // of truth for the admin menu; rebuildSidebar() regenerates the sidebar
+  // identically on every admin page so new/renamed menu items only ever need
+  // to be edited here.
+  // UPDATED (2026-07-31, Tahap 1): removed "Cek Data Admin" and
+  // "Cek Koneksi DB" per direct request - dianggap tidak berguna untuk admin
+  // sehari-hari. Halaman aslinya masih ada di server tapi tidak lagi
+  // dilink dari menu manapun.
   var SIDEBAR_SECTIONS = [
     { label:'Utama', items:[ ['admin.html','Dashboard Admin'] ] },
     { label:'Member & Akses', items:[
       ['admin-members.html','Data Member'],
       ['admin-internal.html','Data Internal'],
-      ['admin-activation.html','Aktivasi Akun & Fasilitas'],
-      ['admin-data-check.html','Cek Data Admin'],
-      ['admin-connection-check.html','Cek Koneksi DB']
+      ['admin-activation.html','Aktivasi Akun & Fasilitas']
     ]},
     { label:'Affiliate', items:[
       ['admin-affiliate-v2.html?view=overview','Data Affiliate'],
@@ -78,20 +134,57 @@
   function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || /aktif|active|on|yes/i.test(String(v||'')); }
   function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
 
+  // NEW (2026-07-31, Tahap 1): satu blok CSS yang disuntikkan sekali ke setiap
+  // halaman admin, supaya sub-menu sidebar yang bisa dibuka/tutup dan tampilan
+  // kartu data (Konten Website/Kontrol Sistem) selalu SAMA persis di semua
+  // halaman - tidak perlu edit style.css di puluhan file satu-satu.
+  function injectSharedStyles(){
+    if(qs('#kamarAdminSharedStyle29F')) return;
+    var style = document.createElement('style');
+    style.id = 'kamarAdminSharedStyle29F';
+    style.textContent =
+      '.split-sidebar details{margin:4px 0}'+
+      '.split-sidebar summary{list-style:none;cursor:pointer;padding:12px 14px;border-radius:16px;font-weight:1000;color:#f1dda2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;opacity:.9}'+
+      '.split-sidebar summary::-webkit-details-marker{display:none}'+
+      '.split-sidebar summary:after{content:"\\25BE";font-size:11px;opacity:.7;transition:.2s ease}'+
+      '.split-sidebar details[open] summary:after{content:"\\25B4"}'+
+      '.split-sidebar summary:hover{background:rgba(212,166,63,.10);color:#f4df90}'+
+      '.online-card-list{display:grid;gap:14px}'+
+      '.online-card{border:1px solid rgba(238,206,122,.16);border-radius:20px;background:rgba(255,255,255,.03);padding:16px 18px}'+
+      '.online-card-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid rgba(238,206,122,.08)}'+
+      '.online-card-row:last-of-type{border-bottom:0}'+
+      '.online-card-row span{color:#d8cda9;font-weight:800;font-size:13px}'+
+      '.online-card-row strong{color:#f5f0e6;font-weight:700;text-align:right;max-width:60%}'+
+      '.online-card details{margin-top:8px}'+
+      '.online-card summary{cursor:pointer;color:#e9d79f;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;list-style:none}'+
+      '.online-card summary::-webkit-details-marker{display:none}'+
+      '.manager-help{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:20px;padding:16px 18px;margin-bottom:4px;color:#d8f5e4}'+
+      '.manager-help strong{color:#eafff2}'+
+      '.manager-help ol{margin:8px 0 0;padding-left:18px;color:#c9ffe1}'+
+      '.manager-help li{margin-bottom:4px}';
+    document.head.appendChild(style);
+  }
+
+  function sidebarLinkHtml(item){
+    var href = item[0], label = item[1];
+    var file = href.split('?')[0].toLowerCase();
+    var isActive = (file === PAGE);
+    var isLogout = (label === 'Logout');
+    return '<a'+(isActive?' class="active"':'')+(isLogout?' data-kamar-logout':'')+' href="'+esc(href)+'">'+esc(label)+'</a>';
+  }
   function rebuildSidebar(){
     var sidebar = qs('.split-sidebar');
     if(!sidebar || sidebar.getAttribute('data-kamar-sidebar-online-29h')) return;
     sidebar.setAttribute('data-kamar-sidebar-online-29h','1');
     var html = '<div class="brand-small">ADMIN KAMAR</div>';
     SIDEBAR_SECTIONS.forEach(function(sec){
-      html += '<div class="admin-menu-section">'+esc(sec.label)+'</div>';
-      sec.items.forEach(function(item){
-        var href = item[0], label = item[1];
-        var file = href.split('?')[0].toLowerCase();
-        var isActive = (file === PAGE);
-        var isLogout = (label === 'Logout');
-        html += '<a'+(isActive?' class="active"':'')+(isLogout?' data-kamar-logout':'')+' href="'+esc(href)+'">'+esc(label)+'</a>';
-      });
+      if(sec.items.length <= 1){
+        html += '<div class="admin-menu-section">'+esc(sec.label)+'</div>';
+        html += sec.items.map(sidebarLinkHtml).join('');
+      } else {
+        var hasActive = sec.items.some(function(item){ return item[0].split('?')[0].toLowerCase() === PAGE; });
+        html += '<details'+(hasActive?' open':'')+'><summary>'+esc(sec.label)+'</summary>'+sec.items.map(sidebarLinkHtml).join('')+'</details>';
+      }
     });
     sidebar.innerHTML = html;
   }
@@ -103,19 +196,19 @@
   }
   async function select(table, limit){
     var c = await ready();
-    if(!c) throw new Error('Client Supabase tidak terbaca.');
+    if(!c) throw new Error('Data belum bisa dibaca.');
     var res = await c.from(table).select('*',{count:'exact'}).limit(limit || 200);
     if(res.error) throw res.error;
     return res;
   }
   async function insert(table, row){
-    var c = await ready(); if(!c) throw new Error('Client Supabase tidak terbaca.');
+    var c = await ready(); if(!c) throw new Error('Data belum bisa disimpan.');
     var res = await c.from(table).insert(row).select();
     if(res.error) throw res.error;
     return res.data || [];
   }
   async function update(table, id, row){
-    var c = await ready(); if(!c) throw new Error('Client Supabase tidak terbaca.');
+    var c = await ready(); if(!c) throw new Error('Data belum bisa disimpan.');
     var q = c.from(table).update(row);
     if(id) q = q.eq('id', id);
     var res = await q.select();
@@ -123,49 +216,60 @@
     return res.data || [];
   }
   async function remove(table, id){
-    var c = await ready(); if(!c) throw new Error('Client Supabase tidak terbaca.');
+    var c = await ready(); if(!c) throw new Error('Data belum bisa dihapus.');
     var res = await c.from(table).delete().eq('id', id);
     if(res.error) throw res.error;
     return true;
   }
   function getMain(){ return qs('.split-main') || qs('main') || document.body; }
+  function fieldLabel(name){ return FIELD_LABELS[name] || name; }
   function fieldInput(name){
     if(ENUM_FIELDS[name]){
-      var opts = '<option value="">— Pilih '+esc(name)+' —</option>'+ENUM_FIELDS[name].map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>';}).join('');
-      return '<label class="field"><span>'+esc(name)+'</span><select name="'+esc(name)+'">'+opts+'</select></label>';
+      var labels = ENUM_LABELS[name] || {};
+      var opts = '<option value="">— Pilih —</option>'+ENUM_FIELDS[name].map(function(v){return '<option value="'+esc(v)+'">'+esc(labels[v]||v)+'</option>';}).join('');
+      return '<label class="field"><span>'+esc(fieldLabel(name))+'</span><select name="'+esc(name)+'">'+opts+'</select></label>';
     }
     var type = /url|link|file|image|youtube/i.test(name) ? 'url' : /enabled|is_active|active/i.test(name) ? 'checkbox' : 'text';
     if(/message|description|instructions|value|changelog|notes/i.test(name)) type='textarea';
-    if(type==='textarea') return '<label class="field"><span>'+esc(name)+'</span><textarea name="'+esc(name)+'" placeholder="'+esc(name)+'"></textarea></label>';
-    if(type==='checkbox') return '<label class="toggle-row"><span><strong>'+esc(name)+'</strong><small>Aktif / nonaktif</small></span><input type="checkbox" name="'+esc(name)+'"></label>';
-    return '<label class="field"><span>'+esc(name)+'</span><input type="'+type+'" name="'+esc(name)+'" placeholder="'+esc(name)+'"></label>';
+    if(type==='textarea') return '<label class="field"><span>'+esc(fieldLabel(name))+'</span><textarea name="'+esc(name)+'" placeholder="Isi '+esc(fieldLabel(name).toLowerCase())+'"></textarea></label>';
+    if(type==='checkbox') return '<label class="toggle-row"><span><strong>'+esc(fieldLabel(name))+'</strong><small>Aktif / nonaktif</small></span><input type="checkbox" name="'+esc(name)+'"></label>';
+    return '<label class="field"><span>'+esc(fieldLabel(name))+'</span><input type="'+type+'" name="'+esc(name)+'" placeholder="Isi '+esc(fieldLabel(name).toLowerCase())+'"></label>';
   }
-  function rowValue(v){
-    if(v == null) return '-';
+  function displayValue(field, v){
+    if(v == null || v === '') return '-';
+    if(ENUM_FIELDS[field]){ var labels = ENUM_LABELS[field] || {}; return esc(labels[v] || v); }
+    if(typeof v === 'boolean') return v ? 'Aktif' : 'Nonaktif';
     if(typeof v === 'object') return esc(JSON.stringify(v)).slice(0,180);
     return esc(v).slice(0,180);
   }
-  function renderRows(rows, table, fields){
-    if(!rows.length) return '<div class="admin-empty-state">Belum ada data di tabel <code>'+esc(table)+'</code>. Tambahkan data pertama melalui form di atas.</div>';
-    var cols = Array.from(new Set(['id'].concat(fields || [], Object.keys(rows[0]||{})))).slice(0,8);
-    return '<div class="table-box"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c)+'</th>';}).join('')+'<th>Aksi</th></tr></thead><tbody>'+rows.map(function(r){return '<tr>'+cols.map(function(c){return '<td>'+rowValue(r[c])+'</td>';}).join('')+'<td><button class="btn mini danger" data-online-delete="'+esc(r.id||'')+'" '+(!r.id?'disabled':'')+'>Hapus</button></td></tr>';}).join('')+'</tbody></table></div>';
+  function renderRows(rows, cfg){
+    if(!rows.length) return '<div class="admin-empty-state">Belum ada data. Tambahkan data pertama lewat form di atas.</div>';
+    var main = cfg.fields.slice(0,3), rest = cfg.fields.slice(3);
+    return '<div class="online-card-list">'+rows.map(function(r){
+      var mainHtml = main.map(function(f){ return '<div class="online-card-row"><span>'+esc(fieldLabel(f))+'</span><strong>'+displayValue(f,r[f])+'</strong></div>'; }).join('');
+      var restHtml = rest.map(function(f){ return '<div class="online-card-row"><span>'+esc(fieldLabel(f))+'</span><strong>'+displayValue(f,r[f])+'</strong></div>'; }).join('');
+      return '<div class="online-card">'+mainHtml+(restHtml?'<details><summary>Lihat detail lain</summary>'+restHtml+'</details>':'')+'<div class="button-row"><button class="btn mini danger" data-online-delete="'+esc(r.id||'')+'" '+(!r.id?'disabled':'')+'>Hapus</button></div></div>';
+    }).join('')+'</div>';
   }
   async function renderManager(cfg){
     var main = getMain();
     if(!main || qs('#kamarOnlineManager29F')) return;
+    injectSharedStyles();
     var box = document.createElement('section');
     box.className = 'split-card';
     box.id = 'kamarOnlineManager29F';
-    box.innerHTML = '<span class="mini-label">Supabase Online</span><h2>'+esc(cfg.title)+'</h2><p>Halaman ini membaca dan menulis ke tabel <code>'+esc(cfg.table)+'</code>. Jika tombol simpan error, cek nama kolom tabel atau RLS policy INSERT/UPDATE.</p><form id="onlineForm29F" class="grid-2 kamar-form-grid">'+cfg.fields.map(fieldInput).join('')+'<div class="button-row full"><button class="btn" type="submit">Simpan ke Supabase</button><button class="btn secondary" type="button" id="reloadOnline29F">Refresh Data</button></div></form><div id="onlineData29F" class="preview-box">Memuat data online...</div>';
+    var stepsHtml = (cfg.steps && cfg.steps.length) ? '<div class="manager-help"><strong>Cara pakai halaman ini:</strong><ol>'+cfg.steps.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ol></div>' : '';
+    box.innerHTML = '<h2>'+esc(cfg.title)+'</h2>'+(cfg.help?'<p>'+esc(cfg.help)+'</p>':'')+stepsHtml+'<form id="onlineForm29F" class="grid-2 kamar-form-grid">'+cfg.fields.map(fieldInput).join('')+'<div class="button-row full"><button class="btn" type="submit">Simpan</button><button class="btn secondary" type="button" id="reloadOnline29F">Muat Ulang</button></div></form><div id="onlineData29F" class="preview-box">Memuat data...</div>';
     main.appendChild(box);
     async function reload(){
       var target = qs('#onlineData29F', box);
-      target.innerHTML = 'Membaca tabel <code>'+esc(cfg.table)+'</code>...';
+      target.innerHTML = 'Memuat data...';
       try{
         var res = await select(cfg.table, 200);
-        target.innerHTML = '<div class="button-row"><span class="status-pill on">Supabase OK</span><span class="status-pill">Jumlah: '+(res.count != null ? res.count : (res.data||[]).length)+'</span></div>'+renderRows(res.data||[], cfg.table, cfg.fields);
+        var count = res.count != null ? res.count : (res.data||[]).length;
+        target.innerHTML = '<div class="button-row"><span class="status-pill on">Data Siap</span><span class="status-pill">Jumlah: '+count+'</span></div>'+renderRows(res.data||[], cfg);
       }catch(e){
-        target.innerHTML = '<div class="expired-note"><strong>Belum bisa membaca tabel '+esc(cfg.table)+'</strong><br>'+esc(e.message || e)+'<br><br>Jika tabel ada, aktifkan RLS SELECT/INSERT/UPDATE untuk akun auth/admin atau anon sesuai kebutuhan.</div>';
+        target.innerHTML = '<div class="expired-note"><strong>Data belum bisa dimuat</strong><br>Coba klik "Muat Ulang". Jika masih gagal, hubungi pengelola teknis website.</div>';
       }
     }
     qs('#onlineForm29F', box).addEventListener('submit', async function(e){
@@ -191,14 +295,14 @@
       });
       if(!('created_at' in row)) row.created_at = new Date().toISOString();
       if(!('updated_at' in row)) row.updated_at = new Date().toISOString();
-      try{ await insert(cfg.table, row); toast('Tersimpan ke Supabase: '+cfg.table); e.target.reset(); await reload(); }
+      try{ await insert(cfg.table, row); toast('Data berhasil disimpan.'); e.target.reset(); await reload(); }
       catch(err){ toast('Gagal simpan: '+(err.message||err)); }
     });
     qs('#reloadOnline29F', box).onclick = reload;
     box.addEventListener('click', async function(e){
       var id = e.target && e.target.getAttribute('data-online-delete');
       if(!id) return;
-      if(!confirm('Hapus data ID '+id+' dari '+cfg.table+'?')) return;
+      if(!confirm('Yakin mau menghapus data ini?')) return;
       try{ await remove(cfg.table, id); toast('Data dihapus.'); await reload(); }catch(err){ toast('Gagal hapus: '+(err.message||err)); }
     });
     await reload();
@@ -215,18 +319,18 @@
       try{
         await update('member_profiles', id, { status:'active', account_status:'active', updated_at:new Date().toISOString() });
         toast('Member diupdate online.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;
-      }catch(e){ toast('Online update gagal, fallback lokal: '+(e.message||e)); return oldActivate ? oldActivate(id) : false; }
+      }catch(e){ toast('Gagal update, coba lagi: '+(e.message||e)); return oldActivate ? oldActivate(id) : false; }
     };
     K.suspendMember = async function(id){
       try{ await update('member_profiles', id, { status:'suspended', account_status:'suspended', updated_at:new Date().toISOString() }); toast('Member disuspend online.'); return true; }
-      catch(e){ toast('Online update gagal, fallback lokal: '+(e.message||e)); return oldSuspend ? oldSuspend(id) : false; }
+      catch(e){ toast('Gagal update, coba lagi: '+(e.message||e)); return oldSuspend ? oldSuspend(id) : false; }
     };
     K.toggleFacility = async function(id,fac,on,duration,note){
       try{
         var row = { member_id:id, facility_name:fac, is_active:!!on, duration:String(duration||''), note:String(note||''), updated_at:new Date().toISOString() };
         await insert('member_access', row);
         toast((on?'Fasilitas aktif online: ':'Fasilitas nonaktif online: ')+fac); return true;
-      }catch(e){ toast('Online akses gagal, fallback lokal: '+(e.message||e)); return oldToggle ? oldToggle(id,fac,on,duration,note) : false; }
+      }catch(e){ toast('Gagal update akses, coba lagi: '+(e.message||e)); return oldToggle ? oldToggle(id,fac,on,duration,note) : false; }
     };
   }
   // NEW (2026-07-30): real actionable notification/to-do center for the main
@@ -234,12 +338,10 @@
   // already being filled in automatically (new_registration, new_payment,
   // renewal_request, upgrade_request, access_expiring, access_expired,
   // profile_change, support_request, manual_note) - but nothing in the admin
-  // UI ever read it. The old #adminTodoList only listed members whose
-  // account_status looked "pending", with a link that just navigated away.
-  // renderActionCenter() replaces that with the real admin_todos queue and
-  // gives each item a one-click action (activate account, confirm payment +
-  // grant the requested facilities, approve/reject a profile change, or mark
-  // done) so the admin can act directly from the dashboard.
+  // UI ever read it. renderActionCenter() reads the real admin_todos queue
+  // and gives each item a one-click action (activate account, confirm payment
+  // + grant the requested facilities, approve/reject a profile change, or
+  // mark done) so the admin can act directly from the dashboard.
   var TODO_LABELS = {
     new_registration: 'Pendaftaran Baru',
     new_payment: 'Pembayaran Baru',
@@ -250,25 +352,6 @@
     profile_change: 'Perubahan Profil',
     support_request: 'Permintaan Bantuan',
     manual_note: 'Catatan Admin'
-  };
-  var FACILITY_COLUMN = {
-    kamar_study:'access_kamar_study',
-    materi_edukasi:'access_materi_edukasi',
-    kamar_private:'access_kamar_private',
-    kamar_indikator:'access_kamar_indikator',
-    kamar_robot:'access_kamar_robot'
-  };
-  // RENAMED (2026-07-31): "kamar_study" is the internal technical key (matches
-  // the real DB column/enum value and existing payment records) - only the
-  // text admin actually SEES has changed, to match the homepage's facility
-  // name. Do not rename the FACILITY_COLUMN key above; it would break lookups
-  // against existing payments/todos already stored with the old slug.
-  var FACILITY_LABEL = {
-    kamar_study:'Kamar Signal',
-    materi_edukasi:'Kamar Edukasi',
-    kamar_private:'Kamar Private',
-    kamar_indikator:'Kamar Indikator',
-    kamar_robot:'Kamar Robot'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
@@ -379,7 +462,7 @@
     if(!el) return false;
     try{
       var c = await ready();
-      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      if(!c) throw new Error('Data belum bisa dibaca.');
       var res = await c.from('admin_todos').select('*').in('todo_status',['new','processing']).order('priority',{ascending:true}).order('created_at',{ascending:true}).limit(50);
       if(res.error) throw res.error;
       var rows = res.data || [];
@@ -394,30 +477,10 @@
       return false;
     }
   }
-  async function injectStatus(){
-    if(!/^admin/i.test(PAGE) || NO_STATUS_PAGES.indexOf(PAGE) !== -1 || qs('#kamarOnlineStatus29F')) return;
-    var main = getMain(); if(!main) return;
-    var box = document.createElement('section');
-    box.className='split-card'; box.id='kamarOnlineStatus29F';
-    box.innerHTML='<span class="mini-label">Status Database</span><div id="kamarOnlineStatusBody29F">Mengecek Supabase...</div>';
-    main.insertBefore(box, main.children[1] || null);
-    try{
-      var c = await ready();
-      if(!c) throw new Error('Client Supabase tidak terbaca.');
-      var ok=0, err=0, samples=[];
-      for(var i=0;i<Math.min(CRITICAL_TABLES.length,8);i++){
-        try{ var r = await select(CRITICAL_TABLES[i], 1); ok++; samples.push(CRITICAL_TABLES[i]+': OK'); }
-        catch(e){ err++; samples.push(CRITICAL_TABLES[i]+': '+(e.message||'ERROR')); }
-      }
-      qs('#kamarOnlineStatusBody29F',box).innerHTML='<div class="button-row"><span class="status-pill on">Client Supabase Terbaca</span><span class="status-pill">Tabel OK: '+ok+'</span><span class="status-pill warn">Error/Policy: '+err+'</span></div><p>'+esc(samples.join(' | '))+'</p><a class="btn secondary mini" href="admin-connection-check.html?v='+VERSION+'">Buka Cek Koneksi Lengkap</a>';
-    }catch(e){
-      qs('#kamarOnlineStatusBody29F',box).innerHTML='<div class="expired-note"><strong>Supabase belum siap</strong><br>'+esc(e.message||e)+'</div>';
-    }
-  }
   async function run(){
     if(!/^admin/i.test(PAGE)) return;
+    injectSharedStyles();
     rebuildSidebar();
-    await injectStatus();
     await patchKamarAdminLocal();
     if(PAGE === 'admin.html') await renderActionCenter();
     if(MAP[PAGE]) await renderManager(MAP[PAGE]);

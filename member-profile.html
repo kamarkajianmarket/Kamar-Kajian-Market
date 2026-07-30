@@ -25,7 +25,7 @@ body{background:#070707;color:var(--text)}
 <link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 <link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
-<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<meta name="kamar-step" content="60-broker-modal-profile"/>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">KAWAN KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Study 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a class="active" href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 <div class="split-card kamar-title-card"><h1>Profil Akun</h1></div>
 <section class="split-card profile-panel">
@@ -39,6 +39,8 @@ body{background:#070707;color:var(--text)}
 <div class="profile-detail-row"><span>Masa Akses</span><strong id="profileAccessDate">-</strong></div>
 <div class="profile-detail-row"><span>Fasilitas Aktif</span><strong id="profileFacilities">-</strong></div>
 <div class="profile-detail-row"><span>Kode Referral</span><strong id="profileReferralCode">-</strong></div>
+<div class="profile-detail-row"><span>Broker Trading</span><strong id="profileBroker">-</strong></div>
+<div class="profile-detail-row"><span>Modal / Equity</span><strong id="profileModal">-</strong></div>
 </div>
 </section>
 
@@ -59,6 +61,53 @@ body{background:#070707;color:var(--text)}
   <div class="referral-status-note" id="memberReferralStatus">Kosongkan bila Anda tidak memiliki kode referral. Pengisian hanya dapat dilakukan satu kali.</div>
 </section>
 
+<section class="split-card" id="memberBrokerCapitalCard">
+  <span class="eyebrow">Data Trading</span>
+  <h2>Broker &amp; Modal</h2>
+  <p>Data ini opsional, membantu kami memahami broker dan kisaran modal yang paling banyak digunakan Kawan Kamar. Bisa diubah kapan saja.</p>
+  <form id="memberBrokerCapitalForm" class="grid-2">
+    <label class="field">Broker yang digunakan
+      <select id="brokerSelect" name="broker_name">
+        <option value="">— Pilih broker —</option>
+        <option value="FBS">FBS</option>
+        <option value="Exness">Exness</option>
+        <option value="Octafx">Octafx</option>
+        <option value="XM">XM</option>
+        <option value="HFM (HotForex)">HFM (HotForex)</option>
+        <option value="Tickmill">Tickmill</option>
+        <option value="InstaForex">InstaForex</option>
+        <option value="IUX Markets">IUX Markets</option>
+        <option value="HSB Investasi (Bappebti)">HSB Investasi (Bappebti)</option>
+        <option value="Monex Investindo Futures (MIFX)">Monex Investindo Futures (MIFX)</option>
+        <option value="GKInvest">GKInvest</option>
+        <option value="Valbury Asia Futures">Valbury Asia Futures</option>
+        <option value="Didimax">Didimax</option>
+        <option value="Finex Berjangka">Finex Berjangka</option>
+        <option value="Rifan Financindo Berjangka">Rifan Financindo Berjangka</option>
+        <option value="Central Capital Futures (CCF)">Central Capital Futures (CCF)</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+    </label>
+    <label class="field hidden" id="brokerOtherWrap">Nama broker lainnya
+      <input id="brokerOtherInput" name="broker_name_other" placeholder="Tulis nama broker" autocomplete="off" type="text"/>
+    </label>
+    <label class="field">Modal / Equity yang digunakan
+      <select id="capitalSelect" name="capital_range">
+        <option value="">— Pilih rentang modal —</option>
+        <option value="<10 juta">Kurang dari 10 juta</option>
+        <option value="10-50 juta">10 - 50 juta</option>
+        <option value="50-100 juta">50 - 100 juta</option>
+        <option value="100-500 juta">100 - 500 juta</option>
+        <option value=">500 juta">Lebih dari 500 juta</option>
+      </select>
+    </label>
+    <div class="button-row" style="grid-column:1/-1">
+      <button class="btn primary" type="submit">Simpan Data Trading</button>
+    </div>
+  </form>
+  <div class="referral-status-note" id="memberBrokerCapitalStatus">Kosongkan bila Anda tidak ingin mengisi. Data ini tidak memengaruhi akses fasilitas Anda.</div>
+</section>
+
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
@@ -75,7 +124,7 @@ body{background:#070707;color:var(--text)}
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-member-profile.js?v=28"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=30G"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=32I"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-member-profile.js?v=28"></script>
 <script id="kamar-step24CB-member-referral-profile-logic">
 (function(){
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
@@ -156,6 +205,66 @@ body{background:#070707;color:var(--text)}
   var m=sess&&sess.email?members.find(function(x){return String(x.email||'').toLowerCase()===String(sess.email||'').toLowerCase();}):null;
   var data=m||sess||{};
   var el=document.getElementById('profileReferralCode'); if(el) el.textContent=data.referralCode||'Tidak ada';
+})();
+</script>
+<script id="kamar-step60-broker-modal-profile-logic">
+(function(){
+  function byId(id){return document.getElementById(id);}
+  function setStatus(msg,type){var el=byId('memberBrokerCapitalStatus'); if(!el) return; el.textContent=msg; el.className='referral-status-note '+(type||'');}
+  var form=byId('memberBrokerCapitalForm'); if(!form) return;
+  var brokerSelect=byId('brokerSelect');
+  var brokerOtherWrap=byId('brokerOtherWrap');
+  var brokerOtherInput=byId('brokerOtherInput');
+  var capitalSelect=byId('capitalSelect');
+
+  function toggleOther(){
+    var isOther=brokerSelect && brokerSelect.value==='Lainnya';
+    if(brokerOtherWrap) brokerOtherWrap.classList.toggle('hidden', !isOther);
+    if(!isOther && brokerOtherInput) brokerOtherInput.value='';
+  }
+  if(brokerSelect) brokerSelect.addEventListener('change', toggleOther);
+
+  function prefill(member){
+    if(!member) return;
+    var broker=String(member.broker_name||'').trim();
+    var brokerOther=String(member.broker_name_other||'').trim();
+    var capital=String(member.capital_range||'').trim();
+    if(brokerSelect && broker) brokerSelect.value=broker;
+    if(brokerOtherInput && brokerOther) brokerOtherInput.value=brokerOther;
+    if(capitalSelect && capital) capitalSelect.value=capital;
+    toggleOther();
+  }
+  document.addEventListener('kamarProfileLoaded', function(ev){
+    prefill(ev && ev.detail && ev.detail.member);
+  });
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    setStatus('Menyimpan...', '');
+    try{
+      var client = window.kamarSupabaseClient;
+      if(!client){ setStatus('Sistem belum siap. Coba muat ulang halaman ini.', 'error'); return; }
+      var u = await client.auth.getUser();
+      var userId = u && u.data && u.data.user && u.data.user.id;
+      if(!userId){ setStatus('Sesi Anda tidak ditemukan. Silakan login ulang.', 'error'); return; }
+      var broker = brokerSelect ? brokerSelect.value : '';
+      var brokerOther = (broker==='Lainnya' && brokerOtherInput) ? brokerOtherInput.value.trim() : '';
+      var capital = capitalSelect ? capitalSelect.value : '';
+      var res = await client.from('member_profiles').update({
+        broker_name: broker || null,
+        broker_name_other: brokerOther || null,
+        capital_range: capital || null
+      }).eq('user_id', userId);
+      if(res.error) throw res.error;
+      var brokerText = broker ? (broker==='Lainnya' && brokerOther ? ('Lainnya - '+brokerOther) : broker) : '-';
+      var bEl=byId('profileBroker'); if(bEl) bEl.textContent=brokerText;
+      var mEl=byId('profileModal'); if(mEl) mEl.textContent=capital||'-';
+      setStatus('Data trading berhasil disimpan.', 'success');
+      toast('Data trading berhasil disimpan.');
+    }catch(err){
+      setStatus('Gagal menyimpan. Coba lagi, atau hubungi admin jika masih bermasalah.', 'error');
+    }
+  });
 })();
 </script>
 <script id="kamar-step24CO-maintenance-notice">

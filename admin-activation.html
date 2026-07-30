@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
@@ -37,7 +36,6 @@
 <div class="menu-section">Member &amp; Akses</div>
 <a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
 <a class="active" href="admin-activation.html?v=24dg">Aktivasi Akun &amp; Fasilitas</a>
-<a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
 <div class="menu-section">Affiliate</div>
 <a href="admin-affiliate-v2.html?view=overview&amp;v=24dx">Data Affiliate</a>
 <div class="menu-section">Konten Website</div>
@@ -72,9 +70,10 @@
 </div>
 </div>
 <div class="hero-panel">
-<div class="hero-panel-row"><span>Fungsi Utama</span><strong>Aktivasi &amp; Akses</strong></div>
-<div class="hero-panel-row"><span>Mode Kontrol</span><strong>Manual Admin</strong></div>
-<div class="hero-panel-row"><span>Fasilitas</span><strong>Toggle ON/OFF</strong></div>
+<div class="hero-panel-row"><span>Total Member</span><strong id="heroTotalMember">-</strong></div>
+<div class="hero-panel-row"><span>Pending Aktivasi</span><strong id="heroPendingMember">-</strong></div>
+<div class="hero-panel-row"><span>Sudah Aktif</span><strong id="heroActiveMember">-</strong></div>
+<div class="hero-panel-row"><span>Status Sistem</span><strong id="heroSystemStatus">Memuat...</strong></div>
 </div>
 </section>
 <section class="split-card" id="activationSearch">
@@ -152,18 +151,6 @@
     var TABLE_PROFILE='member_profiles';
     var TABLE_ACCESS='member_access';
     var FACILITIES=['Kamar Edukasi','Kamar Signal','Kamar Private','Kamar Indikator','Kamar Robot'];
-    // FIXED (2026-07-30): member_access is ONE row per profile_id with a
-    // boolean column per facility (access_kamar_study, access_materi_edukasi,
-    // access_kamar_private, access_kamar_indikator, access_kamar_robot) - it
-    // is NOT one row per facility with a "facility name" column like the old
-    // code assumed. That mismatch meant every facility toggle click here
-    // silently failed with "Baris fasilitas ... belum ditemukan". FACILITY_COLUMN
-    // maps each display label to its real column name.
-    // RENAMED (2026-07-31): "Kamar Study" is now displayed as "Kamar Signal" to
-    // match the facility name shown on the public homepage - only the on-screen
-    // label changed, the underlying database column stays access_kamar_study
-    // (renaming the real column would be a much bigger, riskier change and
-    // isn't needed just to fix the label).
     var FACILITY_COLUMN={
       'Kamar Edukasi':'access_materi_edukasi',
       'Kamar Signal':'access_kamar_study',
@@ -181,9 +168,6 @@
     function toast(msg){var t=byId('toast'); if(!t)return alert(msg); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2600)}
     function getConfig(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
     function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
-    // FIXED (2026-07-30): now awaits KamarSupabase.ready() first instead of only
-    // checking window.kamarSupabaseClient synchronously, so this no longer loses
-    // the race against kamar-supabase.js's async client setup on a fresh page load.
     async function initClient(){
       if(state.client)return state.client;
       try{ if(window.KamarSupabase&&window.KamarSupabase.ready){ var rc=await window.KamarSupabase.ready(); if(rc){state.client=rc;return rc} } }catch(e){}
@@ -191,7 +175,7 @@
       var cfg=getConfig(); if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){state.client=window.supabase.createClient(cfg.url,cfg.key);return state.client}
       return null
     }
-    async function query(table){var c=await initClient(); if(!c)throw new Error('Supabase client tidak terbaca.'); var res=await c.from(table).select('*').limit(1000); if(res.error)throw new Error(table+': '+(res.error.message||String(res.error))); return res.data||[]}
+    async function query(table){var c=await initClient(); if(!c)throw new Error('Data belum bisa dibaca.'); var res=await c.from(table).select('*').limit(1000); if(res.error)throw new Error(table+': '+(res.error.message||String(res.error))); return res.data||[]}
     function pick(o,keys){if(!o)return ''; for(var i=0;i<keys.length;i++){var k=keys[i]; if(o[k]!=null && String(o[k]).trim()!=='')return o[k]} return ''}
     function idOf(o){return String(pick(o,['member_id','memberId','member_code','memberCode','code','id','user_id','userId','profile_id','profileId','email'])||'').trim()}
     function emailOf(o){return String(pick(o,['email','member_email','user_email'])||'').trim()}
@@ -204,9 +188,6 @@
     function isSuspended(o){var s=rawStatus(o); return /suspend|block|banned|disabled/.test(s)}
     function statusLabel(o){if(isSuspended(o))return '<span class="chip bad">Suspended</span>'; if(isActive(o))return '<span class="chip ok">Active / Confirmed</span>'; return '<span class="chip warn">Pending Aktivasi</span>'}
     function mergeKey(o){return norm(emailOf(o)||idOf(o)||pick(o,['user_id','profile_id','id']))}
-    // FIXED (2026-07-30): member_access has one row per profile_id with
-    // boolean columns, so this now reads those columns directly instead of
-    // looking for a non-existent per-facility "name" row.
     function getFacilities(member){
       var out=[];
       var access=(member._access&&member._access[0])||null;
@@ -218,43 +199,35 @@
       }
       return out;
     }
-    // FIXED (2026-07-30): the "by" lookup map used to index members mostly by
-    // user_id/email/human member_id, but member_access rows are keyed by
-    // profile_id (member_profiles.id) - a DIFFERENT uuid than user_id. Since
-    // nothing in the old map was indexed by the raw profile id, every
-    // member_access row silently failed to match any member, so the toggle
-    // grid always rendered every facility as OFF even when it was really ON
-    // in the database (the write itself, fixed above, was already correct -
-    // only this read/display side had the mismatch). Explicitly indexing by
-    // m.id and m.profile_id closes that gap.
     function normalize(){var map={}; function add(row,source){var key=mergeKey(row); if(!key)return; if(!map[key])map[key]=Object.assign({},row,{_sources:[],_access:[]}); else Object.assign(map[key],row); map[key]._sources.push(source)} state.viewRows.forEach(function(r){add(r,'admin_member_overview')}); state.profileRows.forEach(function(r){add(r,'member_profiles')}); var by={}; Object.keys(map).forEach(function(k){var m=map[k]; [mergeKey(m),norm(emailOf(m)),norm(idOf(m)),norm(m.id),norm(m.profile_id),norm(pick(m,['user_id','profile_id','id']))].forEach(function(x){if(x)by[x]=m})}); state.accessRows.forEach(function(a){var keys=[norm(pick(a,['profile_id','user_id','id','member_id'])),norm(emailOf(a))]; var found=null; keys.forEach(function(k){if(!found&&by[k])found=by[k]}); if(found)found._access.push(a)}); state.members=Object.keys(map).map(function(k){var m=map[k]; m._id=idOf(m)||emailOf(m)||k; m._facilities=getFacilities(m); return m})}
     async function loadData(){state.loading=true;state.lastError='';renderShell();try{state.viewRows=await query(TABLE_VIEW);state.profileRows=await query(TABLE_PROFILE);state.accessRows=await query(TABLE_ACCESS);normalize()}catch(e){state.lastError=e.message||String(e);state.members=[]}state.loading=false;renderShell();focusRequestedMember()}
     function filtered(){var q=norm(byId('searchInput').value), st=byId('statusFilter').value, ff=byId('facilityFilter').value; return state.members.filter(function(m){var text=norm([nameOf(m),emailOf(m),idOf(m),waOf(m),tgOf(m)].join(' ')); var ok=!q||text.indexOf(q)>=0; if(st==='pending')ok=ok&&isPending(m); if(st==='active')ok=ok&&isActive(m); if(st==='suspended')ok=ok&&isSuspended(m); var fac=m._facilities||[]; if(ff==='none')ok=ok&&!fac.length; else if(ff!=='all')ok=ok&&fac.indexOf(ff)>=0; return ok})}
     function focusRequestedMember(){var req=requestedMember();if(!req||state.autoFocused)return;var m=state.members.find(function(x){return sameId(x,req)});if(!m)return;state.autoFocused=true;var s=byId('searchInput');if(s)s.value=emailOf(m)||idOf(m)||nameOf(m);renderShell();setTimeout(function(){showDetail(m._id)},120)}
-    function renderShell(){var all=state.members, list=filtered(), pending=all.filter(isPending).length; byId('summary').innerHTML='<span class="chip '+(state.client?'ok':'bad')+'">Supabase: '+(state.client?'Ada':'Tidak Ada')+'</span><span class="chip">Total: '+all.length+'</span><span class="chip">Tampil: '+list.length+'</span><span class="chip warn">Pending: '+pending+'</span><span class="chip">View: '+state.viewRows.length+'</span><span class="chip">Profiles: '+state.profileRows.length+'</span><span class="chip">Access: '+state.accessRows.length+'</span>'+(state.loading?'<span class="chip warn">Memuat...</span>':'')+(state.lastError?'<span class="chip bad">Error: '+esc(state.lastError)+'</span>':''); renderList(list)}
-    function renderList(list){var html='<div class="row header"><div>Member</div><div>Kontak</div><div>Status</div><div>Fasilitas</div><div>Aksi</div></div>'; if(state.loading){html+='<div class="empty">Memuat data dari Supabase...</div>'} else if(!list.length){html+='<div class="empty">Data member tidak ditemukan. Dari diagnosis, seharusnya data ada. Klik <b>Refresh</b>. Kalau tetap kosong, kirim screenshot halaman ini.</div>'} list.forEach(function(m){var id=m._id; var fac=(m._facilities&&m._facilities.length)?m._facilities.join(', '):'Belum ada'; html+='<div class="row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(id)+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' · TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(fac)+'</div><div class="actions">'+(isPending(m)?'<button class="btn mini" data-activate="'+esc(id)+'">Aktifkan Gratis</button>':'')+'<button class="btn mini secondary" data-detail="'+esc(id)+'">Detail</button></div></div>'}); byId('memberList').innerHTML=html; document.querySelectorAll('[data-detail]').forEach(function(b){b.onclick=function(){showDetail(b.getAttribute('data-detail'))}}); document.querySelectorAll('[data-activate]').forEach(function(b){b.onclick=function(){activateMember(b.getAttribute('data-activate'))}})}
+    function renderHeroStats(all){
+      var pending=all.filter(isPending).length, active=all.filter(isActive).length;
+      var t=byId('heroTotalMember'); if(t)t.textContent=all.length;
+      var p=byId('heroPendingMember'); if(p)p.textContent=pending;
+      var a=byId('heroActiveMember'); if(a)a.textContent=active;
+      var s=byId('heroSystemStatus'); if(s)s.textContent=state.loading?'Memuat...':(state.client?'Aktif':'Belum Siap');
+    }
+    function renderShell(){var all=state.members, list=filtered(), pending=all.filter(isPending).length; renderHeroStats(all); byId('summary').innerHTML='<span class="chip '+(state.client?'ok':'bad')+'">Sistem: '+(state.client?'Aktif':'Belum Siap')+'</span><span class="chip">Total: '+all.length+'</span><span class="chip">Tampil: '+list.length+'</span><span class="chip warn">Pending: '+pending+'</span>'+(state.loading?'<span class="chip warn">Memuat...</span>':'')+(state.lastError?'<span class="chip bad">Data belum lengkap termuat</span>':''); renderList(list)}
+    function renderList(list){var html='<div class="row header"><div>Member</div><div>Kontak</div><div>Status</div><div>Fasilitas</div><div>Aksi</div></div>'; if(state.loading){html+='<div class="empty">Memuat data member...</div>'} else if(!list.length){html+='<div class="empty">Data member tidak ditemukan. Klik <b>Refresh</b>. Kalau tetap kosong, hubungi pengelola teknis website.</div>'} list.forEach(function(m){var id=m._id; var fac=(m._facilities&&m._facilities.length)?m._facilities.join(', '):'Belum ada'; html+='<div class="row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(id)+'</small></div><div>'+esc(emailOf(m)||'-')+'<small>WA: '+esc(waOf(m))+' &middot; TG: '+esc(tgOf(m))+'</small></div><div>'+statusLabel(m)+'</div><div>'+esc(fac)+'</div><div class="actions">'+(isPending(m)?'<button class="btn mini" data-activate="'+esc(id)+'">Aktifkan Gratis</button>':'')+'<button class="btn mini secondary" data-detail="'+esc(id)+'">Detail</button></div></div>'}); byId('memberList').innerHTML=html; document.querySelectorAll('[data-detail]').forEach(function(b){b.onclick=function(){showDetail(b.getAttribute('data-detail'))}}); document.querySelectorAll('[data-activate]').forEach(function(b){b.onclick=function(){activateMember(b.getAttribute('data-activate'))}})}
     function findMember(id){return state.members.find(function(m){return String(m._id)===String(id)||emailOf(m)===String(id)||idOf(m)===String(id)})}
     function renderDetailActions(m){
       var html='';
       if(isPending(m)) html+='<button class="btn" data-activate="'+esc(m._id)+'">Aktifkan Member Gratis</button>';
       else html+='<span class="chip ok">Akun sudah aktif/confirmed</span>';
-      // NEW (2026-07-30): suspend/ban had no button anywhere even though the
-      // database (account_status_type enum) and kamar-admin-online-29f.js
-      // already support it.
       if(isSuspended(m)) html+='<button class="btn secondary" data-reactivate="'+esc(m._id)+'">Aktifkan Kembali</button>';
       else html+='<button class="btn danger" data-suspend="'+esc(m._id)+'">Suspend / Ban Member</button>';
       html+='<button class="btn secondary" id="scrollTopBtn">Kembali ke List</button>';
       return html;
     }
-    function showDetail(id){state.selectedId=id; var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); byId('detailPanel').style.display='block'; byId('detailTitle').textContent=nameOf(m); byId('detailInfo').innerHTML='<div class="info-box"><span>ID Member</span><strong>'+esc(m._id||'-')+'</strong></div><div class="info-box"><span>Email</span><strong>'+esc(emailOf(m)||'-')+'</strong></div><div class="info-box"><span>WhatsApp</span><strong>'+esc(waOf(m))+'</strong></div><div class="info-box"><span>Telegram</span><strong>'+esc(tgOf(m))+'</strong></div><div class="info-box"><span>Status</span><strong>'+(isActive(m)?'Active / Confirmed':(isSuspended(m)?'Suspended':'Pending Aktivasi'))+'</strong></div><div class="info-box"><span>Source</span><strong>'+esc((m._sources||[]).join(', ')||'-')+'</strong></div>'; byId('detailActions').innerHTML=renderDetailActions(m); byId('detailActions').querySelectorAll('[data-activate]').forEach(function(b){b.onclick=function(){activateMember(b.getAttribute('data-activate'))}}); byId('detailActions').querySelectorAll('[data-suspend]').forEach(function(b){b.onclick=function(){suspendMember(b.getAttribute('data-suspend'))}}); byId('detailActions').querySelectorAll('[data-reactivate]').forEach(function(b){b.onclick=function(){reactivateMember(b.getAttribute('data-reactivate'))}}); byId('scrollTopBtn').onclick=function(){window.scrollTo({top:0,behavior:'smooth'})}; renderToggles(m); byId('sendNotifBtn').onclick=function(){sendNotification(m)}; byId('detailPanel').scrollIntoView({behavior:'smooth',block:'start'})}
-    // NEW (2026-07-30): personal announcement to a single member, stored in
-    // member_notifications (new table) and read back on the member's own
-    // dashboard via the matching IIFE in kamar-supabase.js.
+    function showDetail(id){state.selectedId=id; var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); byId('detailPanel').style.display='block'; byId('detailTitle').textContent=nameOf(m); byId('detailInfo').innerHTML='<div class="info-box"><span>ID Member</span><strong>'+esc(m._id||'-')+'</strong></div><div class="info-box"><span>Email</span><strong>'+esc(emailOf(m)||'-')+'</strong></div><div class="info-box"><span>WhatsApp</span><strong>'+esc(waOf(m))+'</strong></div><div class="info-box"><span>Telegram</span><strong>'+esc(tgOf(m))+'</strong></div><div class="info-box"><span>Status</span><strong>'+(isActive(m)?'Active / Confirmed':(isSuspended(m)?'Suspended':'Pending Aktivasi'))+'</strong></div><div class="info-box"><span>Sumber Data</span><strong>Profil Member</strong></div>'; byId('detailActions').innerHTML=renderDetailActions(m); byId('detailActions').querySelectorAll('[data-activate]').forEach(function(b){b.onclick=function(){activateMember(b.getAttribute('data-activate'))}}); byId('detailActions').querySelectorAll('[data-suspend]').forEach(function(b){b.onclick=function(){suspendMember(b.getAttribute('data-suspend'))}}); byId('detailActions').querySelectorAll('[data-reactivate]').forEach(function(b){b.onclick=function(){reactivateMember(b.getAttribute('data-reactivate'))}}); byId('scrollTopBtn').onclick=function(){window.scrollTo({top:0,behavior:'smooth'})}; renderToggles(m); byId('sendNotifBtn').onclick=function(){sendNotification(m)}; byId('detailPanel').scrollIntoView({behavior:'smooth',block:'start'})}
     async function sendNotification(m){
       var title=(byId('notifTitle').value||'').trim();
       var message=(byId('notifMessage').value||'').trim();
       if(!message){ toast('Isi pesan tidak boleh kosong.'); return; }
-      var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.');
+      var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.');
       try{
         var email=emailOf(m);
         var pid=pick(m,['id','profile_id']);
@@ -273,21 +246,14 @@
     function renderToggles(m){var active=m._facilities||[]; byId('facilityToggles').innerHTML=FACILITIES.map(function(f){var on=active.indexOf(f)>=0; return '<label class="toggle-card"><span><strong>'+esc(f)+'</strong><small>'+(on?'Aktif untuk member ini.':'Belum aktif untuk member ini.')+'</small></span><input type="checkbox" data-facility="'+esc(f)+'" '+(on?'checked':'')+'><span class="switch"></span></label>'}).join(''); byId('facilityToggles').querySelectorAll('[data-facility]').forEach(function(cb){cb.onchange=function(){setFacility(m._id,cb.getAttribute('data-facility'),cb.checked)}})}
     function profileMatchQuery(c,m,upd){ var q=c.from(TABLE_PROFILE).update(upd); var pid=pick(m,['id','profile_id','user_id']); if(pid) return q.eq('id',pid); if(emailOf(m)) return q.eq('email',emailOf(m)); if(idOf(m)) return q.eq('member_id',idOf(m)); return q}
     function buildProfileUpdate(m){var upd={}; var keys=Object.keys(m||{}); function has(k){return keys.indexOf(k)>=0} if(has('status'))upd.status='active'; if(has('account_status'))upd.account_status='active'; if(has('status_key'))upd.status_key='active'; if(has('approval_status'))upd.approval_status='approved'; if(has('is_active'))upd.is_active=true; if(has('active'))upd.active=true; if(has('confirmed'))upd.confirmed=true; if(has('account_active'))upd.account_active=true; if(has('activated_at'))upd.activated_at=new Date().toISOString(); if(has('updated_at'))upd.updated_at=new Date().toISOString(); if(!Object.keys(upd).length)upd.status='active'; return upd}
-    async function activateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var res=await profileMatchQuery(c,m,buildProfileUpdate(m)); if(res.error)throw res.error; toast('Member berhasil diaktifkan gratis.'); await loadData(); showDetail(id)}catch(e){toast('Aktivasi gagal: '+(e.message||String(e)))} }
-    // NEW (2026-07-30): suspend/reactivate, backed by account_status_type's
-    // real 'suspended' value (previously had no UI entry point at all).
-    async function suspendMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); if(!confirm('Suspend/ban member '+nameOf(m)+'? Member tidak akan bisa mengakses dashboard sampai diaktifkan kembali.'))return; var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'suspended',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member disuspend.'); await loadData(); showDetail(id)}catch(e){toast('Suspend gagal: '+(e.message||String(e)))} }
-    async function reactivateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'active',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member diaktifkan kembali.'); await loadData(); showDetail(id)}catch(e){toast('Gagal mengaktifkan kembali: '+(e.message||String(e)))} }
-    // FIXED (2026-07-30): resolves the member's real member_profiles.id via
-    // email (reliable regardless of what the merged view object's own 'id'
-    // field happens to contain), then upserts a single member_access row
-    // with the correct boolean column - matching the real schema instead of
-    // searching for a per-facility row that never existed.
+    async function activateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.'); try{var res=await profileMatchQuery(c,m,buildProfileUpdate(m)); if(res.error)throw res.error; toast('Member berhasil diaktifkan gratis.'); await loadData(); showDetail(id)}catch(e){toast('Aktivasi gagal: '+(e.message||String(e)))} }
+    async function suspendMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); if(!confirm('Suspend/ban member '+nameOf(m)+'? Member tidak akan bisa mengakses dashboard sampai diaktifkan kembali.'))return; var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.'); try{var upd={account_status:'suspended',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member disuspend.'); await loadData(); showDetail(id)}catch(e){toast('Suspend gagal: '+(e.message||String(e)))} }
+    async function reactivateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.'); try{var upd={account_status:'active',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member diaktifkan kembali.'); await loadData(); showDetail(id)}catch(e){toast('Gagal mengaktifkan kembali: '+(e.message||String(e)))} }
     async function setFacility(id,facLabel,on){
       var m=findMember(id); if(!m)return toast('Member tidak ditemukan.');
       var col=FACILITY_COLUMN[facLabel];
       if(!col){ toast('Fasilitas tidak dikenali: '+facLabel); return; }
-      var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.');
+      var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.');
       try{
         var email=emailOf(m);
         var pid=pick(m,['id','profile_id']);

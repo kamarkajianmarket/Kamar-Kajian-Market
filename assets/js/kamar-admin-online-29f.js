@@ -4,30 +4,35 @@
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  var VERSION = '29F';
-  // FIXED (2026-07-29): table/field names below now match the real Supabase schema.
-  // Previously this pointed at tables that don't exist (file_tools, app_settings) or
-  // used column names that don't exist on the real tables (message/link_url on
-  // banners, video_url/platform on videos, file_url on materials, key/enabled on
-  // maintenance_settings) - inserts from these admin pages were failing silently
-  // or with a Postgres "column does not exist" error.
-  //
-  // admin-links.html, admin-payment.html, admin-page-control.html and
-  // admin-dashboard-control.html now point at real tables created on 2026-07-29
-  // (link_settings, payment_gateways, homepage_settings, dashboard_settings).
+  var VERSION = '29G';
+  // FIXED (2026-07-30): table/column names below verified directly against the
+  // live Supabase schema. Every admin content page below now points at a table
+  // and column set that actually exists, including link_settings, payment_gateways,
+  // homepage_settings and dashboard_settings (these tables DO exist in the
+  // database - a previous draft of this file incorrectly assumed they didn't).
+  // Enum columns (display_area, access_required, publish_status, file_type) are
+  // rendered as dropdowns with the real Postgres enum values instead of free
+  // text, so inserts no longer fail with an "invalid input value for enum" error.
+  var ENUM_FIELDS = {
+    'display_area': ['public','member','admin','both','global'],
+    'access_required': ['public','member','kamar_study','materi_edukasi','kamar_private','kamar_indikator','kamar_robot','all_paid'],
+    'publish_status': ['draft','published','hidden'],
+    'file_type': ['indicator','robot','template','pdf','other']
+  };
   var MAP = {
-    'admin-banner.html': { table:'banners', title:'Banner Pengumuman Online', fields:['title','body','image_url','cta_label','cta_url','is_active'] },
-    'admin-video.html': { table:'videos', title:'Video Konten Online', fields:['title','youtube_url','category','description','is_active'] },
-    'admin-materials.html': { table:'materials', title:'Materi / PDF Online', fields:['title','category','description','material_url','version_label','is_active'] },
-    'admin-tools.html': { table:'tools_files', title:'File Tools Online', fields:['title','file_url','version_label','changelog','admin_notes','is_active'] },
+    'admin-banner.html': { table:'banners', title:'Banner Pengumuman Online', fields:['title','body','image_url','cta_label','cta_url','display_area','is_active'] },
+    'admin-video.html': { table:'videos', title:'Video Konten Online', fields:['title','youtube_url','category','description','display_area','access_required','publish_status','is_active'] },
+    'admin-materials.html': { table:'materials', title:'Materi / PDF Online', fields:['title','category','description','material_url','version_label','access_required','publish_status','admin_notes','is_active'] },
+    'admin-tools.html': { table:'tools_files', title:'File Tools Online', fields:['title','file_type','file_url','version_label','changelog','access_required','publish_status','admin_notes','is_active'] },
     'admin-maintenance.html': { table:'maintenance_settings', title:'Maintenance Online', fields:['maintenance_key','title','message','is_active'] },
     'admin-settings.html': { table:'site_settings', title:'Pengaturan Umum Online', fields:['setting_key','setting_value','description','is_active'], jsonFields:['setting_value'] },
-    'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway Online', fields:['name','bank_name','account_name','account_number','instructions','is_active'] },
     'admin-links.html': { table:'link_settings', title:'Link Official Online', fields:['key','label','url','is_active'] },
+    'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway Online', fields:['name','bank_name','account_name','account_number','instructions','is_active'] },
     'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama Online', fields:['key','value','description','is_active'], jsonFields:['value'] },
     'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member Online', fields:['key','value','description','is_active'], jsonFields:['value'] }
   };
-  var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','tools_files','site_settings','maintenance_settings','payment_gateways','link_settings','homepage_settings','dashboard_settings','admin_pending_todos'];
+  var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','tools_files','site_settings','maintenance_settings','link_settings','payment_gateways','homepage_settings','dashboard_settings','admin_pending_todos'];
+  var NO_STATUS_PAGES = ['admin-login.html'];
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
@@ -67,6 +72,10 @@
   }
   function getMain(){ return qs('.split-main') || qs('main') || document.body; }
   function fieldInput(name){
+    if(ENUM_FIELDS[name]){
+      var opts = '<option value="">— Pilih '+esc(name)+' —</option>'+ENUM_FIELDS[name].map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>';}).join('');
+      return '<label class="field"><span>'+esc(name)+'</span><select name="'+esc(name)+'">'+opts+'</select></label>';
+    }
     var type = /url|link|file|image|youtube/i.test(name) ? 'url' : /enabled|is_active|active/i.test(name) ? 'checkbox' : 'text';
     if(/message|description|instructions|value|changelog|notes/i.test(name)) type='textarea';
     if(type==='textarea') return '<label class="field"><span>'+esc(name)+'</span><textarea name="'+esc(name)+'" placeholder="'+esc(name)+'"></textarea></label>';
@@ -112,13 +121,13 @@
         else {
           var raw = String(input.value||'').trim();
           if(jsonFields.indexOf(f) >= 0){
-            // jsonb columns (e.g. site_settings.setting_value) need valid JSON.
-            // If the admin typed plain text, store it as a JSON string instead
-            // of letting the insert fail with an "invalid input syntax" error.
-            try{ JSON.parse(raw); row[f] = raw === '' ? null : JSON.parse(raw); }
-            catch(e2){ row[f] = raw; }
+            // jsonb columns (setting_value / value) need valid JSON. If the
+            // admin typed plain text, store it as a JSON string instead of
+            // letting the insert fail with an "invalid input syntax" error.
+            try{ row[f] = raw === '' ? null : JSON.parse(raw); }
+            catch(e2){ row[f] = raw === '' ? null : raw; }
           } else {
-            row[f] = raw;
+            row[f] = raw === '' ? null : raw;
           }
         }
       });
@@ -163,7 +172,7 @@
     };
   }
   async function injectStatus(){
-    if(!/^admin/i.test(PAGE) || qs('#kamarOnlineStatus29F')) return;
+    if(!/^admin/i.test(PAGE) || NO_STATUS_PAGES.indexOf(PAGE) !== -1 || qs('#kamarOnlineStatus29F')) return;
     var main = getMain(); if(!main) return;
     var box = document.createElement('section');
     box.className='split-card'; box.id='kamarOnlineStatus29F';

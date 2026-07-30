@@ -4,7 +4,7 @@
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  var VERSION = '29G';
+  var VERSION = '29H';
   // FIXED (2026-07-30): table/column names below verified directly against the
   // live Supabase schema. Every admin content page below now points at a table
   // and column set that actually exists, including link_settings, payment_gateways,
@@ -34,10 +34,68 @@
   var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','tools_files','site_settings','maintenance_settings','link_settings','payment_gateways','homepage_settings','dashboard_settings','admin_pending_todos'];
   var NO_STATUS_PAGES = ['admin-login.html'];
 
+  // NEW (2026-07-30): every admin-*.html file has always had its OWN
+  // copy-pasted <aside class="split-sidebar"> markup, and over time these
+  // copies drifted out of sync - some pages are missing "Data Internal",
+  // "Cek Data Admin", or "Cek Koneksi DB" entirely because those links were
+  // added to admin.html later but never back-ported to the other pages.
+  // SIDEBAR_SECTIONS below is now the single source of truth for the admin
+  // menu; rebuildSidebar() regenerates the sidebar identically on every
+  // admin page so new/renamed menu items only ever need to be edited here.
+  var SIDEBAR_SECTIONS = [
+    { label:'Utama', items:[ ['admin.html','Dashboard Admin'] ] },
+    { label:'Member & Akses', items:[
+      ['admin-members.html','Data Member'],
+      ['admin-internal.html','Data Internal'],
+      ['admin-activation.html','Aktivasi Akun & Fasilitas'],
+      ['admin-data-check.html','Cek Data Admin'],
+      ['admin-connection-check.html','Cek Koneksi DB']
+    ]},
+    { label:'Affiliate', items:[
+      ['admin-affiliate-v2.html?view=overview','Data Affiliate'],
+      ['admin-affiliate-v2.html?view=list','Daftar Affiliator'],
+      ['admin-affiliate-v2.html?view=reward','Reward / Komisi']
+    ]},
+    { label:'Konten Website', items:[
+      ['admin-banner.html','Banner Pengumuman'],
+      ['admin-video.html','Konten Video'],
+      ['admin-materials.html','Konten & Materi'],
+      ['admin-tools.html','File Tools']
+    ]},
+    { label:'Kontrol Sistem', items:[
+      ['admin-maintenance.html','Maintenance Fasilitas'],
+      ['admin-page-control.html','Kontrol Halaman Utama'],
+      ['admin-dashboard-control.html','Kontrol Dashboard Member'],
+      ['admin-payment.html','Payment Gateway'],
+      ['admin-links.html','Pengaturan Link'],
+      ['admin-settings.html','Pengaturan Umum']
+    ]},
+    { label:'Akun', items:[ ['index.html','Logout'] ] }
+  ];
+
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
   function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || /aktif|active|on|yes/i.test(String(v||'')); }
   function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
+
+  function rebuildSidebar(){
+    var sidebar = qs('.split-sidebar');
+    if(!sidebar || sidebar.getAttribute('data-kamar-sidebar-online-29h')) return;
+    sidebar.setAttribute('data-kamar-sidebar-online-29h','1');
+    var html = '<div class="brand-small">ADMIN KAMAR</div>';
+    SIDEBAR_SECTIONS.forEach(function(sec){
+      html += '<div class="admin-menu-section">'+esc(sec.label)+'</div>';
+      sec.items.forEach(function(item){
+        var href = item[0], label = item[1];
+        var file = href.split('?')[0].toLowerCase();
+        var isActive = (file === PAGE);
+        var isLogout = (label === 'Logout');
+        html += '<a'+(isActive?' class="active"':'')+(isLogout?' data-kamar-logout':'')+' href="'+esc(href)+'">'+esc(label)+'</a>';
+      });
+    });
+    sidebar.innerHTML = html;
+  }
+
   async function ready(){
     try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
     try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
@@ -193,6 +251,7 @@
   }
   async function run(){
     if(!/^admin/i.test(PAGE)) return;
+    rebuildSidebar();
     await injectStatus();
     await patchKamarAdminLocal();
     if(MAP[PAGE]) await renderManager(MAP[PAGE]);

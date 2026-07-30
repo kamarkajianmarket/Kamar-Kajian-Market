@@ -1,1 +1,40 @@
 /* Kamar Step 26 compatibility stylesheet */
+
+/* Kamar Step 59: style the JS-injected global header used on
+   dashboard.html, admin*.html, member-*.html, affiliate-dashboard.html.
+   Without these rules the logo image and Beranda/Logout links render
+   completely unstyled (logo shows at its raw 1536x1536 size). */
+.kamar-global-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:var(--text);
+  font-weight:1000;
+}
+.kamar-global-brand img{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  object-fit:cover;
+}
+.kamar-global-center,
+.kamar-global-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.kamar-global-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:0 16px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  text-decoration:none;
+  color:var(--gold);
+  font-weight:900;
+  background:rgba(255,255,255,.035);
+}

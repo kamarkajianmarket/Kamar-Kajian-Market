@@ -25,7 +25,7 @@ body{background:#070707;color:var(--text)}
 <link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 <link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
-<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<meta name="kamar-step" content="62-maintenance-online"/>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div>
 <a class="" href="admin.html">Dashboard Admin</a>
@@ -50,7 +50,7 @@ body{background:#070707;color:var(--text)}
 <a class="" href="admin-settings.html">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div>
 <a class="" data-kamar-logout="" href="index.html">Logout</a>
-</aside><section class="split-main"><section class="split-card kamar-title-card"><span class="mini-label">Maintenance</span><h1>Maintenance Website &amp; Fasilitas</h1><p>Aktifkan toggle untuk menampilkan tulisan Maintenance pada halaman yang dipilih.</p></section><section class="split-card"><span class="mini-label">Toggle Maintenance</span><p>Jika ON, halaman terkait akan menampilkan notifikasi maintenance. Berlaku untuk halaman utama, member, affiliate, dan fasilitas.</p><div class="admin-table-card" id="maintenanceList"></div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
+</aside><section class="split-main"><section class="split-card kamar-title-card"><span class="mini-label">Maintenance</span><h1>Maintenance Website &amp; Fasilitas</h1><p>Aktifkan toggle untuk menampilkan tulisan Maintenance pada halaman yang dipilih. Perubahan di sini langsung tersimpan ke database dan langsung terlihat di halaman terkait.</p></section><section class="split-card"><span class="mini-label">Toggle Maintenance</span><p>Jika ON, halaman terkait akan menampilkan notifikasi maintenance. Berlaku untuk halaman utama, member, affiliate, dan fasilitas.</p><div class="admin-table-card" id="maintenanceList">Memuat data maintenance...</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
   document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
@@ -66,7 +66,7 @@ body{background:#070707;color:var(--text)}
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
 <script id="kamar-step24CM-admin-functional-logic">
 (function(){
   var facilities=[['Kamar Edukasi','Kamar Edukasi'],['Kamar Study','Kamar Study'],['Kamar Private','Kamar Private'],['Kamar Indikator','Kamar Indikator'],['Kamar Robot','Kamar Robot']];
@@ -89,11 +89,7 @@ body{background:#070707;color:var(--text)}
 </script>
 
 <script id="kamar-step24CN-admin-click-guard">(function(){document.addEventListener('click',function(e){var c=e.target.closest('[data-href]');if(c){window.location.href=c.getAttribute('data-href');}});})();</script>
-<script id="kamar-step24CN-maintenance-render">(function(){
-var items=[['home','Halaman Utama','Kontrol maintenance halaman utama website publik.'],['member_dashboard','Dashboard Member','Kontrol maintenance dashboard Kawan Kamar.'],['affiliate_dashboard','Dashboard Affiliate','Kontrol maintenance dashboard affiliator.'],['register_member','Pendaftaran Member','Kontrol maintenance halaman daftar member.'],['register_affiliate','Pendaftaran Affiliate','Kontrol maintenance halaman daftar affiliate.'],['kamar_edukasi','Kamar Edukasi','Kontrol maintenance fasilitas Kamar Edukasi.'],['kamar_study','Kamar Study','Kontrol maintenance fasilitas Kamar Study.'],['kamar_private','Kamar Private','Kontrol maintenance fasilitas Kamar Private.'],['kamar_indikator','Kamar Indikator','Kontrol maintenance fasilitas Kamar Indikator.'],['kamar_robot','Kamar Robot','Kontrol maintenance fasilitas Kamar Robot.'],['payment','Pembayaran','Kontrol maintenance halaman pembayaran/aktivasi fasilitas.'],['admin','Admin Panel','Catatan internal untuk maintenance admin.']];
-function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function set(v){localStorage.setItem('kamarMaintenanceSettings',JSON.stringify(v));}
-function render(){var data=get();var wrap=document.getElementById('maintenanceList');if(!wrap)return;wrap.innerHTML=items.map(function(it){var on=!!(data[it[0]]&&data[it[0]].enabled);return '<label class="toggle-row"><span>'+it[1]+'<small>'+it[2]+'</small></span><input type="checkbox" data-maint="'+it[0]+'" '+(on?'checked':'')+'></label>';}).join('');wrap.querySelectorAll('[data-maint]').forEach(function(inp){inp.onchange=function(){var d=get();var key=inp.getAttribute('data-maint');d[key]=d[key]||{};d[key].enabled=inp.checked;d[key].message=(d[key].message||'Maintenance sedang berlangsung. Silakan cek kembali nanti.');set(d);if(window.toast)toast((inp.checked?'Maintenance ON: ':'Maintenance OFF: ')+key);};});}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();})();</script><script id="kamar-step24CO-admin-stable-utils">
+<script id="kamar-step24CO-admin-stable-utils">
 
 (function(){
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
@@ -116,10 +112,88 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   document.addEventListener('click',function(e){var t=e.target.closest('[data-href]'); if(t && !e.target.closest('button,a,input,select,textarea')){location.href=t.getAttribute('data-href');}});
 })();
 
-</script><script id="kamar-step24CO-maintenance-toggles">
-
-(function(){var items=[['home','Halaman Utama','Tampilkan maintenance di halaman utama publik.'],['member_dashboard','Dashboard Member','Tampilkan maintenance di dashboard member.'],['affiliate_dashboard','Dashboard Affiliate','Tampilkan maintenance di dashboard affiliator.'],['register_member','Pendaftaran Member','Tampilkan maintenance di halaman pendaftaran member.'],['register_affiliate','Pendaftaran Affiliate','Tampilkan maintenance di halaman pendaftaran affiliate.'],['kamar_edukasi','Kamar Edukasi','Tampilkan maintenance pada fasilitas Kamar Edukasi.'],['kamar_study','Kamar Study','Tampilkan maintenance pada fasilitas Kamar Study.'],['kamar_private','Kamar Private','Tampilkan maintenance pada fasilitas Kamar Private.'],['kamar_indikator','Kamar Indikator','Tampilkan maintenance pada fasilitas Kamar Indikator.'],['kamar_robot','Kamar Robot','Tampilkan maintenance pada fasilitas Kamar Robot.'],['payment','Pembayaran / Aktivasi','Tampilkan maintenance di halaman bayar/aktivasi fasilitas.'],['admin','Admin Panel','Catatan internal maintenance admin.']];function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function set(v){localStorage.setItem('kamarMaintenanceSettings',JSON.stringify(v));}function render(){var data=get(),wrap=document.getElementById('maintenanceList');if(!wrap)return;wrap.innerHTML=items.map(function(it){var on=!!(data[it[0]]&&data[it[0]].enabled);return '<label class="toggle-row"><span><strong>'+it[1]+'</strong><small>'+it[2]+'</small></span><input type="checkbox" data-maint="'+it[0]+'" '+(on?'checked':'')+'></label>';}).join('');wrap.querySelectorAll('[data-maint]').forEach(function(inp){inp.onchange=function(){var d=get();var key=inp.getAttribute('data-maint');d[key]=d[key]||{};d[key].enabled=inp.checked;d[key].message=d[key].message||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';set(d);if(window.toast)toast((inp.checked?'Maintenance ON: ':'Maintenance OFF: ')+key);};});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();})();
-
+</script>
+<script id="kamar-step62-maintenance-online">
+(function(){
+  var items=[
+    ['home','Halaman Utama','Kontrol maintenance halaman utama website publik.'],
+    ['member_dashboard','Dashboard Member','Kontrol maintenance dashboard Kawan Kamar.'],
+    ['affiliate_dashboard','Dashboard Affiliate','Kontrol maintenance dashboard affiliator.'],
+    ['register_member','Pendaftaran Member','Kontrol maintenance halaman daftar member.'],
+    ['register_affiliate','Pendaftaran Affiliate','Kontrol maintenance halaman daftar affiliate.'],
+    ['kamar_edukasi','Kamar Edukasi','Kontrol maintenance fasilitas Kamar Edukasi.'],
+    ['kamar_study','Kamar Study','Kontrol maintenance fasilitas Kamar Study.'],
+    ['kamar_private','Kamar Private','Kontrol maintenance fasilitas Kamar Private.'],
+    ['kamar_indikator','Kamar Indikator','Kontrol maintenance fasilitas Kamar Indikator.'],
+    ['kamar_robot','Kamar Robot','Kontrol maintenance fasilitas Kamar Robot.'],
+    ['payment','Pembayaran','Kontrol maintenance halaman pembayaran/aktivasi fasilitas.'],
+    ['admin','Admin Panel','Catatan internal untuk maintenance admin (tidak ditampilkan ke pengunjung).']
+  ];
+  var DEFAULT_MSG='Maintenance sedang berlangsung. Silakan cek kembali nanti.';
+  function esc(x){return String(x==null?'':x).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
+  async function client(){
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+    return window.kamarSupabaseClient || null;
+  }
+  async function loadRows(){
+    var c = await client();
+    if(!c) throw new Error('Client Supabase tidak terbaca.');
+    var res = await c.from('maintenance_settings').select('maintenance_key,title,message,is_active');
+    if(res.error) throw res.error;
+    var map = {};
+    (res.data||[]).forEach(function(r){ map[r.maintenance_key] = r; });
+    return map;
+  }
+  async function saveRow(key, label, enabled){
+    var c = await client();
+    if(!c) throw new Error('Client Supabase tidak terbaca.');
+    var res = await c.from('maintenance_settings').upsert({
+      maintenance_key: key,
+      title: label,
+      message: DEFAULT_MSG,
+      is_active: enabled,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'maintenance_key' }).select();
+    if(res.error) throw res.error;
+    return res.data;
+  }
+  async function render(){
+    var wrap = document.getElementById('maintenanceList');
+    if(!wrap) return;
+    var rows;
+    try{ rows = await loadRows(); }
+    catch(e){ wrap.innerHTML = '<div class="expired-note"><strong>Gagal membaca data maintenance.</strong><br>'+esc(e.message||e)+'</div>'; return; }
+    wrap.innerHTML = items.map(function(it){
+      var row = rows[it[0]];
+      var on = !!(row && row.is_active);
+      return '<label class="toggle-row"><span><strong>'+esc(it[1])+'</strong><small>'+esc(it[2])+'</small></span><input type="checkbox" data-maint="'+esc(it[0])+'" data-label="'+esc(it[1])+'" '+(on?'checked':'')+'></label>';
+    }).join('');
+    document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
+      if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
+        var sw=document.createElement('span'); sw.className='toggle-switch'; sw.setAttribute('aria-hidden','true');
+        var dot=document.createElement('span'); dot.className='toggle-dot'; sw.appendChild(dot);
+        input.insertAdjacentElement('afterend', sw);
+      }
+    });
+    wrap.querySelectorAll('[data-maint]').forEach(function(inp){
+      inp.onchange = async function(){
+        var key = inp.getAttribute('data-maint');
+        var label = inp.getAttribute('data-label');
+        var checked = inp.checked;
+        inp.disabled = true;
+        try{
+          await saveRow(key, label, checked);
+          if(window.toast) toast((checked?'Maintenance ON: ':'Maintenance OFF: ')+label);
+        }catch(e){
+          inp.checked = !checked;
+          if(window.toast) toast('Gagal simpan: '+(e.message||e)); else alert('Gagal simpan: '+(e.message||e));
+        }
+        inp.disabled = false;
+      };
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
 </script>
 <script id="kamar-global-header-script">
 (function(){
@@ -159,5 +233,5 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <script src="assets/js/kamar-premium-v29.js?v=30"></script>
-<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29G"></script>
 </body></html>

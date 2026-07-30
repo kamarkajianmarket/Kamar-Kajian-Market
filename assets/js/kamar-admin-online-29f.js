@@ -258,6 +258,18 @@
     kamar_indikator:'access_kamar_indikator',
     kamar_robot:'access_kamar_robot'
   };
+  // RENAMED (2026-07-31): "kamar_study" is the internal technical key (matches
+  // the real DB column/enum value and existing payment records) - only the
+  // text admin actually SEES has changed, to match the homepage's facility
+  // name. Do not rename the FACILITY_COLUMN key above; it would break lookups
+  // against existing payments/todos already stored with the old slug.
+  var FACILITY_LABEL = {
+    kamar_study:'Kamar Signal',
+    materi_edukasi:'Kamar Edukasi',
+    kamar_private:'Kamar Private',
+    kamar_indikator:'Kamar Indikator',
+    kamar_robot:'Kamar Robot'
+  };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
     if(todo.profile_id) return todo.profile_id;
@@ -321,7 +333,7 @@
     if(p.member_id) subBits.push(p.member_id);
     if(p.whatsapp) subBits.push('WA '+p.whatsapp);
     if(p.amount) subBits.push(fmtMoney(p.amount));
-    if(p.selected_facilities && p.selected_facilities.length) subBits.push(p.selected_facilities.join(', '));
+    if(p.selected_facilities && p.selected_facilities.length) subBits.push(p.selected_facilities.map(function(f){ return FACILITY_LABEL[f] || f; }).join(', '));
     if(p.duration_days) subBits.push(p.duration_days+' hari');
     var actionsHtml;
     if(todo.todo_type === 'new_registration'){

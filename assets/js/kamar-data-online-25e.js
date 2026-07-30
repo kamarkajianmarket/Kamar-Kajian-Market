@@ -3,7 +3,7 @@
   if(window.__KAMAR_DATA_ONLINE_25E__) return;
   window.__KAMAR_DATA_ONLINE_25E__ = true;
   var VERSION='30G';
-  var FAC=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
+  var FAC=['Kamar Edukasi','Kamar Signal','Kamar Private','Kamar Indikator','Kamar Robot'];
   var state={client:null, viewRows:[], profileRows:[], accessRows:[], affiliateRows:[], members:[], internal:[], source:'init', error:''};
 
   function qs(s,r){return (r||document).querySelector(s)}
@@ -39,7 +39,7 @@
       return v.split(',').map(function(x){return x.trim()}).filter(Boolean);
     }
     var out=[];
-    [['kamar_edukasi','Kamar Edukasi'],['kamar_study','Kamar Study'],['kamar_private','Kamar Private'],['kamar_indikator','Kamar Indikator'],['kamar_robot','Kamar Robot']].forEach(function(p){var val=o[p[0]]; if(val===true||val==='true'||val===1||val==='1'||norm(val)==='active'||norm(val)==='aktif')out.push(p[1])});
+    [['kamar_edukasi','Kamar Edukasi'],['kamar_study','Kamar Signal'],['kamar_private','Kamar Private'],['kamar_indikator','Kamar Indikator'],['kamar_robot','Kamar Robot']].forEach(function(p){var val=o[p[0]]; if(val===true||val==='true'||val===1||val==='1'||norm(val)==='active'||norm(val)==='aktif')out.push(p[1])});
     return out;
   }
   function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}

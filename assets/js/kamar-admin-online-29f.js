@@ -251,10 +251,28 @@
       return '<div class="online-card">'+mainHtml+(restHtml?'<details><summary>Lihat detail lain</summary>'+restHtml+'</details>':'')+'<div class="button-row"><button class="btn mini danger" data-online-delete="'+esc(r.id||'')+'" '+(!r.id?'disabled':'')+'>Hapus</button></div></div>';
     }).join('')+'</div>';
   }
+  // NEW (2026-07-31, Tahap 1 - perbaikan tambahan): setiap halaman
+  // admin-*.html untuk Konten Website/Kontrol Sistem ternyata masih punya
+  // kotak placeholder BAWAAN di HTML aslinya sebelum konten ini dimuat -
+  // "Memuat Data Supabase / Halaman ini sedang membaca data real." Kotak ini
+  // tidak pernah dihapus otomatis, jadi tetap terlihat berdampingan dengan
+  // form yang sudah dirapikan. removeLegacyNotice() menghapusnya begitu
+  // halaman selesai memuat, supaya tidak ada lagi kata "Supabase" yang
+  // kelihatan di layar admin.
+  function removeLegacyNotice(){
+    var main = getMain(); if(!main) return;
+    Array.prototype.slice.call(main.querySelectorAll('.page-note')).forEach(function(el){
+      if(/supabase/i.test(el.textContent||'')){
+        var card = el.closest('.split-card');
+        (card || el).remove();
+      }
+    });
+  }
   async function renderManager(cfg){
     var main = getMain();
     if(!main || qs('#kamarOnlineManager29F')) return;
     injectSharedStyles();
+    removeLegacyNotice();
     var box = document.createElement('section');
     box.className = 'split-card';
     box.id = 'kamarOnlineManager29F';

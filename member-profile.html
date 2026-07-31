@@ -44,6 +44,27 @@ body{background:#070707;color:var(--text)}
 </div>
 </section>
 
+<section class="split-card" id="memberChangeRequestCard">
+  <span class="eyebrow">Ubah Data Akun</span>
+  <h2>Ajukan Perubahan Data</h2>
+  <p>Untuk keamanan akun, nama, WhatsApp, dan Telegram tidak bisa diedit langsung dari sini. Ajukan permintaan di bawah, admin akan meninjau dan menyetujuinya sebelum data berubah.</p>
+  <form id="profileChangeForm" class="grid-2 kamar-form-grid">
+    <label class="field"><span>Data yang ingin diubah</span>
+      <select id="profileChangeField" name="field">
+        <option value="full_name">Nama Lengkap</option>
+        <option value="whatsapp">Nomor WhatsApp</option>
+        <option value="telegram_username">Username Telegram</option>
+      </select>
+    </label>
+    <label class="field"><span>Nilai Baru</span>
+      <input type="text" id="profileChangeValue" name="new_value" placeholder="Isi nilai baru" required/>
+    </label>
+    <div class="button-row full"><button class="btn" type="submit">Kirim Permintaan</button></div>
+  </form>
+  <div id="profileChangeStatus" class="referral-status-note"></div>
+  <div id="profileChangeHistory" style="margin-top:14px"></div>
+</section>
+
 <section class="split-card referral-lock-card" id="memberReferralProfileCard">
   <span class="eyebrow">Kode Referral</span>
   <h2>Referral Akun</h2>
@@ -64,7 +85,7 @@ body{background:#070707;color:var(--text)}
 <section class="split-card" id="memberBrokerCapitalCard">
   <span class="eyebrow">Data Trading</span>
   <h2>Broker &amp; Modal</h2>
-  <p>Data ini opsional, membantu kami memahami broker dan kisaran modal yang paling banyak digunakan Kawan Kamar. Bisa diubah kapan saja.</p>
+  <p>Data ini opsional, membantu kami memahami broker dan kisaran modal yang paling banyak digunakan Kawan Kamar. Perubahan akan ditinjau dan disetujui admin sebelum data berubah.</p>
   <form id="memberBrokerCapitalForm" class="grid-2">
     <label class="field">Broker yang digunakan
       <select id="brokerSelect" name="broker_name">
@@ -105,7 +126,7 @@ body{background:#070707;color:var(--text)}
       <button class="btn primary" type="submit">Simpan Data Trading</button>
     </div>
   </form>
-  <div class="referral-status-note" id="memberBrokerCapitalStatus">Kosongkan bila Anda tidak ingin mengisi. Data ini tidak memengaruhi akses fasilitas Anda.</div>
+  <div class="referral-status-note" id="memberBrokerCapitalStatus">Kirim permintaan, admin akan meninjau sebelum data berubah. Kosongkan bila tidak ingin mengisi. Data ini tidak memengaruhi akses fasilitas Anda.</div>
 </section>
 
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
@@ -125,6 +146,57 @@ body{background:#070707;color:var(--text)}
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=30G"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=32I"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-member-profile.js?v=28"></script>
+<script id="kamar-step31-profile-change-request">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  async function client(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c=await window.KamarSupabase.ready(); if(c) return c; } }catch(e){}
+    return window.kamarSupabaseClient||null;
+  }
+  function statusLabel(s){ return (s==='new'||s==='processing') ? '<span class="status-pill warn">Menunggu Persetujuan</span>' : s==='done' ? '<span class="status-pill on">Disetujui</span>' : '<span class="status-pill off">Ditolak</span>'; }
+  async function renderHistory(c){
+    var wrap=byId('profileChangeHistory'); if(!wrap) return;
+    try{
+      var res = await c.from('admin_todos').select('*').eq('todo_type','profile_change').order('created_at',{ascending:false}).limit(10);
+      if(res.error) throw res.error;
+      var rows=res.data||[];
+      if(!rows.length){ wrap.innerHTML=''; return; }
+      wrap.innerHTML='<div class="mini-label">Riwayat Permintaan</div>'+rows.map(function(r){
+        var p=r.action_payload||{};
+        return '<div class="setting-card" style="margin-bottom:8px"><span>'+esc(p.field_label||p.field||'-')+'</span><strong>'+esc(p.old_value||'-')+' &rarr; '+esc(p.new_value||'-')+'</strong> '+statusLabel(r.todo_status)+'</div>';
+      }).join('');
+    }catch(e){}
+  }
+  async function init(){
+    var form=byId('profileChangeForm'); if(!form) return;
+    var c=await client();
+    if(c) renderHistory(c);
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      var field=byId('profileChangeField').value;
+      var val=String(byId('profileChangeValue').value||'').trim();
+      var statusEl=byId('profileChangeStatus');
+      if(!val){ statusEl.textContent='Isi nilai baru terlebih dahulu.'; statusEl.className='referral-status-note error'; return; }
+      var cc=await client();
+      if(!cc){ statusEl.textContent='Koneksi database belum siap, coba lagi.'; statusEl.className='referral-status-note error'; return; }
+      try{
+        var res=await cc.rpc('request_profile_change',{p_field:field,p_new_value:val});
+        if(res.error) throw res.error;
+        var d=res.data||{};
+        statusEl.textContent=d.message||'Permintaan terkirim.';
+        statusEl.className='referral-status-note '+(d.success?'success':'error');
+        if(d.success){ form.reset(); renderHistory(cc); }
+      }catch(err){
+        statusEl.textContent='Gagal mengirim permintaan: '+(err.message||err);
+        statusEl.className='referral-status-note error';
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
 <script id="kamar-step24CB-member-referral-profile-logic">
 (function(){
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
@@ -210,63 +282,42 @@ body{background:#070707;color:var(--text)}
 <script id="kamar-step60-broker-modal-profile-logic">
 (function(){
   function byId(id){return document.getElementById(id);}
+  async function client(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c=await window.KamarSupabase.ready(); if(c) return c; } }catch(e){}
+    return window.kamarSupabaseClient||null;
+  }
   function setStatus(msg,type){var el=byId('memberBrokerCapitalStatus'); if(!el) return; el.textContent=msg; el.className='referral-status-note '+(type||'');}
   var form=byId('memberBrokerCapitalForm'); if(!form) return;
-  var brokerSelect=byId('brokerSelect');
-  var brokerOtherWrap=byId('brokerOtherWrap');
-  var brokerOtherInput=byId('brokerOtherInput');
-  var capitalSelect=byId('capitalSelect');
-
-  function toggleOther(){
-    var isOther=brokerSelect && brokerSelect.value==='Lainnya';
-    if(brokerOtherWrap) brokerOtherWrap.classList.toggle('hidden', !isOther);
-    if(!isOther && brokerOtherInput) brokerOtherInput.value='';
-  }
-  if(brokerSelect) brokerSelect.addEventListener('change', toggleOther);
-
-  function prefill(member){
-    if(!member) return;
-    var broker=String(member.broker_name||'').trim();
-    var brokerOther=String(member.broker_name_other||'').trim();
-    var capital=String(member.capital_range||'').trim();
-    if(brokerSelect && broker) brokerSelect.value=broker;
-    if(brokerOtherInput && brokerOther) brokerOtherInput.value=brokerOther;
-    if(capitalSelect && capital) capitalSelect.value=capital;
-    toggleOther();
-  }
-  document.addEventListener('kamarProfileLoaded', function(ev){
-    prefill(ev && ev.detail && ev.detail.member);
-  });
-
+  var brokerSelect=byId('brokerSelect'), otherWrap=byId('brokerOtherWrap'), otherInput=byId('brokerOtherInput'), capitalSelect=byId('capitalSelect');
+  function syncOther(){ if(!brokerSelect||!otherWrap) return; if(brokerSelect.value==='Lainnya'){ otherWrap.classList.remove('hidden'); } else { otherWrap.classList.add('hidden'); if(otherInput) otherInput.value=''; } }
+  if(brokerSelect){ brokerSelect.addEventListener('change', syncOther); syncOther(); }
   form.addEventListener('submit', async function(e){
     e.preventDefault();
-    setStatus('Menyimpan...', '');
-    try{
-      var client = window.kamarSupabaseClient;
-      if(!client){ setStatus('Sistem belum siap. Coba muat ulang halaman ini.', 'error'); return; }
-      var u = await client.auth.getUser();
-      var userId = u && u.data && u.data.user && u.data.user.id;
-      if(!userId){ setStatus('Sesi Anda tidak ditemukan. Silakan login ulang.', 'error'); return; }
-      var broker = brokerSelect ? brokerSelect.value : '';
-      var brokerOther = (broker==='Lainnya' && brokerOtherInput) ? brokerOtherInput.value.trim() : '';
-      var capital = capitalSelect ? capitalSelect.value : '';
-      var res = await client.from('member_profiles').update({
-        broker_name: broker || null,
-        broker_name_other: brokerOther || null,
-        capital_range: capital || null
-      }).eq('user_id', userId);
-      if(res.error) throw res.error;
-      var brokerText = broker ? (broker==='Lainnya' && brokerOther ? ('Lainnya - '+brokerOther) : broker) : '-';
-      var bEl=byId('profileBroker'); if(bEl) bEl.textContent=brokerText;
-      var mEl=byId('profileModal'); if(mEl) mEl.textContent=capital||'-';
-      setStatus('Data trading berhasil disimpan.', 'success');
-      toast('Data trading berhasil disimpan.');
-    }catch(err){
-      setStatus('Gagal menyimpan. Coba lagi, atau hubungi admin jika masih bermasalah.', 'error');
+    var c=await client();
+    if(!c){ setStatus('Koneksi database belum siap, coba lagi.','error'); return; }
+    var jobs=[];
+    if(brokerSelect && brokerSelect.value){ jobs.push(['broker_name', brokerSelect.value]); }
+    if(brokerSelect && brokerSelect.value==='Lainnya' && otherInput && otherInput.value.trim()){ jobs.push(['broker_name_other', otherInput.value.trim()]); }
+    if(capitalSelect && capitalSelect.value){ jobs.push(['capital_range', capitalSelect.value]); }
+    if(!jobs.length){ setStatus('Pilih broker atau rentang modal terlebih dahulu.','error'); return; }
+    setStatus('Mengirim permintaan...', '');
+    var okCount=0, lastMsg='';
+    for(var i=0;i<jobs.length;i++){
+      try{
+        var res=await c.rpc('request_profile_change',{p_field:jobs[i][0],p_new_value:jobs[i][1]});
+        if(res.error) throw res.error;
+        var d=res.data||{};
+        lastMsg=d.message||'';
+        if(d.success) okCount++;
+      }catch(err){ lastMsg='Gagal: '+(err.message||err); }
     }
+    if(okCount>0){ setStatus('Permintaan terkirim ('+okCount+'/'+jobs.length+'). Menunggu persetujuan admin sebelum data berubah.','success'); }
+    else{ setStatus(lastMsg||'Gagal mengirim permintaan.','error'); }
   });
 })();
 </script>
+
 <script id="kamar-step24CO-maintenance-notice">
 
 (function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();

@@ -1,4 +1,4 @@
-(function(){
+undefined(function(){
   'use strict';
   if(window.__KAMAR_ADMIN_ONLINE_29F__) return;
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
@@ -375,7 +375,8 @@
     access_expired: 'Akses Berakhir',
     profile_change: 'Perubahan Profil',
     support_request: 'Permintaan Bantuan',
-    manual_note: 'Catatan Admin'
+    manual_note: 'Catatan Admin',
+    license_request: 'Pengajuan Lisensi'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
@@ -433,6 +434,28 @@
     await markTodoDone(todo.id);
     toast('Ditandai selesai.');
   }
+  async function actionLicenseRequest(todo, approve){
+    var payload = todo.action_payload || {};
+    var pid = todo.profile_id || await resolveProfileId(todo);
+    if(pid && payload.facility_key){
+      try{
+        var c2 = await ready();
+        if(c2){
+          var res2 = await c2.from('kamar_licenses').select('id').eq('member_profile_id', pid).eq('facility_key', payload.facility_key).eq('request_status', 'pending').limit(1);
+          if(!res2.error && res2.data && res2.data.length){
+            var licenseId = res2.data[0].id;
+            if(approve){
+              await update('kamar_licenses', licenseId, { request_status:'approved', status:'active', reviewed_at:new Date().toISOString() });
+            } else {
+              await update('kamar_licenses', licenseId, { request_status:'rejected', status:'suspended', reviewed_at:new Date().toISOString() });
+            }
+          }
+        }
+      }catch(e){}
+    }
+    await markTodoDone(todo.id, approve?'done':'rejected');
+    toast(approve?'License disetujui.':'Pengajuan license ditolak.');
+  }
   function todoCard(todo){
     var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
     var p = todo.action_payload || {};
@@ -442,6 +465,8 @@
     if(p.amount) subBits.push(fmtMoney(p.amount));
     if(p.selected_facilities && p.selected_facilities.length) subBits.push(p.selected_facilities.map(function(f){ return FACILITY_LABEL[f] || f; }).join(', '));
     if(p.duration_days) subBits.push(p.duration_days+' hari');
+    if(p.broker_name) subBits.push(p.broker_name);
+    if(p.account_id) subBits.push('Akun '+p.account_id);
     var actionsHtml;
     if(todo.todo_type === 'new_registration'){
       actionsHtml = '<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
@@ -449,6 +474,8 @@
       actionsHtml = '<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
     } else if(todo.todo_type === 'profile_change'){
       actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'license_request'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
       actionsHtml = '<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
@@ -474,6 +501,8 @@
       else if(action === 'confirm_payment') await actionConfirmPayment(todo);
       else if(action === 'approve_profile') await actionProfileChange(todo, true);
       else if(action === 'reject_profile') await actionProfileChange(todo, false);
+      else if(action === 'approve_license') await actionLicenseRequest(todo, true);
+      else if(action === 'reject_license') await actionLicenseRequest(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);
       await renderActionCenter();
     }catch(err){

@@ -438,20 +438,19 @@
     var payload = todo.action_payload || {};
     var pid = todo.profile_id || await resolveProfileId(todo);
     if(pid && payload.facility_key){
-      try{
-        var c2 = await ready();
-        if(c2){
-          var res2 = await c2.from('kamar_licenses').select('id').eq('member_profile_id', pid).eq('facility_key', payload.facility_key).eq('request_status', 'pending').limit(1);
-          if(!res2.error && res2.data && res2.data.length){
-            var licenseId = res2.data[0].id;
-            if(approve){
-              await update('kamar_licenses', licenseId, { request_status:'approved', status:'active', reviewed_at:new Date().toISOString() });
-            } else {
-              await update('kamar_licenses', licenseId, { request_status:'rejected', status:'suspended', reviewed_at:new Date().toISOString() });
-            }
+      var c2 = await ready();
+      if(c2){
+        var res2 = await c2.from('kamar_licenses').select('id').eq('member_profile_id', pid).eq('facility_key', payload.facility_key).eq('request_status', 'pending').limit(1);
+        if(res2.error) throw res2.error;
+        if(res2.data && res2.data.length){
+          var licenseId = res2.data[0].id;
+          if(approve){
+            await update('kamar_licenses', licenseId, { request_status:'active', status:'active', reviewed_at:new Date().toISOString() });
+          } else {
+            await update('kamar_licenses', licenseId, { request_status:'rejected', status:'suspended', reviewed_at:new Date().toISOString() });
           }
         }
-      }catch(e){}
+      }
     }
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'License disetujui.':'Pengajuan license ditolak.');

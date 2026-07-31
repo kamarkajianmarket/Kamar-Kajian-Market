@@ -133,7 +133,7 @@
  function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
   function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || /aktif|active|on|yes/i.test(String(v||'')); }
-  function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
+  function toast(msg){ if(typeof window.toast === 'function') return window.toast(msg); var t=document.getElementById('toast'); if(t){ t.textContent=msg||''; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2600); return; } try{ alert(msg); }catch(e){} }
 
  // NEW (2026-07-31, Tahap 1): satu blok CSS yang disuntikkan sekali ke setiap
  // halaman admin, supaya sub-menu sidebar yang bisa dibuka/tutup dan tampilan

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Katalog Harga & Produk — Kamar Kajian Market</title><meta content="Kelola harga, diskon, dan produk yang bisa dibeli member." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<style>
+:root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:800}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.split-sidebar a.disabled{opacity:.4;pointer-events:none}.split-main{display:grid;gap:22px}.split-card,.member-page-panel{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card h1,.split-card h2,.split-card h3,.member-page-panel h3{margin:0 0 10px;color:#fff3d8}.split-card p,.member-page-panel p{color:var(--muted);line-height:1.65}.mini-label,.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#d8cda9;font-weight:1000;margin-bottom:8px}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.stat-card,.action-card,.member-card,.todo-item,.setting-card,.video-card{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.025);padding:18px}.stat-card strong{display:block;font-size:34px;color:#fff;margin:6px 0}.stat-card span,.member-card span,.todo-item span{display:block;color:#d8cda9;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:900}.stat-card small,.member-card small,.todo-item small{display:block;color:var(--muted);margin-top:6px}.member-card,.todo-item,.action-card{cursor:pointer;transition:.2s ease}.member-card:hover,.todo-item:hover,.action-card:hover{transform:translateY(-2px);border-color:rgba(244,223,144,.42)}.btn,.admin-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary,.admin-button.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.28)}.btn.mini{padding:8px 12px;font-size:12px}.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8d0bd}input,select,textarea{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.32);color:#f5f0e6;border-radius:16px;padding:13px 15px;outline:none}textarea{min-height:96px;resize:vertical}.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid rgba(238,206,122,.14);border-radius:18px;padding:14px;background:rgba(255,255,255,.02)}.toggle-row span{font-weight:900;color:#f5f0e6}.toggle-row input{appearance:none;-webkit-appearance:none;width:52px;height:28px;border-radius:999px;border:1px solid rgba(238,206,122,.28);background:rgba(255,255,255,.08);position:relative;cursor:pointer;transition:.2s ease;padding:0}.toggle-row input:before{content:"OFF";position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:9px;font-weight:1000;color:#aaa;letter-spacing:.06em}.toggle-row input:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;left:4px;top:3px;background:#8b8170;transition:.2s ease}.toggle-row input:checked{background:linear-gradient(135deg,#f4df90,#c69a39);border-color:rgba(244,223,144,.7)}.toggle-row input:checked:before{content:"ON";left:9px;right:auto;color:#111}.toggle-row input:checked:after{left:26px;background:#111}.toggle-row small{display:block;color:var(--muted);font-weight:600;margin-top:4px}.status-pill{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:6px 12px;color:#d8cda9;font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em}.status-pill.on{color:var(--green);background:rgba(28,97,65,.12);border-color:rgba(158,255,202,.25)}.status-pill.warn{color:#ffd582;background:rgba(255,198,86,.08)}.status-pill.off{color:#aaa}.preview-box{border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:18px;margin-top:14px;background:rgba(0,0,0,.18)}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}.page-note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1}.expired-note{border:1px solid rgba(255,96,96,.24);background:rgba(255,96,96,.07);border-radius:22px;padding:16px;color:#ffd8d8}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}.site-footer strong{color:#d8cda9}.nav-links.centered-admin{gap:22px}.hidden{display:none!important}
+.manager-help{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:20px;padding:16px 18px;margin-bottom:4px;color:#d8f5e4}.manager-help strong{color:#eafff2}.manager-help ol{margin:8px 0 0;padding-left:18px;color:#c9ffe1}.manager-help li{margin-bottom:4px}
+.online-card{border:1px solid rgba(238,206,122,.16);border-radius:20px;background:rgba(255,255,255,.03);padding:18px}.online-card.new-product{border-color:rgba(244,223,144,.4);background:rgba(244,223,144,.05)}
+.kamar-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.kamar-form-grid .field.full{grid-column:1/-1}
+.admin-empty-state{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:20px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}
+@media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.grid-2,.grid-3,.grid-4,.kamar-form-grid{grid-template-columns:1fr}.split-shell{padding-top:92px}}
+</style>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
+<div class="admin-menu-section">Utama</div>
+<a class="" href="admin.html">Dashboard Admin</a>
+<div class="admin-menu-section">Member & Akses</div>
+<a class="" href="admin-members.html">Data Member</a>
+<a class="" href="admin-activation.html">Aktivasi Akun & Fasilitas</a>
+<div class="admin-menu-section">Konten Website</div>
+<a class="" href="admin-banner.html">Banner Pengumuman</a>
+<div class="admin-menu-section">Kontrol Sistem</div>
+<a class="" href="admin-maintenance.html">Maintenance Fasilitas</a>
+<a class="" href="admin-payment.html">Payment Gateway</a>
+<a class="active" href="admin-payment-products.html">Katalog Harga & Produk</a>
+<div class="admin-menu-section">Akun</div>
+<a class="" data-kamar-logout="" href="index.html">Logout</a>
+</aside><section class="split-main"><section class="split-card kamar-title-card"><span class="mini-label">Katalog Harga</span><h1>Katalog Harga & Produk</h1><p>Atur semua produk/paket yang bisa dibeli member: harga, diskon, masa berlaku, dan status aktif. Perubahan di sini langsung dipakai saat member membuat invoice pembayaran.</p></section><section class="split-card"><div class="manager-help"><strong>Cara pakai halaman ini:</strong><ol><li>Untuk menambah produk baru, isi form "Tambah Produk Baru" lalu klik Tambah Produk.</li><li>Untuk mengubah harga/diskon produk yang sudah ada, ubah langsung angkanya di kartu produk lalu klik Simpan Perubahan.</li><li>Nonaktifkan (jangan hapus) produk yang sedang tidak dijual, supaya riwayat transaksi lama tetap rapi. Hapus hanya untuk produk yang salah input.</li></ol></div></section><section class="split-card"><span class="mini-label">Tambah Produk Baru</span><div id="newProductBox"></div></section><section class="split-card"><span class="mini-label">Daftar Produk & Paket</span><div id="productList" class="online-card-list">Memuat data produk...</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
+<script id="kamar-step48-payment-products">
+(function(){
+var FACILITY_OPTIONS = [
+['', '— Tidak terikat fasilitas (Booking/Lainnya) —'],
+['materi_edukasi','Kamar Edukasi'],
+['kamar_study','Kamar Signal'],
+['kamar_private','Kamar Private'],
+['kamar_indikator','Kamar Indikator'],
+['kamar_robot','Kamar Robot']
+];
+var TYPE_OPTIONS = [
+['facility_access','Akses Fasilitas (paket masa berlaku)'],
+['booking','Booking / Reservasi'],
+['custom','Produk Lainnya']
+];
+var rows = [];
+async function ready(){
+try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+return window.kamarSupabaseClient || null;
+}
+function esc(x){ return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
+function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,40) || 'produk'; }
+function optionsHtml(opts, current){
+return opts.map(function(o){ return '<option value="'+esc(o[0])+'"'+(String(current||'')===o[0]?' selected':'')+'>'+esc(o[1])+'</option>'; }).join('');
+}
+function productFormHtml(p){
+var isNew = !p.id;
+var idAttr = p.id ? ' data-id="'+esc(p.id)+'"' : '';
+return ''+
+'<form class="online-card'+(isNew?' new-product':'')+' kamar-product-row"'+idAttr+'>'+
+'<div class="kamar-form-grid">'+
+'<label class="field"><span>Nama Produk / Paket</span><input type="text" name="title" value="'+esc(p.title||'')+'" placeholder="Contoh: Kamar Indikator 30 Hari" required></label>'+
+'<label class="field"><span>Fasilitas Terkait</span><select name="facility_key">'+optionsHtml(FACILITY_OPTIONS, p.facility_key)+'</select></label>'+
+'<label class="field"><span>Jenis Produk</span><select name="product_type">'+optionsHtml(TYPE_OPTIONS, p.product_type||'facility_access')+'</select></label>'+
+'<label class="field"><span>Masa Berlaku (Hari)</span><input type="number" min="1" name="duration_days" value="'+(p.duration_days!=null?p.duration_days:'')+'" placeholder="Contoh: 30"></label>'+
+'<label class="toggle-row"><span><strong>Lifetime</strong><small>Aktifkan jika paket berlaku selamanya (mengabaikan Masa Berlaku)</small></span><input type="checkbox" name="is_lifetime" '+(p.is_lifetime?'checked':'')+'></label>'+
+'<label class="toggle-row"><span><strong>Aktif Dijual</strong><small>Tampilkan produk ini ke member</small></span><input type="checkbox" name="is_active" '+((isNew || p.is_active!==false)?'checked':'')+'></label>'+
+'<label class="field"><span>Harga Normal (Rp)</span><input type="number" min="0" step="1000" name="base_price" value="'+(p.base_price!=null?p.base_price:'')+'" placeholder="Contoh: 3150000" required></label>'+
+'<label class="field"><span>Harga Promo (Rp)</span><input type="number" min="0" step="1000" name="promo_price" value="'+(p.promo_price!=null?p.promo_price:'')+'" placeholder="Kosongkan jika sama dengan harga normal"></label>'+
+'<label class="field"><span>Catatan Diskon (opsional)</span><input type="text" name="discount_note" value="'+esc(p.discount_note||'')+'" placeholder="Contoh: Hemat Rp550.000"></label>'+
+'<label class="field full"><span>Deskripsi Singkat (opsional)</span><input type="text" name="description" value="'+esc(p.description||'')+'" placeholder="Keterangan singkat untuk member"></label>'+
+'</div>'+
+'<div class="button-row">'+
+'<button class="btn mini" type="submit">'+(isNew?'Tambah Produk':'Simpan Perubahan')+'</button>'+
+(isNew?'':'<button class="btn mini danger" type="button" data-delete="'+esc(p.id)+'">Hapus</button>')+
+'</div>'+
+'</form>';
+}
+async function load(){
+var wrap = document.getElementById('productList');
+if(wrap) wrap.innerHTML = '<div class="admin-empty-state">Memuat data produk...</div>';
+try{
+var c = await ready(); if(!c) throw new Error('no client');
+var res = await c.from('payment_products').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:true});
+if(res.error) throw res.error;
+rows = res.data || [];
+render();
+}catch(e){
+if(wrap) wrap.innerHTML = '<div class="expired-note"><strong>Data belum bisa dimuat</strong><br>Coba muat ulang halaman. Jika masih gagal, hubungi pengelola teknis website.</div>';
+}
+}
+function render(){
+var newBox = document.getElementById('newProductBox');
+if(newBox) newBox.innerHTML = productFormHtml({});
+var wrap = document.getElementById('productList');
+if(!wrap) return;
+wrap.innerHTML = rows.length ? rows.map(productFormHtml).join('') : '<div class="admin-empty-state">Belum ada produk. Tambahkan produk pertama lewat form di atas.</div>';
+}
+async function onSubmit(e){
+var form = e.target.closest ? e.target.closest('form.kamar-product-row') : null;
+if(!form) return;
+e.preventDefault();
+var id = form.getAttribute('data-id');
+var fd = new FormData(form);
+var title = String(fd.get('title')||'').trim();
+var base_price = Number(fd.get('base_price')||0);
+if(!title){ toast('Nama produk wajib diisi.'); return; }
+if(!base_price){ toast('Harga normal wajib diisi.'); return; }
+var is_lifetime = fd.get('is_lifetime') === 'on';
+var promoRaw = fd.get('promo_price');
+var payload = {
+title: title,
+facility_key: String(fd.get('facility_key')||'').trim() || null,
+product_type: String(fd.get('product_type')||'facility_access'),
+is_lifetime: is_lifetime,
+duration_days: is_lifetime ? null : (fd.get('duration_days') ? Number(fd.get('duration_days')) : null),
+base_price: base_price,
+promo_price: promoRaw ? Number(promoRaw) : base_price,
+discount_note: String(fd.get('discount_note')||'').trim() || null,
+description: String(fd.get('description')||'').trim() || null,
+is_active: fd.get('is_active') === 'on',
+updated_at: new Date().toISOString()
+};
+var btn = form.querySelector('button[type="submit"]');
+btn.disabled = true;
+try{
+var c = await ready(); if(!c) throw new Error('Data belum bisa disimpan.');
+if(id){
+var res = await c.from('payment_products').update(payload).eq('id', id).select();
+if(res.error) throw res.error;
+toast('Perubahan disimpan.');
+} else {
+payload.product_key = slugify(title)+'_'+Date.now();
+payload.sort_order = rows.length;
+payload.created_at = new Date().toISOString();
+var res2 = await c.from('payment_products').insert(payload).select();
+if(res2.error) throw res2.error;
+toast('Produk baru berhasil ditambahkan.');
+}
+await load();
+}catch(err){
+toast('Gagal menyimpan: '+(err.message||err));
+}
+btn.disabled = false;
+}
+async function onClick(e){
+var btn = e.target.closest ? e.target.closest('[data-delete]') : null;
+if(!btn) return;
+var id = btn.getAttribute('data-delete');
+if(!confirm('Yakin mau menghapus produk ini? Produk yang dihapus tidak akan muncul lagi untuk pembelian baru.')) return;
+btn.disabled = true;
+try{
+var c = await ready(); if(!c) throw new Error('Data belum bisa dihapus.');
+var res = await c.from('payment_products').delete().eq('id', id);
+if(res.error) throw res.error;
+toast('Produk dihapus.');
+await load();
+}catch(err){
+toast('Gagal menghapus: '+(err.message||err));
+btn.disabled = false;
+}
+}
+function init(){
+var newBox = document.getElementById('newProductBox');
+var list = document.getElementById('productList');
+if(newBox){ newBox.addEventListener('submit', onSubmit); newBox.addEventListener('click', onClick); }
+if(list){ list.addEventListener('submit', onSubmit); list.addEventListener('click', onClick); }
+load();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+<script id="kamar-global-header-script">
+(function(){
+function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+function shouldShowHeader(){
+var p=pageName();
+if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+if(p==='affiliate-dashboard.html') return true;
+return false;
+}
+function clearSessionAndLogout(e){
+try{
+['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+}catch(err){}
+}
+function buildHeader(){
+if(!shouldShowHeader()) return;
+document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+var header=document.createElement('header');
+header.className='site-header kamar-global-header';
+header.innerHTML=''+
+'<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+'<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+'<span>Kamar Kajian Market</span>'+
+'</a>'+
+'<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+'<div class="kamar-global-actions">'+
+'<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+'<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+'</div>';
+document.body.insertBefore(header, document.body.firstChild);
+var out=header.querySelector('[data-kamar-logout]');
+if(out) out.addEventListener('click', clearSessionAndLogout);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
+</body></html>

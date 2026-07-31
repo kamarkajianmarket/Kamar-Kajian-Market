@@ -423,10 +423,10 @@
     var payload = todo.action_payload || {};
     var pid = await resolveProfileId(todo);
     if(approve && pid && payload.new_data){
-      try{ await update('member_profiles', pid, Object.assign({}, payload.new_data, { updated_at:new Date().toISOString() })); }catch(e){}
+      await update('member_profiles', pid, Object.assign({}, payload.new_data, { updated_at:new Date().toISOString() }));
     }
     if(payload.profile_change_request_id){
-      try{ await update('profile_change_requests', payload.profile_change_request_id, { status: approve?'approved':'rejected', reviewed_at:new Date().toISOString() }); }catch(e){}
+      await update('profile_change_requests', payload.profile_change_request_id, { status: approve?'approved':'rejected', reviewed_at:new Date().toISOString() });
     }
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'Perubahan profil disetujui.':'Perubahan profil ditolak.');

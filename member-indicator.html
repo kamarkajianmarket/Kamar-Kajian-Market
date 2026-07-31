@@ -84,5 +84,100 @@ body{background:#070707;color:var(--text)}
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
+<script id="kamar-step32-license-indikator">
+(function(){
+  var FACILITY_KEY = 'kamar_indikator';
+  var FACILITY_LABEL = 'Kamar Indikator';
+  function esc(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  async function client(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c=await window.KamarSupabase.ready(); if(c) return c; } }catch(e){}
+    return window.kamarSupabaseClient||null;
+  }
+  function statusBadge(rs){
+    if(rs==='active') return '<span class="status-pill on">Aktif</span>';
+    if(rs==='pending') return '<span class="status-pill warn">Menunggu Persetujuan</span>';
+    return '<span class="status-pill off">Ditolak</span>';
+  }
+  async function render(){
+    var box = document.getElementById('memberContentList');
+    if(!box) return;
+    var c = await client();
+    if(!c){ box.innerHTML='<div class="expired-note">Koneksi database belum siap. Muat ulang halaman.</div>'; return; }
+    var userRes = await c.auth.getUser();
+    var user = userRes.data && userRes.data.user;
+    if(!user){ box.innerHTML='<div class="expired-note">Sesi login tidak ditemukan.</div>'; return; }
+    var profRes = await c.from('member_profiles').select('id').eq('user_id', user.id).limit(1);
+    var profile = profRes.data && profRes.data[0];
+    if(!profile){ box.innerHTML='<div class="expired-note">Profil member tidak ditemukan.</div>'; return; }
+    var pid = profile.id;
+    var accessRes = await c.from('member_access').select('*').eq('profile_id', pid).limit(1);
+    var access = (accessRes.data && accessRes.data[0]) || {};
+    var hasAccess = FACILITY_KEY==='kamar_indikator' ? access.access_kamar_indikator : access.access_kamar_robot;
+    if(!hasAccess){
+      box.innerHTML='<div class="expired-note">Anda belum memiliki akses '+FACILITY_LABEL+'. <a class="btn mini" href="member-renewal.html">Aktifkan Fasilitas</a></div>';
+      return;
+    }
+    var licRes = await c.from('kamar_licenses').select('*').eq('member_profile_id', pid).eq('facility_key', FACILITY_KEY).limit(1);
+    var license = licRes.data && licRes.data[0];
+    var html = '';
+    if(!license){
+      html += '<div class="split-card"><span class="eyebrow">Request License</span><h2>Ajukan License '+FACILITY_LABEL+'</h2>'+
+        '<p>Isi data akun trading MT5 Anda. License hanya bisa diajukan 1 kali - pastikan data sudah benar sebelum mengirim.</p>'+
+        '<form id="licenseRequestForm" class="grid-2 kamar-form-grid">'+
+        '<label class="field"><span>Nama Broker</span><input type="text" id="licBroker" placeholder="Contoh: Exness, FBS, XM" required/></label>'+
+        '<label class="field"><span>Nomor Akun Trading</span><input type="number" id="licAccount" placeholder="Contoh: 12345678" required/></label>'+
+        '<label class="field"><span>Nama Server MT5</span><input type="text" id="licServer" placeholder="Contoh: Exness-MT5Real8" required/></label>'+
+        '<label class="field"><span>Versi EA/Indikator (opsional)</span><input type="text" id="licVersion" placeholder="Opsional"/></label>'+
+        '<div class="button-row full"><button class="btn" type="submit">Kirim Request License</button></div></form>'+
+        '<div id="licenseRequestStatus" class="referral-status-note"></div></div>';
+    } else {
+      html += '<div class="split-card"><span class="eyebrow">Status License</span><h2>License '+FACILITY_LABEL+'</h2>'+
+        '<div class="admin-detail-panel">'+
+        '<div class="setting-card"><span>Status</span><strong>'+statusBadge(license.request_status)+'</strong></div>'+
+        '<div class="setting-card"><span>Broker</span><strong>'+esc(license.broker_name)+'</strong></div>'+
+        '<div class="setting-card"><span>Nomor Akun</span><strong>'+esc(license.account_id)+'</strong></div>'+
+        '<div class="setting-card"><span>Server</span><strong>'+esc(license.server_name)+'</strong></div>'+
+        '</div>';
+      if(license.request_status==='pending') html += '<p>Permintaan Anda sedang ditinjau admin.</p>';
+      if(license.request_status==='rejected') html += '<p>Permintaan license ditolak admin. Hubungi admin untuk info lebih lanjut.</p>';
+      html += '</div>';
+      if(license.request_status==='active'){
+        var toolsRes = await c.from('tools_files').select('*').eq('access_required', FACILITY_KEY).eq('publish_status','published').eq('is_active', true).order('sort_order');
+        var files = toolsRes.data || [];
+        html += '<div class="split-card"><span class="eyebrow">Download</span><h2>File '+FACILITY_LABEL+'</h2>';
+        if(!files.length){ html += '<div class="admin-empty-state">Belum ada file tersedia. Hubungi admin.</div>'; }
+        else { html += files.map(function(f){ return '<div class="setting-card" style="margin-bottom:10px"><span>'+esc(f.title)+(f.version_label?' &middot; v'+esc(f.version_label):'')+'</span><div class="button-row"><a class="btn mini" href="'+esc(f.file_url||'#')+'" target="_blank" rel="noopener">Download</a></div></div>'; }).join(''); }
+        html += '</div>';
+      }
+    }
+    box.outerHTML = html;
+    var form = document.getElementById('licenseRequestForm');
+    if(form){
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        var statusEl = document.getElementById('licenseRequestStatus');
+        var broker = document.getElementById('licBroker').value.trim();
+        var account = Number(document.getElementById('licAccount').value);
+        var server = document.getElementById('licServer').value.trim();
+        var version = document.getElementById('licVersion').value.trim();
+        if(!broker || !account || !server){ statusEl.textContent='Lengkapi semua data wajib.'; statusEl.className='referral-status-note error'; return; }
+        try{
+          var res = await c.rpc('request_license', {p_facility_key:FACILITY_KEY, p_broker_name:broker, p_account_id:account, p_server_name:server, p_ea_version:version||null});
+          if(res.error) throw res.error;
+          var d = res.data||{};
+          statusEl.textContent = d.message||'Terkirim.';
+          statusEl.className = 'referral-status-note '+(d.success?'success':'error');
+          if(d.success) setTimeout(function(){location.reload()}, 1200);
+        }catch(err){
+          statusEl.textContent = 'Gagal: '+(err.message||err);
+          statusEl.className = 'referral-status-note error';
+        }
+      });
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
+</script>
 <script src="assets/js/kamar-premium-v29.js?v=30"></script>
 </body></html>

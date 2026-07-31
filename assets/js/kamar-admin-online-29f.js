@@ -377,7 +377,8 @@
     profile_change: 'Perubahan Profil',
     support_request: 'Permintaan Bantuan',
     manual_note: 'Catatan Admin',
-    license_request: 'Pengajuan Lisensi'
+    license_request: 'Pengajuan Lisensi',
+    affiliate_payout_change: 'Perubahan Rekening Affiliate'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
@@ -456,6 +457,21 @@
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'License disetujui.':'Pengajuan license ditolak.');
   }
+  async function actionAffiliatePayoutChange(todo, approve){
+    var payload = todo.action_payload || {};
+    if(approve && payload.affiliate_id){
+      await update('affiliates', payload.affiliate_id, {
+        payment_account_name: payload.new_payment_account_name,
+        payment_account_number: payload.new_payment_account_number,
+        payment_bank_name: payload.new_payment_bank_name,
+        payment_verified: false,
+        payment_verified_at: null,
+        updated_at: new Date().toISOString()
+      });
+    }
+    await markTodoDone(todo.id, approve?'done':'rejected');
+    toast(approve?'Perubahan rekening affiliate disetujui.':'Perubahan rekening affiliate ditolak.');
+  }
   function todoCard(todo){
     var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
     var p = todo.action_payload || {};
@@ -467,6 +483,8 @@
     if(p.duration_days) subBits.push(p.duration_days+' hari');
     if(p.broker_name) subBits.push(p.broker_name);
     if(p.account_id) subBits.push('Akun '+p.account_id);
+    if(p.new_payment_bank_name) subBits.push('Bank baru: '+p.new_payment_bank_name);
+    if(p.new_payment_account_number) subBits.push('No. Rek baru: '+p.new_payment_account_number);
     var actionsHtml;
     if(todo.todo_type === 'new_registration'){
       actionsHtml = '<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
@@ -476,6 +494,8 @@
       actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'license_request'){
       actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'affiliate_payout_change'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
       actionsHtml = '<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
@@ -503,6 +523,8 @@
       else if(action === 'reject_profile') await actionProfileChange(todo, false);
       else if(action === 'approve_license') await actionLicenseRequest(todo, true);
       else if(action === 'reject_license') await actionLicenseRequest(todo, false);
+      else if(action === 'approve_affiliate_payout') await actionAffiliatePayoutChange(todo, true);
+      else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);
       await renderActionCenter();
     }catch(err){

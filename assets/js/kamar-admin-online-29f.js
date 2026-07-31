@@ -174,6 +174,7 @@
      '.hero,.card.hero,.split-card.hero,.activation-hero{padding:22px!important}'+
      '.split-card h2,.card h2,.detail-head h2{font-size:24px!important;line-height:1.2!important;letter-spacing:-.02em!important}'+
      '.pill{font-size:11px!important;letter-spacing:.09em!important;padding:7px 12px!important;font-weight:900!important}'+
+     '.kamar-global-header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;padding:16px 26px!important;border-bottom:1px solid rgba(238,206,122,.16)!important;background:rgba(7,7,7,.86)!important;backdrop-filter:blur(14px)!important;position:sticky!important;top:0!important;z-index:40!important}'+
      '.admin-row strong{display:block;color:#fff3d8}'+
      '.admin-row small{display:block;color:rgba(245,240,230,.62);margin-top:4px;line-height:1.4}'+
      '.admin-row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}'+

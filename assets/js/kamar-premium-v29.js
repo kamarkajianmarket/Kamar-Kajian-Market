@@ -1,5 +1,12 @@
 (function(){
   'use strict';
+  function injectCanonicalTheme(){
+    if(document.getElementById('kamarCanonicalTheme30')) return;
+    var style=document.createElement('style');
+    style.id='kamarCanonicalTheme30';
+    style.textContent=':root{--bg:#070706!important;--panel:#11100d!important;--line:rgba(238,206,122,.18)!important;--gold:#f4df90!important;--gold2:#c69a39!important;--text:#f5f0e6!important;--muted:rgba(245,240,230,.66)!important;--green:#bfffd9!important;--red:#ffb4b4!important}';
+    document.head.appendChild(style);
+  }
   function ensureLogoInAuthTop(){
     document.querySelectorAll('.auth-top .brand').forEach(function(brand){
       if(brand.querySelector('img')) return;
@@ -24,6 +31,7 @@
     });
   }
   function init(){
+    injectCanonicalTheme();
     ensureLogoInAuthTop();
     normalizeButtons();
     setTimeout(cleanDuplicateHeaders, 50);

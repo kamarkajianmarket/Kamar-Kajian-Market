@@ -3,20 +3,20 @@
   if(window.__KAMAR_ADMIN_ONLINE_29F__) return;
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
-  var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+ var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
-  // RENAMED (2026-07-31): "kamar_study" is the internal technical key (matches
-  // the real DB column/enum value and existing payment records) - only the
-  // text admin actually SEES has changed, to match the homepage's facility
-  // name. Do not rename the FACILITY_COLUMN key below; it would break lookups
-  // against existing payments/todos already stored with the old slug.
-  var FACILITY_COLUMN = {
-    kamar_study:'access_kamar_study',
-    materi_edukasi:'access_materi_edukasi',
-    kamar_private:'access_kamar_private',
-    kamar_indikator:'access_kamar_indikator',
-    kamar_robot:'access_kamar_robot'
-  };
+ // RENAMED (2026-07-31): "kamar_study" is the internal technical key (matches
+ // the real DB column/enum value and existing payment records) - only the
+ // text admin actually SEES has changed, to match the homepage's facility
+ // name. Do not rename the FACILITY_COLUMN key below; it would break lookups
+ // against existing payments/todos already stored with the old slug.
+ var FACILITY_COLUMN = {
+   kamar_study:'access_kamar_study',
+   materi_edukasi:'access_materi_edukasi',
+   kamar_private:'access_kamar_private',
+   kamar_indikator:'access_kamar_indikator',
+   kamar_robot:'access_kamar_robot'
+ };
   var FACILITY_LABEL = {
     kamar_study:'Kamar Signal',
     materi_edukasi:'Kamar Edukasi',
@@ -25,19 +25,19 @@
     kamar_robot:'Kamar Robot'
   };
 
-  // FIXED (2026-07-30): table/column names below verified directly against the
-  // live Supabase schema. Every admin content page below now points at a table
-  // and column set that actually exists.
-  // UPDATED (2026-07-31, Tahap 1 - bersihkan bahasa teknis): enum values below
-  // are still the real database values (must stay exactly as-is so writes keep
-  // working) but are now shown to admin through ENUM_LABELS as plain Indonesian
-  // text instead of raw values like "kamar_study" or "public".
-  var ENUM_FIELDS = {
-    'display_area': ['public','member','admin','both','global'],
-    'access_required': ['public','member','kamar_study','materi_edukasi','kamar_private','kamar_indikator','kamar_robot','all_paid'],
-    'publish_status': ['draft','published','hidden'],
-    'file_type': ['indicator','robot','template','pdf','other']
-  };
+ // FIXED (2026-07-30): table/column names below verified directly against the
+ // live Supabase schema. Every admin content page below now points at a table
+ // and column set that actually exists.
+ // UPDATED (2026-07-31, Tahap 1 - bersihkan bahasa teknis): enum values below
+ // are still the real database values (must stay exactly as-is so writes keep
+ // working) but are now shown to admin through ENUM_LABELS as plain Indonesian
+ // text instead of raw values like "kamar_study" or "public".
+ var ENUM_FIELDS = {
+   'display_area': ['public','member','admin','both','global'],
+   'access_required': ['public','member','kamar_study','materi_edukasi','kamar_private','kamar_indikator','kamar_robot','all_paid'],
+   'publish_status': ['draft','published','hidden'],
+   'file_type': ['indicator','robot','template','pdf','other']
+ };
   var ENUM_LABELS = {
     display_area:{ public:'Halaman Publik (Semua Pengunjung)', member:'Khusus Member', admin:'Khusus Admin', both:'Member & Pengunjung', global:'Semua Halaman' },
     access_required:{ public:'Bebas, Semua Orang', member:'Member Terdaftar', kamar_study:FACILITY_LABEL.kamar_study, materi_edukasi:FACILITY_LABEL.materi_edukasi, kamar_private:FACILITY_LABEL.kamar_private, kamar_indikator:FACILITY_LABEL.kamar_indikator, kamar_robot:FACILITY_LABEL.kamar_robot, all_paid:'Semua Member Berbayar' },
@@ -56,139 +56,140 @@
     instructions:'Petunjuk Pembayaran', value:'Isi'
   };
 
-  // NOTE (2026-07-31): 'admin-maintenance.html' sengaja TIDAK dimasukkan ke MAP
-  // ini - halaman itu sudah punya tampilan toggle ON/OFF sendiri, jadi kalau
-  // ditambahkan di sini akan muncul dua form yang membingungkan di halaman
-  // yang sama.
-  var MAP = {
-    'admin-banner.html': { table:'banners', title:'Banner Pengumuman', fields:['title','body','image_url','cta_label','cta_url','display_area','is_active'],
-      help:'Buat pengumuman yang tampil di bagian atas halaman utama atau dashboard member.',
-      steps:['Isi judul dan pesan pengumuman di form di bawah.','Pilih mau tampil di halaman mana.','Klik Simpan untuk menayangkan (atau biarkan nonaktif dulu kalau belum mau tampil).'] },
-    'admin-video.html': { table:'videos', title:'Konten Video', fields:['title','youtube_url','category','description','display_area','access_required','publish_status','is_active'],
-      help:'Tambahkan video edukasi yang bisa ditonton member.',
-      steps:['Tempel link video YouTube di form.','Pilih siapa yang boleh menonton video ini.','Pilih status Tayang supaya video langsung terlihat member.'] },
-    'admin-materials.html': { table:'materials', title:'Konten & Materi', fields:['title','category','description','material_url','version_label','access_required','publish_status','admin_notes','is_active'],
-      help:'Unggah materi belajar seperti PDF atau dokumen untuk member.',
-      steps:['Tempel link file materi (Google Drive/tempat penyimpanan lain).','Tentukan fasilitas mana yang boleh mengakses materi ini.','Pilih status Tayang agar materi langsung muncul di dashboard member.'] },
-    'admin-tools.html': { table:'tools_files', title:'File Tools', fields:['title','file_type','file_url','version_label','changelog','access_required','publish_status','admin_notes','is_active'],
-      help:'Kelola file tools, indikator, atau robot trading yang bisa diunduh member.',
-      steps:['Tempel link file tools.','Tentukan untuk siapa file ini (fasilitas mana).','Pilih status Tayang agar file bisa diunduh member.'] },
-    'admin-settings.html': { table:'site_settings', title:'Pengaturan Umum', fields:['setting_key','setting_value','description','is_active'], jsonFields:['setting_value'],
-      help:'Atur pengaturan umum website, seperti nama produk atau kontak.',
-      steps:['Isi nama pengaturan dan isinya di form.','Klik Simpan.','Pengaturan baru langsung dipakai website setelah disimpan.'] },
-    'admin-links.html': { table:'link_settings', title:'Pengaturan Link', fields:['key','label','url','is_active'],
-      help:'Atur link-link penting seperti Telegram, WhatsApp admin, atau link pembayaran.',
-      steps:['Isi kode link, contoh: telegram atau whatsapp.','Isi nama tampilan dan link aslinya.','Klik Simpan lalu aktifkan link tersebut.'] },
-    'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway', fields:['name','bank_name','account_name','account_number','instructions','is_active'],
-      help:'Atur rekening/metode pembayaran yang muncul ke member.',
-      steps:['Isi nama bank/metode pembayaran.','Isi nama & nomor rekening, plus petunjuk transfer.','Aktifkan metode ini supaya muncul ke member.'] },
-    'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama', fields:['key','value','description','is_active'], jsonFields:['value'],
-      help:'Atur bagian mana saja yang tampil di halaman utama (landing page) website.',
-      steps:['Isi kode bagian yang mau diatur.','Isi keterangan singkat.','Aktifkan/nonaktifkan sesuai kebutuhan.'] },
-    'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member', fields:['key','value','description','is_active'], jsonFields:['value'],
-      help:'Atur tampilan dan akses dashboard member.',
-      steps:['Isi kode pengaturan dashboard.','Isi keterangan singkat.','Aktifkan/nonaktifkan sesuai kebutuhan.'] }
-  };
+ // NOTE (2026-07-31): 'admin-maintenance.html' sengaja TIDAK dimasukkan ke MAP
+ // ini - halaman itu sudah punya tampilan toggle ON/OFF sendiri, jadi kalau
+ // ditambahkan di sini akan muncul dua form yang membingungkan di halaman
+ // yang sama.
+ var MAP = {
+   'admin-banner.html': { table:'banners', title:'Banner Pengumuman', fields:['title','body','image_url','cta_label','cta_url','display_area','is_active'],
+                         help:'Buat pengumuman yang tampil di bagian atas halaman utama atau dashboard member.',
+                         steps:['Isi judul dan pesan pengumuman di form di bawah.','Pilih mau tampil di halaman mana.','Klik Simpan untuk menayangkan (atau biarkan nonaktif dulu kalau belum mau tampil).'] },
+   'admin-video.html': { table:'videos', title:'Konten Video', fields:['title','youtube_url','category','description','display_area','access_required','publish_status','is_active'],
+                        help:'Tambahkan video edukasi yang bisa ditonton member.',
+                        steps:['Tempel link video YouTube di form.','Pilih siapa yang boleh menonton video ini.','Pilih status Tayang supaya video langsung terlihat member.'] },
+   'admin-materials.html': { table:'materials', title:'Konten & Materi', fields:['title','category','description','material_url','version_label','access_required','publish_status','admin_notes','is_active'],
+                            help:'Unggah materi belajar seperti PDF atau dokumen untuk member.',
+                            steps:['Tempel link file materi (Google Drive/tempat penyimpanan lain).','Tentukan fasilitas mana yang boleh mengakses materi ini.','Pilih status Tayang agar materi langsung muncul di dashboard member.'] },
+   'admin-tools.html': { table:'tools_files', title:'File Tools', fields:['title','file_type','file_url','version_label','changelog','access_required','publish_status','admin_notes','is_active'],
+                        help:'Kelola file tools, indikator, atau robot trading yang bisa diunduh member.',
+                        steps:['Tempel link file tools.','Tentukan untuk siapa file ini (fasilitas mana).','Pilih status Tayang agar file bisa diunduh member.'] },
+   'admin-settings.html': { table:'site_settings', title:'Pengaturan Umum', fields:['setting_key','setting_value','description','is_active'], jsonFields:['setting_value'],
+                           help:'Atur pengaturan umum website, seperti nama produk atau kontak.',
+                           steps:['Isi nama pengaturan dan isinya di form.','Klik Simpan.','Pengaturan baru langsung dipakai website setelah disimpan.'] },
+   'admin-links.html': { table:'link_settings', title:'Pengaturan Link', fields:['key','label','url','is_active'],
+                        help:'Atur link-link penting seperti Telegram, WhatsApp admin, atau link pembayaran.',
+                        steps:['Isi kode link, contoh: telegram atau whatsapp.','Isi nama tampilan dan link aslinya.','Klik Simpan lalu aktifkan link tersebut.'] },
+   'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway', fields:['name','bank_name','account_name','account_number','instructions','is_active'],
+                          help:'Atur rekening/metode pembayaran yang muncul ke member.',
+                          steps:['Isi nama bank/metode pembayaran.','Isi nama & nomor rekening, plus petunjuk transfer.','Aktifkan metode ini supaya muncul ke member.'] },
+   'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama', fields:['key','value','description','is_active'], jsonFields:['value'],
+                               help:'Atur bagian mana saja yang tampil di halaman utama (landing page) website.',
+                               steps:['Isi kode bagian yang mau diatur.','Isi keterangan singkat.','Aktifkan/nonaktifkan sesuai kebutuhan.'] },
+   'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member', fields:['key','value','description','is_active'], jsonFields:['value'],
+                                    help:'Atur tampilan dan akses dashboard member.',
+                                    steps:['Isi kode pengaturan dashboard.','Isi keterangan singkat.','Aktifkan/nonaktifkan sesuai kebutuhan.'] }
+ };
 
-  // NEW (2026-07-30): every admin-*.html file has always had its OWN
-  // copy-pasted <aside class="split-sidebar"> markup, and over time these
-  // copies drifted out of sync. SIDEBAR_SECTIONS below is the single source
-  // of truth for the admin menu; rebuildSidebar() regenerates the sidebar
-  // identically on every admin page so new/renamed menu items only ever need
-  // to be edited here.
-  // UPDATED (2026-07-31, Tahap 1): removed "Cek Data Admin" and
-  // "Cek Koneksi DB" per direct request - dianggap tidak berguna untuk admin
-  // sehari-hari. Halaman aslinya masih ada di server tapi tidak lagi
-  // dilink dari menu manapun.
-  var SIDEBAR_SECTIONS = [
-    { label:'Utama', items:[ ['admin.html','Dashboard Admin'] ] },
-    { label:'Member & Akses', items:[
-      ['admin-members.html','Data Member'],
-      ['admin-internal.html','Data Internal'],
-      ['admin-activation.html','Aktivasi Akun & Fasilitas']
-    ]},
-    { label:'Affiliate', items:[
-      ['admin-affiliate-v2.html?view=overview','Data Affiliate'],
-      ['admin-affiliate-v2.html?view=list','Daftar Affiliator'],
-      ['admin-affiliate-v2.html?view=reward','Reward / Komisi']
-    ]},
-    { label:'Konten Website', items:[
-      ['admin-banner.html','Banner Pengumuman'],
-      ['admin-video.html','Konten Video'],
-      ['admin-materials.html','Konten & Materi'],
-      ['admin-tools.html','File Tools']
-    ]},
-    { label:'Kontrol Sistem', items:[
-      ['admin-maintenance.html','Maintenance Fasilitas'],
-      ['admin-page-control.html','Kontrol Halaman Utama'],
-      ['admin-dashboard-control.html','Kontrol Dashboard Member'],
-      ['admin-payment.html','Payment Gateway'],
-      ['admin-links.html','Pengaturan Link'],
-      ['admin-settings.html','Pengaturan Umum']
-    ]},
-    { label:'Akun', items:[ ['index.html','Logout'] ] }
-  ];
+ // NEW (2026-07-30): every admin-*.html file has always had its OWN
+ // copy-pasted <aside class="split-sidebar"> markup, and over time these
+ // copies drifted out of sync. SIDEBAR_SECTIONS below is the single source
+ // of truth for the admin menu; rebuildSidebar() regenerates the sidebar
+ // identically on every admin page so new/renamed menu items only ever need
+ // to be edited here.
+ // UPDATED (2026-07-31, Tahap 1): removed "Cek Data Admin" and
+ // "Cek Koneksi DB" per direct request - dianggap tidak berguna untuk admin
+ // sehari-hari. Halaman aslinya masih ada di server tapi tidak lagi
+ // dilink dari menu manapun.
+ var SIDEBAR_SECTIONS = [
+   { label:'Utama', items:[ ['admin.html','Dashboard Admin'] ] },
+   { label:'Member & Akses', items:[
+     ['admin-members.html','Data Member'],
+     ['admin-internal.html','Data Internal'],
+     ['admin-activation.html','Aktivasi Akun & Fasilitas']
+     ]},
+   { label:'Affiliate', items:[
+     ['admin-affiliate-v2.html?view=overview','Data Affiliate'],
+     ['admin-affiliate-v2.html?view=list','Daftar Affiliator'],
+     ['admin-affiliate-v2.html?view=reward','Reward / Komisi']
+     ]},
+   { label:'Konten Website', items:[
+     ['admin-banner.html','Banner Pengumuman'],
+     ['admin-video.html','Konten Video'],
+     ['admin-materials.html','Konten & Materi'],
+     ['admin-tools.html','File Tools']
+     ]},
+   { label:'Kontrol Sistem', items:[
+     ['admin-maintenance.html','Maintenance Fasilitas'],
+     ['admin-page-control.html','Kontrol Halaman Utama'],
+     ['admin-dashboard-control.html','Kontrol Dashboard Member'],
+     ['admin-payment.html','Payment Gateway'],
+     ['admin-payment-products.html','Katalog Harga & Produk'],
+     ['admin-links.html','Pengaturan Link'],
+     ['admin-settings.html','Pengaturan Umum']
+     ]},
+   { label:'Akun', items:[ ['index.html','Logout'] ] }
+   ];
 
-  function qs(s,r){ return (r||document).querySelector(s); }
+ function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
   function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || /aktif|active|on|yes/i.test(String(v||'')); }
   function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
 
-  // NEW (2026-07-31, Tahap 1): satu blok CSS yang disuntikkan sekali ke setiap
-  // halaman admin, supaya sub-menu sidebar yang bisa dibuka/tutup dan tampilan
-  // kartu data (Konten Website/Kontrol Sistem) selalu SAMA persis di semua
-  // halaman - tidak perlu edit style.css di puluhan file satu-satu.
-  function injectSharedStyles(){
-    if(qs('#kamarAdminSharedStyle29F')) return;
-    var style = document.createElement('style');
-    style.id = 'kamarAdminSharedStyle29F';
-    style.textContent =
-      '.split-sidebar details,.admin-sidebar details{margin:4px 0}'+
-      '.split-sidebar summary,.admin-sidebar summary{list-style:none;cursor:pointer;padding:12px 14px;border-radius:16px;font-weight:1000;color:#f1dda2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;opacity:.9}'+
-      '.split-sidebar summary::-webkit-details-marker,.admin-sidebar summary::-webkit-details-marker{display:none}'+
-      '.split-sidebar summary:after,.admin-sidebar summary:after{content:"\\25BE";font-size:11px;opacity:.7;transition:.2s ease}'+
-      '.split-sidebar details[open] summary:after,.admin-sidebar details[open] summary:after{content:"\\25B4"}'+
-      '.split-sidebar summary:hover,.admin-sidebar summary:hover{background:rgba(212,166,63,.10);color:#f4df90}'+
-      '.online-card-list{display:grid;gap:14px}'+
-      '.online-card{border:1px solid rgba(238,206,122,.16);border-radius:20px;background:rgba(255,255,255,.03);padding:16px 18px}'+
-      '.online-card-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid rgba(238,206,122,.08)}'+
-      '.online-card-row:last-of-type{border-bottom:0}'+
-      '.online-card-row span{color:#d8cda9;font-weight:800;font-size:13px}'+
-      '.online-card-row strong{color:#f5f0e6;font-weight:700;text-align:right;max-width:60%}'+
-      '.online-card details{margin-top:8px}'+
-      '.online-card summary{cursor:pointer;color:#e9d79f;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;list-style:none}'+
-      '.online-card summary::-webkit-details-marker{display:none}'+
-      '.manager-help{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:20px;padding:16px 18px;margin-bottom:4px;color:#d8f5e4}'+
-      '.manager-help strong{color:#eafff2}'+
-      '.manager-help ol{margin:8px 0 0;padding-left:18px;color:#c9ffe1}'+
-      '.manager-help li{margin-bottom:4px}'+
-      '.admin-toolbar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;align-items:end}'+
-      '.admin-toolbar-grid label{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8d0bd;font-size:13px}'+
-      '.admin-table-card{display:grid;gap:12px}'+
-      '.admin-row{display:grid;grid-template-columns:1.3fr 1.3fr .8fr 1fr 1.4fr auto;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}'+
-      '.admin-row.header{border:0;background:transparent;padding:6px 16px;color:#e7d391;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:1000}'+
-      '.admin-row strong{display:block;color:#fff3d8}'+
-      '.admin-row small{display:block;color:rgba(245,240,230,.62);margin-top:4px;line-height:1.4}'+
-      '.admin-row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}'+
-      '.admin-empty{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:20px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}'+
-      '.admin-empty-state{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:20px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}'+
-      '.admin-note-soft{color:#d8cda9;font-size:13px;line-height:1.6}'+
-      '.admin-detail-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}'+
-      '.admin-detail-box{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:16px}'+
-      '.admin-detail-box span{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:1000;color:#e7d391}'+
-      '.admin-detail-box strong{display:block;margin-top:7px;color:#fff4db}'+
-      '.admin-detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}'+
-      '@media(max-width:900px){.admin-row{grid-template-columns:1fr}.admin-row.header{display:none}.admin-toolbar-grid{grid-template-columns:1fr}}';
-    document.head.appendChild(style);
-  }
+ // NEW (2026-07-31, Tahap 1): satu blok CSS yang disuntikkan sekali ke setiap
+ // halaman admin, supaya sub-menu sidebar yang bisa dibuka/tutup dan tampilan
+ // kartu data (Konten Website/Kontrol Sistem) selalu SAMA persis di semua
+ // halaman - tidak perlu edit style.css di puluhan file satu-satu.
+ function injectSharedStyles(){
+   if(qs('#kamarAdminSharedStyle29F')) return;
+   var style = document.createElement('style');
+   style.id = 'kamarAdminSharedStyle29F';
+   style.textContent =
+     '.split-sidebar details,.admin-sidebar details{margin:4px 0}'+
+     '.split-sidebar summary,.admin-sidebar summary{list-style:none;cursor:pointer;padding:12px 14px;border-radius:16px;font-weight:1000;color:#f1dda2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;opacity:.9}'+
+     '.split-sidebar summary::-webkit-details-marker,.admin-sidebar summary::-webkit-details-marker{display:none}'+
+     '.split-sidebar summary:after,.admin-sidebar summary:after{content:"\\25BE";font-size:11px;opacity:.7;transition:.2s ease}'+
+     '.split-sidebar details[open] summary:after,.admin-sidebar details[open] summary:after{content:"\\25B4"}'+
+     '.split-sidebar summary:hover,.admin-sidebar summary:hover{background:rgba(212,166,63,.10);color:#f4df90}'+
+     '.online-card-list{display:grid;gap:14px}'+
+     '.online-card{border:1px solid rgba(238,206,122,.16);border-radius:20px;background:rgba(255,255,255,.03);padding:16px 18px}'+
+     '.online-card-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid rgba(238,206,122,.08)}'+
+     '.online-card-row:last-of-type{border-bottom:0}'+
+     '.online-card-row span{color:#d8cda9;font-weight:800;font-size:13px}'+
+     '.online-card-row strong{color:#f5f0e6;font-weight:700;text-align:right;max-width:60%}'+
+     '.online-card details{margin-top:8px}'+
+     '.online-card summary{cursor:pointer;color:#e9d79f;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;list-style:none}'+
+     '.online-card summary::-webkit-details-marker{display:none}'+
+     '.manager-help{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:20px;padding:16px 18px;margin-bottom:4px;color:#d8f5e4}'+
+     '.manager-help strong{color:#eafff2}'+
+     '.manager-help ol{margin:8px 0 0;padding-left:18px;color:#c9ffe1}'+
+     '.manager-help li{margin-bottom:4px}'+
+     '.admin-toolbar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;align-items:end}'+
+     '.admin-toolbar-grid label{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8d0bd;font-size:13px}'+
+     '.admin-table-card{display:grid;gap:12px}'+
+     '.admin-row{display:grid;grid-template-columns:1.3fr 1.3fr .8fr 1fr 1.4fr auto;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}'+
+     '.admin-row.header{border:0;background:transparent;padding:6px 16px;color:#e7d391;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:1000}'+
+     '.admin-row strong{display:block;color:#fff3d8}'+
+     '.admin-row small{display:block;color:rgba(245,240,230,.62);margin-top:4px;line-height:1.4}'+
+     '.admin-row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}'+
+     '.admin-empty{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:20px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}'+
+     '.admin-empty-state{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:20px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}'+
+     '.admin-note-soft{color:#d8cda9;font-size:13px;line-height:1.6}'+
+     '.admin-detail-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}'+
+     '.admin-detail-box{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:16px}'+
+     '.admin-detail-box span{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:1000;color:#e7d391}'+
+     '.admin-detail-box strong{display:block;margin-top:7px;color:#fff4db}'+
+     '.admin-detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}'+
+     '@media(max-width:900px){.admin-row{grid-template-columns:1fr}.admin-row.header{display:none}.admin-toolbar-grid{grid-template-columns:1fr}}';
+   document.head.appendChild(style);
+ }
 
-  function sidebarLinkHtml(item){
-    var href = item[0], label = item[1];
-    var file = href.split('?')[0].toLowerCase();
-    var isActive = (file === PAGE);
-    var isLogout = (label === 'Logout');
-    return '<a'+(isActive?' class="active"':'')+(isLogout?' data-kamar-logout':'')+' href="'+esc(href)+'">'+esc(label)+'</a>';
-  }
+ function sidebarLinkHtml(item){
+   var href = item[0], label = item[1];
+   var file = href.split('?')[0].toLowerCase();
+   var isActive = (file === PAGE);
+   var isLogout = (label === 'Logout');
+   return '<a'+(isActive?' class="active"':'')+(isLogout?' data-kamar-logout':'')+' href="'+esc(href)+'">'+esc(label)+'</a>';
+ }
   function rebuildSidebar(){
     var sidebar = qs('.split-sidebar, .admin-sidebar');
     if(!sidebar || sidebar.getAttribute('data-kamar-sidebar-online-29h')) return;
@@ -206,11 +207,11 @@
     sidebar.innerHTML = html;
   }
 
-  async function ready(){
-    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
-    try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
-    return window.kamarSupabaseClient || null;
-  }
+ async function ready(){
+   try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+   try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+   return window.kamarSupabaseClient || null;
+ }
   async function select(table, limit){
     var c = await ready();
     if(!c) throw new Error('Data belum bisa dibaca.');
@@ -269,22 +270,22 @@
     }).join('')+'</div>';
   }
   // NEW (2026-07-31, Tahap 1 - perbaikan tambahan): setiap halaman
-  // admin-*.html untuk Konten Website/Kontrol Sistem ternyata masih punya
-  // kotak placeholder BAWAAN di HTML aslinya sebelum konten ini dimuat -
-  // "Memuat Data Supabase / Halaman ini sedang membaca data real." Kotak ini
-  // tidak pernah dihapus otomatis, jadi tetap terlihat berdampingan dengan
-  // form yang sudah dirapikan. removeLegacyNotice() menghapusnya begitu
-  // halaman selesai memuat, supaya tidak ada lagi kata "Supabase" yang
-  // kelihatan di layar admin.
-  function removeLegacyNotice(){
-    var main = getMain(); if(!main) return;
-    Array.prototype.slice.call(main.querySelectorAll('.page-note')).forEach(function(el){
-      if(/supabase/i.test(el.textContent||'')){
-        var card = el.closest('.split-card');
-        (card || el).remove();
-      }
-    });
-  }
+ // admin-*.html untuk Konten Website/Kontrol Sistem ternyata masih punya
+ // kotak placeholder BAWAAN di HTML aslinya sebelum konten ini dimuat -
+ // "Memuat Data Supabase / Halaman ini sedang membaca data real." Kotak ini
+ // tidak pernah dihapus otomatis, jadi tetap terlihat berdampingan dengan
+ // form yang sudah dirapikan. removeLegacyNotice() menghapusnya begitu
+ // halaman selesai memuat, supaya tidak ada lagi kata "Supabase" yang
+ // kelihatan di layar admin.
+ function removeLegacyNotice(){
+   var main = getMain(); if(!main) return;
+   Array.prototype.slice.call(main.querySelectorAll('.page-note')).forEach(function(el){
+     if(/supabase/i.test(el.textContent||'')){
+       var card = el.closest('.split-card');
+       (card || el).remove();
+     }
+   });
+ }
   async function renderManager(cfg){
     var main = getMain();
     if(!main || qs('#kamarOnlineManager29F')) return;
@@ -452,11 +453,11 @@
       actionsHtml = '<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
     return '<div class="todo-row">'
-      +'<div><strong>'+esc(todo.title || label)+'</strong><small>'+esc(p.full_name || '')+(subBits.length ? ' &middot; '+esc(subBits.join(' &middot; ')) : '')+'</small></div>'
-      +'<div>'+esc(p.email || todo.description || '-')+'</div>'
-      +'<div><span class="chip">'+esc(label)+'</span></div>'
-      +'<div>'+actionsHtml+'</div>'
-      +'</div>';
+    +'<div><strong>'+esc(todo.title || label)+'</strong><small>'+esc(p.full_name || '')+(subBits.length ? ' &middot; '+esc(subBits.join(' &middot; ')) : '')+'</small></div>'
+    +'<div>'+esc(p.email || todo.description || '-')+'</div>'
+    +'<div><span class="chip">'+esc(label)+'</span></div>'
+    +'<div>'+actionsHtml+'</div>'
+    +'</div>';
   }
   async function onTodoAction(e){
     var btn = e.target && e.target.closest ? e.target.closest('[data-todo-action]') : null;

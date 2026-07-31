@@ -108,9 +108,9 @@
      ['admin-activation.html','Aktivasi Akun & Fasilitas']
      ]},
    { label:'Affiliate', items:[
-     ['admin-affiliate-v2.html?view=overview','Data Affiliate'],
-     ['admin-affiliate-v2.html?view=list','Daftar Affiliator'],
-     ['admin-affiliate-v2.html?view=reward','Reward / Komisi']
+['admin-affiliate-overview.html','Data Affiliate'],
+         ['admin-affiliate-list.html','Daftar Affiliator'],
+             ['admin-affiliate-reward.html','Reward / Komisi']
      ]},
    { label:'Konten Website', items:[
      ['admin-banner.html','Banner Pengumuman'],

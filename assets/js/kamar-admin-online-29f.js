@@ -186,6 +186,7 @@
      '.admin-detail-box span{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:1000;color:#e7d391}'+
      '.admin-detail-box strong{display:block;margin-top:7px;color:#fff4db}'+
      '.admin-detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}'+
+     '.affiliate-table{gap:14px!important}.aff-row:not(.head){border-radius:22px!important;padding:16px!important;background:rgba(255,255,255,.025)!important;transition:.2s ease!important}.aff-row:not(.head):hover{border-color:rgba(244,223,144,.32)!important}.aff-row.head{font-size:11px!important;letter-spacing:.14em!important}'+
      '@media(max-width:900px){.admin-row{grid-template-columns:1fr}.admin-row.header{display:none}.admin-toolbar-grid{grid-template-columns:1fr}}';
    document.head.appendChild(style);
  }

@@ -558,11 +558,12 @@
       return false;
     }
   }
+  async function patchMemberDeleteButtons(){if(!/^(admin-members|admin-internal)\.html$/i.test(PAGE))return;var wrap=qs('#adminMembersList');if(!wrap)return;async function doDelete(key,name){if(!confirm('Yakin ingin menghapus member '+name+' ('+key+')? Data profil dan akses fasilitas akan dihapus permanen dan tidak bisa dikembalikan.'))return;var c=await ready();if(!c){toast('Supabase client tidak terbaca.');return}try{var pid='';if(key&&key.indexOf('@')!==-1){var pr=await c.from('member_profiles').select('id').eq('email',key).limit(1);if(pr.error)throw pr.error;if(pr.data&&pr.data.length)pid=pr.data[0].id}if(!pid)pid=key;var res=await c.rpc('admin_delete_member',{p_profile_id:pid});if(res.error)throw res.error;toast('Member '+name+' berhasil dihapus.');location.reload()}catch(e){toast('Gagal menghapus member: '+(e.message||String(e)))}}function ensureButtons(){wrap.querySelectorAll('.admin-row-actions').forEach(function(actions){if(actions.querySelector('[data-member-delete]'))return;var detailBtn=actions.querySelector('[data-detail-key],[data-member-detail]');if(!detailBtn)return;var key=detailBtn.getAttribute('data-detail-key')||detailBtn.getAttribute('data-member-detail');var row=actions.closest('.admin-row');var strongEl=row?row.querySelector('strong'):null;var name=strongEl?strongEl.textContent:'member ini';var btn=document.createElement('button');btn.className='btn mini danger';btn.type='button';btn.textContent='Hapus';btn.setAttribute('data-member-delete',key);btn.addEventListener('click',function(e){e.stopPropagation();doDelete(key,name)});actions.appendChild(btn)})}ensureButtons();var obs=new MutationObserver(function(){ensureButtons()});obs.observe(wrap,{childList:true,subtree:true})}
   async function run(){
     if(!/^admin/i.test(PAGE)) return;
     injectSharedStyles();
     rebuildSidebar();
-    await patchKamarAdminLocal();
+    await patchKamarAdminLocal(); await patchMemberDeleteButtons();
     if(PAGE === 'admin.html') await renderActionCenter();
     if(MAP[PAGE]) await renderManager(MAP[PAGE]);
   }

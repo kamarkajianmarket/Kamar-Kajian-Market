@@ -115,120 +115,31 @@
 <small>© Kamar Kajian Market</small>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js?v=29F"></script>
+<script src="assets/js/kamar-supabase.js?v=29F"></script>
 <script>
 (function(){
-  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  function normalize(s){return String(s||'').trim().toUpperCase();}
-  function escapeHtml(s){return String(s||'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function byId(id){return document.getElementById(id);}
-
-  var affiliates=getJSON('kamarAffiliateList',[]);
-  var members=getJSON('kamarRegisteredMembers',[]);
-  var current=getJSON('kamarAffiliateSession',null);
-
-  function nameInitial(name){
-    var first=String(name||'Kawan').trim().split(/\s+/)[0]||'Kawan';
-    first=first.normalize?first.normalize('NFD').replace(/[\u0300-\u036f]/g,''):first;
-    first=first.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
-    return (first.charAt(0)||'K');
-  }
-  function nextAffiliateNumber(excludeEmail){
-    var max=0;
-    affiliates.forEach(function(a){
-      if(String(a.email||'').toLowerCase()===String(excludeEmail||'').toLowerCase())return;
-      var n=parseInt(a.affiliateNumber||0,10);
-      var m=String(a.referralCode||'').match(/^KM(\d{5})[A-Z0-9]$/i);
-      if(m)n=parseInt(m[1],10);
-      if(n>max)max=n;
-    });
-    return max+1;
-  }
-  function makeReadableCode(name,excludeEmail,number){
-    var n=number||nextAffiliateNumber(excludeEmail);
-    return 'KM'+String(n).padStart(5,'0')+nameInitial(name);
-  }
-  function migrateOldLocalCodes(){
-    var changed=false;
-    affiliates.forEach(function(a){
-      if(a&&a.referralCode&&!/^KM\d{5}[A-Z0-9]$/i.test(String(a.referralCode||''))){
-        var oldCode=a.referralCode;
-        var existingNumber=parseInt(a.affiliateNumber||0,10)||nextAffiliateNumber(a.email);
-        a.affiliateNumber=existingNumber;
-        var newCode=makeReadableCode(a.fullName||'KAWAN',a.email,existingNumber);
-        a.referralCode=newCode;
-        members.forEach(function(m){if(normalize(m.referralCode)===normalize(oldCode)){m.referralCode=newCode;m.referrerName=a.fullName||m.referrerName||'';}});
-        if(current&&normalize(current.referralCode)===normalize(oldCode)){current.referralCode=newCode;current.affiliateNumber=existingNumber;}
-        changed=true;
-      } else if(a && a.referralCode){
-        var match=String(a.referralCode||'').match(/^KM(\d{5})[A-Z0-9]$/i);
-        if(match && !a.affiliateNumber){a.affiliateNumber=parseInt(match[1],10);changed=true;}
-      }
-    });
-    if(changed){setJSON('kamarAffiliateList',affiliates);setJSON('kamarRegisteredMembers',members);if(current)setJSON('kamarAffiliateSession',current);}
-  }
-  migrateOldLocalCodes();
-
-  function findAffiliate(code){code=normalize(code);return affiliates.find(function(a){return normalize(a.referralCode)===code;})||null;}
-  function currentAffiliate(){
-    if(current && current.referralCode){return findAffiliate(current.referralCode)||current;}
-    if(affiliates.length===1){current=affiliates[0];setJSON('kamarAffiliateSession',current);return current;}
-    return null;
-  }
-  function referralRows(aff){
-    var code=aff&&aff.referralCode?normalize(aff.referralCode):'';
-    if(!code) return [];
-    return members.filter(function(m){return normalize(m.referralCode)===code;});
-  }
-  function memberFacilities(m){
-    return (m.facilities&&m.facilities.length)?m.facilities.join(', '):'Belum ada fasilitas aktif';
-  }
-  function render(aff){
-    aff=aff||currentAffiliate();
-    byId('affiliateDashName').textContent=aff&&aff.fullName?aff.fullName:'Affiliator Kamar';
-    byId('affiliateDashCode').textContent=aff&&aff.referralCode?aff.referralCode:'-';
-    renderPayout(aff);
-    renderReferralList(aff);
-    renderSearchDefault(aff);
-  }
-  function renderReferralList(aff){
-    var rows=referralRows(aff);
-    var body=byId('affiliateReferralBody');
-    var status=byId('affiliateReferralStatus');
-    body.innerHTML='';
-    if(!aff || !aff.referralCode){status.textContent='Belum ada kode affiliate aktif di browser ini. Daftar affiliate terlebih dahulu atau buka dashboard setelah pendaftaran.';return;}
-    if(!rows.length){status.textContent='Belum ada member yang terdaftar menggunakan kode referral ini.';return;}
-    status.textContent=rows.length+' member terdaftar menggunakan kode referral Anda.';
-    rows.forEach(function(m){
-      var tr=document.createElement('tr');
-      tr.innerHTML='<td>'+escapeHtml(m.fullName||'Member Kamar')+'</td><td>'+escapeHtml(memberFacilities(m))+'</td>';
-      body.appendChild(tr);
-    });
-  }
-  function renderSearchDefault(aff){
-    var box=byId('affiliateSearchResult');
-    box.className='search-help';
-    if(!aff || !aff.referralCode){box.textContent='Daftar affiliate terlebih dahulu sebelum memakai fitur pencarian referral.';return;}
-    box.textContent='Masukkan nama member, lalu klik Search.';
-  }
-  function searchReferral(){
-    var aff=currentAffiliate();
-    var q=String(byId('referralNameSearch').value||'').trim().toLowerCase();
-    var box=byId('affiliateSearchResult');
-    if(!aff || !aff.referralCode){box.className='search-help warn';box.textContent='Belum ada kode affiliate aktif. Daftar affiliate terlebih dahulu.';return;}
-    if(!q){box.className='search-help warn';box.textContent='Isi nama member yang ingin dicari.';return;}
-    var rows=referralRows(aff);
-    var found=rows.filter(function(m){return String(m.fullName||'').toLowerCase().indexOf(q)>=0;});
-    if(!found.length){box.className='search-help warn';box.innerHTML='Tidak ditemukan member dengan nama <strong>'+escapeHtml(q)+'</strong> di daftar referral Anda.';return;}
-    box.className='search-help success';
-    box.innerHTML=found.map(function(m){return '<div><strong>'+escapeHtml(m.fullName||'Member Kamar')+'</strong><br/>Fasilitas: '+escapeHtml(memberFacilities(m))+'</div>';}).join('<hr style="border:0;border-top:1px solid rgba(238,206,122,.16);margin:12px 0"/>');
-  }
+  function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function maskAccount(num){
     num=String(num||'').trim();
     if(!num)return '-';
     if(num.length<=4)return num;
-    return '•••• '+num.slice(-4);
+    return '\u2022\u2022\u2022\u2022 '+num.slice(-4);
   }
+  var FACILITY_LABELS={kamar_edukasi:'Kamar Edukasi',kamar_study:'Kamar Study',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot'};
+  function facilityLabel(key){key=String(key||'').trim();if(!key)return '-';return FACILITY_LABELS[key]||key.replace(/_/g,' ').replace(/\b\w/g,function(m){return m.toUpperCase();});}
+
+  var state={aff:null, referrals:[]};
+
+  async function getClient(){
+    if(window.KamarSupabase && window.KamarSupabase.ready){
+      try{return await window.KamarSupabase.ready();}catch(e){return null;}
+    }
+    return window.kamarSupabaseClient||null;
+  }
+
   function showPayoutForm(show){
     var view=byId('akun-pembayaran');
     var form=byId('akun-pembayaran-form');
@@ -236,53 +147,92 @@
     if(form)form.hidden=!show;
     if(show&&form){setTimeout(function(){form.scrollIntoView({behavior:'smooth',block:'start'});},60);}
   }
-  function renderPayout(aff){
-    var account=(aff&&aff.payoutAccount)||{};
-    byId('payoutFullName').value=account.fullName||'';
-    byId('payoutAccountNumber').value=account.accountNumber||'';
-    byId('payoutBankName').value=account.bankName||'';
-    byId('payoutSummaryName').textContent=account.fullName||'-';
-    byId('payoutSummaryNumber').textContent=maskAccount(account.accountNumber);
-    byId('payoutSummaryBank').textContent=account.bankName||'-';
+
+  function renderNoAffiliate(reason){
+    byId('affiliateDashName').textContent='Affiliator Kamar';
+    byId('affiliateDashCode').textContent='-';
+    byId('payoutSummaryName').textContent='-';
+    byId('payoutSummaryNumber').textContent='-';
+    byId('payoutSummaryBank').textContent='-';
+    byId('payoutStatusBox').innerHTML='<strong>Status:</strong> '+escapeHtml(reason);
+    byId('affiliateReferralStatus').textContent=reason;
+    byId('affiliateReferralBody').innerHTML='';
+    var box=byId('affiliateSearchResult');
+    box.className='search-help';
+    box.textContent=reason;
+    showPayoutForm(false);
+  }
+
+  function renderAffiliate(aff){
+    byId('affiliateDashName').textContent=aff.full_name||'Affiliator Kamar';
+    byId('affiliateDashCode').textContent=aff.affiliate_code||'-';
+    byId('payoutSummaryName').textContent=aff.payment_account_name||'-';
+    byId('payoutSummaryNumber').textContent=maskAccount(aff.payment_account_number);
+    byId('payoutSummaryBank').textContent=aff.payment_bank_name||'-';
+    byId('payoutFullName').value=aff.payment_account_name||'';
+    byId('payoutAccountNumber').value=aff.payment_account_number||'';
+    byId('payoutBankName').value=aff.payment_bank_name||'';
     var box=byId('payoutStatusBox');
-    if(!aff || !aff.referralCode){box.innerHTML='<strong>Status:</strong> Daftar affiliate terlebih dahulu sebelum mengisi akun pembayaran.';showPayoutForm(false);return;}
-    if(account.fullName && account.accountNumber && account.bankName){
-      box.innerHTML='<strong>Status:</strong> Data rekening tersimpan. Verifikasi identitas tetap melalui admin resmi sebelum pencairan komisi.';
-      showPayoutForm(false);
+    if(aff.payment_account_name && aff.payment_account_number && aff.payment_bank_name){
+      box.innerHTML='<strong>Status:</strong> '+(aff.payment_verified?'Data rekening terverifikasi.':'Data rekening tersimpan, menunggu verifikasi admin.');
     }else{
       box.innerHTML='<strong>Status:</strong> Belum lengkap. Klik tombol ganti data untuk mengisi akun penerima pembayaran.';
-      showPayoutForm(false);
     }
+    showPayoutForm(false);
+    var box2=byId('affiliateSearchResult');
+    box2.className='search-help';
+    box2.textContent='Masukkan nama member, lalu klik Search.';
   }
-  function sendPayout(){
-    var aff=currentAffiliate();
-    if(!aff || !aff.referralCode){alert('Daftar affiliate terlebih dahulu sebelum mengirim data rekening.');return;}
+
+  function renderReferralList(){
+    var body=byId('affiliateReferralBody');
+    var status=byId('affiliateReferralStatus');
+    body.innerHTML='';
+    if(!state.referrals.length){status.textContent='Belum ada member yang terdaftar menggunakan kode referral ini.';return;}
+    status.textContent=state.referrals.length+' member terdaftar menggunakan kode referral Anda.';
+    state.referrals.forEach(function(r){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td>'+escapeHtml(r.member_name||'Member Kamar')+'</td><td>'+escapeHtml(facilityLabel(r.facility_key))+'</td>';
+      body.appendChild(tr);
+    });
+  }
+
+  function searchReferral(){
+    var q=String(byId('referralNameSearch').value||'').trim().toLowerCase();
+    var box=byId('affiliateSearchResult');
+    if(!state.aff){box.className='search-help warn';box.textContent='Belum ada akun affiliate aktif.';return;}
+    if(!q){box.className='search-help warn';box.textContent='Isi nama member yang ingin dicari.';return;}
+    var found=state.referrals.filter(function(r){return String(r.member_name||'').toLowerCase().indexOf(q)>=0;});
+    if(!found.length){box.className='search-help warn';box.innerHTML='Tidak ditemukan member dengan nama <strong>'+escapeHtml(q)+'</strong> di daftar referral Anda.';return;}
+    box.className='search-help success';
+    box.innerHTML=found.map(function(r){return '<div><strong>'+escapeHtml(r.member_name||'Member Kamar')+'</strong><br/>Fasilitas: '+escapeHtml(facilityLabel(r.facility_key))+'</div>';}).join('<hr style="border:0;border-top:1px solid rgba(238,206,122,.16);margin:12px 0"/>');
+  }
+
+  async function sendPayout(){
+    if(!state.aff){alert('Akun affiliate belum ditemukan. Silakan login ulang atau hubungi admin.');return;}
     var fullName=byId('payoutFullName').value.trim();
     var accountNumber=byId('payoutAccountNumber').value.trim();
     var bankName=byId('payoutBankName').value.trim();
     if(!fullName || !accountNumber || !bankName){alert('Lengkapi Nama Sesuai KTP, Nomor Rekening, dan Nama Bank.');return;}
-    aff.payoutAccount={fullName:fullName,accountNumber:accountNumber,bankName:bankName,verificationStatus:'Menunggu Verifikasi Admin',updatedAt:new Date().toISOString(),ktpUpload:false};
-    var idx=affiliates.findIndex(function(a){return normalize(a.referralCode)===normalize(aff.referralCode);});
-    if(idx>=0){affiliates[idx]=Object.assign({},affiliates[idx],aff);}else{affiliates.push(aff);}
-    current=aff;
-    setJSON('kamarAffiliateList',affiliates);
-    setJSON('kamarAffiliateSession',aff);
-    render(aff);
-    var lines=['Halo Admin Kamar, saya ingin mengirim data akun penerima pembayaran affiliate.','Nama Affiliate: '+(aff.fullName||'-'),'Kode Referral: '+(aff.referralCode||'-'),'Nama Rekening/KTP: '+fullName,'Bank: '+bankName,'Nomor Rekening: '+accountNumber,'Catatan: dokumen identitas tidak saya unggah ke website dan akan saya kirim hanya melalui admin resmi bila diminta.'];
-    try{navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n'));}catch(e){}
-    alert('Data rekening tersimpan. Pesan verifikasi sudah disiapkan/salin manual jika dibutuhkan. Lanjut hubungi admin resmi.');
-    window.open('https://telegram.me/kajianmarketkamar','_blank','noopener');
+    try{
+      var updated=await window.KamarSupabase.update('affiliates', {
+        payment_account_name: fullName,
+        payment_account_number: accountNumber,
+        payment_bank_name: bankName,
+        payment_verified: false,
+        payment_verified_at: null,
+        updated_at: new Date().toISOString()
+      }, { id: state.aff.id });
+      if(updated && updated.length) state.aff=updated[0];
+      renderAffiliate(state.aff);
+      var lines=['Halo Admin Kamar, saya ingin mengirim data akun penerima pembayaran affiliate.','Nama Affiliate: '+(state.aff.full_name||'-'),'Kode Referral: '+(state.aff.affiliate_code||'-'),'Nama Rekening/KTP: '+fullName,'Bank: '+bankName,'Nomor Rekening: '+accountNumber,'Catatan: dokumen identitas tidak saya unggah ke website dan akan saya kirim hanya melalui admin resmi bila diminta.'];
+      try{navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n'));}catch(e){}
+      alert('Data rekening tersimpan. Pesan verifikasi sudah disiapkan/salin manual jika dibutuhkan. Lanjut hubungi admin resmi.');
+      window.open('https://telegram.me/kajianmarketkamar','_blank','noopener');
+    }catch(e){
+      alert('Gagal menyimpan data rekening: '+(e.message||e));
+    }
   }
-
-  byId('copyDashCode').addEventListener('click',function(){
-    var t=byId('affiliateDashCode').textContent;
-    if(t&&t!=='-')navigator.clipboard&&navigator.clipboard.writeText(t);
-    this.textContent='Tersalin';var b=this;setTimeout(function(){b.textContent='Salin Kode';},1200);
-  });
-  byId('affiliateSearchBtn').addEventListener('click',searchReferral);
-  byId('referralNameSearch').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();searchReferral();}});
-  byId('sendPayoutAccount').addEventListener('click',sendPayout);
-  byId('editPayoutAccount').addEventListener('click',function(){showPayoutForm(true);});
 
   function setAffiliateFilter(filter){
     filter=filter||'all';
@@ -313,8 +263,44 @@
     });
   });
 
+  byId('copyDashCode').addEventListener('click',function(){
+    var t=byId('affiliateDashCode').textContent;
+    if(t&&t!=='-')navigator.clipboard&&navigator.clipboard.writeText(t);
+    this.textContent='Tersalin';var b=this;setTimeout(function(){b.textContent='Salin Kode';},1200);
+  });
+  byId('affiliateSearchBtn').addEventListener('click',searchReferral);
+  byId('referralNameSearch').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();searchReferral();}});
+  byId('sendPayoutAccount').addEventListener('click',sendPayout);
+  byId('editPayoutAccount').addEventListener('click',function(){showPayoutForm(true);});
+
   setAffiliateFilter('all');
-  render(currentAffiliate());
+  renderNoAffiliate('Memuat data...');
+
+  async function init(){
+    try{
+      var client=await getClient();
+      if(!client){renderNoAffiliate('Gagal terhubung ke server. Coba muat ulang halaman.');return;}
+      var authRes=await client.auth.getUser();
+      var user=authRes && authRes.data && authRes.data.user;
+      if(!user){renderNoAffiliate('Sesi login tidak ditemukan. Silakan login kembali sebagai affiliate.');return;}
+      var affRes=await window.KamarSupabase.select('affiliates', { eq: { user_id: user.id }, limit: 1 });
+      var aff=affRes && affRes.data && affRes.data[0];
+      if(!aff){renderNoAffiliate('Akun affiliate tidak ditemukan untuk akun ini. Hubungi admin bila ini tidak sesuai.');return;}
+      state.aff=aff;
+      if(aff.approval_status!=='APPROVED' || !aff.is_active){
+        renderNoAffiliate('Akun affiliate Anda berstatus "'+(aff.approval_status||'PENDING')+'". Menunggu persetujuan admin sebelum kode referral aktif.');
+        byId('affiliateDashName').textContent=aff.full_name||'Affiliator Kamar';
+        return;
+      }
+      renderAffiliate(aff);
+      var refRes=await window.KamarSupabase.select('affiliate_referrals', { eq: { affiliate_id: aff.id }, order: 'created_at', ascending: false, limit: 500 });
+      state.referrals=(refRes && refRes.data)||[];
+      renderReferralList();
+    }catch(e){
+      renderNoAffiliate('Terjadi kesalahan memuat data: '+(e.message||e));
+    }
+  }
+  init();
 })();
 </script>
 

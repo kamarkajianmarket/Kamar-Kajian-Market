@@ -131,13 +131,23 @@
   var FACILITY_LABELS={kamar_edukasi:'Kamar Edukasi',kamar_study:'Kamar Study',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot'};
   function facilityLabel(key){key=String(key||'').trim();if(!key)return '-';return FACILITY_LABELS[key]||key.replace(/_/g,' ').replace(/\b\w/g,function(m){return m.toUpperCase();});}
 
-  var state={aff:null, referrals:[]};
+  var state={aff:null, referrals:[], pendingPayoutRequest:false};
 
   async function getClient(){
     if(window.KamarSupabase && window.KamarSupabase.ready){
       try{return await window.KamarSupabase.ready();}catch(e){return null;}
     }
     return window.kamarSupabaseClient||null;
+  }
+
+  async function checkPendingPayoutRequest(){
+    try{
+      var client=await getClient();
+      if(!client) return;
+      var res=await client.from('admin_todos').select('id').eq('todo_type','affiliate_payout_change').in('todo_status',['new','processing']).limit(1);
+      if(res.error) return;
+      state.pendingPayoutRequest=!!(res.data && res.data.length);
+    }catch(e){}
   }
 
   function showPayoutForm(show){
@@ -173,11 +183,16 @@
     byId('payoutAccountNumber').value=aff.payment_account_number||'';
     byId('payoutBankName').value=aff.payment_bank_name||'';
     var box=byId('payoutStatusBox');
+    var statusMsg;
     if(aff.payment_account_name && aff.payment_account_number && aff.payment_bank_name){
-      box.innerHTML='<strong>Status:</strong> '+(aff.payment_verified?'Data rekening terverifikasi.':'Data rekening tersimpan, menunggu verifikasi admin.');
+      statusMsg=(aff.payment_verified?'Data rekening terverifikasi.':'Data rekening tersimpan, menunggu verifikasi admin.');
     }else{
-      box.innerHTML='<strong>Status:</strong> Belum lengkap. Klik tombol ganti data untuk mengisi akun penerima pembayaran.';
+      statusMsg='Belum lengkap. Klik tombol ganti data untuk mengisi akun penerima pembayaran.';
     }
+    if(state.pendingPayoutRequest){
+      statusMsg+=' Ada permintaan perubahan rekening baru yang sedang menunggu persetujuan admin.';
+    }
+    box.innerHTML='<strong>Status:</strong> '+statusMsg;
     showPayoutForm(false);
     var box2=byId('affiliateSearchResult');
     box2.className='search-help';
@@ -215,22 +230,26 @@
     var bankName=byId('payoutBankName').value.trim();
     if(!fullName || !accountNumber || !bankName){alert('Lengkapi Nama Sesuai KTP, Nomor Rekening, dan Nama Bank.');return;}
     try{
-      var updated=await window.KamarSupabase.update('affiliates', {
-        payment_account_name: fullName,
-        payment_account_number: accountNumber,
-        payment_bank_name: bankName,
-        payment_verified: false,
-        payment_verified_at: null,
-        updated_at: new Date().toISOString()
-      }, { id: state.aff.id });
-      if(updated && updated.length) state.aff=updated[0];
+      var client=await getClient();
+      if(!client){alert('Gagal terhubung ke server. Coba muat ulang halaman.');return;}
+      var res=await client.rpc('request_affiliate_payout_change', {
+        p_full_name: fullName,
+        p_account_number: accountNumber,
+        p_bank_name: bankName
+      });
+      if(res.error) throw res.error;
+      var result=res.data;
+      if(!result || !result.success){
+        alert((result && result.message) || 'Gagal mengirim permintaan perubahan rekening.');
+        return;
+      }
+      await checkPendingPayoutRequest();
       renderAffiliate(state.aff);
-      var lines=['Halo Admin Kamar, saya ingin mengirim data akun penerima pembayaran affiliate.','Nama Affiliate: '+(state.aff.full_name||'-'),'Kode Referral: '+(state.aff.affiliate_code||'-'),'Nama Rekening/KTP: '+fullName,'Bank: '+bankName,'Nomor Rekening: '+accountNumber,'Catatan: dokumen identitas tidak saya unggah ke website dan akan saya kirim hanya melalui admin resmi bila diminta.'];
-      try{navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n'));}catch(e){}
-      alert('Data rekening tersimpan. Pesan verifikasi sudah disiapkan/salin manual jika dibutuhkan. Lanjut hubungi admin resmi.');
+      showPayoutForm(false);
+      alert('Permintaan perubahan rekening terkirim. Data resmi baru berubah setelah disetujui admin.');
       window.open('https://telegram.me/kajianmarketkamar','_blank','noopener');
     }catch(e){
-      alert('Gagal menyimpan data rekening: '+(e.message||e));
+      alert('Gagal mengirim permintaan: '+(e.message||e));
     }
   }
 
@@ -292,6 +311,7 @@
         byId('affiliateDashName').textContent=aff.full_name||'Affiliator Kamar';
         return;
       }
+      await checkPendingPayoutRequest();
       renderAffiliate(aff);
       var refRes=await window.KamarSupabase.select('affiliate_referrals', { eq: { affiliate_id: aff.id }, order: 'created_at', ascending: false, limit: 500 });
       state.referrals=(refRes && refRes.data)||[];

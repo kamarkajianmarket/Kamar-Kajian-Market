@@ -57,108 +57,151 @@ body{background:#070707;color:var(--text)}
 <a class="btn secondary activation-muted-btn" id="activationAdminLink" href="https://telegram.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
 <a class="btn secondary activation-muted-btn" href="member-renewal.html">Kembali ke Pilihan Fasilitas</a>
 </div>
-<div class="payment-note-box activation-note-box" style="margin-top:18px"><strong>Catatan:</strong> sebelum pembayaran, pastikan menghubungi admin lebih dulu untuk konfirmasi apakah layanan masih tersedia, detail layanan, atau promo yang sedang berjalan (jika ada) dan hal teknis lainnya.<br/><br/>Setelah pembayaran, pastikan untuk menghubungi admin supaya aktivasi fasilitas lebih cepat diproses.</div>
+<div class="payment-note-box activation-note-box" style="margin-top:18px"><strong>Catatan:</strong> sebelum pembayaran, pastikan menghubungi admin lebih dulu untuk konfirmasi apakah layanan masih tersedia, detail layanan, atau promo yang sedang berjalan (jika ada) dan hal teknis lainnya.<br/><br/>Setelah pembayaran, sistem akan otomatis mengaktifkan fasilitas kamu begitu pembayaran dikonfirmasi Mayar.</div>
 </section>
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
 <script id="kamar-activate-separate-page-logic">
 (function(){
-  const map={edukasi:'Kamar Edukasi',study:'Kamar Study',private:'Kamar Private',indikator:'Kamar Indikator',robot:'Kamar Robot'};
-  const params=new URLSearchParams(window.location.search);
-  const key=(params.get('facility')||'').toLowerCase();
-  const facility=map[key];
-  if(!facility){ window.location.replace('member-renewal.html'); return; }
-  const title=document.getElementById('facilityPageTitle');
-  const formTitle=document.getElementById('activationFormTitle');
-  const text=document.getElementById('activationFormText');
-  const adminLink=document.getElementById('activationAdminLink');
-  const need=document.getElementById('activationNeed');
-  const duration=document.getElementById('activationDuration');
-  const note=document.getElementById('activationNote');
-  if(title) title.textContent='Aktifkan '+facility;
-  if(formTitle) formTitle.textContent='Aktifkan '+facility;
-  if(text) text.textContent='Pilih kebutuhan dan durasi untuk '+facility+'. Setelah itu hubungi admin untuk konfirmasi.';
-  function buildMessage(){
-    const lines=['Halo Admin Kamar, saya ingin aktivasi fasilitas.','Fasilitas: '+facility,'Kebutuhan: '+(need?need.value:''),'Durasi: '+(duration?duration.value:''),note&&note.value.trim()?('Catatan: '+note.value.trim()):''].filter(Boolean);
-    return 'https://telegram.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
-  }
-  const paymentLinks={
-    indikator:{
-      '30 Hari':'https://kamar.myr.id/pl/kamarindikator30hari',
-      '60 Hari':'https://kamar.myr.id/pl/kamarindikator60hari',
-      '90 Hari':'https://kamar.myr.id/pl/kamarindikator90hari',
-      '180 Hari':'https://kamar.myr.id/pl/kamarindikator180hari',
-      'Lifetime':'https://kamar.myr.id/pl/kamarindikatorlifetime'
-    },
-    robot:{
-      '30 Hari':'https://kamar.myr.id/pl/kamarrobot30haricore',
-      '60 Hari':'https://kamar.myr.id/pl/kamarrobot60haricore',
-      '90 Hari':'https://kamar.myr.id/pl/kamarrobot90haricore',
-      '180 Hari':'https://kamar.myr.id/pl/kamarrobot180haricore',
-      'Lifetime':'https://kamar.myr.id/pl/kamarrobotlifetime'
-    }
-  };
-  const priceInfo={
-    indikator:{
-      '30 Hari':{normal:'Rp3.150.000',promo:'Rp3.150.000',note:'Core access'},
-      '60 Hari':{normal:'Rp6.300.000',promo:'Rp5.750.000',note:'Hemat Rp550.000'},
-      '90 Hari':{normal:'Rp9.450.000',promo:'Rp7.950.000',note:'Best Value'},
-      '180 Hari':{normal:'Rp18.900.000',promo:'Rp13.500.000',note:'Hemat besar'},
-      'Lifetime':{normal:'Rp24.500.000',promo:'Rp17.900.000',note:'Promo terbatas'}
-    },
-    robot:{
-      '30 Hari':{normal:'Rp3.750.000',promo:'Rp3.500.000',note:'Launching price'},
-      '60 Hari':{normal:'Rp7.500.000',promo:'Rp6.500.000',note:'Hemat Rp1.000.000'},
-      '90 Hari':{normal:'Rp11.250.000',promo:'Rp8.950.000',note:'Best Value'},
-      '180 Hari':{normal:'Rp22.500.000',promo:'Rp15.500.000',note:'Hemat besar'},
-      'Lifetime':{normal:'Rp29.500.000',promo:'Rp22.500.000',note:'Promo terbatas'}
-    }
-  };
-  const payLink=document.getElementById('activationPayLink');
-  let priceBox=document.getElementById('activationPriceBox');
-  if(!priceBox){
-    priceBox=document.createElement('div');
-    priceBox.id='activationPriceBox';
-    priceBox.className='payment-note-box activation-price-box';
-    const actions=document.querySelector('.activation-actions');
-    if(actions&&actions.parentNode) actions.parentNode.insertBefore(priceBox,actions);
-  }
-  function updatePay(){
-    const selectedDuration=duration?duration.value:'';
-    const url=paymentLinks[key]&&paymentLinks[key][selectedDuration];
-    const info=priceInfo[key]&&priceInfo[key][selectedDuration];
-    if(payLink){
-      payLink.href=url||'#';
-      if(url){
-        payLink.removeAttribute('data-payment-placeholder');
-        payLink.setAttribute('aria-label','Bayar '+facility+' '+selectedDuration);
-      }else{
-        payLink.setAttribute('data-payment-placeholder','true');
-        payLink.setAttribute('aria-label','Link pembayaran belum tersedia');
-      }
-    }
-    if(priceBox){
-      if(info){
-        priceBox.innerHTML='<strong>Ringkasan Paket:</strong><br/>Durasi: '+selectedDuration+'<br/>Harga Normal: '+info.normal+'<br/>Harga Promo/Rekomendasi: <strong>'+info.promo+'</strong><br/>Catatan: '+info.note;
-        priceBox.style.display='block';
-      }else{
-        priceBox.innerHTML='<strong>Ringkasan Paket:</strong><br/>Link pembayaran fasilitas ini belum dipasang. Hubungi admin untuk konfirmasi detail pembayaran.';
-        priceBox.style.display='block';
-      }
-    }
-  }
-  function update(){ if(adminLink) adminLink.href=buildMessage(); updatePay(); }
-  [need,duration,note].forEach(function(el){ if(el) el.addEventListener('input',update); });
-
-  if(payLink){
-    payLink.addEventListener('click',function(e){
-      if(payLink.getAttribute('href')==='#'){
-        e.preventDefault();
-        if(typeof toast==='function') toast('Link pembayaran Mayar fasilitas belum dipasang. Hubungi admin untuk konfirmasi pembayaran.');
-      }
-    });
-  }
-  update();
+const map={edukasi:'Kamar Edukasi',study:'Kamar Study',private:'Kamar Private',indikator:'Kamar Indikator',robot:'Kamar Robot'};
+const facilityKeyMap={edukasi:'materi_edukasi',study:'kamar_study',private:'kamar_private',indikator:'kamar_indikator',robot:'kamar_robot'};
+const params=new URLSearchParams(window.location.search);
+const key=(params.get('facility')||'').toLowerCase();
+const facility=map[key];
+const dbFacilityKey=facilityKeyMap[key];
+if(!facility){ window.location.replace('member-renewal.html'); return; }
+const title=document.getElementById('facilityPageTitle');
+const formTitle=document.getElementById('activationFormTitle');
+const text=document.getElementById('activationFormText');
+const adminLink=document.getElementById('activationAdminLink');
+const need=document.getElementById('activationNeed');
+const duration=document.getElementById('activationDuration');
+const note=document.getElementById('activationNote');
+if(title) title.textContent='Aktifkan '+facility;
+if(formTitle) formTitle.textContent='Aktifkan '+facility;
+if(text) text.textContent='Pilih kebutuhan dan durasi untuk '+facility+'. Setelah itu klik Bayar untuk membuat tagihan pembayaran otomatis.';
+function buildMessage(){
+const lines=['Halo Admin Kamar, saya ingin aktivasi fasilitas.','Fasilitas: '+facility,'Kebutuhan: '+(need?need.value:''),'Durasi: '+(duration?duration.value:''),note&&note.value.trim()?('Catatan: '+note.value.trim()):''].filter(Boolean);
+return 'https://telegram.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
+}
+async function readyClient(){
+try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+return window.kamarSupabaseClient || null;
+}
+function fmtRupiah(n){ try{ return 'Rp'+Number(n).toLocaleString('id-ID'); }catch(e){ return 'Rp'+n; } }
+function durationToRow(products, label){
+if(label==='Lifetime') return products.find(function(p){ return p.is_lifetime; });
+const days=parseInt(label,10);
+return products.find(function(p){ return !p.is_lifetime && Number(p.duration_days)===days; });
+}
+let productRows=[];
+let profileId=null;
+const payLink=document.getElementById('activationPayLink');
+let priceBox=document.getElementById('activationPriceBox');
+if(!priceBox){
+priceBox=document.createElement('div');
+priceBox.id='activationPriceBox';
+priceBox.className='payment-note-box activation-price-box';
+const actions=document.querySelector('.activation-actions');
+if(actions&&actions.parentNode) actions.parentNode.insertBefore(priceBox,actions);
+}
+function updatePay(){
+const selectedDuration=duration?duration.value:'';
+const row=durationToRow(productRows, selectedDuration);
+if(payLink){
+if(row){
+payLink.dataset.productKey=row.product_key;
+payLink.removeAttribute('data-payment-placeholder');
+payLink.setAttribute('aria-label','Bayar '+facility+' '+selectedDuration);
+}else{
+delete payLink.dataset.productKey;
+payLink.setAttribute('data-payment-placeholder','true');
+payLink.setAttribute('aria-label','Link pembayaran belum tersedia');
+}
+}
+if(priceBox){
+if(row){
+const promo=row.promo_price!=null?row.promo_price:row.base_price;
+priceBox.innerHTML='<strong>Ringkasan Paket:</strong><br/>Produk: '+row.title+'<br/>Durasi: '+selectedDuration+'<br/>Harga Normal: '+fmtRupiah(row.base_price)+'<br/>Harga Promo/Rekomendasi: <strong>'+fmtRupiah(promo)+'</strong>'+(row.discount_note?('<br/>Catatan: '+row.discount_note):'');
+priceBox.style.display='block';
+}else{
+priceBox.innerHTML='<strong>Ringkasan Paket:</strong><br/>Paket untuk durasi ini belum diatur admin. Hubungi admin untuk konfirmasi detail pembayaran.';
+priceBox.style.display='block';
+}
+}
+}
+async function loadProducts(){
+try{
+const c=await readyClient();
+if(!c) throw new Error('no client');
+const res=await c.from('payment_products').select('*').eq('facility_key',dbFacilityKey).eq('product_type','facility_access').eq('is_active',true);
+if(res.error) throw res.error;
+productRows=res.data||[];
+}catch(e){ productRows=[]; }
+updatePay();
+}
+async function resolveProfileId(){
+try{
+const sess=JSON.parse(localStorage.getItem('kamarMemberSession')||'null');
+if(!sess) return null;
+const c=await readyClient();
+if(!c) return null;
+if(sess.id){
+const r1=await c.from('member_profiles').select('id').eq('user_id',sess.id).maybeSingle();
+if(!r1.error && r1.data) return r1.data.id;
+}
+if(sess.email){
+const r2=await c.from('member_profiles').select('id').ilike('email',sess.email).limit(1);
+if(!r2.error && r2.data && r2.data.length) return r2.data[0].id;
+}
+}catch(e){}
+return null;
+}
+function update(){ if(adminLink) adminLink.href=buildMessage(); updatePay(); }
+[need,duration,note].forEach(function(el){ if(el) el.addEventListener('input',update); });
+if(payLink){
+payLink.addEventListener('click',function(e){
+e.preventDefault();
+const productKey=payLink.dataset.productKey;
+if(!productKey){
+if(typeof toast==='function') toast('Paket untuk durasi ini belum diatur admin. Hubungi admin untuk konfirmasi pembayaran.');
+return;
+}
+createInvoice(productKey);
+});
+}
+async function createInvoice(productKey){
+if(payLink.dataset.loading==='1') return;
+payLink.dataset.loading='1';
+const oldText=payLink.textContent;
+payLink.textContent='Memproses...';
+try{
+if(!profileId) profileId=await resolveProfileId();
+if(!profileId){ if(typeof toast==='function') toast('Gagal memuat data akun. Silakan muat ulang halaman lalu coba lagi.'); return; }
+const cfg=window.KAMAR_CONFIG||window.KamarConfig||{};
+const base=(cfg.supabaseUrl||cfg.SUPABASE_URL||'').replace(/\/$/,'');
+const anonKey=cfg.supabaseAnonKey||cfg.SUPABASE_ANON_KEY||'';
+const resp=await fetch(base+'/functions/v1/mayar-create-invoice',{
+method:'POST',
+headers:{'Content-Type':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},
+body:JSON.stringify({profile_id:profileId,product_key:productKey,redirect_url:'https://www.kamarkajianmarket.com/dashboard.html'})
+});
+const data=await resp.json();
+if(!resp.ok || !data.payment_link){
+if(typeof toast==='function') toast('Gagal membuat tagihan: '+(data.error||'Coba lagi nanti.'));
+return;
+}
+window.location.href=data.payment_link;
+}catch(e){
+if(typeof toast==='function') toast('Gagal membuat tagihan pembayaran. Coba lagi.');
+}finally{
+payLink.dataset.loading='0';
+payLink.textContent=oldText;
+}
+}
+update();
+loadProducts();
 })();
 </script><script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
 
@@ -167,39 +210,39 @@ body{background:#070707;color:var(--text)}
 </script>
 <script id="kamar-global-header-script">
 (function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+function shouldShowHeader(){
+var p=pageName();
+if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+if(p==='affiliate-dashboard.html') return true;
+return false;
+}
+function clearSessionAndLogout(e){
+try{
+['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+}catch(err){}
+}
+function buildHeader(){
+if(!shouldShowHeader()) return;
+document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+var header=document.createElement('header');
+header.className='site-header kamar-global-header';
+header.innerHTML=''+
+'<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+'<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+'<span>Kamar Kajian Market</span>'+
+'</a>'+
+'<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+'<div class="kamar-global-actions">'+
+'<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+'<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+'</div>';
+document.body.insertBefore(header, document.body.firstChild);
+var out=header.querySelector('[data-kamar-logout]');
+if(out) out.addEventListener('click', clearSessionAndLogout);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
 <script src="assets/js/kamar-premium-v29.js?v=30"></script>

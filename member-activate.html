@@ -63,7 +63,7 @@ body{background:#070707;color:var(--text)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
 <script id="kamar-activate-separate-page-logic">
 (function(){
-const map={edukasi:'Kamar Edukasi',study:'Kamar Study',private:'Kamar Private',indikator:'Kamar Indikator',robot:'Kamar Robot'};
+const map={edukasi:'Kamar Edukasi',study:'Kamar Signal',private:'Kamar Private',indikator:'Kamar Indikator',robot:'Kamar Robot'};
 const facilityKeyMap={edukasi:'materi_edukasi',study:'kamar_study',private:'kamar_private',indikator:'kamar_indikator',robot:'kamar_robot'};
 const params=new URLSearchParams(window.location.search);
 const key=(params.get('facility')||'').toLowerCase();

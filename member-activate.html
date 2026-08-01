@@ -78,7 +78,7 @@ const need=document.getElementById('activationNeed');
 const duration=document.getElementById('activationDuration');
 const note=document.getElementById('activationNote');
 if(title) title.textContent='Aktifkan '+facility;
-if(formTitle) formTitle.textContent='Aktifkan '+facility;
+if(formTitle) formTitle.textContent='Lengkapi Detail Aktivasi';
 if(text) text.textContent='Pilih kebutuhan dan durasi untuk '+facility+'. Setelah itu klik Bayar untuk membuat tagihan pembayaran otomatis.';
 function buildMessage(){
 const lines=['Halo Admin Kamar, saya ingin aktivasi fasilitas.','Fasilitas: '+facility,'Kebutuhan: '+(need?need.value:''),'Durasi: '+(duration?duration.value:''),note&&note.value.trim()?('Catatan: '+note.value.trim()):''].filter(Boolean);

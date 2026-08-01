@@ -57,8 +57,10 @@
           <li><b>Link Materi</b> harus link langsung ke file (PDF, dokumen, dsb) yang bisa diunduh langsung, contoh: <code>assets/materi-nama-file.pdf</code> atau <code>https://domainanda.com/file.pdf</code>. <span class="warn-line">Jangan pakai link share Google Drive</span> — biasanya gagal diunduh. Cara upload file ke folder situs sendiri: buka repo GitHub → folder <b>assets</b> → Add file → Upload files.</li>
           <li><b>Kategori</b> bebas untuk mengelompokkan materi (misal "Edukasi Dasar", "Analisa Teknikal"), boleh dikosongkan.</li>
           <li><b>Akses Diperlukan</b> menentukan siapa yang boleh mengunduh/melihat materi ini (Publik, Member, atau fasilitas berbayar tertentu).</li>
+                  <li><b>Tampil di</b> menentukan halaman mana yang menampilkan materi ini (sama seperti Konten Video). Jika <b>Akses Diperlukan</b> dipilih fasilitas berbayar, kolom ini otomatis terkunci ke <b>Dashboard Member</b> — materi berbayar tidak pernah tampil di halaman publik.</li>li></b></b>
           <li><b>Label Versi</b> & <b>Catatan Admin</b> bersifat opsional. Catatan Admin hanya pengingat internal, tidak tampil ke member.</li>
           <li><b>Status Publikasi</b>: Draft = belum tayang, Terbit = tayang, Disembunyikan = pernah tayang lalu disembunyikan. <b>Status Aktif</b> = saklar utama on/off.</li>
+                  <li>Jika satu halaman menampilkan lebih dari satu jenis konten sekaligus, urutannya selalu: <b>Banner Pengumuman &rarr; Konten Video &rarr; Materi &rarr; File Tools</b>.</li></b></li>
         </ol>
       </div>
     </section>
@@ -107,6 +109,14 @@
             </select>
             <div class="field-hint">Siapa yang boleh mengunduh/melihat materi ini.</div>
           </label>
+      <label class="field">Tampil di
+                <select id="fArea">
+                            <option value="public">Halaman Utama (Publik)</option>
+                            <option value="member">Dashboard Member</option>
+                            <option value="admin">Dashboard Admin</option>
+                            <option value="affiliate">Dashboard Affiliate</option>
+                            <option value="both">Publik + Member</option>
+                            <option value="global">Semua Halaman</option>
           <label class="field">Urutan Tampil
             <input id="fSort" type="number" value="0" min="0">
             <div class="field-hint">Angka lebih kecil tampil lebih dulu.</div>

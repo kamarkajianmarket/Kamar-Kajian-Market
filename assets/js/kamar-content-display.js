@@ -63,38 +63,8 @@ async function fetchMemberAccess(c){
   }catch(e){ return {}; }
 }
 
-// ---------------- Banner ----------------
-async function renderBanner(c){
-  var mount=document.getElementById('kamarBannerMount');
-  if(!mount) return;
-  try{
-    var res=await c.from('banners').select('*').order('sort_order',{ascending:true});
-    if(res.error) return;
-    var areas=bannerAreas();
-    var rows=(res.data||[]).filter(function(b){return areas.indexOf(b.display_area)>=0;});
-    if(!rows.length) return;
-    var dismissedKey='kamarDismissedBanners_'+CTX;
-    var dismissed=[];
-    try{dismissed=JSON.parse(sessionStorage.getItem(dismissedKey)||'[]');}catch(e){}
-    rows=rows.filter(function(b){return dismissed.indexOf(b.id)<0;});
-    if(!rows.length) return;
-    var b=rows[0];
-    var isTop=(b.display_style||'topbar')==='topbar';
-    var wrap=document.createElement('div');
-    wrap.className='kamar-banner '+(isTop?'kamar-banner-topbar':'kamar-banner-card');
-    wrap.innerHTML='<div class="kamar-banner-inner"><div class="kamar-banner-text"><strong>'+esc(b.title)+'</strong>'+(b.body?'<span>'+esc(b.body)+'</span>':'')+'</div><div class="kamar-banner-actions">'+(b.cta_url?'<a class="kamar-banner-cta" href="'+esc(b.cta_url)+'" target="_blank" rel="noopener">'+esc(b.cta_label||'Selengkapnya')+'</a>':'')+'<button type="button" class="kamar-banner-close" aria-label="Tutup pengumuman">&times;</button></div></div>';
-    mount.innerHTML='';
-    mount.appendChild(wrap);
-    var closeBtn=wrap.querySelector('.kamar-banner-close');
-    if(closeBtn){
-      closeBtn.addEventListener('click',function(){
-        wrap.remove();
-        dismissed.push(b.id);
-        try{sessionStorage.setItem(dismissedKey,JSON.stringify(dismissed));}catch(e){}
-      });
-    }
-  }catch(e){}
-}
+// NOTE: Banner sudah ditangani oleh sistem bawaan (kamar-supabase.js / #kamarBannersLive...).
+// Modul ini sengaja TIDAK merender banner lagi supaya tidak dobel.
 
 // ---------------- Videos ----------------
 function extractYoutubeId(url,fallbackId){
@@ -166,7 +136,6 @@ async function init(){
   var c=await client();
   if(!c) return;
   var access=await fetchMemberAccess(c);
-  renderBanner(c);
   renderVideos(c, access);
   renderMaterials(c, access);
 }

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Maintenance Fasilitas — Kamar Kajian Market</title><meta content="ON/OFF maintenance untuk setiap fasilitas." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
@@ -30,11 +31,11 @@ body{background:#070707;color:var(--text)}
 <a class="" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
 <a class="" href="admin-members.html">Data Member</a>
-<a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
+<a class="" href="admin-activation.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<a href="admin-affiliate-overview.html">Data Affiliate</a>
+<a href="admin-affiliate-list.html">Daftar Affiliator</a>
+<a href="admin-affiliate-reward.html">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div>
 <a class="" href="admin-banner.html">Banner Pengumuman</a>
 <a class="" href="admin-video.html">Konten Video</a>
@@ -49,173 +50,112 @@ body{background:#070707;color:var(--text)}
 <a class="" href="admin-settings.html">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div>
 <a class="" data-kamar-logout="" href="index.html">Logout</a>
-</aside><section class="split-main"><section class="split-card kamar-title-card"><span class="mini-label">Maintenance</span><h1>Maintenance Website &amp; Fasilitas</h1><p>Aktifkan toggle untuk menampilkan tulisan Maintenance pada halaman yang dipilih.</p></section><section class="split-card"><span class="mini-label">Toggle Maintenance</span><p>Jika ON, halaman terkait akan menampilkan notifikasi maintenance. Berlaku untuk halaman utama, member, affiliate, dan fasilitas.</p><div class="manager-help"><strong>Cara pakai halaman ini:</strong><ol><li>Klik toggle ON untuk menandai halaman/fasilitas sedang maintenance.</li><li>Klik lagi (OFF) begitu maintenance selesai.</li><li>Pengaturan ini tersimpan ke sistem pusat, jadi akan sama persis walau dibuka dari HP atau komputer lain.</li></ol></div><div class="admin-table-card" id="maintenanceList">Memuat data maintenance...</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
+</aside><section class="split-main"><section class="split-card kamar-title-card"><span class="mini-label">Maintenance</span><h1>Maintenance Website &amp; Fasilitas</h1><p>Aktifkan toggle untuk menampilkan tulisan Maintenance pada halaman yang dipilih.</p></section><section class="split-card"><span class="mini-label">Toggle Maintenance</span><p>Jika ON, halaman terkait akan menampilkan notifikasi maintenance. Berlaku untuk halaman utama, member, affiliate, dan fasilitas.</p><div class="admin-table-card" id="maintenanceList"></div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
-document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
-if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
-var sw=document.createElement('span');
-sw.className='toggle-switch';
-sw.setAttribute('aria-hidden','true');
-var dot=document.createElement('span');
-dot.className='toggle-dot';
-sw.appendChild(dot);
-input.insertAdjacentElement('afterend', sw);
-}
-});
+  document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
+    if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
+      var sw=document.createElement('span');
+      sw.className='toggle-switch';
+      sw.setAttribute('aria-hidden','true');
+      var dot=document.createElement('span');
+      dot.className='toggle-dot';
+      sw.appendChild(dot);
+      input.insertAdjacentElement('afterend', sw);
+    }
+  });
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
 <script id="kamar-step24CM-admin-functional-logic">
 (function(){
-var facilities=[['Kamar Edukasi','Kamar Edukasi'],['Kamar Signal','Kamar Signal'],['Kamar Private','Kamar Private'],['Kamar Indikator','Kamar Indikator'],['Kamar Robot','Kamar Robot']];
-function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function esc(x){return String(x||'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
-function norm(x){return String(x||'').trim().toLowerCase();}
-function toast2(msg){if(window.toast){window.toast(msg);return;} alert(msg);}
-function members(){return getJSON('kamarRegisteredMembers',[]);}
-function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
-function isActive(m){return m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|active/i.test(m.status||''));}
-function isPending(m){return !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending/i.test(m.status||''));}
-function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>';if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>';return '<span class="status-pill off">Belum Aktif</span>';}
-function findMember(id){var ms=members();return [ms,ms.find(function(m){return String(m.memberId||m.email)===String(id);})];}
-function activateMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=true;m.statusKey='active';m.status='Member Website: Aktif Gratis';m.activatedAt=new Date().toISOString();m.updatedAt=new Date().toISOString();saveMembers(ms);try{var sess=getJSON('kamarMemberSession',null);if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email).toLowerCase()===String(m.email||'').toLowerCase())){sess.accountActive=true;sess.statusKey='active';sess.status='Member Website: Aktif Gratis';sess.fullName=m.fullName||sess.fullName;sess.referralCode=m.referralCode||sess.referralCode||'';sess.lastActivity=Date.now();setJSON('kamarMemberSession',sess);}}catch(e){}toast2('Member sudah diaktifkan gratis.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-function suspendMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=false;m.statusKey='suspended';m.status='Suspended';m.updatedAt=new Date().toISOString();saveMembers(ms);toast2('Status member disuspend.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-function toggleFacility(id,fac,on){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.facilities=Array.isArray(m.facilities)?m.facilities:[]; if(on && m.facilities.indexOf(fac)<0)m.facilities.push(fac); if(!on)m.facilities=m.facilities.filter(function(x){return x!==fac;});m.updatedAt=new Date().toISOString();saveMembers(ms);toast2((on?'Aktif: ':'Nonaktif: ')+fac);document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-window.KamarAdminLocal={facilities:facilities,getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,isActive:isActive,isPending:isPending,labelStatus:labelStatus,activateMember:activateMember,suspendMember:suspendMember,toggleFacility:toggleFacility};
+  var facilities=[['Kamar Edukasi','Kamar Edukasi'],['Kamar Study','Kamar Study'],['Kamar Private','Kamar Private'],['Kamar Indikator','Kamar Indikator'],['Kamar Robot','Kamar Robot']];
+  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function esc(x){return String(x||'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
+  function norm(x){return String(x||'').trim().toLowerCase();}
+  function toast2(msg){if(window.toast){window.toast(msg);return;} alert(msg);}
+  function members(){return getJSON('kamarRegisteredMembers',[]);}
+  function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
+  function isActive(m){return m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|active/i.test(m.status||''));}
+  function isPending(m){return !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending/i.test(m.status||''));}
+  function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>';if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>';return '<span class="status-pill off">Belum Aktif</span>';}
+  function findMember(id){var ms=members();return [ms,ms.find(function(m){return String(m.memberId||m.email)===String(id);})];}
+  function activateMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=true;m.statusKey='active';m.status='Member Website: Aktif Gratis';m.activatedAt=new Date().toISOString();m.updatedAt=new Date().toISOString();saveMembers(ms);try{var sess=getJSON('kamarMemberSession',null);if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email).toLowerCase()===String(m.email||'').toLowerCase())){sess.accountActive=true;sess.statusKey='active';sess.status='Member Website: Aktif Gratis';sess.fullName=m.fullName||sess.fullName;sess.referralCode=m.referralCode||sess.referralCode||'';sess.lastActivity=Date.now();setJSON('kamarMemberSession',sess);}}catch(e){}toast2('Member sudah diaktifkan gratis.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
+  function suspendMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=false;m.statusKey='suspended';m.status='Suspended';m.updatedAt=new Date().toISOString();saveMembers(ms);toast2('Status member disuspend.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
+  function toggleFacility(id,fac,on){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.facilities=Array.isArray(m.facilities)?m.facilities:[]; if(on && m.facilities.indexOf(fac)<0)m.facilities.push(fac); if(!on)m.facilities=m.facilities.filter(function(x){return x!==fac;});m.updatedAt=new Date().toISOString();saveMembers(ms);toast2((on?'Aktif: ':'Nonaktif: ')+fac);document.dispatchEvent(new Event('kamarAdminDataChanged'));}
+  window.KamarAdminLocal={facilities:facilities,getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,isActive:isActive,isPending:isPending,labelStatus:labelStatus,activateMember:activateMember,suspendMember:suspendMember,toggleFacility:toggleFacility};
 })();
 </script>
 
 <script id="kamar-step24CN-admin-click-guard">(function(){document.addEventListener('click',function(e){var c=e.target.closest('[data-href]');if(c){window.location.href=c.getAttribute('data-href');}});})();</script>
-<script id="kamar-step24CO-admin-stable-utils">
+<script id="kamar-step24CN-maintenance-render">(function(){
+var items=[['home','Halaman Utama','Kontrol maintenance halaman utama website publik.'],['member_dashboard','Dashboard Member','Kontrol maintenance dashboard Kawan Kamar.'],['affiliate_dashboard','Dashboard Affiliate','Kontrol maintenance dashboard affiliator.'],['register_member','Pendaftaran Member','Kontrol maintenance halaman daftar member.'],['register_affiliate','Pendaftaran Affiliate','Kontrol maintenance halaman daftar affiliate.'],['kamar_edukasi','Kamar Edukasi','Kontrol maintenance fasilitas Kamar Edukasi.'],['kamar_study','Kamar Study','Kontrol maintenance fasilitas Kamar Study.'],['kamar_private','Kamar Private','Kontrol maintenance fasilitas Kamar Private.'],['kamar_indikator','Kamar Indikator','Kontrol maintenance fasilitas Kamar Indikator.'],['kamar_robot','Kamar Robot','Kontrol maintenance fasilitas Kamar Robot.'],['payment','Pembayaran','Kontrol maintenance halaman pembayaran/aktivasi fasilitas.'],['admin','Admin Panel','Catatan internal untuk maintenance admin.']];
+function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function set(v){localStorage.setItem('kamarMaintenanceSettings',JSON.stringify(v));}
+function render(){var data=get();var wrap=document.getElementById('maintenanceList');if(!wrap)return;wrap.innerHTML=items.map(function(it){var on=!!(data[it[0]]&&data[it[0]].enabled);return '<label class="toggle-row"><span>'+it[1]+'<small>'+it[2]+'</small></span><input type="checkbox" data-maint="'+it[0]+'" '+(on?'checked':'')+'></label>';}).join('');wrap.querySelectorAll('[data-maint]').forEach(function(inp){inp.onchange=function(){var d=get();var key=inp.getAttribute('data-maint');d[key]=d[key]||{};d[key].enabled=inp.checked;d[key].message=(d[key].message||'Maintenance sedang berlangsung. Silakan cek kembali nanti.');set(d);if(window.toast)toast((inp.checked?'Maintenance ON: ':'Maintenance OFF: ')+key);};});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();})();</script><script id="kamar-step24CO-admin-stable-utils">
 
 (function(){
-function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function esc(x){return String(x==null?'':x).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\\':'\\','\"':'&quot;'}[c]||c;});}
-function norm(x){return String(x||'').trim().toLowerCase();}
-function toast2(msg){if(window.toast){window.toast(msg);return;} try{alert(msg)}catch(e){}}
-function members(){return getJSON('kamarRegisteredMembers',[]);}
-function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
-function idOf(m){return String((m&&m.memberId)||(m&&m.email)||'');}
-function isActive(m){return !!(m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|member website: aktif|active/i.test(m.status||'')));}
-function isPending(m){return !!(m && !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending|belum aktif/i.test(m.status||'')));}
-function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>'; if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>'; if(m&&m.statusKey==='suspended')return '<span class="status-pill off">Suspended</span>'; return '<span class="status-pill off">Belum Aktif</span>';}
-function findMember(id){var ms=members();var target=String(id||'').toLowerCase();return [ms,ms.find(function(m){return String(m.memberId||'').toLowerCase()===target || String(m.email||'').toLowerCase()===target;})];}
-function activateMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.accountActive=true; m.statusKey='active'; m.status='Member Website: Aktif Gratis'; m.activatedAt=m.activatedAt||new Date().toISOString(); m.updatedAt=new Date().toISOString(); saveMembers(ms); try{var sess=getJSON('kamarMemberSession',null); if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email||'').toLowerCase()===String(m.email||'').toLowerCase())){Object.assign(sess,{accountActive:true,statusKey:'active',status:'Member Website: Aktif Gratis',fullName:m.fullName||sess.fullName,referralCode:m.referralCode||sess.referralCode||'',lastActivity:Date.now()}); setJSON('kamarMemberSession',sess);}}catch(e){} toast2('Member berhasil diaktifkan gratis.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-function suspendMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m)return false; m.accountActive=false; m.statusKey='suspended'; m.status='Suspended'; m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2('Member disuspend.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-var facilities=['Kamar Edukasi','Kamar Signal','Kamar Private','Kamar Indikator','Kamar Robot'];
-function toggleFacility(id,fac,on,duration,note){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.facilities=Array.isArray(m.facilities)?m.facilities:[]; m.facilityAccess=m.facilityAccess||{}; if(on){if(m.facilities.indexOf(fac)<0)m.facilities.push(fac); m.facilityAccess[fac]={active:true,duration:duration||'30',note:note||'',activatedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};}else{m.facilities=m.facilities.filter(function(x){return x!==fac;}); m.facilityAccess[fac]=Object.assign({},m.facilityAccess[fac]||{},{active:false,updatedAt:new Date().toISOString()});} m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+fac); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-window.KamarAdminLocal={getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,saveMembers:saveMembers,idOf:idOf,isActive:isActive,isPending:isPending,labelStatus:labelStatus,findMember:findMember,activateMember:activateMember,suspendMember:suspendMember,facilities:facilities,toggleFacility:toggleFacility};
-document.addEventListener('click',function(e){var t=e.target.closest('[data-href]'); if(t && !e.target.closest('button,a,input,select,textarea')){location.href=t.getAttribute('data-href');}});
+  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function esc(x){return String(x==null?'':x).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\\':'\\','\"':'&quot;'}[c]||c;});}
+  function norm(x){return String(x||'').trim().toLowerCase();}
+  function toast2(msg){if(window.toast){window.toast(msg);return;} try{alert(msg)}catch(e){}}
+  function members(){return getJSON('kamarRegisteredMembers',[]);}
+  function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
+  function idOf(m){return String((m&&m.memberId)||(m&&m.email)||'');}
+  function isActive(m){return !!(m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|member website: aktif|active/i.test(m.status||'')));}
+  function isPending(m){return !!(m && !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending|belum aktif/i.test(m.status||'')));}
+  function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>'; if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>'; if(m&&m.statusKey==='suspended')return '<span class="status-pill off">Suspended</span>'; return '<span class="status-pill off">Belum Aktif</span>';}
+  function findMember(id){var ms=members();var target=String(id||'').toLowerCase();return [ms,ms.find(function(m){return String(m.memberId||'').toLowerCase()===target || String(m.email||'').toLowerCase()===target;})];}
+  function activateMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.accountActive=true; m.statusKey='active'; m.status='Member Website: Aktif Gratis'; m.activatedAt=m.activatedAt||new Date().toISOString(); m.updatedAt=new Date().toISOString(); saveMembers(ms); try{var sess=getJSON('kamarMemberSession',null); if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email||'').toLowerCase()===String(m.email||'').toLowerCase())){Object.assign(sess,{accountActive:true,statusKey:'active',status:'Member Website: Aktif Gratis',fullName:m.fullName||sess.fullName,referralCode:m.referralCode||sess.referralCode||'',lastActivity:Date.now()}); setJSON('kamarMemberSession',sess);}}catch(e){} toast2('Member berhasil diaktifkan gratis.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
+  function suspendMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m)return false; m.accountActive=false; m.statusKey='suspended'; m.status='Suspended'; m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2('Member disuspend.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
+  var facilities=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
+  function toggleFacility(id,fac,on,duration,note){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.facilities=Array.isArray(m.facilities)?m.facilities:[]; m.facilityAccess=m.facilityAccess||{}; if(on){if(m.facilities.indexOf(fac)<0)m.facilities.push(fac); m.facilityAccess[fac]={active:true,duration:duration||'30',note:note||'',activatedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};}else{m.facilities=m.facilities.filter(function(x){return x!==fac;}); m.facilityAccess[fac]=Object.assign({},m.facilityAccess[fac]||{},{active:false,updatedAt:new Date().toISOString()});} m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+fac); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
+  window.KamarAdminLocal={getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,saveMembers:saveMembers,idOf:idOf,isActive:isActive,isPending:isPending,labelStatus:labelStatus,findMember:findMember,activateMember:activateMember,suspendMember:suspendMember,facilities:facilities,toggleFacility:toggleFacility};
+  document.addEventListener('click',function(e){var t=e.target.closest('[data-href]'); if(t && !e.target.closest('button,a,input,select,textarea')){location.href=t.getAttribute('data-href');}});
 })();
 
-</script>
-<script id="kamar-step24CP-maintenance-supabase">
-(function(){
-var items=[
-  ['home','Halaman Utama','Tampilkan pesan maintenance di halaman utama (publik).'],
-  ['member_dashboard','Dashboard Member','Tampilkan pesan maintenance di dashboard member.'],
-  ['affiliate_dashboard','Dashboard Affiliate','Tampilkan pesan maintenance di dashboard affiliator.'],
-  ['register_member','Pendaftaran Member','Tampilkan pesan maintenance di halaman pendaftaran member.'],
-  ['register_affiliate','Pendaftaran Affiliate','Tampilkan pesan maintenance di halaman pendaftaran affiliate.'],
-  ['kamar_edukasi','Kamar Edukasi','Tampilkan pesan maintenance pada fasilitas Kamar Edukasi.'],
-  ['kamar_study','Kamar Signal','Tampilkan pesan maintenance pada fasilitas Kamar Signal.'],
-  ['kamar_private','Kamar Private','Tampilkan pesan maintenance pada fasilitas Kamar Private.'],
-  ['kamar_indikator','Kamar Indikator','Tampilkan pesan maintenance pada fasilitas Kamar Indikator.'],
-  ['kamar_robot','Kamar Robot','Tampilkan pesan maintenance pada fasilitas Kamar Robot.'],
-  ['payment','Pembayaran / Aktivasi','Tampilkan pesan maintenance di halaman bayar/aktivasi fasilitas.'],
-  ['admin','Admin Panel','Catatan internal maintenance admin (tidak tampil ke member).']
-];
-var rowsByKey = {};
-async function ready(){
-  try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
-  try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
-  return window.kamarSupabaseClient || null;
-}
-function render(){
-  var wrap=document.getElementById('maintenanceList'); if(!wrap) return;
-  wrap.innerHTML = items.map(function(it){
-    var row = rowsByKey[it[0]];
-    var on = !!(row && row.is_active);
-    return '<label class="toggle-row"><span><strong>'+it[1]+'</strong><small>'+it[2]+'</small></span><input type="checkbox" data-maint="'+it[0]+'" '+(on?'checked':'')+'></label>';
-  }).join('');
-  wrap.querySelectorAll('[data-maint]').forEach(function(inp){
-    inp.onchange = async function(){
-      var key = inp.getAttribute('data-maint');
-      var checked = inp.checked;
-      var itemDef = items.filter(function(i){return i[0]===key})[0];
-      inp.disabled = true;
-      try{
-        var c = await ready();
-        if(!c) throw new Error('no client');
-        var existing = rowsByKey[key];
-        var payload = { maintenance_key:key, title: itemDef[1], is_active: checked, updated_at: new Date().toISOString() };
-        if(!existing) payload.message = 'Fasilitas ini sedang dalam maintenance. Silakan cek kembali nanti.';
-        var res = await c.from('maintenance_settings').upsert(payload, {onConflict:'maintenance_key'}).select();
-        if(res.error) throw res.error;
-        if(res.data && res.data[0]) rowsByKey[key] = res.data[0];
-        if(window.toast) toast((checked?'Maintenance ON: ':'Maintenance OFF: ')+itemDef[1]);
-      }catch(e){
-        inp.checked = !checked;
-        if(window.toast) toast('Gagal menyimpan, coba lagi.');
-      }
-      inp.disabled = false;
-    };
-  });
-}
-async function load(){
-  var wrap=document.getElementById('maintenanceList');
-  if(wrap) wrap.innerHTML = '<div class="admin-empty">Memuat data maintenance...</div>';
-  try{
-    var c = await ready();
-    if(!c) throw new Error('no client');
-    var res = await c.from('maintenance_settings').select('*');
-    if(res.error) throw res.error;
-    rowsByKey = {};
-    (res.data||[]).forEach(function(r){ rowsByKey[r.maintenance_key] = r; });
-  }catch(e){}
-  render();
-}
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', load); else load();
-})();
+</script><script id="kamar-step24CO-maintenance-toggles">
+
+(function(){var items=[['home','Halaman Utama','Tampilkan maintenance di halaman utama publik.'],['member_dashboard','Dashboard Member','Tampilkan maintenance di dashboard member.'],['affiliate_dashboard','Dashboard Affiliate','Tampilkan maintenance di dashboard affiliator.'],['register_member','Pendaftaran Member','Tampilkan maintenance di halaman pendaftaran member.'],['register_affiliate','Pendaftaran Affiliate','Tampilkan maintenance di halaman pendaftaran affiliate.'],['kamar_edukasi','Kamar Edukasi','Tampilkan maintenance pada fasilitas Kamar Edukasi.'],['kamar_study','Kamar Study','Tampilkan maintenance pada fasilitas Kamar Study.'],['kamar_private','Kamar Private','Tampilkan maintenance pada fasilitas Kamar Private.'],['kamar_indikator','Kamar Indikator','Tampilkan maintenance pada fasilitas Kamar Indikator.'],['kamar_robot','Kamar Robot','Tampilkan maintenance pada fasilitas Kamar Robot.'],['payment','Pembayaran / Aktivasi','Tampilkan maintenance di halaman bayar/aktivasi fasilitas.'],['admin','Admin Panel','Catatan internal maintenance admin.']];function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function set(v){localStorage.setItem('kamarMaintenanceSettings',JSON.stringify(v));}function render(){var data=get(),wrap=document.getElementById('maintenanceList');if(!wrap)return;wrap.innerHTML=items.map(function(it){var on=!!(data[it[0]]&&data[it[0]].enabled);return '<label class="toggle-row"><span><strong>'+it[1]+'</strong><small>'+it[2]+'</small></span><input type="checkbox" data-maint="'+it[0]+'" '+(on?'checked':'')+'></label>';}).join('');wrap.querySelectorAll('[data-maint]').forEach(function(inp){inp.onchange=function(){var d=get();var key=inp.getAttribute('data-maint');d[key]=d[key]||{};d[key].enabled=inp.checked;d[key].message=d[key].message||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';set(d);if(window.toast)toast((inp.checked?'Maintenance ON: ':'Maintenance OFF: ')+key);};});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();})();
+
 </script>
 <script id="kamar-global-header-script">
 (function(){
-function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-function shouldShowHeader(){
-var p=pageName();
-if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-if(p==='affiliate-dashboard.html') return true;
-return false;
-}
-function clearSessionAndLogout(e){
-try{
-['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-}catch(err){}
-}
-function buildHeader(){
-if(!shouldShowHeader()) return;
-document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-var header=document.createElement('header');
-header.className='site-header kamar-global-header';
-header.innerHTML=''+
-'<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-'<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-'<span>Kamar Kajian Market</span>'+
-'</a>'+
-'<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-'<div class="kamar-global-actions">'+
-'<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-'<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
-'</div>';
-document.body.insertBefore(header, document.body.firstChild);
-var out=header.querySelector('[data-kamar-logout]');
-if(out) out.addEventListener('click', clearSessionAndLogout);
-}
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
 <script src="assets/js/kamar-premium-v29.js?v=30"></script>

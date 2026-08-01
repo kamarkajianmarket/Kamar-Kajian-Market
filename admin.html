@@ -17,28 +17,27 @@
 <header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a></div></header>
 <main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
 <div class="admin-menu-section">Utama</div><a class="active" href="admin.html?v=24dh">Dashboard Admin</a>
-<div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dh">Data Member</a><a href="admin-internal.html?v=24dh">Data Internal</a><a href="admin-activation.html?v=24dh">Aktivasi Akun & Fasilitas</a>
+<div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dh">Data Member</a><a href="admin-internal.html?v=24dh">Data Internal</a><a href="admin-activation.html?v=24dh">Aktivasi Akun & Fasilitas</a><a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<a href="admin-affiliate-overview.html">Data Affiliate</a>
+<a href="admin-affiliate-list.html">Daftar Affiliator</a>
+<a href="admin-affiliate-reward.html">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html">Banner Pengumuman</a><a href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten & Materi</a><a href="admin-tools.html">File Tools</a>
 <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html">Maintenance Fasilitas</a><a href="admin-page-control.html">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html">Kontrol Dashboard Member</a><a href="admin-payment.html">Payment Gateway</a><a href="admin-links.html">Pengaturan Link</a><a href="admin-settings.html">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div><a data-kamar-logout href="index.html">Logout</a>
 </aside><section class="split-main">
 <section class="split-card hero"><div><span class="eyebrow">Dashboard Admin</span><h1>Kontrol Utama Kamar</h1><p>Pusat ringkasan member, akun internal, aktivasi akun, affiliate, pembayaran, konten, dan pengaturan website Kamar Kajian Market.</p><div class="hero-actions"><a class="btn" href="admin-members.html?v=24dh">Buka Data Member</a><a class="btn secondary" href="admin-activation.html?v=24dh">Aktivasi Akun</a></div></div><div class="status-line" id="adminConnectionStatus"><span class="chip warn">Memuat data...</span></div></section>
-<section class="split-card"><span class="mini-label">Notifikasi & Tindakan Admin</span><div class="todo-list" id="adminTodoList"><div class="empty">Memuat notifikasi...</div></div></section>
 <section class="split-card"><span class="mini-label">Ringkasan Admin</span><div class="grid-4" id="adminSummaryCards">
 <a class="stat-card" href="admin-members.html?v=24dh"><span>Total Member</span><strong id="totalMember">-</strong><small>Akun member real, tidak termasuk akun admin/internal.</small><em>Lihat Detail</em></a>
 <a class="stat-card" href="admin-internal.html?v=24dh"><span>Akun Internal</span><strong id="internalAccount">-</strong><small>Akun admin/internal dipisahkan dari statistik member.</small><em>Lihat Internal</em></a>
 <a class="stat-card" href="admin-members.html?filter=active&v=24dh"><span>Member Aktif</span><strong id="activeMember">-</strong><small>Akun gratis yang sudah aktif/confirmed.</small><em>Lihat Detail</em></a>
 <a class="stat-card" href="admin-activation.html?v=24dh"><span>Pending Aktivasi</span><strong id="pendingMember">-</strong><small>Member yang masih perlu aktivasi akun.</small><em>Aktivasi</em></a>
-<a class="stat-card" href="admin-affiliate-v2.html?view=list&v=24dx"><span>Total Affiliate</span><strong id="totalAffiliate">-</strong><small>Jumlah affiliator yang sudah terdaftar.</small><em>Lihat Detail</em></a>
+<a class="stat-card" href="admin-affiliate-list.html"><span>Total Affiliate</span><strong id="totalAffiliate">-</strong><small>Affiliator yang terdata di browser/Supabase.</small><em>Lihat Detail</em></a>
 </div></section>
 <section class="split-card"><span class="mini-label">Menu Admin Kamar</span><div class="admin-dashboard-grid">
 <a class="admin-click-card" href="admin-members.html?v=24dh"><h3>Data Member</h3><p>Lihat member, status akun, referral, dan fasilitas aktif.</p></a>
 <a class="admin-click-card" href="admin-activation.html?v=24dh"><h3>Aktivasi Akun & Fasilitas</h3><p>Setujui member gratis dan kelola akses fasilitas.</p></a>
-<a class="admin-click-card" href="admin-affiliate-v2.html?view=overview&v=24dx"><h3>Data Affiliate</h3><p>Cek affiliator, kode referral, rekening, dan referral mereka.</p></a>
+<a class="admin-click-card" href="admin-affiliate-overview.html"><h3>Data Affiliate</h3><p>Cek affiliator, kode referral, rekening, dan referral mereka.</p></a>
 <a class="admin-click-card" href="admin-payment.html"><h3>Payment Gateway</h3><p>Kelola link pembayaran dan validasi payment.</p></a>
 <a class="admin-click-card" href="admin-banner.html"><h3>Banner Pengumuman</h3><p>Atur banner, pengumuman, dan pesan website.</p></a>
 <a class="admin-click-card" href="admin-video.html"><h3>Konten Video</h3><p>Kelola video edukasi dan konten website.</p></a>
@@ -49,9 +48,11 @@
 <a class="admin-click-card" href="admin-dashboard-control.html"><h3>Kontrol Dashboard Member</h3><p>Atur tampilan dan akses dashboard member.</p></a>
 <a class="admin-click-card" href="admin-links.html"><h3>Pengaturan Link</h3><p>Kelola link Telegram, admin, payment, dan CTA.</p></a>
 <a class="admin-click-card" href="admin-settings.html"><h3>Pengaturan Umum</h3><p>Kelola konfigurasi umum website dan admin.</p></a>
+<a class="admin-click-card" href="admin-data-check.html?v=24cu"><h3>Cek Data Admin</h3><p>Diagnosis sumber data Supabase/localStorage.</p></a>
 </div></section>
+<section class="split-card"><span class="mini-label">To Do Admin</span><div class="todo-list" id="adminTodoList"><div class="empty">Memuat to do...</div></div></section>
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-data-online-25e.js?v=30G"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script>
 <script>
 (function(){
 'use strict';
@@ -62,25 +63,8 @@ function norm(v){return String(v||'').toLowerCase().trim()}
 function getJSON(k,d){try{var raw=localStorage.getItem(k);return raw?JSON.parse(raw):d}catch(e){return d}}
 function getConfig(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
 function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
-async function initClient(){
-  // FIXED (2026-07-30): this used to only check window.kamarSupabaseClient
-  // synchronously, so on a slow/fresh page load it ran before
-  // kamar-supabase.js's async ready() had finished, permanently showing
-  // "Tidak Terbaca" even though the client became available a
-  // moment later. Now it awaits the same readiness signal every other
-  // admin script already relies on before giving up.
-  if(state.client)return state.client;
-  try{
-    if(window.KamarSupabase&&window.KamarSupabase.ready){
-      var rc=await window.KamarSupabase.ready();
-      if(rc){state.client=rc;return rc}
-    }
-  }catch(e){}
-  var ex=existingClient();if(ex){state.client=ex;return ex}
-  var cfg=getConfig();if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){state.client=window.supabase.createClient(cfg.url,cfg.key);return state.client}
-  return null
-}
-async function query(table){var c=await initClient();if(!c)throw new Error('Data belum bisa dibaca');var res=await c.from(table).select('*').limit(1000);if(res.error)throw res.error;return res.data||[]}
+function initClient(){if(state.client)return state.client;var ex=existingClient();if(ex){state.client=ex;return ex}var cfg=getConfig();if(window.supabase&&window.supabase.createClient&&cfg.url&&cfg.key){state.client=window.supabase.createClient(cfg.url,cfg.key);return state.client}return null}
+async function query(table){var c=initClient();if(!c)throw new Error('Supabase client tidak terbaca');var res=await c.from(table).select('*').limit(1000);if(res.error)throw res.error;return res.data||[]}
 function pick(o,keys){if(!o)return '';for(var i=0;i<keys.length;i++){var k=keys[i];if(o[k]!=null&&String(o[k]).trim()!=='')return o[k]}return ''}
 function emailOf(o){return String(pick(o,['email','member_email','user_email'])||'').trim()}
 function nameOf(o){return String(pick(o,['full_name','fullName','name','display_name','member_name','username'])||emailOf(o)||'Member Kamar').trim()}
@@ -100,17 +84,10 @@ function internalAccounts(){return state.members.filter(function(m){return isInt
 function label(o){if(isActive(o))return '<span class="chip ok">Active</span>';if(isPending(o))return '<span class="chip warn">Pending</span>';if(isSuspended(o))return '<span class="chip bad">Suspended</span>';return '<span class="chip">Belum Aktif</span>'}
 function mergeMembers(rows1,rows2){var map={};function add(r){var key=norm(emailOf(r)||idOf(r)||pick(r,['user_id','profile_id','id']));if(!key)return;if(!map[key])map[key]=Object.assign({},r);else Object.assign(map[key],r)};(rows1||[]).forEach(add);(rows2||[]).forEach(add);return Object.keys(map).map(function(k){var m=map[k];m._id=idOf(m)||emailOf(m)||k;return m})}
 function setText(id,v){var el=byId(id);if(el)el.textContent=String(v)}
-function renderStatus(){var box=byId('adminConnectionStatus');if(!box)return;var members=regularMembers();var internal=internalAccounts();var html='<span class="chip '+(state.client?'ok':'bad')+'">Sistem: '+(state.client?'Aktif':'Belum Siap')+'</span>';html+='<span class="chip">Member: '+members.length+'</span>';html+='<span class="chip">Internal: '+internal.length+'</span>';html+='<span class="chip">Payment: '+state.payments.length+'</span>';if(state.errors.length)html+='<span class="chip bad">Data belum lengkap termuat</span>';box.innerHTML=html}
+function renderStatus(){var box=byId('adminConnectionStatus');if(!box)return;var members=regularMembers();var internal=internalAccounts();var html='<span class="chip '+(state.client?'ok':'bad')+'">Supabase: '+(state.client?'Terhubung':'Tidak Terbaca')+'</span>';html+='<span class="chip">Member: '+members.length+'</span>';html+='<span class="chip">Internal: '+internal.length+'</span>';html+='<span class="chip">Payment: '+state.payments.length+'</span>';if(state.errors.length)html+='<span class="chip bad">Error: '+esc(state.errors[0])+'</span>';box.innerHTML=html}
 function renderSummary(){var members=regularMembers();var internal=internalAccounts();var active=members.filter(isActive).length;var pending=members.filter(isPending).length;setText('totalMember',members.length);setText('internalAccount',internal.length);setText('activeMember',active);setText('pendingMember',pending);setText('totalAffiliate',state.affiliates.length)}
 function renderTodo(){var el=byId('adminTodoList');if(!el)return;var pending=regularMembers().filter(isPending);var h='';if(!pending.length){h+='<div class="empty">Tidak ada member pending. Aktivasi akun gratis sudah bersih.</div>'}else{pending.forEach(function(m){h+='<div class="todo-row"><div><strong>Aktivasi member gratis</strong><small>'+esc(nameOf(m))+'<br>'+esc(m._id||idOf(m)||emailOf(m))+'</small></div><div>'+esc(emailOf(m)||'-')+'</div><div>'+label(m)+'</div><div><a class="btn" href="admin-activation.html?v=24dh">Aktivasi</a></div></div>'})}el.innerHTML=h}
-async function load(){state.errors=[];state.client=await initClient();try{var view=await query('admin_member_overview');var prof=await query('member_profiles');state.members=mergeMembers(view,prof)}catch(e){state.errors.push('Member: '+(e.message||String(e)));state.members=[]}try{state.payments=await query('payments')}catch(e){state.payments=[]}try{state.affiliates=await query('affiliates')}catch(e){state.affiliates=getJSON('kamarAffiliateList',[])}renderStatus();renderSummary();
-/* NEW (2026-07-30): #adminTodoList is now rendered by kamar-admin-online-29f.js's
-   renderActionCenter(), which reads the real admin_todos queue (registrations,
-   payments, profile changes, etc.) and gives each item a one-click action
-   button, instead of this file's old member-status-only renderTodo(). Left the
-   renderTodo() function above defined but unused, in case it's ever needed as
-   a fallback. */
-}
+async function load(){state.errors=[];state.client=initClient();try{var view=await query('admin_member_overview');var prof=await query('member_profiles');state.members=mergeMembers(view,prof)}catch(e){state.errors.push('Member: '+(e.message||String(e)));state.members=[]}try{state.payments=await query('payments')}catch(e){state.payments=[]}try{state.affiliates=await query('affiliates')}catch(e){state.affiliates=getJSON('kamarAffiliateList',[])}renderStatus();renderSummary();renderTodo()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
 })();
 </script>
@@ -153,6 +130,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=30"></script>
-<script src="assets/js/kamar-admin-online-29f.js?v=29I"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
 </body>
 </html>

@@ -31,11 +31,11 @@ body{background:#070707;color:var(--text)}
 <a class="" href="admin.html">Dashboard Admin</a>
 <div class="admin-menu-section">Member & Akses</div>
 <a class="" href="admin-members.html">Data Member</a>
-<a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
+<a class="" href="admin-activation.html">Aktivasi Akun & Fasilitas</a>
 <div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<a href="admin-affiliate-overview.html">Data Affiliate</a>
+<a href="admin-affiliate-list.html">Daftar Affiliator</a>
+<a href="admin-affiliate-reward.html">Reward / Komisi</a>
 <div class="admin-menu-section">Konten Website</div>
 <a class="" href="admin-banner.html">Banner Pengumuman</a>
 <a class="" href="admin-video.html">Konten Video</a>
@@ -106,7 +106,7 @@ body{background:#070707;color:var(--text)}
   function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>'; if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>'; if(m&&m.statusKey==='suspended')return '<span class="status-pill off">Suspended</span>'; return '<span class="status-pill off">Belum Aktif</span>';}
   function findMember(id){var ms=members();var target=String(id||'').toLowerCase();return [ms,ms.find(function(m){return String(m.memberId||'').toLowerCase()===target || String(m.email||'').toLowerCase()===target;})];}
   function activateMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.accountActive=true; m.statusKey='active'; m.status='Member Website: Aktif Gratis'; m.activatedAt=m.activatedAt||new Date().toISOString(); m.updatedAt=new Date().toISOString(); saveMembers(ms); try{var sess=getJSON('kamarMemberSession',null); if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email||'').toLowerCase()===String(m.email||'').toLowerCase())){Object.assign(sess,{accountActive:true,statusKey:'active',status:'Member Website: Aktif Gratis',fullName:m.fullName||sess.fullName,referralCode:m.referralCode||sess.referralCode||'',lastActivity:Date.now()}); setJSON('kamarMemberSession',sess);}}catch(e){} toast2('Member berhasil diaktifkan gratis.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  function suspendMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m)return false; m.accountActive=false; m.statusKey='suspended'; m.status='Suspended'; m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2('Member disuspend.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
+  function suspendMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m)return false; m.accountActive=false; m.statusKey='suspended'; m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2('Member disuspend.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
   var facilities=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
   function toggleFacility(id,fac,on,duration,note){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.facilities=Array.isArray(m.facilities)?m.facilities:[]; m.facilityAccess=m.facilityAccess||{}; if(on){if(m.facilities.indexOf(fac)<0)m.facilities.push(fac); m.facilityAccess[fac]={active:true,duration:duration||'30',note:note||'',activatedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};}else{m.facilities=m.facilities.filter(function(x){return x!==fac;}); m.facilityAccess[fac]=Object.assign({},m.facilityAccess[fac]||{},{active:false,updatedAt:new Date().toISOString()});} m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+fac); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
   window.KamarAdminLocal={getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,saveMembers:saveMembers,idOf:idOf,isActive:isActive,isPending:isPending,labelStatus:labelStatus,findMember:findMember,activateMember:activateMember,suspendMember:suspendMember,facilities:facilities,toggleFacility:toggleFacility};

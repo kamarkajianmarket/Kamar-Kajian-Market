@@ -1,119 +1,187 @@
 <!DOCTYPE html>
-
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Konten Video — Kamar Kajian Market</title><meta content="Kelola card YouTube untuk halaman utama dan member area." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
-<style>
-:root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
-body{background:#070707;color:var(--text)}
-.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:800}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.split-sidebar a.disabled{opacity:.4;pointer-events:none}.split-main{display:grid;gap:22px}.split-card,.member-page-panel{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card h1,.split-card h2,.split-card h3,.member-page-panel h3{margin:0 0 10px;color:#fff3d8}.split-card p,.member-page-panel p{color:var(--muted);line-height:1.65}.mini-label,.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#d8cda9;font-weight:1000;margin-bottom:8px}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.stat-card,.action-card,.member-card,.todo-item,.setting-card,.video-card{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.025);padding:18px}.stat-card strong{display:block;font-size:34px;color:#fff;margin:6px 0}.stat-card span,.member-card span,.todo-item span{display:block;color:#d8cda9;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:900}.stat-card small,.member-card small,.todo-item small{display:block;color:var(--muted);margin-top:6px}.member-card,.todo-item,.action-card{cursor:pointer;transition:.2s ease}.member-card:hover,.todo-item:hover,.action-card:hover{transform:translateY(-2px);border-color:rgba(244,223,144,.42)}.btn,.admin-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary,.admin-button.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.28)}.btn.mini{padding:8px 12px;font-size:12px}.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8d0bd}input,select,textarea{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.32);color:#f5f0e6;border-radius:16px;padding:13px 15px;outline:none}textarea{min-height:96px;resize:vertical}.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid rgba(238,206,122,.14);border-radius:18px;padding:14px;background:rgba(255,255,255,.02)}.toggle-row span{font-weight:900;color:#f5f0e6}.toggle-row input{appearance:none;-webkit-appearance:none;width:52px;height:28px;border-radius:999px;border:1px solid rgba(238,206,122,.28);background:rgba(255,255,255,.08);position:relative;cursor:pointer;transition:.2s ease;padding:0}.toggle-row input:before{content:"OFF";position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:9px;font-weight:1000;color:#aaa;letter-spacing:.06em}.toggle-row input:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;left:4px;top:3px;background:#8b8170;transition:.2s ease}.toggle-row input:checked{background:linear-gradient(135deg,#f4df90,#c69a39);border-color:rgba(244,223,144,.7)}.toggle-row input:checked:before{content:"ON";left:9px;right:auto;color:#111}.toggle-row input:checked:after{left:26px;background:#111}.toggle-row small{display:block;color:var(--muted);font-weight:600;margin-top:4px}.toggle-group-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 12px}.toggle-group-title h3{margin:0}.toggle-help{font-size:12px;color:#d8cda9;text-transform:uppercase;letter-spacing:.12em;font-weight:1000}.status-pill{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:6px 12px;color:#d8cda9;font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em}.status-pill.on{color:var(--green);background:rgba(28,97,65,.12);border-color:rgba(158,255,202,.25)}.status-pill.warn{color:#ffd582;background:rgba(255,198,86,.08)}.status-pill.off{color:#aaa}.preview-box{border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:18px;margin-top:14px;background:rgba(0,0,0,.18)}.preview-box img{max-width:100%;border-radius:18px;margin-top:12px}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}.facility-locked{opacity:.55}.facility-active{border-color:rgba(244,223,144,.32)}.page-note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1}.expired-note{border:1px solid rgba(255,96,96,.24);background:rgba(255,96,96,.07);border-radius:22px;padding:16px;color:#ffd8d8}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}.site-footer strong{color:#d8cda9}.nav-links.centered-admin{gap:22px}.banner-file-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.admin-detail-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.admin-detail-row .setting-card strong{display:block;color:#fff;margin-top:8px}.hidden{display:none!important}@media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.grid-2,.grid-3,.grid-4,.banner-file-row,.admin-detail-row{grid-template-columns:1fr}.split-shell{padding-top:92px}}
-
-/* === KAMAR V4.1: visible proportional toggle controls === */
-.toggle-row{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;min-height:86px;gap:18px;border:1px solid rgba(238,206,122,.16);border-radius:22px;padding:18px 18px 18px 20px;background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.012));}
-.toggle-row > span:first-child{display:block;min-width:0;line-height:1.25;font-weight:1000;color:#f5f0e6;}
-.toggle-row > span:first-child small{display:block;margin-top:8px;color:var(--muted);font-weight:700;line-height:1.4;text-transform:none;letter-spacing:0;font-size:13px;}
-.toggle-row input[type="checkbox"]{position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;margin:0!important;padding:0!important;pointer-events:none!important;}
-.toggle-switch{position:relative;display:inline-flex;align-items:center;justify-content:flex-start;width:86px;height:42px;flex:0 0 86px;border-radius:999px;border:1px solid rgba(238,206,122,.24);background:rgba(255,255,255,.065);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);transition:.22s ease;cursor:pointer;}
-.toggle-switch::before{content:'OFF';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:11px;letter-spacing:.08em;font-weight:1000;color:#b8b0a0;line-height:1;}
-.toggle-dot{position:absolute;left:5px;top:5px;width:30px;height:30px;border-radius:50%;background:#8d8473;box-shadow:0 8px 18px rgba(0,0,0,.32);transition:.22s ease;}
-.toggle-row input[type="checkbox"]:checked + .toggle-switch{background:linear-gradient(135deg,#f4df90,#c69a39);border-color:rgba(244,223,144,.72);box-shadow:0 0 0 1px rgba(244,223,144,.13),0 10px 34px rgba(212,166,63,.14);}
-.toggle-row input[type="checkbox"]:checked + .toggle-switch::before{content:'ON';left:16px;right:auto;color:#10100d;}
-.toggle-row input[type="checkbox"]:checked + .toggle-switch .toggle-dot{left:49px;background:#111;}
-.toggle-row:hover{border-color:rgba(244,223,144,.38);}
-.toggle-row:has(input[type="checkbox"]:checked){border-color:rgba(158,255,202,.28);background:linear-gradient(135deg,rgba(28,97,65,.12),rgba(255,255,255,.018));}
-@media(max-width:680px){.toggle-row{grid-template-columns:1fr;align-items:flex-start}.toggle-switch{margin-top:4px}}
-
-</style>
-<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Konten Video — Kamar Kajian Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
+  <style>
+    :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;--accent:#ff6b6b;--accent-soft:rgba(255,107,107,.14);--accent-line:rgba(255,107,107,.5);}
+    *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
+    .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
+    .admin-main{display:grid;gap:22px;min-width:0}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px;min-width:0;overflow:hidden}.hero{padding:34px}.hero-inner{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{display:flex;align-items:center;gap:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:900;margin-bottom:12px}.eyebrow:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.module-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;margin-bottom:12px}.hero h1{margin:0;font-size:clamp(32px,4vw,52px);letter-spacing:-.05em;line-height:.98}.hero p{max-width:850px;margin:14px 0 0;color:var(--muted);font-size:16px;line-height:1.65}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .btn{border:0;border-radius:18px;padding:13px 18px;font-weight:900;background:linear-gradient(135deg,#fff1a9,#d8ae47);color:#14100a;cursor:pointer;transition:.18s ease;white-space:nowrap}.btn:hover{transform:translateY(-1px);filter:saturate(1.04)}.btn.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--gold2)}.btn.danger{border:1px solid rgba(255,155,155,.35);background:rgba(255,90,90,.12);color:#ffd1d1}.btn.good{border:1px solid rgba(159,240,189,.35);background:rgba(36,185,96,.14);color:#d7ffe5}.btn.accent{border:0;background:linear-gradient(135deg,#ffd6d6,var(--accent));color:#2a0f0f}.btn.small{padding:10px 13px;border-radius:15px;font-size:13px}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;filter:none!important}
+    .section-title{margin:0 0 14px;display:flex;align-items:center;gap:14px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:13px;font-weight:900}.section-title:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.muted{color:var(--muted);line-height:1.55}
+    .guide-box{border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:22px;padding:18px 20px;display:grid;gap:8px}.guide-box strong{color:var(--accent);font-size:13px;letter-spacing:.1em;text-transform:uppercase}.guide-box ol{margin:6px 0 0;padding-left:20px;color:var(--text);line-height:1.7}.guide-box li b{color:var(--accent)}.guide-box .warn-line{color:var(--warn);font-weight:800}
+    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:7px;font-weight:900;color:var(--text)}.field.full{grid-column:1/-1}.field-hint{font-weight:600;color:var(--muted);font-size:12.5px;line-height:1.5}.field-count{font-weight:700;color:rgba(247,241,226,.45);font-size:11px;text-align:right}.field-count.over{color:var(--danger)}
+    input,select,textarea{width:100%;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.04);color:var(--text);border-radius:17px;padding:13px 16px;font:inherit;font-weight:800;outline:none}input::placeholder,textarea::placeholder{color:rgba(247,241,226,.4);font-weight:600}textarea{min-height:88px;resize:vertical}select option{background:#151310;color:var(--text)}input:focus,select:focus,textarea:focus{border-color:var(--accent-line)}
+    .preview-box{border:1px dashed var(--accent-line);border-radius:20px;padding:16px;background:rgba(0,0,0,.16);display:grid;gap:10px}.preview-box img{max-width:100%;max-height:220px;object-fit:cover;border-radius:14px;display:block}.preview-box .ph{color:var(--muted);font-size:13px}
+    .form-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}
+    .item-list{display:grid;gap:14px}.item-row{display:grid;grid-template-columns:130px minmax(0,1.3fr) minmax(0,.8fr) minmax(0,.8fr) minmax(0,.6fr) auto;gap:16px;align-items:center;border:1px solid rgba(238,206,122,.13);border-top:3px solid var(--accent-line);border-radius:20px;padding:16px 18px;background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015))}.item-thumb{width:130px;height:74px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;text-align:center}.item-thumb img{width:100%;height:100%;object-fit:cover}
+    .item-row strong{display:block;color:var(--text)}.item-row small{display:block;color:rgba(247,241,226,.6);margin-top:4px;line-height:1.4}.cell-label{display:none;color:var(--accent);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;margin-bottom:6px}
+    .pill{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 11px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:900;line-height:1.1}.pill.ok{color:var(--ok);background:rgba(36,185,96,.1);border-color:rgba(159,240,189,.26)}.pill.off{color:rgba(247,241,226,.6);background:rgba(255,255,255,.035)}.pill.info{color:var(--accent);background:var(--accent-soft);border-color:var(--accent-line)}.pill.warn{color:var(--warn);background:rgba(240,206,124,.12);border-color:rgba(240,206,124,.3)}
+    .row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.empty{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:17px;color:var(--muted);font-weight:800}
+    @media(max-width:1220px){.field-grid{grid-template-columns:1fr}.item-row{grid-template-columns:1fr}.cell-label{display:block}.row-actions{justify-content:flex-start}}
+    @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}}
+  </style>
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 <link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
 <meta name="kamar-step" content="46-luxury-atelier-formation"/>
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
-<div class="admin-menu-section">Utama</div>
-<a class="" href="admin.html">Dashboard Admin</a>
-<div class="admin-menu-section">Member & Akses</div>
-<a class="" href="admin-members.html">Data Member</a>
-<a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
-<div class="admin-menu-section">Affiliate</div>
-<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
-<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
-<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
-<div class="admin-menu-section">Konten Website</div>
-<a class="" href="admin-banner.html">Banner Pengumuman</a>
-<a class="active" href="admin-video.html">Konten Video</a>
-<a class="" href="admin-materials.html">Konten & Materi</a>
-<a class="" href="admin-tools.html">File Tools</a>
-<div class="admin-menu-section">Kontrol Sistem</div>
-<a class="" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
-<a class="" href="admin-maintenance.html">Maintenance Fasilitas</a>
-<a class="" href="admin-page-control.html">Kontrol Halaman Utama</a>
-<a class="" href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
-<a class="" href="admin-payment.html">Payment Gateway</a>
-<a class="" href="admin-links.html">Pengaturan Link</a>
-<a class="" href="admin-settings.html">Pengaturan Umum</a>
-<div class="admin-menu-section">Akun</div>
-<a class="" data-kamar-logout="" href="index.html">Logout</a>
-</aside><section class="split-main"><section class="split-card kamar-title-card"><h1>Konten Video</h1></section><section class="split-card"><div class="page-note"><strong>Memuat Data Supabase</strong><br/>Halaman ini sedang membaca data real.</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand-small">Admin Kamar</div>
+    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
+    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
+    <div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-overview.html">Data Affiliate</a><a href="admin-affiliate-list.html">Daftar Affiliator</a><a href="admin-affiliate-reward.html">Reward / Komisi</a>
+    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html">Banner Pengumuman</a><a class="active" href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten & Materi</a><a href="admin-tools.html">File Tools</a>
+    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
+    <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
+  </aside>
+  <main class="admin-main">
+    <section class="card hero">
+      <div class="hero-inner">
+        <div><span class="eyebrow">Konten Website</span> <span class="module-chip">▶ Video</span><h1>Konten Video</h1><p>Kelola video edukasi/promosi: link YouTube, kategori, target tampilan, dan hak akses tonton.</p></div>
+        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Panduan Singkat</h2>
+      <div class="guide-box">
+        <strong>Baca dulu sebelum mengisi</strong>
+        <ol>
+          <li><b>Link YouTube</b> harus link video YouTube yang bisa diakses publik atau unlisted (bukan private), contoh: <code>https://www.youtube.com/watch?v=XXXXXXXXXXX</code> atau <code>https://youtu.be/XXXXXXXXXXX</code>. Sistem otomatis mengambil ID video untuk membuat thumbnail pratinjau di bawah form.</li>
+          <li><b>Kategori</b> bebas diisi untuk mengelompokkan video (misal "Kamar Study", "Tutorial Robot"), boleh dikosongkan.</li>
+          <li><b>Tampil di</b> menentukan halaman mana yang menampilkan daftar video ini. <b>Akses Diperlukan</b> menentukan siapa yang boleh menonton (misal hanya member fasilitas tertentu) — dua hal ini berbeda: satu soal lokasi tampil, satu soal hak akses tonton.</li>
+          <li><b>Status Publikasi</b>: Draft = belum tayang sama sekali (masih disiapkan), Terbit = tayang sesuai Tampil di & Akses, Disembunyikan = pernah tayang lalu disembunyikan tanpa dihapus datanya. <b>Status Aktif</b> adalah saklar utama on/off.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="card" id="formCard">
+      <h2 class="section-title" id="formTitle">Tambah Video Baru</h2>
+      <form id="itemForm">
+        <input type="hidden" id="itemId" value="">
+        <div class="field-grid">
+          <label class="field full">Judul Video
+            <input id="fTitle" maxlength="80" placeholder="Contoh: Cara Membaca Candlestick untuk Pemula" required>
+            <div class="field-hint">Judul video. Maksimal 80 karakter.</div>
+            <div class="field-count" id="countTitle">0 / 80</div>
+          </label>
+          <label class="field full">Link YouTube
+            <input id="fYoutube" placeholder="https://www.youtube.com/watch?v=..." required>
+            <div class="field-hint">Link video YouTube publik/unlisted. Jangan private.</div>
+          </label>
+          <div class="field full">
+            <div class="preview-box" id="previewBox"><span class="ph">Belum ada link. Isi Link YouTube untuk melihat pratinjau thumbnail di sini.</span></div>
+          </div>
+          <label class="field">Kategori (opsional)
+            <input id="fCategory" maxlength="40" placeholder="Contoh: Kamar Study">
+            <div class="field-hint">Untuk mengelompokkan video di daftar.</div>
+          </label>
+          <label class="field">Urutan Tampil
+            <input id="fSort" type="number" value="0" min="0">
+            <div class="field-hint">Angka lebih kecil tampil lebih dulu.</div>
+          </label>
+          <label class="field full">Deskripsi (opsional)
+            <textarea id="fDescription" maxlength="300" placeholder="Ringkasan singkat isi video."></textarea>
+            <div class="field-hint">Maksimal 300 karakter.</div>
+            <div class="field-count" id="countDesc">0 / 300</div>
+          </label>
+          <label class="field">Tampil di
+            <select id="fArea">
+              <option value="public">Halaman Utama (Publik)</option>
+              <option value="member">Dashboard Member</option>
+              <option value="admin">Dashboard Admin</option>
+              <option value="affiliate">Dashboard Affiliate</option>
+              <option value="both">Publik + Member</option>
+              <option value="global">Semua Halaman</option>
+            </select>
+            <div class="field-hint">Lokasi video ini akan ditampilkan.</div>
+          </label>
+          <label class="field">Akses Diperlukan
+            <select id="fAccess">
+              <option value="public">Publik (Gratis, semua bisa)</option>
+              <option value="member">Member (Login saja)</option>
+              <option value="kamar_study">Kamar Study</option>
+              <option value="materi_edukasi">Materi Edukasi</option>
+              <option value="kamar_private">Kamar Private</option>
+              <option value="kamar_indikator">Kamar Indikator</option>
+              <option value="kamar_robot">Kamar Robot</option>
+              <option value="all_paid">Semua Fasilitas Berbayar</option>
+            </select>
+            <div class="field-hint">Siapa yang boleh menonton video ini.</div>
+          </label>
+          <label class="field">Status Publikasi
+            <select id="fStatus">
+              <option value="draft">Draft (belum tayang)</option>
+              <option value="published">Terbit (tayang)</option>
+              <option value="hidden">Disembunyikan</option>
+            </select>
+            <div class="field-hint">Kontrol tahap publikasi konten.</div>
+          </label>
+          <label class="field">Status Aktif
+            <select id="fActive">
+              <option value="true">Aktif</option>
+              <option value="false">Nonaktif</option>
+            </select>
+            <div class="field-hint">Nonaktif = video mati total, tidak tampil di manapun.</div>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button class="btn secondary" id="cancelEditBtn" type="button" style="display:none">Batal Edit</button>
+          <button class="btn accent" id="saveBtn" type="submit">Simpan Video</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Daftar Video</h2>
+      <p class="muted">Semua video yang pernah dibuat, termasuk yang draft, disembunyikan, atau nonaktif.</p>
+      <div class="item-list" id="itemList"></div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="confirm" id="confirmModal"><div class="confirm-box"><h3 id="confirmTitle">Konfirmasi</h3><p id="confirmText"></p><div class="confirm-actions"><button class="btn secondary" id="cancelConfirm" type="button">Batal</button><button class="btn danger" id="confirmAction" type="button">Ya, Lanjutkan</button></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
 <script>
 (function(){
-  document.querySelectorAll('.toggle-row input[type="checkbox"]').forEach(function(input){
-    if(!input.nextElementSibling || !input.nextElementSibling.classList.contains('toggle-switch')){
-      var sw=document.createElement('span');
-      sw.className='toggle-switch';
-      sw.setAttribute('aria-hidden','true');
-      var dot=document.createElement('span');
-      dot.className='toggle-dot';
-      sw.appendChild(dot);
-      input.insertAdjacentElement('afterend', sw);
-    }
-  });
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
-<script id="kamar-step24CM-admin-functional-logic">
-(function(){
-  var facilities=[['Kamar Edukasi','Kamar Edukasi'],['Kamar Study','Kamar Study'],['Kamar Private','Kamar Private'],['Kamar Indikator','Kamar Indikator'],['Kamar Robot','Kamar Robot']];
-  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  function esc(x){return String(x||'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
-  function norm(x){return String(x||'').trim().toLowerCase();}
-  function toast2(msg){if(window.toast){window.toast(msg);return;} alert(msg);}
-  function members(){return getJSON('kamarRegisteredMembers',[]);}
-  function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
-  function isActive(m){return m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|active/i.test(m.status||''));}
-  function isPending(m){return !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending/i.test(m.status||''));}
-  function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>';if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>';return '<span class="status-pill off">Belum Aktif</span>';}
-  function findMember(id){var ms=members();return [ms,ms.find(function(m){return String(m.memberId||m.email)===String(id);})];}
-  function activateMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=true;m.statusKey='active';m.status='Member Website: Aktif Gratis';m.activatedAt=new Date().toISOString();m.updatedAt=new Date().toISOString();saveMembers(ms);try{var sess=getJSON('kamarMemberSession',null);if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email).toLowerCase()===String(m.email||'').toLowerCase())){sess.accountActive=true;sess.statusKey='active';sess.status='Member Website: Aktif Gratis';sess.fullName=m.fullName||sess.fullName;sess.referralCode=m.referralCode||sess.referralCode||'';sess.lastActivity=Date.now();setJSON('kamarMemberSession',sess);}}catch(e){}toast2('Member sudah diaktifkan gratis.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-  function suspendMember(id){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.accountActive=false;m.statusKey='suspended';m.status='Suspended';m.updatedAt=new Date().toISOString();saveMembers(ms);toast2('Status member disuspend.');document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-  function toggleFacility(id,fac,on){var pair=findMember(id), ms=pair[0], m=pair[1]; if(!m)return; m.facilities=Array.isArray(m.facilities)?m.facilities:[]; if(on && m.facilities.indexOf(fac)<0)m.facilities.push(fac); if(!on)m.facilities=m.facilities.filter(function(x){return x!==fac;});m.updatedAt=new Date().toISOString();saveMembers(ms);toast2((on?'Aktif: ':'Nonaktif: ')+fac);document.dispatchEvent(new Event('kamarAdminDataChanged'));}
-  window.KamarAdminLocal={facilities:facilities,getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,isActive:isActive,isPending:isPending,labelStatus:labelStatus,activateMember:activateMember,suspendMember:suspendMember,toggleFacility:toggleFacility};
+'use strict';
+var state={items:[],client:null,editId:null,pendingAction:null};
+function el(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
+function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
+function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
+function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
+var AREA_LABEL={public:'Halaman Utama',member:'Dashboard Member',admin:'Dashboard Admin',affiliate:'Dashboard Affiliate',both:'Publik + Member',global:'Semua Halaman'};
+var ACCESS_LABEL={public:'Publik',member:'Member',kamar_study:'Kamar Study',materi_edukasi:'Materi Edukasi',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',all_paid:'Semua Berbayar'};
+var STATUS_LABEL={draft:'Draft',published:'Terbit',hidden:'Disembunyikan'};
+function fmtDate(v){if(!v)return '-';try{return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return v}}
+function extractYoutubeId(url){if(!url)return '';url=String(url).trim();var m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);if(m)return m[1];m=url.match(/[?&]v=([A-Za-z0-9_-]{11})/);if(m)return m[1];return ''}
+function statusPill(it){if(!it.is_active)return '<span class="pill off">Nonaktif</span>';if(it.publish_status==='draft')return '<span class="pill warn">Draft</span>';if(it.publish_status==='hidden')return '<span class="pill off">Disembunyikan</span>';return '<span class="pill ok">Tayang</span>'}
+function counters(){[['fTitle','countTitle',80],['fDescription','countDesc',300]].forEach(function(p){var inp=el(p[0]),out=el(p[1]),max=p[2];if(!inp||!out)return;var n=inp.value.length;out.textContent=n+' / '+max;out.classList.toggle('over',n>max)})}
+function updatePreview(){var url=(el('fYoutube').value||'').trim();var id=extractYoutubeId(url);var box=el('previewBox');if(!id){box.innerHTML='<span class="ph">'+(url?'Link belum dikenali sebagai YouTube yang valid.':'Belum ada link. Isi Link YouTube untuk melihat pratinjau thumbnail di sini.')+'</span>';return}box.innerHTML='<img src="https://img.youtube.com/vi/'+esc(id)+'/hqdefault.jpg" alt="Pratinjau thumbnail" onerror="this.parentElement.innerHTML=\'<span class=&quot;ph&quot;>Thumbnail tidak ditemukan, cek kembali link video.</span>\'">'}
+async function load(){el('itemList').innerHTML='<div class="empty">Memuat data video...</div>';var c=client();if(!c){el('itemList').innerHTML='<div class="empty">Supabase client tidak tersedia.</div>';return}try{var res=await c.from('videos').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(res.error)throw res.error;state.items=res.data||[];render()}catch(e){el('itemList').innerHTML='<div class="empty">Gagal memuat data: '+esc(e.message||String(e))+'</div>'}}
+function render(){var arr=state.items;if(!arr.length){el('itemList').innerHTML='<div class="empty">Belum ada video. Isi form di atas untuk membuat video pertama.</div>';return}var h='';arr.forEach(function(it){var vid=it.youtube_video_id||extractYoutubeId(it.youtube_url);var thumb=vid?('<img src="https://img.youtube.com/vi/'+esc(vid)+'/hqdefault.jpg" alt="" onerror="this.parentElement.textContent=\'Tanpa Thumbnail\'">'):'Tanpa Thumbnail';h+='<div class="item-row"><div class="item-thumb">'+thumb+'</div><div><span class="cell-label">Judul</span><strong>'+esc(it.title)+'</strong><small>'+esc(it.category||'-')+'</small></div><div><span class="cell-label">Tampil di</span><span class="pill info">'+esc(AREA_LABEL[it.display_area]||it.display_area)+'</span></div><div><span class="cell-label">Akses</span><small>'+esc(ACCESS_LABEL[it.access_required]||it.access_required)+'</small></div><div><span class="cell-label">Status</span>'+statusPill(it)+'<small>'+esc(STATUS_LABEL[it.publish_status]||it.publish_status)+'</small></div><div class="row-actions"><button class="btn small" data-edit="'+esc(it.id)+'">Edit</button><button class="btn danger small" data-delete="'+esc(it.id)+'">Hapus</button></div></div>'});el('itemList').innerHTML=h;wireRowButtons()}
+function findItem(id){return state.items.find(function(b){return String(b.id)===String(id)})}
+function fillForm(it){el('itemId').value=it.id;el('fTitle').value=it.title||'';el('fYoutube').value=it.youtube_url||'';el('fCategory').value=it.category||'';el('fDescription').value=it.description||'';el('fArea').value=it.display_area||'public';el('fAccess').value=it.access_required||'public';el('fStatus').value=it.publish_status||'draft';el('fSort').value=it.sort_order||0;el('fActive').value=it.is_active?'true':'false';counters();updatePreview();el('formTitle').textContent='Edit Video: '+it.title;el('cancelEditBtn').style.display='inline-flex';state.editId=it.id;el('formCard').scrollIntoView({behavior:'smooth',block:'start'})}
+function resetForm(){el('itemForm').reset();el('itemId').value='';el('fSort').value=0;el('fArea').value='public';el('fAccess').value='public';el('fStatus').value='draft';el('fActive').value='true';counters();updatePreview();el('formTitle').textContent='Tambah Video Baru';el('cancelEditBtn').style.display='none';state.editId=null}
+function payloadFromForm(){var title=(el('fTitle').value||'').trim().slice(0,80);var ytUrl=(el('fYoutube').value||'').trim();var desc=(el('fDescription').value||'').trim().slice(0,300);return {title:title,youtube_url:ytUrl,youtube_video_id:extractYoutubeId(ytUrl)||null,category:(el('fCategory').value||'').trim().slice(0,40)||null,description:desc||null,display_area:el('fArea').value,access_required:el('fAccess').value,publish_status:el('fStatus').value,sort_order:Number(el('fSort').value)||0,is_active:el('fActive').value==='true'}}
+async function saveItem(ev){ev.preventDefault();var c=client();if(!c){toast('Supabase client tidak tersedia.');return}var payload=payloadFromForm();if(!payload.title){toast('Judul video wajib diisi.');return}if(!payload.youtube_url){toast('Link YouTube wajib diisi.');return}try{var res;if(state.editId){res=await c.from('videos').update(payload).eq('id',state.editId).select().maybeSingle()}else{res=await c.from('videos').insert(payload).select().maybeSingle()}if(res.error)throw res.error;toast(state.editId?'Video berhasil diperbarui.':'Video baru berhasil dibuat.');resetForm();await load()}catch(e){toast('Gagal menyimpan: '+(e.message||String(e)))}}
+async function deleteItem(id){var c=client();if(!c){toast('Supabase client tidak tersedia.');return}try{var res=await c.from('videos').delete().eq('id',id);if(res.error)throw res.error;toast('Video dihapus.');if(state.editId===id)resetForm();await load()}catch(e){toast('Gagal menghapus: '+(e.message||String(e)))}}
+function confirmDo(title,text,fn){if(!el('confirmModal')){if(fn)fn();return}el('confirmTitle').textContent=title;el('confirmText').textContent=text;state.pendingAction=fn;el('confirmModal').classList.add('show')}
+function wireRowButtons(){document.querySelectorAll('[data-edit]').forEach(function(b){b.onclick=function(){var it=findItem(b.getAttribute('data-edit'));if(it)fillForm(it)}});document.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=function(){var id=b.getAttribute('data-delete'),it=findItem(id);confirmDo('Hapus Video','Hapus video "'+(it?it.title:'ini')+'"? Tindakan ini tidak bisa dibatalkan.',function(){deleteItem(id)})}})}
+function init(){el('itemForm').addEventListener('submit',saveItem);['fTitle','fDescription'].forEach(function(id){el(id).addEventListener('input',counters)});el('fYoutube').addEventListener('input',updatePreview);el('cancelEditBtn').addEventListener('click',resetForm);el('refreshBtn').addEventListener('click',load);if(el('cancelConfirm'))el('cancelConfirm').onclick=function(){state.pendingAction=null;el('confirmModal').classList.remove('show')};if(el('confirmAction'))el('confirmAction').onclick=function(){var fn=state.pendingAction;state.pendingAction=null;el('confirmModal').classList.remove('show');if(fn)fn()};counters();updatePreview();load()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 
-<script id="kamar-step24CN-admin-click-guard">(function(){document.addEventListener('click',function(e){var c=e.target.closest('[data-href]');if(c){window.location.href=c.getAttribute('data-href');}});})();</script>
-<script id="kamar-step24CO-admin-stable-utils">
-
-(function(){
-  function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
-  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  function esc(x){return String(x==null?'':x).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\\':'\\','\"':'&quot;'}[c]||c;});}
-  function norm(x){return String(x||'').trim().toLowerCase();}
-  function toast2(msg){if(window.toast){window.toast(msg);return;} try{alert(msg)}catch(e){}}
-  function members(){return getJSON('kamarRegisteredMembers',[]);}
-  function saveMembers(v){setJSON('kamarRegisteredMembers',v);}
-  function idOf(m){return String((m&&m.memberId)||(m&&m.email)||'');}
-  function isActive(m){return !!(m && (m.accountActive===true || m.statusKey==='active' || /aktif gratis|member website: aktif|active/i.test(m.status||'')));}
-  function isPending(m){return !!(m && !isActive(m) && (m.accountActive===false || m.statusKey==='pending_activation' || /pending|belum aktif/i.test(m.status||'')));}
-  function labelStatus(m){if(isActive(m))return '<span class="status-pill ok">Aktif Gratis</span>'; if(isPending(m))return '<span class="status-pill warn">Pending Aktivasi</span>'; if(m&&m.statusKey==='suspended')return '<span class="status-pill off">Suspended</span>'; return '<span class="status-pill off">Belum Aktif</span>';}
-  function findMember(id){var ms=members();var target=String(id||'').toLowerCase();return [ms,ms.find(function(m){return String(m.memberId||'').toLowerCase()===target || String(m.email||'').toLowerCase()===target;})];}
-  function activateMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.accountActive=true; m.statusKey='active'; m.status='Member Website: Aktif Gratis'; m.activatedAt=m.activatedAt||new Date().toISOString(); m.updatedAt=new Date().toISOString(); saveMembers(ms); try{var sess=getJSON('kamarMemberSession',null); if(sess&&(String(sess.memberId)===String(m.memberId)||String(sess.email||'').toLowerCase()===String(m.email||'').toLowerCase())){Object.assign(sess,{accountActive:true,statusKey:'active',status:'Member Website: Aktif Gratis',fullName:m.fullName||sess.fullName,referralCode:m.referralCode||sess.referralCode||'',lastActivity:Date.now()}); setJSON('kamarMemberSession',sess);}}catch(e){} toast2('Member berhasil diaktifkan gratis.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  function suspendMember(id){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m)return false; m.accountActive=false; m.statusKey='suspended'; m.status='Suspended'; m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2('Member disuspend.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  var facilities=['Kamar Edukasi','Kamar Study','Kamar Private','Kamar Indikator','Kamar Robot'];
-  function toggleFacility(id,fac,on,duration,note){var pair=findMember(id),ms=pair[0],m=pair[1]; if(!m){toast2('Member tidak ditemukan.');return false;} m.facilities=Array.isArray(m.facilities)?m.facilities:[]; m.facilityAccess=m.facilityAccess||{}; if(on){if(m.facilities.indexOf(fac)<0)m.facilities.push(fac); m.facilityAccess[fac]={active:true,duration:duration||'30',note:note||'',activatedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};}else{m.facilities=m.facilities.filter(function(x){return x!==fac;}); m.facilityAccess[fac]=Object.assign({},m.facilityAccess[fac]||{},{active:false,updatedAt:new Date().toISOString()});} m.updatedAt=new Date().toISOString(); saveMembers(ms); toast2((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+fac); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;}
-  window.KamarAdminLocal={getJSON:getJSON,setJSON:setJSON,esc:esc,norm:norm,members:members,saveMembers:saveMembers,idOf:idOf,isActive:isActive,isPending:isPending,labelStatus:labelStatus,findMember:findMember,activateMember:activateMember,suspendMember:suspendMember,facilities:facilities,toggleFacility:toggleFacility};
-  document.addEventListener('click',function(e){var t=e.target.closest('[data-href]'); if(t && !e.target.closest('button,a,input,select,textarea')){location.href=t.getAttribute('data-href');}});
-})();
-
-</script>
 <script id="kamar-global-header-script">
 (function(){
   function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
@@ -153,4 +221,5 @@ body{background:#070707;color:var(--text)}
 </script>
 <script src="assets/js/kamar-premium-v29.js?v=30"></script>
 <script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
-</body></html>
+</body>
+</html>

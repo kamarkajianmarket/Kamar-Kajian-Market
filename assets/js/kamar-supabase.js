@@ -227,7 +227,7 @@
         return true;
       });
       if(!rows.length) return;
-      var dark = (ctx==='admin');
+      var dark = true;
       var topRows = rows.filter(function(b){return b.display_style!=='floating_card';}).slice(0,3);
       var floatRows = rows.filter(function(b){return b.display_style==='floating_card';}).slice(0,2);
       if(topRows.length){

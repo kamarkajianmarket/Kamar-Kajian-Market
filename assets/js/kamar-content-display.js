@@ -8,6 +8,8 @@ var CTX=(function(){
   var f=file();
   if(f==='dashboard.html') return 'member';
   if(f==='affiliate-dashboard.html') return 'affiliate';
+    if(f==='admin.html'||f.indexOf('admin-')===0) return 'admin';
+    if(f.indexOf('member-')===0) return 'member';
   return 'public';
 })();
 
@@ -32,6 +34,7 @@ async function client(){
 function bannerAreas(){
   if(CTX==='member') return ['member','global','both'];
   if(CTX==='affiliate') return ['affiliate','global','both'];
+    if(CTX==='admin') return ['admin','global','both'];
   return ['public','global','both'];
 }
 
@@ -49,6 +52,7 @@ function memberAccessAllows(accessRequired, access){
   }
 }
 function accessAllowed(accessRequired, access){
+    if(CTX==='admin') return true;
   if(CTX==='public') return accessRequired==='public';
   if(CTX==='member') return memberAccessAllows(accessRequired, access);
   return false;
@@ -63,6 +67,25 @@ async function fetchMemberAccess(c){
   }catch(e){ return {}; }
 }
 
+  function ensureSection(kind){
+      var main=document.querySelector('.split-main')||document.querySelector('.admin-main')||document.querySelector('main#top')||document.querySelector('main');
+      if(!main) return null;
+      var sid=kind==='video'?'kamarVideoSection':'kamarMaterialSection';
+      var gid=kind==='video'?'kamarVideoGrid':'kamarMaterialGrid';
+      var sec=document.getElementById(sid);
+      if(sec) return sec;
+      sec=document.createElement('section');
+      sec.id=sid; sec.hidden=true; sec.className='kamar-auto-content-section';
+      sec.style.cssText='margin-top:22px';
+      var h=document.createElement('h2');
+      h.textContent=kind==='video'?'Video':'Materi & File Tools';
+      var grid=document.createElement('div');
+      grid.id=gid; grid.className='kamar-content-grid';
+      sec.appendChild(h); sec.appendChild(grid);
+      main.appendChild(sec);
+      return sec;
+  }
+
 // NOTE: Banner sudah ditangani oleh sistem bawaan (kamar-supabase.js / #kamarBannersLive...).
 // Modul ini sengaja TIDAK merender banner lagi supaya tidak dobel.
 
@@ -76,7 +99,7 @@ function extractYoutubeId(url,fallbackId){
   return m?m[1]:'';
 }
 async function renderVideos(c, access){
-  var section=document.getElementById('kamarVideoSection');
+    var section=document.getElementById('kamarVideoSection')||ensureSection('video');
   var mount=document.getElementById('kamarVideoGrid');
   if(!section||!mount) return;
   if(CTX==='affiliate') return;
@@ -106,15 +129,16 @@ async function renderVideos(c, access){
 // ---------------- Materials & Tools ----------------
 var FILE_TYPE_LABEL={indicator:'Indikator',robot:'Robot EA',template:'Template',pdf:'PDF',other:'File'};
 async function renderMaterials(c, access){
-  var section=document.getElementById('kamarMaterialSection');
+    var section=document.getElementById('kamarMaterialSection')||ensureSection('material');
   var mount=document.getElementById('kamarMaterialGrid');
   if(!section||!mount) return;
   if(CTX==='affiliate') return;
   try{
-    var matRes=await c.from('materials').select('*').eq('is_active',true).eq('publish_status','published').order('sort_order',{ascending:true});
-    var toolRes=await c.from('tools_files').select('*').eq('is_active',true).eq('publish_status','published').order('sort_order',{ascending:true});
-    var mats=((matRes && !matRes.error)?(matRes.data||[]):[]).filter(function(m){return accessAllowed(m.access_required, access);}).map(function(m){return {kind:'material', title:m.title, description:m.description, category:m.category, url:m.material_url, version:m.version_label};});
-    var tools=((toolRes && !toolRes.error)?(toolRes.data||[]):[]).filter(function(t){return accessAllowed(t.access_required, access);}).map(function(t){return {kind:'tool', title:t.title, description:t.changelog, category:FILE_TYPE_LABEL[t.file_type]||'Tools', url:t.file_url, version:t.version_label};});
+        var areas=bannerAreas();
+      var matRes=await c.from('materials').select('*').eq('is_active',true).eq('publish_status','published').order('sort_order',{ascending:true});
+      var toolRes=await c.from('tools_files').select('*').eq('is_active',true).eq('publish_status','published').order('sort_order',{ascending:true});
+      var mats=((matRes && !matRes.error)?(matRes.data||[]):[]).filter(function(m){return areas.indexOf(m.display_area)>=0 && accessAllowed(m.access_required, access);}).map(function(m){return {kind:'material', title:m.title, description:m.description, category:m.category, url:m.material_url, version:m.version_label};});
+      var tools=((toolRes && !toolRes.error)?(toolRes.data||[]):[]).filter(function(t){return areas.indexOf(t.display_area)>=0 && accessAllowed(t.access_required, access);}).map(function(t){return {kind:'tool', title:t.title, description:t.changelog, category:FILE_TYPE_LABEL[t.file_type]||'Tools', url:t.file_url, version:t.version_label};});
     var rows=mats.concat(tools);
     if(!rows.length) return;
     mount.innerHTML=rows.map(function(r){

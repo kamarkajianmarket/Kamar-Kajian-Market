@@ -38,3 +38,109 @@
   font-weight:900;
   background:rgba(255,255,255,.035);
 }
+
+/* Kamar Step 66: hide the plain "Beranda" center nav text in the
+   JS-injected global header (dashboard.html, admin*.html, member-*.html,
+   affiliate-dashboard.html). The Beranda/Logout pill buttons on the
+   right side (.kamar-global-actions) stay untouched. */
+.kamar-global-center{
+     display:none!important;
+}
+
+/* Kamar Step 67: elegant member dashboard pass. Upgrades the shared
+   split-shell / split-card / split-sidebar system used by dashboard.html
+   and every member-*.html page so they match the premium, dark-glass,
+   gold-accented look of the public homepage. Scoped to classes only
+   used on member pages, so admin-*.html (its own .card system) is
+   unaffected. */
+.split-card,
+.member-page-panel{
+     position:relative;
+     overflow:hidden;
+     box-shadow:0 22px 70px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05);
+     transition:box-shadow .25s ease, transform .25s ease;
+}
+.split-card::before,
+.member-page-panel::before{
+     content:"";
+     position:absolute;
+     inset:0 0 auto 0;
+     height:1px;
+     background:linear-gradient(90deg,transparent,rgba(244,223,144,.55),transparent);
+     pointer-events:none;
+}
+.split-card:hover,
+.member-page-panel:hover{
+     box-shadow:0 28px 84px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.kamar-title-card{
+     background:linear-gradient(135deg,rgba(244,223,144,.10),rgba(255,255,255,.02))!important;
+}
+.kamar-title-card h1{
+     letter-spacing:-.03em;
+}
+.split-sidebar{
+     background:
+            linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
+            radial-gradient(circle at 0% 0%,rgba(244,223,144,.10),transparent 46%);
+     box-shadow:0 20px 60px rgba(0,0,0,.30);
+}
+.split-sidebar a{
+     transition:background .18s ease, color .18s ease, transform .18s ease;
+}
+.split-sidebar a.active{
+     background:linear-gradient(135deg,rgba(244,223,144,.16),rgba(244,223,144,.05))!important;
+     color:#fff3d8!important;
+     box-shadow:inset 0 0 0 1px rgba(244,223,144,.25);
+}
+.split-sidebar a:hover{
+     transform:translateX(2px);
+}
+.split-sidebar .sidebar-group{
+     border-top:1px solid rgba(238,206,122,.14);
+     margin-top:10px;
+     padding-top:8px;
+}
+.split-sidebar summary{
+     cursor:pointer;
+     list-style:none;
+     display:flex;
+     align-items:center;
+     justify-content:space-between;
+     gap:10px;
+     padding:12px 14px;
+     border-radius:16px;
+     font-weight:900;
+     color:#d8d0bd;
+     transition:background .18s ease, color .18s ease;
+}
+.split-sidebar summary::-webkit-details-marker{
+     display:none;
+}
+.split-sidebar summary::after{
+     content:"\203A";
+     color:#d8cda9;
+     font-size:16px;
+     font-weight:900;
+     transform:rotate(90deg);
+     transition:transform .18s ease;
+}
+.split-sidebar .sidebar-group[open] summary::after{
+     transform:rotate(270deg);
+}
+.split-sidebar summary:hover{
+     background:rgba(244,223,144,.07);
+     color:#f4df90;
+}
+.split-sidebar a.disabled{
+     opacity:.5;
+}
+.stat-card,
+.member-card,
+.todo-item,
+.setting-card,
+.video-card{
+     transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+     box-shadow:0 14px 40px rgba(0,0,0,.20);
+}
+

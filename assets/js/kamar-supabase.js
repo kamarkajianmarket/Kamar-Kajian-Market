@@ -171,60 +171,99 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
 
-/* Kamar Step 63: live Banner Pengumuman on the public homepage, read from
-   Supabase (table banners) instead of never being shown at all. Admin can
-   already write rows to this table from admin-banner.html; this is the
-   missing "read" side. Only active banners (is_active = true) whose
-   display_area is public/both/global are shown, newest first, placed at
-   the very top of <main id="top"> so it doesn't disturb the existing
-   layout. Colors are tuned for this page's light theme (see PAGE_AREA -
-   admin pages use a dark theme and are handled separately). */
+/* Kamar Step 65: live Banner Pengumuman on EVERY real page (public/member/
+   affiliate/admin), replacing the old index.html-only version. Reads
+      display_area (public/member/admin/affiliate/both/global) and
+         display_style (topbar = full-width card at top of page content,
+            floating_card = fixed dismissible card bottom-left that reappears on
+               every refresh since nothing is saved to storage) from Supabase table
+                  banners. Order-of-appearance rule (banner, then video, then materi,
+                     then file tools) is kept by inserting topbar banners as the very
+                        first child of the main content area. */
 (function(){
   'use strict';
-  if(window.__KAMAR_BANNERS_LIVE_63__) return;
-  window.__KAMAR_BANNERS_LIVE_63__ = true;
+  if(window.__KAMAR_BANNERS_LIVE_65__) return;
+  window.__KAMAR_BANNERS_LIVE_65__ = true;
 
-  var PAGE_AREA = {
-    "index.html": ["public","both","global"]
-  };
-
+  function pageFile(){ return (location.pathname.split('/').pop()||'index.html').toLowerCase(); }
+  function pageCtx(){
+    var f=pageFile();
+    if(f==='dashboard.html' || f.indexOf('member-')===0) return 'member';
+    if(f==='affiliate-dashboard.html') return 'affiliate';
+    if(f==='admin.html' || f.indexOf('admin-')===0) return 'admin';
+    if(f==='index.html') return 'public';
+    return null;
+  }
   function esc(v){ return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-
+  function cardInner(b){
+    var html='';
+    if(b.image_url) html += '<img src="'+esc(b.image_url)+'" alt="" style="width:52px;height:52px;border-radius:14px;object-fit:cover;flex:none">';
+    html += '<div style="flex:1;min-width:180px">';
+    if(b.title) html += '<strong style="display:block;font-size:15px;margin-bottom:3px">'+esc(b.title)+'</strong>';
+    if(b.body) html += '<span style="line-height:1.5;opacity:.85">'+esc(b.body)+'</span>';
+    html += '</div>';
+    if(b.cta_label && b.cta_url) html += '<a href="'+esc(b.cta_url)+'" style="flex:none;display:inline-flex;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:900;padding:9px 14px;text-decoration:none;font-size:13px">'+esc(b.cta_label)+'</a>';
+    return html;
+  }
   async function run(){
-    var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    var areas = PAGE_AREA[file];
-    if(!areas || !areas.length) return;
-    if(document.getElementById('kamarBannersLive63')) return;
-    var main = document.querySelector('main#top') || document.querySelector('main');
-    if(!main) return;
+    var ctx=pageCtx();
+    if(!ctx) return;
+    if(document.getElementById('kamarBannersTopbar65')||document.getElementById('kamarBannersFloating65')) return;
+    var areas=[ctx,'both','global'];
     try{
       var client = window.kamarSupabaseClient || (window.KamarSupabase && await window.KamarSupabase.ready());
       if(!client) return;
       var res = await client.from('banners')
-        .select('title,body,image_url,cta_label,cta_url,display_area,is_active,created_at')
+        .select('title,body,image_url,cta_label,cta_url,display_area,display_style,is_active,start_at,end_at,sort_order,created_at')
         .eq('is_active', true)
         .in('display_area', areas)
-        .order('created_at', { ascending:false })
-        .limit(3);
+        .order('sort_order', { ascending:true })
+        .order('created_at', { ascending:false });
       if(res.error || !res.data || !res.data.length) return;
-      if(document.getElementById('kamarBannersLive63')) return;
-      var wrap = document.createElement('div');
-      wrap.id = 'kamarBannersLive63';
-      wrap.style.cssText = 'display:grid;gap:14px;margin:0 0 22px';
-      res.data.forEach(function(b){
-        var card = document.createElement('div');
-        card.style.cssText = 'border:1px solid rgba(184,138,61,.35);background:linear-gradient(135deg,rgba(184,138,61,.10),rgba(255,255,255,.55));border-radius:22px;padding:18px 20px;color:#11141c;display:flex;gap:16px;align-items:center;flex-wrap:wrap;backdrop-filter:blur(4px)';
-        var html = '';
-        if(b.image_url) html += '<img src="'+esc(b.image_url)+'" alt="" style="width:56px;height:56px;border-radius:14px;object-fit:cover;flex:none">';
-        html += '<div style="flex:1;min-width:200px">';
-        if(b.title) html += '<strong style="display:block;font-size:16px;margin-bottom:4px;color:#11141c">'+esc(b.title)+'</strong>';
-        if(b.body) html += '<span style="color:#4a4a52;line-height:1.5">'+esc(b.body)+'</span>';
-        html += '</div>';
-        if(b.cta_label && b.cta_url) html += '<a href="'+esc(b.cta_url)+'" style="flex:none;display:inline-flex;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:900;padding:10px 16px;text-decoration:none">'+esc(b.cta_label)+'</a>';
-        card.innerHTML = html;
-        wrap.appendChild(card);
+      var now=Date.now();
+      var rows=res.data.filter(function(b){
+        if(b.start_at && new Date(b.start_at).getTime()>now) return false;
+        if(b.end_at && new Date(b.end_at).getTime()<now) return false;
+        return true;
       });
-      main.insertBefore(wrap, main.firstChild);
+      if(!rows.length) return;
+      var dark = (ctx==='admin');
+      var topRows = rows.filter(function(b){return b.display_style!=='floating_card';}).slice(0,3);
+      var floatRows = rows.filter(function(b){return b.display_style==='floating_card';}).slice(0,2);
+      if(topRows.length){
+        var main=document.querySelector('main#top')||document.querySelector('.split-main')||document.querySelector('.admin-main')||document.querySelector('main');
+        if(main){
+          var wrap=document.createElement('div');
+          wrap.id='kamarBannersTopbar65';
+          wrap.style.cssText='display:grid;gap:12px;margin:0 0 20px';
+          topRows.forEach(function(b){
+            var card=document.createElement('div');
+            card.style.cssText = dark
+              ? 'border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:20px;padding:16px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap'
+              : 'border:1px solid rgba(184,138,61,.35);background:linear-gradient(135deg,rgba(184,138,61,.10),rgba(255,255,255,.55));color:#11141c;border-radius:22px;padding:18px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;backdrop-filter:blur(4px)';
+            card.innerHTML=cardInner(b);
+            wrap.appendChild(card);
+          });
+          main.insertBefore(wrap, main.firstChild);
+        }
+      }
+      if(floatRows.length){
+        var fwrap=document.createElement('div');
+        fwrap.id='kamarBannersFloating65';
+        fwrap.style.cssText='position:fixed;left:16px;bottom:16px;z-index:9998;display:grid;gap:10px;max-width:340px';
+        floatRows.forEach(function(b){
+          var card=document.createElement('div');
+          card.style.cssText=(dark?'border:1px solid rgba(238,206,122,.34);background:rgba(9,9,8,.96);color:#fff3d8;':'border:1px solid rgba(184,138,61,.35);background:#fffdf7;color:#11141c;')+'border-radius:18px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 16px 46px rgba(0,0,0,.35);position:relative';
+          card.innerHTML=cardInner(b);
+          var closeBtn=document.createElement('button');
+          closeBtn.textContent='×'; closeBtn.type='button';
+          closeBtn.style.cssText='position:absolute;top:8px;right:10px;background:none;border:0;color:inherit;opacity:.6;font-size:16px;cursor:pointer;line-height:1';
+          closeBtn.onclick=function(){ card.remove(); };
+          card.appendChild(closeBtn);
+          fwrap.appendChild(card);
+        });
+        document.body.appendChild(fwrap);
+      }
     }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();

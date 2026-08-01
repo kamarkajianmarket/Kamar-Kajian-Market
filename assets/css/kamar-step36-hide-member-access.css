@@ -50,3 +50,53 @@
   font-weight:900;
   background:rgba(255,255,255,.035);
 }
+
+
+/* NEW (2026-08-01): header.kamar-global-header sendiri belum punya display:flex,
+   jadi anak-anaknya (brand/center/actions) tetap tersusun 3 baris ke bawah
+   walau masing-masing sudah flex. Tambahan kecil ini menyatukan jadi 1 baris. */
+header.kamar-global-header{
+     display:flex;
+     flex-wrap:wrap;
+     align-items:center;
+     justify-content:space-between;
+     gap:16px;
+     position:sticky;
+     top:0;
+     z-index:40;
+     padding:16px 26px;
+     border-bottom:1px solid rgba(238,206,122,.10);
+     background:rgba(7,7,6,.86);
+     backdrop-filter:blur(14px);
+}
+@media(max-width:680px){
+     header.kamar-global-header{padding:12px 16px}
+     .kamar-global-center{display:none!important}
+}
+
+/* NEW (2026-08-01): admin-affiliate-list.html & admin-affiliate-reward.html
+   punya dialog #confirmModal ("Konfirmasi/Batal/Ya, Lanjutkan") tanpa CSS
+   sama sekali, jadi selalu tampil sebagai teks polos di bawah halaman.
+   Disembunyikan default, jadi overlay tengah layar saat class .show aktif. */
+.confirm{
+     display:none;
+     position:fixed;
+     inset:0;
+     z-index:200;
+     align-items:center;
+     justify-content:center;
+     background:rgba(5,5,4,.72);
+     backdrop-filter:blur(6px);
+}
+.confirm.show{display:flex}
+.confirm-box{
+     width:min(420px,92vw);
+     border:1px solid rgba(238,206,122,.28);
+     border-radius:26px;
+     padding:26px;
+     background:linear-gradient(135deg,#151310,#0b0a08);
+     box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.confirm-box h3{margin:0 0 10px;color:#fff3d8;font-size:20px}
+.confirm-box p{margin:0 0 20px;color:rgba(245,240,230,.72);line-height:1.6}
+.confirm-actions{display:flex;gap:10px;justify-content:flex-end}

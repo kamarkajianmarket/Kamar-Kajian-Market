@@ -1,0 +1,53 @@
+/* Kamar Step 72: efek cursor ambient + liquid glass untuk dashboard member,
+   meniru efek ambient-cursor (kamar-ambient-market-v58.js) dan spotlight kartu
+   (kamar-premium-motion-v55.js) yang sudah ada di halaman utama. Dipasang khusus
+   di dashboard.html & member-*.html lewat kamar-dashboard-motion.js. */
+:root{--ambient-x:50%;--ambient-y:30%}
+body{position:relative}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:radial-gradient(480px circle at var(--ambient-x,50%) var(--ambient-y,30%),rgba(244,223,144,.10),transparent 60%);
+}
+.split-shell{position:relative;z-index:1}
+
+.split-card,.member-page-panel,.member-payment-card,.facility-content-card,.setting-card,.stat-card,.action-card,.video-card,.todo-item{
+    position:relative;
+    isolation:isolate;
+    will-change:transform;
+}
+.split-card::after,.member-page-panel::after,.member-payment-card::after,.facility-content-card::after,.setting-card::after,.stat-card::after,.action-card::after,.video-card::after,.todo-item::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:inherit;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(244,223,144,.16),transparent 62%);
+    opacity:0;
+    transition:opacity .35s ease;
+    pointer-events:none;
+}
+.split-card:hover::after,.member-page-panel:hover::after,.member-payment-card:hover::after,.facility-content-card:hover::after,.setting-card:hover::after,.stat-card:hover::after,.action-card:hover::after,.video-card:hover::after,.todo-item:hover::after{
+    opacity:1;
+}
+
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    z-index:-1;
+    background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.32) 47%,transparent 69%);
+    transform:translateX(-125%);
+    transition:transform .8s cubic-bezier(.22,1,.36,1);
+    pointer-events:none;
+}
+.btn:hover::after{transform:translateX(125%)}
+
+@media(prefers-reduced-motion:reduce){
+    body::before{display:none}
+    .split-card::after,.member-page-panel::after,.member-payment-card::after,.facility-content-card::after,.setting-card::after,.stat-card::after,.action-card::after,.video-card::after,.todo-item::after,.btn::after{display:none!important}
+}

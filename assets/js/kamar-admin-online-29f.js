@@ -447,6 +447,7 @@
     rebuildSidebar();
     await patchKamarAdminLocal();
     renderActionCenter();
+    setTimeout(renderActionCenter, 1500);
     if(MAP[PAGE]) await renderManager(MAP[PAGE]);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();

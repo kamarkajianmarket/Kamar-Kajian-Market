@@ -41,8 +41,7 @@
       return v.split(',').map(function(x){return x.trim()}).filter(Boolean);
     }
     var out=[];
-    [['kamar_edukasi','Kamar Edukasi'],['kamar_study','Kamar Signal'],['kamar_private','Kamar Private'],['kamar_indikator','Kamar Indikator'],['kamar_robot','Kamar Robot']].forEach(function(p){var val=o[p[0]]; if(val===true||val==='true'||val===1||val==='1'||norm(val)==='active'||norm(val)==='aktif')out.push(p[1])});
-    return out;
+    [['access_materi_edukasi','Kamar Edukasi'],['access_kamar_study','Kamar Signal'],['access_kamar_private','Kamar Private'],['access_kamar_indikator','Kamar Indikator'],['access_kamar_robot','Kamar Robot']].forEach(function(p){var val=o[p[0]]; if(val===true||val==='true'||val===1||val==='1'||norm(val)==='active'||norm(val)==='aktif')out.push(p[1])});    return out;
   }
   function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
   function existingClient(){return window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client)||(window.KAMAR_SUPABASE&&window.KAMAR_SUPABASE.client)||null}
@@ -59,6 +58,7 @@
     try{ state.accessRows=await query('member_access'); }catch(e){state.accessRows=[];}
     try{ state.affiliateRows=await query('affiliates'); }catch(e){state.affiliateRows=getJSON('kamarAffiliateList',[]);}
     var merged=merge({rows:state.viewRows,src:'view'},{rows:state.profileRows,src:'profile'},{rows:state.accessRows,src:'access'});
+        state.accessRows.forEach(function(a){var pid=norm(a.profile_id||''); if(!pid)return; var m=merged.find(function(x){return norm(pick(x,['profile_id','id']))===pid}); if(m) Object.assign(m,a);});
     if(!merged.length){ merged=getJSON('kamarRegisteredMembers',[]); state.source='localStorage'; }
     state.members=merged.filter(function(m){return !isInternal(m)&&!isGhost(m)&&hasIdentity(m)});
     state.internal=merged.filter(function(m){return isInternal(m)&&!isGhost(m)});

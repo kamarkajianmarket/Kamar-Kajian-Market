@@ -245,11 +245,200 @@
       }catch(e){ toast('Online akses gagal, fallback lokal: '+(e.message||e)); return oldToggle ? oldToggle(id,fac,on,duration,note) : false; }
     };
   }
+
+  var TODO_LABELS = {
+    new_registration: 'Pendaftaran Baru',
+    new_payment: 'Pembayaran Baru',
+    renewal_request: 'Perpanjangan',
+    upgrade_request: 'Upgrade Fasilitas',
+    access_expiring: 'Akses Akan Berakhir',
+    access_expired: 'Akses Berakhir',
+    profile_change: 'Perubahan Profil',
+    support_request: 'Permintaan Bantuan',
+    manual_note: 'Catatan Admin',
+    license_request: 'Pengajuan Lisensi',
+    affiliate_payout_change: 'Perubahan Rekening Affiliate'
+  };
+  function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
+  async function resolveProfileId(todo){
+    if(todo.profile_id) return todo.profile_id;
+    var email = todo.action_payload && todo.action_payload.email;
+    if(!email) return null;
+    var c = await ready(); if(!c) return null;
+    var res = await c.from('member_profiles').select('id').eq('email', email).limit(1);
+    if(res.error || !res.data || !res.data.length) return null;
+    return res.data[0].id;
+  }
+  async function markTodoDone(todoId, statusVal){
+    await update('admin_todos', todoId, { todo_status: statusVal || 'done', completed_at: new Date().toISOString() });
+  }
+  async function actionActivateRegistration(todo){
+    var pid = await resolveProfileId(todo);
+    if(!pid){ toast('Tidak menemukan profil member untuk diaktifkan.'); return; }
+    await update('member_profiles', pid, { account_status:'active', updated_at:new Date().toISOString() });
+    await markTodoDone(todo.id);
+    toast('Member diaktifkan.');
+  }
+  async function actionConfirmPayment(todo){
+    var payload = todo.action_payload || {};
+    var pid = await resolveProfileId(todo);
+    if(!pid){ toast('Tidak menemukan profil member untuk pembayaran ini.'); return; }
+    var days = Number(payload.duration_days || 30) || 30;
+    var endDate = new Date(Date.now() + days*24*60*60*1000).toISOString();
+    if(payload.payment_id){
+      try{ await update('payments', payload.payment_id, { payment_status:'confirmed', confirmed_at:new Date().toISOString() }); }catch(e){}
+    }
+    await update('member_profiles', pid, { account_status:'active', payment_status:'confirmed', access_start_date:new Date().toISOString(), access_end_date:endDate, updated_at:new Date().toISOString() });
+    var facilities = payload.selected_facilities || [];
+    if(facilities.length){
+      var accessRow = { profile_id: pid, updated_at:new Date().toISOString() };
+      facilities.forEach(function(f){ if(FACILITY_COLUMN[f]) accessRow[FACILITY_COLUMN[f]] = true; });
+      var c = await ready();
+      if(c) await c.from('member_access').upsert(accessRow, { onConflict:'profile_id' });
+    }
+    await markTodoDone(todo.id);
+    toast('Pembayaran dikonfirmasi & fasilitas diaktifkan.');
+  }
+  async function actionProfileChange(todo, approve){
+    var payload = todo.action_payload || {};
+    var pid = await resolveProfileId(todo);
+    if(approve && pid && payload.new_data){
+      await update('member_profiles', pid, Object.assign({}, payload.new_data, { updated_at:new Date().toISOString() }));
+    }
+    if(payload.profile_change_request_id){
+      await update('profile_change_requests', payload.profile_change_request_id, { status: approve?'approved':'rejected', reviewed_at:new Date().toISOString() });
+    }
+    await markTodoDone(todo.id, approve?'done':'rejected');
+    toast(approve?'Perubahan profil disetujui.':'Perubahan profil ditolak.');
+  }
+  async function actionDismiss(todo){
+    await markTodoDone(todo.id);
+    toast('Ditandai selesai.');
+  }
+  async function actionLicenseRequest(todo, approve){
+    var payload = todo.action_payload || {};
+    var pid = todo.profile_id || await resolveProfileId(todo);
+    if(pid && payload.facility_key){
+      var c2 = await ready();
+      if(c2){
+        var res2 = await c2.from('kamar_licenses').select('id').eq('member_profile_id', pid).eq('facility_key', payload.facility_key).eq('request_status', 'pending').limit(1);
+        if(res2.error) throw res2.error;
+        if(res2.data && res2.data.length){
+          var licenseId = res2.data[0].id;
+          if(approve){
+            await update('kamar_licenses', licenseId, { request_status:'active', status:'active', reviewed_at:new Date().toISOString() });
+          } else {
+            await update('kamar_licenses', licenseId, { request_status:'rejected', status:'suspended', reviewed_at:new Date().toISOString() });
+          }
+        }
+      }
+    }
+    await markTodoDone(todo.id, approve?'done':'rejected');
+    toast(approve?'License disetujui.':'Pengajuan license ditolak.');
+  }
+  async function actionAffiliatePayoutChange(todo, approve){
+    var payload = todo.action_payload || {};
+    if(approve && payload.affiliate_id){
+      await update('affiliates', payload.affiliate_id, {
+        payment_account_name: payload.new_payment_account_name,
+        payment_account_number: payload.new_payment_account_number,
+        payment_bank_name: payload.new_payment_bank_name,
+        payment_verified: false,
+        payment_verified_at: null,
+        updated_at: new Date().toISOString()
+      });
+    }
+    await markTodoDone(todo.id, approve?'done':'rejected');
+    toast(approve?'Perubahan rekening affiliate disetujui.':'Perubahan rekening affiliate ditolak.');
+  }
+  function todoCard(todo){
+    var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
+    var p = todo.action_payload || {};
+    var subBits = [];
+    if(p.member_id) subBits.push(p.member_id);
+    if(p.whatsapp) subBits.push('WA '+p.whatsapp);
+    if(p.amount) subBits.push(fmtMoney(p.amount));
+    if(p.selected_facilities && p.selected_facilities.length) subBits.push(p.selected_facilities.map(function(f){ return FACILITY_LABEL[f] || f; }).join(', '));
+    if(p.duration_days) subBits.push(p.duration_days+' hari');
+    if(p.broker_name) subBits.push(p.broker_name);
+    if(p.account_id) subBits.push('Akun '+p.account_id);
+    if(p.new_payment_bank_name) subBits.push('Bank baru: '+p.new_payment_bank_name);
+    if(p.new_payment_account_number) subBits.push('No. Rek baru: '+p.new_payment_account_number);
+    var actionsHtml;
+    if(todo.todo_type === 'new_registration'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
+    } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
+    } else if(todo.todo_type === 'profile_change'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'license_request'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'affiliate_payout_change'){
+      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else {
+      actionsHtml = '<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
+    }
+    return '<div class="todo-row">'
+    +'<div><strong>'+esc(todo.title || label)+'</strong><small>'+esc(p.full_name || '')+(subBits.length ? ' &middot; '+esc(subBits.join(' &middot; ')) : '')+'</small></div>'
+    +'<div>'+esc(p.email || todo.description || '-')+'</div>'
+    +'<div><span class="chip">'+esc(label)+'</span></div>'
+    +'<div>'+actionsHtml+'</div>'
+    +'</div>';
+  }
+  async function onTodoAction(e){
+    var btn = e.target && e.target.closest ? e.target.closest('[data-todo-action]') : null;
+    if(!btn) return;
+    var action = btn.getAttribute('data-todo-action');
+    var todoId = btn.getAttribute('data-todo-id');
+    var c = await ready(); if(!c) return;
+    var res = await c.from('admin_todos').select('*').eq('id', todoId).limit(1);
+    if(res.error || !res.data || !res.data.length){ toast('Data tugas tidak ditemukan (mungkin sudah diproses).'); await renderActionCenter(); return; }
+    var todo = res.data[0];
+    btn.disabled = true;
+    try{
+      if(action === 'activate') await actionActivateRegistration(todo);
+      else if(action === 'confirm_payment') await actionConfirmPayment(todo);
+      else if(action === 'approve_profile') await actionProfileChange(todo, true);
+      else if(action === 'reject_profile') await actionProfileChange(todo, false);
+      else if(action === 'approve_license') await actionLicenseRequest(todo, true);
+      else if(action === 'reject_license') await actionLicenseRequest(todo, false);
+      else if(action === 'approve_affiliate_payout') await actionAffiliatePayoutChange(todo, true);
+      else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
+      else if(action === 'dismiss') await actionDismiss(todo);
+      await renderActionCenter();
+    }catch(err){
+      toast('Gagal proses: '+(err.message||err));
+      btn.disabled = false;
+    }
+  }
+  async function renderActionCenter(){
+    var el = qs('#adminTodoList');
+    if(!el) return false;
+    try{
+      var c = await ready();
+      if(!c) throw new Error('Data belum bisa dibaca.');
+      var res = await c.from('admin_todos').select('*').in('todo_status',['new','processing']).order('priority',{ascending:true}).order('created_at',{ascending:true}).limit(50);
+      if(res.error) throw res.error;
+      var rows = res.data || [];
+      el.innerHTML = rows.length ? rows.map(todoCard).join('') : '<div class="empty">Tidak ada notifikasi/tugas admin yang menunggu. Semua sudah beres.</div>';
+      if(!el.getAttribute('data-kamar-actioncenter-bound')){
+        el.setAttribute('data-kamar-actioncenter-bound','1');
+        el.addEventListener('click', onTodoAction);
+      }
+      window.__KAMAR_TODO_CENTER_ACTIVE__ = true;
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  
   async function run(){
     if(!/^admin/i.test(PAGE)) return;
     injectSharedStyles();
     rebuildSidebar();
     await patchKamarAdminLocal();
+    renderActionCenter();
     if(MAP[PAGE]) await renderManager(MAP[PAGE]);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();

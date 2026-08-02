@@ -55,7 +55,7 @@
   function isInternal(o){var r=roleRaw(o); return /admin|internal|owner|superadmin|staff|team/.test(r)||norm(emailOf(o))==='kamarkajianmarket@gmail.com'||norm(nameOf(o))==='kamarkajianmarket'||norm(idOf(o))==='kamarkajianmarket'}
   function isActive(o){return /active|aktif|approved|confirm|confirmed|true|1|gratis|paid|lunas/.test(statusRaw(o))}
   function isPending(o){var s=statusRaw(o); return !isActive(o)&&(/pending|menunggu|wait|unconfirm|false|0/.test(s)||!s.trim())}
-  function expiryOf(o){return pick(o,['access_until','expired_at','expires_at','access_expired_at','valid_until','end_date','expiry_date'])||'-'}
+  function expiryOf(o){return pick(o,['access_end_date','access_until','expired_at','expires_at','access_expired_at','valid_until','end_date','expiry_date'])||'-'}
   function referralOf(o){return String(pick(o,['referral_code','referralCode','used_referral_code','usedReferralCode','affiliate_code','affiliateCode','kode_referral','kodeReferral','referred_by_code','referredByCode'])||'').trim()}
   function facilitiesOf(o){
     var v=pick(o,['facilities','facility','active_facilities','facility_names','access_names','access']);

@@ -274,3 +274,28 @@
      margin-top:8px;
 }
 
+
+/* Kamar Step 70: highlight fasilitas yang sudah unlock di sidebar member
+   (lihat unlockSidebarFacilities() di kamar-data-online-25e.js). Link yang
+   tadinya class="disabled" + ikon kunci sekarang diberi warna aktif dan
+   badge hijau "Aktif" menggantikan ikon kunci. */
+.split-sidebar a.kamar-facility-unlocked{
+     color:#f4df90;
+     background:rgba(212,166,63,.10);
+}
+.split-sidebar a.kamar-facility-unlocked:hover{
+     background:rgba(212,166,63,.18);
+}
+.kamar-unlock-badge{
+     display:inline-flex;
+     align-items:center;
+     border:1px solid rgba(158,255,202,.35);
+     background:rgba(28,97,65,.18);
+     color:#9effca;
+     font-size:10px;
+     font-weight:1000;
+     letter-spacing:.08em;
+     text-transform:uppercase;
+     padding:3px 8px;
+     border-radius:999px;
+}

@@ -57,7 +57,7 @@
   function waUrl(member){
     const number = String(member.whatsapp || "").replace(/[^0-9]/g, "");
     if(!number) return "";
-    const msg = `Halo ${member.full_name || "Kawan Kamar"}, saya Admin Kamar Kajian Market. Saya ingin follow up terkait status akun/fasilitas member Anda.`;
+    const msg = `Halo ${member.full_name || "Member Kamar"}, saya Admin Kamar Kajian Market. Saya ingin follow up terkait status akun/fasilitas member Anda.`;
     return `https://wa.me/${encodeURIComponent(number)}?text=${encodeURIComponent(msg)}`;
   }
   function tgUrl(member){

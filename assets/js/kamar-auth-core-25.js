@@ -26,7 +26,7 @@
   setInterval(stopGlobalLoading,700); window.addEventListener('pageshow',stopGlobalLoading); document.addEventListener('DOMContentLoaded',stopGlobalLoading);
   function pick(o,ks){for(var i=0;i<ks.length;i++){if(o && o[ks[i]]!=null && String(o[ks[i]]).trim()!=='') return o[ks[i]]}return ''}
   function emailOf(o){return clean(pick(o,['email','member_email','user_email']))}
-  function nameOf(o){return clean(pick(o,['full_name','fullName','name','display_name','member_name','username']))||emailOf(o)||'Kawan Kamar'}
+  function nameOf(o){return clean(pick(o,['full_name','fullName','name','display_name','member_name','username']))||emailOf(o)||'Member Kamar'}
   function idOf(o){return clean(pick(o,['id','member_id','memberId','profile_id','profileId','user_id','userId']))||emailOf(o)}
   function config(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||window.kamarConfigPublic||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||window.SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||c.key||window.KAMAR_SUPABASE_ANON_KEY||window.SUPABASE_ANON_KEY||''}}
   function client(){

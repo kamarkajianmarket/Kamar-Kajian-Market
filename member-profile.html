@@ -48,6 +48,7 @@ body{background:#070707;color:var(--text)}
   <span class="eyebrow">Ubah Data Akun</span>
   <h2>Ajukan Perubahan Data</h2>
   <p>Untuk keamanan akun, nama, WhatsApp, dan Telegram tidak bisa diedit langsung dari sini. Ajukan permintaan di bawah, admin akan meninjau dan menyetujuinya sebelum data berubah.</p>
+  <div class="facility-guide-box">Petunjuk: pilih data yang mau diganti di kolom pertama (Nama Lengkap, Nomor WhatsApp, atau Username Telegram), isi nilai barunya di kolom kedua sesuai contoh placeholder, lalu klik Kirim Permintaan. Data baru aktif setelah disetujui admin.</div>
   <form id="profileChangeForm" class="grid-2 kamar-form-grid">
     <label class="field"><span>Data yang ingin diubah</span>
       <select id="profileChangeField" name="field">
@@ -69,6 +70,7 @@ body{background:#070707;color:var(--text)}
   <span class="eyebrow">Kode Referral</span>
   <h2>Referral Akun</h2>
   <p>Jika akun Anda belum terhubung dengan kode referral, Anda bisa mengisinya satu kali dari halaman ini. Setelah tersimpan, perubahan hanya bisa dilakukan melalui admin.</p>
+  <div class="facility-guide-box">Petunjuk: isi kode referral dari affiliator (jika ada) di kolom bawah, contoh format KM00001C, lalu klik Simpan Referral. Kode hanya bisa diisi satu kali dan tidak bisa diubah sendiri setelah tersimpan.</div>
   <div id="referralAlreadySet" hidden>
     <div class="referral-current-code" id="profileReferralCurrentCode">REFERRAL: -</div>
     <div class="referral-status-note success">Kode referral akun ini sudah terkunci. Untuk perubahan referral, hubungi admin.</div>
@@ -86,6 +88,7 @@ body{background:#070707;color:var(--text)}
   <span class="eyebrow">Data Trading</span>
   <h2>Broker &amp; Modal</h2>
   <p>Data ini opsional, membantu kami memahami broker dan kisaran modal yang paling banyak digunakan Kawan Kamar. Perubahan akan ditinjau dan disetujui admin sebelum data berubah.</p>
+  <div class="facility-guide-box">Petunjuk: pilih broker yang kamu pakai dari daftar (contoh: Exness, FBS), lalu pilih rentang modal/equity, dan klik Simpan Data Trading. Data ini opsional dan tidak memengaruhi akses fasilitas kamu.</div>
   <form id="memberBrokerCapitalForm" class="grid-2">
     <label class="field">Broker yang digunakan
       <select id="brokerSelect" name="broker_name">
@@ -171,6 +174,10 @@ body{background:#070707;color:var(--text)}
   }
   async function init(){
     var form=byId('profileChangeForm'); if(!form) return;
+        var fieldSelect=byId('profileChangeField'); var valueInput=byId('profileChangeValue');
+        var changePlaceholders={full_name:'Contoh: Budi Santoso', whatsapp:'Contoh: 081234567890', telegram_username:'Contoh: budisantoso'};
+        function syncChangePlaceholder(){ if(fieldSelect&&valueInput) valueInput.placeholder=changePlaceholders[fieldSelect.value]||'Isi nilai baru'; }
+        if(fieldSelect){ fieldSelect.addEventListener('change', syncChangePlaceholder); syncChangePlaceholder(); }
     var c=await client();
     if(c) renderHistory(c);
     form.addEventListener('submit', async function(e){

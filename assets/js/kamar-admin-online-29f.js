@@ -246,6 +246,14 @@
     };
   }
 
+  function genericTodoCard(todo){
+    var title = esc(todo.title || todo.todo_type || 'Tugas Admin');
+    var desc = esc(todo.description || '');
+    var payload = todo.action_payload || {};
+    var name = esc(payload.full_name || payload.email || '-');
+    return '<div class="todo-row"><div><strong>'+title+'</strong><small>'+name+'</small></div><div>'+desc+'</div><div></div><div><button class="btn" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Tandai Selesai</button></div></div>';
+  }
+
   var TODO_LABELS = {
     new_registration: 'Pendaftaran Baru',
     new_payment: 'Pembayaran Baru',
@@ -420,7 +428,7 @@
       var res = await c.from('admin_todos').select('*').in('todo_status',['new','processing']).order('priority',{ascending:true}).order('created_at',{ascending:true}).limit(50);
       if(res.error) throw res.error;
       var rows = res.data || [];
-      el.innerHTML = rows.length ? rows.map(todoCard).join('') : '<div class="empty">Tidak ada notifikasi/tugas admin yang menunggu. Semua sudah beres.</div>';
+      el.innerHTML = rows.length ? rows.map(function(t){ try{ var c = todoCard(t); return (c && String(c).trim()) ? c : genericTodoCard(t); }catch(e){ return genericTodoCard(t); } }).join('') : '<div class="empty">Tidak ada notifikasi/tugas admin yang menunggu. Semua sudah beres.</div>';
       if(!el.getAttribute('data-kamar-actioncenter-bound')){
         el.setAttribute('data-kamar-actioncenter-bound','1');
         el.addEventListener('click', onTodoAction);

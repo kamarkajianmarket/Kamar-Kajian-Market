@@ -1,0 +1,209 @@
+/* ==========================================================================
+   Kamar Kajian Market — Dashboard Member Identity Redesign v2
+   VISUAL ONLY. Tidak ada perubahan struktur DOM, ID, class, data-attribute,
+   atau logic JS apa pun. File ini murni override tampilan CSS.
+
+   Nilai warna/radius/shadow diambil PERSIS dari theme homepage yang sedang
+   live (kamar-neo-minimal-palace-v47.css, bagian 4/11 dari kamar-bundle.css),
+   supaya Dashboard Member terlihat 1:1 dengan identitas Homepage saat ini
+   (bukan cuma "senada"). Dashboard.html saat ini masih memuat theme LAMA
+   (kamar-luxury-atelier-v46.css / gold-on-black), sedangkan Homepage sudah
+   pindah ke theme BARU (krem terang + kartu putih + aksen gelap-emas).
+
+   Sudah diuji langsung di halaman live (preview injeksi, belum di-commit)
+   dan seluruh kontras teks diperbaiki iteratif (heading, label, value,
+   detail-grid, tombol, footer, header).
+
+   Muat file ini SETELAH kamar-luxury-atelier-v46.css di dashboard.html.
+   ========================================================================== */
+
+:root{
+  --km-bg:#f5f1e8;
+  --km-ink:#111417;
+  --km-panel:#ffffff;
+  --km-panel-2:#fbf7ee;
+  --km-line:rgba(17,20,23,.12);
+  --km-muted:#606973;
+  --km-gold:#b88a3d;
+  --km-gold-2:#d7b46d;
+  --km-emerald:#0e5f54;
+  --km-deep:#111820;
+  --km-deep-2:#17252d;
+  --km-shadow:0 20px 70px rgba(17,20,23,.10);
+  --km-radius-xl:34px;
+  --km-radius-lg:26px;
+  --km-radius-md:18px;
+}
+
+body{
+  background:
+    radial-gradient(circle at 10% 0%, rgba(184,138,61,.18), transparent 34rem),
+    radial-gradient(circle at 90% 14%, rgba(14,95,84,.12), transparent 30rem),
+    linear-gradient(180deg,#f9f5ed 0%,#eee6d7 48%,#f6f1e8 100%) !important;
+  color: var(--km-ink) !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+.page-glow{ display:none !important; }
+
+h1,h2,h3{ color: var(--km-ink) !important; }
+.split-card.kamar-title-card h1,
+.split-card.kamar-title-card h2,
+.split-card.kamar-title-card h3{ color:#fffaf0 !important; }
+#memberStatusBox h1,#memberStatusBox h2,#memberStatusBox h3{ color:#fff !important; }
+.site-footer h1,.site-footer h2,.site-footer h3{ color:#fffaf0 !important; }
+
+.split-card:not(.kamar-title-card) p,
+.split-card:not(.kamar-title-card) small,
+.split-sidebar p, .split-sidebar small, .split-sidebar summary,
+#memberWelcomeText, #memberReferralLine{ color:var(--km-muted) !important; }
+.split-sidebar summary:hover{ color:#101418 !important; }
+.split-main h1{ letter-spacing:-.055em !important; }
+.page-note{ color: var(--km-muted) !important; }
+.split-card.kamar-title-card .page-note{ color:#d9d1c2 !important; }
+
+.site-header{
+  position:sticky !important;
+  top:16px !important;
+  width:min(calc(100% - 32px),1180px) !important;
+  margin:16px auto 0 !important;
+  padding:12px 14px !important;
+  border:1px solid rgba(17,20,23,.13) !important;
+  border-radius:28px !important;
+  background:rgba(255,255,255,.86) !important;
+  backdrop-filter:blur(18px) !important;
+  box-shadow:0 18px 50px rgba(17,20,23,.10) !important;
+}
+.brand{ color: var(--km-ink) !important; font-weight:900 !important; letter-spacing:-.03em !important; }
+.brand img{ border:1px solid rgba(184,138,61,.35) !important; box-shadow:0 10px 24px rgba(17,20,23,.12) !important; }
+.site-header a{ color:#37414a !important; }
+.site-header a:hover{ color:#101418 !important; }
+.nav-links a{
+  background:transparent !important;
+  border:1px solid transparent !important;
+  border-radius:999px !important;
+}
+.nav-links a:hover{ background:#f2eadc !important; border-color:rgba(184,138,61,.25) !important; }
+.header-cta,.header-member-cta{
+  background:linear-gradient(135deg,#0e5f54,#17483f 58%,#b88a3d) !important;
+  color:#fffaf0 !important;
+  border:1px solid rgba(255,255,255,.45) !important;
+  border-radius:999px !important;
+  box-shadow:0 14px 32px rgba(14,95,84,.22) !important;
+  font-weight:950 !important;
+}
+.kamar-global-btn.kamar-global-logout{
+  color:#37414a !important;
+  background:transparent !important;
+  border-color:transparent !important;
+}
+.kamar-global-btn.kamar-global-logout:hover{ color:#101418 !important; }
+
+.split-sidebar{
+  border-radius: var(--km-radius-lg) !important;
+  background: rgba(255,255,255,.72) !important;
+  border:1px solid var(--km-line) !important;
+  box-shadow: var(--km-shadow) !important;
+}
+.split-sidebar .brand-small{
+  color: var(--km-gold) !important;
+  font-weight:950 !important;
+  letter-spacing:.13em !important;
+}
+.split-sidebar a{ color: var(--km-muted) !important; border-radius:14px !important; }
+.split-sidebar a.active,
+.split-sidebar a:hover{
+  background:#f2eadc !important;
+  border-color:rgba(184,138,61,.25) !important;
+  color:#101418 !important;
+}
+
+.split-card{
+  border-radius: var(--km-radius-xl) !important;
+  background: rgba(255,255,255,.72) !important;
+  border:1px solid var(--km-line) !important;
+  box-shadow: var(--km-shadow) !important;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.split-card.kamar-title-card{
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025)),
+    radial-gradient(circle at 0% 10%,rgba(184,138,61,.22),transparent 34rem),
+    linear-gradient(135deg,#111820 0%,#17252d 58%,#23333a 100%) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  color:#fff !important;
+}
+
+#memberStatusBox{
+  border-radius:30px !important;
+  background: linear-gradient(135deg,#111820,#1d2a31) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  box-shadow:0 18px 50px rgba(17,20,23,.14) !important;
+}
+#memberStatusBox strong{ color:#f4d694 !important; }
+
+.mini-label{
+  background:#efe3ca !important;
+  color:#7a561e !important;
+  border:1px solid rgba(184,138,61,.22) !important;
+  border-radius:999px !important;
+  font-weight:950 !important;
+  letter-spacing:.16em !important;
+  text-transform:uppercase !important;
+}
+
+.btn{ border-radius:999px !important; font-weight:950 !important; transition:transform .2s ease, box-shadow .2s ease; }
+.btn:hover{ transform: translateY(-2px); }
+.btn.primary{
+  background:linear-gradient(135deg,#c99d51,#f1d893) !important;
+  color:#15120b !important;
+  border:1px solid rgba(17,20,23,.12) !important;
+  box-shadow:0 16px 40px rgba(184,138,61,.24) !important;
+}
+.btn.secondary{
+  background:#fff !important;
+  color:#192027 !important;
+  border:1px solid rgba(17,20,23,.12) !important;
+}
+.split-card.kamar-title-card .btn.secondary{
+  background:rgba(255,255,255,.08) !important;
+  color:#fff6e8 !important;
+  border-color:rgba(255,255,255,.18) !important;
+}
+
+.setting-card{
+  background:#fff !important;
+  border:1px solid var(--km-line) !important;
+  box-shadow:0 10px 30px rgba(17,20,23,.06) !important;
+  border-radius:18px !important;
+}
+.setting-card span{ color:var(--km-gold) !important; font-weight:900 !important; letter-spacing:.08em !important; }
+.setting-card strong{ color:var(--km-ink) !important; }
+
+.kamar-content-grid > *{
+  background:#fff !important;
+  border:1px solid var(--km-line) !important;
+  border-radius:28px !important;
+  box-shadow:0 14px 42px rgba(17,20,23,.07) !important;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+.kamar-content-grid > *:hover{
+  transform: translateY(-4px);
+  border-color: rgba(184,138,61,.42) !important;
+  background: linear-gradient(180deg,#fff,#fbf4e7) !important;
+}
+
+.site-footer{
+  border-radius:28px !important;
+  background:#111820 !important;
+  color:#dcd3c2 !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+}
+
+@media (max-width:980px){
+  .site-header{ border-radius:24px !important; }
+}
+@media (max-width:640px){
+  .split-card{ border-radius:22px !important; padding:20px !important; }
+}

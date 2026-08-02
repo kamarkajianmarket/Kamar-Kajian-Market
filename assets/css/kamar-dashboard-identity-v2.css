@@ -35,7 +35,14 @@
   --km-radius-md:18px;
 }
 
-body{
+/* Selector "html body" dipakai sengaja (bukan "body" saja) supaya specificity-nya
+   menang melawan <style id="kamarCanonicalBg30"> yang di-inject oleh JS saat
+   runtime (kamar-premium-v29.js) dengan selector "html,body{...!important}".
+   Keduanya sama-sama !important, jadi kalau specificity sama, yang terakhir di
+   DOM yang menang -- dan script itu selalu inject belakangan. Menaikkan
+   specificity di sini adalah cara paling aman untuk menang tanpa menyentuh
+   file JS apa pun. */
+html body{
   background:
     radial-gradient(circle at 10% 0%, rgba(184,138,61,.18), transparent 34rem),
     radial-gradient(circle at 90% 14%, rgba(14,95,84,.12), transparent 30rem),

@@ -5,7 +5,7 @@
   var VERSION='30G';
   var FAC=['Kamar Edukasi','Kamar Signal','Kamar Private','Kamar Indikator','Kamar Robot'];
     var FAC_PAGES={'Kamar Edukasi':'member-materials.html','Kamar Signal':'member-study.html','Kamar Private':'member-private.html','Kamar Indikator':'member-indicator.html','Kamar Robot':'member-robot.html'};
-    function unlockSidebarFacilities(){var f=(location.pathname.split('/').pop()||'').toLowerCase(); if(!/^(dashboard\.html$|member-)/.test(f))return; var m=findCurrentMember(); if(!m||!isActive(m))return; var fac=facilitiesOf(m).map(function(x){return norm(x)}); Object.keys(FAC_PAGES).forEach(function(name){ if(fac.indexOf(norm(name))<0)return; var href=FAC_PAGES[name]; qsa('a.disabled[href="'+href+'"]').forEach(function(a){ a.classList.remove('disabled'); a.removeAttribute('aria-disabled'); a.classList.add('kamar-facility-unlocked'); a.innerHTML=a.innerHTML.replace(/\s*🔒\s*$/,' <span class="kamar-unlock-badge">Aktif</span>'); }); }); }
+    function unlockSidebarFacilities(){var f=(location.pathname.split('/').pop()||'').toLowerCase(); if(!/^(dashboard\.html$|member-)/.test(f))return; var m=findCurrentMember(); if(!m||!isActive(m)||m.locked_by_expired||m.is_expired_by_date)return; var fac=facilitiesOf(m).map(function(x){return norm(x)}); Object.keys(FAC_PAGES).forEach(function(name){ if(fac.indexOf(norm(name))<0)return; var href=FAC_PAGES[name]; qsa('a.disabled[href="'+href+'"]').forEach(function(a){ a.classList.remove('disabled'); a.removeAttribute('aria-disabled'); a.classList.add('kamar-facility-unlocked'); a.innerHTML=a.innerHTML.replace(/\s*🔒\s*$/,' <span class="kamar-unlock-badge">Aktif</span>'); }); }); }
     var FACILITY_ACCESS_COL={'member-materials.html':'access_materi_edukasi','member-study.html':'access_kamar_study','member-private.html':'access_kamar_private'};
     var FACILITY_DB_KEY={'member-materials.html':'materi_edukasi','member-study.html':'kamar_study','member-private.html':'kamar_private'};
     function facilityCardHTML(it,url){var ver=it.version_label?(' &middot; v'+esc(it.version_label)):''; var desc=it.description||it.changelog||''; return '<article class="facility-content-card"><h3>'+esc(it.title)+ver+'</h3>'+(desc?('<p>'+esc(desc)+'</p>'):'')+'<div class="button-row"><a class="btn mini" href="'+esc(url||'#')+'" target="_blank" rel="noopener">Download</a></div></article>';}
@@ -14,7 +14,7 @@
           var accessCol=FACILITY_ACCESS_COL[f]; if(!accessCol)return;
           var box=el('memberContentList'); if(!box)return;
           var m=findCurrentMember();
-          var unlocked=!!(m&&isActive(m)&&m[accessCol]===true);
+          var unlocked=!!(m&&isActive(m)&&m[accessCol]===true&&!m.locked_by_expired&&!m.is_expired_by_date);
           if(!unlocked){ box.innerHTML='<div class="facility-locked-box"><span>Kamu belum memiliki akses ke fasilitas ini. Aktifkan dulu supaya bisa membuka materi dan tools di halaman ini.</span><a class="btn mini" href="member-renewal.html">Aktifkan Fasilitas</a></div>'; return; }
           var dbKey=FACILITY_DB_KEY[f];
           var okAccess=['public','member',dbKey,'all_paid'];

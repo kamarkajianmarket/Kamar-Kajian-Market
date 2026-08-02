@@ -143,12 +143,18 @@ body{background:#070707;color:var(--text)}
       if(license.request_status==='rejected') html += '<p>Permintaan license ditolak admin. Hubungi admin untuk info lebih lanjut.</p>';
       html += '</div>';
       if(license.request_status==='active'){
-        var toolsRes = await c.from('tools_files').select('*').eq('access_required', FACILITY_KEY).eq('publish_status','published').eq('is_active', true).order('sort_order');
-        var files = toolsRes.data || [];
-        html += '<div class="split-card"><span class="eyebrow">Download</span><h2>File '+FACILITY_LABEL+'</h2>';
-        if(!files.length){ html += '<div class="admin-empty-state">Belum ada file tersedia. Hubungi admin.</div>'; }
-        else { html += files.map(function(f){ return '<div class="setting-card" style="margin-bottom:10px"><span>'+esc(f.title)+(f.version_label?' &middot; v'+esc(f.version_label):'')+'</span><div class="button-row"><a class="btn mini" href="'+esc(f.file_url||'#')+'" target="_blank" rel="noopener">Download</a></div></div>'; }).join(''); }
-        html += '</div>';
+        var matRes = await c.from('materials').select('*').eq('access_required', FACILITY_KEY).eq('publish_status','published').eq('is_active', true).order('sort_order');
+              var mats = matRes.data || [];
+              html += '<div class="split-card"><span class="eyebrow">Download</span><h2>Materi '+FACILITY_LABEL+'</h2><p>Panduan dan dokumen pendukung '+FACILITY_LABEL+'.</p>';
+              if(!mats.length){ html += '<div class="admin-empty-state">Belum ada materi tersedia. Cek lagi nanti.</div>'; }
+              else { html += mats.map(function(f){ return '<div class="setting-card" style="margin-bottom:10px"><span>'+esc(f.title)+(f.version_label?' &middot; v'+esc(f.version_label):'')+'</span><div class="button-row"><a class="btn mini" href="'+esc(f.material_url||'#')+'" target="_blank" rel="noopener">Download</a></div></div>'; }).join(''); }
+              html += '</div>';
+              var toolsRes = await c.from('tools_files').select('*').eq('access_required', FACILITY_KEY).eq('publish_status','published').eq('is_active', true).order('sort_order');
+              var files = toolsRes.data || [];
+              html += '<div class="split-card"><span class="eyebrow">Tools</span><h2>File Tools '+FACILITY_LABEL+'</h2>';
+              if(!files.length){ html += '<div class="admin-empty-state">Belum ada file tersedia. Hubungi admin.</div>'; }
+              else { html += files.map(function(f){ return '<div class="setting-card" style="margin-bottom:10px"><span>'+esc(f.title)+(f.version_label?' &middot; v'+esc(f.version_label):'')+'</span><div class="button-row"><a class="btn mini" href="'+esc(f.file_url||'#')+'" target="_blank" rel="noopener">Download</a></div></div>'; }).join(''); }
+              html += '</div>';
       }
     }
     box.outerHTML = html;

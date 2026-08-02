@@ -299,3 +299,67 @@
      padding:3px 8px;
      border-radius:999px;
 }
+
+/* Kamar Step 71: grid & card untuk section Download (tabel materials) dan
+   Tools (tabel tools_files) di halaman fasilitas member (member-materials,
+   member-study, member-private, member-indicator, member-robot). Meniru
+   gaya .member-payment-card supaya konsisten dengan tampilan halaman utama. */
+.facility-content-grid{
+     display:grid;
+     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+     gap:16px;
+     margin-top:16px;
+}
+.facility-content-card{
+     display:flex;
+     flex-direction:column;
+     justify-content:space-between;
+     gap:10px;
+     border:1px solid rgba(238,206,122,.16);
+     border-radius:22px;
+     padding:18px;
+     background:
+            linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
+            radial-gradient(circle at 0% 0%,rgba(244,223,144,.08),transparent 46%);
+     box-shadow:0 14px 40px rgba(0,0,0,.20);
+     transition:transform .2s ease, border-color .2s ease;
+}
+.facility-content-card:hover{
+     transform:translateY(-3px);
+     border-color:rgba(244,223,144,.38);
+}
+.facility-content-card h3{
+     margin:0;
+     color:#fff3d8;
+     font-size:16px;
+     letter-spacing:-.01em;
+}
+.facility-content-card p{
+     margin:0;
+     color:var(--muted);
+     font-size:13px;
+     line-height:1.55;
+}
+.facility-locked-box{
+     border:1px solid rgba(255,96,96,.24);
+     background:rgba(255,96,96,.07);
+     border-radius:22px;
+     padding:20px;
+     color:#ffd8d8;
+     line-height:1.6;
+     display:flex;
+     flex-wrap:wrap;
+     align-items:center;
+     gap:12px;
+     justify-content:space-between;
+}
+.facility-guide-box{
+     border:1px solid rgba(158,255,202,.22);
+     background:rgba(28,97,65,.08);
+     border-radius:20px;
+     padding:14px 16px;
+     color:#c9ffe1;
+     font-size:13px;
+     line-height:1.6;
+     margin:0 0 16px;
+}

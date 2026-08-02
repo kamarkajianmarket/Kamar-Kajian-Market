@@ -353,7 +353,7 @@
      gap:12px;
      justify-content:space-between;
 }
-.facility-guide-box{
+/* Kamar Step 75: rapikan card Profil Akun (label/value) */ .profile-detail-list{display:flex;flex-direction:column;gap:2px} .profile-detail-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 4px;border-bottom:1px solid rgba(255,255,255,.06);flex-wrap:wrap} .profile-detail-row:last-child{border-bottom:none} .profile-detail-row>span{color:var(--muted);font-size:13px;font-weight:700;letter-spacing:.01em;white-space:nowrap} .profile-detail-row>strong{color:var(--text);font-size:14px;font-weight:600;text-align:right;word-break:break-word} .facility-guide-box{
      border:1px solid rgba(158,255,202,.22);
      background:rgba(28,97,65,.08);
      border-radius:20px;

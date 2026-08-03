@@ -113,7 +113,7 @@ var html = '<div class="split-card" id="licenseFormCard"><span class="eyebrow">R
 if(isRevision && v.admin_note){
 html += '<div class="expired-note">Admin meminta revisi: '+esc(v.admin_note)+'</div>';
 }
-html += '<div class="facility-guide-box">Petunjuk: isi Nama Broker, Nomor Akun Trading, dan Nama Server MT5 PERSIS SAMA (termasuk huruf besar/kecil) seperti yang tercatat di akun MetaTrader 5 kamu — sistem mencocokkan data ini secara case-sensitive dan karakter-per-karakter, jadi typo atau beda kapitalisasi sedikit saja bisa membuat EA/Indikator tidak aktif. Khusus Nama Broker, tulis nama badan usaha/perusahaan lengkap (bukan nama singkat/brand), persis seperti yang tertera saat klik kanan akun di panel Navigator MT5 &rarr; Properties, atau di Laporan Akun (File &rarr; Statement/Report). Jangan cek dari menu Help &rarr; About karena itu hanya menampilkan versi software, bukan nama broker. Contoh: &quot;TradeMax Global Limited&quot;, &quot;Exness Technology Limited&quot;, &quot;FBS Markets Inc.&quot;, dan sejenisnya. Data hanya bisa dikirim 1 kali untuk request baru, jadi pastikan sudah benar sebelum submit.</div>'+
+html += '<div class="facility-guide-box">Petunjuk: isi Nama Broker, Nomor Akun Trading, dan Nama Server MT5 PERSIS SAMA (termasuk huruf besar/kecil) seperti yang tercatat di akun MetaTrader 5 kamu — sistem mencocokkan data ini secara case-sensitive dan karakter-per-karakter, jadi typo atau beda kapitalisasi sedikit saja bisa membuat EA/Indikator tidak aktif. Khusus Nama Broker, tulis nama badan usaha/perusahaan lengkap (bukan nama singkat/brand), persis seperti yang tertera saat klik kanan akun di panel Navigator MT5 &rarr; Properties, atau di Laporan Akun (File &rarr; Statement/Report). Jangan cek dari menu Help &rarr; About karena itu hanya menampilkan versi software, bukan nama broker. Contoh: &quot;TradeMax Global Limited&quot;, &quot;Exness Technology Limited&quot;, &quot;FBS Markets Inc.&quot;, dan sejenisnya. 1 token hanya berlaku untuk 1 akun/broker/server sesuai data yang Anda kirim di sini, dan tidak bisa diedit setelah dikirim (kecuali admin meminta revisi). Jika Anda memang berhak menggunakan lebih dari 1 akun trading, ajukan token baru dari halaman ini setelah token sebelumnya disetujui admin — mengikuti kuota token Anda (lihat card Ringkasan di atas).</div>'+
 '<form id="licenseRequestForm" class="grid-2 kamar-form-grid">'+
 '<label class="field"><span>Nama Broker (nama perusahaan lengkap) *</span><input type="text" id="licBroker" value="'+esc(v.broker_name||'')+'" placeholder="Contoh: Exness Technology Limited, TradeMax Global Limited" required/></label>'+
 '<label class="field"><span>Nomor Akun Trading *</span><input type="number" id="licAccount" value="'+esc(v.account_id||'')+'" placeholder="Contoh: 12345678" required/></label>'+
@@ -213,32 +213,32 @@ return '<div class="split-card"><span class="eyebrow">Panduan</span><h2>Panduan 
 '<p>4. Salin file yang sudah diunduh ke folder tersebut, lalu restart MetaTrader 5.</p>'+
 '<p>5. Buka chart pair yang diinginkan, drag EA dari Navigator ke chart.</p>'+
 '<p>6. Aktifkan <strong>AlgoTrading/AutoTrading</strong> di toolbar MT5. Pada jendela input EA yang muncul, buka bagian <strong>00. LICENSE ONLINE KAMAR ROBOT</strong>, lalu isi parameter <strong>License_Token</strong> dengan token dari card License Aktif di atas (copy dari tombol Copy), lalu klik OK.</p>'+
-'<p>7. Pastikan Nama Broker, Nomor Akun, dan Nama Server pada akun MT5 Anda sama persis dengan data yang terdaftar di request license — jika berbeda, EA tidak akan aktif meski token benar.</p>'+
+'<p>7. Pastikan Nama Broker, Nomor Akun, dan Nama Server pada akun MT5 Anda sama persis dengan data yang terdaftar di request license — jika berbeda, EA tidak akan aktif meski token benar. Setiap token hanya berlaku untuk 1 akun; kalau Anda punya lebih dari 1 token aktif, pasangkan tiap token ke akun MT5 yang sesuai dengan pendaftarannya masing-masing.</p>'+
 '<p>Butuh bantuan instalasi? Hubungi admin melalui menu Profil Akun.</p>'+
 '</div></div>';
 }
 
-function licenseActiveCardHTML(license){
+function licenseActiveCardHTML(license, idx, total){
 var expiry = license.expired_at ? fmtDate(license.expired_at) : (license.license_type==='lifetime' ? 'Lifetime (tanpa batas)' : '-');
 var suspendedNote = license.status!=='active' ? ('<div class="expired-note">Status akun license: '+accountStatusPill(license.status)+'. '+(license.admin_note?esc(license.admin_note):'Hubungi admin untuk info lebih lanjut.')+'</div>') : '';
-return '<div class="split-card"><span class="eyebrow">License Aktif</span><h2>License '+FACILITY_LABEL+'</h2>'+
+var titleSuffix = total>1 ? (' — Token '+(idx+1)+' dari '+total) : '';
+return '<div class="split-card"><span class="eyebrow">License Aktif</span><h2>License '+FACILITY_LABEL+titleSuffix+'</h2>'+
 suspendedNote+
 '<div class="admin-detail-panel">'+
 '<div class="setting-card"><span>Status Akun License</span><strong>'+accountStatusPill(license.status)+'</strong></div>'+
 '<div class="setting-card"><span>Paket</span><strong>'+esc(license.license_type||'-')+'</strong></div>'+
-'<div class="setting-card"><span>Token License</span><strong><span id="licTokenMasked">'+esc(maskToken(license.token))+'</span> <button type="button" class="btn mini secondary" id="licTokenReveal">Reveal</button> <button type="button" class="btn mini secondary" id="licTokenCopy">Copy</button></strong></div>'+
+'<div class="setting-card"><span>Token License</span><strong><span id="licTokenMasked_'+idx+'">'+esc(maskToken(license.token))+'</span> <button type="button" class="btn mini secondary" data-reveal="'+idx+'">Reveal</button> <button type="button" class="btn mini secondary" data-copy="'+idx+'">Copy</button></strong></div>'+
 '<div class="setting-card"><span>Berlaku Sampai</span><strong>'+esc(expiry)+'</strong></div>'+
-'<div class="setting-card"><span>Allowed Accounts</span><strong>'+esc(license.allowed_accounts||1)+'</strong></div>'+
 '<div class="setting-card"><span>Broker / Server</span><strong>'+esc(license.broker_name)+' &middot; '+esc(license.server_name)+'</strong></div>'+
 '<div class="setting-card"><span>Nomor Akun</span><strong>'+esc(license.account_id)+'</strong></div>'+
 '<div class="setting-card"><span>Disetujui Pada</span><strong>'+fmtDate(license.reviewed_at)+'</strong></div>'+
-'</div></div>';
+'</div><p style="margin-top:12px;font-size:13px">Token ini hanya berlaku untuk akun/broker/server di atas — pasang di EA yang berjalan pada akun MT5 yang sama persis.</p></div>';
 }
 
-function bindTokenReveal(license){
-var maskedEl = document.getElementById('licTokenMasked');
-var revealBtn = document.getElementById('licTokenReveal');
-var copyBtn = document.getElementById('licTokenCopy');
+function bindTokenReveal(license, idx){
+var maskedEl = document.getElementById('licTokenMasked_'+idx);
+var revealBtn = document.querySelector('[data-reveal="'+idx+'"]');
+var copyBtn = document.querySelector('[data-copy="'+idx+'"]');
 var revealed = false;
 if(revealBtn) revealBtn.addEventListener('click', function(){
 revealed = !revealed;
@@ -260,22 +260,31 @@ return '<div class="split-card"><span class="eyebrow">Status Request</span><h2>S
 '<div class="setting-card"><span>Broker / Server</span><strong>'+esc(license.broker_name)+' &middot; '+esc(license.server_name)+'</strong></div>'+
 '<div class="setting-card"><span>Nomor Akun</span><strong>'+esc(license.account_id)+'</strong></div>'+
 '</div>'+
-(license.request_status==='pending' ? '<p>Permintaan Anda sedang menunggu ditinjau admin.</p>' : '')+
+(license.request_status==='pending' ? '<p>Permintaan Anda sedang menunggu ditinjau admin. Anda tidak bisa mengajukan token baru sampai permintaan ini diproses.</p>' : '')+
 (license.request_status==='under_review' ? '<p>Permintaan Anda sedang ditahan untuk ditinjau lebih lanjut oleh admin.</p>' : '')+
 (license.request_status==='rejected' ? '<p>Permintaan license ditolak admin. '+esc(license.admin_note||'Hubungi admin untuk info lebih lanjut.')+'</p>' : '')+
 (license.request_status==='revision_required' ? '<p>Admin meminta Anda memperbaiki data pada card Request License di atas.</p>' : '')+
 '</div>';
 }
 
-async function historyCardHTML(c, license){
-var html = '<div class="split-card"><span class="eyebrow">Riwayat</span><h2>Riwayat License</h2>';
+function quotaReachedNoteHTML(quota){
+return '<div class="split-card"><span class="eyebrow">Request License</span><h2>Kuota Token Tercapai</h2><div class="expired-note">Anda sudah memiliki '+quota+' token aktif untuk '+FACILITY_LABEL+', yaitu batas maksimum kuota Anda saat ini. Hubungi admin melalui menu Profil Akun jika Anda memang membutuhkan token tambahan untuk akun trading lain.</div></div>';
+}
+
+async function historyCardHTML(c, rows){
+var html = '<div class="split-card"><span class="eyebrow">Riwayat</span><h2>Riwayat Semua Pengajuan License</h2>';
 try{
-var res = await c.from('kamar_license_audit_log').select('*').eq('license_id', license.id).order('created_at', {ascending:false});
-var rows = res.data || [];
-if(!rows.length){ html += '<div class="admin-empty-state">Belum ada riwayat tindakan untuk license ini.</div>'; }
+var all = [];
+for(var i=0;i<rows.length;i++){
+var res = await c.from('kamar_license_audit_log').select('*').eq('license_id', rows[i].id).order('created_at', {ascending:false});
+var logs = (res.data||[]).map(function(r){ r._account = rows[i].account_id; return r; });
+all = all.concat(logs);
+}
+all.sort(function(a,b){ return new Date(b.created_at||0) - new Date(a.created_at||0); });
+if(!all.length){ html += '<div class="admin-empty-state">Belum ada riwayat tindakan.</div>'; }
 else {
-html += rows.map(function(r){
-return '<div class="setting-card" style="margin-bottom:10px"><span>'+esc((r.action||'-').toUpperCase())+' &middot; '+fmtDate(r.created_at)+'</span>'+
+html += all.map(function(r){
+return '<div class="setting-card" style="margin-bottom:10px"><span>'+esc((r.action||'-').toUpperCase())+' &middot; '+fmtDate(r.created_at)+' &middot; Akun '+esc(r._account||'-')+'</span>'+
 '<strong style="display:block;margin-top:6px;font-size:14px">'+esc(r.from_request_status||'-')+' &rarr; '+esc(r.to_request_status||'-')+'</strong>'+
 (r.note?('<small style="display:block;margin-top:6px">'+esc(r.note)+'</small>'):'')+
 '</div>';
@@ -286,14 +295,14 @@ html += '</div>';
 return html;
 }
 
-function ringkasanCardHTML(license){
-var licStat = !license ? 'Belum Request' : (REQUEST_STATUS_LABEL[license.request_status]||license.request_status);
-var licHint = !license ? 'Ajukan license pada card di bawah untuk mulai menggunakan '+FACILITY_LABEL+'.' : (license.status==='active' ? 'License aktif dan siap digunakan.' : 'Lihat card Status Request untuk detail.');
+function ringkasanCardHTML(rows, activeRows, quota, openRow){
+var licHint = !rows.length ? ('Ajukan license pada card di bawah untuk mulai menggunakan '+FACILITY_LABEL+'.') : (openRow ? 'Lihat card Status Request untuk detail.' : (activeRows.length>=quota ? 'Anda sudah menggunakan seluruh kuota token aktif.' : 'Anda masih bisa mengajukan token tambahan.'));
+var akunText = activeRows.length===0 ? 'Belum ada akun terdaftar' : (activeRows.length===1 ? (esc(activeRows[0].broker_name)+' &middot; '+esc(activeRows[0].server_name)) : (activeRows.length+' akun terdaftar — lihat card License Aktif di bawah'));
 return '<div class="split-card"><span class="eyebrow">Ringkasan</span><h2>'+FACILITY_LABEL+'</h2>'+
 '<div class="grid-3">'+
 '<div class="stat-card"><span>Akses Fasilitas</span><strong>Aktif</strong><small>Fasilitas '+FACILITY_LABEL+' sudah aktif di akun Anda.</small></div>'+
-'<div class="stat-card"><span>Status License</span><strong>'+esc(licStat)+'</strong><small>'+esc(licHint)+'</small></div>'+
-'<div class="stat-card"><span>Akun Terdaftar</span><strong>'+(license?esc(license.account_id):'-')+'</strong><small>'+(license?(esc(license.broker_name)+' &middot; '+esc(license.server_name)):'Belum ada akun terdaftar')+'</small></div>'+
+'<div class="stat-card"><span>Token Aktif</span><strong>'+activeRows.length+' / '+quota+'</strong><small>'+esc(licHint)+'</small></div>'+
+'<div class="stat-card"><span>Akun Terdaftar</span><strong>'+(activeRows.length||'-')+'</strong><small>'+akunText+'</small></div>'+
 '</div></div>';
 }
 
@@ -316,22 +325,26 @@ if(!hasAccess){
 box.innerHTML='<div class="expired-note">Anda belum memiliki akses '+FACILITY_LABEL+'. <a class="btn mini" href="member-renewal.html">Aktifkan Fasilitas</a></div>';
 return;
 }
-var licRes = await c.from('kamar_licenses').select('*').eq('member_profile_id', pid).eq('facility_key', FACILITY_KEY).limit(1);
-var license = licRes.data && licRes.data[0];
+var quota = Number(FACILITY_KEY==='kamar_indikator' ? access.max_license_kamar_indikator : access.max_license_kamar_robot) || 1;
+var licRes = await c.from('kamar_licenses').select('*').eq('member_profile_id', pid).eq('facility_key', FACILITY_KEY).order('requested_at', {ascending:false});
+var rows = licRes.data || [];
+var openRow = rows.find(function(r){ return ['pending','under_review','revision_required'].indexOf(r.request_status)>=0; });
+var activeRows = rows.filter(function(r){ return r.request_status==='active'; });
+var isRevision = !!(openRow && openRow.request_status==='revision_required');
+var showForm = isRevision || (!openRow && activeRows.length < quota);
 
-var html = ringkasanCardHTML(license);
+var html = ringkasanCardHTML(rows, activeRows, quota, openRow);
 html += await renderDownloadCard(c);
-var isRevision = license && license.request_status==='revision_required';
-var showForm = !license || isRevision;
-if(showForm) html += requestFormHTML(license, isRevision);
-if(license) html += statusRequestCardHTML(license);
-if(license && license.status==='active') html += licenseActiveCardHTML(license);
+if(showForm) html += requestFormHTML(isRevision?openRow:null, isRevision);
+if(openRow) html += statusRequestCardHTML(openRow);
+if(!showForm && !openRow && activeRows.length>=quota) html += quotaReachedNoteHTML(quota);
+activeRows.forEach(function(lic, idx){ html += licenseActiveCardHTML(lic, idx, activeRows.length); });
 html += guideCardHTML();
-if(license) html += await historyCardHTML(c, license);
+if(rows.length) html += await historyCardHTML(c, rows);
 
 box.outerHTML = html;
-if(showForm) bindRequestForm(c, license, isRevision);
-if(license && license.status==='active') bindTokenReveal(license);
+if(showForm) bindRequestForm(c, isRevision?openRow:null, isRevision);
+activeRows.forEach(function(lic, idx){ bindTokenReveal(lic, idx); });
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
 })();

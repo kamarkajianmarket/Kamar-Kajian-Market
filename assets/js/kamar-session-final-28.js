@@ -35,8 +35,8 @@
     bridge();
     var f=file();
     var adminPages=['admin.html','admin-members.html','admin-internal.html','admin-activation.html','admin-activation-v2.html','admin-affiliate.html','admin-affiliate-v2.html','admin-connection-check.html','admin-banner.html','admin-video.html','admin-materials.html','admin-payment.html','admin-settings.html','admin-tools.html','admin-maintenance.html','admin-page-control.html','admin-dashboard-control.html','admin-study-control.html','admin-links.html','admin-data-check.html'];
-    var memberPages=['dashboard.html','member-profile.html','member-materials.html','member-study.html','member-private.html','member-indicator.html','member-robot.html','member-activate.html','member-activate-edukasi.html','member-activate-study.html','member-renewal.html'];
-    var affiliatePages=['affiliate-dashboard.html'];
+    var memberPages=['dashboard.html','member-profile.html','member-materials.html','member-study.html','member-private.html','member-indicator.html','member-robot.html','member-activate.html','member-activate-edukasi.html','member-activate-study.html','member-renewal.html','member-affiliate-activate.html','affiliate-dashboard.html'];
+    var affiliatePages=[];
     if(adminPages.indexOf(f)>=0 && !isAdmin(get('kamarAdminSession'))) location.replace('admin-login.html?v='+VERSION);
     if(memberPages.indexOf(f)>=0 && !isMember(get('kamarMemberSession'))) location.replace('member.html?v='+VERSION);
     if(affiliatePages.indexOf(f)>=0 && !get('kamarAffiliateSession')) location.replace('affiliate.html?v='+VERSION);

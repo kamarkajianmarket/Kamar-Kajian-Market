@@ -67,10 +67,14 @@
           <input autocomplete="off" name="referral" placeholder="Isi jika ada kode referral affiliate" type="text"/>
         </label>
       </div>
+      <label class="toggle-row full" style="margin-top:6px">
+        <input id="registerTos" name="tos" required type="checkbox"/>
+        <span>Saya menyetujui <a href="index.html#faq" target="_blank">Syarat dan Ketentuan</a>.</span>
+      </label>
       <div class="auth-status" hidden=""></div>
-      <button class="btn" type="submit">Daftar Sekarang</button>
+      <button class="btn" type="submit">Daftar</button>
       <div class="auth-switch">
-        <div class="switch-row">Sudah punya akun? <a class="pill" href="member.html">Login di sini</a></div>
+        <div class="switch-row">Sudah punya akun? <a class="pill" href="member.html">LOGIN</a></div>
       </div>
     </form>
   </div>
@@ -140,5 +144,26 @@
 })();
 </script>
 <script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script id="kamar-affiliate-referral-capture">
+(function(){
+  try{
+    var params=new URLSearchParams(location.search);
+    var ref=params.get('ref');
+    if(!ref) return;
+    function fillField(){
+      var el=document.querySelector('#kamarRegisterForm [name="referral"]');
+      if(el && !el.value) el.value=ref;
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fillField); else fillField();
+    function trackClick(){
+      try{
+        var c=window.kamarSupabaseClient || (window.KamarSupabase && window.KamarSupabase.getClient && window.KamarSupabase.getClient());
+        if(c && c.rpc) c.rpc('track_affiliate_click', {p_code: ref});
+      }catch(e){}
+    }
+    if(document.readyState==='complete') trackClick(); else window.addEventListener('load', trackClick);
+  }catch(e){}
+})();
+</script>
 </body>
 </html>

@@ -113,9 +113,9 @@ function requestFormHTML(license, isRevision){
   if(isRevision && v.admin_note){
     html += '<div class="expired-note">Admin meminta revisi: '+esc(v.admin_note)+'</div>';
   }
-  html += '<div class="facility-guide-box">Petunjuk: isi Nama Broker, Nomor Akun Trading, dan Nama Server MT5 PERSIS SAMA seperti yang tertera di aplikasi MetaTrader 5 kamu (cek di info akun MT5 — jangan disingkat atau diketik ulang manual, karena license dicocokkan berdasarkan data ini). Data hanya bisa dikirim 1 kali untuk request baru, jadi pastikan sudah benar sebelum submit.</div>'+
+  html += '<div class="facility-guide-box">Petunjuk: isi Nama Broker, Nomor Akun Trading, dan Nama Server MT5 PERSIS SAMA seperti yang tertera di aplikasi MetaTrader 5 kamu (cek di info akun MT5 — jangan disingkat atau diketik ulang manual, karena license dicocokkan berdasarkan data ini). Khusus Nama Broker, tulis nama badan usaha/perusahaan lengkap sesuai yang tertera di info akun MT5 (menu Help &rarr; About atau tab Navigator &rarr; Accounts), BUKAN nama singkat/brand. Contoh: &quot;TradeMax Global Limited&quot;, &quot;Exness Technology Limited&quot;, &quot;FBS Markets Inc.&quot;, dan sejenisnya. Data hanya bisa dikirim 1 kali untuk request baru, jadi pastikan sudah benar sebelum submit.</div>'+
   '<form id="licenseRequestForm" class="grid-2 kamar-form-grid">'+
-  '<label class="field"><span>Nama Broker *</span><input type="text" id="licBroker" value="'+esc(v.broker_name||'')+'" placeholder="Contoh: Exness, FBS, XM" required/></label>'+
+  '<label class="field"><span>Nama Broker (nama perusahaan lengkap) *</span><input type="text" id="licBroker" value="'+esc(v.broker_name||'')+'" placeholder="Contoh: Exness Technology Limited, TradeMax Global Limited" required/></label>'+
   '<label class="field"><span>Nomor Akun Trading *</span><input type="number" id="licAccount" value="'+esc(v.account_id||'')+'" placeholder="Contoh: 12345678" required/></label>'+
   '<label class="field"><span>Nama Server MT5 *</span><input type="text" id="licServer" value="'+esc(v.server_name||'')+'" placeholder="Contoh: Exness-MT5Real8" required/></label>'+
   '<label class="field"><span>Nama Pemilik Akun</span><input type="text" id="licOwner" value="'+esc(v.account_holder_name||'')+'" placeholder="Sesuai nama di akun MT5"/></label>'+

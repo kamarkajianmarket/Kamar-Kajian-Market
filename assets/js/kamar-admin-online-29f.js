@@ -33,7 +33,8 @@
     { label:'Member & Akses', items:[
       ['admin-members.html','Data Member'],
       ['admin-internal.html','Data Internal'],
-      ['admin-activation.html','Aktivasi Akun & Fasilitas']
+      ['admin-activation.html','Aktivasi Akun & Fasilitas'],
+            ['admin-license-requests.html','Request License']
       ] },
     { label:'Affiliate', items:[
       ['admin-affiliate-overview.html','Data Affiliate'],

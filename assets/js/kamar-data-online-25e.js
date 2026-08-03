@@ -107,7 +107,7 @@
     '<div class="setting-card" style="grid-column:1/-1"><span>Fasilitas Aktif</span><strong>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</strong></div>'+
     '</div>'; }
   function fillMemberDashboard(){
-if(!/dashboard\.html$/i.test(location.pathname))return;
+if((location.pathname.split('/').pop()||'').toLowerCase()!=='dashboard.html')return;
 var m=findCurrentMember(); if(!m)return;
 setText('memberWelcomeTitle','Selamat datang, '+nameOf(m)+'.');
 setText('memberWelcomeText','ID: '+(idOf(m)||'-'));

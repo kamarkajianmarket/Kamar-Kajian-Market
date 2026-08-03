@@ -358,3 +358,22 @@ dan .member-list .row (admin-activation.html). */
 .admin-empty,.admin-note-soft{ color:var(--km-muted) !important; }
 .admin-empty{ border-color:var(--km-line) !important; background:#fbf7ee !important; }
 .admin-toolbar-grid label{ color:var(--km-ink) !important; }
+
+/* ==========================================================================
+PERLUASAN v2.3 (2026-08-03) — ditemukan saat verifikasi end-to-end toggle
+fasilitas di admin-activation.html: panel "DETAIL MEMBER" (.info-box) dan
+"Toggle Fasilitas" (.toggle-grid) memakai class BERBEDA dari yang ditebak
+di v2.2 (.admin-detail-box), jadi belum ter-cover — teks masih pakai warna
+tema lama (krem/mint pucat) yang nyaris tak terbaca di atas kartu terang.
+========================================================================== */
+
+.info-box{ background:#fff !important; border:1px solid var(--km-line) !important; border-radius:18px !important; }
+.info-box span{ color:var(--km-gold) !important; font-weight:900 !important; letter-spacing:.08em !important; }
+.info-box strong{ color:var(--km-ink) !important; }
+
+.toggle-grid strong{ color:var(--km-ink) !important; }
+.toggle-grid small{ color:var(--km-muted) !important; }
+
+.btn.danger{ color:#8a2b2b !important; background:rgba(196,60,60,.10) !important; border:1px solid rgba(196,60,60,.28) !important; }
+
+.note{ color:#0e5f54 !important; background:rgba(14,95,84,.06) !important; border:1px solid rgba(14,95,84,.22) !important; }

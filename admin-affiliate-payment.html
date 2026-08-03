@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pencairan Komisi Affiliate — Kamar Kajian Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
+  <style>
+    :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;--accent:#6fa8ff;--accent-soft:rgba(111,168,255,.14);--accent-line:rgba(111,168,255,.5);}
+    *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
+    .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
+    .admin-main{display:grid;gap:22px;min-width:0}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px;min-width:0;overflow:hidden}.hero{padding:34px}.hero-inner{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{display:flex;align-items:center;gap:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:900;margin-bottom:12px}.eyebrow:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.module-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;margin-bottom:12px}.hero h1{margin:0;font-size:clamp(36px,4vw,58px);letter-spacing:-.055em;line-height:.95}.hero p{max-width:850px;margin:14px 0 0;color:var(--muted);font-size:16px;line-height:1.65}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .btn{border:0;border-radius:18px;padding:13px 18px;font-weight:900;background:linear-gradient(135deg,#fff1a9,#d8ae47);color:#14100a;cursor:pointer;transition:.18s ease;white-space:nowrap}.btn:hover{transform:translateY(-1px);filter:saturate(1.04)}.btn.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--gold2)}.btn.danger{border:1px solid rgba(255,155,155,.35);background:rgba(255,90,90,.12);color:#ffd1d1}.btn.good{border:1px solid rgba(159,240,189,.35);background:rgba(36,185,96,.14);color:#d7ffe5}.btn.small{padding:10px 13px;border-radius:15px;font-size:13px}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;filter:none!important}
+    .section-title{margin:0 0 14px;display:flex;align-items:center;gap:14px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:13px;font-weight:900}.section-title:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.muted{color:var(--muted);line-height:1.55}
+    .submenu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.submenu-card{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.026);padding:20px;display:flex;flex-direction:column;gap:12px;min-height:160px;transition:.18s ease}.submenu-card:hover{transform:translateY(-1px);border-color:rgba(232,201,111,.4);background:rgba(232,201,111,.06)}.submenu-card.active{transform:translateY(-1px);border-color:var(--accent-line);border-left:4px solid var(--accent);background:var(--accent-soft)}.submenu-card h3{margin:0;color:var(--gold2);font-size:13px;letter-spacing:.16em;text-transform:uppercase}.submenu-card.active h3{color:var(--accent)}.submenu-card strong{font-size:22px;letter-spacing:-.035em}.submenu-card p{margin:0;color:var(--muted);line-height:1.45;font-weight:750;min-height:42px}.submenu-card .btn{align-self:flex-start;margin-top:auto}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.stat-card{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;background:rgba(255,255,255,.026);padding:16px 18px;display:block}.stat-card span{display:block;color:var(--gold2);text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:900}.stat-card strong{display:block;font-size:32px;line-height:1;margin:10px 0 8px;font-variant-numeric:tabular-nums}.stat-card small{display:block;color:var(--muted);line-height:1.45}
+    .toolbar{display:grid;grid-template-columns:minmax(260px,1fr) minmax(190px,.6fr) 120px 118px;gap:12px;align-items:end;margin:18px 0 22px}.field{display:grid;gap:7px;font-weight:900;color:var(--text)}input,select,textarea{width:100%;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.04);color:var(--text);border-radius:17px;padding:13px 16px;font:inherit;font-weight:800;outline:none}textarea{min-height:80px;resize:vertical}input::placeholder,textarea::placeholder{color:rgba(247,241,226,.46)}
+    .pay-table{display:grid;gap:14px}.pay-row.head{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .6fr;gap:14px;border:0;background:transparent;padding:0 18px 4px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:900}.pay-row:not(.head){display:grid;grid-template-columns:minmax(210px,1.2fr) minmax(140px,.8fr) minmax(140px,.8fr) minmax(140px,.8fr) minmax(90px,.6fr);gap:14px;align-items:center;border:1px solid rgba(238,206,122,.13);border-left:3px solid var(--accent-line);border-radius:14px;padding:18px;background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015));box-shadow:0 16px 40px rgba(0,0,0,.12)}
+    .pay-name strong{display:block;color:var(--text);font-weight:900}.pay-name small{display:block;color:rgba(247,241,226,.62);line-height:1.45;margin-top:4px}.cell-label{display:none;color:var(--gold2);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;margin-bottom:7px}
+    .pill{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:8px 12px;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:900;line-height:1.1}.pill.ok{color:var(--ok);background:rgba(36,185,96,.1);border-color:rgba(159,240,189,.26)}.pill.warn{color:var(--warn);background:rgba(232,201,111,.11);border-color:rgba(232,201,111,.28)}.pill.bad{color:var(--danger);background:rgba(255,90,90,.10);border-color:rgba(255,155,155,.28)}.pill.info{color:var(--blue);background:rgba(110,169,255,.10);border-color:rgba(155,200,255,.26)}.pill.off{color:rgba(247,241,226,.65);background:rgba(255,255,255,.035)}
+    .row-actions{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;border-top:1px solid rgba(238,206,122,.10);padding-top:14px;margin-top:2px}.empty{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:17px;color:var(--muted);font-weight:800}
+    .toast{position:fixed;right:22px;bottom:22px;z-index:999;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#fff4df;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}
+    .confirm{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:998;padding:20px}.confirm.show{display:flex}.confirm-box{width:100%;max-width:480px;border:1px solid var(--line);border-radius:26px;background:#0c0c0b;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.confirm-box h3{margin:0 0 10px}.confirm-box .field{margin-top:14px}.confirm-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+    @media(max-width:1220px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.pay-row.head{display:none}.pay-row:not(.head){grid-template-columns:1fr}.cell-label{display:block}.row-actions{justify-content:flex-start}}
+    @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.submenu-grid,.stats{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}}
+  </style>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
+  <meta name="kamar-step" content="60-affiliate-payment-admin"/>
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand-small">Admin Kamar</div>
+    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
+    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
+    <div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-overview.html">Data Affiliate</a><a href="admin-affiliate-list.html">Daftar Affiliator</a><a class="active" href="admin-affiliate-payment.html">Pencairan Komisi</a><a href="admin-affiliate-commission-rate.html">Pengaturan Komisi</a><a href="admin-affiliate-reward.html">Reward / Komisi (Lama)</a>
+    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dx">Banner Pengumuman</a><a href="admin-video.html?v=24dx">Konten Video</a><a href="admin-materials.html?v=24dx">Konten & Materi</a><a href="admin-tools.html?v=24dx">File Tools</a>
+    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
+    <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
+  </aside>
+  <main class="admin-main">
+    <section class="card hero">
+      <div class="hero-inner">
+        <div><span class="eyebrow">Affiliate Admin</span> <span class="module-chip">▤ Kelola</span><h1>Pencairan Komisi Affiliate</h1><p>Tinjau, setujui, tolak, atau tandai lunas pengajuan pencairan komisi affiliate. Data rekening lengkap hanya terlihat selama pengajuan masih aktif (Menunggu/Review/Disetujui) — otomatis terhapus setelah Lunas atau Dibatalkan, hanya menyisakan 4 digit terakhir.</p></div>
+        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Struktur Menu Affiliate</h2>
+      <p class="muted">Kelola seluruh alur affiliate dari satu tempat: data ringkas, daftar affiliator, pencairan komisi, dan pengaturan persentase komisi per fasilitas.</p>
+      <div class="submenu-grid">
+        <a class="submenu-card" href="admin-affiliate-overview.html"><h3>Data Affiliate</h3><strong>Ringkasan Affiliate</strong><p>Statistik approval, rekening, pendaftar terbaru, dan leaderboard.</p><span class="btn secondary small">Buka Ringkasan</span></a>
+        <a class="submenu-card" href="admin-affiliate-list.html"><h3>Daftar Affiliator</h3><strong>Kelola Affiliator</strong><p>Detail, salin kode, approve, tolak, dan hapus.</p><span class="btn secondary small">Buka Daftar</span></a>
+        <a class="submenu-card active" href="admin-affiliate-payment.html"><h3>Pencairan Komisi</h3><strong>Approve &amp; Bayar</strong><p>Review, setujui, tolak, atau tandai lunas pengajuan pencairan.</p><span class="btn small">Halaman Ini</span></a>
+      </div>
+    </section>
+
+    <section class="stats" id="payStats">
+      <div class="stat-card"><span>Menunggu / Review</span><strong id="statPending">0</strong><small>Perlu ditinjau admin.</small></div>
+      <div class="stat-card"><span>Disetujui</span><strong id="statApproved">0</strong><small>Siap ditransfer &amp; ditandai lunas.</small></div>
+      <div class="stat-card"><span>Sudah Lunas</span><strong id="statPaid">0</strong><small>Pencairan selesai.</small></div>
+      <div class="stat-card"><span>Ditolak / Dibatalkan</span><strong id="statOther">0</strong><small>Tidak diproses lebih lanjut.</small></div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Daftar Pengajuan Pencairan</h2>
+      <div class="toolbar">
+        <label class="field">Cari Nama / Kode Affiliate<input id="paySearch" placeholder="Cari nama atau kode referral"></label>
+        <label class="field">Status<select id="payStatusFilter"><option value="all">Semua Status</option><option value="pending">Menunggu</option><option value="review">Review</option><option value="approved">Disetujui</option><option value="rejected">Ditolak</option><option value="paid">Lunas</option><option value="cancelled">Dibatalkan</option></select></label>
+        <button class="btn" id="applyPayFilter" type="button">Cari</button>
+        <button class="btn secondary" id="resetPayFilter" type="button">Reset</button>
+      </div>
+      <div class="pay-table" id="payList"></div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="confirm" id="actionModal">
+  <div class="confirm-box">
+    <h3 id="actionTitle">Proses Pengajuan</h3>
+    <p id="actionText"></p>
+    <div class="field" id="refField"><span>Referensi Pembayaran (wajib untuk Lunas)</span><input id="actionRef" placeholder="Contoh: TRF-20260803-001" type="text"/></div>
+    <div class="field"><span>Catatan Admin (opsional)</span><textarea id="actionNote" placeholder="Catatan internal, tidak wajib"></textarea></div>
+    <div class="confirm-actions"><button class="btn secondary" id="cancelAction" type="button">Batal</button><button class="btn good" id="confirmActionBtn" type="button">Proses</button></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29E"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
+<script>
+(function(){
+'use strict';
+var state={requests:[],affiliates:{},client:null,pendingAction:null};
+function el(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
+function norm(v){return String(v==null?'':v).trim().toLowerCase()}
+function rupiah(n){n=Number(n||0);return 'Rp '+n.toLocaleString('id-ID')}
+function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
+function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
+function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
+function statusPill(s){s=norm(s);if(s==='paid')return '<span class="pill ok">Lunas</span>';if(s==='approved')return '<span class="pill info">Disetujui</span>';if(s==='review')return '<span class="pill warn">Review</span>';if(s==='pending')return '<span class="pill warn">Menunggu</span>';if(s==='rejected')return '<span class="pill bad">Ditolak</span>';if(s==='cancelled')return '<span class="pill off">Dibatalkan</span>';return '<span class="pill off">'+esc(s||'-')+'</span>'}
+async function load(){
+  var c=client();
+  el('payList').innerHTML='<div class="empty">Memuat data pengajuan...</div>';
+  if(!c){el('payList').innerHTML='<div class="empty">Koneksi Supabase belum tersedia.</div>';return}
+  try{
+    var res=await c.from('affiliate_payment_requests').select('*').order('created_at',{ascending:false});
+    if(res.error) throw res.error;
+    state.requests=res.data||[];
+    var ids=Array.from(new Set(state.requests.map(function(r){return r.affiliate_id}).filter(Boolean)));
+    state.affiliates={};
+    if(ids.length){
+      var affRes=await c.from('affiliates').select('id,full_name,affiliate_code,email').in('id',ids);
+      (affRes.data||[]).forEach(function(a){state.affiliates[a.id]=a});
+    }
+    render();
+  }catch(e){ el('payList').innerHTML='<div class="empty">Gagal memuat data: '+esc(e.message||e)+'</div>'; }
+}
+function updateStats(){
+  var pend=0,appr=0,paid=0,other=0;
+  state.requests.forEach(function(r){var s=norm(r.status);if(s==='pending'||s==='review')pend++;else if(s==='approved')appr++;else if(s==='paid')paid++;else other++;});
+  el('statPending').textContent=pend; el('statApproved').textContent=appr; el('statPaid').textContent=paid; el('statOther').textContent=other;
+}
+function filtered(){
+  var q=norm((el('paySearch')||{}).value), sf=(el('payStatusFilter')||{}).value||'all';
+  return state.requests.filter(function(r){
+    var aff=state.affiliates[r.affiliate_id]||{};
+    var text=norm([aff.full_name,aff.affiliate_code,aff.email,r.bank_name].join(' '));
+    if(q&&text.indexOf(q)<0)return false;
+    if(sf!=='all'&&norm(r.status)!==sf)return false;
+    return true;
+  });
+}
+function actionsFor(r){
+  var s=norm(r.status), a=[];
+  if(s==='pending'){a.push(['review','Review']);a.push(['approve','Setujui']);a.push(['reject','Tolak']);}
+  else if(s==='review'){a.push(['approve','Setujui']);a.push(['reject','Tolak']);}
+  else if(s==='approved'){a.push(['paid','Tandai Lunas']);a.push(['cancel','Batalkan']);}
+  return a;
+}
+function render(){
+  updateStats();
+  var arr=filtered();
+  var h='<div class="pay-row head"><div>Affiliate</div><div>Nominal</div><div>Rekening</div><div>Status</div><div>Diajukan</div></div>';
+  if(!arr.length) h+='<div class="empty">Tidak ada pengajuan sesuai filter.</div>';
+  arr.forEach(function(r){
+    var aff=state.affiliates[r.affiliate_id]||{};
+    var acct = r.account_number ? (r.bank_name+' · '+r.account_number+' a/n '+(r.account_holder||'-')) : (r.bank_name+' · ****'+(r.account_number_last4||'----'));
+    var actions=actionsFor(r).map(function(pair){
+      var kind=pair[0]==='reject'||pair[0]==='cancel'?'danger':(pair[0]==='paid'||pair[0]==='approve'?'good':'secondary');
+      return '<button class="btn '+kind+' small" data-action="'+pair[0]+'" data-id="'+r.id+'">'+pair[1]+'</button>';
+    }).join('');
+    h+='<div class="pay-row"><div class="pay-name"><span class="cell-label">Affiliate</span><strong>'+esc(aff.full_name||'-')+'</strong><small>'+esc(aff.affiliate_code||'-')+' · '+esc(aff.email||'-')+'</small></div>'+
+      '<div><span class="cell-label">Nominal</span><strong>'+esc(rupiah(r.amount))+'</strong></div>'+
+      '<div><span class="cell-label">Rekening</span><small>'+esc(acct)+'</small>'+(r.payment_reference?('<br><small>Ref: '+esc(r.payment_reference)+'</small>'):'')+'</div>'+
+      '<div><span class="cell-label">Status</span>'+statusPill(r.status)+'</div>'+
+      '<div><span class="cell-label">Diajukan</span><small>'+esc((r.requested_at||r.created_at||'').slice(0,16).replace('T',' '))+'</small></div>'+
+      (actions?('<div class="row-actions">'+actions+'</div>'):'')+
+      '</div>';
+  });
+  el('payList').innerHTML=h;
+  document.querySelectorAll('[data-action]').forEach(function(b){
+    b.onclick=function(){ openAction(b.getAttribute('data-action'), b.getAttribute('data-id')); };
+  });
+}
+function openAction(action,id){
+  var r=state.requests.find(function(x){return x.id===id}); if(!r)return;
+  var aff=state.affiliates[r.affiliate_id]||{};
+  var labels={review:'Tandai sedang direview',approve:'Setujui pengajuan',reject:'Tolak pengajuan',paid:'Tandai lunas',cancel:'Batalkan pengajuan'};
+  el('actionTitle').textContent=labels[action]||'Proses Pengajuan';
+  el('actionText').textContent=(aff.full_name||'Affiliate')+' — '+rupiah(r.amount)+'. Aksi ini akan mengubah status pengajuan.';
+  el('actionRef').value=''; el('actionNote').value='';
+  el('refField').style.display = action==='paid' ? 'grid' : 'none';
+  state.pendingAction={action:action,id:id};
+  el('actionModal').classList.add('show');
+}
+async function doAction(){
+  var pend=state.pendingAction; if(!pend)return;
+  var c=client(); if(!c){toast('Koneksi Supabase belum tersedia.');return}
+  var note=el('actionNote').value.trim()||null;
+  var ref=el('actionRef').value.trim()||null;
+  if(pend.action==='paid' && !ref){toast('Isi Referensi Pembayaran untuk menandai lunas.');return}
+  try{
+    var res=await c.rpc('admin_review_affiliate_payment',{p_request_id:pend.id,p_action:pend.action,p_admin_note:note,p_payment_reference:ref,p_amount:null});
+    if(res.error) throw res.error;
+    var data=res.data;
+    if(data && data.success===false){toast(data.message||'Gagal memproses.');return}
+    el('actionModal').classList.remove('show');
+    toast('Pengajuan berhasil diproses.');
+    await load();
+  }catch(e){ toast('Gagal memproses: '+(e.message||e)); }
+}
+el('refreshBtn').onclick=load;
+el('paySearch').addEventListener('input',render);
+el('payStatusFilter').addEventListener('change',render);
+el('applyPayFilter').onclick=render;
+el('resetPayFilter').onclick=function(){el('paySearch').value='';el('payStatusFilter').value='all';render()};
+el('cancelAction').onclick=function(){state.pendingAction=null;el('actionModal').classList.remove('show')};
+el('confirmActionBtn').onclick=doAction;
+load();
+})();
+</script>
+<script id="kamar-global-header-script">
+(function(){
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+</body>
+</html>

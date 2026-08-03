@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pengaturan Komisi Affiliate — Kamar Kajian Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
+  <style>
+    :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;--accent:#6fa8ff;--accent-soft:rgba(111,168,255,.14);--accent-line:rgba(111,168,255,.5);}
+    *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
+    .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
+    .admin-main{display:grid;gap:22px;min-width:0}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px;min-width:0;overflow:hidden}.hero{padding:34px}.hero-inner{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{display:flex;align-items:center;gap:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:900;margin-bottom:12px}.eyebrow:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.module-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;margin-bottom:12px}.hero h1{margin:0;font-size:clamp(36px,4vw,58px);letter-spacing:-.055em;line-height:.95}.hero p{max-width:850px;margin:14px 0 0;color:var(--muted);font-size:16px;line-height:1.65}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .btn{border:0;border-radius:18px;padding:13px 18px;font-weight:900;background:linear-gradient(135deg,#fff1a9,#d8ae47);color:#14100a;cursor:pointer;transition:.18s ease;white-space:nowrap}.btn:hover{transform:translateY(-1px);filter:saturate(1.04)}.btn.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--gold2)}.btn.small{padding:10px 13px;border-radius:15px;font-size:13px}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .section-title{margin:0 0 14px;display:flex;align-items:center;gap:14px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:13px;font-weight:900}.section-title:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.muted{color:var(--muted);line-height:1.55}
+    .submenu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.submenu-card{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.026);padding:20px;display:flex;flex-direction:column;gap:12px;min-height:160px;transition:.18s ease}.submenu-card:hover{transform:translateY(-1px);border-color:rgba(232,201,111,.4);background:rgba(232,201,111,.06)}.submenu-card.active{transform:translateY(-1px);border-color:var(--accent-line);border-left:4px solid var(--accent);background:var(--accent-soft)}.submenu-card h3{margin:0;color:var(--gold2);font-size:13px;letter-spacing:.16em;text-transform:uppercase}.submenu-card.active h3{color:var(--accent)}.submenu-card strong{font-size:22px;letter-spacing:-.035em}.submenu-card p{margin:0;color:var(--muted);line-height:1.45;font-weight:750;min-height:42px}.submenu-card .btn{align-self:flex-start;margin-top:auto}
+    .rate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .rate-card{border:1px solid rgba(238,206,122,.16);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));padding:20px;display:flex;flex-direction:column;gap:12px}
+    .rate-card .mini-label{display:inline-block;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--gold2);font-weight:900}
+    .rate-card h3{margin:0;font-size:20px}
+    .rate-input-row{display:flex;align-items:center;gap:10px}
+    .rate-input-row input{width:100px;text-align:right;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.05);color:var(--text);border-radius:14px;padding:10px 12px;font:inherit;font-weight:900;outline:none}
+    .rate-input-row span{color:var(--muted);font-weight:900}
+    .toggle-row-mini{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid rgba(238,206,122,.14);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.02)}
+    .toggle-row-mini span{font-weight:800;color:var(--muted);font-size:13px}
+    .toast{position:fixed;right:22px;bottom:22px;z-index:999;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#fff4df;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}.submenu-grid{grid-template-columns:1fr}}
+  </style>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
+  <meta name="kamar-step" content="61-affiliate-commission-rate"/>
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand-small">Admin Kamar</div>
+    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
+    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
+    <div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-overview.html">Data Affiliate</a><a href="admin-affiliate-list.html">Daftar Affiliator</a><a href="admin-affiliate-payment.html">Pencairan Komisi</a><a class="active" href="admin-affiliate-commission-rate.html">Pengaturan Komisi</a><a href="admin-affiliate-reward.html">Reward / Komisi (Lama)</a>
+    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html?v=24dx">Banner Pengumuman</a><a href="admin-video.html?v=24dx">Konten Video</a><a href="admin-materials.html?v=24dx">Konten & Materi</a><a href="admin-tools.html?v=24dx">File Tools</a>
+    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
+    <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
+  </aside>
+  <main class="admin-main">
+    <section class="card hero">
+      <div class="hero-inner">
+        <div><span class="eyebrow">Affiliate Admin</span> <span class="module-chip">▤ Kelola</span><h1>Pengaturan Komisi Affiliate</h1><p>Atur persentase komisi affiliate per fasilitas. Perubahan berlaku otomatis untuk pembayaran member baru yang dikreditkan komisinya setelah perubahan disimpan. Default saat ini: 10% untuk semua fasilitas.</p></div>
+        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Struktur Menu Affiliate</h2>
+      <div class="submenu-grid">
+        <a class="submenu-card" href="admin-affiliate-overview.html"><h3>Data Affiliate</h3><strong>Ringkasan Affiliate</strong><p>Statistik approval, rekening, pendaftar terbaru.</p><span class="btn secondary small">Buka Ringkasan</span></a>
+        <a class="submenu-card" href="admin-affiliate-list.html"><h3>Daftar Affiliator</h3><strong>Kelola Affiliator</strong><p>Detail, salin kode, approve, tolak.</p><span class="btn secondary small">Buka Daftar</span></a>
+        <a class="submenu-card" href="admin-affiliate-payment.html"><h3>Pencairan Komisi</h3><strong>Approve &amp; Bayar</strong><p>Review dan proses pengajuan pencairan.</p><span class="btn secondary small">Buka Pencairan</span></a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Persentase Komisi per Fasilitas</h2>
+      <p class="muted">Ubah angka lalu klik Simpan pada tiap kartu. Nonaktifkan fasilitas untuk menghentikan sementara perhitungan komisi otomatis pada fasilitas tersebut tanpa menghapus data historis.</p>
+      <div class="rate-grid" id="rateGrid"><div class="empty">Memuat data...</div></div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29E"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
+<script>
+(function(){
+'use strict';
+var state={rates:[],client:null};
+function el(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
+function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
+function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
+function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
+async function load(){
+  var c=client();
+  el('rateGrid').innerHTML='<div class="empty">Memuat data...</div>';
+  if(!c){el('rateGrid').innerHTML='<div class="empty">Koneksi Supabase belum tersedia.</div>';return}
+  try{
+    var res=await c.from('affiliate_commission_rates').select('*').order('facility_label',{ascending:true});
+    if(res.error) throw res.error;
+    state.rates=res.data||[];
+    render();
+  }catch(e){ el('rateGrid').innerHTML='<div class="empty">Gagal memuat data: '+esc(e.message||e)+'</div>'; }
+}
+function render(){
+  if(!state.rates.length){ el('rateGrid').innerHTML='<div class="empty">Belum ada data persentase komisi.</div>'; return; }
+  var h='';
+  state.rates.forEach(function(r){
+    h+='<div class="rate-card" data-id="'+r.id+'">'+
+      '<span class="mini-label">'+esc(r.facility_key)+'</span>'+
+      '<h3>'+esc(r.facility_label||r.facility_key)+'</h3>'+
+      '<div class="rate-input-row"><input type="number" min="0" max="100" step="0.5" value="'+Number(r.commission_percent||0)+'" data-field="commission_percent"/><span>%</span></div>'+
+      '<label class="toggle-row-mini"><span>Aktif (dihitung otomatis)</span><input type="checkbox" data-field="is_active" '+(r.is_active?'checked':'')+'/></label>'+
+      '<button class="btn small" data-save="'+r.id+'" type="button">Simpan</button>'+
+      '</div>';
+  });
+  el('rateGrid').innerHTML=h;
+  document.querySelectorAll('[data-save]').forEach(function(b){
+    b.onclick=function(){ save(b.getAttribute('data-save')); };
+  });
+}
+async function save(id){
+  var card=document.querySelector('.rate-card[data-id="'+id+'"]'); if(!card)return;
+  var pct=Number(card.querySelector('[data-field="commission_percent"]').value||0);
+  var active=card.querySelector('[data-field="is_active"]').checked;
+  if(pct<0||pct>100){toast('Persentase harus antara 0-100.');return}
+  var c=client(); if(!c){toast('Koneksi Supabase belum tersedia.');return}
+  try{
+    var res=await c.from('affiliate_commission_rates').update({commission_percent:pct,is_active:active,updated_at:new Date().toISOString()}).eq('id',id);
+    if(res.error) throw res.error;
+    toast('Komisi berhasil disimpan.');
+    await load();
+  }catch(e){ toast('Gagal menyimpan: '+(e.message||e)); }
+}
+el('refreshBtn').onclick=load;
+load();
+})();
+</script>
+<script id="kamar-global-header-script">
+(function(){
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+</body>
+</html>

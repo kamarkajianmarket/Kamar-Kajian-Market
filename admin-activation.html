@@ -25,7 +25,9 @@
 
 
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
-<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><meta name="kamar-step" content="46-luxury-atelier-formation"/></head>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
+<meta name="kamar-step" content="46-luxury-atelier-formation"/></head>
 <body>
 <main class="split-shell">
 <div class="split-app">
@@ -158,6 +160,13 @@
       'Kamar Indikator':'access_kamar_indikator',
       'Kamar Robot':'access_kamar_robot'
     };
+    var FACILITY_RPC_PARAM={
+      'Kamar Edukasi':'enable_materi_edukasi',
+      'Kamar Signal':'enable_kamar_study',
+      'Kamar Private':'enable_kamar_private',
+      'Kamar Indikator':'enable_kamar_indikator',
+      'Kamar Robot':'enable_kamar_robot'
+    };
     var state={client:null,viewRows:[],profileRows:[],accessRows:[],members:[],selectedId:null,loading:false,lastError:'',autoFocused:false};
     function byId(id){return document.getElementById(id)}
     function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -251,8 +260,8 @@
     async function reactivateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.'); try{var upd={account_status:'active',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member diaktifkan kembali.'); await loadData(); showDetail(id)}catch(e){toast('Gagal mengaktifkan kembali: '+(e.message||String(e)))} }
     async function setFacility(id,facLabel,on){
       var m=findMember(id); if(!m)return toast('Member tidak ditemukan.');
-      var col=FACILITY_COLUMN[facLabel];
-      if(!col){ toast('Fasilitas tidak dikenali: '+facLabel); return; }
+      var rpcParam=FACILITY_RPC_PARAM[facLabel];
+      if(!rpcParam){ toast('Fasilitas tidak dikenali: '+facLabel); return; }
       var c=await initClient(); if(!c)return toast('Data belum bisa disimpan.');
       try{
         var email=emailOf(m);
@@ -263,11 +272,32 @@
           if(pr.data && pr.data.length) pid=pr.data[0].id;
         }
         if(!pid){ toast('Tidak menemukan profil member untuk mengubah fasilitas.'); return; }
-        var row={ profile_id: pid, updated_at:new Date().toISOString() };
-        row[col]=!!on;
-        var res=await c.from(TABLE_ACCESS).upsert(row, { onConflict:'profile_id' });
+        // FIXED (2026-08-03): this used to be a raw upsert straight to the
+        // member_access table, touching ONLY the one column being toggled.
+        // That silently left locked_by_expired=true stuck forever on any
+        // member who had previously expired -- so re-enabling a facility for
+        // them here looked like it worked (toast said "aktif"), but their
+        // dashboard sidebar stayed locked, because unlockSidebarFacilities()
+        // in kamar-data-online-25e.js refuses to unlock anything while
+        // locked_by_expired is true, regardless of the individual access_*
+        // column. Calling the admin_update_member_access RPC instead fixes
+        // this: it always resets locked_by_expired=false/locked_reason=null
+        // as part of the same update, in addition to correctly toggling just
+        // the one facility (the other four are passed as null, which the
+        // RPC's own COALESCE logic treats as "leave unchanged").
+        var args={
+          target_profile_id: pid,
+          enable_kamar_study: null,
+          enable_materi_edukasi: null,
+          enable_kamar_private: null,
+          enable_kamar_indikator: null,
+          enable_kamar_robot: null,
+          admin_note: null
+        };
+        args[rpcParam]=!!on;
+        var res=await c.rpc('admin_update_member_access', args);
         if(res.error) throw res.error;
-        toast((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+facLabel);
+        toast((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+facLabel+'. Menu di dashboard member langsung terbuka.');
         await loadData(); showDetail(id);
       }catch(e){ toast('Update fasilitas gagal: '+(e.message||String(e))); }
     }

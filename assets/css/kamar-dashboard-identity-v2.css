@@ -428,3 +428,7 @@ proporsional pada layout sempit (mis. label form, catatan kecil). */
 .split-card:not([class*="hero"]):not(.kamar-title-card) p{
 color: var(--km-muted) !important;
 }
+
+
+/* PERLUASAN v2.5 (auto-fix): pastikan warna teks bare (email, daftar fasilitas, dll) di semua halaman admin ber-body.kamar-v46-atelier ikut jadi gelap, bukan cuma background-nya. */
+body.kamar-v46-atelier{ color: var(--km-ink) !important; }

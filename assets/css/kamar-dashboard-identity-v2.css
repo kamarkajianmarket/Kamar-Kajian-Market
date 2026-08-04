@@ -432,3 +432,11 @@ color: var(--km-muted) !important;
 
 /* PERLUASAN v2.5 (auto-fix): pastikan warna teks bare (email, daftar fasilitas, dll) di semua halaman admin ber-body.kamar-v46-atelier ikut jadi gelap, bukan cuma background-nya. */
 body.kamar-v46-atelier{ color: var(--km-ink) !important; }
+
+
+/* PERLUASAN v2.6 (auto-fix): kamar-luxury-atelier-v46.css punya rule catch-all ".kamar-v46-atelier .btn, .kamar-v46-atelier button, .kamar-v46-atelier input[type=submit]" yang memaksa background nyaris transparan + teks krem nyaris putih pada SEMUA tombol yang bukan .secondary/.danger (mis. Aktifkan Gratis, Refresh, Cari Member, Kelola) - teks jadi nyaris tak terlihat di atas kartu terang v2. Fix ini mengembalikan gold-gradient + teks hitam (desain asli) dengan specificity yang pasti menang atas v46. */
+.kamar-v46-atelier .btn:not(.secondary):not(.danger),
+.kamar-v46-atelier button:not(.secondary):not(.danger){
+background: linear-gradient(135deg,#f4df90,#c69a39) !important;
+color: #111 !important;
+}

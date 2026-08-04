@@ -440,3 +440,9 @@ body.kamar-v46-atelier{ color: var(--km-ink) !important; }
 background: linear-gradient(135deg,#f4df90,#c69a39) !important;
 color: #111 !important;
 }
+
+
+/* PERLUASAN v2.7 (auto-fix): kartu hero "Aktivasi Akun & Fasilitas" (.activation-hero) terlihat tidak simetris - kolom kiri (judul besar+paragraf+badge+tombol) jauh lebih tinggi dari kolom kanan (.hero-panel, cuma 3 baris label/value), dan align-items:center pada grid bikin panel kanan mengambang di tengah dengan banyak spasi kosong di atas/bawahnya. Fix ini murni CSS: bikin kedua kolom stretch penuh & isi panel kanan tersebar rata, tanpa mengubah HTML/struktur. */
+.activation-hero{ align-items: stretch !important; }
+.activation-hero .hero-panel{ height: 100% !important; box-sizing: border-box !important; justify-content: space-between !important; }
+.activation-hero .hero-copy{ display: flex !important; flex-direction: column !important; justify-content: center !important; height: 100% !important; }

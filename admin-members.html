@@ -231,119 +231,123 @@ function applyInitial(){var f=params().get('filter');var st=el('adminMemberStatu
 </body></html>
 
 
-(function(){
-  'use strict';
-  if(window.__KAMAR_SUBHISTORY_MEMBERS__) return;
-  window.__KAMAR_SUBHISTORY_MEMBERS__ = true;
-  var PAGE = (location.pathname.split('/').pop()||'').toLowerCase();
-  if(PAGE !== 'admin-members.html') return;
 
-  var FACILITY_MAP = {
-    kamar_study: {access:'access_kamar_study', expires:'expires_kamar_study', label:'Kamar Signal'},
-    materi_edukasi: {access:'access_materi_edukasi', expires:'expires_materi_edukasi', label:'Kamar Edukasi'},
-    kamar_private: {access:'access_kamar_private', expires:'expires_kamar_private', label:'Kamar Private'},
-    kamar_indikator: {access:'access_kamar_indikator', expires:'expires_kamar_indikator', label:'Kamar Indikator'},
-    kamar_robot: {access:'access_kamar_robot', expires:'expires_kamar_robot', label:'Kamar Robot'}
-  };
-  function qs(s,r){ return (r||document).querySelector(s); }
-  function esc(v){ return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
-  function fmtDate(v){ if(!v) return '-'; try{ return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return String(v); } }
-  function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
-  async function ready(){
-    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
-    try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
-    return window.kamarSupabaseClient || null;
-  }
-  function extractEmail(){
-    var boxes = document.querySelectorAll('#adminMemberDetail .admin-detail-box');
-    for(var i=0;i<boxes.length;i++){
-      var span = boxes[i].querySelector('span');
-      if(span && /email/i.test(span.textContent)){
-        var strong = boxes[i].querySelector('strong');
-        return strong ? strong.textContent.trim() : '';
-      }
-    }
-    return '';
-  }
-  function ensureCard(){
-    var body = qs('#adminMemberDetail');
-    if(!body) return null;
-    var existing = qs('#kamarSubHistoryCard29F');
-    if(existing) return existing;
-    var card = document.createElement('div');
-    card.id = 'kamarSubHistoryCard29F';
-    card.style.marginTop = '18px';
-    card.innerHTML = '<h3 style="margin:18px 0 10px;color:#fff3d8">Riwayat Berlangganan Member</h3><div id="kamarSubHistoryWrap29F" class="admin-note-soft">Memuat riwayat...</div>';
-    body.appendChild(card);
-    return card;
-  }
-  async function loadSubHistoryForEmail(email){
-    ensureCard();
-    var wrap = qs('#kamarSubHistoryWrap29F');
-    if(!wrap) return;
-    if(!email || email === '-'){ wrap.innerHTML = '<span style="color:var(--muted)">Email member tidak ditemukan.</span>'; return; }
-    wrap.innerHTML = 'Memuat riwayat berlangganan...';
-    try{
-      var c = await ready();
-      if(!c) throw new Error('Supabase client tidak terbaca.');
-      var pr = await c.from('member_profiles').select('id').eq('email', email).limit(1);
-      if(pr.error) throw pr.error;
-      if(!pr.data || !pr.data.length) throw new Error('Profil member tidak ditemukan untuk email ini.');
-      var profileId = pr.data[0].id;
-      var res = await c.rpc('admin_get_member_subscription_history', { p_profile_id: profileId });
-      if(res.error) throw res.error;
-      var data = res.data || {};
-      var access = data.access || {};
-      var payments = data.payments || [];
-      var now = Date.now();
-      var accessHtml = Object.keys(FACILITY_MAP).map(function(key){
-        var m = FACILITY_MAP[key];
-        var active = !!access[m.access];
-        var exp = access[m.expires];
-        var expTs = exp ? new Date(exp).getTime() : null;
-        var expired = expTs && expTs < now;
-        var statusLabel = (active && !expired) ? 'Aktif' : (expired ? 'Expired' : 'Belum Aktif');
-        var pillColor = (active && !expired) ? 'color:var(--green);border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)' : (expired ? 'color:var(--red);border-color:rgba(255,96,96,.28);background:rgba(255,96,96,.08)' : '');
-        return '<div class="admin-detail-box" style="margin-bottom:8px"><span>'+esc(m.label)+'</span><strong><span class="status-pill" style="'+pillColor+'">'+statusLabel+'</span>'+(exp ? ' &middot; Berlaku sampai '+esc(fmtDate(exp)) : '')+'</strong></div>';
-      }).join('');
-      var paymentsHtml;
-      if(!payments.length){
-        paymentsHtml = '<div class="admin-empty">Belum ada riwayat pembayaran untuk member ini.</div>';
-      } else {
-        paymentsHtml = payments.slice(0,8).map(function(p){
-          var facs = (p.selected_facilities||[]).map(function(f){ return (FACILITY_MAP[f]&&FACILITY_MAP[f].label) || f; }).join(', ') || '-';
-          var pillColor = p.payment_status==='confirmed' ? 'color:var(--green);border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)' : (p.payment_status==='rejected' ? 'color:var(--red);border-color:rgba(255,96,96,.28);background:rgba(255,96,96,.08)' : '');
-          return '<div style="border-bottom:1px solid rgba(238,206,122,.1);padding:10px 0;font-size:13px"><div style="color:#e7d391;font-size:11px;text-transform:uppercase;letter-spacing:.08em">'+esc(fmtDate(p.created_at))+'</div><strong style="display:block;color:#fff4db;margin-top:4px">'+esc(p.payment_type||'-')+' &middot; '+esc(fmtMoney(p.amount))+'</strong><small style="display:block;color:var(--muted);margin-top:3px">'+esc(facs)+(p.duration_days ? (' &middot; '+p.duration_days+' hari') : '')+' &middot; <span class="status-pill" style="'+pillColor+';padding:3px 8px;font-size:10px">'+esc(p.payment_status||'-')+'</span></small></div>';
-        }).join('');
-      }
-      wrap.innerHTML = '<div style="margin-bottom:6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Status Akses Fasilitas Saat Ini</div>'
-        + accessHtml
-        + '<div style="margin:14px 0 6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Riwayat Pembayaran ('+payments.length+')</div>'
-        + paymentsHtml;
-    }catch(e){
-      wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(e.message||String(e))+'</span>';
-    }
-  }
-  var lastEmail = '';
-  function checkAndLoad(){
-    var wrapEl = qs('#adminMemberDetailWrap');
-    if(!wrapEl || wrapEl.classList.contains('hidden')) return;
-    var email = extractEmail();
-    if(!email) return;
-    if(email !== lastEmail || !qs('#kamarSubHistoryCard29F')){
-      lastEmail = email;
-      loadSubHistoryForEmail(email);
-    }
-  }
-  var targetEl = qs('#adminMemberDetailWrap');
-  if(targetEl){
-    var mo = new MutationObserver(function(){ checkAndLoad(); });
-    mo.observe(targetEl, { attributes:true, attributeFilter:['class'], childList:true, subtree:true });
-  }
-  document.addEventListener('click', function(e){
-    var t = e.target;
-    if(t && t.closest && t.closest('[data-member-detail]')){
-      setTimeout(checkAndLoad, 250);
-    }
-  });
+<script>
+(function(){
+'use strict';
+if(window.__KAMAR_SUBHISTORY_MEMBERS__) return;
+window.__KAMAR_SUBHISTORY_MEMBERS__ = true;
+var PAGE = (location.pathname.split('/').pop()||'').toLowerCase();
+if(PAGE !== 'admin-members.html') return;
+
+var FACILITY_MAP = {
+kamar_study: {access:'access_kamar_study', expires:'expires_kamar_study', label:'Kamar Signal'},
+materi_edukasi: {access:'access_materi_edukasi', expires:'expires_materi_edukasi', label:'Kamar Edukasi'},
+kamar_private: {access:'access_kamar_private', expires:'expires_kamar_private', label:'Kamar Private'},
+kamar_indikator: {access:'access_kamar_indikator', expires:'expires_kamar_indikator', label:'Kamar Indikator'},
+kamar_robot: {access:'access_kamar_robot', expires:'expires_kamar_robot', label:'Kamar Robot'}
+};
+function qs(s,r){ return (r||document).querySelector(s); }
+function esc(v){ return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
+function fmtDate(v){ if(!v) return '-'; try{ return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return String(v); } }
+function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
+async function ready(){
+try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+return window.kamarSupabaseClient || null;
+}
+function extractEmail(){
+var boxes = document.querySelectorAll('#adminMemberDetail .admin-detail-box');
+for(var i=0;i<boxes.length;i++){
+var span = boxes[i].querySelector('span');
+if(span && /email/i.test(span.textContent)){
+var strong = boxes[i].querySelector('strong');
+return strong ? strong.textContent.trim() : '';
+}
+}
+return '';
+}
+function ensureCard(){
+var body = qs('#adminMemberDetail');
+if(!body) return null;
+var existing = qs('#kamarSubHistoryCard29F');
+if(existing) return existing;
+var card = document.createElement('div');
+card.id = 'kamarSubHistoryCard29F';
+card.style.marginTop = '18px';
+card.innerHTML = '<h3 style="margin:18px 0 10px;color:#fff3d8">Riwayat Berlangganan Member</h3><div id="kamarSubHistoryWrap29F" class="admin-note-soft">Memuat riwayat...</div>';
+body.appendChild(card);
+return card;
+}
+async function loadSubHistoryForEmail(email){
+ensureCard();
+var wrap = qs('#kamarSubHistoryWrap29F');
+if(!wrap) return;
+if(!email || email === '-'){ wrap.innerHTML = '<span style="color:var(--muted)">Email member tidak ditemukan.</span>'; return; }
+wrap.innerHTML = 'Memuat riwayat berlangganan...';
+try{
+var c = await ready();
+if(!c) throw new Error('Supabase client tidak terbaca.');
+var pr = await c.from('member_profiles').select('id').eq('email', email).limit(1);
+if(pr.error) throw pr.error;
+if(!pr.data || !pr.data.length) throw new Error('Profil member tidak ditemukan untuk email ini.');
+var profileId = pr.data[0].id;
+var res = await c.rpc('admin_get_member_subscription_history', { p_profile_id: profileId });
+if(res.error) throw res.error;
+var data = res.data || {};
+var access = data.access || {};
+var payments = data.payments || [];
+var now = Date.now();
+var accessHtml = Object.keys(FACILITY_MAP).map(function(key){
+var m = FACILITY_MAP[key];
+var active = !!access[m.access];
+var exp = access[m.expires];
+var expTs = exp ? new Date(exp).getTime() : null;
+var expired = expTs && expTs < now;
+var statusLabel = (active && !expired) ? 'Aktif' : (expired ? 'Expired' : 'Belum Aktif');
+var pillColor = (active && !expired) ? 'color:var(--green);border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)' : (expired ? 'color:var(--red);border-color:rgba(255,96,96,.28);background:rgba(255,96,96,.08)' : '');
+return '<div class="admin-detail-box" style="margin-bottom:8px"><span>'+esc(m.label)+'</span><strong><span class="status-pill" style="'+pillColor+'">'+statusLabel+'</span>'+(exp ? ' &middot; Berlaku sampai '+esc(fmtDate(exp)) : '')+'</strong></div>';
+}).join('');
+var paymentsHtml;
+if(!payments.length){
+paymentsHtml = '<div class="admin-empty">Belum ada riwayat pembayaran untuk member ini.</div>';
+} else {
+paymentsHtml = payments.slice(0,8).map(function(p){
+var facs = (p.selected_facilities||[]).map(function(f){ return (FACILITY_MAP[f]&&FACILITY_MAP[f].label) || f; }).join(', ') || '-';
+var pillColor = p.payment_status==='confirmed' ? 'color:var(--green);border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)' : (p.payment_status==='rejected' ? 'color:var(--red);border-color:rgba(255,96,96,.28);background:rgba(255,96,96,.08)' : '');
+return '<div style="border-bottom:1px solid rgba(238,206,122,.1);padding:10px 0;font-size:13px"><div style="color:#e7d391;font-size:11px;text-transform:uppercase;letter-spacing:.08em">'+esc(fmtDate(p.created_at))+'</div><strong style="display:block;color:#fff4db;margin-top:4px">'+esc(p.payment_type||'-')+' &middot; '+esc(fmtMoney(p.amount))+'</strong><small style="display:block;color:var(--muted);margin-top:3px">'+esc(facs)+(p.duration_days ? (' &middot; '+p.duration_days+' hari') : '')+' &middot; <span class="status-pill" style="'+pillColor+';padding:3px 8px;font-size:10px">'+esc(p.payment_status||'-')+'</span></small></div>';
+}).join('');
+}
+wrap.innerHTML = '<div style="margin-bottom:6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Status Akses Fasilitas Saat Ini</div>'
++ accessHtml
++ '<div style="margin:14px 0 6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Riwayat Pembayaran ('+payments.length+')</div>'
++ paymentsHtml;
+}catch(e){
+wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(e.message||String(e))+'</span>';
+}
+}
+var lastEmail = '';
+function checkAndLoad(){
+var wrapEl = qs('#adminMemberDetailWrap');
+if(!wrapEl || wrapEl.classList.contains('hidden')) return;
+var email = extractEmail();
+if(!email) return;
+if(email !== lastEmail || !qs('#kamarSubHistoryCard29F')){
+lastEmail = email;
+loadSubHistoryForEmail(email);
+}
+}
+var targetEl = qs('#adminMemberDetailWrap');
+if(targetEl){
+var mo = new MutationObserver(function(){ checkAndLoad(); });
+mo.observe(targetEl, { attributes:true, attributeFilter:['class'], childList:true, subtree:true });
+}
+document.addEventListener('click', function(e){
+var t = e.target;
+if(t && t.closest && t.closest('[data-member-detail]')){
+setTimeout(checkAndLoad, 250);
+}
+});
 })();
+</script>
+

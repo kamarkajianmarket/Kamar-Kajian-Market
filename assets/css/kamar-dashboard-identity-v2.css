@@ -558,3 +558,115 @@ border:1px solid var(--km-line) !important;
 .admin-shell .btn.good{ color:#0e5f54 !important; background:rgba(14,95,84,.10) !important; border:1px solid rgba(14,95,84,.25) !important; }
 
 .admin-shell .empty{ background:#fbf7ee !important; border:1px solid var(--km-line) !important; color: var(--km-muted) !important; }
+
+
+/* ==========================================================================
+PERLUASAN v2.8 (2026-08-04) - halaman admin-affiliate-overview/list/payment/
+commission-rate/reward.html TIDAK memakai vocabulary class yang sama dengan
+halaman admin lain (.split-card/.split-sidebar/.admin-row/.status-pill),
+melainkan markup bespoke sendiri (.admin-shell/.admin-sidebar/.card/.pill/
+.aff-row/.pay-row/.reward-row/.rate-card/.stat-card/.submenu-card) yang
+didesain untuk background gelap (#060606) dan TIDAK dikenali rule v2 mana
+pun di atas. Karena `html body{background:...!important}` di v2 tetap
+memaksa background halaman jadi terang (rule itu tidak di-scope ke body
+class apa pun), sidebar & card ini jadi nyaris tanpa batas (border/bg
+transparan didesain utk kontras di atas gelap, sekarang di atas terang)
+dan teks jadi nyaris tak terbaca (warna krem pucat didesain utk background
+gelap). Section ini menyamakan seluruh komponen tsb dengan tema kartu
+terang yang sudah dipakai di semua halaman admin lain. CSS-only, semua
+diberi scope .admin-shell supaya tidak menyentuh halaman lain yang
+mungkin kebetulan memakai nama class generik seperti .card atau .pill.
+========================================================================== */
+
+.admin-shell .admin-sidebar{
+background: rgba(255,255,255,.72) !important;
+border:1px solid var(--km-line) !important;
+box-shadow: var(--km-shadow) !important;
+}
+.admin-shell .admin-sidebar .brand-small{ color: var(--km-gold) !important; }
+.admin-shell .admin-sidebar .admin-menu-section{ color: var(--km-gold) !important; }
+.admin-shell .admin-sidebar a{ color: var(--km-muted) !important; }
+.admin-shell .admin-sidebar a:hover,
+.admin-shell .admin-sidebar a.active{
+background:#f2eadc !important;
+color:#101418 !important;
+}
+
+.admin-shell .card{
+background: rgba(255,255,255,.72) !important;
+border:1px solid var(--km-line) !important;
+box-shadow: var(--km-shadow) !important;
+}
+.admin-shell .card.hero{
+background:
+linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025)),
+radial-gradient(circle at 0% 10%,rgba(184,138,61,.22),transparent 34rem),
+linear-gradient(135deg,#111820 0%,#17252d 58%,#23333a 100%) !important;
+border:1px solid rgba(255,255,255,.10) !important;
+color:#fff !important;
+}
+.admin-shell .card.hero h1{ color:#fffaf0 !important; }
+.admin-shell .card.hero p{ color:#d9d1c2 !important; }
+.admin-shell .module-chip{ background:#efe3ca !important; color:#7a561e !important; border:1px solid rgba(184,138,61,.3) !important; }
+.admin-shell .card.hero .module-chip{ background:rgba(255,255,255,.10) !important; color:#f4d694 !important; border-color:rgba(255,255,255,.18) !important; }
+
+.admin-shell .muted,.admin-shell p.muted{ color: var(--km-muted) !important; }
+
+.admin-shell .submenu-card{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.admin-shell .submenu-card:hover{ background:linear-gradient(180deg,#fff,#fbf4e7) !important; border-color:rgba(184,138,61,.42) !important; }
+.admin-shell .submenu-card.active{ background:rgba(184,138,61,.08) !important; }
+.admin-shell .submenu-card h3{ color: var(--km-gold) !important; }
+.admin-shell .submenu-card strong{ color: var(--km-ink) !important; }
+.admin-shell .submenu-card p{ color: var(--km-muted) !important; }
+
+.admin-shell .stat-card{ background:#fff !important; border:1px solid var(--km-line) !important; border-left:4px solid var(--km-gold) !important; }
+.admin-shell .stat-card span{ color: var(--km-gold) !important; }
+.admin-shell .stat-card strong{ color: var(--km-ink) !important; }
+.admin-shell .stat-card small{ color: var(--km-muted) !important; }
+
+.admin-shell .aff-row:not(.head),
+.admin-shell .pay-row:not(.head),
+.admin-shell .reward-row:not(.head),
+.admin-shell .ref-row:not(.head){
+background:#fff !important;
+border:1px solid var(--km-line) !important;
+}
+.admin-shell .aff-row.head,
+.admin-shell .pay-row.head,
+.admin-shell .reward-row.head,
+.admin-shell .ref-row.head{ color: var(--km-gold) !important; }
+.admin-shell strong{ color: var(--km-ink) !important; }
+.admin-shell small,.admin-shell .cell-label{ color: var(--km-muted) !important; }
+
+.admin-shell .rate-card{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.admin-shell .rate-card .mini-label{ color: var(--km-gold) !important; }
+.admin-shell .rate-card h3{ color: var(--km-ink) !important; }
+.admin-shell .toggle-row-mini{ background:#fbf7ee !important; border:1px solid var(--km-line) !important; }
+.admin-shell .toggle-row-mini span{ color: var(--km-muted) !important; }
+
+.admin-shell .panel{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.admin-shell .panel h3{ color: var(--km-gold) !important; }
+.admin-shell .info-item{ background:#fbf7ee !important; border:1px solid var(--km-line) !important; }
+.admin-shell .info-item span{ color: var(--km-gold) !important; }
+.admin-shell .info-item strong{ color: var(--km-ink) !important; }
+
+.admin-shell .pill{ background:#efe3ca !important; color:#7a561e !important; border:1px solid rgba(184,138,61,.22) !important; }
+.admin-shell .pill.ok{ color:#0e5f54 !important; background:rgba(14,95,84,.10) !important; border-color:rgba(14,95,84,.25) !important; }
+.admin-shell .pill.warn{ color:#8a5a12 !important; background:rgba(217,164,54,.16) !important; border-color:rgba(184,138,61,.3) !important; }
+.admin-shell .pill.bad{ color:#8a2b2b !important; background:rgba(196,60,60,.10) !important; border-color:rgba(196,60,60,.28) !important; }
+.admin-shell .pill.info{ color:#1f5fa8 !important; background:rgba(31,95,168,.08) !important; border-color:rgba(31,95,168,.25) !important; }
+.admin-shell .pill.off{ color: var(--km-muted) !important; background:#f1ede2 !important; }
+
+.admin-shell input,.admin-shell select,.admin-shell textarea{
+background:#fff !important;
+color: var(--km-ink) !important;
+border:1px solid var(--km-line) !important;
+}
+.admin-shell input::placeholder,.admin-shell textarea::placeholder{ color:#9aa0a6 !important; }
+
+.admin-shell .btn{ background: linear-gradient(135deg,#f4df90,#c69a39) !important; color:#111 !important; }
+.admin-shell .btn.secondary{ background:#fff !important; color: var(--km-ink) !important; border:1px solid var(--km-line) !important; }
+.admin-shell .btn.danger{ color:#8a2b2b !important; background:rgba(196,60,60,.10) !important; border:1px solid rgba(196,60,60,.28) !important; }
+.admin-shell .btn.good{ color:#0e5f54 !important; background:rgba(14,95,84,.10) !important; border:1px solid rgba(14,95,84,.25) !important; }
+
+.admin-shell .empty{ background:#fbf7ee !important; border:1px solid var(--km-line) !important; color: var(--km-muted) !important; }

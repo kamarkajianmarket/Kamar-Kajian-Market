@@ -453,3 +453,172 @@
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
+
+
+(function(){
+  'use strict';
+  if(window.__KAMAR_ADMIN_NOTIF_29F__) return;
+  window.__KAMAR_ADMIN_NOTIF_29F__ = true;
+  var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  if(!/^admin/i.test(PAGE)) return;
+
+  var NOTIF_POLL_MS = 30000;
+  var notifState = { items: [], open: false, channel: null };
+
+  function qs(s,r){ return (r||document).querySelector(s); }
+  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
+  function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
+  async function ready(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+    return window.kamarSupabaseClient || null;
+  }
+  function fmtRelative(iso){
+    try{
+      var d = new Date(iso); var diff = Math.floor((Date.now()-d.getTime())/1000);
+      if(diff < 60) return 'baru saja';
+      if(diff < 3600) return Math.floor(diff/60)+' menit lalu';
+      if(diff < 86400) return Math.floor(diff/3600)+' jam lalu';
+      return Math.floor(diff/86400)+' hari lalu';
+    }catch(e){ return ''; }
+  }
+  var NOTIF_LINK = {
+    new_registration: 'admin-activation.html?member=',
+    new_payment: 'admin-activation.html?member=',
+    license_request: 'admin-license-requests.html?member=',
+    access_expired: 'admin-activation.html?member='
+  };
+  var NOTIF_ICON = {
+    new_registration: String.fromCodePoint(128100),
+    new_payment: String.fromCodePoint(128176),
+    license_request: String.fromCodePoint(128273),
+    access_expired: String.fromCodePoint(9200)
+  };
+  function injectNotifStyles(){
+    if(qs('#kamarNotifStyles29F')) return;
+    var st = document.createElement('style');
+    st.id = 'kamarNotifStyles29F';
+    st.textContent = '.kamar-notif-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;border:1px solid rgba(238,206,122,.24);background:rgba(255,255,255,.08);color:#f4df90;cursor:pointer;font-size:18px}'
+      + '.kamar-notif-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#c43c3c;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1}'
+      + '.kamar-notif-panel{position:absolute;top:52px;right:0;width:360px;max-height:420px;overflow:auto;background:#fff;border:1px solid rgba(17,20,23,.12);border-radius:20px;box-shadow:0 20px 60px rgba(17,20,23,.24);padding:10px;display:none;z-index:9999}'
+      + '.kamar-notif-panel.open{display:block}'
+      + '.kamar-notif-item{display:block;text-decoration:none;color:inherit;padding:12px;border-radius:14px;border:1px solid rgba(17,20,23,.08);margin-bottom:8px;background:#fbf7ee}'
+      + '.kamar-notif-item strong{display:block;color:#111417;font-size:13px}'
+      + '.kamar-notif-item small{display:block;color:#606973;margin-top:4px;line-height:1.4}'
+      + '.kamar-notif-item time{display:block;color:#b88a3d;font-size:11px;margin-top:6px;font-weight:800;text-transform:uppercase}'
+      + '.kamar-notif-empty{padding:18px;text-align:center;color:#606973;font-size:13px}'
+      + '.kamar-notif-mark{margin-top:8px;border:0;background:#efe3ca;color:#7a561e;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;cursor:pointer}';
+    document.head.appendChild(st);
+  }
+  function renderNotifPanel(){
+    var panel = qs('#kamarNotifPanel29F');
+    if(!panel) return;
+    if(!notifState.items.length){
+      panel.innerHTML = '<div class="kamar-notif-empty">Tidak ada notifikasi baru.</div>';
+      return;
+    }
+    panel.innerHTML = notifState.items.map(function(t){
+      var payload = t.action_payload || {};
+      var name = payload.full_name || '-';
+      var linkBase = NOTIF_LINK[t.todo_type] || 'admin.html?member=';
+      var href = linkBase + encodeURIComponent(t.profile_id || '');
+      return '<div class="kamar-notif-item">'
+        + '<a href="'+esc(href)+'" style="text-decoration:none;color:inherit">'
+        + '<strong>'+(NOTIF_ICON[t.todo_type]||String.fromCodePoint(128276))+' '+esc(t.title||'Notifikasi')+'</strong>'
+        + '<small>'+esc(name)+' &middot; '+esc(t.description||'')+'</small>'
+        + '<time>'+esc(fmtRelative(t.created_at))+'</time>'
+        + '</a>'
+        + '<button type="button" class="kamar-notif-mark" data-mark-todo="'+esc(t.todo_id||t.id||'')+'">Tandai Selesai</button>'
+        + '</div>';
+    }).join('');
+    panel.querySelectorAll('[data-mark-todo]').forEach(function(b){
+      b.onclick = async function(ev){
+        ev.preventDefault();
+        var id = b.getAttribute('data-mark-todo');
+        try{
+          var c = await ready();
+          if(c){ await c.rpc('admin_update_todo_status', { target_todo_id: id, new_status: 'done', admin_note: null }); }
+          await loadNotifs();
+        }catch(e){ toast('Gagal menandai selesai: '+(e.message||e)); }
+      };
+    });
+  }
+  function updateNotifBadge(){
+    var badge = qs('#kamarNotifBadge29F');
+    if(!badge) return;
+    var n = notifState.items.length;
+    badge.style.display = n ? 'flex' : 'none';
+    badge.textContent = n > 99 ? '99+' : String(n);
+  }
+  async function loadNotifs(){
+    try{
+      var c = await ready();
+      if(!c) return;
+      var res = await c.from('admin_todos').select('*').in('todo_status', ['new','processing']).order('priority', {ascending:true}).order('created_at', {ascending:false}).limit(30);
+      if(res.error) throw res.error;
+      var rows = res.data || [];
+      var pids = Array.from(new Set(rows.map(function(r){return r.profile_id;}).filter(Boolean)));
+      var profiles = {};
+      if(pids.length){
+        try{
+          var pr = await c.from('member_profiles').select('id,full_name,email,member_id').in('id', pids);
+          if(!pr.error){ (pr.data||[]).forEach(function(p){ profiles[p.id]=p; }); }
+        }catch(e){}
+      }
+      notifState.items = rows.map(function(r){
+        var payload = Object.assign({}, r.action_payload||{});
+        if(!payload.full_name && profiles[r.profile_id]) payload.full_name = profiles[r.profile_id].full_name;
+        return Object.assign({}, r, { todo_id:r.id, action_payload: payload });
+      });
+      updateNotifBadge();
+      renderNotifPanel();
+    }catch(e){ /* silent, biar tidak ganggu halaman lain */ }
+  }
+  function findHeaderActions(){
+    return qs('.kamar-global-actions') || qs('.header-actions');
+  }
+  async function injectNotificationBell(){
+    if(qs('#kamarNotifBtn29F')) return;
+    var actions = findHeaderActions();
+    var tries = 0;
+    while(!actions && tries < 20){
+      await new Promise(function(r){ setTimeout(r, 150); });
+      actions = findHeaderActions();
+      tries++;
+    }
+    if(!actions) return;
+    injectNotifStyles();
+    var wrap = document.createElement('div');
+    wrap.style.position = 'relative';
+    wrap.innerHTML = '<button type="button" id="kamarNotifBtn29F" class="kamar-notif-btn" aria-label="Notifikasi Admin">'
+      + String.fromCodePoint(128276) + '<span id="kamarNotifBadge29F" class="kamar-notif-badge" style="display:none">0</span>'
+      + '</button>'
+      + '<div id="kamarNotifPanel29F" class="kamar-notif-panel"><div class="kamar-notif-empty">Memuat notifikasi...</div></div>';
+    actions.insertBefore(wrap, actions.firstChild);
+    qs('#kamarNotifBtn29F', wrap).onclick = function(e){
+      e.stopPropagation();
+      notifState.open = !notifState.open;
+      qs('#kamarNotifPanel29F', wrap).classList.toggle('open', notifState.open);
+    };
+    document.addEventListener('click', function(e){
+      if(notifState.open && !wrap.contains(e.target)){
+        notifState.open = false;
+        var p = qs('#kamarNotifPanel29F', wrap);
+        if(p) p.classList.remove('open');
+      }
+    });
+    await loadNotifs();
+    setInterval(loadNotifs, NOTIF_POLL_MS);
+    try{
+      var c = await ready();
+      if(c && c.channel){
+        notifState.channel = c.channel('admin-todos-rt-29f')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'admin_todos' }, function(){ loadNotifs(); })
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'admin_todos' }, function(){ loadNotifs(); })
+          .subscribe();
+      }
+    }catch(e){}
+  }
+  function initNotif(){ injectNotificationBell(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initNotif); else initNotif();
+})();

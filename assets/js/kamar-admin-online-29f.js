@@ -463,7 +463,7 @@
   if(!/^admin/i.test(PAGE)) return;
 
   var NOTIF_POLL_MS = 30000;
-  var notifState = { items: [], open: false, channel: null };
+  var notifState = { items: [], open: false, channel: null, seenCount: 0 };
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
@@ -546,7 +546,7 @@
   function updateNotifBadge(){
     var badge = qs('#kamarNotifBadge29F');
     if(!badge) return;
-    var n = notifState.items.length;
+    var n = Math.max(0, notifState.items.length - notifState.seenCount);
     badge.style.display = n ? 'flex' : 'none';
     badge.textContent = n > 99 ? '99+' : String(n);
   }
@@ -598,6 +598,7 @@
     qs('#kamarNotifBtn29F', wrap).onclick = function(e){
       e.stopPropagation();
       notifState.open = !notifState.open;
+      if(notifState.open){ notifState.seenCount = notifState.items.length; updateNotifBadge(); }
       qs('#kamarNotifPanel29F', wrap).classList.toggle('open', notifState.open);
     };
     document.addEventListener('click', function(e){

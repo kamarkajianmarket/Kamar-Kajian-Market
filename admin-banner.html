@@ -1,225 +1,351 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Banner Pengumuman — Kamar Kajian Market</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
-  <style>
-    :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;--accent:#ffab5e;--accent-soft:rgba(255,171,94,.14);--accent-line:rgba(255,171,94,.5);}
-    *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
-    .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
-    .admin-main{display:grid;gap:22px;min-width:0}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px;min-width:0;overflow:hidden}.hero{padding:34px}.hero-inner{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{display:flex;align-items:center;gap:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:900;margin-bottom:12px}.eyebrow:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.module-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;margin-bottom:12px}.hero h1{margin:0;font-size:clamp(32px,4vw,52px);letter-spacing:-.05em;line-height:.98}.hero p{max-width:850px;margin:14px 0 0;color:var(--muted);font-size:16px;line-height:1.65}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .btn{border:0;border-radius:18px;padding:13px 18px;font-weight:900;background:linear-gradient(135deg,#fff1a9,#d8ae47);color:#14100a;cursor:pointer;transition:.18s ease;white-space:nowrap}.btn:hover{transform:translateY(-1px);filter:saturate(1.04)}.btn.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--gold2)}.btn.danger{border:1px solid rgba(255,155,155,.35);background:rgba(255,90,90,.12);color:#ffd1d1}.btn.good{border:1px solid rgba(159,240,189,.35);background:rgba(36,185,96,.14);color:#d7ffe5}.btn.accent{border:0;background:linear-gradient(135deg,#ffd6a3,var(--accent));color:#241203}.btn.small{padding:10px 13px;border-radius:15px;font-size:13px}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;filter:none!important}
-    .section-title{margin:0 0 14px;display:flex;align-items:center;gap:14px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:13px;font-weight:900}.section-title:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.muted{color:var(--muted);line-height:1.55}
-    .guide-box{border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:22px;padding:18px 20px;display:grid;gap:8px}.guide-box strong{color:var(--accent);font-size:13px;letter-spacing:.1em;text-transform:uppercase}.guide-box ol{margin:6px 0 0;padding-left:20px;color:var(--text);line-height:1.7}.guide-box li b{color:var(--accent)}.guide-box .warn-line{color:var(--warn);font-weight:800}
-    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:7px;font-weight:900;color:var(--text)}.field.full{grid-column:1/-1}.field-hint{font-weight:600;color:var(--muted);font-size:12.5px;line-height:1.5}.field-count{font-weight:700;color:rgba(247,241,226,.45);font-size:11px;text-align:right}.field-count.over{color:var(--danger)}
-    input,select,textarea{width:100%;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.04);color:var(--text);border-radius:17px;padding:13px 16px;font:inherit;font-weight:800;outline:none}input::placeholder,textarea::placeholder{color:rgba(247,241,226,.4);font-weight:600}textarea{min-height:88px;resize:vertical}select option{background:#151310;color:var(--text)}input:focus,select:focus,textarea:focus{border-color:var(--accent-line)}
-    .preview-box{border:1px dashed var(--accent-line);border-radius:20px;padding:16px;background:rgba(0,0,0,.16);display:grid;gap:10px}.preview-box img{max-width:100%;max-height:220px;object-fit:cover;border-radius:14px;display:block}.preview-box .ph{color:var(--muted);font-size:13px}
-    .form-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}
-    .banner-list{display:grid;gap:14px}.banner-row{display:grid;grid-template-columns:110px minmax(0,1.3fr) minmax(0,.85fr) minmax(0,.7fr) minmax(0,.6fr) auto;gap:16px;align-items:center;border:1px solid rgba(238,206,122,.13);border-top:3px solid var(--accent-line);border-radius:20px;padding:16px 18px;background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015))}.banner-thumb{width:110px;height:66px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;text-align:center}.banner-thumb img{width:100%;height:100%;object-fit:cover}
-    .banner-row strong{display:block;color:var(--text)}.banner-row small{display:block;color:rgba(247,241,226,.6);margin-top:4px;line-height:1.4}.cell-label{display:none;color:var(--accent);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;margin-bottom:6px}
-    .pill{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 11px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:900;line-height:1.1}.pill.ok{color:var(--ok);background:rgba(36,185,96,.1);border-color:rgba(159,240,189,.26)}.pill.off{color:rgba(247,241,226,.6);background:rgba(255,255,255,.035)}.pill.info{color:var(--accent);background:var(--accent-soft);border-color:var(--accent-line)}
-    .row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.empty{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:17px;color:var(--muted);font-weight:800}
-    @media(max-width:1220px){.field-grid{grid-template-columns:1fr}.banner-row{grid-template-columns:1fr}.cell-label{display:block}.row-actions{justify-content:flex-start}}
-    @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}}
-  </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Banner Pengumuman — Kamar Kajian Market</title>
+<meta content="Atur banner publik/member, upload gambar, dan preview." name="description"/>
+<meta content="#070707" name="theme-color"/>
+<link href="assets/favicon.png" rel="icon"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="style.css" rel="stylesheet"/>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<style>
+:root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4;--warn:#ffd582}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:48px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:32px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.menu-section{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#e7d391;font-weight:1000;margin:20px 10px 8px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:900}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.14);color:#f4df90}.split-main{display:grid;gap:22px}.split-card{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card.hero-card{padding:44px 32px}.split-card h1{margin:0;color:#fff3d8;font-size:clamp(30px,4vw,50px);line-height:1;letter-spacing:-.05em}.split-card h2,.split-card h3{margin:0 0 12px;color:#fff3d8}.split-card p{color:var(--muted);line-height:1.65}.mini-label{display:inline-block;text-transform:uppercase;letter-spacing:.22em;font-size:13px;color:#f1dda2;font-weight:1000;margin-bottom:12px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.28)}.btn.mini{padding:8px 12px;font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}.field{display:flex;flex-direction:column;gap:8px;color:#e8ddc7;font-size:14px;font-weight:1000}input,select,textarea{width:100%;box-sizing:border-box;border:1px solid rgba(238,206,122,.24);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025));color:#fff4db;border-radius:18px;padding:15px 17px;font:inherit;font-weight:800;outline:none}select option{background:#11100d;color:#fff4db}.summary{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.chip{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:7px 11px;color:#e7d391;background:rgba(255,255,255,.035);font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.chip.ok{color:#bfffd9;border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)}.chip.warn{color:#ffd582;border-color:rgba(255,213,130,.28);background:rgba(255,213,130,.08)}.chip.bad{color:#ffb4b4;border-color:rgba(255,96,96,.25);background:rgba(255,96,96,.08)}.row-list{display:grid;gap:14px}.row{display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr auto;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}.row.header{border:0;background:transparent;padding:10px 16px;color:#e7d391;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:1000}.row strong{display:block;color:#fff3d8}.row small{display:block;color:rgba(245,240,230,.62);line-height:1.4;margin-top:5px}.actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.empty{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:22px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1;line-height:1.6}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:380px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}
+.upload-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.upload-row input[type=file]{padding:12px}
+.preview-box{border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:18px;margin-top:14px;background:rgba(0,0,0,.18)}.preview-box img{max-width:100%;border-radius:18px;margin-top:12px;display:block}
+@media(max-width:980px){.split-app,.grid-2,.row{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.actions{justify-content:flex-start}.split-shell{padding:24px 16px}}
+</style>
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
-<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
-<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
-  <meta name="kamar-step" content="46-luxury-atelier-formation"/>
-</head>
-<body>
-<div class="admin-shell">
-  <aside class="admin-sidebar">
-    <div class="brand-small">Admin Kamar</div>
-    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
-    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
-    <div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-overview.html">Data Affiliate</a><a href="admin-affiliate-list.html">Daftar Affiliator</a><a href="admin-affiliate-reward.html">Reward / Komisi</a>
-    <div class="admin-menu-section">Konten Website</div><a class="active" href="admin-banner.html">Banner Pengumuman</a><a href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten & Materi</a><a href="admin-tools.html">File Tools</a>
-    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
-    <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
-  </aside>
-  <main class="admin-main">
-    <section class="card hero">
-      <div class="hero-inner">
-        <div><span class="eyebrow">Konten Website</span> <span class="module-chip">▲ Banner</span><h1>Banner Pengumuman</h1><p>Kelola banner pengumuman: judul, isi, gambar, tombol aksi, target tampilan, dan jadwal tayang.</p></div>
-        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2 class="section-title">Panduan Singkat</h2>
-      <div class="guide-box">
-        <strong>Baca dulu sebelum mengisi</strong>
-        <ol>
-          <li><b>Link Gambar</b> harus link langsung ke file gambar (contoh: <code>assets/banner-promo.jpg</code> atau <code>https://domainanda.com/gambar.jpg</code>). <span class="warn-line">Jangan pakai link share Google Drive</span> — biasanya gagal tampil. Cara upload gambar ke folder situs sendiri: buka repo GitHub → folder <b>assets</b> → Add file → Upload files.</li>
-          <li><b>Teks Tombol</b> = tulisan yang tampil di tombol (misal "Daftar Sekarang"). <b>Link Tombol</b> = alamat tujuan saat tombol itu diklik. Keduanya boleh dikosongkan kalau banner tidak perlu tombol.</li>
-          <li><b>Tampil di</b> menentukan banner ini muncul di halaman mana. <b>Gaya Tampilan</b> menentukan bentuknya: Bar Atas Halaman (memanjang penuh di atas) atau Floating Card (kartu mengambang, biasanya pojok layar).</li>
-          <li><b>Jadwal Tayang</b> opsional — kosongkan kalau ingin tayang terus selama status Aktif.</li>
-          <li>Jika satu halaman menampilkan lebih dari satu jenis konten sekaligus, urutannya selalu: <b>Banner Pengumuman &rarr; Konten Video &rarr; Materi &rarr; File Tools</b>.</li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="card" id="formCard">
-      <h2 class="section-title" id="formTitle">Tambah Banner Baru</h2>
-      <form id="bannerForm">
-        <input type="hidden" id="bannerId" value="">
-        <div class="field-grid">
-          <label class="field full">Judul Banner
-            <input id="fTitle" maxlength="60" placeholder="Contoh: Promo Kamar Study Agustus" required>
-            <div class="field-hint">Judul utama banner. Maksimal 60 karakter.</div>
-            <div class="field-count" id="countTitle">0 / 60</div>
-          </label>
-          <label class="field full">Isi / Deskripsi
-            <textarea id="fBody" maxlength="200" placeholder="Contoh: Diskon 20% untuk member baru Kamar Study sampai akhir bulan."></textarea>
-            <div class="field-hint">Kalimat singkat isi pengumuman. Maksimal 200 karakter.</div>
-            <div class="field-count" id="countBody">0 / 200</div>
-          </label>
-          <label class="field full">Link Gambar (opsional)
-            <input id="fImage" placeholder="assets/nama-file.jpg atau https://...">
-            <div class="field-hint">Link langsung ke gambar. Jangan pakai link share Google Drive.</div>
-          </label>
-          <div class="field full">
-            <div class="preview-box" id="previewBox"><span class="ph">Belum ada gambar. Isi Link Gambar untuk melihat pratinjau di sini.</span></div>
-          </div>
-          <label class="field">Teks Tombol (opsional)
-            <input id="fCtaLabel" maxlength="24" placeholder="Contoh: Daftar Sekarang">
-            <div class="field-hint">Tulisan pada tombol. Maksimal 24 karakter.</div>
-            <div class="field-count" id="countCta">0 / 24</div>
-          </label>
-          <label class="field">Link Tombol (opsional)
-            <input id="fCtaUrl" placeholder="Contoh: https://kamarkajianmarket.com/daftar">
-            <div class="field-hint">Alamat tujuan saat tombol diklik.</div>
-          </label>
-          <label class="field">Tampil di
-            <select id="fArea">
-              <option value="public">Halaman Utama (Publik)</option>
-              <option value="member">Dashboard Member</option>
-              <option value="admin">Dashboard Admin</option>
-              <option value="affiliate">Dashboard Affiliate</option>
-              <option value="both">Publik + Member</option>
-              <option value="global">Semua Halaman</option>
-            </select>
-            <div class="field-hint">Lokasi banner ini akan ditampilkan.</div>
-          </label>
-          <label class="field">Gaya Tampilan
-            <select id="fStyle">
-              <option value="topbar">Bar Atas Halaman</option>
-              <option value="floating_card">Floating Card</option>
-            </select>
-            <div class="field-hint">Bentuk tampilan banner di halaman.</div>
-          </label>
-          <label class="field">Jadwal Tayang — Mulai (opsional)
-            <input id="fStart" type="datetime-local">
-            <div class="field-hint">Kosongkan jika ingin langsung tayang.</div>
-          </label>
-          <label class="field">Jadwal Tayang — Selesai (opsional)
-            <input id="fEnd" type="datetime-local">
-            <div class="field-hint">Kosongkan jika ingin tayang terus.</div>
-          </label>
-          <label class="field">Urutan Tampil
-            <input id="fSort" type="number" value="0" min="0">
-            <div class="field-hint">Angka lebih kecil tampil lebih dulu jika banner lebih dari satu.</div>
-          </label>
-          <label class="field">Status
-            <select id="fActive">
-              <option value="true">Aktif</option>
-              <option value="false">Nonaktif</option>
-            </select>
-            <div class="field-hint">Banner nonaktif tidak akan tampil di halaman manapun.</div>
-          </label>
-        </div>
-        <div class="form-actions">
-          <button class="btn secondary" id="cancelEditBtn" type="button" style="display:none">Batal Edit</button>
-          <button class="btn accent" id="saveBannerBtn" type="submit">Simpan Banner</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2 class="section-title">Daftar Banner</h2>
-      <p class="muted">Semua banner yang pernah dibuat, termasuk yang nonaktif atau sudah lewat jadwal tayang.</p>
-      <div class="banner-list" id="bannerList"></div>
-    </section>
-  </main>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/></head>
+<body class="kamar-v46-atelier">
+<main class="split-shell">
+<div class="split-app">
+<aside class="split-sidebar">
+<div class="brand-small">Admin Kamar</div>
+<div class="menu-section">Utama</div>
+<a href="admin.html">Dashboard Admin</a>
+<div class="menu-section">Member &amp; Akses</div>
+<a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
+<a href="admin-activation.html?v=24dg">Aktivasi Akun &amp; Fasilitas</a>
+<a href="admin-license-requests.html">Request License</a>
+<a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+<div class="menu-section">Affiliate</div>
+<a href="admin-affiliate-v2.html?view=overview&amp;v=24dx">Data Affiliate</a>
+<div class="menu-section">Konten Website</div>
+<a class="active" href="admin-banner.html">Banner Pengumuman</a>
+<a href="admin-video.html">Konten Video</a>
+<a href="admin-materials.html">Konten &amp; Materi</a>
+<a href="admin-tools.html">File Tools</a>
+<div class="menu-section">Kontrol Sistem</div>
+<a href="admin-maintenance.html">Maintenance Fasilitas</a>
+<a href="admin-page-control.html">Kontrol Halaman Utama</a>
+<a href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
+<a href="admin-payment.html">Payment Gateway</a>
+<a href="admin-links.html">Pengaturan Link</a>
+<a href="admin-settings.html">Pengaturan Umum</a>
+<div class="menu-section">Akun</div>
+<a href="member.html">Logout</a>
+</aside>
+<section class="split-main">
+<section class="split-card hero-card">
+<span class="mini-label">Pengumuman</span>
+<h1>Banner Pengumuman</h1>
+<p>Buat banner untuk halaman publik atau area member. Banner yang <b>Aktif</b> dan berada dalam jendela tanggal tampil (atau tanpa batas tanggal) akan otomatis muncul — tidak perlu ubah kode apa pun.</p>
+</section>
+<section class="split-card" id="formCard">
+<span class="mini-label" id="formModeLabel">Tambah Banner Baru</span>
+<h2 id="formTitle">Buat Banner Baru</h2>
+<form id="bannerForm" class="grid-2">
+<label class="field" style="grid-column:1/-1">Judul Banner *<input id="fJudul" placeholder="Contoh: Promo Kamar Robot Bulan Ini" required/></label>
+<label class="field" style="grid-column:1/-1">Isi / Teks Banner<textarea id="fBody" rows="2" placeholder="Teks singkat yang tampil di banner"></textarea></label>
+<label class="field">Tampil Untuk
+<select id="fArea">
+<option value="public">Publik (halaman utama)</option>
+<option value="member">Member (dashboard)</option>
+<option value="both">Publik &amp; Member</option>
+<option value="global">Semua Halaman</option>
+<option value="affiliate">Halaman Affiliate</option>
+<option value="admin">Admin Saja</option>
+</select>
+</label>
+<label class="field">Gaya Tampilan
+<select id="fStyle">
+<option value="topbar">Topbar (garis atas)</option>
+<option value="card">Card / Kartu</option>
+<option value="floating">Floating / Melayang</option>
+</select>
+</label>
+<label class="field">Label Tombol (CTA)<input id="fCtaLabel" placeholder="Contoh: Lihat Detail"/></label>
+<label class="field">Link Tombol (CTA)<input id="fCtaUrl" placeholder="https://... atau #fasilitas"/></label>
+<label class="field">Mulai Tampil (opsional)<input id="fStart" type="datetime-local"/></label>
+<label class="field">Selesai Tampil (opsional)<input id="fEnd" type="datetime-local"/></label>
+<label class="field" style="grid-column:1/-1">Gambar Banner (opsional)
+<div class="upload-row">
+<input id="fImage" type="file" accept="image/*"/>
+<span id="fCurrentImageNote" class="chip"></span>
 </div>
+<small style="color:var(--muted);font-weight:600">Kosongkan saat edit jika hanya ingin mengubah teks tanpa mengganti gambar.</small>
+<div class="preview-box" id="fImagePreview" style="display:none"><span class="chip">Preview</span><img id="fImagePreviewImg" alt="Preview banner"/></div>
+</label>
+<label class="field">Urutan Tampil<input id="fSort" type="number" value="0"/></label>
+<div class="field" style="flex-direction:row;align-items:center;gap:10px">
+<input id="fAktif" type="checkbox" checked style="width:22px;height:22px;flex:0 0 22px"/>
+<span>Banner Aktif</span>
+</div>
+<div class="summary" style="grid-column:1/-1">
+<button class="btn" type="submit" id="fSubmitBtn">Simpan Banner</button>
+<button class="btn secondary" type="button" id="fCancelBtn" style="display:none">Batal Edit</button>
+<span id="fStatusMsg"></span>
+</div>
+</form>
+</section>
+<section class="split-card">
+<span class="mini-label">Daftar Banner</span>
+<div class="summary" id="listSummary"><span class="chip">Memuat data...</span></div>
+<div class="row-list" id="bannerList"></div>
+</section>
+</section>
+</div>
+</main>
 <div class="toast" id="toast"></div>
-<div class="confirm" id="confirmModal"><div class="confirm-box"><h3 id="confirmTitle">Konfirmasi</h3><p id="confirmText"></p><div class="confirm-actions"><button class="btn secondary" id="cancelConfirm" type="button">Batal</button><button class="btn danger" id="confirmAction" type="button">Ya, Lanjutkan</button></div></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js?v=29F"></script>
+<script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-data-online-25e.js?v=30G"></script>
 <script>
 (function(){
 'use strict';
-var state={banners:[],client:null,editId:null,pendingAction:null};
-function el(id){return document.getElementById(id)}
-function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
-function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
-function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
-function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
-var AREA_LABEL={public:'Halaman Utama',member:'Dashboard Member',admin:'Dashboard Admin',affiliate:'Dashboard Affiliate',both:'Publik + Member',global:'Semua Halaman'};
-var STYLE_LABEL={topbar:'Bar Atas',floating_card:'Floating Card'};
-function fmtDate(v){if(!v)return '-';try{return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return v}}
-function isLive(b){var now=Date.now();if(b.start_at&&new Date(b.start_at).getTime()>now)return false;if(b.end_at&&new Date(b.end_at).getTime()<now)return false;return !!b.is_active}
-function statusPill(b){if(!b.is_active)return '<span class="pill off">Nonaktif</span>';if(!isLive(b))return '<span class="pill off">Di Luar Jadwal</span>';return '<span class="pill ok">Tayang</span>'}
-function counters(){[['fTitle','countTitle',60],['fBody','countBody',200],['fCtaLabel','countCta',24]].forEach(function(p){var inp=el(p[0]),out=el(p[1]),max=p[2];if(!inp||!out)return;var n=inp.value.length;out.textContent=n+' / '+max;out.classList.toggle('over',n>max)})}
-function updatePreview(){var url=(el('fImage').value||'').trim();var box=el('previewBox');if(!url){box.innerHTML='<span class="ph">Belum ada gambar. Isi Link Gambar untuk melihat pratinjau di sini.</span>';return}box.innerHTML='<img src="'+esc(url)+'" alt="Pratinjau banner" onerror="this.parentElement.innerHTML=\'<span class=&quot;ph&quot;>Gambar tidak bisa dimuat. Cek kembali link-nya (pastikan bukan link share Google Drive).</span>\'">'}
-async function load(){el('bannerList').innerHTML='<div class="empty">Memuat data banner...</div>';if(window.KAMAR_CONFIG_READY){try{await window.KAMAR_CONFIG_READY}catch(e){}}var c=client();if(!c){el('bannerList').innerHTML='<div class="empty">Supabase client tidak tersedia.</div>';return}try{var res=await c.from('banners').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(res.error)throw res.error;state.banners=res.data||[];render()}catch(e){el('bannerList').innerHTML='<div class="empty">Gagal memuat data: '+esc(e.message||String(e))+'</div>'}}
-function render(){var arr=state.banners;if(!arr.length){el('bannerList').innerHTML='<div class="empty">Belum ada banner. Isi form di atas untuk membuat banner pertama.</div>';return}var h='';arr.forEach(function(b){var thumb=b.image_url?('<img src="'+esc(b.image_url)+'" alt="" onerror="this.parentElement.textContent=\'Tanpa Gambar\'">'):'Tanpa Gambar';h+='<div class="banner-row"><div class="banner-thumb">'+thumb+'</div><div><span class="cell-label">Judul</span><strong>'+esc(b.title)+'</strong><small>'+esc((b.body||'').slice(0,80))+((b.body||'').length>80?'…':'')+'</small></div><div><span class="cell-label">Tampil di</span><span class="pill info">'+esc(AREA_LABEL[b.display_area]||b.display_area)+'</span><small>'+esc(STYLE_LABEL[b.display_style]||b.display_style||'-')+'</small></div><div><span class="cell-label">Jadwal</span><small>Mulai: '+esc(fmtDate(b.start_at))+'</small><small>Selesai: '+esc(fmtDate(b.end_at))+'</small></div><div><span class="cell-label">Status</span>'+statusPill(b)+'</div><div class="row-actions"><button class="btn small" data-edit="'+esc(b.id)+'">Edit</button><button class="btn danger small" data-delete="'+esc(b.id)+'">Hapus</button></div></div>'});el('bannerList').innerHTML=h;wireRowButtons()}
-function findBanner(id){return state.banners.find(function(b){return String(b.id)===String(id)})}
-function fillForm(b){el('bannerId').value=b.id;el('fTitle').value=b.title||'';el('fBody').value=b.body||'';el('fImage').value=b.image_url||'';el('fCtaLabel').value=b.cta_label||'';el('fCtaUrl').value=b.cta_url||'';el('fArea').value=b.display_area||'public';el('fStyle').value=b.display_style||'topbar';el('fStart').value=b.start_at?String(b.start_at).slice(0,16):'';el('fEnd').value=b.end_at?String(b.end_at).slice(0,16):'';el('fSort').value=b.sort_order||0;el('fActive').value=b.is_active?'true':'false';counters();updatePreview();el('formTitle').textContent='Edit Banner: '+b.title;el('cancelEditBtn').style.display='inline-flex';state.editId=b.id;el('formCard').scrollIntoView({behavior:'smooth',block:'start'})}
-function resetForm(){el('bannerForm').reset();el('bannerId').value='';el('fSort').value=0;el('fArea').value='public';el('fStyle').value='topbar';el('fActive').value='true';counters();updatePreview();el('formTitle').textContent='Tambah Banner Baru';el('cancelEditBtn').style.display='none';state.editId=null}
-function payloadFromForm(){var title=(el('fTitle').value||'').trim().slice(0,60);var body=(el('fBody').value||'').trim().slice(0,200);var ctaLabel=(el('fCtaLabel').value||'').trim().slice(0,24);return {title:title,body:body||null,image_url:(el('fImage').value||'').trim()||null,cta_label:ctaLabel||null,cta_url:(el('fCtaUrl').value||'').trim()||null,display_area:el('fArea').value,display_style:el('fStyle').value,start_at:el('fStart').value?new Date(el('fStart').value).toISOString():null,end_at:el('fEnd').value?new Date(el('fEnd').value).toISOString():null,sort_order:Number(el('fSort').value)||0,is_active:el('fActive').value==='true'}}
-async function saveBanner(ev){ev.preventDefault();var c=client();if(!c){toast('Supabase client tidak tersedia.');return}var payload=payloadFromForm();if(!payload.title){toast('Judul banner wajib diisi.');return}try{var res;if(state.editId){res=await c.from('banners').update(payload).eq('id',state.editId).select().maybeSingle()}else{res=await c.from('banners').insert(payload).select().maybeSingle()}if(res.error)throw res.error;toast(state.editId?'Banner berhasil diperbarui.':'Banner baru berhasil dibuat.');resetForm();await load()}catch(e){toast('Gagal menyimpan: '+(e.message||String(e)))}}
-async function deleteBanner(id){var c=client();if(!c){toast('Supabase client tidak tersedia.');return}try{var res=await c.from('banners').delete().eq('id',id);if(res.error)throw res.error;toast('Banner dihapus.');if(state.editId===id)resetForm();await load()}catch(e){toast('Gagal menghapus: '+(e.message||String(e)))}}
-function confirmDo(title,text,fn){if(!el('confirmModal')){if(fn)fn();return}el('confirmTitle').textContent=title;el('confirmText').textContent=text;state.pendingAction=fn;el('confirmModal').classList.add('show')}
-function wireRowButtons(){document.querySelectorAll('[data-edit]').forEach(function(b){b.onclick=function(){var banner=findBanner(b.getAttribute('data-edit'));if(banner)fillForm(banner)}});document.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=function(){var id=b.getAttribute('data-delete'),banner=findBanner(id);confirmDo('Hapus Banner','Hapus banner "'+(banner?banner.title:'ini')+'"? Tindakan ini tidak bisa dibatalkan.',function(){deleteBanner(id)})}})}
-function init(){el('bannerForm').addEventListener('submit',saveBanner);['fTitle','fBody','fCtaLabel'].forEach(function(id){el(id).addEventListener('input',counters)});el('fImage').addEventListener('input',updatePreview);el('cancelEditBtn').addEventListener('click',resetForm);el('refreshBtn').addEventListener('click',load);if(el('cancelConfirm'))el('cancelConfirm').onclick=function(){state.pendingAction=null;el('confirmModal').classList.remove('show')};if(el('confirmAction'))el('confirmAction').onclick=function(){var fn=state.pendingAction;state.pendingAction=null;el('confirmModal').classList.remove('show');if(fn)fn()};counters();updatePreview();load()}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+var BUCKET='kamar-content';
+var TABLE='banners';
+var AREA_LABEL={public:'Publik',member:'Member',both:'Publik & Member',global:'Semua Halaman',affiliate:'Affiliate',admin:'Admin'};
+var STYLE_LABEL={topbar:'Topbar',card:'Card',floating:'Floating'};
+var state={client:null,rows:[],editingId:null};
+function byId(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function toast(msg){var t=byId('toast'); if(!t)return alert(msg); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2800)}
+function fmtDate(v){if(!v)return '-'; try{return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return String(v)}}
+function toLocalInput(v){if(!v)return ''; try{var d=new Date(v); var pad=function(n){return String(n).padStart(2,'0')}; return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())}catch(e){return ''}}
+async function initClient(){
+if(state.client)return state.client;
+try{ if(window.KamarSupabase&&window.KamarSupabase.ready){ var rc=await window.KamarSupabase.ready(); if(rc){state.client=rc;return rc} } }catch(e){}
+var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||null; if(ex){state.client=ex;return ex}
+return null
+}
+function slugify(s){return String(s||'banner').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60)||'banner'}
+
+function windowLabel(r){
+var now=new Date();
+if(r.start_at && new Date(r.start_at)>now) return '<span class="chip warn">Terjadwal</span>';
+if(r.end_at && new Date(r.end_at)<now) return '<span class="chip bad">Sudah Lewat</span>';
+return '<span class="chip ok">Dalam Jendela</span>';
+}
+
+async function loadBanners(){
+var c=await initClient(); if(!c){ byId('listSummary').innerHTML='<span class="chip bad">Supabase belum siap</span>'; return; }
+try{
+var res=await c.from(TABLE).select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+if(res.error) throw res.error;
+state.rows=res.data||[];
+}catch(e){ byId('listSummary').innerHTML='<span class="chip bad">Gagal memuat: '+esc(e.message||String(e))+'</span>'; return; }
+render();
+}
+
+function render(){
+var rows=state.rows;
+var active=rows.filter(function(r){return r.is_active}).length;
+byId('listSummary').innerHTML='<span class="chip ok">Total: '+rows.length+'</span><span class="chip">Aktif: '+active+'</span><span class="chip warn">Nonaktif: '+(rows.length-active)+'</span>';
+var wrap=byId('bannerList');
+var html='<div class="row header"><div>Judul</div><div>Tampil Untuk</div><div>Gaya / Jendela</div><div>Status</div><div>Aksi</div></div>';
+if(!rows.length){ html+='<div class="empty">Belum ada banner. Isi form di atas untuk menambahkan banner pertama.</div>'; }
+rows.forEach(function(r){
+html+='<div class="row">'+
+'<div><strong>'+esc(r.title)+'</strong><small>Update: '+fmtDate(r.updated_at)+'</small></div>'+
+'<div>'+esc(AREA_LABEL[r.display_area]||r.display_area)+'</div>'+
+'<div>'+esc(STYLE_LABEL[r.display_style]||r.display_style)+'<br/>'+windowLabel(r)+'</div>'+
+'<div><label style="display:flex;align-items:center;gap:6px;font-size:12px"><input type="checkbox" data-quick-active="'+esc(r.id)+'" '+(r.is_active?'checked':'')+' style="width:18px;height:18px"/> Aktif</label></div>'+
+'<div class="actions">'+(r.cta_url?'<a class="btn mini secondary" href="'+esc(r.cta_url)+'" target="_blank" rel="noopener">Buka Link</a>':'')+
+'<button class="btn mini secondary" type="button" data-edit="'+esc(r.id)+'">Edit</button>'+
+'<button class="btn mini danger" type="button" data-delete="'+esc(r.id)+'">Hapus</button></div>'+
+'</div>';
+});
+wrap.innerHTML=html;
+wrap.querySelectorAll('[data-edit]').forEach(function(b){b.onclick=function(){startEdit(b.getAttribute('data-edit'))}});
+wrap.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=function(){deleteBanner(b.getAttribute('data-delete'))}});
+wrap.querySelectorAll('[data-quick-active]').forEach(function(cb){cb.onchange=function(){quickUpdate(cb.getAttribute('data-quick-active'),{is_active:cb.checked})}});
+}
+
+async function quickUpdate(id,patch){
+var c=await initClient(); if(!c)return toast('Supabase belum siap.');
+try{
+patch.updated_at=new Date().toISOString();
+var res=await c.from(TABLE).update(patch).eq('id',id);
+if(res.error) throw res.error;
+toast('Status banner diperbarui.');
+await loadBanners();
+}catch(e){ toast('Gagal update: '+(e.message||String(e))); }
+}
+
+function findRow(id){return state.rows.find(function(r){return String(r.id)===String(id)})}
+
+function startEdit(id){
+var r=findRow(id); if(!r)return;
+state.editingId=id;
+byId('formModeLabel').textContent='Edit Banner';
+byId('formTitle').textContent='Edit Banner — '+r.title;
+byId('fJudul').value=r.title||'';
+byId('fBody').value=r.body||'';
+byId('fArea').value=r.display_area||'public';
+byId('fStyle').value=r.display_style||'topbar';
+byId('fCtaLabel').value=r.cta_label||'';
+byId('fCtaUrl').value=r.cta_url||'';
+byId('fStart').value=toLocalInput(r.start_at);
+byId('fEnd').value=toLocalInput(r.end_at);
+byId('fSort').value=r.sort_order||0;
+byId('fAktif').checked=!!r.is_active;
+byId('fImage').value='';
+byId('fCurrentImageNote').textContent=r.image_url?'Gambar saat ini tersimpan':'Belum ada gambar';
+if(r.image_url){ byId('fImagePreview').style.display='block'; byId('fImagePreviewImg').src=r.image_url; } else { byId('fImagePreview').style.display='none'; }
+byId('fSubmitBtn').textContent='Simpan Perubahan';
+byId('fCancelBtn').style.display='inline-flex';
+byId('formCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetForm(){
+state.editingId=null;
+byId('bannerForm').reset();
+byId('fAktif').checked=true;
+byId('fSort').value=0;
+byId('formModeLabel').textContent='Tambah Banner Baru';
+byId('formTitle').textContent='Buat Banner Baru';
+byId('fCurrentImageNote').textContent='';
+byId('fImagePreview').style.display='none';
+byId('fSubmitBtn').textContent='Simpan Banner';
+byId('fCancelBtn').style.display='none';
+byId('fStatusMsg').innerHTML='';
+}
+byId('fCancelBtn').onclick=resetForm;
+
+async function deleteBanner(id){
+var r=findRow(id); if(!r)return;
+if(!confirm('Hapus banner "'+r.title+'"? Gambar di storage juga akan dihapus dan tidak bisa dikembalikan.'))return;
+var c=await initClient(); if(!c)return toast('Supabase belum siap.');
+try{
+if(r.image_storage_path){
+var rm=await c.storage.from(BUCKET).remove([r.image_storage_path]);
+if(rm.error) console.warn('Gagal hapus gambar fisik:',rm.error.message);
+}
+var res=await c.from(TABLE).delete().eq('id',id);
+if(res.error) throw res.error;
+toast('Banner dihapus.');
+if(state.editingId===id) resetForm();
+await loadBanners();
+}catch(e){ toast('Gagal hapus: '+(e.message||String(e))); }
+}
+
+byId('fImage').addEventListener('change',function(){
+var f=this.files&&this.files[0];
+if(!f){return}
+var reader=new FileReader();
+reader.onload=function(ev){ byId('fImagePreview').style.display='block'; byId('fImagePreviewImg').src=ev.target.result; };
+reader.readAsDataURL(f);
+});
+
+byId('bannerForm').addEventListener('submit', async function(e){
+e.preventDefault();
+var statusEl=byId('fStatusMsg');
+var c=await initClient(); if(!c){ toast('Supabase belum siap.'); return; }
+var title=byId('fJudul').value.trim();
+if(!title){ statusEl.innerHTML='<span class="chip bad">Judul wajib diisi.</span>'; return; }
+var fileInput=byId('fImage');
+var file=fileInput.files && fileInput.files[0];
+var startVal=byId('fStart').value; var endVal=byId('fEnd').value;
+var payload={
+title:title,
+body:byId('fBody').value.trim()||null,
+display_area:byId('fArea').value,
+display_style:byId('fStyle').value,
+cta_label:byId('fCtaLabel').value.trim()||null,
+cta_url:byId('fCtaUrl').value.trim()||null,
+start_at:startVal?new Date(startVal).toISOString():null,
+end_at:endVal?new Date(endVal).toISOString():null,
+sort_order:Number(byId('fSort').value)||0,
+is_active:byId('fAktif').checked,
+updated_at:new Date().toISOString()
+};
+byId('fSubmitBtn').disabled=true;
+statusEl.innerHTML='<span class="chip warn">Menyimpan...</span>';
+try{
+if(file){
+statusEl.innerHTML='<span class="chip warn">Mengupload gambar...</span>';
+var path='banners/'+Date.now()+'-'+slugify(file.name.replace(/\.[^.]+$/,''))+(file.name.match(/\.[^.]+$/)?file.name.match(/\.[^.]+$/)[0]:'');
+var up=await c.storage.from(BUCKET).upload(path,file,{cacheControl:'3600',upsert:false});
+if(up.error) throw up.error;
+var pub=c.storage.from(BUCKET).getPublicUrl(path);
+payload.image_url=pub.data.publicUrl;
+payload.image_storage_path=path;
+}
+var res;
+if(state.editingId){
+res=await c.from(TABLE).update(payload).eq('id',state.editingId);
+}else{
+res=await c.from(TABLE).insert(payload);
+}
+if(res.error) throw res.error;
+statusEl.innerHTML='<span class="chip ok">Tersimpan.</span>';
+toast(state.editingId?'Banner berhasil diperbarui.':'Banner berhasil ditambahkan.');
+resetForm();
+await loadBanners();
+}catch(e){
+statusEl.innerHTML='<span class="chip bad">Gagal: '+esc(e.message||String(e))+'</span>';
+}
+byId('fSubmitBtn').disabled=false;
+});
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadBanners); else loadBanners();
 })();
 </script>
-
 <script id="kamar-global-header-script">
 (function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+function shouldShowHeader(){
+var p=pageName();
+if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+if(p==='affiliate-dashboard.html') return true;
+return false;
+}
+function clearSessionAndLogout(e){
+try{
+['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+}catch(err){}
+}
+function buildHeader(){
+if(!shouldShowHeader()) return;
+document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+var header=document.createElement('header');
+header.className='site-header kamar-global-header';
+header.innerHTML=''+
+'<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+'<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+'<span>Kamar Kajian Market</span>'+
+'</a>'+
+'<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+'<div class="kamar-global-actions">'+
+'<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+'<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+'</div>';
+document.body.insertBefore(header, document.body.firstChild);
+var out=header.querySelector('[data-kamar-logout]');
+if(out) out.addEventListener('click', clearSessionAndLogout);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
-<script src="assets/js/kamar-premium-v29.js?v=30"></script>
-<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
+<script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29I"></script>
 </body>
 </html>

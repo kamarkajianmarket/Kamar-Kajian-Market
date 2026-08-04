@@ -1,227 +1,333 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Konten Video — Kamar Kajian Market</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="assets/css/kamar-full-online.css" rel="stylesheet" />
-  <style>
-    :root{--bg:#060606;--panel:#10100f;--panel2:#151411;--line:rgba(238,206,122,.16);--gold:#e8c96f;--gold2:#f7e7ad;--text:#fff4df;--muted:rgba(247,241,226,.66);--ok:#9ff0bd;--warn:#f0ce7c;--danger:#ff9b9b;--blue:#9bc8ff;--accent:#ff6b6b;--accent-soft:rgba(255,107,107,.14);--accent-line:rgba(255,107,107,.5);}
-    *{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 18% 12%,rgba(216,174,82,.10),transparent 32%),radial-gradient(circle at 88% 28%,rgba(20,90,69,.12),transparent 32%),#060606;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}
-    .admin-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;max-width:1500px;margin:0 auto;padding:72px 34px}.admin-sidebar{position:sticky;top:28px;align-self:start;border:1px solid var(--line);border-radius:28px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 60px rgba(0,0,0,.26)}.brand-small{letter-spacing:.22em;text-transform:uppercase;font-weight:900;font-size:12px;color:var(--gold2);margin:0 0 18px}.admin-menu-section{margin:20px 0 9px;color:var(--gold2);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:900}.admin-sidebar a{display:block;padding:11px 14px;border-radius:16px;color:rgba(255,244,223,.82);font-weight:800;line-height:1.15}.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(232,201,111,.13);color:var(--gold2)}
-    .admin-main{display:grid;gap:22px;min-width:0}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px;min-width:0;overflow:hidden}.hero{padding:34px}.hero-inner{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.eyebrow{display:flex;align-items:center;gap:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:900;margin-bottom:12px}.eyebrow:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.module-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;margin-bottom:12px}.hero h1{margin:0;font-size:clamp(32px,4vw,52px);letter-spacing:-.05em;line-height:.98}.hero p{max-width:850px;margin:14px 0 0;color:var(--muted);font-size:16px;line-height:1.65}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .btn{border:0;border-radius:18px;padding:13px 18px;font-weight:900;background:linear-gradient(135deg,#fff1a9,#d8ae47);color:#14100a;cursor:pointer;transition:.18s ease;white-space:nowrap}.btn:hover{transform:translateY(-1px);filter:saturate(1.04)}.btn.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--gold2)}.btn.danger{border:1px solid rgba(255,155,155,.35);background:rgba(255,90,90,.12);color:#ffd1d1}.btn.good{border:1px solid rgba(159,240,189,.35);background:rgba(36,185,96,.14);color:#d7ffe5}.btn.accent{border:0;background:linear-gradient(135deg,#ffd6d6,var(--accent));color:#2a0f0f}.btn.small{padding:10px 13px;border-radius:15px;font-size:13px}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;filter:none!important}
-    .section-title{margin:0 0 14px;display:flex;align-items:center;gap:14px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;font-size:13px;font-weight:900}.section-title:before{content:"";width:58px;height:1px;background:linear-gradient(90deg,rgba(238,206,122,.1),var(--accent-line))}.muted{color:var(--muted);line-height:1.55}
-    .guide-box{border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:22px;padding:18px 20px;display:grid;gap:8px}.guide-box strong{color:var(--accent);font-size:13px;letter-spacing:.1em;text-transform:uppercase}.guide-box ol{margin:6px 0 0;padding-left:20px;color:var(--text);line-height:1.7}.guide-box li b{color:var(--accent)}.guide-box .warn-line{color:var(--warn);font-weight:800}
-    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:7px;font-weight:900;color:var(--text)}.field.full{grid-column:1/-1}.field-hint{font-weight:600;color:var(--muted);font-size:12.5px;line-height:1.5}.field-count{font-weight:700;color:rgba(247,241,226,.45);font-size:11px;text-align:right}.field-count.over{color:var(--danger)}
-    input,select,textarea{width:100%;border:1px solid rgba(238,206,122,.22);background:rgba(255,255,255,.04);color:var(--text);border-radius:17px;padding:13px 16px;font:inherit;font-weight:800;outline:none}input::placeholder,textarea::placeholder{color:rgba(247,241,226,.4);font-weight:600}textarea{min-height:88px;resize:vertical}select option{background:#151310;color:var(--text)}input:focus,select:focus,textarea:focus{border-color:var(--accent-line)}
-    .preview-box{border:1px dashed var(--accent-line);border-radius:20px;padding:16px;background:rgba(0,0,0,.16);display:grid;gap:10px}.preview-box img{max-width:100%;max-height:220px;object-fit:cover;border-radius:14px;display:block}.preview-box .ph{color:var(--muted);font-size:13px}
-    .form-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}
-    .item-list{display:grid;gap:14px}.item-row{display:grid;grid-template-columns:130px minmax(0,1.3fr) minmax(0,.8fr) minmax(0,.8fr) minmax(0,.6fr) auto;gap:16px;align-items:center;border:1px solid rgba(238,206,122,.13);border-top:3px solid var(--accent-line);border-radius:20px;padding:16px 18px;background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015))}.item-thumb{width:130px;height:74px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;text-align:center}.item-thumb img{width:100%;height:100%;object-fit:cover}
-    .item-row strong{display:block;color:var(--text)}.item-row small{display:block;color:rgba(247,241,226,.6);margin-top:4px;line-height:1.4}.cell-label{display:none;color:var(--accent);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;margin-bottom:6px}
-    .pill{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 11px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:900;line-height:1.1}.pill.ok{color:var(--ok);background:rgba(36,185,96,.1);border-color:rgba(159,240,189,.26)}.pill.off{color:rgba(247,241,226,.6);background:rgba(255,255,255,.035)}.pill.info{color:var(--accent);background:var(--accent-soft);border-color:var(--accent-line)}.pill.warn{color:var(--warn);background:rgba(240,206,124,.12);border-color:rgba(240,206,124,.3)}
-    .row-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.empty{border:1px solid rgba(238,206,122,.14);border-radius:20px;background:rgba(255,255,255,.025);padding:17px;color:var(--muted);font-weight:800}
-    @media(max-width:1220px){.field-grid{grid-template-columns:1fr}.item-row{grid-template-columns:1fr}.cell-label{display:block}.row-actions{justify-content:flex-start}}
-    @media(max-width:900px){.admin-shell{grid-template-columns:1fr;padding:32px 16px}.admin-sidebar{position:relative;top:0}.hero-inner{grid-template-columns:1fr}.hero-actions{justify-content:flex-start}}
-  </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Konten Video — Kamar Kajian Market</title>
+<meta content="Kelola card YouTube untuk halaman utama dan member area." name="description"/>
+<meta content="#070707" name="theme-color"/>
+<link href="assets/favicon.png" rel="icon"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="style.css" rel="stylesheet"/>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<style>
+:root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4;--warn:#ffd582}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:48px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:32px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.menu-section{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#e7d391;font-weight:1000;margin:20px 10px 8px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:900}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.14);color:#f4df90}.split-main{display:grid;gap:22px}.split-card{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card.hero-card{padding:44px 32px}.split-card h1{margin:0;color:#fff3d8;font-size:clamp(30px,4vw,50px);line-height:1;letter-spacing:-.05em}.split-card h2,.split-card h3{margin:0 0 12px;color:#fff3d8}.split-card p{color:var(--muted);line-height:1.65}.mini-label{display:inline-block;text-transform:uppercase;letter-spacing:.22em;font-size:13px;color:#f1dda2;font-weight:1000;margin-bottom:12px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.28)}.btn.mini{padding:8px 12px;font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}.field{display:flex;flex-direction:column;gap:8px;color:#e8ddc7;font-size:14px;font-weight:1000}input,select,textarea{width:100%;box-sizing:border-box;border:1px solid rgba(238,206,122,.24);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025));color:#fff4db;border-radius:18px;padding:15px 17px;font:inherit;font-weight:800;outline:none}select option{background:#11100d;color:#fff4db}.summary{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.chip{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:7px 11px;color:#e7d391;background:rgba(255,255,255,.035);font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.chip.ok{color:#bfffd9;border-color:rgba(158,255,202,.28);background:rgba(28,97,65,.12)}.chip.warn{color:#ffd582;border-color:rgba(255,213,130,.28);background:rgba(255,213,130,.08)}.chip.bad{color:#ffb4b4;border-color:rgba(255,96,96,.25);background:rgba(255,96,96,.08)}.row-list{display:grid;gap:14px}.row{display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr auto;gap:14px;align-items:center;border:1px solid rgba(238,206,122,.14);border-radius:22px;background:rgba(255,255,255,.025);padding:16px}.row.header{border:0;background:transparent;padding:10px 16px;color:#e7d391;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:1000}.row strong{display:block;color:#fff3d8}.row small{display:block;color:rgba(245,240,230,.62);line-height:1.4;margin-top:5px}.actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.empty{border:1px dashed rgba(238,206,122,.25);border-radius:22px;padding:22px;color:#d8d0bd;background:rgba(255,255,255,.02);line-height:1.6}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1;line-height:1.6}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:380px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}
+.status-select{padding:8px 10px;border-radius:12px;font-size:12px;font-weight:900}
+.preview-box{border:1px dashed rgba(238,206,122,.25);border-radius:24px;padding:18px;margin-top:14px;background:rgba(0,0,0,.18)}.preview-box img{max-width:280px;border-radius:18px;margin-top:12px;display:block}
+@media(max-width:980px){.split-app,.grid-2,.row{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.actions{justify-content:flex-start}.split-shell{padding:24px 16px}}
+</style>
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
-<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
-<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
-  <meta name="kamar-step" content="46-luxury-atelier-formation"/>
-</head>
-<body>
-<div class="admin-shell">
-  <aside class="admin-sidebar">
-    <div class="brand-small">Admin Kamar</div>
-    <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
-    <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
-    <div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-overview.html">Data Affiliate</a><a href="admin-affiliate-list.html">Daftar Affiliator</a><a href="admin-affiliate-reward.html">Reward / Komisi</a>
-    <div class="admin-menu-section">Konten Website</div><a href="admin-banner.html">Banner Pengumuman</a><a class="active" href="admin-video.html">Konten Video</a><a href="admin-materials.html">Konten & Materi</a><a href="admin-tools.html">File Tools</a>
-    <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
-    <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
-  </aside>
-  <main class="admin-main">
-    <section class="card hero">
-      <div class="hero-inner">
-        <div><span class="eyebrow">Konten Website</span> <span class="module-chip">▶ Video</span><h1>Konten Video</h1><p>Kelola video edukasi/promosi: link YouTube, kategori, target tampilan, dan hak akses tonton.</p></div>
-        <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2 class="section-title">Panduan Singkat</h2>
-      <div class="guide-box">
-        <strong>Baca dulu sebelum mengisi</strong>
-        <ol>
-          <li><b>Link YouTube</b> harus link video YouTube yang bisa diakses publik atau unlisted (bukan private), contoh: <code>https://www.youtube.com/watch?v=XXXXXXXXXXX</code> atau <code>https://youtu.be/XXXXXXXXXXX</code>. Sistem otomatis mengambil ID video untuk membuat thumbnail pratinjau di bawah form.</li>
-          <li><b>Kategori</b> bebas diisi untuk mengelompokkan video (misal "Kamar Study", "Tutorial Robot"), boleh dikosongkan.</li>
-          <li><b>Tampil di</b> menentukan halaman mana yang menampilkan daftar video ini. <b>Akses Diperlukan</b> menentukan siapa yang boleh menonton (misal hanya member fasilitas tertentu) — dua hal ini berbeda: satu soal lokasi tampil, satu soal hak akses tonton.</li>
-          <li><b>Status Publikasi</b>: Draft = belum tayang sama sekali (masih disiapkan), Terbit = tayang sesuai Tampil di & Akses, Disembunyikan = pernah tayang lalu disembunyikan tanpa dihapus datanya. <b>Status Aktif</b> adalah saklar utama on/off.</li>
-          <li>Jika satu halaman menampilkan lebih dari satu jenis konten sekaligus, urutannya selalu: <b>Banner Pengumuman &rarr; Konten Video &rarr; Materi &rarr; File Tools</b>.</li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="card" id="formCard">
-      <h2 class="section-title" id="formTitle">Tambah Video Baru</h2>
-      <form id="itemForm">
-        <input type="hidden" id="itemId" value="">
-        <div class="field-grid">
-          <label class="field full">Judul Video
-            <input id="fTitle" maxlength="80" placeholder="Contoh: Cara Membaca Candlestick untuk Pemula" required>
-            <div class="field-hint">Judul video. Maksimal 80 karakter.</div>
-            <div class="field-count" id="countTitle">0 / 80</div>
-          </label>
-          <label class="field full">Link YouTube
-            <input id="fYoutube" placeholder="https://www.youtube.com/watch?v=..." required>
-            <div class="field-hint">Link video YouTube publik/unlisted. Jangan private.</div>
-          </label>
-          <div class="field full">
-            <div class="preview-box" id="previewBox"><span class="ph">Belum ada link. Isi Link YouTube untuk melihat pratinjau thumbnail di sini.</span></div>
-          </div>
-          <label class="field">Kategori (opsional)
-            <input id="fCategory" maxlength="40" placeholder="Contoh: Kamar Study">
-            <div class="field-hint">Untuk mengelompokkan video di daftar.</div>
-          </label>
-          <label class="field">Urutan Tampil
-            <input id="fSort" type="number" value="0" min="0">
-            <div class="field-hint">Angka lebih kecil tampil lebih dulu.</div>
-          </label>
-          <label class="field full">Deskripsi (opsional)
-            <textarea id="fDescription" maxlength="300" placeholder="Ringkasan singkat isi video."></textarea>
-            <div class="field-hint">Maksimal 300 karakter.</div>
-            <div class="field-count" id="countDesc">0 / 300</div>
-          </label>
-          <label class="field">Tampil di
-            <select id="fArea">
-              <option value="public">Halaman Utama (Publik)</option>
-              <option value="member">Dashboard Member</option>
-              <option value="admin">Dashboard Admin</option>
-              <option value="affiliate">Dashboard Affiliate</option>
-              <option value="both">Publik + Member</option>
-              <option value="global">Semua Halaman</option>
-            </select>
-            <div class="field-hint">Lokasi video ini akan ditampilkan.</div>
-          </label>
-          <label class="field">Akses Diperlukan
-            <select id="fAccess">
-              <option value="public">Publik (Gratis, semua bisa)</option>
-              <option value="member">Member (Login saja)</option>
-              <option value="kamar_study">Kamar Study</option>
-              <option value="materi_edukasi">Materi Edukasi</option>
-              <option value="kamar_private">Kamar Private</option>
-              <option value="kamar_indikator">Kamar Indikator</option>
-              <option value="kamar_robot">Kamar Robot</option>
-              <option value="all_paid">Semua Fasilitas Berbayar</option>
-            </select>
-            <div class="field-hint">Siapa yang boleh menonton video ini.</div>
-          </label>
-          <label class="field">Status Publikasi
-            <select id="fStatus">
-              <option value="draft">Draft (belum tayang)</option>
-              <option value="published">Terbit (tayang)</option>
-              <option value="hidden">Disembunyikan</option>
-            </select>
-            <div class="field-hint">Kontrol tahap publikasi konten.</div>
-          </label>
-          <label class="field">Status Aktif
-            <select id="fActive">
-              <option value="true">Aktif</option>
-              <option value="false">Nonaktif</option>
-            </select>
-            <div class="field-hint">Nonaktif = video mati total, tidak tampil di manapun.</div>
-          </label>
-        </div>
-        <div class="form-actions">
-          <button class="btn secondary" id="cancelEditBtn" type="button" style="display:none">Batal Edit</button>
-          <button class="btn accent" id="saveBtn" type="submit">Simpan Video</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2 class="section-title">Daftar Video</h2>
-      <p class="muted">Semua video yang pernah dibuat, termasuk yang draft, disembunyikan, atau nonaktif.</p>
-      <div class="item-list" id="itemList"></div>
-    </section>
-  </main>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/></head>
+<body class="kamar-v46-atelier">
+<main class="split-shell">
+<div class="split-app">
+<aside class="split-sidebar">
+<div class="brand-small">Admin Kamar</div>
+<div class="menu-section">Utama</div>
+<a href="admin.html">Dashboard Admin</a>
+<div class="menu-section">Member &amp; Akses</div>
+<a href="admin-members.html?v=24dg">Data Member</a><a href="admin-internal.html?v=24dg">Data Internal</a>
+<a href="admin-activation.html?v=24dg">Aktivasi Akun &amp; Fasilitas</a>
+<a href="admin-license-requests.html">Request License</a>
+<a href="admin-data-check.html?v=24cu">Cek Data Admin</a><a href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+<div class="menu-section">Affiliate</div>
+<a href="admin-affiliate-v2.html?view=overview&amp;v=24dx">Data Affiliate</a>
+<div class="menu-section">Konten Website</div>
+<a href="admin-banner.html">Banner Pengumuman</a>
+<a class="active" href="admin-video.html">Konten Video</a>
+<a href="admin-materials.html">Konten &amp; Materi</a>
+<a href="admin-tools.html">File Tools</a>
+<div class="menu-section">Kontrol Sistem</div>
+<a href="admin-maintenance.html">Maintenance Fasilitas</a>
+<a href="admin-page-control.html">Kontrol Halaman Utama</a>
+<a href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
+<a href="admin-payment.html">Payment Gateway</a>
+<a href="admin-links.html">Pengaturan Link</a>
+<a href="admin-settings.html">Pengaturan Umum</a>
+<div class="menu-section">Akun</div>
+<a href="member.html">Logout</a>
+</aside>
+<section class="split-main">
+<section class="split-card hero-card">
+<span class="mini-label">Video Edukasi</span>
+<h1>Konten Video</h1>
+<p>Tambahkan video YouTube untuk halaman utama (publik) atau area member sesuai fasilitas. Video yang berstatus <b>Published</b> dan <b>Aktif</b> otomatis muncul — tidak perlu ubah kode apa pun.</p>
+</section>
+<section class="split-card" id="formCard">
+<span class="mini-label" id="formModeLabel">Tambah Video Baru</span>
+<h2 id="formTitle">Tambah Video Baru</h2>
+<form id="videoForm" class="grid-2">
+<label class="field" style="grid-column:1/-1">Judul Video *<input id="fJudul" placeholder="Contoh: Cara Membaca Zona Supply Demand" required/></label>
+<label class="field" style="grid-column:1/-1">Link YouTube *<input id="fUrl" placeholder="https://www.youtube.com/watch?v=..." required/></label>
+<div class="preview-box" id="fPreview" style="display:none"><span class="chip">Preview Thumbnail</span><img id="fPreviewImg" alt="Preview thumbnail video"/></div>
+<label class="field">Kategori<input id="fKategori" placeholder="Contoh: Kamar Study"/></label>
+<label class="field">Tampil Untuk
+<select id="fArea">
+<option value="public">Publik (halaman utama)</option>
+<option value="member">Member (dashboard)</option>
+<option value="both">Publik &amp; Member</option>
+</select>
+</label>
+<label class="field" style="grid-column:1/-1">Deskripsi<textarea id="fDeskripsi" rows="2" placeholder="Opsional: ringkasan singkat video"></textarea></label>
+<label class="field">Fasilitas yang Wajib Aktif
+<select id="fFasilitas">
+<option value="public">Publik (tanpa login)</option>
+<option value="member">Semua Member (fasilitas apa saja)</option>
+<option value="kamar_study">Kamar Study / Signal</option>
+<option value="kamar_private">Kamar Private</option>
+<option value="kamar_indikator">Kamar Indikator</option>
+<option value="kamar_robot">Kamar Robot</option>
+<option value="materi_edukasi">Kamar Edukasi</option>
+<option value="all_paid">Semua Fasilitas Berbayar</option>
+</select>
+</label>
+<label class="field">Status Publikasi
+<select id="fStatus">
+<option value="draft">Draft (belum tampil)</option>
+<option value="published">Published (tampil ke member)</option>
+<option value="hidden">Hidden (disembunyikan sementara)</option>
+</select>
+</label>
+<label class="field">Urutan Tampil<input id="fSort" type="number" value="0"/></label>
+<div class="field" style="flex-direction:row;align-items:center;gap:10px">
+<input id="fAktif" type="checkbox" checked style="width:22px;height:22px;flex:0 0 22px"/>
+<span>Video Aktif (bisa ditampilkan)</span>
 </div>
+<div class="summary" style="grid-column:1/-1">
+<button class="btn" type="submit" id="fSubmitBtn">Simpan Video</button>
+<button class="btn secondary" type="button" id="fCancelBtn" style="display:none">Batal Edit</button>
+<span id="fStatusMsg"></span>
+</div>
+</form>
+</section>
+<section class="split-card">
+<span class="mini-label">Daftar Video</span>
+<div class="summary" id="listSummary"><span class="chip">Memuat data...</span></div>
+<div class="row-list" id="videoList"></div>
+</section>
+</section>
+</div>
+</main>
 <div class="toast" id="toast"></div>
-<div class="confirm" id="confirmModal"><div class="confirm-box"><h3 id="confirmTitle">Konfirmasi</h3><p id="confirmText"></p><div class="confirm-actions"><button class="btn secondary" id="cancelConfirm" type="button">Batal</button><button class="btn danger" id="confirmAction" type="button">Ya, Lanjutkan</button></div></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js?v=29F"></script>
+<script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-data-online-25e.js?v=30G"></script>
 <script>
 (function(){
 'use strict';
-var state={items:[],client:null,editId:null,pendingAction:null};
-function el(id){return document.getElementById(id)}
-function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
-function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
-function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
-function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client)||(window.KamarSB&&window.KamarSB.client)||(window.kamarSupabase&&window.kamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
-var AREA_LABEL={public:'Halaman Utama',member:'Dashboard Member',admin:'Dashboard Admin',affiliate:'Dashboard Affiliate',both:'Publik + Member',global:'Semua Halaman'};
-var ACCESS_LABEL={public:'Publik',member:'Member',kamar_study:'Kamar Study',materi_edukasi:'Materi Edukasi',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',all_paid:'Semua Berbayar'};
-var STATUS_LABEL={draft:'Draft',published:'Terbit',hidden:'Disembunyikan'};
-function fmtDate(v){if(!v)return '-';try{return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return v}}
-function extractYoutubeId(url){if(!url)return '';url=String(url).trim();var m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);if(m)return m[1];m=url.match(/[?&]v=([A-Za-z0-9_-]{11})/);if(m)return m[1];return ''}
-function statusPill(it){if(!it.is_active)return '<span class="pill off">Nonaktif</span>';if(it.publish_status==='draft')return '<span class="pill warn">Draft</span>';if(it.publish_status==='hidden')return '<span class="pill off">Disembunyikan</span>';return '<span class="pill ok">Tayang</span>'}
-function counters(){[['fTitle','countTitle',80],['fDescription','countDesc',300]].forEach(function(p){var inp=el(p[0]),out=el(p[1]),max=p[2];if(!inp||!out)return;var n=inp.value.length;out.textContent=n+' / '+max;out.classList.toggle('over',n>max)})}
-function updatePreview(){var url=(el('fYoutube').value||'').trim();var id=extractYoutubeId(url);var box=el('previewBox');if(!id){box.innerHTML='<span class="ph">'+(url?'Link belum dikenali sebagai YouTube yang valid.':'Belum ada link. Isi Link YouTube untuk melihat pratinjau thumbnail di sini.')+'</span>';return}box.innerHTML='<img src="https://img.youtube.com/vi/'+esc(id)+'/hqdefault.jpg" alt="Pratinjau thumbnail" onerror="this.parentElement.innerHTML=\'<span class=&quot;ph&quot;>Thumbnail tidak ditemukan, cek kembali link video.</span>\'">'}
-async function load(){el('itemList').innerHTML='<div class="empty">Memuat data video...</div>';if(window.KAMAR_CONFIG_READY){try{await window.KAMAR_CONFIG_READY}catch(e){}}var c=client();if(!c){el('itemList').innerHTML='<div class="empty">Supabase client tidak tersedia.</div>';return}try{var res=await c.from('videos').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(res.error)throw res.error;state.items=res.data||[];render()}catch(e){el('itemList').innerHTML='<div class="empty">Gagal memuat data: '+esc(e.message||String(e))+'</div>'}}
-function render(){var arr=state.items;if(!arr.length){el('itemList').innerHTML='<div class="empty">Belum ada video. Isi form di atas untuk membuat video pertama.</div>';return}var h='';arr.forEach(function(it){var vid=it.youtube_video_id||extractYoutubeId(it.youtube_url);var thumb=vid?('<img src="https://img.youtube.com/vi/'+esc(vid)+'/hqdefault.jpg" alt="" onerror="this.parentElement.textContent=\'Tanpa Thumbnail\'">'):'Tanpa Thumbnail';h+='<div class="item-row"><div class="item-thumb">'+thumb+'</div><div><span class="cell-label">Judul</span><strong>'+esc(it.title)+'</strong><small>'+esc(it.category||'-')+'</small></div><div><span class="cell-label">Tampil di</span><span class="pill info">'+esc(AREA_LABEL[it.display_area]||it.display_area)+'</span></div><div><span class="cell-label">Akses</span><small>'+esc(ACCESS_LABEL[it.access_required]||it.access_required)+'</small></div><div><span class="cell-label">Status</span>'+statusPill(it)+'<small>'+esc(STATUS_LABEL[it.publish_status]||it.publish_status)+'</small></div><div class="row-actions"><button class="btn small" data-edit="'+esc(it.id)+'">Edit</button><button class="btn danger small" data-delete="'+esc(it.id)+'">Hapus</button></div></div>'});el('itemList').innerHTML=h;wireRowButtons()}
-function findItem(id){return state.items.find(function(b){return String(b.id)===String(id)})}
-function fillForm(it){el('itemId').value=it.id;el('fTitle').value=it.title||'';el('fYoutube').value=it.youtube_url||'';el('fCategory').value=it.category||'';el('fDescription').value=it.description||'';el('fArea').value=it.display_area||'public';el('fAccess').value=it.access_required||'public';el('fStatus').value=it.publish_status||'draft';el('fSort').value=it.sort_order||0;el('fActive').value=it.is_active?'true':'false';counters();updatePreview();el('formTitle').textContent='Edit Video: '+it.title;el('cancelEditBtn').style.display='inline-flex';state.editId=it.id;el('formCard').scrollIntoView({behavior:'smooth',block:'start'})}
-function resetForm(){el('itemForm').reset();el('itemId').value='';el('fSort').value=0;el('fArea').value='public';el('fAccess').value='public';el('fStatus').value='draft';el('fActive').value='true';counters();updatePreview();el('formTitle').textContent='Tambah Video Baru';el('cancelEditBtn').style.display='none';state.editId=null}
-function payloadFromForm(){var title=(el('fTitle').value||'').trim().slice(0,80);var ytUrl=(el('fYoutube').value||'').trim();var desc=(el('fDescription').value||'').trim().slice(0,300);return {title:title,youtube_url:ytUrl,youtube_video_id:extractYoutubeId(ytUrl)||null,category:(el('fCategory').value||'').trim().slice(0,40)||null,description:desc||null,display_area:el('fArea').value,access_required:el('fAccess').value,publish_status:el('fStatus').value,sort_order:Number(el('fSort').value)||0,is_active:el('fActive').value==='true'}}
-async function saveItem(ev){ev.preventDefault();var c=client();if(!c){toast('Supabase client tidak tersedia.');return}var payload=payloadFromForm();if(!payload.title){toast('Judul video wajib diisi.');return}if(!payload.youtube_url){toast('Link YouTube wajib diisi.');return}try{var res;if(state.editId){res=await c.from('videos').update(payload).eq('id',state.editId).select().maybeSingle()}else{res=await c.from('videos').insert(payload).select().maybeSingle()}if(res.error)throw res.error;toast(state.editId?'Video berhasil diperbarui.':'Video baru berhasil dibuat.');resetForm();await load()}catch(e){toast('Gagal menyimpan: '+(e.message||String(e)))}}
-async function deleteItem(id){var c=client();if(!c){toast('Supabase client tidak tersedia.');return}try{var res=await c.from('videos').delete().eq('id',id);if(res.error)throw res.error;toast('Video dihapus.');if(state.editId===id)resetForm();await load()}catch(e){toast('Gagal menghapus: '+(e.message||String(e)))}}
-function confirmDo(title,text,fn){if(!el('confirmModal')){if(fn)fn();return}el('confirmTitle').textContent=title;el('confirmText').textContent=text;state.pendingAction=fn;el('confirmModal').classList.add('show')}
-function wireRowButtons(){document.querySelectorAll('[data-edit]').forEach(function(b){b.onclick=function(){var it=findItem(b.getAttribute('data-edit'));if(it)fillForm(it)}});document.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=function(){var id=b.getAttribute('data-delete'),it=findItem(id);confirmDo('Hapus Video','Hapus video "'+(it?it.title:'ini')+'"? Tindakan ini tidak bisa dibatalkan.',function(){deleteItem(id)})}})}
-function init(){el('itemForm').addEventListener('submit',saveItem);['fTitle','fDescription'].forEach(function(id){el(id).addEventListener('input',counters)});el('fYoutube').addEventListener('input',updatePreview);el('cancelEditBtn').addEventListener('click',resetForm);el('refreshBtn').addEventListener('click',load);if(el('cancelConfirm'))el('cancelConfirm').onclick=function(){state.pendingAction=null;el('confirmModal').classList.remove('show')};if(el('confirmAction'))el('confirmAction').onclick=function(){var fn=state.pendingAction;state.pendingAction=null;el('confirmModal').classList.remove('show');if(fn)fn()};counters();updatePreview();load()}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+var TABLE='videos';
+var AREA_LABEL={public:'Publik',member:'Member',both:'Publik & Member'};
+var FACILITY_LABEL={public:'Publik',member:'Semua Member',kamar_study:'Kamar Study/Signal',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',materi_edukasi:'Kamar Edukasi',all_paid:'Semua Berbayar'};
+var STATUS_LABEL={draft:'Draft',published:'Published',hidden:'Hidden'};
+var state={client:null,rows:[],editingId:null};
+function byId(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function toast(msg){var t=byId('toast'); if(!t)return alert(msg); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2800)}
+function fmtDate(v){if(!v)return '-'; try{return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return String(v)}}
+async function initClient(){
+if(state.client)return state.client;
+try{ if(window.KamarSupabase&&window.KamarSupabase.ready){ var rc=await window.KamarSupabase.ready(); if(rc){state.client=rc;return rc} } }catch(e){}
+var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||null; if(ex){state.client=ex;return ex}
+return null
+}
+function extractVideoId(url){
+url=String(url||'');
+var m=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{6,})/);
+return m?m[1]:null;
+}
+function updatePreview(url){
+var id=extractVideoId(url);
+if(id){ byId('fPreview').style.display='block'; byId('fPreviewImg').src='https://img.youtube.com/vi/'+id+'/mqdefault.jpg'; }
+else{ byId('fPreview').style.display='none'; }
+return id;
+}
+byId('fUrl').addEventListener('input',function(){ updatePreview(this.value); });
+
+async function loadVideos(){
+var c=await initClient(); if(!c){ byId('listSummary').innerHTML='<span class="chip bad">Supabase belum siap</span>'; return; }
+try{
+var res=await c.from(TABLE).select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+if(res.error) throw res.error;
+state.rows=res.data||[];
+}catch(e){ byId('listSummary').innerHTML='<span class="chip bad">Gagal memuat: '+esc(e.message||String(e))+'</span>'; return; }
+render();
+}
+
+function render(){
+var rows=state.rows;
+var published=rows.filter(function(r){return r.publish_status==='published'}).length;
+byId('listSummary').innerHTML='<span class="chip ok">Total: '+rows.length+'</span><span class="chip">Published: '+published+'</span><span class="chip warn">Draft/Hidden: '+(rows.length-published)+'</span>';
+var wrap=byId('videoList');
+var html='<div class="row header"><div>Judul</div><div>Tampil Untuk</div><div>Fasilitas</div><div>Status</div><div>Aksi</div></div>';
+if(!rows.length){ html+='<div class="empty">Belum ada video. Isi form di atas untuk menambahkan video pertama.</div>'; }
+rows.forEach(function(r){
+html+='<div class="row">'+
+'<div><strong>'+esc(r.title)+'</strong><small>Update: '+fmtDate(r.updated_at)+(r.category?' &middot; '+esc(r.category):'')+'</small></div>'+
+'<div>'+esc(AREA_LABEL[r.display_area]||r.display_area)+'</div>'+
+'<div>'+esc(FACILITY_LABEL[r.access_required]||r.access_required)+'</div>'+
+'<div><select class="status-select" data-quick-status="'+esc(r.id)+'">'+
+Object.keys(STATUS_LABEL).map(function(k){return '<option value="'+k+'"'+(r.publish_status===k?' selected':'')+'>'+STATUS_LABEL[k]+'</option>'}).join('')+
+'</select><br/><label style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px"><input type="checkbox" data-quick-active="'+esc(r.id)+'" '+(r.is_active?'checked':'')+' style="width:18px;height:18px"/> Aktif</label></div>'+
+'<div class="actions">'+(r.youtube_url?'<a class="btn mini secondary" href="'+esc(r.youtube_url)+'" target="_blank" rel="noopener">Tonton</a>':'')+
+'<button class="btn mini secondary" type="button" data-edit="'+esc(r.id)+'">Edit</button>'+
+'<button class="btn mini danger" type="button" data-delete="'+esc(r.id)+'">Hapus</button></div>'+
+'</div>';
+});
+wrap.innerHTML=html;
+wrap.querySelectorAll('[data-edit]').forEach(function(b){b.onclick=function(){startEdit(b.getAttribute('data-edit'))}});
+wrap.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=function(){deleteVideo(b.getAttribute('data-delete'))}});
+wrap.querySelectorAll('[data-quick-status]').forEach(function(s){s.onchange=function(){quickUpdate(s.getAttribute('data-quick-status'),{publish_status:s.value})}});
+wrap.querySelectorAll('[data-quick-active]').forEach(function(cb){cb.onchange=function(){quickUpdate(cb.getAttribute('data-quick-active'),{is_active:cb.checked})}});
+}
+
+async function quickUpdate(id,patch){
+var c=await initClient(); if(!c)return toast('Supabase belum siap.');
+try{
+patch.updated_at=new Date().toISOString();
+var res=await c.from(TABLE).update(patch).eq('id',id);
+if(res.error) throw res.error;
+toast('Status video diperbarui.');
+await loadVideos();
+}catch(e){ toast('Gagal update: '+(e.message||String(e))); }
+}
+
+function findRow(id){return state.rows.find(function(r){return String(r.id)===String(id)})}
+
+function startEdit(id){
+var r=findRow(id); if(!r)return;
+state.editingId=id;
+byId('formModeLabel').textContent='Edit Video';
+byId('formTitle').textContent='Edit Video — '+r.title;
+byId('fJudul').value=r.title||'';
+byId('fUrl').value=r.youtube_url||'';
+updatePreview(r.youtube_url);
+byId('fKategori').value=r.category||'';
+byId('fArea').value=r.display_area||'member';
+byId('fDeskripsi').value=r.description||'';
+byId('fFasilitas').value=r.access_required||'member';
+byId('fStatus').value=r.publish_status||'draft';
+byId('fSort').value=r.sort_order||0;
+byId('fAktif').checked=!!r.is_active;
+byId('fSubmitBtn').textContent='Simpan Perubahan';
+byId('fCancelBtn').style.display='inline-flex';
+byId('formCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetForm(){
+state.editingId=null;
+byId('videoForm').reset();
+byId('fAktif').checked=true;
+byId('fSort').value=0;
+byId('fPreview').style.display='none';
+byId('formModeLabel').textContent='Tambah Video Baru';
+byId('formTitle').textContent='Tambah Video Baru';
+byId('fSubmitBtn').textContent='Simpan Video';
+byId('fCancelBtn').style.display='none';
+byId('fStatusMsg').innerHTML='';
+}
+byId('fCancelBtn').onclick=resetForm;
+
+async function deleteVideo(id){
+var r=findRow(id); if(!r)return;
+if(!confirm('Hapus video "'+r.title+'"? Tindakan ini tidak bisa dibatalkan.'))return;
+var c=await initClient(); if(!c)return toast('Supabase belum siap.');
+try{
+var res=await c.from(TABLE).delete().eq('id',id);
+if(res.error) throw res.error;
+toast('Video dihapus.');
+if(state.editingId===id) resetForm();
+await loadVideos();
+}catch(e){ toast('Gagal hapus: '+(e.message||String(e))); }
+}
+
+byId('videoForm').addEventListener('submit', async function(e){
+e.preventDefault();
+var statusEl=byId('fStatusMsg');
+var c=await initClient(); if(!c){ toast('Supabase belum siap.'); return; }
+var title=byId('fJudul').value.trim();
+var url=byId('fUrl').value.trim();
+if(!title){ statusEl.innerHTML='<span class="chip bad">Judul wajib diisi.</span>'; return; }
+if(!url){ statusEl.innerHTML='<span class="chip bad">Link YouTube wajib diisi.</span>'; return; }
+var vid=extractVideoId(url);
+if(!vid){ statusEl.innerHTML='<span class="chip bad">Link YouTube tidak valid. Pastikan format seperti https://www.youtube.com/watch?v=...</span>'; return; }
+var payload={
+title:title,
+youtube_url:url,
+youtube_video_id:vid,
+category:byId('fKategori').value.trim()||null,
+display_area:byId('fArea').value,
+description:byId('fDeskripsi').value.trim()||null,
+access_required:byId('fFasilitas').value,
+publish_status:byId('fStatus').value,
+sort_order:Number(byId('fSort').value)||0,
+is_active:byId('fAktif').checked,
+updated_at:new Date().toISOString()
+};
+byId('fSubmitBtn').disabled=true;
+statusEl.innerHTML='<span class="chip warn">Menyimpan...</span>';
+try{
+var res;
+if(state.editingId){
+res=await c.from(TABLE).update(payload).eq('id',state.editingId);
+}else{
+res=await c.from(TABLE).insert(payload);
+}
+if(res.error) throw res.error;
+statusEl.innerHTML='<span class="chip ok">Tersimpan.</span>';
+toast(state.editingId?'Video berhasil diperbarui.':'Video berhasil ditambahkan.');
+resetForm();
+await loadVideos();
+}catch(e){
+statusEl.innerHTML='<span class="chip bad">Gagal: '+esc(e.message||String(e))+'</span>';
+}
+byId('fSubmitBtn').disabled=false;
+});
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadVideos); else loadVideos();
 })();
 </script>
-
 <script id="kamar-global-header-script">
 (function(){
-  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
-  function shouldShowHeader(){
-    var p=pageName();
-    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
-    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
-    if(p==='affiliate-dashboard.html') return true;
-    return false;
-  }
-  function clearSessionAndLogout(e){
-    try{
-      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
-    }catch(err){}
-  }
-  function buildHeader(){
-    if(!shouldShowHeader()) return;
-    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
-    var header=document.createElement('header');
-    header.className='site-header kamar-global-header';
-    header.innerHTML=''+
-      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
-        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
-        '<span>Kamar Kajian Market</span>'+
-      '</a>'+
-      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
-      '<div class="kamar-global-actions">'+
-        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
-        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
-      '</div>';
-    document.body.insertBefore(header, document.body.firstChild);
-    var out=header.querySelector('[data-kamar-logout]');
-    if(out) out.addEventListener('click', clearSessionAndLogout);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+function shouldShowHeader(){
+var p=pageName();
+if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+if(p==='affiliate-dashboard.html') return true;
+return false;
+}
+function clearSessionAndLogout(e){
+try{
+['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+}catch(err){}
+}
+function buildHeader(){
+if(!shouldShowHeader()) return;
+document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+var header=document.createElement('header');
+header.className='site-header kamar-global-header';
+header.innerHTML=''+
+'<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+'<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+'<span>Kamar Kajian Market</span>'+
+'</a>'+
+'<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+'<div class="kamar-global-actions">'+
+'<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+'<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+'</div>';
+document.body.insertBefore(header, document.body.firstChild);
+var out=header.querySelector('[data-kamar-logout]');
+if(out) out.addEventListener('click', clearSessionAndLogout);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
 })();
 </script>
-<script src="assets/js/kamar-premium-v29.js?v=30"></script>
-<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
+<script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29I"></script>
 </body>
 </html>

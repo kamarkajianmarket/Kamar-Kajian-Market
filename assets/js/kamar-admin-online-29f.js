@@ -6,7 +6,7 @@
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var VERSION = '29F';
   // NOTE (2026-08-01): admin-banner.html, admin-video.html, admin-materials.html
-  // and admin-tools.html used to be empty placeholders, fso this generic
+  // and admin-tools.html used to be empty placeholders, so this generic
   // "auto CRUD panel" was injected as a stopgap. All four now have their own
   // full, schema-accurate admin pages (correct field names, enums, guidance
   // text) built directly into the HTML, so this generic panel is removed for

@@ -692,3 +692,16 @@ line-height:1.55 !important;
 @media(min-width:981px){
 .split-card.hero.activation-hero{ grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr) !important; align-items:center !important; }
 }
+
+/* ==========================================================================
+PERLUASAN v2.11 (2026-08-04) - opsi default dropdown (mis. 'Semua Member',
+'Semua Fasilitas' di admin-activation.html) tetap tampil pudar walau label
+field & warna select box sendiri sudah diperbaiki (v2.1). Banyak halaman
+admin punya style bawaan 'select option{color:#fff4db}' (krem, didesain utk
+tema gelap v46) yang TIDAK ketutup oleh rule v2.1 'select{color:...}' karena
+itu cuma menyasar elemen <select>, bukan elemen <option> di dalamnya - dan
+browser (terutama saat select belum diklik/masih menampilkan opsi pertama)
+bisa memakai warna dari <option> itu sendiri utk teks yang ditampilkan.
+========================================================================== */
+
+select option{ color:var(--km-ink) !important; background:#fff !important; }

@@ -271,8 +271,8 @@ body.kamar-v46-atelier::after{
 .kamar-v46-atelier .facility-detail-card p{max-width:980px!important;font-size:17px!important;margin:0 0 20px!important;}
 .kamar-v46-atelier .detail-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;margin:22px 0!important;}
 .kamar-v46-atelier .detail-grid div{border-radius:22px!important;border:1px solid rgba(255,255,255,.10)!important;background:rgba(255,255,255,.045)!important;padding:18px!important;}
-.kamar-v46-atelier .detail-grid strong{display:block!important;margin-bottom:8px!important;color:#f1d99a!important;font-size:12px!important;letter-spacing:.14em!important;text-transform:uppercase!important;}
-.kamar-v46-atelier .detail-grid span{display:block!important;color:rgba(246,240,226,.70)!important;line-height:1.62!important;font-weight:650!important;}
+.kamar-v46-atelier .detail-grid strong{display:block!important;margin-bottom:8px!important;color:#14171a!important;font-size:12px!important;letter-spacing:.14em!important;text-transform:uppercase!important;}
+.kamar-v46-atelier .detail-grid span{display:block!important;color:#4b5157!important;line-height:1.62!important;font-weight:650!important;}
 .kamar-v46-atelier .facility-status-row{display:flex!important;flex-wrap:wrap!important;gap:10px!important;margin:10px 0 18px!important;}
 .kamar-v46-atelier .facility-status-badge{border-radius:999px!important;border:1px solid rgba(241,217,154,.23)!important;background:rgba(241,217,154,.08)!important;color:#f5dfa0!important;padding:9px 13px!important;font-size:11px!important;font-weight:1000!important;letter-spacing:.12em!important;text-transform:uppercase!important;}
 .kamar-v46-atelier .facility-status-badge.green{border-color:rgba(85,201,154,.28)!important;background:rgba(85,201,154,.10)!important;color:#aef4d0!important;}

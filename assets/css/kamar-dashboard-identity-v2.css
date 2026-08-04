@@ -558,3 +558,100 @@ border:1px solid var(--km-line) !important;
 .admin-shell .btn.good{ color:#0e5f54 !important; background:rgba(14,95,84,.10) !important; border:1px solid rgba(14,95,84,.25) !important; }
 
 .admin-shell .empty{ background:#fbf7ee !important; border:1px solid var(--km-line) !important; color: var(--km-muted) !important; }
+
+
+/* ==========================================================================
+PERLUASAN v2.9 (2026-08-04) - audit lanjutan ke seluruh halaman admin-*.html
+(bukan cuma affiliate) menemukan pola bug YANG SAMA pada beberapa komponen
+lain yang dipakai luas tapi belum dikenali rule v2 manapun di atas:
+
+1) .toggle-row - dipakai di admin-maintenance/page-control/dashboard-control/
+   payment/payment-products/links/settings/members untuk switch ON/OFF.
+   Didesain untuk background gelap (background transparan tipis, teks span
+   krem #f5f0e6), jadi nyaris tak terbaca begitu body dipaksa terang oleh
+   v2. Halaman admin-maintenance.html PALING TERDAMPAK karena seluruh isi
+   utamanya adalah daftar 12 .toggle-row.
+2) .row / .row-list .row / .matrix-row - dipakai sbg baris list di
+   admin-banner/video/materials/tools/license-requests/connection-check
+   (dan .member-list .row di admin-activation/admin-license-requests).
+   Background transparan tipis (rgba(255,255,255,.025), didesain utk
+   background gelap) belum ter-cover background-nya (v2.2 cuma set
+   border-color utk .member-list .row), jadi baris nyaris tanpa batas.
+3) .online-card / .manager-help - komponen kartu produk khusus
+   admin-payment-products.html, sama sekali belum dikenali v2.
+4) .pill - dipakai admin.html/admin-connection-check.html/admin-data-check
+   .html sbg status badge, terpisah dari .chip/.status-pill yang sudah
+   di-cover.
+5) admin-data-check.html pakai vocabulary class SENDIRI (.layout/.sidebar/
+   .card/.stat/.table .row), bukan .split-shell/.split-sidebar/.split-card
+   standar, jadi tidak ke-cover rule manapun. Di-scope ke .layout (unik
+   di halaman ini) supaya tidak menyentuh halaman lain yang mungkin
+   kebetulan pakai nama class generik seperti .card atau .sidebar.
+
+Semua fix di bawah CSS-only, tidak menyentuh HTML/JS/struktur apa pun.
+========================================================================== */
+
+.toggle-row{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.toggle-row > span:first-child,
+.toggle-row span{ color: var(--km-ink) !important; }
+.toggle-row small{ color: var(--km-muted) !important; }
+.toggle-row:has(input[type="checkbox"]:checked){
+background:rgba(14,95,84,.06) !important;
+border-color:rgba(14,95,84,.28) !important;
+}
+
+.row-list .row:not(.header),
+.member-list .row:not(.header),
+.matrix-row:not(.header){
+background:#fff !important;
+border:1px solid var(--km-line) !important;
+}
+.row-list .row.header,
+.matrix-row.header{ color: var(--km-gold) !important; }
+.row-list .row strong,
+.matrix-row strong{ color: var(--km-ink) !important; }
+.row-list .row small,
+.matrix-row small{ color: var(--km-muted) !important; }
+
+.online-card{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.online-card.new-product{ background:#fbf7ee !important; border-color:rgba(184,138,61,.35) !important; }
+.online-card .card-toggle-header strong{ color: var(--km-ink) !important; }
+.online-card .card-toggle-price{ color: var(--km-gold) !important; }
+.manager-help{ background:rgba(14,95,84,.06) !important; color:#0e5f54 !important; border:1px solid rgba(14,95,84,.22) !important; }
+.manager-help strong{ color:#0e5f54 !important; }
+.manager-help ol,.manager-help li{ color:#0e5f54 !important; }
+
+.pill{ background:#efe3ca !important; color:#7a561e !important; border:1px solid rgba(184,138,61,.3) !important; }
+.pill.ok,.status.ok{ color:#0e5f54 !important; background:rgba(14,95,84,.10) !important; border-color:rgba(14,95,84,.25) !important; }
+.pill.warn,.status.warn{ color:#8a5a12 !important; background:rgba(217,164,54,.16) !important; border-color:rgba(184,138,61,.3) !important; }
+.pill.bad,.status.bad{ color:#8a2b2b !important; background:rgba(196,60,60,.10) !important; border-color:rgba(196,60,60,.28) !important; }
+.pill.info{ color:#1f5fa8 !important; background:rgba(31,95,168,.08) !important; border-color:rgba(31,95,168,.25) !important; }
+.pill.off,.status.off{ color: var(--km-muted) !important; background:#f1ede2 !important; }
+
+.priority-row{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.priority-block{ background:#fbf7ee !important; border:1px solid var(--km-line) !important; }
+.priority-head strong{ color: var(--km-ink) !important; }
+.priority-body span{ color: var(--km-gold) !important; }
+.priority-body small,.priority-head small{ color: var(--km-muted) !important; }
+.table-box{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.table-box table th{ color: var(--km-gold) !important; }
+.table-box table td{ color: var(--km-ink) !important; }
+
+.layout .card{ background: rgba(255,255,255,.72) !important; border:1px solid var(--km-line) !important; box-shadow: var(--km-shadow) !important; }
+.layout .card h1,.layout .card h2,.layout .card h3{ color: var(--km-ink) !important; }
+.layout .card p{ color: var(--km-muted) !important; }
+.layout .sidebar{ background: rgba(255,255,255,.72) !important; border:1px solid var(--km-line) !important; box-shadow: var(--km-shadow) !important; }
+.layout .sidebar .label{ color: var(--km-gold) !important; }
+.layout .sidebar a{ color: var(--km-muted) !important; }
+.layout .sidebar a:hover,.layout .sidebar a.active{ background:#f2eadc !important; color:#101418 !important; }
+.layout .stat{ background:#fff !important; border:1px solid var(--km-line) !important; }
+.layout .stat strong{ color: var(--km-ink) !important; }
+.layout .stat span{ color: var(--km-gold) !important; }
+.layout .stat small{ color: var(--km-muted) !important; }
+.layout .table .row:not(.header){ background:#fff !important; border:1px solid var(--km-line) !important; }
+.layout .table .row.header{ color: var(--km-gold) !important; }
+.layout .table .row strong{ color: var(--km-ink) !important; }
+.layout .table .row small{ color: var(--km-muted) !important; }
+.layout .result-box{ background:#fbf7ee !important; color: var(--km-ink) !important; border:1px dashed var(--km-line) !important; }
+.layout .note{ border:1px solid rgba(184,138,61,.3) !important; background:#efe3ca !important; color:#7a561e !important; }
+.layout .oknote{ border:1px solid rgba(14,95,84,.22) !important; background:rgba(14,95,84,.06) !important; color:#0e5f54 !important; }

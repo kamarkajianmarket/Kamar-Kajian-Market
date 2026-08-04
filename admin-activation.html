@@ -29,7 +29,8 @@
 
 
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
-<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><meta name="kamar-step" content="46-luxury-atelier-formation"/></head>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/></head>
 <body class="kamar-v46-atelier">
 <main class="split-shell">
 <div class="split-app">
@@ -278,7 +279,37 @@
         byId('notifTitle').value=''; byId('notifMessage').value='';
       }catch(e){ toast('Gagal kirim pengumuman: '+(e.message||String(e))); }
     }
-    function renderToggles(m){var active=m._facilities||[]; byId('facilityToggles').innerHTML=FACILITIES.map(function(f){var on=active.indexOf(f)>=0; return '<label class="toggle-card"><span><strong>'+esc(f)+'</strong><small>'+(on?'Aktif untuk member ini.':'Belum aktif untuk member ini.')+'</small></span><input type="checkbox" data-facility="'+esc(f)+'" '+(on?'checked':'')+'><span class="switch"></span></label>'}).join(''); byId('facilityToggles').querySelectorAll('[data-facility]').forEach(function(cb){cb.onchange=function(){setFacility(m._id,cb.getAttribute('data-facility'),cb.checked)}})}
+    var FACILITY_RPC_KEY={
+      'Kamar Edukasi':'materi_edukasi',
+      'Kamar Signal':'kamar_study',
+      'Kamar Private':'kamar_private',
+      'Kamar Indikator':'kamar_indikator',
+      'Kamar Robot':'kamar_robot'
+    };
+    var FACILITY_EXPIRY_COLUMN={
+      'Kamar Edukasi':'expires_materi_edukasi',
+      'Kamar Signal':'expires_kamar_study',
+      'Kamar Private':'expires_kamar_private',
+      'Kamar Indikator':'expires_kamar_indikator',
+      'Kamar Robot':'expires_kamar_robot'
+    };
+    function fmtExpiry(v){ if(!v) return 'Lifetime (tanpa batas)'; try{ return new Date(v).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}); }catch(e){ return v; } }
+    // NEW (2026-08-04): per-facility duration, independent from the
+    // whole-account access_end_date that Mayar payments drive. Reads the
+    // access object straight off the member row (m._access[0]) so the
+    // small badge below each toggle always reflects the freshest loadData().
+    function renderToggles(m){
+      var active=m._facilities||[];
+      var access=(m._access&&m._access[0])||{};
+      byId('facilityToggles').innerHTML=FACILITIES.map(function(f){
+        var on=active.indexOf(f)>=0;
+        var expCol=FACILITY_EXPIRY_COLUMN[f];
+        var expVal=access[expCol];
+        var expBadge=on?('<small style="display:block;margin-top:4px;color:#e7d391">Masa aktif: '+esc(fmtExpiry(expVal))+'</small>'):'';
+        return '<label class="toggle-card"><span><strong>'+esc(f)+'</strong><small>'+(on?'Aktif untuk member ini.':'Belum aktif untuk member ini.')+'</small>'+expBadge+'</span><input type="checkbox" data-facility="'+esc(f)+'" '+(on?'checked':'')+'><span class="switch"></span></label>';
+      }).join('');
+      byId('facilityToggles').querySelectorAll('[data-facility]').forEach(function(cb){cb.onchange=function(){setFacility(m._id,cb.getAttribute('data-facility'),cb.checked)}});
+    }
     // NEW (2026-08-04): per-member license quota management, added here on
     // Data Member -> Kelola so admin can raise/lower a member's token quota
     // any time, without needing an open license request to be visible first
@@ -349,10 +380,18 @@
     // field happens to contain), then upserts a single member_access row
     // with the correct boolean column - matching the real schema instead of
     // searching for a per-facility row that never existed.
+    // REWRITTEN (2026-08-04): now calls admin_set_facility_access RPC instead
+    // of upserting member_access directly from JS. Turning a facility ON
+    // reads the Durasi Fasilitas select (30/60/90/180 hari or Lifetime) and
+    // writes a per-facility expiry independent of the member's whole-account
+    // access_end_date (which stays owned by the Mayar payment flow and the
+    // hourly internal_lock_expired_members() job untouched). A new hourly
+    // job internal_lock_expired_facilities() turns a facility back OFF once
+    // its own expiry passes.
     async function setFacility(id,facLabel,on){
       var m=findMember(id); if(!m)return toast('Member tidak ditemukan.');
-      var col=FACILITY_COLUMN[facLabel];
-      if(!col){ toast('Fasilitas tidak dikenali: '+facLabel); return; }
+      var rpcKey=FACILITY_RPC_KEY[facLabel];
+      if(!rpcKey){ toast('Fasilitas tidak dikenali: '+facLabel); return; }
       var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.');
       try{
         var email=emailOf(m);
@@ -363,11 +402,13 @@
           if(pr.data && pr.data.length) pid=pr.data[0].id;
         }
         if(!pid){ toast('Tidak menemukan profil member untuk mengubah fasilitas.'); return; }
-        var row={ profile_id: pid, updated_at:new Date().toISOString() };
-        row[col]=!!on;
-        var res=await c.from(TABLE_ACCESS).upsert(row, { onConflict:'profile_id' });
+        var durationVal=(byId('durationSelect')||{}).value||'30';
+        var isLifetime=(durationVal==='lifetime');
+        var durationDays=isLifetime?null:Number(durationVal);
+        var params={ p_profile_id: pid, p_facility_key: rpcKey, p_on: !!on, p_duration_days: on?durationDays:null, p_lifetime: on?isLifetime:false };
+        var res=await c.rpc('admin_set_facility_access', params);
         if(res.error) throw res.error;
-        toast((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+facLabel);
+        toast(on?('Fasilitas aktif: '+facLabel+' ('+(isLifetime?'Lifetime':durationDays+' hari')+')'):('Fasilitas nonaktif: '+facLabel));
         await loadData(); showDetail(id);
       }catch(e){ toast('Update fasilitas gagal: '+(e.message||String(e))); }
     }

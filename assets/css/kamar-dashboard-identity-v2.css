@@ -377,3 +377,54 @@ tema lama (krem/mint pucat) yang nyaris tak terbaca di atas kartu terang.
 .btn.danger{ color:#8a2b2b !important; background:rgba(196,60,60,.10) !important; border:1px solid rgba(196,60,60,.28) !important; }
 
 .note{ color:#0e5f54 !important; background:rgba(14,95,84,.06) !important; border:1px solid rgba(14,95,84,.22) !important; }
+
+/* ==========================================================================
+PERLUASAN v2.4 (2026-08-04) — memperbaiki "specificity war" dengan
+kamar-luxury-atelier-v46.css pada halaman admin yang masih memuat v46
+(body class="kamar-v46-atelier"). Selector v46 (mis. `body.kamar-v46-atelier`,
+`.kamar-v46-atelier h1/h2/h3`, `.kamar-v46-atelier .hero`) di-scope ke class
+`.kamar-v46-atelier`, sehingga secara CSS-specificity MENGALAHKAN override
+tag polos v2 (`html body`, `h1,h2,h3`) meski v2 dimuat belakangan di <head>.
+
+Ditemukan di admin-tools.html: heading section non-hero (mis. "Upload File
+Baru") tampil raksasa (clamp 34–58px, v46) dan berwarna krem pucat di atas
+kartu terang v2 — nyaris tak terbaca. Body juga tetap gelap alih-alih tema
+terang. Section ini menambah selector yang sama-sama/lebih tinggi
+specificity-nya dari `.kamar-v46-atelier` supaya v2 menang secara pasti,
+tanpa menyentuh HTML/JS di halaman manapun.
+========================================================================== */
+
+body.kamar-v46-atelier{
+background:
+radial-gradient(circle at 10% 0%, rgba(184,138,61,.18), transparent 34rem),
+radial-gradient(circle at 90% 14%, rgba(14,95,84,.12), transparent 30rem),
+linear-gradient(180deg,#f9f5ed 0%,#eee6d7 48%,#f6f1e8 100%) !important;
+}
+
+/* Heading non-hero/non-title-card (yang masih dipakai bare tanpa wrapper
+khusus) — dipaksa kembali ke ukuran & warna proporsional kartu terang. */
+.split-card:not([class*="hero"]):not(.kamar-title-card) h1,
+.split-card:not([class*="hero"]):not(.kamar-title-card) h2,
+.split-card:not([class*="hero"]):not(.kamar-title-card) h3{
+color: var(--km-ink) !important;
+font-weight: 900 !important;
+letter-spacing: -.02em !important;
+max-width: none !important;
+text-wrap: initial !important;
+}
+.split-card:not([class*="hero"]):not(.kamar-title-card) h2{
+font-size: clamp(20px,2.4vw,28px) !important;
+line-height: 1.2 !important;
+}
+.split-card:not([class*="hero"]):not(.kamar-title-card) h3{
+font-size: clamp(17px,2vw,22px) !important;
+line-height: 1.25 !important;
+}
+
+/* Paragraf non-hero/non-title-card — v46 memaksa font-weight:650 dan
+font-size:16px lewat `.kamar-v46-atelier p`; tetap pertahankan warna muted
+tapi jangan biarkan ukuran/leading dari v46 membuat card jadi tidak
+proporsional pada layout sempit (mis. label form, catatan kecil). */
+.split-card:not([class*="hero"]):not(.kamar-title-card) p{
+color: var(--km-muted) !important;
+}

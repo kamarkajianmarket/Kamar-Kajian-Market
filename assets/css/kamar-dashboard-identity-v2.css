@@ -655,3 +655,40 @@ border:1px solid var(--km-line) !important;
 .layout .result-box{ background:#fbf7ee !important; color: var(--km-ink) !important; border:1px dashed var(--km-line) !important; }
 .layout .note{ border:1px solid rgba(184,138,61,.3) !important; background:#efe3ca !important; color:#7a561e !important; }
 .layout .oknote{ border:1px solid rgba(14,95,84,.22) !important; background:rgba(14,95,84,.06) !important; color:#0e5f54 !important; }
+
+/* ==========================================================================
+PERLUASAN v2.10 (2026-08-04) - admin-activation.html TIDAK memuat file ini
+sama sekali (link kamar-dashboard-identity-v2.css belum ada di head-nya),
+jadi label 'Status Akun' / 'Fasilitas' di toolbar Cari Member tampil nyaris
+tak terlihat (warna krem pucat #e8ddc7 dari style lama, di atas card yang
+seharusnya terang). Link sudah ditambahkan langsung di admin-activation.html,
+dan .field di atas (v2.1) sudah menutup kontrasnya. Bagian ini KHUSUS untuk
+merapikan .activation-hero yang tampil terlalu tinggi/panjang ke bawah -
+judul 'Aktivasi Akun & Fasilitas' pecah jadi 4 baris karena font terlalu
+besar untuk lebar kolomnya, bikin card jadi sangat panjang & terlihat kasar.
+========================================================================== */
+
+.split-card.hero.activation-hero{
+padding:26px 30px !important;
+min-height:0 !important;
+}
+.activation-hero h1{
+font-size:clamp(24px,2.4vw,36px) !important;
+line-height:1.08 !important;
+letter-spacing:-.03em !important;
+}
+.activation-hero .mini-label{ margin-bottom:8px !important; }
+.activation-hero .hero-copy p{
+font-size:14px !important;
+margin:8px 0 0 !important;
+line-height:1.55 !important;
+}
+.activation-hero .hero-badges{ margin-top:12px !important; gap:8px !important; }
+.activation-hero .hero-actions{ margin-top:14px !important; gap:8px !important; }
+.activation-hero .hero-panel{ padding:14px !important; gap:8px !important; }
+.activation-hero .hero-panel-row{ padding-bottom:8px !important; }
+.activation-hero .hero-panel-row span{ font-size:12px !important; }
+.activation-hero .hero-panel-row strong{ font-size:14px !important; }
+@media(min-width:981px){
+.split-card.hero.activation-hero{ grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr) !important; align-items:center !important; }
+}

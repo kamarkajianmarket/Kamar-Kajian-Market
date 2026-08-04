@@ -4,7 +4,7 @@
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  var VERSION = '29F';
+  var VERSION = '29G';
   // NOTE (2026-08-01): admin-banner.html, admin-video.html, admin-materials.html
   // and admin-tools.html used to be empty placeholders, so this generic
   // "auto CRUD panel" was injected as a stopgap. All four now have their own

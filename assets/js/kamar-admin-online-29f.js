@@ -39,7 +39,9 @@
     { label:'Affiliate', items:[
       ['admin-affiliate-overview.html','Data Affiliate'],
       ['admin-affiliate-list.html','Daftar Affiliator'],
-      ['admin-affiliate-reward.html','Reward / Komisi']
+      ['admin-affiliate-payment.html','Pencairan Komisi'],
+      ['admin-affiliate-commission-rate.html','Pengaturan Komisi'],
+      ['admin-affiliate-reward.html','Reward / Komisi (Lama)']
       ] },
     { label:'Konten Website', items:[
       ['admin-banner.html','Banner Pengumuman'],

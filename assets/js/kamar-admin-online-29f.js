@@ -6,7 +6,7 @@
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var VERSION = '29F';
   // NOTE (2026-08-01): admin-banner.html, admin-video.html, admin-materials.html
-  // and admin-tools.html used to be empty placeholders, so this generic
+  // and admin-tools.html used to be empty placeholders, fso this generic
   // "auto CRUD panel" was injected as a stopgap. All four now have their own
   // full, schema-accurate admin pages (correct field names, enums, guidance
   // text) built directly into the HTML, so this generic panel is removed for
@@ -463,7 +463,10 @@
   if(!/^admin/i.test(PAGE)) return;
 
   var NOTIF_POLL_MS = 30000;
-  var notifState = { items: [], open: false, channel: null, seenCount: 0 };
+  var NOTIF_SEEN_KEY = 'kamarAdminNotifSeenIds29F';
+  function loadSeenIds(){ try{ var raw = localStorage.getItem(NOTIF_SEEN_KEY); var arr = raw ? JSON.parse(raw) : []; return new Set(Array.isArray(arr)?arr:[]); }catch(e){ return new Set(); } }
+  function saveSeenIds(set){ try{ localStorage.setItem(NOTIF_SEEN_KEY, JSON.stringify(Array.from(set))); }catch(e){} }
+  var notifState = { items: [], open: false, channel: null, seenIds: loadSeenIds() };
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
@@ -546,7 +549,7 @@
   function updateNotifBadge(){
     var badge = qs('#kamarNotifBadge29F');
     if(!badge) return;
-    var n = Math.max(0, notifState.items.length - notifState.seenCount);
+    var n = notifState.items.filter(function(t){ return !notifState.seenIds.has(String(t.id)); }).length;
     badge.style.display = n ? 'flex' : 'none';
     badge.textContent = n > 99 ? '99+' : String(n);
   }
@@ -598,7 +601,7 @@
     qs('#kamarNotifBtn29F', wrap).onclick = function(e){
       e.stopPropagation();
       notifState.open = !notifState.open;
-      if(notifState.open){ notifState.seenCount = notifState.items.length; updateNotifBadge(); }
+      if(notifState.open){ notifState.items.forEach(function(t){ notifState.seenIds.add(String(t.id)); }); saveSeenIds(notifState.seenIds); updateNotifBadge(); }
       qs('#kamarNotifPanel29F', wrap).classList.toggle('open', notifState.open);
     };
     document.addEventListener('click', function(e){

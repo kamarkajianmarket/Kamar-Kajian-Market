@@ -179,7 +179,7 @@ statusEl.textContent = d.message||'Terkirim.';
 statusEl.className = 'referral-status-note '+(d.success?'success':'error');
 if(d.success) setTimeout(function(){location.reload()}, 1200);
 }catch(err){
-statusEl.textContent = 'Gagal: '+(err.message||err);
+statusEl.textContent = window.kamarFriendlyError ? window.kamarFriendlyError(err) : 'Terjadi kesalahan. Silakan coba lagi.';
 statusEl.className = 'referral-status-note error';
 }
 });
@@ -199,7 +199,7 @@ return '<div class="setting-card"><span>'+esc(f.title||'File')+(f.version_label?
 '<div class="button-row"><a class="btn mini" href="'+esc(f.file_url||'#')+'" target="_blank" rel="noopener">Download</a></div></div>';
 }).join('')+'</div>';
 }
-}catch(e){ html += '<div class="expired-note">Gagal memuat daftar file: '+esc(e.message||String(e))+'</div>'; }
+}catch(e){ html += '<div class="expired-note">Gagal memuat daftar file. Muat ulang halaman atau hubungi admin jika masalah berlanjut.</div>'; }
 html += '</div>';
 return html;
 }

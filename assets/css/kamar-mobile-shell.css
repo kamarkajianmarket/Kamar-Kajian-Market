@@ -91,44 +91,14 @@
   }
   .kamar-drawer-close-btn svg{ width: 18px; height: 18px; }
 
-  /* --- Tombol hamburger di header --- */
-  .kamar-hamburger-btn{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    flex: 0 0 auto;
-    border-radius: 12px;
-    border: 1px solid var(--line, rgba(238,206,122,.18));
-    background: rgba(255,255,255,.05);
-    color: inherit;
-    cursor: pointer;
-  }
-  .kamar-hamburger-btn svg{ width: 20px; height: 20px; }
-
   /* --- FIX: beberapa halaman (mis. admin-activation.html) nambahin class
      "kamar-v46-atelier" ke <body>, yang otomatis bikin SEMUA elemen
-     <button> polos (termasuk tombol hamburger & tombol tutup drawer kita)
-     ketiban style tombol emas besar dari kamar-luxury-atelier-v46.css /
+     <button> polos (termasuk tombol tutup drawer kita) ketiban style
+     tombol emas besar dari kamar-luxury-atelier-v46.css /
      kamar-dashboard-identity-v2.css (keduanya pakai !important dengan
-     specificity lebih tinggi dari ".kamar-hamburger-btn" biasa). Class
-     diulang 4x supaya specificity-nya menang telak tanpa perlu utak-atik
-     file tema aslinya (yang memang tidak boleh disentuh). --- */
-  .kamar-hamburger-btn.kamar-hamburger-btn.kamar-hamburger-btn.kamar-hamburger-btn{
-    background: rgba(255,255,255,.05) !important;
-    background-image: none !important;
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    padding: 0 !important;
-    border-radius: 12px !important;
-    border: 1px solid var(--line, rgba(238,206,122,.18)) !important;
-    color: inherit !important;
-    font-weight: 400 !important;
-    box-shadow: none !important;
-  }
+     specificity lebih tinggi dari class biasa). Class diulang 4x supaya
+     specificity-nya menang telak tanpa perlu utak-atik file tema
+     aslinya (yang memang tidak boleh disentuh). --- */
   .kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn{
     background: rgba(255,255,255,.05) !important;
     background-image: none !important;
@@ -159,6 +129,16 @@
     max-height: min(420px, calc(100vh - 100px)) !important;
   }
 
+  /* --- FIX: header global (dibangun kamar-global-header-script) selalu
+     punya tombol teks "Beranda" yang linknya ("index.html") SAMA PERSIS
+     dengan link logo brand di sebelahnya — jadi dobel. Karena bottom nav
+     sudah selalu ada tombol "Beranda" sendiri (ke dashboard admin/member),
+     tombol teks "Beranda" di header disembunyikan di mobile/tablet supaya
+     header lebih ringkas: logo (=Beranda/situs utama), lonceng, Logout. */
+  .kamar-global-actions > .kamar-global-btn:not(.kamar-global-logout){
+    display: none !important;
+  }
+
   /* --- Bottom navigation --- */
   .kamar-bottom-nav{
     position: fixed;
@@ -187,11 +167,38 @@
     border-radius: 12px;
     min-height: 44px;
     justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    transform: scale(1);
+    transition: transform .16s cubic-bezier(.34,1.56,.64,1),
+                background-color .18s ease,
+                color .18s ease;
   }
-  .kamar-bottom-nav a svg{ width: 20px; height: 20px; }
+  .kamar-bottom-nav a svg{
+    width: 20px;
+    height: 20px;
+    transition: transform .16s cubic-bezier(.34,1.56,.64,1);
+  }
+  /* --- Efek tekan ala tab bar iOS: sedikit mengecil + latar nyala redup
+     saat disentuh, balik lagi begitu jari dilepas --- */
+  .kamar-bottom-nav a:active{
+    transform: scale(.92);
+    background: rgba(212,166,63,.16);
+  }
+  .kamar-bottom-nav a:active svg{
+    transform: scale(.9);
+  }
   .kamar-bottom-nav a.active{
     color: var(--gold, #f4df90);
     background: rgba(212,166,63,.13);
+  }
+  /* --- "Pop" halus untuk tab yang lagi aktif saat halaman baru dimuat --- */
+  .kamar-bottom-nav a.active svg{
+    animation: kamarNavPop .32s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes kamarNavPop{
+    0%{ transform: scale(.8); }
+    65%{ transform: scale(1.12); }
+    100%{ transform: scale(1); }
   }
 
   /* --- Kasih jarak bawah supaya konten tidak ketutup bottom nav --- */
@@ -205,16 +212,20 @@
 @media (min-width: 1025px){
   .kamar-bottom-nav,
   .kamar-drawer-backdrop,
-  .kamar-hamburger-btn,
   .kamar-drawer-close-btn{
     display: none !important;
   }
+  /* Tombol "Beranda" di header cuma disembunyikan di mobile/tablet;
+     di desktop tetap tampil seperti semula (tidak disentuh). */
 }
 
 /* Hormati preferensi pengguna yang mematikan animasi */
 @media (prefers-reduced-motion: reduce){
   .split-sidebar,
-  .kamar-drawer-backdrop{
+  .kamar-drawer-backdrop,
+  .kamar-bottom-nav a,
+  .kamar-bottom-nav a svg{
     transition: none !important;
+    animation: none !important;
   }
 }

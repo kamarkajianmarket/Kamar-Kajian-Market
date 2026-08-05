@@ -1,10 +1,11 @@
 /* ==========================================================================
    KAMAR MOBILE SHELL v1
-   Menyuntik tombol hamburger, drawer menu, dan bottom navigation di HP/tablet.
+   Menyuntik drawer menu (dibuka lewat tombol "Menu" di bottom navigation)
+   dan bottom navigation di HP/tablet. Header tidak lagi dapat tombol
+   hamburger tambahan — tombol "Menu" di bottom nav sudah cukup.
    TIDAK mengubah logic yang sudah ada — hanya menambah elemen UI baru dan
    memakai route/link yang sudah ada di sidebar existing.
-   Wajib di-load SETELAH kamar-admin-online-29f.js / kamar-global-header-script,
-   supaya header sudah selesai dibangun sebelum tombol hamburger disisipkan.
+   Wajib di-load SETELAH kamar-admin-online-29f.js / kamar-global-header-script.
    ========================================================================== */
 (function(){
   'use strict';
@@ -50,8 +51,8 @@
       {label:'Beranda',  href:'affiliate-dashboard.html',                icon:'home',  match:['affiliate-dashboard.html']},
       {label:'Referral', href:'affiliate-dashboard.html#referredTable',  icon:'link',  match:[]},
       {label:'Komisi',   href:'affiliate-dashboard.html#commissionTable',icon:'coin',  match:[]},
-      {label:'Riwayat',  href:'affiliate-dashboard.html#paymentTable',   icon:'clock', match:[]},
-      {label:'Akun',     href:'member-profile.html',                     icon:'user',  match:['member-profile.html']}
+      {label:'Akun',     href:'member-profile.html',                     icon:'user',  match:['member-profile.html']},
+      {label:'Menu',     href:'#kamar-drawer',                           icon:'menu',  isDrawerToggle:true}
     ],
     member: [
       {label:'Beranda',   href:'dashboard.html',                icon:'home',  match:['dashboard.html']},
@@ -106,18 +107,11 @@
       if(e.key === 'Escape') closeDrawer();
     });
 
-    // Tombol hamburger disisipkan di header (kiri)
-    var header = document.querySelector('header.kamar-global-header, header.site-header');
-    if(header){
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'kamar-hamburger-btn';
-      btn.setAttribute('aria-label','Buka menu');
-      btn.setAttribute('aria-controls','kamar-drawer');
-      btn.innerHTML = svgIcon('menu');
-      btn.addEventListener('click', toggleDrawer);
-      header.insertBefore(btn, header.firstChild);
-    }
+    // CATATAN: dulu ada tombol hamburger yang disisipkan di header di sini.
+    // Sudah dihapus (2026-08-05) karena dobel fungsi dengan tombol "Menu" di
+    // bottom navigation (setupBottomNav) — setiap NAV_SETS sekarang selalu
+    // punya 1 item isDrawerToggle:true, jadi drawer tetap bisa dibuka dari
+    // bottom nav tanpa perlu tombol tambahan di header.
   }
 
   function setupBottomNav(){

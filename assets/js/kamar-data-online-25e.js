@@ -147,7 +147,7 @@ var hero=qs('.hero')||qs('.split-main'); if(hero&&!el('memberOnlineDetailCard'))
       link.setAttribute('data-kamar-affiliate-menu','1');
       if(row&&row.approval_status==='APPROVED'&&row.is_active){
         link.href='affiliate-dashboard.html';
-        link.textContent='Dashboard Affiliate';
+        link.textContent='Affiliate Program';
         if(p==='affiliate-dashboard.html') link.className='active';
       } else if(row&&row.approval_status==='PENDING_APPROVAL'){
         link.href='member-affiliate-activate.html';

@@ -150,8 +150,7 @@ var c=await initClient(); if(!c){ byId('listSummary').innerHTML='<span class="ch
 try{
 var res=await c.from(TABLE).select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
 if(res.error) throw res.error;
-state.rows=res.data||[];
-}catch(e){ byId('listSummary').innerHTML='<span class="chip bad">Gagal memuat: '+esc(e.message||String(e))+'</span>'; return; }
+state.rows=res.data||[];}catch(e){ byId('listSummary').innerHTML='<span class="chip bad">'+esc(window.kamarFriendlyError(e))+'</span>'; return; }
 render();
 }
 
@@ -189,8 +188,7 @@ patch.updated_at=new Date().toISOString();
 var res=await c.from(TABLE).update(patch).eq('id',id);
 if(res.error) throw res.error;
 toast('Status file diperbarui.');
-await loadFiles();
-}catch(e){ toast('Gagal update: '+(e.message||String(e))); }
+await loadFiles();}catch(e){ toast(window.kamarFriendlyError(e)); }
 }
 
 function findRow(id){return state.rows.find(function(r){return String(r.id)===String(id)})}
@@ -243,8 +241,7 @@ var res=await c.from(TABLE).delete().eq('id',id);
 if(res.error) throw res.error;
 toast('File dihapus.');
 if(state.editingId===id) resetForm();
-await loadFiles();
-}catch(e){ toast('Gagal hapus: '+(e.message||String(e))); }
+await loadFiles();}catch(e){ toast(window.kamarFriendlyError(e)); }
 }
 
 byId('toolsForm').addEventListener('submit', async function(e){
@@ -291,8 +288,7 @@ statusEl.innerHTML='<span class="chip ok">Tersimpan.</span>';
 toast(state.editingId?'File berhasil diperbarui.':'File berhasil ditambahkan.');
 resetForm();
 await loadFiles();
-}catch(e){
-statusEl.innerHTML='<span class="chip bad">Gagal: '+esc(e.message||String(e))+'</span>';
+}catch(e){statusEl.innerHTML='<span class="chip bad">'+esc(window.kamarFriendlyError(e))+'</span>';
 }
 byId('fSubmitBtn').disabled=false;
 });

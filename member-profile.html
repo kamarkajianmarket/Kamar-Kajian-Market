@@ -197,7 +197,7 @@ body{background:#070707;color:var(--text)}
         statusEl.className='referral-status-note '+(d.success?'success':'error');
         if(d.success){ form.reset(); renderHistory(cc); }
       }catch(err){
-        statusEl.textContent='Gagal mengirim permintaan: '+(err.message||err);
+        statusEl.textContent=window.kamarFriendlyError ? window.kamarFriendlyError(err) : 'Gagal mengirim permintaan. Coba lagi.';
         statusEl.className='referral-status-note error';
       }
     });
@@ -251,7 +251,7 @@ body{background:#070707;color:var(--text)}
           if(data.valid){ setStatus('\u2713 '+(data.message||'Kode valid.'), 'success'); }
           else { setStatus('\u2717 '+(data.message||'Kode referral tidak valid.'), 'error'); }
         }catch(err){
-          setStatus('Gagal memeriksa kode: '+(err.message||err), 'error');
+          setStatus(window.kamarFriendlyError ? window.kamarFriendlyError(err) : 'Gagal memeriksa kode. Coba lagi.', 'error');
         }
       }, 500);
     });
@@ -274,7 +274,7 @@ body{background:#070707;color:var(--text)}
         applyLockedState((val||'').toUpperCase());
       }
     }catch(err){
-      setStatus('Gagal menyimpan kode referral: '+(err.message||err), 'error');
+      setStatus(window.kamarFriendlyError ? window.kamarFriendlyError(err) : 'Gagal menyimpan kode referral. Coba lagi.', 'error');
     }finally{
       if(btn){ btn.disabled=false; btn.textContent=btn.dataset.old||'Simpan Referral'; }
     }
@@ -394,7 +394,7 @@ body{background:#070707;color:var(--text)}
         var d=res.data||{};
         lastMsg=d.message||'';
         if(d.success) okCount++;
-      }catch(err){ lastMsg='Gagal: '+(err.message||err); }
+      }catch(err){ lastMsg=window.kamarFriendlyError ? window.kamarFriendlyError(err) : 'Gagal mengirim permintaan.'; }
     }
     if(okCount>0){ setStatus('Permintaan terkirim ('+okCount+'/'+jobs.length+'). Menunggu persetujuan admin sebelum data berubah.','success'); }
     else{ setStatus(lastMsg||'Gagal mengirim permintaan.','error'); }

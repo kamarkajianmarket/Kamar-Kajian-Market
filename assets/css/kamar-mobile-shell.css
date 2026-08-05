@@ -292,3 +292,56 @@
     transform: translateX(0);
   }
 }
+
+/* --- FIX (feedback 2026-08-06 putaran 2): grid row admin (dipakai di
+   admin-members.html & admin-internal.html, class .admin-row, di-generate
+   oleh kamar-admin-online-29f.js) punya grid-template-columns tetap
+   (1.3fr 1.3fr .8fr 1fr 1.4fr auto) TANPA !important. Situs sudah punya
+   breakpoint sendiri @media(max-width:900px) tapi krn tanpa !important dan
+   di-inject via JS belakangan, kadang kalah/telat -- nama panjang seperti
+   "Mitra Uji Kamar" jadi kepecah satu kata per baris krn kolomnya jadi
+   sangat sempit. Paksa 1 kolom penuh dgn !important supaya PASTI menang. --- */
+@media (max-width: 1024px){
+  .admin-row{
+    grid-template-columns: 1fr !important;
+  }
+  .admin-row.header{
+    display: none !important;
+  }
+}
+
+/* --- FIX: hero 2 kolom di admin-license-requests.html (.license-hero, kolom
+   kiri teks + kolom kanan panel kuota) SAMA SEKALI belum ada override mobile
+   di halaman itu sendiri -- di HP kolom teks kiri diperas sampai nyaris 0px,
+   bikin tiap kata deskripsi jadi baris sendiri-sendiri. Susun jadi 1 kolom
+   (teks di atas, panel kuota di bawah), rapikan padding biar tidak terlalu
+   menjulang ke bawah. --- */
+@media (max-width: 1024px){
+  .license-hero{
+    grid-template-columns: 1fr !important;
+    padding: 20px !important;
+    gap: 16px !important;
+  }
+  .hero-copy{
+    max-width: 100% !important;
+  }
+  .hero{
+    padding: 22px 18px !important;
+  }
+  .hero-panel{
+    padding: 14px !important;
+  }
+  .hero-panel-row{
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .hero-badges,
+  .hero-actions{
+    gap: 8px !important;
+    margin-top: 14px !important;
+  }
+  .hero-badges .chip,
+  .quota-pill{
+    font-size: 10.5px !important;
+  }
+}

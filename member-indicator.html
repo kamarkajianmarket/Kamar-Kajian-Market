@@ -268,8 +268,37 @@ return '<div class="split-card"><span class="eyebrow">Status Request</span><h2>S
 
 function quotaReachedNoteHTML(quota){
 return '<div class="split-card"><span class="eyebrow">Request License</span><h2>Kuota Token Tercapai</h2><div class="expired-note">Anda sudah memiliki '+quota+' token aktif untuk '+FACILITY_LABEL+', yaitu batas maksimum kuota Anda saat ini. Hubungi admin melalui menu Profil Akun jika Anda memang membutuhkan token tambahan untuk akun trading lain.</div></div>';
+}function bindHistoryTokenReveal(license, idx){
+var maskedEl = document.getElementById('licHistTokenMasked_'+idx);
+if(!maskedEl) return;
+var revealBtn = document.querySelector('[data-hist-reveal="'+idx+'"]');
+var copyBtn = document.querySelector('[data-hist-copy="'+idx+'"]');
+var revealed = false;
+if(revealBtn) revealBtn.addEventListener('click', function(){
+revealed = !revealed;
+maskedEl.textContent = revealed ? (license.token||'-') : maskToken(license.token);
+revealBtn.textContent = revealed ? 'Sembunyikan' : 'Reveal';
+});
+if(copyBtn) copyBtn.addEventListener('click', function(){
+try{ navigator.clipboard.writeText(license.token||''); copyBtn.textContent='Tersalin!'; setTimeout(function(){copyBtn.textContent='Copy';},1500); }catch(e){}
+});
 }
-
+async function historyCardHTMLv2(c, rows){
+var html = '<div class="split-card"><span class="eyebrow">Riwayat</span><h2>Riwayat Semua Pengajuan License</h2><p>Semua token yang pernah Anda ajukan untuk '+FACILITY_LABEL+', termasuk yang masih diproses, perlu revisi, atau ditolak, beserta nomor tokennya.</p>';
+if(!rows.length){ html += '<div class="admin-empty-state">Belum ada pengajuan license.</div>'; html += '</div>'; return html; }
+html += rows.map(function(r, idx){
+var tok = r.token ? ('<span id="licHistTokenMasked_'+idx+'">'+esc(maskToken(r.token))+'</span> <button type="button" class="btn mini secondary" data-hist-reveal="'+idx+'">Reveal</button> <button type="button" class="btn mini secondary" data-hist-copy="'+idx+'">Copy</button>') : '-';
+return '<div class="setting-card" style="margin-bottom:10px"><span>Diajukan '+fmtDate(r.requested_at)+'</span>'+
+'<strong style="display:block;margin-top:6px;font-size:14px">'+requestStatusPill(r.request_status)+'</strong>'+
+'<small style="display:block;margin-top:8px">Broker/Server: '+esc(r.broker_name)+' &middot; '+esc(r.server_name)+' &middot; Akun: '+esc(r.account_id)+'</small>'+
+'<small style="display:block;margin-top:4px">Token: '+tok+'</small>'+
+(r.reviewed_at?('<small style="display:block;margin-top:4px">Ditinjau: '+fmtDate(r.reviewed_at)+'</small>'):'')+
+(r.admin_note?('<small style="display:block;margin-top:4px">Catatan Admin: '+esc(r.admin_note)+'</small>'):'')+
+'</div>';
+}).join('');
+html += '</div>';
+return html;
+}
 async function historyCardHTML(c, rows){
 var html = '<div class="split-card"><span class="eyebrow">Riwayat</span><h2>Riwayat Semua Pengajuan License</h2>';
 try{
@@ -294,8 +323,7 @@ html += '</div>';
 return html;
 }
 
-function ringkasanCardHTML(rows, activeRows, quota, openRow){
-var licHint = !rows.length ? ('Ajukan license pada card di bawah untuk mulai menggunakan '+FACILITY_LABEL+'.') : (openRow ? 'Lihat card Status Request untuk detail.' : (activeRows.length>=quota ? 'Anda sudah menggunakan seluruh kuota token aktif.' : 'Anda masih bisa mengajukan token tambahan.'));
+function ringkasanCardHTML(rows, activeRows, quota, openRow){var quotaPrefix = 'Kuota maksimum Anda: '+quota+' token '+FACILITY_LABEL+'. '; var licHint = quotaPrefix + (!rows.length ? ('Ajukan license pada card di bawah untuk mulai menggunakan '+FACILITY_LABEL+'.') : (openRow ? 'Lihat card Status Request untuk detail.' : (activeRows.length>=quota ? 'Anda sudah menggunakan seluruh kuota token aktif.' : 'Anda masih bisa mengajukan token tambahan ('+(quota-activeRows.length)+' slot tersisa).')));
 var akunText = activeRows.length===0 ? 'Belum ada akun terdaftar' : (activeRows.length===1 ? (esc(activeRows[0].broker_name)+' &middot; '+esc(activeRows[0].server_name)) : (activeRows.length+' akun terdaftar — lihat card License Aktif di bawah'));
 return '<div class="split-card"><span class="eyebrow">Ringkasan</span><h2>'+FACILITY_LABEL+'</h2>'+
 '<div class="grid-3">'+
@@ -342,8 +370,8 @@ html += guideCardHTML();
 if(rows.length) html += await historyCardHTML(c, rows);
 
 box.outerHTML = html;
-if(showForm) bindRequestForm(c, isRevision?openRow:null, isRevision);
-activeRows.forEach(function(lic, idx){ bindTokenReveal(lic, idx); });
+if(showForm) bindRequestForm(c, isRevision?openRow:null, isRevision);activeRows.forEach(function(lic, idx){ bindTokenReveal(lic, idx); });
+rows.forEach(function(lic, idx){ bindHistoryTokenReveal(lic, idx); });
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
 })();

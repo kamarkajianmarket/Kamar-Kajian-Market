@@ -145,7 +145,22 @@
   ready(function(){
     // Hanya jalan di halaman yang memang pakai kerangka sidebar+konten (.split-app).
     // Halaman lain (homepage publik, login, register) tidak disentuh sama sekali.
-    var sidebar = document.querySelector('.split-app > .split-sidebar');
+    // Beberapa halaman admin pakai markup sidebar yang beda-beda (ditemukan
+    // saat audit 2026-08-06): mayoritas pakai .split-app > .split-sidebar,
+    // tapi 5 halaman admin-affiliate-*.html pakai .admin-shell > .admin-sidebar,
+    // dan admin-data-check.html pakai .layout > .sidebar. Cek ketiganya supaya
+    // shell benar-benar aktif (drawer+bottom-nav) di SEMUA halaman yang sudah
+    // dipasangi <link>/<script> shell ini, bukan cuma yang polanya cocok.
+    var SIDEBAR_PATTERNS = [
+      '.split-app > .split-sidebar',
+      '.admin-shell > .admin-sidebar',
+      '.layout > .sidebar'
+    ];
+    var sidebar = null;
+    for(var si=0; si<SIDEBAR_PATTERNS.length; si++){
+      sidebar = document.querySelector(SIDEBAR_PATTERNS[si]);
+      if(sidebar) break;
+    }
     if(!sidebar) return;
 
     setupDrawer(sidebar);

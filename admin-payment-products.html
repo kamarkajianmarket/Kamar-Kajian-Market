@@ -146,8 +146,7 @@ if(res2.error) throw res2.error;
 toast('Produk baru berhasil ditambahkan.');
 }
 await load();
-}catch(err){
-toast('Gagal menyimpan: '+(err.message||err));
+}catch(err){toast(window.kamarFriendlyError(err));
 }
 btn.disabled = false;
 }
@@ -165,8 +164,7 @@ var res = await c.from('payment_products').delete().eq('id', id);
 if(res.error) throw res.error;
 toast('Produk dihapus.');
 await load();
-}catch(err){
-toast('Gagal menghapus: '+(err.message||err));
+}catch(err){toast(window.kamarFriendlyError(err));
 btn.disabled = false;
 }
 }

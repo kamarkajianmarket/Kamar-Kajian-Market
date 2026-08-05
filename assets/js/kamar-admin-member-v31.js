@@ -81,7 +81,7 @@
       if(row)row.remove();
       toast(deleted?'Member berhasil dihapus dari data Kamar.':'Perintah hapus dikirim. Refresh untuk memastikan data terbaru.');
       setTimeout(function(){location.reload()},900);
-    }catch(e){toast('Hapus member gagal: '+(e.message||String(e))); btn.disabled=false; btn.textContent='Hapus';}
+    }catch(e){toast(window.kamarFriendlyError(e)); btn.disabled=false; btn.textContent='Hapus';}
   }
   function enhanceMemberList(){addSearchButtons();hardenManageLinks();addDeleteButtons();}
 
@@ -175,7 +175,7 @@
       }
       toast((on?'Fasilitas aktif: ':'Fasilitas nonaktif: ')+fac+' • durasi '+(duration==='lifetime'?'Lifetime':duration+' hari'));
       setTimeout(function(){location.reload()},900);
-    }catch(e){toast('Update fasilitas gagal: '+(e.message||String(e))); cb.checked=!on;}
+    }catch(e){toast(window.kamarFriendlyError(e)); cb.checked=!on;}
     cb.disabled=false;
   }
   function interceptFacilityChanges(){

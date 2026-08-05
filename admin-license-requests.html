@@ -170,8 +170,7 @@ try{
 var lics=await query(TABLE_LICENSES);
 state.licenses=lics.filter(function(r){return !!r.facility_key});
 state.profiles=await query(TABLE_PROFILE);
-state.access=await query(TABLE_ACCESS);
-}catch(e){state.lastError=e.message||String(e);state.licenses=[];state.profiles=[];state.access=[]}
+state.access=await query(TABLE_ACCESS);}catch(e){state.lastError=window.kamarFriendlyError(e);state.licenses=[];state.profiles=[];state.access=[]}
 state.loading=false;renderShell();
 }
 function filtered(){
@@ -331,7 +330,7 @@ byId('quotaStatusChip').innerHTML='<span class="chip ok">Tersimpan</span>';
 toast('Kuota token berhasil diperbarui.');
 await loadData();
 showDetail(l.id);
-}catch(e){ toast('Gagal menyimpan kuota: '+(e.message||String(e))); }
+}catch(e){ toast(window.kamarFriendlyError(e)); }
 }
 byId('packageSelect').addEventListener('change',function(){
 byId('customExpiryWrap').style.display=this.value==='custom'?'block':'none';
@@ -376,7 +375,7 @@ toast(r4.data&&r4.data.message?r4.data.message:'Request berhasil diproses.');
 }
 await loadData();
 showDetail(licenseId);
-}catch(e){ toast('Gagal memproses: '+(e.message||String(e))); }
+}catch(e){ toast(window.kamarFriendlyError(e)); }
 }
 ['searchInput','statusFilter','facilityFilter'].forEach(function(id){byId(id).addEventListener(id==='searchInput'?'input':'change',renderShell)});
 byId('refreshBtn').onclick=loadData;
@@ -501,8 +500,7 @@ wrap.innerHTML = '<div style="margin-bottom:6px;color:#e7d391;font-size:11px;fon
 + accessHtml
 + '<div style="margin:14px 0 6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Riwayat Pembayaran ('+payments.length+')</div>'
 + paymentsHtml;
-}catch(e){
-wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(e.message||String(e))+'</span>';
+}catch(e){wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(window.kamarFriendlyError(e))+'</span>';
 }
 }
 document.addEventListener('click', function(e){

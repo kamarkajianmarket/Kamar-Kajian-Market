@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  if(window.__KAMAR_ADMIN_ONLINE_29F__) return;
+  if(window.__KAMAR_ADMIN_ONLINE_29F__) return; window.kamarFriendlyError=window.kamarFriendlyError||function(e){var raw=String((e&&e.message)||e||'');var low=raw.toLowerCase();if(!raw) return 'Terjadi kesalahan. Silakan coba lagi.';if(low.indexOf('duplicate key')>-1||low.indexOf('unique constraint')>-1) return 'Data ini sepertinya sudah pernah dikirim sebelumnya. Muat ulang halaman lalu coba lagi, atau hubungi admin bila masalah berlanjut.';if(low.indexOf('foreign key')>-1) return 'Data terkait tidak ditemukan. Muat ulang halaman lalu coba lagi.';if(low.indexOf('permission denied')>-1||low.indexOf('row-level security')>-1||low.indexOf(' rls')>-1) return 'Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi admin bila ini seharusnya diizinkan.';if(low.indexOf('not-null')>-1) return 'Ada data wajib yang belum terisi. Periksa kembali formulir Anda.';if(low.indexOf('failed to fetch')>-1||low.indexOf('network')>-1||low.indexOf('load failed')>-1) return 'Koneksi internet bermasalah. Periksa koneksi Anda lalu coba lagi.';if(low.indexOf('jwt')>-1||low.indexOf('unauthorized')>-1||low.indexOf('401')>-1||low.indexOf('session')>-1) return 'Sesi login Anda sudah berakhir. Muat ulang halaman dan login kembali.';if(low.indexOf('timeout')>-1) return 'Permintaan memakan waktu terlalu lama. Coba lagi beberapa saat.';return 'Terjadi kesalahan saat memproses permintaan Anda. Coba lagi, atau hubungi admin bila masalah berlanjut.';};
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
@@ -211,14 +211,14 @@
       if(!('created_at' in row)) row.created_at = new Date().toISOString();
       if(!('updated_at' in row)) row.updated_at = new Date().toISOString();
       try{ await insert(cfg.table, row); toast('Tersimpan ke Supabase: '+cfg.table); e.target.reset(); await reload(); }
-      catch(err){ toast('Gagal simpan: '+(err.message||err)); }
+      catch(err){ toast(window.kamarFriendlyError(err)); }
     });
     qs('#reloadOnline29F', box).onclick = reload;
     box.addEventListener('click', async function(e){
       var id = e.target && e.target.getAttribute('data-online-delete');
       if(!id) return;
       if(!confirm('Hapus data ID '+id+' dari '+cfg.table+'?')) return;
-      try{ await remove(cfg.table, id); toast('Data dihapus.'); await reload(); }catch(err){ toast('Gagal hapus: '+(err.message||err)); }
+      try{ await remove(cfg.table, id); toast('Data dihapus.'); await reload(); }catch(err){ toast(window.kamarFriendlyError(err)); }
     });
     await reload();
   }
@@ -234,18 +234,18 @@
       try{
         await update('member_profiles', id, { status:'active', account_status:'active', updated_at:new Date().toISOString() });
         toast('Member diupdate online.'); document.dispatchEvent(new Event('kamarAdminDataChanged')); return true;
-      }catch(e){ toast('Online update gagal, fallback lokal: '+(e.message||e)); return oldActivate ? oldActivate(id) : false; }
+      }catch(e){ toast(window.kamarFriendlyError(e)); return oldActivate ? oldActivate(id) : false; }
     };
     K.suspendMember = async function(id){
       try{ await update('member_profiles', id, { status:'suspended', account_status:'suspended', updated_at:new Date().toISOString() }); toast('Member disuspend online.'); return true; }
-      catch(e){ toast('Online update gagal, fallback lokal: '+(e.message||e)); return oldSuspend ? oldSuspend(id) : false; }
+      catch(e){ toast(window.kamarFriendlyError(e)); return oldSuspend ? oldSuspend(id) : false; }
     };
     K.toggleFacility = async function(id,fac,on,duration,note){
       try{
         var row = { member_id:id, facility_name:fac, is_active:!!on, duration:String(duration||''), note:String(note||''), updated_at:new Date().toISOString() };
         await insert('member_access', row);
         toast((on?'Fasilitas aktif online: ':'Fasilitas nonaktif online: ')+fac); return true;
-      }catch(e){ toast('Online akses gagal, fallback lokal: '+(e.message||e)); return oldToggle ? oldToggle(id,fac,on,duration,note) : false; }
+      }catch(e){ toast(window.kamarFriendlyError(e)); return oldToggle ? oldToggle(id,fac,on,duration,note) : false; }
     };
   }
 
@@ -418,7 +418,7 @@
       else if(action === 'dismiss') await actionDismiss(todo);
       await renderActionCenter();
     }catch(err){
-      toast('Gagal proses: '+(err.message||err));
+      toast(window.kamarFriendlyError(err));
       btn.disabled = false;
     }
   }
@@ -544,7 +544,7 @@
           var c = await ready();
           if(c){ await c.rpc('admin_update_todo_status', { target_todo_id: id, new_status: 'done', admin_note: null }); }
           await loadNotifs();
-        }catch(e){ toast('Gagal menandai selesai: '+(e.message||e)); }
+        }catch(e){ toast(window.kamarFriendlyError(e)); }
       };
     });
   }

@@ -367,7 +367,7 @@ if(openRow) html += statusRequestCardHTML(openRow);
 if(!showForm && !openRow && activeRows.length>=quota) html += quotaReachedNoteHTML(quota);
 activeRows.forEach(function(lic, idx){ html += licenseActiveCardHTML(lic, idx, activeRows.length); });
 html += guideCardHTML();
-if(rows.length) html += await historyCardHTML(c, rows);
+if(rows.length) html += await historyCardHTMLv2(c, rows);
 
 box.outerHTML = html;
 if(showForm) bindRequestForm(c, isRevision?openRow:null, isRevision);activeRows.forEach(function(lic, idx){ bindTokenReveal(lic, idx); });

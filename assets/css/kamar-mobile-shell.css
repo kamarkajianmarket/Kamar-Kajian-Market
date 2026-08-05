@@ -345,3 +345,84 @@
     font-size: 10.5px !important;
   }
 }
+
+/* --- FIX (feedback 2026-08-06 putaran 3), bug #1: drawer .admin-sidebar
+   masih tembus/ghosting di 5 halaman admin-affiliate-*.html. Penyebab asli:
+   kamar-dashboard-identity-v2.css punya rule KOMPOUND ".admin-shell
+   .admin-sidebar{background:rgba(255,255,255,.72)!important}" -- specificity
+   2 class (0,2,0) itu MENANG lawan rule saya yang cuma ".admin-sidebar"
+   1 class (0,1,0), padahal sama-sama !important dan file saya di-load
+   belakangan (urutan load cuma jadi penentu kalau specificity SAMA).
+   Fix: naikkan specificity dengan mengulang class jadi (0,3,0), pasti
+   menang, plus pakai warna solid langsung (bukan var custom property) biar
+   tidak tergantung definisi variable di file manapun. --- */
+@media (max-width: 1024px){
+  .admin-sidebar.admin-sidebar.admin-sidebar,
+  .split-sidebar.split-sidebar.split-sidebar{
+    background: #0b0a08 !important;
+    background-image: none !important;
+  }
+}
+
+/* --- FIX bug #2: card header atas (logo + lonceng + logout) di dashboard
+   admin & member kegedean di HP -- 2 baris terpisah (baris logo, baris
+   aksi) dengan padding/gap lebar ala desktop, makan banyak layar pas di-
+   scroll. Ubah jadi 1 baris kompak model nav-bar iOS: logo+nama kiri,
+   lonceng+logout kanan, semua lebih kecil & rapat. --- */
+@media (max-width: 1024px){
+  .site-header{
+    display: flex !important;
+    grid-template-columns: unset !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 7px 10px !important;
+    margin: 8px auto 0 !important;
+    gap: 8px !important;
+    min-height: 0 !important;
+    text-align: left !important;
+  }
+  .site-header .brand{
+    width: auto !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+  }
+  .site-header .brand img{
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 9px !important;
+  }
+  .site-header .brand span{
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 150px !important;
+  }
+  .site-header .kamar-global-actions,
+  .site-header .header-actions{
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    width: auto !important;
+  }
+  .kamar-notif-btn{
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    padding: 0 !important;
+  }
+  .kamar-global-logout,
+  .site-header .kamar-global-btn,
+  .site-header .btn{
+    min-height: 30px !important;
+    padding: 0 12px !important;
+    font-size: 12.5px !important;
+  }
+}

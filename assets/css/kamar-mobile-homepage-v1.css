@@ -1,0 +1,34 @@
+/* ==========================================================================
+   KAMAR MOBILE HOMEPAGE FIX v1
+   HANYA untuk halaman publik (index.html, body.public-home) dan HANYA di
+   layar HP (max-width:640px). Tidak menyentuh tampilan desktop/tablet sama
+   sekali. Wajib di-load PALING TERAKHIR di <head> (setelah semua CSS lain,
+   termasuk kamar-ambient-market-v58.css) supaya menang di cascade.
+
+   Alasan: bagian atas homepage (hero) di HP terasa kegedean karena
+   .hero-person (gambar karakter) sebelumnya bisa setinggi max-height:620px
+   (diwarisi dari aturan tablet di kamar-neo-minimal-palace-v47.css yang
+   tidak diperkecil lagi khusus untuk HP kecil) -- itu bikin user harus
+   scroll banyak sebelum sampai ke konten Fasilitas/Tentang. Di sini gambar
+   diperkecil, padding/gap dirapikan, TANPA mengubah teks/link/logic apapun.
+   ========================================================================== */
+@media (max-width:640px){
+  body.public-home .hero-visual{
+    min-height:0 !important;
+  }
+  body.public-home .hero-person{
+    max-height:min(280px,42vh) !important;
+    border-radius:22px !important;
+  }
+  body.public-home .hero-copy{
+    padding:20px !important;
+    gap:12px !important;
+  }
+  body.public-home .hero{
+    gap:10px !important;
+  }
+  body.public-home .hero-badges-on-visual{
+    margin:8px !important;
+    padding:9px !important;
+  }
+}

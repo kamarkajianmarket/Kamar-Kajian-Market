@@ -136,7 +136,7 @@
         var res=await client.from(table).select('*',{count:'exact'}).limit(10);
         if(res.error)return {table:table,ok:false,count:0,error:res.error.message||String(res.error),rows:[]};
         return {table:table,ok:true,count:(res.count!=null?res.count:(res.data||[]).length),error:'',rows:res.data||[]};
-      }catch(e){return {table:table,ok:false,count:0,error:e.message||String(e),rows:[]};}
+      }catch(e){return {table:table,ok:false,count:0,error:window.kamarFriendlyError(e),rows:[]};}
     }
     function renderLocal(local){
       var html='<div class="row header"><div>Key</div><div>Ukuran</div><div>Jumlah Row</div><div>Contoh</div></div>';

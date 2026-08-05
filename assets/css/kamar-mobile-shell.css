@@ -248,3 +248,47 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+/* --- FIX (audit 2026-08-06): 5 halaman admin-affiliate-*.html pakai
+   struktur .admin-shell > .admin-sidebar (BUKAN .split-app > .split-sidebar),
+   dan admin-data-check.html pakai .layout > .sidebar. Tanpa baris ini,
+   shell (CSS+JS) sudah ke-link tapi drawer/bottom-nav TIDAK PERNAH aktif di
+   halaman-halaman itu karena grid-nya tidak collapse dan sidebar-nya tidak
+   pernah jadi off-canvas drawer -- javascriptnya sudah dibetulkan duluan
+   (kamar-mobile-shell.js) supaya bisa mendeteksi ketiga pola sidebar ini,
+   sekarang giliran CSS-nya disamakan perlakuannya. --- */
+@media (max-width: 1024px){
+  .admin-shell,
+  .layout{
+    grid-template-columns: 1fr !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .admin-sidebar,
+  .layout > .sidebar{
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    height: 100dvh;
+    width: 86vw;
+    max-width: 340px;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform .28s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(18px + env(safe-area-inset-top)) !important;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+    padding-left: calc(16px + env(safe-area-inset-left)) !important;
+    box-shadow: 20px 0 60px rgba(0,0,0,.45);
+    background: var(--panel, var(--bg, #0b0a08)) !important;
+    background-image: none !important;
+  }
+  html.kamar-drawer-open .admin-sidebar,
+  html.kamar-drawer-open .layout > .sidebar{
+    transform: translateX(0);
+  }
+}

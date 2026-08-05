@@ -235,7 +235,7 @@
     // only this read/display side had the mismatch). Explicitly indexing by
     // m.id and m.profile_id closes that gap.
     function normalize(){var map={}; function add(row,source){var key=mergeKey(row); if(!key)return; if(!map[key])map[key]=Object.assign({},row,{_sources:[],_access:[]}); else Object.assign(map[key],row); map[key]._sources.push(source)} state.viewRows.forEach(function(r){add(r,'admin_member_overview')}); state.profileRows.forEach(function(r){add(r,'member_profiles')}); var by={}; Object.keys(map).forEach(function(k){var m=map[k]; [mergeKey(m),norm(emailOf(m)),norm(idOf(m)),norm(m.id),norm(m.profile_id),norm(pick(m,['user_id','profile_id','id']))].forEach(function(x){if(x)by[x]=m})}); state.accessRows.forEach(function(a){var keys=[norm(pick(a,['profile_id','user_id','id','member_id'])),norm(emailOf(a))]; var found=null; keys.forEach(function(k){if(!found&&by[k])found=by[k]}); if(found)found._access.push(a)}); state.members=Object.keys(map).map(function(k){var m=map[k]; m._id=idOf(m)||emailOf(m)||k; m._facilities=getFacilities(m); return m})}
-    async function loadData(){state.loading=true;state.lastError='';renderShell();try{state.viewRows=await query(TABLE_VIEW);state.profileRows=await query(TABLE_PROFILE);state.accessRows=await query(TABLE_ACCESS);try{state.licenses=await query(TABLE_LICENSES)}catch(e2){state.licenses=[]}normalize()}catch(e){state.lastError=e.message||String(e);state.members=[]}state.loading=false;renderShell();focusRequestedMember()}
+    async function loadData(){state.loading=true;state.lastError='';renderShell();try{state.viewRows=await query(TABLE_VIEW);state.profileRows=await query(TABLE_PROFILE);state.accessRows=await query(TABLE_ACCESS);try{state.licenses=await query(TABLE_LICENSES)}catch(e2){state.licenses=[]}normalize()}catch(e){state.lastError=window.kamarFriendlyError(e);state.members=[]}state.loading=false;renderShell();focusRequestedMember()}
     function filtered(){var q=norm(byId('searchInput').value), st=byId('statusFilter').value, ff=byId('facilityFilter').value; return state.members.filter(function(m){var text=norm([nameOf(m),emailOf(m),idOf(m),waOf(m),tgOf(m)].join(' ')); var ok=!q||text.indexOf(q)>=0; if(st==='pending')ok=ok&&isPending(m); if(st==='active')ok=ok&&isActive(m); if(st==='suspended')ok=ok&&isSuspended(m); var fac=m._facilities||[]; if(ff==='none')ok=ok&&!fac.length; else if(ff!=='all')ok=ok&&fac.indexOf(ff)>=0; return ok})}
     function focusRequestedMember(){var req=requestedMember();if(!req||state.autoFocused)return;var m=state.members.find(function(x){return sameId(x,req)});if(!m)return;state.autoFocused=true;var s=byId('searchInput');if(s)s.value=emailOf(m)||idOf(m)||nameOf(m);renderShell();setTimeout(function(){showDetail(m._id)},120)}
     function renderShell(){var all=state.members, list=filtered(), pending=all.filter(isPending).length; byId('summary').innerHTML='<span class="chip '+(state.client?'ok':'bad')+'">Supabase: '+(state.client?'Ada':'Tidak Ada')+'</span><span class="chip">Total: '+all.length+'</span><span class="chip">Tampil: '+list.length+'</span><span class="chip warn">Pending: '+pending+'</span><span class="chip">View: '+state.viewRows.length+'</span><span class="chip">Profiles: '+state.profileRows.length+'</span><span class="chip">Access: '+state.accessRows.length+'</span>'+(state.loading?'<span class="chip warn">Memuat...</span>':'')+(state.lastError?'<span class="chip bad">Error: '+esc(state.lastError)+'</span>':''); renderList(list)}
@@ -275,7 +275,7 @@
         if(res.error) throw res.error;
         toast('Pengumuman terkirim ke '+nameOf(m)+'.');
         byId('notifTitle').value=''; byId('notifMessage').value='';
-      }catch(e){ toast('Gagal kirim pengumuman: '+(e.message||String(e))); }
+      }catch(e){ toast(window.kamarFriendlyError(e)); }
     }
     var FACILITY_RPC_KEY={
       'Kamar Edukasi':'materi_edukasi',
@@ -380,15 +380,15 @@
         toast('Kuota '+(FACILITY_KEY_LABEL[facilityKey]||facilityKey)+' berhasil diperbarui.');
         await loadData();
         showDetail(state.selectedId);
-      }catch(e){ toast('Gagal menyimpan kuota: '+(e.message||String(e))); }
+      }catch(e){ toast(window.kamarFriendlyError(e)); }
     }
     function profileMatchQuery(c,m,upd){ var q=c.from(TABLE_PROFILE).update(upd); var pid=pick(m,['id','profile_id','user_id']); if(pid) return q.eq('id',pid); if(emailOf(m)) return q.eq('email',emailOf(m)); if(idOf(m)) return q.eq('member_id',idOf(m)); return q}
     function buildProfileUpdate(m){var upd={}; var keys=Object.keys(m||{}); function has(k){return keys.indexOf(k)>=0} if(has('status'))upd.status='active'; if(has('account_status'))upd.account_status='active'; if(has('status_key'))upd.status_key='active'; if(has('approval_status'))upd.approval_status='approved'; if(has('is_active'))upd.is_active=true; if(has('active'))upd.active=true; if(has('confirmed'))upd.confirmed=true; if(has('account_active'))upd.account_active=true; if(has('activated_at'))upd.activated_at=new Date().toISOString(); if(has('updated_at'))upd.updated_at=new Date().toISOString(); if(!Object.keys(upd).length)upd.status='active'; return upd}
-    async function activateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var res=await profileMatchQuery(c,m,buildProfileUpdate(m)); if(res.error)throw res.error; toast('Member berhasil diaktifkan gratis.'); await loadData(); showDetail(id)}catch(e){toast('Aktivasi gagal: '+(e.message||String(e)))} }
+    async function activateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var res=await profileMatchQuery(c,m,buildProfileUpdate(m)); if(res.error)throw res.error; toast('Member berhasil diaktifkan gratis.'); await loadData(); showDetail(id)}catch(e){toast(window.kamarFriendlyError(e))} }
     // NEW (2026-07-30): suspend/reactivate, backed by account_status_type's
     // real 'suspended' value (previously had no UI entry point at all).
-    async function suspendMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); if(!confirm('Suspend/ban member '+nameOf(m)+'? Member tidak akan bisa mengakses dashboard sampai diaktifkan kembali.'))return; var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'suspended',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member disuspend.'); await loadData(); showDetail(id)}catch(e){toast('Suspend gagal: '+(e.message||String(e)))} }
-    async function reactivateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'active',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member diaktifkan kembali.'); await loadData(); showDetail(id)}catch(e){toast('Gagal mengaktifkan kembali: '+(e.message||String(e)))} }
+    async function suspendMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); if(!confirm('Suspend/ban member '+nameOf(m)+'? Member tidak akan bisa mengakses dashboard sampai diaktifkan kembali.'))return; var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'suspended',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member disuspend.'); await loadData(); showDetail(id)}catch(e){toast(window.kamarFriendlyError(e))} }
+    async function reactivateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'active',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member diaktifkan kembali.'); await loadData(); showDetail(id)}catch(e){toast(window.kamarFriendlyError(e))} }
     // FIXED (2026-07-30): resolves the member's real member_profiles.id via
     // email (reliable regardless of what the merged view object's own 'id'
     // field happens to contain), then upserts a single member_access row
@@ -428,7 +428,7 @@
         if(res.error) throw res.error;
         toast(on?('Fasilitas aktif: '+facLabel+' ('+(isLifetime?'Lifetime':durationDays+' hari')+')'):('Fasilitas nonaktif: '+facLabel));
         await loadData(); showDetail(id);
-      }catch(e){ toast('Update fasilitas gagal: '+(e.message||String(e))); }
+      }catch(e){ toast(window.kamarFriendlyError(e)); }
     }
     ['searchInput','statusFilter','facilityFilter'].forEach(function(id){byId(id).addEventListener(id==='searchInput'?'input':'change',renderShell)}); byId('refreshBtn').onclick=loadData; var heroRefresh=byId('heroRefreshBtn'); if(heroRefresh) heroRefresh.onclick=loadData; if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadData); else loadData();
   })();
@@ -565,8 +565,7 @@ wrap.innerHTML = '<div style="margin-bottom:6px;color:#e7d391;font-size:11px;fon
 + accessHtml
 + '<div style="margin:14px 0 6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Riwayat Pembayaran ('+payments.length+')</div>'
 + paymentsHtml;
-}catch(e){
-wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(e.message||String(e))+'</span>';
+}catch(e){wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(window.kamarFriendlyError(e))+'</span>';
 }
 }
 var lastEmail = '';

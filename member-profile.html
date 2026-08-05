@@ -205,7 +205,83 @@ body{background:#070707;color:var(--text)}
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
-<script id="kamar-step24CB-member-referral-profile-logic">
+<script id="kamar-step60-member-referral-profile-logic-v2">
+(function(){
+  function byId(id){return document.getElementById(id);}
+  function setStatus(msg,type){var el=byId('memberReferralStatus'); if(!el) return; el.textContent=msg; el.className='referral-status-note '+(type||'');}
+  var form=byId('memberReferralForm'); if(!form) return;
+  var input=byId('memberReferralInput');
+  var lockBox=byId('referralAlreadySet');
+  var codeBox=byId('profileReferralCurrentCode');
+  async function getClient(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c=await window.KamarSupabase.ready(); if(c) return c; } }catch(e){}
+    if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
+    return null;
+  }
+  function applyLockedState(code){
+    if(code){
+      form.hidden=true;
+      if(lockBox) lockBox.hidden=false;
+      if(codeBox) codeBox.textContent='REFERRAL: '+code;
+    } else {
+      form.hidden=false;
+      if(lockBox) lockBox.hidden=true;
+    }
+  }
+  document.addEventListener('kamarProfileLoaded', function(e){
+    var m=e.detail&&e.detail.member;
+    var code=m&&(m.referral_code||m.referralCode);
+    applyLockedState(code||null);
+  });
+  var checkTimer=null;
+  if(input){
+    input.addEventListener('input', function(){
+      var val=input.value.trim();
+      if(checkTimer) clearTimeout(checkTimer);
+      if(!val){ setStatus('Kosongkan bila Anda tidak memiliki kode referral. Pengisian hanya dapat dilakukan satu kali.',''); return; }
+      setStatus('Memeriksa kode...', '');
+      checkTimer=setTimeout(async function(){
+        try{
+          var c=await getClient();
+          if(!c){ setStatus('Koneksi belum siap, coba lagi.', ''); return; }
+          var res=await c.rpc('check_referral_code',{p_code:val});
+          if(res.error) throw res.error;
+          var data=res.data||{};
+          if(data.valid){ setStatus('\u2713 '+(data.message||'Kode valid.'), 'success'); }
+          else { setStatus('\u2717 '+(data.message||'Kode referral tidak valid.'), 'error'); }
+        }catch(err){
+          setStatus('Gagal memeriksa kode: '+(err.message||err), 'error');
+        }
+      }, 500);
+    });
+  }
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var val=input?input.value.trim():'';
+    var btn=form.querySelector('button[type="submit"]');
+    if(btn){ btn.disabled=true; btn.dataset.old=btn.dataset.old||btn.textContent; btn.textContent='Menyimpan...'; }
+    try{
+      var c=await getClient();
+      if(!c){ setStatus('Koneksi Supabase belum siap. Muat ulang halaman.', 'error'); return; }
+      var res=await c.rpc('set_member_referral_code',{p_code:val});
+      if(res.error) throw res.error;
+      var data=res.data||{};
+      if(data.success===false){
+        setStatus(data.message||'Gagal menyimpan kode referral.', 'error');
+      } else {
+        setStatus(data.message||'Kode referral berhasil disimpan.', 'success');
+        applyLockedState((val||'').toUpperCase());
+      }
+    }catch(err){
+      setStatus('Gagal menyimpan kode referral: '+(err.message||err), 'error');
+    }finally{
+      if(btn){ btn.disabled=false; btn.textContent=btn.dataset.old||'Simpan Referral'; }
+    }
+  });
+})();
+</script>
+<script id="kamar-step24CB-member-referral-profile-logic-legacy-disabled" type="text/plain">
 (function(){
   function getJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d));}catch(e){return d;}}
   function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}

@@ -100,11 +100,8 @@ function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){retur
 function norm(v){return String(v==null?'':v).trim().toLowerCase()}
 function rupiah(n){n=Number(n||0);return 'Rp '+n.toLocaleString('id-ID')}
 function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
-function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
-function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
-function statusPill(s){s=norm(s);if(s==='paid')return '<span class="pill ok">Lunas</span>';if(s==='approved')return '<span class="pill info">Disetujui</span>';if(s==='review')return '<span class="pill warn">Review</span>';if(s==='pending')return '<span class="pill warn">Menunggu</span>';if(s==='rejected')return '<span class="pill bad">Ditolak</span>';if(s==='cancelled')return '<span class="pill off">Dibatalkan</span>';return '<span class="pill off">'+esc(s||'-')+'</span>'}
-async function load(){
-  var c=client();
+function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}async function client(){if(state.client)return state.client;try{if(window.KAMAR_CONFIG_READY)await window.KAMAR_CONFIG_READY;}catch(e){}try{if(window.KamarSupabase&&window.KamarSupabase.ready){var rc=await window.KamarSupabase.ready();if(rc){state.client=rc;return rc}}}catch(e){}var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
+function statusPill(s){s=norm(s);if(s==='paid')return '<span class="pill ok">Lunas</span>';if(s==='approved')return '<span class="pill info">Disetujui</span>';if(s==='review')return '<span class="pill warn">Review</span>';if(s==='pending')return '<span class="pill warn">Menunggu</span>';if(s==='rejected')return '<span class="pill bad">Ditolak</span>';if(s==='cancelled')return '<span class="pill off">Dibatalkan</span>';return '<span class="pill off">'+esc(s||'-')+'</span>'}async function load(){  var c=await client();
   el('payList').innerHTML='<div class="empty">Memuat data pengajuan...</div>';
   if(!c){el('payList').innerHTML='<div class="empty">Koneksi Supabase belum tersedia.</div>';return}
   try{
@@ -180,7 +177,7 @@ function openAction(action,id){
 }
 async function doAction(){
   var pend=state.pendingAction; if(!pend)return;
-  var c=client(); if(!c){toast('Koneksi Supabase belum tersedia.');return}
+  var c=await client(); if(!c){toast('Koneksi Supabase belum tersedia.');return}
   var note=el('actionNote').value.trim()||null;
   var ref=el('actionRef').value.trim()||null;
   if(pend.action==='paid' && !ref){toast('Isi Referensi Pembayaran untuk menandai lunas.');return}

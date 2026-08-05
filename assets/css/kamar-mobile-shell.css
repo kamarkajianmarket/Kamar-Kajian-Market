@@ -38,6 +38,9 @@
     padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
     padding-left: calc(16px + env(safe-area-inset-left)) !important;
     box-shadow: 20px 0 60px rgba(0,0,0,.45);
+    /* Latar aslinya cuma tint tipis (dibuat untuk nempel di atas background
+       gelap yang sama), jadi kalau dipakai sebagai panel drawer yang berdiri
+       sendiri, konten di belakangnya keliatan tembus. Kasih latar solid. */
     background: var(--panel, var(--bg, #0b0a08)) !important;
     background-image: none !important;
   }
@@ -103,6 +106,58 @@
     cursor: pointer;
   }
   .kamar-hamburger-btn svg{ width: 20px; height: 20px; }
+
+  /* --- FIX: beberapa halaman (mis. admin-activation.html) nambahin class
+     "kamar-v46-atelier" ke <body>, yang otomatis bikin SEMUA elemen
+     <button> polos (termasuk tombol hamburger & tombol tutup drawer kita)
+     ketiban style tombol emas besar dari kamar-luxury-atelier-v46.css /
+     kamar-dashboard-identity-v2.css (keduanya pakai !important dengan
+     specificity lebih tinggi dari ".kamar-hamburger-btn" biasa). Class
+     diulang 4x supaya specificity-nya menang telak tanpa perlu utak-atik
+     file tema aslinya (yang memang tidak boleh disentuh). --- */
+  .kamar-hamburger-btn.kamar-hamburger-btn.kamar-hamburger-btn.kamar-hamburger-btn{
+    background: rgba(255,255,255,.05) !important;
+    background-image: none !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--line, rgba(238,206,122,.18)) !important;
+    color: inherit !important;
+    font-weight: 400 !important;
+    box-shadow: none !important;
+  }
+  .kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn{
+    background: rgba(255,255,255,.05) !important;
+    background-image: none !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--line, rgba(238,206,122,.18)) !important;
+    color: inherit !important;
+    font-weight: 400 !important;
+    box-shadow: none !important;
+  }
+
+  /* --- FIX: panel dropdown notifikasi lonceng (#kamarNotifPanel29F) di
+     desktop posisinya "position:absolute; right:0; width:360px" relatif ke
+     div pembungkus kecil di sisi kiri header — di layar sempit ini bikin
+     panel selebar 360px terpotong ke kiri layar. Di mobile/tablet, pindah
+     jadi "fixed" relatif ke viewport supaya selalu pas di dalam layar. --- */
+  .kamar-notif-panel{
+    position: fixed !important;
+    top: 84px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(420px, calc(100vh - 100px)) !important;
+  }
 
   /* --- Bottom navigation --- */
   .kamar-bottom-nav{

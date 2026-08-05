@@ -84,12 +84,17 @@
     height: 34px;
     flex: 0 0 auto;
     border-radius: 10px;
-    border: 1px solid var(--line, rgba(238,206,122,.18));
-    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(244,223,144,.4);
+    background: rgba(255,255,255,.12);
     color: inherit;
     cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,.3);
   }
+  /* --- FIX kontras: latar drawer selalu gelap (lihat komentar di .split-sidebar
+     di atas), jadi tombol X butuh latar/garis yang cukup terang supaya tidak
+     tenggelam. stroke-width ikon juga ditebalkan sedikit biar lebih jelas. --- */
   .kamar-drawer-close-btn svg{ width: 18px; height: 18px; }
+  .kamar-drawer-close-btn svg path{ stroke-width: 2.4; }
 
   /* --- FIX: beberapa halaman (mis. admin-activation.html) nambahin class
      "kamar-v46-atelier" ke <body>, yang otomatis bikin SEMUA elemen
@@ -100,7 +105,7 @@
      specificity-nya menang telak tanpa perlu utak-atik file tema
      aslinya (yang memang tidak boleh disentuh). --- */
   .kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn{
-    background: rgba(255,255,255,.05) !important;
+    background: rgba(255,255,255,.12) !important;
     background-image: none !important;
     width: 34px !important;
     height: 34px !important;
@@ -108,10 +113,10 @@
     min-height: 34px !important;
     padding: 0 !important;
     border-radius: 10px !important;
-    border: 1px solid var(--line, rgba(238,206,122,.18)) !important;
+    border: 1px solid rgba(244,223,144,.4) !important;
     color: inherit !important;
     font-weight: 400 !important;
-    box-shadow: none !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,.3) !important;
   }
 
   /* --- FIX: panel dropdown notifikasi lonceng (#kamarNotifPanel29F) di

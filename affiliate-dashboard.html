@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Dashboard Affiliate — Kamar Kajian Market</title><meta content="Dashboard affiliate Kamar Kajian Market. Kode referral, statistik, komisi, dan pencairan komisi." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Affiliate Program — Kamar Kajian Market</title><meta content="Dashboard affiliate Kamar Kajian Market. Kode referral, statistik, komisi, dan pencairan komisi." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
 body{background:#070707;color:var(--text)}
@@ -17,7 +17,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
 <meta name="kamar-step" content="62-affiliate-dashboard-rebuild"/>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Study 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
 
-<div class="split-card kamar-title-card"><h1>Dashboard Affiliate</h1><p>Statistik referral, komisi, dan pencairan komisi affiliate kamu.</p></div>
+<div class="split-card kamar-title-card"><h1>Affiliate Program</h1><p>Pantau performa referral kamu: member yang bergabung, fasilitas yang mereka aktifkan, dan komisi yang kamu hasilkan &mdash; semua dalam satu dashboard.</p></div>
 
 <section class="split-card" id="affiliateGateCard" hidden>
   <div class="expired-note" id="affiliateGateBox"><strong>Memuat...</strong></div>
@@ -41,7 +41,14 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
 </section>
 
 <section class="split-card">
-<span class="mini-label">Riwayat Komisi</span>
+<span class="mini-label">Member Referral</span>
+<h2>Member yang Kamu Referensikan</h2>
+<p>Daftar member yang bergabung lewat kode referral kamu. Detail dibatasi hanya nama, fasilitas yang aktif dibayar, dan potensi komisi &mdash; untuk menjaga privasi member.</p>
+<div class="page-note" id="referredEmpty">Belum ada member yang direferensikan.</div>
+<table class="kamar-table hidden" id="referredTable"><thead><tr><th>Nama Member</th><th>Status</th><th>Fasilitas Aktif</th><th>Potensi Komisi</th></tr></thead><tbody id="referredBody"></tbody></table>
+</section>
+
+<section class="split-card"><span class="mini-label">Riwayat Komisi</span>
 <h2>Komisi dari Referral</h2>
 <div class="page-note" id="commissionEmpty">Belum ada komisi.</div>
 <table class="kamar-table hidden" id="commissionTable"><thead><tr><th>Member</th><th>Fasilitas</th><th>Nominal</th><th>Status</th><th>Tanggal</th></tr></thead><tbody id="commissionBody"></tbody></table>
@@ -59,7 +66,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
 
 </div>
 
-</section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div>
+</section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer>
 
 <div class="kamar-modal-backdrop" id="paymentModalBackdrop">
   <div class="kamar-modal">
@@ -233,13 +240,27 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
       el('affiliateDashboardContent').hidden=false;
       renderStats();
       renderCommissions();
+renderReferredMembers();
       renderPayments();
     }catch(e){
       showGate('Gagal memuat data affiliate: '+(e.message||e));
     }
   }
 
-  function copyText(text, btn){
+  function renderReferredMembers(){
+var body=el('referredBody');
+if(!state.referrals.length){ el('referredEmpty').classList.remove('hidden'); el('referredTable').classList.add('hidden'); return; }
+el('referredEmpty').classList.add('hidden'); el('referredTable').classList.remove('hidden');
+body.innerHTML=state.referrals.map(function(r){
+var mine=state.commissions.filter(function(c){return c.member_name===r.member_name});
+var facs=Array.from(new Set(mine.map(function(c){return facilityLabel(c.facility_key)}))).filter(Boolean);
+var potensi=mine.reduce(function(s,c){return s+Number(c.commission_amount||0)},0);
+var st=r.referral_status==='ACTIVE'?'<span class="status-pill on">Aktif (Sudah Bayar)</span>':(r.referral_status==='PENDING'?'<span class="status-pill warn">Mendaftar</span>':'<span class="status-pill off">'+esc(r.referral_status||'-')+'</span>');
+return '<tr><td>'+esc(r.member_name||'Member')+'</td><td>'+st+'</td><td>'+esc(facs.length?facs.join(', '):'-')+'</td><td>'+esc(rupiah(potensi))+'</td></tr>';
+}).join('');
+}
+
+function copyText(text, btn){
     if(!text||text==='-') return;
     if(navigator.clipboard) navigator.clipboard.writeText(text);
     var old=btn.textContent; btn.textContent='Tersalin'; setTimeout(function(){btn.textContent=old;},1200);

@@ -1,0 +1,165 @@
+/* ==========================================================================
+   KAMAR MOBILE SHELL v1
+   Drawer navigasi, header mobile, dan bottom navigation untuk HP & tablet.
+   SELURUH aturan di file ini dibungkus @media(max-width:1024px) atau
+   @media(min-width:1025px) supaya TIDAK PERNAH menyentuh tampilan desktop.
+   File ini harus di-load PALING TERAKHIR (setelah semua CSS lain).
+   ========================================================================== */
+
+@media (max-width: 1024px){
+
+  /* --- Paksa grid sidebar+konten jadi 1 kolom, terlepas dari breakpoint
+     bawaan tiap halaman (beberapa halaman baru collapse di 880/1000/1100px) --- */
+  .split-app{
+    grid-template-columns: 1fr !important;
+  }
+
+  /* --- Ubah sidebar jadi drawer off-canvas (nempel kiri, geser masuk/keluar) ---
+     (position:fixed di sini otomatis mengeluarkan sidebar dari alur grid,
+     jadi tidak perlu aturan "position:relative" terpisah yang tadinya malah
+     menang duluan karena selector-nya lebih spesifik dan bikin sidebar
+     "position:relative" dulu, mendorong .split-main turun ~1 layar penuh) --- */
+  .split-sidebar{
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    height: 100dvh;
+    width: 86vw;
+    max-width: 340px;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform .28s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(18px + env(safe-area-inset-top)) !important;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+    padding-left: calc(16px + env(safe-area-inset-left)) !important;
+    box-shadow: 20px 0 60px rgba(0,0,0,.45);
+    background: var(--panel, var(--bg, #0b0a08)) !important;
+    background-image: none !important;
+  }
+  html.kamar-drawer-open .split-sidebar{
+    transform: translateX(0);
+  }
+
+  /* --- Backdrop gelap di belakang drawer --- */
+  .kamar-drawer-backdrop{
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0,0,0,.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+  }
+  html.kamar-drawer-open .kamar-drawer-backdrop{
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* --- Kunci scroll halaman belakang saat drawer terbuka --- */
+  html.kamar-drawer-open body{
+    overflow: hidden;
+  }
+
+  /* --- Baris judul di dalam drawer (nama akun + tombol tutup) --- */
+  .kamar-drawer-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .kamar-drawer-close-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    border: 1px solid var(--line, rgba(238,206,122,.18));
+    background: rgba(255,255,255,.05);
+    color: inherit;
+    cursor: pointer;
+  }
+  .kamar-drawer-close-btn svg{ width: 18px; height: 18px; }
+
+  /* --- Tombol hamburger di header --- */
+  .kamar-hamburger-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    border-radius: 12px;
+    border: 1px solid var(--line, rgba(238,206,122,.18));
+    background: rgba(255,255,255,.05);
+    color: inherit;
+    cursor: pointer;
+  }
+  .kamar-hamburger-btn svg{ width: 20px; height: 20px; }
+
+  /* --- Bottom navigation --- */
+  .kamar-bottom-nav{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    display: flex;
+    border-top: 1px solid var(--line, rgba(238,206,122,.18));
+    background: rgba(7,7,6,.94);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  .kamar-bottom-nav a{
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: var(--muted, rgba(245,240,230,.66));
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 6px 2px;
+    border-radius: 12px;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .kamar-bottom-nav a svg{ width: 20px; height: 20px; }
+  .kamar-bottom-nav a.active{
+    color: var(--gold, #f4df90);
+    background: rgba(212,166,63,.13);
+  }
+
+  /* --- Kasih jarak bawah supaya konten tidak ketutup bottom nav --- */
+  body.kamar-has-bottom-nav{
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Di atas 1024px (tablet landscape besar / laptop / desktop): sembunyikan
+   semua elemen mobile-only supaya tidak pernah muncul di desktop. */
+@media (min-width: 1025px){
+  .kamar-bottom-nav,
+  .kamar-drawer-backdrop,
+  .kamar-hamburger-btn,
+  .kamar-drawer-close-btn{
+    display: none !important;
+  }
+}
+
+/* Hormati preferensi pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce){
+  .split-sidebar,
+  .kamar-drawer-backdrop{
+    transition: none !important;
+  }
+}

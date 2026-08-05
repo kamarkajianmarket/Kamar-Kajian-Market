@@ -78,10 +78,7 @@ var state={rates:[],client:null};
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
 function toast(msg){var t=el('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2600)}
-function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}
-function client(){if(state.client)return state.client;var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}
-async function load(){
-  var c=client();
+function cfg(){var c=window.KAMAR_CONFIG||window.KamarConfig||window.kamarConfig||{};return {url:c.supabaseUrl||c.SUPABASE_URL||c.url||window.KAMAR_SUPABASE_URL||'',key:c.supabaseAnonKey||c.SUPABASE_ANON_KEY||c.anonKey||window.KAMAR_SUPABASE_ANON_KEY||''}}async function client(){if(state.client)return state.client;try{if(window.KAMAR_CONFIG_READY)await window.KAMAR_CONFIG_READY;}catch(e){}try{if(window.KamarSupabase&&window.KamarSupabase.ready){var rc=await window.KamarSupabase.ready();if(rc){state.client=rc;return rc}}}catch(e){}var ex=window.kamarSupabaseClient||window.KamarSupabaseClient||(window.KamarSupabase&&window.KamarSupabase.client);if(ex){state.client=ex;return ex}var c=cfg();if(window.supabase&&window.supabase.createClient&&c.url&&c.key){state.client=window.supabase.createClient(c.url,c.key);return state.client}return null}async function load(){  var c=await client();
   el('rateGrid').innerHTML='<div class="empty">Memuat data...</div>';
   if(!c){el('rateGrid').innerHTML='<div class="empty">Koneksi Supabase belum tersedia.</div>';return}
   try{
@@ -113,7 +110,7 @@ async function save(id){
   var pct=Number(card.querySelector('[data-field="commission_percent"]').value||0);
   var active=card.querySelector('[data-field="is_active"]').checked;
   if(pct<0||pct>100){toast('Persentase harus antara 0-100.');return}
-  var c=client(); if(!c){toast('Koneksi Supabase belum tersedia.');return}
+  var c=await client(); if(!c){toast('Koneksi Supabase belum tersedia.');return}
   try{
     var res=await c.from('affiliate_commission_rates').update({commission_percent:pct,is_active:active,updated_at:new Date().toISOString()}).eq('id',id);
     if(res.error) throw res.error;

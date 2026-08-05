@@ -234,3 +234,17 @@
     animation: none !important;
   }
 }
+
+/* --- Tabel HTML (mis. affiliate-dashboard.html, admin-connection-check.html):
+   di HP tabel lebar bisa terpotong/dorong layar melebar. Bikin scroll
+   horizontal lokal di dalam tabelnya sendiri, bukan di seluruh halaman.
+   Berlaku generik untuk elemen <table> apapun di halaman yang pakai shell
+   ini, tidak perlu ubah HTML/markup tiap halaman satu-satu. --- */
+@media (max-width: 1024px){
+  table{
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -1,1 +1,1 @@
-{"name":"Kamar Kajian Market","short_name":"Kamar","start_url":"/index.html","display":"standalone","background_color":"#070707","theme_color":"#070707"}
+{"name":"Kamar Kajian Market","short_name":"Kamar","start_url":"/index.html","display":"standalone","background_color":"#070707","theme_color":"#070707","icons":[{"src":"assets/favicon.png","sizes":"64x64","type":"image/png"},{"src":"assets/apple-touch-icon.png","sizes":"180x180","type":"image/png"},{"src":"assets/logo-kamar.jpeg","sizes":"1536x1536","type":"image/jpeg"}]}

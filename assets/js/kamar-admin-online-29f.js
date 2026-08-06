@@ -254,7 +254,7 @@
     var desc = esc(todo.description || '');
     var payload = todo.action_payload || {};
     var name = esc(payload.full_name || payload.email || '-');
-    return '<div class="todo-row"><div><strong>'+title+'</strong><small>'+name+'</small></div><div>'+desc+'</div><div></div><div><button class="btn" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Tandai Selesai</button></div></div>';
+    return '<div class="todo-row"><div><strong>'+title+'</strong><small>'+name+'</small></div><div>'+desc+'</div><div></div><div><button class="btn mini secondary" type="button" data-todo-action="review" data-todo-id="'+esc(todo.id)+'">Tinjau</button> <button class="btn" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Tandai Selesai</button></div></div>';
   }
 
   var TODO_LABELS = {
@@ -375,26 +375,138 @@
     if(p.account_id) subBits.push('Akun '+p.account_id);
     if(p.new_payment_bank_name) subBits.push('Bank baru: '+p.new_payment_bank_name);
     if(p.new_payment_account_number) subBits.push('No. Rek baru: '+p.new_payment_account_number);
+    // NEW (2026-08-06): tombol "Tinjau" di setiap baris supaya admin bisa lihat detail
+    // lengkap isi permintaan (field yang diubah, nilai lama -> baru, dsb) SEBELUM
+    // menekan Setujui/Tolak. Sebelumnya admin harus memutuskan tanpa detail karena
+    // kolom kedua menampilkan email (kalau ada) padahal payload sudah punya
+    // field_label/old_value/new_value yang siap ditampilkan via openReviewModal().
+    var reviewBtn = '<button class="btn mini secondary" type="button" data-todo-action="review" data-todo-id="'+esc(todo.id)+'">Tinjau</button> ';
     var actionsHtml;
     if(todo.todo_type === 'new_registration'){
-      actionsHtml = '<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
-      actionsHtml = '<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
     } else if(todo.todo_type === 'profile_change'){
-      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'license_request'){
-      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'affiliate_payout_change'){
-      actionsHtml = '<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
-      actionsHtml = '<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
     return '<div class="todo-row">'
     +'<div><strong>'+esc(todo.title || label)+'</strong><small>'+esc(p.full_name || '')+(subBits.length ? ' &middot; '+esc(subBits.join(' &middot; ')) : '')+'</small></div>'
-    +'<div>'+esc(p.email || todo.description || '-')+'</div>'
+    +'<div>'+esc(todo.description || p.email || '-')+'</div>'
     +'<div><span class="chip">'+esc(label)+'</span></div>'
     +'<div>'+actionsHtml+'</div>'
     +'</div>';
+  }
+  // NEW (2026-08-06): modal "Tinjau" generik. Dibangun dari action_payload yang
+  // SUDAH berisi field_label/old_value/new_value (diisi backend saat member submit
+  // perubahan), jadi tidak perlu query tambahan ke member_profiles untuk kasus
+  // profile_change. Untuk tipe todo lain, sisa key di action_payload ditampilkan
+  // apa adanya sebagai daftar "Data Tambahan" supaya tetap berguna secara umum.
+  var TODO_FIELD_SKIP = { field:1, new_data:1, field_label:1, old_value:1, new_value:1, full_name:1, email:1, profile_id:1, payment_id:1, affiliate_id:1, facility_key:1 };
+  function fmtFieldKey(k){
+    return String(k||'').replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+  }
+  function fmtFieldVal(v){
+    if(v == null || v === '') return '-';
+    if(typeof v === 'object') return esc(JSON.stringify(v));
+    return esc(String(v));
+  }
+  function fmtRelativeSafe(iso){
+    try{
+      var d = new Date(iso); var diff = Math.floor((Date.now()-d.getTime())/1000);
+      if(diff < 60) return 'baru saja';
+      if(diff < 3600) return Math.floor(diff/60)+' menit lalu';
+      if(diff < 86400) return Math.floor(diff/3600)+' jam lalu';
+      return Math.floor(diff/86400)+' hari lalu';
+    }catch(e){ return ''; }
+  }
+  function injectReviewModal(){
+    if(qs('#kamarTodoReviewModal29F')) return;
+    injectSharedStyles();
+    var style = document.createElement('style');
+    style.textContent =
+      '.kamar-review-backdrop{position:fixed;inset:0;background:rgba(6,6,5,.62);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}'+
+      '.kamar-review-backdrop.open{display:flex}'+
+      '.kamar-review-box{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#141210;border:1px solid rgba(238,206,122,.24);border-radius:26px;padding:26px;box-shadow:0 30px 90px rgba(0,0,0,.5)}'+
+      '.kamar-review-box h3{margin:0 0 6px;color:#fff3d8;font-size:20px}'+
+      '.kamar-review-box .kamar-review-sub{color:#d8cda9;font-size:13px;margin-bottom:18px}'+
+      '.kamar-review-diff{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:18px;padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}'+
+      '.kamar-review-diff .from{color:#ffb4b4;text-decoration:line-through;opacity:.85}'+
+      '.kamar-review-diff .to{color:#9effca;font-weight:1000;font-size:16px}'+
+      '.kamar-review-grid{display:grid;gap:10px;margin-bottom:18px}'+
+      '.kamar-review-grid div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(238,206,122,.10);padding-bottom:8px;font-size:13px}'+
+      '.kamar-review-grid span:first-child{color:#a99d82;font-weight:900;flex-shrink:0}'+
+      '.kamar-review-grid span:last-child{color:#f5f0e6;text-align:right;overflow-wrap:anywhere}'+
+      '.kamar-review-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}';
+    document.head.appendChild(style);
+    var wrap = document.createElement('div');
+    wrap.id = 'kamarTodoReviewModal29F';
+    wrap.className = 'kamar-review-backdrop';
+    wrap.innerHTML = '<div class="kamar-review-box" id="kamarTodoReviewBox29F"></div>';
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', function(e){ if(e.target === wrap) closeReviewModal(); });
+    wrap.addEventListener('click', onTodoAction);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeReviewModal(); });
+  }
+  function closeReviewModal(){
+    var wrap = qs('#kamarTodoReviewModal29F');
+    if(wrap) wrap.classList.remove('open');
+  }
+  function reviewActionButtons(todo){
+    var actions = '<button class="btn secondary" type="button" data-review-close="1">Tutup</button>';
+    if(todo.todo_type === 'profile_change'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'license_request'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'affiliate_payout_change'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'new_registration'){
+      actions += ' <button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
+    } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
+      actions += ' <button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
+    } else {
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Tandai Selesai</button>';
+    }
+    return actions;
+  }
+  function openReviewModal(todo){
+    injectReviewModal();
+    var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
+    var p = todo.action_payload || {};
+    var box = qs('#kamarTodoReviewBox29F');
+    var html = '<h3>'+esc(todo.title || label)+'</h3>';
+    html += '<div class="kamar-review-sub"><span class="chip">'+esc(label)+'</span> &middot; '+esc(fmtRelativeSafe(todo.created_at))+'</div>';
+    if(p.field_label || p.new_value !== undefined){
+      html += '<div class="kamar-review-diff"><span class="from">'+fmtFieldVal(p.old_value)+'</span><span>&rarr;</span><span class="to">'+fmtFieldVal(p.new_value)+'</span></div>';
+    } else if(todo.description){
+      html += '<p class="admin-note-soft">'+esc(todo.description)+'</p>';
+    }
+    var grid = '';
+    grid += '<div><span>Diajukan oleh</span><span>'+esc(p.full_name || '-')+'</span></div>';
+    if(p.email) grid += '<div><span>Email</span><span>'+esc(p.email)+'</span></div>';
+    if(p.field_label) grid += '<div><span>Field</span><span>'+esc(p.field_label)+'</span></div>';
+    Object.keys(p).forEach(function(k){
+      if(TODO_FIELD_SKIP[k]) return;
+      var v = p[k];
+      if(v == null || v === '' || (Array.isArray(v) && !v.length)) return;
+      grid += '<div><span>'+esc(fmtFieldKey(k))+'</span><span>'+fmtFieldVal(v)+'</span></div>';
+    });
+    html += '<div class="kamar-review-grid">'+grid+'</div>';
+    html += '<div class="kamar-review-actions">'+reviewActionButtons(todo)+'</div>';
+    box.innerHTML = html;
+    box.querySelectorAll('[data-review-close]:not([data-todo-action])').forEach(function(b){
+      b.addEventListener('click', function(){ closeReviewModal(); });
+    });
+    var wrap = qs('#kamarTodoReviewModal29F');
+    if(wrap) wrap.classList.add('open');
   }
   async function onTodoAction(e){
     var btn = e.target && e.target.closest ? e.target.closest('[data-todo-action]') : null;
@@ -403,8 +515,10 @@
     var todoId = btn.getAttribute('data-todo-id');
     var c = await ready(); if(!c) return;
     var res = await c.from('admin_todos').select('*').eq('id', todoId).limit(1);
-    if(res.error || !res.data || !res.data.length){ toast('Data tugas tidak ditemukan (mungkin sudah diproses).'); await renderActionCenter(); return; }
+    if(res.error || !res.data || !res.data.length){ toast('Data tugas tidak ditemukan (mungkin sudah diproses).'); closeReviewModal(); await renderActionCenter(); return; }
     var todo = res.data[0];
+    if(action === 'review'){ openReviewModal(todo); return; }
+    closeReviewModal();
     btn.disabled = true;
     try{
       if(action === 'activate') await actionActivateRegistration(todo);
@@ -436,6 +550,11 @@
         el.setAttribute('data-kamar-actioncenter-bound','1');
         el.addEventListener('click', onTodoAction);
       }
+      // NEW (2026-08-06): isi angka di stat-card "Permintaan Menunggu" pada grid
+      // Ringkasan Admin (kalau elemennya ada di halaman ini), supaya admin langsung
+      // lihat ada berapa permintaan yang perlu ditinjau tanpa scroll ke bawah dulu.
+      var countEl = qs('#pendingTodoCount');
+      if(countEl) countEl.textContent = String(rows.length);
       window.__KAMAR_TODO_CENTER_ACTIVE__ = true;
       return true;
     }catch(e){
@@ -443,7 +562,7 @@
     }
   }
 
-  
+
   async function run(){
     if(!/^admin/i.test(PAGE)) return;
     injectSharedStyles();

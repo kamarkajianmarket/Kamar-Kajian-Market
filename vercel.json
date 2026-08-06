@@ -1,7 +1,10 @@
 {
 "version": 2,
 "rewrites": [
-{ "source": "/register", "destination": "/register.html" },
-{ "source": "/login", "destination": "/member.html" }
-]
+{ "source": "/register", "destination": "/register.html" },{ "source": "/login", "destination": "/member.html" }
+  ],
+  "headers": [
+    { "source": "/assets/js/kamar-mobile-shell.js", "headers": [ { "key": "Cache-Control", "value": "no-cache, must-revalidate" } ] },
+    { "source": "/assets/css/kamar-mobile-shell.css", "headers": [ { "key": "Cache-Control", "value": "no-cache, must-revalidate" } ] }
+  ]
 }

@@ -10,6 +10,17 @@
 (function(){
   'use strict';
 
+  /* --- PWA: daftarkan service worker (Fase 5, 2026-08-06). Sengaja network-first
+     (lihat service-worker.js) supaya TIDAK pernah menyajikan CSS/JS lama ke user --
+     situs ini sering di-update. Tujuannya cuma memenuhi syarat installability PWA,
+     bukan bikin app offline-first. Aman dijalankan di semua halaman. --- */
+  (function registerKamarServiceWorker(){
+    if(!('serviceWorker' in navigator)) return;
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/service-worker.js').catch(function(){ /* diam-diam gagal, tidak ganggu halaman */ });
+    });
+  })();
+
   function ready(fn){
     if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn);
     else fn();

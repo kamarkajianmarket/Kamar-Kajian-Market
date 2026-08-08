@@ -3,6 +3,30 @@
   if(window.__KAMAR_ADMIN_ONLINE_29F__) return; window.kamarFriendlyError=window.kamarFriendlyError||function(e){var raw=String((e&&e.message)||e||'');var low=raw.toLowerCase();if(!raw) return 'Terjadi kesalahan. Silakan coba lagi.';if(low.indexOf('duplicate key')>-1||low.indexOf('unique constraint')>-1) return 'Data ini sepertinya sudah pernah dikirim sebelumnya. Muat ulang halaman lalu coba lagi, atau hubungi admin bila masalah berlanjut.';if(low.indexOf('foreign key')>-1) return 'Data terkait tidak ditemukan. Muat ulang halaman lalu coba lagi.';if(low.indexOf('permission denied')>-1||low.indexOf('row-level security')>-1||low.indexOf(' rls')>-1) return 'Anda tidak memiliki izin untuk melakukan aksi ini. Hubungi admin bila ini seharusnya diizinkan.';if(low.indexOf('not-null')>-1) return 'Ada data wajib yang belum terisi. Periksa kembali formulir Anda.';if(low.indexOf('failed to fetch')>-1||low.indexOf('network')>-1||low.indexOf('load failed')>-1) return 'Koneksi internet bermasalah. Periksa koneksi Anda lalu coba lagi.';if(low.indexOf('jwt')>-1||low.indexOf('unauthorized')>-1||low.indexOf('401')>-1||low.indexOf('session')>-1) return 'Sesi login Anda sudah berakhir. Muat ulang halaman dan login kembali.';if(low.indexOf('timeout')>-1) return 'Permintaan memakan waktu terlalu lama. Coba lagi beberapa saat.';return 'Terjadi kesalahan saat memproses permintaan Anda. Coba lagi, atau hubungi admin bila masalah berlanjut.';};
   window.__KAMAR_ADMIN_ONLINE_29F__ = true;
 
+  // FIXED (2026-08-08): window.toast used to silently resolve to the <div id="toast">
+  // element itself (every admin page has one, e.g. admin.html's <div class="toast" id="toast">),
+  // NOT a function. The old check below was `if(window.toast) return window.toast(msg)`,
+  // and since a DOM element is truthy, that check passed and then crashed with
+  // "window.toast is not a function" the instant it tried to call the div as a function.
+  // That crash happened AFTER the real database update (Setujui/Tolak/Verifikasi etc.
+  // already succeeded), but BEFORE renderActionCenter() could re-run - so the action
+  // center looked "stuck"/unresponsive even though the change was really saved.
+  // Fix: define a real window.toast function (only if one doesn't already exist) that
+  // fills the existing #toast div and shows/hides it, and change every local toast()
+  // helper below to check `typeof window.toast === 'function'` instead of truthiness.
+  if(typeof window.toast !== 'function'){
+    window.toast = function(msg){
+      try{
+        var el = document.getElementById('toast');
+        if(!el){ alert(msg); return; }
+        el.textContent = String(msg == null ? '' : msg);
+        el.classList.add('show');
+        clearTimeout(window.__kamarToastTimer29F);
+        window.__kamarToastTimer29F = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+      }catch(e){ try{ alert(msg); }catch(e2){} }
+    };
+  }
+
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var VERSION = '29G';
   // NOTE (2026-08-01): admin-banner.html, admin-video.html, admin-materials.html
@@ -64,7 +88,7 @@
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
   function bool(v){ return v === true || v === 'true' || v === 1 || v === '1' || /aktif|active|on|yes/i.test(String(v||'')); }
-  function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
+  function toast(msg){ if(typeof window.toast === 'function') return window.toast(msg); try{ alert(msg); }catch(e){} }
 
   // NEW (2026-08-01): satu blok CSS yang dulunya hilang (kamar-full-online.css
   // ternyata kosong), sehingga kartu Data Member/Data Internal tampil sebagai
@@ -591,7 +615,7 @@
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
-  function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
+  function toast(msg){ if(typeof window.toast === 'function') return window.toast(msg); try{ alert(msg); }catch(e){} }
   async function ready(){
     try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
     try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}

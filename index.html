@@ -555,9 +555,10 @@
 <span class="kamar-badge">Support Sukarela</span>
 <h3>Kirim Traktiran</h3>
 <p>Jika edukasi Kamar membantu proses belajar Anda, traktiran ini bisa menjadi bentuk apresiasi sederhana. Tidak wajib, bukan pembayaran sinyal, dan bukan jaminan profit.</p>
-<div class="traktir-short-note">Pembayaran diarahkan melalui Mayar.</div>
-<div class="traktir-actions-simple">
-<a class="btn btn-primary" data-mayar-key="traktir" href="https://mayar.to/kamar" rel="noopener" target="_blank">Kirim Traktiran</a>
+<div class="traktir-actions-simple" id="traktirButtonRow">
+<a class="btn btn-primary" data-traktir-key="traktir_50k" href="#">Rp 50.000</a>
+<a class="btn btn-primary" data-traktir-key="traktir_100k" href="#">Rp 100.000</a>
+<a class="btn btn-primary" data-traktir-key="traktir_250k" href="#">Rp 250.000</a>
 </div>
 </article>
 </div>
@@ -704,31 +705,68 @@
   });
 })();
 </script>
-<script id="kamar-mayar-payment-config">
-/* Link Mayar Traktir Kamar sudah aktif. Link fasilitas member lain dipasang setelah tersedia. */
-window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
-  traktir: "https://mayar.to/kamar",
-  study: "",
-  private: "",
-  indikator: "",
-  robot: ""
-};
+<script id="kamar-traktir-payment-config">
 (function(){
-  const links = window.KAMAR_MAYAR_LINKS || {};
-  document.querySelectorAll('[data-mayar-key]').forEach((button) => {
-    const key = button.getAttribute('data-mayar-key');
-    const url = links[key];
-    if(url){
-      button.setAttribute('href', url);
-      button.setAttribute('target', '_blank');
-      button.setAttribute('rel', 'noopener');
-      button.removeAttribute('aria-disabled');
-      button.classList.remove('disabled-payment');
-    }else{
-      button.setAttribute('href', '#');
-      button.setAttribute('aria-disabled', 'true');
-      button.classList.add('disabled-payment');
+  async function readyClient(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+    return window.kamarSupabaseClient || null;
+  }
+  async function resolveProfileId(){
+    try{
+      const sess=JSON.parse(localStorage.getItem('kamarMemberSession')||'null');
+      if(!sess) return null;
+      const c=await readyClient();
+      if(!c) return null;
+      if(sess.id){
+        const r1=await c.from('member_profiles').select('id').eq('user_id',sess.id).maybeSingle();
+        if(!r1.error && r1.data) return r1.data.id;
+      }
+      if(sess.email){
+        const r2=await c.from('member_profiles').select('id').ilike('email',sess.email).limit(1);
+        if(!r2.error && r2.data && r2.data.length) return r2.data[0].id;
+      }
+    }catch(e){}
+    return null;
+  }
+  let busy=false;
+  async function createInvoice(productKey, btn){
+    if(busy) return;
+    busy=true;
+    const oldText=btn.textContent;
+    btn.textContent='Memproses...';
+    try{
+      const profileId=await resolveProfileId();
+      if(!profileId){
+        window.location.href='member.html';
+        return;
+      }
+      const cfg=window.KAMAR_CONFIG||window.KamarConfig||{};
+      const base=(cfg.supabaseUrl||cfg.SUPABASE_URL||'').replace(/\/$/,'');
+      const anonKey=cfg.supabaseAnonKey||cfg.SUPABASE_ANON_KEY||'';
+      const resp=await fetch(base+'/functions/v1/mayar-create-invoice',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},
+        body:JSON.stringify({profile_id:profileId,product_key:productKey,redirect_url:'https://www.kamarkajianmarket.com/dashboard.html'})
+      });
+      const data=await resp.json();
+      if(!resp.ok || !data.payment_link){
+        alert('Gagal membuat tagihan. Coba lagi nanti.');
+        return;
+      }
+      window.location.href=data.payment_link;
+    }catch(e){
+      alert('Gagal membuat tagihan. Coba lagi nanti.');
+    }finally{
+      busy=false;
+      btn.textContent=oldText;
     }
+  }
+  document.querySelectorAll('[data-traktir-key]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      createInvoice(btn.getAttribute('data-traktir-key'), btn);
+    });
   });
 })();
 </script>

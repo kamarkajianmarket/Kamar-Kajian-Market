@@ -163,10 +163,14 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   function doLogin(email, password, onDone){
     state.client.auth.signInWithPassword({ email:email, password:password }).then(function(res){
       if(res.error){ onDone(res.error.message || 'Login gagal.'); return; }
+      state.user = res.data.user;
       onDone(null);
       renderBoot('Login berhasil, membuka Kamar Signal…');
       loadProfileAndAccess();
-    }).catch(function(err){ onDone(err && err.message || 'Login gagal.'); });
+    }).catch(function(err){
+      onDone(err && err.message || 'Login gagal.');
+      renderBootError('Terjadi kesalahan setelah login: ' + (err && err.message || err));
+    });
   }
 
   function doLogout(){

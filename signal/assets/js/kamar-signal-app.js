@@ -25,8 +25,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     lastUpdate: null,
     readsMap: {},
     realtimeStatus: 'off', // off | connecting | on | warn
-    list: { status:'fresh', items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'' } },
-    recap: { type:'DAILY', row:null, loading:false },
+    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'' } },
+    recap: { type:'DAILY', row:null, loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
   };
 
@@ -279,6 +279,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       L.page += 1;
       L.loading = false;
       L.error = null;
+      L.loaded = true;
+      L.loadedForStatus = L.status;
       renderApp();
     }).catch(function(err){
       L.loading = false; L.error = err && err.message || 'Data gagal dimuat.';
@@ -295,6 +297,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         if(res.error) throw res.error;
         R.row = res.data || null;
         R.loading = false;
+        R.loaded = true;
         renderApp();
       }).catch(function(err){
         R.loading = false; R.error = err && err.message || 'Rekap gagal dimuat.';
@@ -430,7 +433,10 @@ Prinsip (jangan dilanggar, lihat master prompt user):
 
   function renderList(){
     var L = state.list;
-    var isFirstLoad = L.items.length===0 && !L.loading && !L.error;
+    if(L.status !== L.loadedForStatus && !L.loading){
+      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null;
+    }
+    var isFirstLoad = !L.loaded && !L.loading && !L.error;
     el.innerHTML =
       appBar(STATUS_LABEL[L.status] || 'Signal', { back:'/signal/' }) +
       '<div class="ksig-main">'+
@@ -562,7 +568,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       t.addEventListener('click', function(){ loadRecap(t.getAttribute('data-type')); });
     });
     renderRecapBody();
-    if(!R.row && !R.loading) loadRecap(R.type);
+    if(!R.loaded && !R.loading) loadRecap(R.type);
     function tab(type,label){
       return '<div class="ksig-tab'+(R.type===type?' active':'')+'" data-type="'+type+'">'+label+'</div>';
     }

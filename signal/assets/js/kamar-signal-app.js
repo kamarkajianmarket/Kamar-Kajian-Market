@@ -1,5 +1,5 @@
 /* ==========================================================================
-Kamar Signal — app logic v1
+Kamar Signal — app logic v2 (professional UI/UX redesign)
 Prinsip (jangan dilanggar, lihat master prompt user):
 - EA adalah source of truth untuk isi/angka signal. App ini HANYA presentasi.
 - Auth = Supabase Auth asli (auth.uid()), bukan boolean localStorage.
@@ -7,12 +7,15 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   localStorage di sini hanya dipakai untuk state UX non-sensitif (unread cache lokal opsional).
 - Semua waktu ditampilkan dalam WIB (timezone EA), bukan timezone browser.
 - Tidak ada polling agresif. Update berbasis event (Supabase Realtime) + refetch bertarget.
+- Rekap Signal WAJIB mengikuti struktur existing: PERIODE -> TIMEFRAME -> HASIL REKAP.
+  Timeframe TIDAK di-hardcode — hanya menampilkan apa yang benar-benar ada di data.
 ========================================================================== */
 (function(){
   'use strict';
 
   var ROOT_PATH = '/signal/';
   var el = document.getElementById('ksigRoot');
+  var dashboardEntered = false;
 
   var state = {
     client: null,
@@ -26,7 +29,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     readsMap: {},
     realtimeStatus: 'off', // off | connecting | on | warn
     list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'' } },
-    recap: { type:'DAILY', row:null, loaded:false, loading:false },
+    recap: { type:'DAILY', rows:[], loaded:false, loading:false },
+    activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
   };
 
@@ -178,12 +182,19 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     e.preventDefault();
     navigate(a.getAttribute('data-ksig-nav'));
   });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Enter' && e.key !== ' ') return;
+    var a = e.target.closest && e.target.closest('[data-ksig-nav]');
+    if(!a) return;
+    e.preventDefault();
+    navigate(a.getAttribute('data-ksig-nav'));
+  });
   window.addEventListener('popstate', function(){ routeFromLocation(); renderApp(); });
 
   function routeFromLocation(){
     var p = location.pathname;
     if(p.indexOf(ROOT_PATH) !== 0){ state.route = { view:'dashboard' }; return; }
-    var rest = p.slice(ROOT_PATH.length).replace(/\/+$/,'');
+    var rest = p.slice(ROOT_PATH.length).replace(new RegExp('/+$'),'');
     if(!rest){ state.route = { view:'dashboard' }; return; }
     var parts = rest.split('/');
     if(parts[0]==='list' && parts[1]){ state.route = { view:'list', status:parts[1] }; state.list.status = parts[1]; return; }
@@ -293,6 +304,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     refreshCounts();
     if(state.route.view === 'list') loadList(true);
     if(state.route.view === 'detail') loadDetail(state.route.id_zona);
+    if(state.route.view === 'dashboard') loadActivity();
   }, 600);
   function onLiveEvent(payload){
     state.lastUpdate = new Date().toISOString();
@@ -377,15 +389,44 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var R = state.recap;
     R.type = type; R.loading = true; R.error = null;
     renderApp();
-    return state.client.from('signal_recaps').select('*').eq('recap_type', type).order('period_end_wib', { ascending:false }).limit(1).maybeSingle()
+    // Ambil rekap existing apa adanya. Struktur bisnis existing: satu periode bisa
+    // mempunyai lebih dari satu baris (per timeframe, dan per pair kalau ada).
+    // UI hanya mengelompokkan baris-baris ini untuk ditampilkan — tidak menghitung ulang,
+    // tidak menggabungkan angka, tidak membuat timeframe baru.
+    return state.client.from('signal_recaps').select('*').eq('recap_type', type)
+      .order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(50)
       .then(function(res){
         if(res.error) throw res.error;
-        R.row = res.data || null;
+        var rows = res.data || [];
+        if(rows.length){
+          var latestEnd = rows[0].period_end_wib;
+          rows = rows.filter(function(r){ return r.period_end_wib === latestEnd; });
+        }
+        R.rows = rows;
         R.loading = false;
         R.loaded = true;
         renderApp();
       }).catch(function(err){
         R.loading = false; R.error = err && err.message || 'Rekap gagal dimuat.';
+        renderApp();
+      });
+  }
+
+  function loadActivity(){
+    var A = state.activity;
+    A.loading = true; A.error = null;
+    return state.client.from('signal_events')
+      .select('id,id_zona,event_type,event_title,event_description,tp_level,created_at,signals(pair,timeframe,skenario,display_status,jenis_zona,area_low,area_high)')
+      .order('created_at', { ascending:false })
+      .limit(5)
+      .then(function(res){
+        if(res.error) throw res.error;
+        A.items = res.data || [];
+        A.loading = false;
+        A.loaded = true;
+        renderApp();
+      }).catch(function(err){
+        A.loading = false; A.error = err && err.message || 'Aktivitas gagal dimuat.';
         renderApp();
       });
   }
@@ -413,12 +454,14 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       });
   }
 
-  /* ---------------- rendering ---------------- */
+  /* ---------------- rendering: shared bits ---------------- */
   function updateLiveDot(){
-    var dot = document.getElementById('ksigLive');
-    if(!dot) return;
-    dot.className = 'ksig-live ' + (state.realtimeStatus==='on'?'on':state.realtimeStatus==='connecting'?'warn':state.realtimeStatus==='warn'?'warn':'off');
-    dot.querySelector('.ksig-live-label').textContent = state.realtimeStatus==='on' ? 'LIVE' : state.realtimeStatus==='connecting' ? 'Menghubungkan…' : state.realtimeStatus==='warn' ? 'Reconnecting…' : 'Offline';
+    var dots = document.querySelectorAll('#ksigLive');
+    dots.forEach(function(dot){
+      dot.className = 'ksig-live ' + (state.realtimeStatus==='on'?'on':state.realtimeStatus==='connecting'?'warn':state.realtimeStatus==='warn'?'warn':'off');
+      var lbl = dot.querySelector('.ksig-live-label');
+      if(lbl) lbl.textContent = state.realtimeStatus==='on' ? 'LIVE' : state.realtimeStatus==='connecting' ? 'Menghubungkan…' : state.realtimeStatus==='warn' ? 'Reconnecting…' : 'Offline';
+    });
   }
 
   function renderBoot(msg){
@@ -430,10 +473,14 @@ Prinsip (jangan dilanggar, lihat master prompt user):
 
   function appBar(title, opts){
     opts = opts || {};
-    var back = opts.back ? '<div class="ksig-appbar-back" data-ksig-nav="'+esc(opts.back)+'">‹</div>' : '';
+    var back = opts.back ? '<div class="ksig-appbar-back" data-ksig-nav="'+esc(opts.back)+'" tabindex="0" role="link" aria-label="Kembali">‹</div>' : '';
     var live = '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>';
     var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
-    return '<div class="ksig-appbar">'+back+'<div class="ksig-appbar-title">'+esc(title)+'</div>'+install+live+'</div>';
+    return '<div class="ksig-appbar"><div class="ksig-appbar-inner">'+back+'<div class="ksig-appbar-title">'+esc(title)+'</div>'+install+live+'</div></div>';
+  }
+
+  function sectionLabel(text, right){
+    return '<div class="ksig-section-label-row"><div class="ksig-section-label">'+esc(text)+'</div>'+(right||'')+'</div>';
   }
 
   function renderApp(){
@@ -458,7 +505,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
           '<div class="ksig-status-line" id="ksigLoginStatus"></div>'+
           '<button type="submit" class="ksig-btn primary block" id="ksigLoginBtn">Masuk</button>'+
         '</form>'+
-        (installAvailable() ? '<a class="ksig-login-install" id="ksigLoginInstall">⇩ Instal Kamar Signal sebagai Aplikasi</a>' : '')+
+        (installAvailable() ? '<a class="ksig-login-install" id="ksigLoginInstall" tabindex="0">⇩ Instal Kamar Signal sebagai Aplikasi</a>' : '')+
       '</div>'+
       '</div>';
     bindInstallBtn();
@@ -494,32 +541,97 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     bindInstallBtn();
   }
 
+  /* ---------------- dashboard ---------------- */
+  var OVERVIEW_META = {
+    fresh:  { label:'Signal Fresh',  desc:'Signal terbaru' },
+    aktif:  { label:'Signal Aktif',  desc:'Signal sedang aktif' },
+    profit: { label:'Signal Profit', desc:'Signal selesai profit' },
+    loss:   { label:'Signal Loss',   desc:'Signal selesai loss' }
+  };
+
+  function dashboardHeader(animCls){
+    var updatedTxt = state.lastUpdate ? 'Terakhir Diperbarui • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…';
+    var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
+    return '<div class="ksig-header'+animCls+'">'+
+      '<div class="ksig-header-row">'+
+        '<div class="ksig-header-titles">'+
+          '<div class="ksig-header-title">Kamar Signal</div>'+
+          '<div class="ksig-header-sub">Pantau signal dan perkembangannya</div>'+
+        '</div>'+
+        '<div class="ksig-header-meta">'+
+          '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>'+
+          '<div class="ksig-header-updated">'+esc(updatedTxt)+'</div>'+
+          install+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+
+  function panduanSectionHtml(animCls){
+    function guideCard(icon,title,desc){
+      return '<div class="ksig-guide-card" aria-disabled="true">'+
+        '<div class="ksig-guide-icon" aria-hidden="true">'+icon+'</div>'+
+        '<div class="ksig-guide-body">'+
+          '<div class="ksig-guide-title">'+esc(title)+'</div>'+
+          '<div class="ksig-guide-desc">'+esc(desc)+'</div>'+
+        '</div>'+
+        '<div class="ksig-guide-cta">Segera Hadir</div>'+
+      '</div>';
+    }
+    return '<div class="'+animCls.trim()+'">'+
+      sectionLabel('PANDUAN KAMAR SIGNAL') +
+      '<div class="ksig-guide-grid">'+
+        guideCard('◇','Aturan Kamar Signal','Ketentuan penggunaan dan panduan member Kamar Signal.') +
+        guideCard('◇','Cara Membaca Signal','Panduan memahami format, status, dan informasi Kamar Signal.') +
+      '</div>'+
+    '</div>';
+  }
+
   function renderDashboard(){
     var c = state.counts;
+    var firstPaint = !dashboardEntered;
+    function ac(n){ return firstPaint ? ' ksig-fade ksig-stagger-'+n : ''; }
     el.innerHTML =
-      appBar('Kamar Signal') +
-      '<div class="ksig-main">'+
-        '<div class="ksig-grid">'+
-          card('fresh','Signal Fresh', c.fresh) +
-          card('aktif','Signal Aktif', c.aktif) +
-          card('profit','Signal Profit', c.profit) +
-          card('loss','Signal Loss', c.loss) +
+      dashboardHeader(ac(1)) +
+      '<div class="ksig-main ksig-dashboard">'+
+        '<div class="'+('ksig-block'+ac(2)).trim()+'">'+
+          sectionLabel('SIGNAL OVERVIEW') +
+          '<div class="ksig-grid">'+
+            card('fresh') + card('aktif') + card('profit') + card('loss') +
+          '</div>'+
         '</div>'+
-        '<div class="ksig-section-gap"></div>'+
-        '<div class="ksig-card ksig-card-full" data-ksig-nav="/signal/recap" style="cursor:pointer">'+
-          '<div class="ksig-card-label">Rekap Signal</div>'+
-          '<div style="font-size:12.5px;color:var(--km-muted);margin-top:2px;">Harian · Mingguan · Bulanan →</div>'+
+        '<div class="'+('ksig-block'+ac(3)).trim()+'">'+
+          sectionLabel('REKAP SIGNAL') +
+          recapCardHtml() +
         '</div>'+
-        '<div class="ksig-lastupdate">'+(state.lastUpdate ? 'Last Update • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…')+'</div>'+
+        '<div class="'+('ksig-block'+ac(4)).trim()+'">'+
+          sectionLabel('AKTIVITAS TERBARU', '<a class="ksig-section-action" data-ksig-nav="/signal/list/aktif" tabindex="0" role="link">Lihat Semua →</a>') +
+          '<div class="ksig-activity-card" id="ksigActivityBody"></div>'+
+        '</div>'+
+        panduanSectionHtml('ksig-block'+ac(5)) +
+        '<div class="ksig-minifooter">KAMAR KAJIAN MARKET • KAMAR SIGNAL</div>'+
       '</div>';
+    dashboardEntered = true;
     updateLiveDot();
     bindInstallBtn();
+    bindRecapTabs();
+    renderRecapBody();
+    renderActivityBody();
     if(!state.lastUpdate) refreshCounts();
-    function card(status,label,count){
-      return '<div class="ksig-card '+status+'" data-ksig-nav="/signal/list/'+status+'"><div class="ksig-card-label">'+label+'</div><div class="ksig-card-count">'+count+'</div></div>';
+    if(!state.recap.loaded && !state.recap.loading) loadRecap(state.recap.type);
+    if(!state.activity.loaded && !state.activity.loading) loadActivity();
+    function card(status){
+      var meta = OVERVIEW_META[status];
+      var countHtml = state.lastUpdate!=null ? c[status] : '<span class="ksig-skel-inline"></span>';
+      return '<div class="ksig-card '+status+'" data-ksig-nav="/signal/list/'+status+'" tabindex="0" role="link">'+
+        '<div class="ksig-card-top"><span class="ksig-card-label">'+esc(meta.label)+'</span><span class="ksig-card-arrow" aria-hidden="true">↗</span></div>'+
+        '<div class="ksig-card-count">'+countHtml+'</div>'+
+        '<div class="ksig-card-desc">'+esc(meta.desc)+'</div>'+
+      '</div>';
     }
   }
 
+  /* ---------------- signal list ---------------- */
   var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss' };
 
   function renderList(){
@@ -532,9 +644,9 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       appBar(STATUS_LABEL[L.status] || 'Signal', { back:'/signal/' }) +
       '<div class="ksig-main">'+
         '<div class="ksig-toolbar">'+
-          '<div class="ksig-search"><span>🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona…" value="'+esc(L.search)+'"/></div>'+
-          '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn">⚙</div>'+
-          '<div class="ksig-tool-btn" id="ksigSortBtn">↕</div>'+
+          '<div class="ksig-search"><span aria-hidden="true">🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona…" value="'+esc(L.search)+'"/></div>'+
+          '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter">⚙</div>'+
+          '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan">↕</div>'+
         '</div>'+
         '<div id="ksigListBody"></div>'+
       '</div>';
@@ -562,7 +674,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada '+esc((STATUS_LABEL[L.status]||'signal').toLowerCase())+' saat ini.</div>Cek kembali beberapa saat lagi.</div>';
       return;
     }
-    var html = '<div class="ksig-list">' + L.items.map(rowHtml).join('') + '</div>';
+    var html = '<div class="ksig-list ksig-fade">' + L.items.map(rowHtml).join('') + '</div>';
     if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');
@@ -579,13 +691,13 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       if(pips!=null) infoParts.push((pips>=0?'+':'')+fmtNum(pips,1)+' pt');
     }
     var info = infoParts.join(' • ');
-    return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'">'+
+    return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
         '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span></div>'+
         (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
-      '<div class="ksig-row-chev">›</div>'+
+      '<div class="ksig-row-chev" aria-hidden="true">›</div>'+
     '</div>';
   }
 
@@ -648,52 +760,131 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     wrap.addEventListener('click', function(e){ if(e.target===wrap) document.body.removeChild(wrap); });
   }
 
-  function renderRecap(){
+  /* ---------------- rekap signal ---------------- */
+  function recapCardHtml(){
     var R = state.recap;
-    el.innerHTML =
-      appBar('Rekap Signal', { back:'/signal/' }) +
-      '<div class="ksig-main">'+
-        '<div class="ksig-recap-card">'+
-          '<div class="ksig-tabs">'+
-            tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') +
-          '</div>'+
-          '<div id="ksigRecapBody"></div>'+
-        '</div>'+
-      '</div>';
-    updateLiveDot();
-    bindInstallBtn();
-    document.querySelectorAll('.ksig-tab').forEach(function(t){
-      t.addEventListener('click', function(){ loadRecap(t.getAttribute('data-type')); });
-    });
-    renderRecapBody();
-    if(!R.loaded && !R.loading) loadRecap(R.type);
+    return '<div class="ksig-recap-card">'+
+      '<div class="ksig-tabs" role="tablist">'+
+        tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') +
+      '</div>'+
+      '<div id="ksigRecapBody"></div>'+
+    '</div>';
     function tab(type,label){
-      return '<div class="ksig-tab'+(R.type===type?' active':'')+'" data-type="'+type+'">'+label+'</div>';
+      return '<div class="ksig-tab'+(R.type===type?' active':'')+'" data-type="'+type+'" tabindex="0" role="tab" aria-selected="'+(R.type===type?'true':'false')+'">'+label+'</div>';
     }
+  }
+  function bindRecapTabs(){
+    document.querySelectorAll('.ksig-tab').forEach(function(t){
+      t.addEventListener('click', function(){ if(t.getAttribute('data-type')!==state.recap.type) loadRecap(t.getAttribute('data-type')); });
+      t.addEventListener('keydown', function(e){
+        if(e.key!=='Enter' && e.key!==' ') return;
+        e.preventDefault();
+        if(t.getAttribute('data-type')!==state.recap.type) loadRecap(t.getAttribute('data-type'));
+      });
+    });
+  }
+  function groupRecapRows(rows){
+    var order = [], map = {};
+    rows.forEach(function(r){
+      var tf = r.timeframe || 'Semua Timeframe';
+      if(!map[tf]){ map[tf] = []; order.push(tf); }
+      map[tf].push(r);
+    });
+    return order.map(function(tf){ return { timeframe: tf, rows: map[tf] }; });
+  }
+  function recapRowLine(label, r, sub){
+    var pipsVal = r.total_pips!=null ? Number(r.total_pips) : null;
+    var pipsTxt = pipsVal!=null ? (pipsVal>=0?'+':'')+fmtNum(pipsVal,1)+' Pips' : '-';
+    var pipsCls = pipsVal!=null && pipsVal<0 ? 'neg' : 'pos';
+    return '<div class="ksig-recap-row'+(sub?' sub':'')+'">'+
+      '<div class="ksig-recap-row-top"><span class="ksig-recap-row-label">'+esc(label)+'</span><span class="ksig-recap-row-pips '+pipsCls+'">'+esc(pipsTxt)+'</span></div>'+
+      '<div class="ksig-recap-row-stats">'+(r.total_signal||0)+' Signal • '+(r.total_profit||0)+' Profit • '+(r.total_loss||0)+' Loss • Winrate '+(r.winrate!=null?fmtNum(r.winrate,1)+'%':'-')+'</div>'+
+    '</div>';
+  }
+  function recapTimeframeGroupHtml(g){
+    if(g.rows.length === 1){
+      return recapRowLine(g.timeframe, g.rows[0]);
+    }
+    return '<div class="ksig-recap-tf-block">'+
+      '<div class="ksig-recap-tf-heading">'+esc(g.timeframe)+'</div>'+
+      g.rows.map(function(r){ return recapRowLine(r.pair || '-', r, true); }).join('') +
+    '</div>';
   }
   function renderRecapBody(){
     var body = document.getElementById('ksigRecapBody');
     if(!body) return;
     var R = state.recap;
-    if(R.loading){ body.innerHTML = '<div class="ksig-skel"><div class="ksig-skel-row" style="height:120px"></div></div>'; return; }
+    if(R.loading){ body.innerHTML = '<div class="ksig-skel"><div class="ksig-skel-row" style="height:52px"></div><div class="ksig-skel-row" style="height:52px"></div></div>'; return; }
     if(R.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(R.error)+'</p></div>'; return; }
-    if(!R.row){ body.innerHTML = '<div class="ksig-empty">Belum ada rekap untuk periode ini.</div>'; return; }
-    var r = R.row;
+    if(!R.rows || !R.rows.length){ body.innerHTML = '<div class="ksig-empty">Belum ada rekap untuk periode ini.</div>'; return; }
+    var groups = groupRecapRows(R.rows);
+    var periodRef = R.rows[0];
     body.innerHTML =
-      '<div class="ksig-recap-stats">'+
-        stat('Total Signal', r.total_signal) +
-        stat('Buy / Sell', (r.total_buy||0)+' / '+(r.total_sell||0)) +
-        stat('Profit', r.total_profit, 'pos') +
-        stat('Loss', r.total_loss, 'neg') +
-        stat('Win Rate', (r.winrate!=null? fmtNum(r.winrate,1)+'%' : '-')) +
-        stat('Total Pips', (r.total_pips!=null? (r.total_pips>=0?'+':'')+fmtNum(r.total_pips,1) : '-'), r.total_pips>=0?'pos':'neg') +
-      '</div>'+
-      '<div class="ksig-recap-period">'+fmtWIB(r.period_start_wib,{hour:undefined,minute:undefined})+' – '+fmtWIB(r.period_end_wib,{hour:undefined,minute:undefined})+(r.pair?' • '+esc(r.pair):'')+'</div>';
-    function stat(label,val,cls){
-      return '<div class="ksig-stat"><div class="ksig-stat-label">'+esc(label)+'</div><div class="ksig-stat-value'+(cls?' '+cls:'')+'">'+esc(val==null?'-':val)+'</div></div>';
-    }
+      '<div class="ksig-recap-list ksig-fade">' + groups.map(recapTimeframeGroupHtml).join('') + '</div>' +
+      '<div class="ksig-recap-period">'+fmtWIB(periodRef.period_start_wib,{hour:undefined,minute:undefined})+' – '+fmtWIB(periodRef.period_end_wib,{hour:undefined,minute:undefined})+'</div>';
   }
 
+  function renderRecap(){
+    el.innerHTML =
+      appBar('Rekap Signal', { back:'/signal/' }) +
+      '<div class="ksig-main">'+ recapCardHtml() +'</div>';
+    updateLiveDot();
+    bindInstallBtn();
+    bindRecapTabs();
+    renderRecapBody();
+    if(!state.recap.loaded && !state.recap.loading) loadRecap(state.recap.type);
+  }
+
+  /* ---------------- aktivitas terbaru ---------------- */
+  var ACTIVITY_BADGE = {
+    SIGNAL_CREATED_OR_UPDATED: { label:'FRESH', cls:'fresh' },
+    NEW_ZONE:            { label:'FRESH', cls:'fresh' },
+    ZONE_ACTIVE:          { label:'AKTIF', cls:'aktif' },
+    RUNNING:              { label:'RUNNING', cls:'aktif' },
+    RUNNING_UPDATE:        { label:'RUNNING', cls:'aktif' },
+    TP1_HIT:               { label:'TP1', cls:'profit' },
+    TP2_HIT:               { label:'TP2', cls:'profit' },
+    TP3_HIT:               { label:'TP3', cls:'profit' },
+    HOLD1_HIT:              { label:'TP1', cls:'profit' },
+    HOLD2_HIT:              { label:'TP2', cls:'profit' },
+    HOLD3_HIT:              { label:'TP3', cls:'profit' },
+    RR_1_1_REACHED:        { label:'RR 1:1', cls:'aktif' },
+    HIGH_RISK_WARNING:      { label:'PERINGATAN', cls:'loss' },
+    CRITICAL_ZONE_WARNING:  { label:'PERINGATAN', cls:'loss' },
+    HIT_INVALIDASI:         { label:'CUT LOSS', cls:'loss' },
+    INVALID:                { label:'CUT LOSS', cls:'loss' }
+  };
+  function activityRowHtml(item){
+    var sig = item.signals || {};
+    var badgeMeta = ACTIVITY_BADGE[item.event_type] || { label:(STATUS_LABEL[sig.display_status]||'').replace('Signal ','').toUpperCase(), cls: sig.display_status||'' };
+    var dirBadge = sig.skenario==='SELL' ? 'sell' : 'buy';
+    var isFreshCreate = (item.event_type==='SIGNAL_CREATED_OR_UPDATED' || item.event_type==='NEW_ZONE');
+    var info;
+    if(isFreshCreate && sig.jenis_zona){
+      info = sig.jenis_zona + ((sig.area_low!=null && sig.area_high!=null) ? ' • Area '+fmtNum(sig.area_low)+' – '+fmtNum(sig.area_high) : '');
+    } else {
+      info = item.event_description || item.event_title || EVENT_LABEL[item.event_type] || '';
+    }
+    return '<div class="ksig-row" data-ksig-nav="/signal/id/'+encodeURIComponent(item.id_zona)+'" tabindex="0" role="link">'+
+      '<div class="ksig-row-main">'+
+        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(sig.pair||'-')+'</span><span class="ksig-row-tf">'+esc(sig.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(sig.skenario||'-')+'</span><span class="ksig-badge '+esc(badgeMeta.cls)+'">'+esc(badgeMeta.label)+'</span></div>'+
+        (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
+        '<div class="ksig-row-time">'+fmtWIB(item.created_at)+'</div>'+
+      '</div>'+
+      '<div class="ksig-row-chev" aria-hidden="true">›</div>'+
+    '</div>';
+  }
+  function renderActivityBody(){
+    var body = document.getElementById('ksigActivityBody');
+    if(!body) return;
+    var A = state.activity;
+    if(A.loading && !A.items.length){ body.innerHTML = '<div class="ksig-skel">'+'<div class="ksig-skel-row" style="height:60px"></div>'.repeat(3)+'</div>'; return; }
+    if(A.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(A.error)+'</p></div>'; return; }
+    if(!A.items.length){ body.innerHTML = '<div class="ksig-empty">Belum ada aktivitas terbaru.</div>'; return; }
+    body.innerHTML = '<div class="ksig-list ksig-fade">' + A.items.map(activityRowHtml).join('') + '</div>';
+  }
+
+  /* ---------------- signal detail ---------------- */
   var EVENT_LABEL = {
     NEW_ZONE:'Signal dibuat', ZONE_ACTIVE:'Signal aktif', RUNNING_UPDATE:'Update berjalan',
     TP1_HIT:'TP1 tercapai', TP2_HIT:'TP2 tercapai', TP3_HIT:'TP3 tercapai',
@@ -734,8 +925,12 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       ['ID Zona', s.id_zona]
     ];
     var html =
+      '<div class="ksig-fade">'+
       '<div class="ksig-detail-head">'+
-        '<div class="ksig-detail-top"><span class="ksig-detail-symbol">'+esc(s.pair)+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span></div>'+
+        '<div class="ksig-detail-top">'+
+          '<span class="ksig-detail-symbol">'+esc(s.pair)+'</span>'+
+          '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span><span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
+        '</div>'+
         (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
         '<div class="ksig-detail-rows">' + rows.map(function(r){ return '<div class="ksig-detail-row"><span>'+esc(r[0])+'</span><strong>'+esc(r[1]==null?'-':r[1])+'</strong></div>'; }).join('') + '</div>'+
       '</div>'+
@@ -744,6 +939,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         (D.events.length ? D.events.map(function(ev){
           return '<div class="ksig-tl-item"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><div class="ksig-tl-body"><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<span>'+esc(ev.event_description)+'</span>':'')+'</div></div>';
         }).join('') : '<div class="ksig-empty" style="padding:16px 0;">Belum ada riwayat perkembangan.</div>')+
+      '</div>'+
       '</div>';
     body.innerHTML = html;
   }

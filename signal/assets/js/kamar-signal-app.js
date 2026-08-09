@@ -30,6 +30,67 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     detail: { id_zona:null, signal:null, events:[], loading:false }
   };
 
+  /* ---------------- instal aplikasi (PWA) ---------------- */
+  var installPromptEvent = null;
+  function isStandaloneMode(){
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+  function isIOSDevice(){
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  }
+  function installAvailable(){
+    return !isStandaloneMode() && (!!installPromptEvent || isIOSDevice());
+  }
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    installPromptEvent = e;
+    if(state.client) renderApp();
+  });
+  window.addEventListener('appinstalled', function(){
+    installPromptEvent = null;
+    if(state.client) renderApp();
+  });
+  function bindInstallBtn(){
+    var b = document.getElementById('ksigInstallBtn');
+    if(b) b.addEventListener('click', openInstallSheet);
+    var l = document.getElementById('ksigLoginInstall');
+    if(l) l.addEventListener('click', openInstallSheet);
+  }
+  function openInstallSheet(){
+    var wrap = document.createElement('div');
+    wrap.className = 'ksig-sheet-backdrop';
+    var body;
+    if(installPromptEvent){
+      body = '<div class="ksig-sheet-title">Instal Kamar Signal</div>'+
+        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Instal Kamar Signal sebagai aplikasi di perangkat ini supaya lebih cepat dibuka dan tampil layar penuh seperti aplikasi biasa.</p>'+
+        '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigInstallCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigInstallGo">Instal Sekarang</button></div>';
+    } else if(isIOSDevice()){
+      body = '<div class="ksig-sheet-title">Instal Kamar Signal (iPhone/iPad)</div>'+
+        '<ol style="color:var(--km-muted);font-size:13.5px;line-height:1.85;margin:0 0 16px;padding-left:18px">'+
+          '<li>Tap tombol <strong>Share</strong> (kotak dengan panah ke atas) di Safari.</li>'+
+          '<li>Pilih <strong>"Add to Home Screen"</strong>.</li>'+
+          '<li>Tap <strong>"Add"</strong> di pojok kanan atas.</li>'+
+        '</ol>'+
+        '<div class="ksig-sheet-actions"><button class="ksig-btn primary block" id="ksigInstallCancel">Mengerti</button></div>';
+    } else {
+      body = '<div class="ksig-sheet-title">Instal Kamar Signal</div>'+
+        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Buka menu browser Anda (biasanya ikon titik tiga atau ikon instal di address bar) lalu pilih "Instal Aplikasi" atau "Add to Home Screen".</p>'+
+        '<div class="ksig-sheet-actions"><button class="ksig-btn primary block" id="ksigInstallCancel">Mengerti</button></div>';
+    }
+    wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div>'+body+'</div>';
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', function(e){ if(e.target===wrap) document.body.removeChild(wrap); });
+    var cancelBtn = document.getElementById('ksigInstallCancel');
+    if(cancelBtn) cancelBtn.addEventListener('click', function(){ document.body.removeChild(wrap); });
+    var goBtn = document.getElementById('ksigInstallGo');
+    if(goBtn) goBtn.addEventListener('click', function(){
+      document.body.removeChild(wrap);
+      if(!installPromptEvent) return;
+      installPromptEvent.prompt();
+      installPromptEvent.userChoice.then(function(){ installPromptEvent = null; renderApp(); });
+    });
+  }
+
   /* ---------------- helpers ---------------- */
   function esc(s){
     return String(s==null?'':s).replace(/[&<>"']/g, function(c){
@@ -347,7 +408,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     opts = opts || {};
     var back = opts.back ? '<div class="ksig-appbar-back" data-ksig-nav="'+esc(opts.back)+'">‹</div>' : '';
     var live = '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>';
-    return '<div class="ksig-appbar">'+back+'<div class="ksig-appbar-title">'+esc(title)+'</div>'+live+'</div>';
+    var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
+    return '<div class="ksig-appbar">'+back+'<div class="ksig-appbar-title">'+esc(title)+'</div>'+install+live+'</div>';
   }
 
   function renderApp(){
@@ -372,8 +434,10 @@ Prinsip (jangan dilanggar, lihat master prompt user):
           '<div class="ksig-status-line" id="ksigLoginStatus"></div>'+
           '<button type="submit" class="ksig-btn primary block" id="ksigLoginBtn">Masuk</button>'+
         '</form>'+
+        (installAvailable() ? '<a class="ksig-login-install" id="ksigLoginInstall">⇩ Instal Kamar Signal sebagai Aplikasi</a>' : '')+
       '</div>'+
       '</div>';
+    bindInstallBtn();
     var form = document.getElementById('ksigLoginForm');
     form.addEventListener('submit', function(e){
       e.preventDefault();
@@ -402,6 +466,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div style="height:8px"></div>'+
         '<a class="ksig-btn block" href="/dashboard.html">Kembali ke Dashboard</a>'+
       '</div></div>';
+    updateLiveDot();
+    bindInstallBtn();
   }
 
   function renderDashboard(){
@@ -423,6 +489,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div class="ksig-lastupdate">'+(state.lastUpdate ? 'Last Update • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…')+'</div>'+
       '</div>';
     updateLiveDot();
+    bindInstallBtn();
     if(!state.lastUpdate) refreshCounts();
     function card(status,label,count){
       return '<div class="ksig-card '+status+'" data-ksig-nav="/signal/list/'+status+'"><div class="ksig-card-label">'+label+'</div><div class="ksig-card-count">'+count+'</div></div>';
@@ -448,6 +515,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div id="ksigListBody"></div>'+
       '</div>';
     updateLiveDot();
+    bindInstallBtn();
     renderListBody();
     var search = document.getElementById('ksigSearchInput');
     search.addEventListener('input', debounce(function(){ L.search = search.value.trim(); loadList(true); }, 400));
@@ -564,6 +632,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '</div>'+
       '</div>';
     updateLiveDot();
+    bindInstallBtn();
     document.querySelectorAll('.ksig-tab').forEach(function(t){
       t.addEventListener('click', function(){ loadRecap(t.getAttribute('data-type')); });
     });
@@ -609,6 +678,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(D.id_zona !== state.route.id_zona) loadDetail(state.route.id_zona);
     el.innerHTML = appBar('Detail Signal', { back:'/signal/list/'+(state.list.status||'fresh') }) + '<div class="ksig-main" id="ksigDetailBody"></div>';
     updateLiveDot();
+    bindInstallBtn();
     renderDetailBody();
   }
   function renderDetailBody(){

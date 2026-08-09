@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Kelas Scalping — Kamar Kajian Market</title><meta content="Kelas khusus member Kamar Kajian Market." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title id="scalpingDocTitle">Fasilitas Khusus — Kamar Kajian Market</title><meta content="Kelas khusus member Kamar Kajian Market." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
 body{background:#070707;color:var(--text)}
@@ -11,12 +11,12 @@ body{background:#070707;color:var(--text)}
 <link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
 <meta name="kamar-step" content="46-luxury-atelier-formation"/>
 <link href="assets/css/kamar-mobile-shell.css" rel="stylesheet"/>
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><a class="active" href="member-scalping.html">Kelas Scalping</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Signal 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
-<div class="split-card kamar-title-card"><h1>Kelas Scalping</h1></div>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><a class="active" href="dashboard.html#kelasScalpingCard">Fasilitas Khusus</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Signal 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
+<div class="split-card kamar-title-card"><h1 id="scalpingPageTitle">Fasilitas Khusus</h1></div>
 <section class="split-card" id="scalpingPageCard">
-<span class="mini-label">Fasilitas Khusus Member</span>
-<h2>Daftar Kelas Scalping</h2>
-<p>Kelas khusus member Kamar Kajian Market: strategi dan teknik scalping, dibahas mendalam dan terstruktur langsung dari admin/mentor Kamar. Kuota terbatas, aktivasi otomatis setelah pembayaran berhasil.</p>
+<span class="mini-label">Fasilitas Khusus</span>
+<h2 id="scalpingPageSubtitle">Memuat fasilitas...</h2>
+<p id="scalpingPageDesc"></p>
 <div class="page-note" id="scalpingPriceBox" style="margin-top:14px"><strong>Memuat harga...</strong></div>
 <div class="button-row">
 <a class="btn" id="scalpingPayLink" href="#" data-payment-placeholder="true">Bayar Sekarang</a>
@@ -29,7 +29,8 @@ body{background:#070707;color:var(--text)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
 <script id="kamar-scalping-page-logic">
 (function(){
-var PRODUCT_KEY='kelas_scalping';
+var params=new URLSearchParams(window.location.search);
+var PRODUCT_KEY=params.get('key')||'kelas_scalping';
 function fmtRupiah(n){ try{ return 'Rp'+Number(n).toLocaleString('id-ID'); }catch(e){ return 'Rp'+n; } }
 async function readyClient(){
   try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
@@ -41,13 +42,23 @@ var productRow=null;
 var payLink=document.getElementById('scalpingPayLink');
 var priceBox=document.getElementById('scalpingPriceBox');
 function updatePrice(){
+  var titleEl=document.getElementById('scalpingPageTitle');
+  var subEl=document.getElementById('scalpingPageSubtitle');
+  var descEl=document.getElementById('scalpingPageDesc');
+  var docTitleEl=document.getElementById('scalpingDocTitle');
   if(!priceBox) return;
   if(productRow){
     var promo=productRow.promo_price!=null?productRow.promo_price:productRow.base_price;
+    if(titleEl) titleEl.textContent=productRow.title;
+    if(subEl) subEl.textContent='Daftar '+productRow.title;
+    if(descEl) descEl.textContent=productRow.description||'Fasilitas khusus member Kamar Kajian Market.';
+    if(docTitleEl) docTitleEl.textContent=productRow.title+' — Kamar Kajian Market';
     priceBox.innerHTML='<strong>'+productRow.title+'</strong><br/>Harga: <strong>'+fmtRupiah(promo)+'</strong><br/><small>Harga belum termasuk biaya payment gateway.</small>';
     if(payLink) payLink.removeAttribute('data-payment-placeholder');
   }else{
-    priceBox.innerHTML='<strong>Harga belum tersedia.</strong><br/>Hubungi admin untuk info Kelas Scalping.';
+    if(subEl) subEl.textContent='Fasilitas Tidak Ditemukan';
+    if(descEl) descEl.textContent='Fasilitas ini sudah tidak tersedia atau belum diaktifkan admin.';
+    priceBox.innerHTML='<strong>Harga belum tersedia.</strong><br/>Hubungi admin untuk info lebih lanjut.';
     if(payLink) payLink.setAttribute('data-payment-placeholder','true');
   }
 }

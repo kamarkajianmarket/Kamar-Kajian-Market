@@ -561,6 +561,13 @@
 .traktir-total-row span{color:rgba(17,20,23,.65);font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:.08em}
 .traktir-total-row strong{color:#8a6215;font-size:22px}
 .traktir-qris-result{background:#fff;border-radius:22px;padding:22px;text-align:center;color:#1a1a1a;margin-top:4px}
+.traktir-qris-status{display:inline-flex;align-items:center;gap:8px;margin:0 auto 14px;padding:6px 14px;border-radius:999px;background:rgba(17,20,23,.06);color:#555;font-weight:800;font-size:13px}
+.traktir-qris-status.paid{background:rgba(28,97,65,.12);color:#1c6141}
+.traktir-qris-status.expired{background:rgba(162,49,49,.1);color:#a23131}
+.traktir-status-dot{width:8px;height:8px;border-radius:50%;background:#c9a227;animation:traktirPulse 1.2s infinite}
+.traktir-qris-status.paid .traktir-status-dot{background:#1c6141;animation:none}
+.traktir-qris-status.expired .traktir-status-dot{background:#a23131;animation:none}
+@keyframes traktirPulse{0%,100%{opacity:1}50%{opacity:.3}}
 .traktir-qris-result.hidden{display:none}
 .traktir-qris-result img{width:220px;height:220px;object-fit:contain;margin:0 auto 14px;display:block;border-radius:12px;border:1px solid #eee}
 .traktir-qris-amount{font-size:20px;font-weight:900;color:#111;margin-bottom:8px}
@@ -595,9 +602,10 @@
 <button class="btn btn-primary" id="traktirShowQrisBtn" type="button">Tampilkan QRIS</button>
 </div>
 <div class="traktir-qris-result hidden" id="traktirQrisResult">
+<div class="traktir-qris-status" id="traktirQrisStatus"><span class="traktir-status-dot"></span><span id="traktirQrisStatusText">Menunggu pembayaran...</span></div>
 <img alt="QRIS Traktir Kamar" id="traktirQrisImg" src=""/>
 <div class="traktir-qris-amount" id="traktirQrisAmount"></div>
-<p class="traktir-qris-note">Scan kode QRIS di atas menggunakan aplikasi e-wallet atau mobile banking Anda. Traktiran diterima langsung, tanpa perlu mendaftar akun.</p>
+<p class="traktir-qris-note" id="traktirQrisNote">Scan kode QRIS di atas menggunakan aplikasi e-wallet atau mobile banking Anda.</p>
 <button class="btn btn-secondary traktir-qris-close" id="traktirQrisClose" type="button">Tutup</button>
 </div>
 </article>
@@ -760,6 +768,11 @@ var qrisAmount = document.getElementById("traktirQrisAmount");
 var closeBtn = document.getElementById("traktirQrisClose");
 var minusBtn = document.getElementById("traktirQtyMinus");
 var plusBtn = document.getElementById("traktirQtyPlus");
+var currentRequestId = null;
+var pollTimer = null;
+var qrisStatusEl = document.getElementById("traktirQrisStatus");
+var qrisStatusTextEl = document.getElementById("traktirQrisStatusText");
+var qrisNoteEl = document.getElementById("traktirQrisNote");
 function fmtRp(n){ try{ return "Rp"+Number(n).toLocaleString("id-ID"); }catch(e){ return "Rp"+n; } }
 async function readyClient(){
   try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
@@ -820,10 +833,13 @@ if(showBtn){
       });
       var data = await resp.json();
       if(!resp.ok || !data.qr_url){ alert("Gagal membuat QRIS: "+(data.error||"Coba lagi nanti.")); return; }
+      currentRequestId = data.request_id;
       if(qrisImg) qrisImg.src = data.qr_url;
       if(qrisAmount) qrisAmount.textContent = fmtRp(data.amount);
+      setQrisStatus("pending");
       if(resultBox) resultBox.classList.remove("hidden");
       if(resultBox) resultBox.scrollIntoView({behavior:"smooth", block:"center"});
+      startPolling();
     }catch(e){
       alert("Gagal membuat QRIS. Coba lagi.");
     }finally{
@@ -832,8 +848,47 @@ if(showBtn){
     }
   });
 }
+function setQrisStatus(state){
+  if(!qrisStatusEl) return;
+  qrisStatusEl.classList.remove("paid","expired");
+  if(state==="paid"){
+    qrisStatusEl.classList.add("paid");
+    if(qrisStatusTextEl) qrisStatusTextEl.textContent = "\u2713 Pembayaran diterima!";
+    if(qrisNoteEl) qrisNoteEl.textContent = "Terima kasih atas traktirannya! Dukunganmu sangat berarti untuk Kamar Kajian Market.";
+  }else if(state==="expired"){
+    qrisStatusEl.classList.add("expired");
+    if(qrisStatusTextEl) qrisStatusTextEl.textContent = "QRIS kedaluwarsa";
+    if(qrisNoteEl) qrisNoteEl.textContent = "QRIS ini sudah tidak berlaku. Tutup lalu buat QRIS baru.";
+  }else{
+    if(qrisStatusTextEl) qrisStatusTextEl.textContent = "Menunggu pembayaran...";
+    if(qrisNoteEl) qrisNoteEl.textContent = "Scan kode QRIS di atas menggunakan aplikasi e-wallet atau mobile banking Anda.";
+  }
+}
+function stopPolling(){
+  if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+}
+function startPolling(){
+  stopPolling();
+  pollTimer = setInterval(async function(){
+    if(!currentRequestId) return;
+    try{
+      var cfg = window.KAMAR_CONFIG || window.KamarConfig || {};
+      var base = (cfg.supabaseUrl||cfg.SUPABASE_URL||"").replace(/\/$/,"");
+      var anonKey = cfg.supabaseAnonKey||cfg.SUPABASE_ANON_KEY||"";
+      var resp = await fetch(base+"/functions/v1/mayar-check-qris-status",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","apikey":anonKey,"Authorization":"Bearer "+anonKey},
+        body: JSON.stringify({request_id: currentRequestId})
+      });
+      var data = await resp.json();
+      if(!resp.ok) return;
+      if(data.status==="paid"){ setQrisStatus("paid"); stopPolling(); }
+      else if(data.status==="expired"){ setQrisStatus("expired"); stopPolling(); }
+    }catch(e){}
+  }, 3000);
+}
 if(closeBtn){
-  closeBtn.addEventListener("click", function(){ if(resultBox) resultBox.classList.add("hidden"); });
+  closeBtn.addEventListener("click", function(){ if(resultBox) resultBox.classList.add("hidden"); stopPolling(); currentRequestId = null; setQrisStatus("pending"); });
 }
 loadDenoms();
 })();

@@ -853,13 +853,15 @@ function setQrisStatus(state){
   qrisStatusEl.classList.remove("paid","expired");
   if(state==="paid"){
     qrisStatusEl.classList.add("paid");
-    if(qrisStatusTextEl) qrisStatusTextEl.textContent = "\u2713 Pembayaran diterima!";
+    if(qrisImg) qrisImg.classList.add("hidden");
+    if(qrisStatusTextEl) qrisStatusTextEl.textContent = "\u2713 Traktiran diterima!";
     if(qrisNoteEl) qrisNoteEl.textContent = "Terima kasih atas traktirannya! Dukunganmu sangat berarti untuk Kamar Kajian Market.";
   }else if(state==="expired"){
     qrisStatusEl.classList.add("expired");
     if(qrisStatusTextEl) qrisStatusTextEl.textContent = "QRIS kedaluwarsa";
     if(qrisNoteEl) qrisNoteEl.textContent = "QRIS ini sudah tidak berlaku. Tutup lalu buat QRIS baru.";
   }else{
+    if(qrisImg) qrisImg.classList.remove("hidden");
     if(qrisStatusTextEl) qrisStatusTextEl.textContent = "Menunggu pembayaran...";
     if(qrisNoteEl) qrisNoteEl.textContent = "Scan kode QRIS di atas menggunakan aplikasi e-wallet atau mobile banking Anda.";
   }

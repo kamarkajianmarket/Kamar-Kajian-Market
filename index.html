@@ -545,20 +545,60 @@
 </div>
 </div>
 </section>
+<style id="kamar-traktir-v2-css">
+.traktir-card-v2{display:flex;flex-direction:column;gap:16px}
+.traktir-denom-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.traktir-denom-chip{border:1px solid rgba(238,206,122,.35);background:rgba(255,255,255,.04);color:#f5f0e6;border-radius:999px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer;transition:.18s ease}
+.traktir-denom-chip:hover{border-color:rgba(244,223,144,.6)}
+.traktir-denom-chip.active{background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;border-color:transparent}
+.traktir-qty-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(238,206,122,.18);border-radius:18px;padding:12px 16px;background:rgba(255,255,255,.02)}
+.traktir-qty-label{font-weight:800;color:#d8cda9;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
+.traktir-qty-control{display:flex;align-items:center;gap:14px}
+.traktir-qty-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(238,206,122,.35);background:rgba(255,255,255,.05);color:#f4df90;font-size:18px;font-weight:900;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center}
+.traktir-qty-btn:hover{background:rgba(244,223,144,.14)}
+.traktir-qty-value{min-width:28px;text-align:center;font-weight:900;font-size:16px;color:#fff}
+.traktir-total-row{display:flex;align-items:center;justify-content:space-between;border-radius:18px;padding:14px 16px;background:rgba(244,223,144,.08);border:1px solid rgba(244,223,144,.22)}
+.traktir-total-row span{color:#d8cda9;font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:.08em}
+.traktir-total-row strong{color:#f4df90;font-size:22px}
+.traktir-qris-result{background:#fff;border-radius:22px;padding:22px;text-align:center;color:#1a1a1a;margin-top:4px}
+.traktir-qris-result.hidden{display:none}
+.traktir-qris-result img{width:220px;height:220px;object-fit:contain;margin:0 auto 14px;display:block;border-radius:12px;border:1px solid #eee}
+.traktir-qris-amount{font-size:20px;font-weight:900;color:#111;margin-bottom:8px}
+.traktir-qris-note{color:#555;font-size:13px;line-height:1.5;margin:0 0 14px}
+.traktir-qris-result .traktir-qris-close{background:rgba(0,0,0,.06);color:#333;border:1px solid rgba(0,0,0,.12)}
+@media(max-width:640px){.traktir-qty-row{flex-direction:column;align-items:flex-start;gap:10px}}
+</style>
 <section class="section-shell compact-section" id="traktir-kamar">
 <div class="section-heading centered">
 <h2>Traktir Kamar</h2>
 <p>Dukungan sukarela untuk membantu operasional edukasi, konten, website, dan ruang diskusi Kamar Kajian Market.</p>
 </div>
 <div class="traktir-grid simple-traktir-grid">
-<article class="traktir-card simple-traktir-card">
+<article class="traktir-card simple-traktir-card traktir-card-v2">
 <span class="kamar-badge">Support Sukarela</span>
 <h3>Kirim Traktiran</h3>
 <p>Jika edukasi Kamar membantu proses belajar Anda, traktiran ini bisa menjadi bentuk apresiasi sederhana. Tidak wajib, bukan pembayaran sinyal, dan bukan jaminan profit.</p>
-<div class="traktir-actions-simple" id="traktirButtonRow">
-<a class="btn btn-primary" data-traktir-key="traktir_50k" href="#">Rp 50.000</a>
-<a class="btn btn-primary" data-traktir-key="traktir_100k" href="#">Rp 100.000</a>
-<a class="btn btn-primary" data-traktir-key="traktir_250k" href="#">Rp 250.000</a>
+<div class="traktir-denom-row" id="traktirDenomRow"></div>
+<div class="traktir-qty-row">
+<span class="traktir-qty-label">Jumlah</span>
+<div class="traktir-qty-control">
+<button aria-label="Kurangi jumlah" class="traktir-qty-btn" id="traktirQtyMinus" type="button">−</button>
+<span class="traktir-qty-value" id="traktirQtyValue">1</span>
+<button aria-label="Tambah jumlah" class="traktir-qty-btn" id="traktirQtyPlus" type="button">+</button>
+</div>
+</div>
+<div class="traktir-total-row">
+<span>Total Traktiran</span>
+<strong id="traktirTotalValue">Rp0</strong>
+</div>
+<div class="traktir-actions-simple">
+<button class="btn btn-primary" id="traktirShowQrisBtn" type="button">Tampilkan QRIS</button>
+</div>
+<div class="traktir-qris-result hidden" id="traktirQrisResult">
+<img alt="QRIS Traktir Kamar" id="traktirQrisImg" src=""/>
+<div class="traktir-qris-amount" id="traktirQrisAmount"></div>
+<p class="traktir-qris-note">Scan kode QRIS di atas menggunakan aplikasi e-wallet atau mobile banking Anda. Traktiran diterima langsung, tanpa perlu mendaftar akun.</p>
+<button class="btn btn-secondary traktir-qris-close" id="traktirQrisClose" type="button">Tutup</button>
 </div>
 </article>
 </div>
@@ -705,69 +745,97 @@
   });
 })();
 </script>
-<script id="kamar-traktir-payment-config">
+<script id="kamar-traktir-payment-config-v2">
 (function(){
-  async function readyClient(){
-    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
-    try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
-    return window.kamarSupabaseClient || null;
-  }
-  async function resolveProfileId(){
-    try{
-      const sess=JSON.parse(localStorage.getItem('kamarMemberSession')||'null');
-      if(!sess) return null;
-      const c=await readyClient();
-      if(!c) return null;
-      if(sess.id){
-        const r1=await c.from('member_profiles').select('id').eq('user_id',sess.id).maybeSingle();
-        if(!r1.error && r1.data) return r1.data.id;
-      }
-      if(sess.email){
-        const r2=await c.from('member_profiles').select('id').ilike('email',sess.email).limit(1);
-        if(!r2.error && r2.data && r2.data.length) return r2.data[0].id;
-      }
-    }catch(e){}
-    return null;
-  }
-  let busy=false;
-  async function createInvoice(productKey, btn){
-    if(busy) return;
-    busy=true;
-    const oldText=btn.textContent;
-    btn.textContent='Memproses...';
-    try{
-      const profileId=await resolveProfileId();
-      if(!profileId){
-        window.location.href='member.html';
-        return;
-      }
-      const cfg=window.KAMAR_CONFIG||window.KamarConfig||{};
-      const base=(cfg.supabaseUrl||cfg.SUPABASE_URL||'').replace(/\/$/,'');
-      const anonKey=cfg.supabaseAnonKey||cfg.SUPABASE_ANON_KEY||'';
-      const resp=await fetch(base+'/functions/v1/mayar-create-invoice',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},
-        body:JSON.stringify({profile_id:profileId,product_key:productKey,redirect_url:'https://www.kamarkajianmarket.com/dashboard.html'})
-      });
-      const data=await resp.json();
-      if(!resp.ok || !data.payment_link){
-        alert('Gagal membuat tagihan. Coba lagi nanti.');
-        return;
-      }
-      window.location.href=data.payment_link;
-    }catch(e){
-      alert('Gagal membuat tagihan. Coba lagi nanti.');
-    }finally{
-      busy=false;
-      btn.textContent=oldText;
-    }
-  }
-  document.querySelectorAll('[data-traktir-key]').forEach(function(btn){
-    btn.addEventListener('click',function(e){
-      e.preventDefault();
-      createInvoice(btn.getAttribute('data-traktir-key'), btn);
-    });
+var denoms = [];
+var selected = null;
+var qty = 1;
+var denomRow = document.getElementById("traktirDenomRow");
+var qtyValueEl = document.getElementById("traktirQtyValue");
+var totalValueEl = document.getElementById("traktirTotalValue");
+var showBtn = document.getElementById("traktirShowQrisBtn");
+var resultBox = document.getElementById("traktirQrisResult");
+var qrisImg = document.getElementById("traktirQrisImg");
+var qrisAmount = document.getElementById("traktirQrisAmount");
+var closeBtn = document.getElementById("traktirQrisClose");
+var minusBtn = document.getElementById("traktirQtyMinus");
+var plusBtn = document.getElementById("traktirQtyPlus");
+function fmtRp(n){ try{ return "Rp"+Number(n).toLocaleString("id-ID"); }catch(e){ return "Rp"+n; } }
+async function readyClient(){
+  try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+  try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+  return window.kamarSupabaseClient || null;
+}
+function renderDenoms(){
+  if(!denomRow) return;
+  denomRow.innerHTML = denoms.map(function(d, i){
+    return '<button type="button" class="traktir-denom-chip'+(i===selected?" active":"")+'" data-idx="'+i+'">'+fmtRp(d.amount)+'</button>';
+  }).join("");
+}
+function updateTotal(){
+  if(selected==null || !denoms[selected]){ if(totalValueEl) totalValueEl.textContent="Rp0"; return; }
+  var total = denoms[selected].amount * qty;
+  if(totalValueEl) totalValueEl.textContent = fmtRp(total);
+}
+async function loadDenoms(){
+  try{
+    var c = await readyClient();
+    if(!c) throw new Error("no client");
+    var res = await c.from("payment_products").select("product_key,title,base_price,promo_price").eq("product_type","custom").eq("is_active",true).order("sort_order",{ascending:true});
+    if(res.error) throw res.error;
+    denoms = (res.data||[]).map(function(p){ return { key:p.product_key, amount: p.promo_price!=null?Number(p.promo_price):Number(p.base_price) }; });
+  }catch(e){ denoms = []; }
+  if(denoms.length){ selected = 0; }
+  renderDenoms();
+  updateTotal();
+}
+if(denomRow){
+  denomRow.addEventListener("click", function(e){
+    var btn = e.target.closest("[data-idx]");
+    if(!btn) return;
+    selected = Number(btn.getAttribute("data-idx"));
+    qty = 1;
+    if(qtyValueEl) qtyValueEl.textContent = String(qty);
+    renderDenoms();
+    updateTotal();
   });
+}
+if(minusBtn) minusBtn.addEventListener("click", function(){ qty = Math.max(1, qty-1); if(qtyValueEl) qtyValueEl.textContent=String(qty); updateTotal(); });
+if(plusBtn) plusBtn.addEventListener("click", function(){ qty = Math.min(999, qty+1); if(qtyValueEl) qtyValueEl.textContent=String(qty); updateTotal(); });
+if(showBtn){
+  showBtn.addEventListener("click", async function(){
+    if(selected==null || !denoms[selected]){ alert("Pilih nominal traktiran terlebih dahulu."); return; }
+    var total = denoms[selected].amount * qty;
+    showBtn.disabled = true;
+    var oldText = showBtn.textContent;
+    showBtn.textContent = "Memuat QRIS...";
+    try{
+      var cfg = window.KAMAR_CONFIG || window.KamarConfig || {};
+      var base = (cfg.supabaseUrl||cfg.SUPABASE_URL||"").replace(/\/$/,"");
+      var anonKey = cfg.supabaseAnonKey||cfg.SUPABASE_ANON_KEY||"";
+      var resp = await fetch(base+"/functions/v1/mayar-create-qris",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","apikey":anonKey,"Authorization":"Bearer "+anonKey},
+        body: JSON.stringify({amount: total})
+      });
+      var data = await resp.json();
+      if(!resp.ok || !data.qr_url){ alert("Gagal membuat QRIS: "+(data.error||"Coba lagi nanti.")); return; }
+      if(qrisImg) qrisImg.src = data.qr_url;
+      if(qrisAmount) qrisAmount.textContent = fmtRp(data.amount);
+      if(resultBox) resultBox.classList.remove("hidden");
+      if(resultBox) resultBox.scrollIntoView({behavior:"smooth", block:"center"});
+    }catch(e){
+      alert("Gagal membuat QRIS. Coba lagi.");
+    }finally{
+      showBtn.disabled = false;
+      showBtn.textContent = oldText;
+    }
+  });
+}
+if(closeBtn){
+  closeBtn.addEventListener("click", function(){ if(resultBox) resultBox.classList.add("hidden"); });
+}
+loadDenoms();
 })();
 </script>
 <script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">

@@ -116,6 +116,30 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(!isFinite(f)) return '-';
     return f.toLocaleString('id-ID', { maximumFractionDigits:(d==null?2:d), minimumFractionDigits:0 });
   }
+  function pipsOf(s){
+    // Angka pip yang ditampilkan ke member: kalau signal sudah benar-benar selesai
+    // (INVALID), pakai hasil final (result_point). Selama masih berjalan (FRESH/ACTIVE),
+    // pakai rekor tertinggi yang pernah dicapai (max_running_point) supaya update live
+    // mengikuti tiap event TP Hit, tidak menunggu signal ditutup.
+    if(s.status==='INVALID' && s.result_point!=null) return Number(s.result_point);
+    if(s.max_running_point!=null) return Number(s.max_running_point);
+    return s.running_point!=null ? Number(s.running_point) : null;
+  }
+  function hasilAkhirInfo(s){
+    var farthest = s.farthest_tp_level || 0;
+    var pips = pipsOf(s);
+    var pipsText = pips!=null ? (pips>=0?'+':'')+fmtNum(pips,1)+' pt' : '';
+    if(s.status==='INVALID' && farthest===0){
+      return { text: 'Kena Cut Loss' + (pipsText?' ('+pipsText+')':''), cls:'neg' };
+    }
+    if(farthest>0){
+      return { text: 'TP'+farthest+' tercapai' + (pipsText?' ('+pipsText+')':''), cls:'pos' };
+    }
+    if(s.status==='FRESH'){
+      return { text: 'Belum ada, signal belum aktif', cls:'' };
+    }
+    return { text: 'Belum ada, signal masih berjalan', cls:'' };
+  }
   function wibNowBoundaries(){
     // Hitung batas WIB (UTC+7) hari ini / minggu ini (Senin-Minggu) / bulan ini,
     // dikonversi balik ke UTC ISO untuk query created_at.
@@ -314,7 +338,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     renderApp();
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
-    var q = state.client.from('signals').select('id_zona,pair,timeframe,skenario,status,display_status,farthest_tp_level,running_point,result_point,created_at,updated_at').eq('display_status', L.status);
+    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at').eq('display_status', L.status);
     if(L.search){
       var s = L.search.replace(/[%,]/g,'');
       q = q.or('pair.ilike.%'+s+'%,id_zona.ilike.%'+s+'%,timeframe.ilike.%'+s+'%');
@@ -328,7 +352,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       q = q.gte('created_at', since);
     }
     if(L.sort==='terlama') q = q.order('created_at', { ascending:true });
-    else if(L.sort==='pips') q = q.order('result_point', { ascending:false, nullsFirst:false }).order('running_point', { ascending:false, nullsFirst:false });
+    else if(L.sort==='pips') q = q.order('result_point', { ascending:false, nullsFirst:false }).order('max_running_point', { ascending:false, nullsFirst:false });
     else if(L.sort==='update') q = q.order('updated_at', { ascending:false });
     else q = q.order('created_at', { ascending:false });
     q = q.range(from, to);
@@ -547,13 +571,18 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   function rowHtml(s){
     var unread = !state.readsMap[s.id_zona];
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
-    var pips = s.result_point!=null ? s.result_point : s.running_point;
-    var pipsTxt = pips!=null ? (pips>=0?'+':'')+fmtNum(pips,1)+' pt' : '';
-    var info = (s.timeframe||'-') + (pipsTxt?' • '+pipsTxt:'');
+    var infoParts = [];
+    if(s.jenis_zona) infoParts.push(s.jenis_zona);
+    if(s.area_low!=null && s.area_high!=null) infoParts.push('Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high));
+    if(s.display_status!=='fresh'){
+      var pips = pipsOf(s);
+      if(pips!=null) infoParts.push((pips>=0?'+':'')+fmtNum(pips,1)+' pt');
+    }
+    var info = infoParts.join(' • ');
     return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'">'+
       '<div class="ksig-row-main">'+
-        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span></div>'+
-        '<div class="ksig-row-info">'+esc(info)+'</div>'+
+        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span></div>'+
+        (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
       '<div class="ksig-row-chev">›</div>'+
@@ -690,17 +719,19 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(!D.signal){ body.innerHTML = '<div class="ksig-empty">Signal tidak ditemukan.</div>'; return; }
     var s = D.signal;
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
+    var ha = hasilAkhirInfo(s);
+    var maxRun = s.max_running_point!=null ? fmtNum(s.max_running_point,1)+' pt' : '-';
     var rows = [
-      ['ID Zona', s.id_zona],
-      ['Timeframe', s.timeframe],
+      ['Signal', (s.skenario||'-') + ' • ' + (s.timeframe||'-')],
       ['Jenis Zona', s.jenis_zona],
-      ['Area', fmtNum(s.area_low)+' – '+fmtNum(s.area_high)],
-      ['TP1 / TP2 / TP3', [s.tp1,s.tp2,s.tp3].map(function(v){return v!=null?fmtNum(v):'-';}).join(' / ')],
-      ['Invalidasi', s.invalidasi!=null?fmtNum(s.invalidasi):'-'],
-      ['Running Point', s.running_point!=null?fmtNum(s.running_point,1):'-'],
-      ['Hasil Akhir', s.result_point!=null?fmtNum(s.result_point,1):'-'],
+      ['Area', (s.area_low!=null && s.area_high!=null) ? fmtNum(s.area_low)+' – '+fmtNum(s.area_high) : '-'],
+      ['Take Profit', [s.tp1,s.tp2,s.tp3].map(function(v){return v!=null?fmtNum(v):'-';}).join(' / ')],
+      ['Cut Loss', s.invalidasi!=null?fmtNum(s.invalidasi):'-'],
+      ['Running Profit', maxRun],
+      ['Hasil Akhir', ha.text],
       ['Dibuat', fmtWIB(s.created_at)],
-      ['Update Terakhir', fmtWIB(s.updated_at)]
+      ['Update Terakhir', fmtWIB(s.updated_at)],
+      ['ID Zona', s.id_zona]
     ];
     var html =
       '<div class="ksig-detail-head">'+

@@ -50,6 +50,14 @@ html,body{ height:100%; }
 .ksig-live.warn{ color:#8a5a12; }
 .ksig-live.off .ksig-live-dot{ background:#8a2b2b; }
 .ksig-live.off{ color:#8a2b2b; }
+.ksig-install-btn{
+  width:32px; height:32px; border-radius:999px; border:1px solid var(--km-line);
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:var(--km-ink); flex:0 0 auto; cursor:pointer; padding:0;
+}
+.ksig-install-btn:active{ transform:translateY(1px); }
+.ksig-login-install{ display:block; text-align:center; margin-top:14px; font-size:12.5px; font-weight:800; color:var(--km-muted); text-decoration:none; cursor:pointer; }
+.ksig-login-install:hover{ color:var(--km-ink); }
 
 .ksig-main{ flex:1 1 auto; padding:12px 14px calc(env(safe-area-inset-bottom,0px) + 24px); max-width:640px; width:100%; margin:0 auto; }
 

@@ -292,7 +292,8 @@
     support_request: 'Permintaan Bantuan',
     manual_note: 'Catatan Admin',
     license_request: 'Pengajuan Lisensi',
-    affiliate_payout_change: 'Perubahan Rekening Affiliate'
+    affiliate_payout_change: 'Perubahan Rekening Affiliate',
+    ib_kamar_activation: 'Pengajuan IB Kamar'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
@@ -371,6 +372,19 @@
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'License disetujui.':'Pengajuan license ditolak.');
   }
+  async function actionIbKamarApplication(todo, approve){
+    var payload = todo.action_payload || {};
+    var appId = payload.application_id;
+    if(appId){
+      var c = await ready();
+      if(c){
+        var res = await c.rpc('admin_review_ib_kamar_application', { p_application_id: appId, p_action: approve?'approve':'reject' });
+        if(res.error) throw res.error;
+      }
+    }
+    await markTodoDone(todo.id, approve?'done':'rejected');
+    toast(approve?'IB Kamar disetujui, akses Kamar Signal diaktifkan.':'Pengajuan IB Kamar ditolak.');
+  }
   async function actionAffiliatePayoutChange(todo, approve){
     var payload = todo.action_payload || {};
     if(approve && payload.affiliate_id){
@@ -416,6 +430,8 @@
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'affiliate_payout_change'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'ib_kamar_activation'){
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
       actionsHtml = reviewBtn+'<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
@@ -492,6 +508,9 @@
     } else if(todo.todo_type === 'affiliate_payout_change'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'ib_kamar_activation'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'new_registration'){
       actions += ' <button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
@@ -553,6 +572,8 @@
       else if(action === 'reject_license') await actionLicenseRequest(todo, false);
       else if(action === 'approve_affiliate_payout') await actionAffiliatePayoutChange(todo, true);
       else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
+      else if(action === 'approve_ib_kamar') await actionIbKamarApplication(todo, true);
+      else if(action === 'reject_ib_kamar') await actionIbKamarApplication(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);
       await renderActionCenter();
     }catch(err){

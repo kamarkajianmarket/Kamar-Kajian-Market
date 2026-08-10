@@ -29,6 +29,7 @@ body{background:#070707;color:var(--text)}
 <meta name="kamar-step" content="46-luxury-atelier-formation"/>
 <link href="assets/css/kamar-mobile-shell.css" rel="stylesheet"/>
 </head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><details class="sidebar-group" open><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Signal 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main"><div class="split-card kamar-title-card"><h1>Kamar Signal</h1></div>
+<section class="split-card hidden" id="signalStatusCard"><span class="mini-label" id="signalStatusLabel">Status Aktivasi</span><h2 id="signalStatusTitle">Memuat status...</h2><p id="signalStatusText"></p><div class="button-row" id="signalStatusActions"></div></section>
 <section class="split-card"><div class="facility-guide-box">Petunjuk: bagian ini otomatis menampilkan Download materi dan Tools sesuai status aktivasi Kamar Signal kamu. Kalau belum aktif, klik tombol Aktifkan Fasilitas di bawah.</div><div class="ksig-live-cta" style="margin:0 0 16px"><a class="btn" href="/signal/">Buka Kamar Signal (Live) →</a></div><div class="kamar-empty" id="memberContentList">Memuat konten Kamar Signal...</div></section>
 </section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
@@ -46,7 +47,63 @@ body{background:#070707;color:var(--text)}
   });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script id="kamar-signal-status-card">
+(function(){
+  function esc(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+  async function getClient(){
+    if(window.KamarSupabase && window.KamarSupabase.ready){
+      try{ var c = await window.KamarSupabase.ready(); if(c) return c; }catch(e){}
+    }
+    return (window.KamarSupabase && window.KamarSupabase.getClient) ? window.KamarSupabase.getClient() : null;
+  }
+  function daysLeft(expiresAt){
+    if(!expiresAt) return null;
+    var ms = new Date(expiresAt).getTime() - Date.now();
+    return Math.ceil(ms/86400000);
+  }
+  async function init(){
+    var card = document.getElementById('signalStatusCard');
+    if(!card) return;
+    var client = await getClient();
+    if(!client) return;
+    var sessionRes = await client.auth.getSession();
+    var user = sessionRes && sessionRes.data && sessionRes.data.session && sessionRes.data.session.user;
+    if(!user) return;
+    try{
+      var prof = await client.from('member_profiles').select('id').eq('user_id', user.id).maybeSingle();
+      var profId = prof && prof.data && prof.data.id;
+      if(!profId) return;
+      var acc = await client.from('member_access').select('access_kamar_study,expires_kamar_study,activation_source').eq('profile_id', profId).maybeSingle();
+      var row = acc && acc.data;
+      var title = document.getElementById('signalStatusTitle');
+      var text = document.getElementById('signalStatusText');
+      var actions = document.getElementById('signalStatusActions');
+      var sourceLabel = row && row.activation_source === 'ib_kamar' ? 'IB Kamar' : (row && row.activation_source === 'paid' ? 'Berbayar' : null);
+      if(row && row.access_kamar_study){
+        var dl = daysLeft(row.expires_kamar_study);
+        if(dl === null){
+          if(title) title.textContent = 'Aktif — Lifetime';
+          if(text) text.textContent = sourceLabel ? ('Sumber aktivasi: '+sourceLabel+'.') : '';
+        } else if(dl < 0){
+          if(title) title.textContent = 'Akses Berakhir';
+          if(text) text.textContent = 'Masa aktif Kamar Signal kamu sudah berakhir. Aktifkan kembali untuk lanjut akses.';
+          if(actions) actions.innerHTML = '<a class="btn" href="member-signal-activate-select.html">Aktifkan Kembali</a>';
+        } else {
+          if(title) title.textContent = dl===0 ? 'Berakhir Hari Ini' : ('Sisa '+dl+' Hari Lagi');
+          if(text) text.textContent = (sourceLabel ? ('Sumber aktivasi: '+sourceLabel+'. ') : '') + (dl<=7 ? 'Segera perpanjang supaya akses tidak terputus.' : 'Akses Kamar Signal kamu masih aktif.');
+          if(dl<=7 && actions) actions.innerHTML = '<a class="btn" href="member-signal-activate-select.html">Perpanjang Sekarang</a>';
+        }
+      } else {
+        if(title) title.textContent = 'Belum Aktif';
+        if(text) text.textContent = 'Aktifkan Kamar Signal lewat Berbayar atau IB Kamar untuk mulai akses sinyal live.';
+        if(actions) actions.innerHTML = '<a class="btn" href="member-signal-activate-select.html">Aktifkan Kamar Signal</a>';
+      }
+      card.classList.remove('hidden');
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script><script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
 
 (function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();
 

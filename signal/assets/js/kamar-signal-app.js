@@ -239,7 +239,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         if(res.error) throw res.error;
         state.profile = res.data || null;
         if(!state.profile){ state.approved = false; renderApp(); return null; }
-        return state.client.from('member_access').select('access_kamar_study,locked_by_expired,expires_kamar_study').eq('profile_id', state.profile.id).maybeSingle();
+        return state.client.from('member_access').select('access_kamar_study,locked_by_expired,expires_kamar_study,activation_source').eq('profile_id', state.profile.id).maybeSingle();
       })
       .then(function(res){
         if(!res) return;
@@ -635,6 +635,15 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     loss:   { label:'Signal Loss',   desc:'Signal selesai loss' }
   };
 
+  function signalStatusBannerHtml(){
+    var a = state.access;
+    if(!a || !a.access_kamar_study || !a.expires_kamar_study) return '';
+    var dl = Math.ceil((new Date(a.expires_kamar_study).getTime() - Date.now())/86400000);
+    if(dl > 7) return '';
+    var cls = dl < 0 ? 'ksig-status-banner off' : (dl <= 3 ? 'ksig-status-banner warn-strong' : 'ksig-status-banner warn');
+    var txt = dl < 0 ? 'Akses Kamar Signal sudah berakhir.' : (dl === 0 ? 'Akses berakhir hari ini.' : ('Sisa '+dl+' hari akses Kamar Signal.'));
+    return '<a class="'+cls+'" href="/member-signal-activate-select.html">'+esc(txt)+' Perpanjang &rarr;</a>';
+  }
   function dashboardHeader(animCls){
     var updatedTxt = state.lastUpdate ? 'Terakhir Diperbarui • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…';
     var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
@@ -643,6 +652,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div class="ksig-header-titles">'+
           '<div class="ksig-header-title">Kamar Signal</div>'+
           '<div class="ksig-header-sub">Pantau signal dan perkembangannya</div>'+
+          signalStatusBannerHtml()+
         '</div>'+
         '<div class="ksig-header-meta">'+
           '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>'+

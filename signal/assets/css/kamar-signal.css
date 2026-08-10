@@ -8,6 +8,11 @@ microinteraction subtle, aman untuk smartphone (safe-area, sticky toolbar tipis)
 ========================================================================== */
 
 html,body{ height:100%; }
+:root{
+  --ksig-t-hover:200ms; --ksig-t-press:140ms; --ksig-t-tab:220ms;
+  --ksig-t-badge:220ms; --ksig-t-entrance:300ms;
+  --ksig-notif-red:#e5484d;
+}
 .ksig-body{
   margin:0;
   background:
@@ -51,10 +56,18 @@ html,body{ height:100%; }
 .ksig-appbar{
   position:sticky; top:0; z-index:40;
   padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;
-  background:rgba(249,245,237,.92);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--km-line);
+  background:rgba(249,245,237,.78);
+  backdrop-filter:none;
+  border-bottom:1px solid transparent;
   min-height:52px;
+  transition:background .22s ease, backdrop-filter .22s ease, border-color .22s ease, box-shadow .22s ease, padding .22s ease;
+}
+.ksig-appbar.scrolled{
+  background:rgba(249,245,237,.86);
+  backdrop-filter:blur(16px) saturate(1.4);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom-color:var(--km-line);
+  box-shadow:0 6px 20px rgba(17,20,23,.05);
 }
 .ksig-appbar-inner{ display:flex; align-items:center; gap:10px; width:100%; max-width:640px; margin:0 auto; }
 .ksig-appbar-back{
@@ -151,9 +164,19 @@ html,body{ height:100%; }
 .ksig-header{
   position:sticky; top:0; z-index:40;
   padding:calc(env(safe-area-inset-top,0px) + 14px) 14px 14px;
-  background:rgba(249,245,237,.92);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--km-line);
+  background:rgba(249,245,237,.78);
+  backdrop-filter:none;
+  border-bottom:1px solid transparent;
+  transition:background .22s ease, backdrop-filter .22s ease, border-color .22s ease, box-shadow .22s ease, padding .22s ease;
+}
+.ksig-header.scrolled{
+  padding-top:calc(env(safe-area-inset-top,0px) + 10px);
+  padding-bottom:10px;
+  background:rgba(249,245,237,.86);
+  backdrop-filter:blur(16px) saturate(1.4);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom-color:var(--km-line);
+  box-shadow:0 6px 20px rgba(17,20,23,.05);
 }
 .ksig-header-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; width:100%; max-width:640px; margin:0 auto; flex-wrap:wrap; }
 .ksig-header-title{ font-size:19px; font-weight:950; letter-spacing:-.02em; }
@@ -181,13 +204,34 @@ html,body{ height:100%; }
   background:#fff; border:1px solid var(--km-line); border-radius:20px;
   box-shadow:0 8px 24px rgba(17,20,23,.05); padding:15px 16px;
   display:flex; flex-direction:column; gap:3px; cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  transition:transform var(--ksig-t-hover) ease, box-shadow var(--ksig-t-hover) ease, border-color var(--ksig-t-hover) ease;
+  position:relative; overflow:hidden;
 }
 .ksig-card-top{ display:flex; align-items:center; justify-content:space-between; }
-.ksig-card-arrow{ font-size:12.5px; color:var(--km-muted); transition:transform .2s ease, color .2s ease; }
+.ksig-card-top-right{ display:flex; align-items:center; gap:7px; }
+.ksig-card-arrow{ font-size:12.5px; color:var(--km-muted); transition:transform var(--ksig-t-hover) ease, color var(--ksig-t-hover) ease; }
 .ksig-card:hover{ transform:translateY(-3px); box-shadow:0 16px 36px rgba(17,20,23,.10); border-color:rgba(184,138,61,.38); }
 .ksig-card:hover .ksig-card-arrow{ transform:translate(2px,-2px); color:#8a5a12; }
-.ksig-card:active{ transform:translateY(-1px) scale(.988); }
+.ksig-card:active{ transform:translateY(-1px) scale(.988); transition-duration:var(--ksig-t-press); }
+
+/* Extremely subtle cursor-aware highlight, desktop only (set via JS --ksig-px/--ksig-py) */
+@media (hover:hover) and (pointer:fine){
+  .ksig-pointer-light::after{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:0;
+    background:radial-gradient(220px circle at var(--ksig-px,50%) var(--ksig-py,50%), rgba(255,255,255,.55), transparent 62%);
+    transition:opacity .25s ease;
+  }
+  .ksig-pointer-light:hover::after{ opacity:.5; }
+}
+
+/* Unread notification badge — distinct "needs attention" red, separate from Loss semantic red */
+.ksig-card-badge{
+  display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px;
+  padding:0 5px; border-radius:999px; background:var(--ksig-notif-red); color:#fff;
+  font-size:10.5px; font-weight:950; line-height:1; letter-spacing:0;
+}
+.ksig-badge-pop{ animation:ksigBadgePop var(--ksig-t-badge) ease both; }
+@keyframes ksigBadgePop{ from{ opacity:0; transform:scale(.85); } to{ opacity:1; transform:scale(1); } }
 .ksig-card-label{ font-size:11.5px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; color:var(--km-muted); }
 .ksig-card-count{ font-size:29px; font-weight:950; letter-spacing:-.03em; color:var(--km-ink); line-height:1.15; }
 .ksig-card-desc{ font-size:11.5px; color:var(--km-muted); font-weight:700; }
@@ -221,6 +265,10 @@ html,body{ height:100%; }
 .ksig-recap-tf-block:last-child{ border-bottom:none; }
 .ksig-recap-tf-heading{ font-size:11px; font-weight:950; letter-spacing:.06em; text-transform:uppercase; color:var(--km-muted); margin-bottom:4px; }
 .ksig-recap-period{ font-size:11px; color:var(--km-muted); margin-top:12px; padding-top:12px; border-top:1px solid var(--km-line); }
+.ksig-recap-empty{ text-align:center; padding:22px 12px; }
+.ksig-recap-empty-icon{ font-size:15px; color:#8a5a12; margin-bottom:6px; }
+.ksig-recap-empty-title{ font-weight:900; color:var(--km-ink); font-size:13px; margin-bottom:3px; }
+.ksig-recap-empty-desc{ font-size:11.5px; color:var(--km-muted); line-height:1.5; max-width:280px; margin:0 auto; }
 
 /* ---------- Activity card ---------- */
 .ksig-activity-card{ background:#fff; border:1px solid var(--km-line); border-radius:var(--km-radius-lg); box-shadow:var(--km-shadow); padding:8px 14px; }
@@ -259,6 +307,19 @@ html,body{ height:100%; }
 .ksig-tool-btn.on{ border-color:var(--km-gold); color:#8a5a12; background:rgba(184,138,61,.10); }
 .ksig-tool-dot{ position:absolute; top:5px; right:5px; width:7px; height:7px; border-radius:999px; background:#c43c3c; }
 
+/* ---------- Unread summary bar (compact, per category) ---------- */
+.ksig-unread-bar{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:6px 2px 10px; font-size:12px; font-weight:800; color:var(--km-muted);
+}
+.ksig-mark-all-btn{
+  border:none; background:none; padding:0; margin:0; cursor:pointer;
+  font-size:11.5px; font-weight:900; color:#8a5a12; text-decoration:none;
+  transition:opacity .18s ease;
+}
+.ksig-mark-all-btn:hover{ opacity:.72; }
+.ksig-mark-all-btn:disabled{ opacity:.4; cursor:default; }
+
 /* ---------- Signal list rows ---------- */
 .ksig-list{ display:flex; flex-direction:column; gap:8px; margin-top:4px; }
 .ksig-row{
@@ -269,7 +330,14 @@ html,body{ height:100%; }
 .ksig-row:hover{ border-color:rgba(184,138,61,.35); box-shadow:0 8px 20px rgba(17,20,23,.06); }
 .ksig-row:hover .ksig-row-chev{ transform:translateX(2px); color:#8a5a12; }
 .ksig-row:active{ transform:scale(.99); }
-.ksig-row-unread::before{ content:""; position:absolute; left:4px; top:50%; transform:translateY(-50%); width:6px; height:6px; border-radius:999px; background:#0e5f54; }
+.ksig-row-unread{ background:rgba(184,138,61,.045); }
+.ksig-row-unread:hover{ background:rgba(184,138,61,.075); }
+.ksig-row-unread .ksig-row-symbol{ font-weight:1000; }
+.ksig-new-badge{
+  display:inline-flex; align-items:center; padding:1px 7px; border-radius:999px;
+  background:var(--ksig-notif-red); color:#fff; font-size:9.5px; font-weight:950;
+  letter-spacing:.04em; line-height:1.6; margin-left:auto;
+}
 .ksig-row-main{ flex:1; min-width:0; }
 .ksig-row-top{ display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
 .ksig-row-symbol{ font-weight:950; font-size:13.5px; }

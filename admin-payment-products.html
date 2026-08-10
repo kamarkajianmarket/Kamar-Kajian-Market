@@ -76,7 +76,7 @@ return ''+
 '<label class="field"><span>Harga Normal (Rp)</span><input type="number" min="0" step="1000" name="base_price" value="'+(p.base_price!=null?p.base_price:'')+'" placeholder="Contoh: 3150000" required></label>'+
 '<label class="field"><span>Harga Promo (Rp)</span><input type="number" min="0" step="1000" name="promo_price" value="'+(p.promo_price!=null?p.promo_price:'')+'" placeholder="Kosongkan jika sama dengan harga normal"></label>'+
 '<label class="field"><span>Catatan Diskon (opsional)</span><input type="text" name="discount_note" value="'+esc(p.discount_note||'')+'" placeholder="Contoh: Hemat Rp550.000"></label>'+
-'<label class="field full"><span>Link PDF Aturan (opsional)</span><input type="url" name="detail_pdf_url" value='+esc(p.detail_pdf_url||'')+' placeholder="https://..."></label>'+
+'<label class="field full"><span>Link PDF Aturan (opsional)</span><input type="url" name="detail_pdf_url" value="'+esc(p.detail_pdf_url||'')+'" placeholder="https://..."></label>'+
 '<label class="field full"><span>Deskripsi Singkat (opsional)</span><input type="text" name="description" value="'+esc(p.description||'')+'" placeholder="Keterangan singkat untuk member"></label>'+
 '</div>'+
 '<div class="button-row">'+

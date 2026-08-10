@@ -25,10 +25,13 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     approved: false,
     route: { view: 'dashboard' },
     counts: { fresh:0, aktif:0, profit:0, loss:0 },
+    unreadCounts: { fresh:0, aktif:0, profit:0, loss:0 },
+    badgeJustChanged: { fresh:false, aktif:false, profit:false, loss:false },
     lastUpdate: null,
-    readsMap: {},
+    readsMap: {}, // id_zona -> ISO timestamp member last opened detail signal itu
+    readsLoaded: false,
     realtimeStatus: 'off', // off | connecting | on | warn
-    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'' } },
+    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0 },
     recap: { type:'DAILY', rows:[], loaded:false, loading:false },
     activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
@@ -171,6 +174,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     };
   }
   function navigate(path, replace){
+    if(state.route.view === 'list') state.list.scrollY = window.scrollY;
     if(replace) history.replaceState({}, '', path);
     else history.pushState({}, '', path);
     routeFromLocation();
@@ -314,32 +318,79 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   window.addEventListener('offline', function(){ state.realtimeStatus = 'off'; updateLiveDot(); });
 
   /* ---------------- data layer ---------------- */
+  // Unread adalah PERSONAL STATE PER MEMBER (bukan status signal). Signal dianggap
+  // "belum dibaca" kalau member belum pernah membuka detailnya, ATAU signal tersebut
+  // mendapat perkembangan baru (signals.updated_at) setelah terakhir kali member
+  // membuka detailnya (signal_member_reads.last_seen_at). Menghitung SIGNAL, bukan event.
+  function isUnread(id_zona, updatedAt){
+    if(!updatedAt) return false;
+    var seen = state.readsMap[id_zona];
+    if(!seen) return true;
+    var seenMs = new Date(seen).getTime();
+    var updMs = new Date(updatedAt).getTime();
+    if(!isFinite(seenMs) || !isFinite(updMs)) return false;
+    return seenMs < updMs;
+  }
+
   function refreshCounts(){
     if(!state.approved) return Promise.resolve();
     var statuses = ['fresh','aktif','profit','loss'];
     return Promise.all(statuses.map(function(s){
-      return state.client.from('signals').select('id', { count:'exact', head:true }).eq('display_status', s);
+      return state.client.from('signals').select('id_zona,updated_at').eq('display_status', s);
     })).then(function(results){
-      results.forEach(function(r,i){ state.counts[statuses[i]] = (r && r.count) || 0; });
+      var prev = state.unreadCounts;
+      var next = {};
+      var changed = {};
+      results.forEach(function(r,i){
+        var st = statuses[i];
+        var rows = (r && r.data) || [];
+        state.counts[st] = rows.length;
+        var u = state.readsLoaded ? rows.filter(function(row){ return isUnread(row.id_zona, row.updated_at); }).length : (prev[st]||0);
+        next[st] = u;
+        changed[st] = state.readsLoaded && u !== (prev[st]||0);
+      });
+      state.unreadCounts = next;
+      state.badgeJustChanged = changed;
       state.lastUpdate = new Date().toISOString();
       if(state.route.view === 'dashboard') renderApp();
     }).catch(function(){});
   }
 
   function loadReadsMap(){
-    if(!state.profile) return;
-    state.client.from('signal_member_reads').select('id_zona').eq('profile_id', state.profile.id).then(function(res){
+    if(!state.profile) return Promise.resolve();
+    return state.client.from('signal_member_reads').select('id_zona,last_seen_at').eq('profile_id', state.profile.id).then(function(res){
       if(res.error) return;
       var map = {};
-      (res.data||[]).forEach(function(r){ map[r.id_zona] = true; });
+      (res.data||[]).forEach(function(r){ map[r.id_zona] = r.last_seen_at; });
       state.readsMap = map;
-      if(state.route.view === 'list') renderApp();
+      state.readsLoaded = true;
+      refreshCounts();
+      if(state.route.view === 'list' || state.route.view === 'dashboard') renderApp();
     }).catch(function(){});
   }
   function markRead(id_zona){
     if(!state.profile || !id_zona) return;
-    state.readsMap[id_zona] = true;
-    state.client.from('signal_member_reads').upsert({ profile_id: state.profile.id, id_zona: id_zona, last_seen_at: new Date().toISOString() }, { onConflict:'profile_id,id_zona' }).then(function(){}).catch(function(){});
+    var nowIso = new Date().toISOString();
+    state.readsMap[id_zona] = nowIso;
+    state.client.from('signal_member_reads').upsert({ profile_id: state.profile.id, id_zona: id_zona, last_seen_at: nowIso }, { onConflict:'profile_id,id_zona' }).then(function(){
+      refreshCounts();
+    }).catch(function(){});
+  }
+  function markAllRead(status){
+    if(!state.profile) return Promise.resolve();
+    return state.client.from('signals').select('id_zona,updated_at').eq('display_status', status).then(function(res){
+      if(res.error) throw res.error;
+      var nowIso = new Date().toISOString();
+      var rows = (res.data||[]).filter(function(row){ return isUnread(row.id_zona, row.updated_at); });
+      if(!rows.length) return;
+      var upsertRows = rows.map(function(row){ return { profile_id: state.profile.id, id_zona: row.id_zona, last_seen_at: nowIso }; });
+      return state.client.from('signal_member_reads').upsert(upsertRows, { onConflict:'profile_id,id_zona' }).then(function(){
+        rows.forEach(function(row){ state.readsMap[row.id_zona] = nowIso; });
+        return refreshCounts();
+      });
+    }).then(function(){
+      renderApp();
+    }).catch(function(){});
   }
 
   function loadList(reset){
@@ -348,6 +399,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(L.loading || (!L.hasMore && !reset)) return Promise.resolve();
     L.loading = true;
     renderApp();
+    var unreadOnly = !!L.filters.unread;
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
     var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at').eq('display_status', L.status);
@@ -367,12 +419,16 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     else if(L.sort==='pips') q = q.order('result_point', { ascending:false, nullsFirst:false }).order('max_running_point', { ascending:false, nullsFirst:false });
     else if(L.sort==='update') q = q.order('updated_at', { ascending:false });
     else q = q.order('created_at', { ascending:false });
-    q = q.range(from, to);
+    // Filter "Belum Dibaca" dihitung di sisi client dari signal_member_reads (bukan kolom
+    // di tabel signals), jadi kalau filter ini aktif kita ambil seluruh baris status ini
+    // (jumlahnya kecil per kategori) lalu saring di client, tanpa pagination server-side.
+    if(unreadOnly) q = q.limit(200); else q = q.range(from, to);
     return q.then(function(res){
       if(res.error) throw res.error;
       var rows = res.data || [];
-      L.items = reset ? rows : L.items.concat(rows);
-      L.hasMore = rows.length === L.pageSize;
+      if(unreadOnly) rows = rows.filter(function(r){ return isUnread(r.id_zona, r.updated_at); });
+      L.items = (reset || unreadOnly) ? rows : L.items.concat(rows);
+      L.hasMore = unreadOnly ? false : rows.length === L.pageSize;
       L.page += 1;
       L.loading = false;
       L.error = null;
@@ -380,7 +436,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       L.loadedForStatus = L.status;
       renderApp();
     }).catch(function(err){
-      L.loading = false; L.error = err && err.message || 'Data gagal dimuat.';
+      L.loading = false; L.error = 'Data belum dapat dimuat.';
       renderApp();
     });
   }
@@ -407,7 +463,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         R.loaded = true;
         renderApp();
       }).catch(function(err){
-        R.loading = false; R.error = err && err.message || 'Rekap gagal dimuat.';
+        R.loading = false; R.error = 'Data belum dapat dimuat.';
         renderApp();
       });
   }
@@ -416,7 +472,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var A = state.activity;
     A.loading = true; A.error = null;
     return state.client.from('signal_events')
-      .select('id,id_zona,event_type,event_title,event_description,tp_level,created_at,signals(pair,timeframe,skenario,display_status,jenis_zona,area_low,area_high)')
+      .select('id,id_zona,event_type,event_title,event_description,tp_level,created_at,signals(pair,timeframe,skenario,display_status,jenis_zona,area_low,area_high,updated_at)')
       .order('created_at', { ascending:false })
       .limit(5)
       .then(function(res){
@@ -426,7 +482,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         A.loaded = true;
         renderApp();
       }).catch(function(err){
-        A.loading = false; A.error = err && err.message || 'Aktivitas gagal dimuat.';
+        A.loading = false; A.error = 'Data belum dapat dimuat.';
         renderApp();
       });
   }
@@ -449,7 +505,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         markRead(id_zona);
       })
       .catch(function(err){
-        D.loading = false; D.error = err && err.message || 'Signal gagal dimuat.';
+        D.loading = false; D.error = 'Data belum dapat dimuat.';
         renderApp();
       });
   }
@@ -461,6 +517,36 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       dot.className = 'ksig-live ' + (state.realtimeStatus==='on'?'on':state.realtimeStatus==='connecting'?'warn':state.realtimeStatus==='warn'?'warn':'off');
       var lbl = dot.querySelector('.ksig-live-label');
       if(lbl) lbl.textContent = state.realtimeStatus==='on' ? 'LIVE' : state.realtimeStatus==='connecting' ? 'Menghubungkan…' : state.realtimeStatus==='warn' ? 'Reconnecting…' : 'Offline';
+    });
+    updateStickyHeaders();
+  }
+
+  /* ---------------- sticky header scroll state (selective glass) ---------------- */
+  var stickyTicking = false;
+  function updateStickyHeaders(){
+    stickyTicking = false;
+    var isScrolled = window.scrollY > 6;
+    document.querySelectorAll('.ksig-header, .ksig-appbar').forEach(function(h){
+      h.classList.toggle('scrolled', isScrolled);
+    });
+    if(state.route.view === 'list') state.list.scrollY = window.scrollY;
+  }
+  window.addEventListener('scroll', function(){
+    if(stickyTicking) return;
+    stickyTicking = true;
+    window.requestAnimationFrame(updateStickyHeaders);
+  }, { passive:true });
+
+  /* ---------------- subtle cursor-aware highlight (desktop overview cards only) ---------------- */
+  var pointerFineMedia = window.matchMedia ? window.matchMedia('(hover:hover) and (pointer:fine)') : null;
+  function bindPointerLight(){
+    if(!pointerFineMedia || !pointerFineMedia.matches) return;
+    document.querySelectorAll('.ksig-pointer-light').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--ksig-px', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+        card.style.setProperty('--ksig-py', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+      });
     });
   }
 
@@ -615,6 +701,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     updateLiveDot();
     bindInstallBtn();
     bindRecapTabs();
+    bindPointerLight();
     renderRecapBody();
     renderActivityBody();
     if(!state.lastUpdate) refreshCounts();
@@ -623,8 +710,10 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     function card(status){
       var meta = OVERVIEW_META[status];
       var countHtml = state.lastUpdate!=null ? c[status] : '<span class="ksig-skel-inline"></span>';
-      return '<div class="ksig-card '+status+'" data-ksig-nav="/signal/list/'+status+'" tabindex="0" role="link">'+
-        '<div class="ksig-card-top"><span class="ksig-card-label">'+esc(meta.label)+'</span><span class="ksig-card-arrow" aria-hidden="true">↗</span></div>'+
+      var unread = state.readsLoaded ? (state.unreadCounts[status]||0) : 0;
+      var badgeHtml = unread>0 ? '<span class="ksig-card-badge'+(state.badgeJustChanged[status]?' ksig-badge-pop':'')+'">'+(unread>99?'99+':unread)+'</span>' : '';
+      return '<div class="ksig-card ksig-pointer-light '+status+'" data-ksig-nav="/signal/list/'+status+'" tabindex="0" role="link">'+
+        '<div class="ksig-card-top"><span class="ksig-card-label">'+esc(meta.label)+'</span><span class="ksig-card-top-right">'+badgeHtml+'<span class="ksig-card-arrow" aria-hidden="true">↗</span></span></div>'+
         '<div class="ksig-card-count">'+countHtml+'</div>'+
         '<div class="ksig-card-desc">'+esc(meta.desc)+'</div>'+
       '</div>';
@@ -636,10 +725,19 @@ Prinsip (jangan dilanggar, lihat master prompt user):
 
   function renderList(){
     var L = state.list;
-    if(L.status !== L.loadedForStatus && !L.loading){
-      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null;
+    var isStatusChange = L.status !== L.loadedForStatus && !L.loading;
+    if(isStatusChange){
+      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null; L.scrollY = 0;
     }
     var isFirstLoad = !L.loaded && !L.loading && !L.error;
+    var restoreScroll = !isFirstLoad && !isStatusChange && L.scrollY;
+    var unreadN = state.readsLoaded ? (state.unreadCounts[L.status]||0) : 0;
+    var unreadBarHtml = unreadN>0 ? (
+      '<div class="ksig-unread-bar">'+
+        '<span>'+unreadN+' Belum Dibaca</span>'+
+        '<button type="button" class="ksig-mark-all-btn" id="ksigMarkAllRead">Tandai Semua Dibaca</button>'+
+      '</div>'
+    ) : '';
     el.innerHTML =
       appBar(STATUS_LABEL[L.status] || 'Signal', { back:'/signal/' }) +
       '<div class="ksig-main">'+
@@ -648,6 +746,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
           '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter">⚙</div>'+
           '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan">↕</div>'+
         '</div>'+
+        unreadBarHtml+
         '<div id="ksigListBody"></div>'+
       '</div>';
     updateLiveDot();
@@ -657,9 +756,17 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     search.addEventListener('input', debounce(function(){ L.search = search.value.trim(); loadList(true); }, 400));
     document.getElementById('ksigFilterBtn').addEventListener('click', openFilterSheet);
     document.getElementById('ksigSortBtn').addEventListener('click', openSortSheet);
+    var markAllBtn = document.getElementById('ksigMarkAllRead');
+    if(markAllBtn) markAllBtn.addEventListener('click', function(){
+      markAllBtn.disabled = true;
+      markAllRead(L.status).then(function(){
+        if(L.filters.unread) loadList(true); else renderList();
+      });
+    });
     if(isFirstLoad) loadList(true);
+    if(restoreScroll) window.requestAnimationFrame(function(){ window.scrollTo(0, L.scrollY); });
   }
-  function hasActiveFilter(f){ return !!(f.symbol||f.timeframe||f.dir||f.period); }
+  function hasActiveFilter(f){ return !!(f.symbol||f.timeframe||f.dir||f.period||f.unread); }
 
   function renderListBody(){
     var body = document.getElementById('ksigListBody');
@@ -681,7 +788,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(lm) lm.addEventListener('click', function(){ loadList(false); });
   }
   function rowHtml(s){
-    var unread = !state.readsMap[s.id_zona];
+    var unread = state.readsLoaded && isUnread(s.id_zona, s.updated_at);
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
     var infoParts = [];
     if(s.jenis_zona) infoParts.push(s.jenis_zona);
@@ -693,7 +800,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var info = infoParts.join(' • ');
     return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
-        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span></div>'+
+        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
         (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
@@ -709,6 +816,9 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       '<div class="ksig-sheet">'+
         '<div class="ksig-sheet-handle"></div>'+
         '<div class="ksig-sheet-title">Filter</div>'+
+        '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">Status Baca</div><div class="ksig-chip-row" data-group="unread">'+
+          chipOpt('unread','','Semua',L.filters.unread?'x':'') + chipOpt('unread','x','Belum Dibaca',L.filters.unread?'x':'') +
+        '</div></div>'+
         '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">Arah</div><div class="ksig-chip-row" data-group="dir">'+
           chipOpt('dir','','Semua',L.filters.dir) + chipOpt('dir','BUY','Buy',L.filters.dir) + chipOpt('dir','SELL','Sell',L.filters.dir) +
         '</div></div>'+
@@ -718,7 +828,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigFilterReset">Reset</button><button class="ksig-btn primary" id="ksigFilterApply">Terapkan</button></div>'+
       '</div>';
     document.body.appendChild(wrap);
-    var pending = Object.assign({}, L.filters);
+    var pending = Object.assign({}, L.filters, { unread: L.filters.unread?'x':'' });
     wrap.querySelectorAll('.ksig-chip-opt').forEach(function(chip){
       chip.addEventListener('click', function(){
         var group = chip.closest('[data-group]').getAttribute('data-group');
@@ -728,12 +838,12 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     });
     wrap.addEventListener('click', function(e){ if(e.target===wrap) document.body.removeChild(wrap); });
     document.getElementById('ksigFilterReset').addEventListener('click', function(){
-      L.filters = { symbol:'', timeframe:'', dir:'', period:'' };
+      L.filters = { symbol:'', timeframe:'', dir:'', period:'', unread:false };
       document.body.removeChild(wrap);
       loadList(true); renderList();
     });
     document.getElementById('ksigFilterApply').addEventListener('click', function(){
-      L.filters = pending;
+      L.filters = Object.assign({}, pending, { unread: pending.unread==='x' });
       document.body.removeChild(wrap);
       loadList(true); renderList();
     });
@@ -815,8 +925,12 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(!body) return;
     var R = state.recap;
     if(R.loading){ body.innerHTML = '<div class="ksig-skel"><div class="ksig-skel-row" style="height:52px"></div><div class="ksig-skel-row" style="height:52px"></div></div>'; return; }
-    if(R.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(R.error)+'</p></div>'; return; }
-    if(!R.rows || !R.rows.length){ body.innerHTML = '<div class="ksig-empty">Belum ada rekap untuk periode ini.</div>'; return; }
+    if(R.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(R.error)+'</p><button class="ksig-btn primary" id="ksigRetryRecap">Coba Lagi</button></div>'; var rb=document.getElementById('ksigRetryRecap'); if(rb) rb.onclick=function(){ loadRecap(R.type); }; return; }
+    if(!R.rows || !R.rows.length){
+      var periodLabel = R.type==='DAILY' ? 'Harian' : (R.type==='WEEKLY' ? 'Mingguan' : 'Bulanan');
+      body.innerHTML = '<div class="ksig-recap-empty"><div class="ksig-recap-empty-icon" aria-hidden="true">◇</div><div class="ksig-recap-empty-title">Belum ada rekap '+esc(periodLabel)+'</div><div class="ksig-recap-empty-desc">Rekap akan tampil ketika data pada periode ini tersedia.</div></div>';
+      return;
+    }
     var groups = groupRecapRows(R.rows);
     var periodRef = R.rows[0];
     body.innerHTML =
@@ -859,15 +973,16 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var badgeMeta = ACTIVITY_BADGE[item.event_type] || { label:(STATUS_LABEL[sig.display_status]||'').replace('Signal ','').toUpperCase(), cls: sig.display_status||'' };
     var dirBadge = sig.skenario==='SELL' ? 'sell' : 'buy';
     var isFreshCreate = (item.event_type==='SIGNAL_CREATED_OR_UPDATED' || item.event_type==='NEW_ZONE');
+    var unread = state.readsLoaded && isUnread(item.id_zona, sig.updated_at);
     var info;
     if(isFreshCreate && sig.jenis_zona){
       info = sig.jenis_zona + ((sig.area_low!=null && sig.area_high!=null) ? ' • Area '+fmtNum(sig.area_low)+' – '+fmtNum(sig.area_high) : '');
     } else {
       info = item.event_description || item.event_title || EVENT_LABEL[item.event_type] || '';
     }
-    return '<div class="ksig-row" data-ksig-nav="/signal/id/'+encodeURIComponent(item.id_zona)+'" tabindex="0" role="link">'+
+    return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(item.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
-        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(sig.pair||'-')+'</span><span class="ksig-row-tf">'+esc(sig.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(sig.skenario||'-')+'</span><span class="ksig-badge '+esc(badgeMeta.cls)+'">'+esc(badgeMeta.label)+'</span></div>'+
+        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(sig.pair||'-')+'</span><span class="ksig-row-tf">'+esc(sig.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(sig.skenario||'-')+'</span><span class="ksig-badge '+esc(badgeMeta.cls)+'">'+esc(badgeMeta.label)+'</span>'+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
         (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(item.created_at)+'</div>'+
       '</div>'+
@@ -879,7 +994,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(!body) return;
     var A = state.activity;
     if(A.loading && !A.items.length){ body.innerHTML = '<div class="ksig-skel">'+'<div class="ksig-skel-row" style="height:60px"></div>'.repeat(3)+'</div>'; return; }
-    if(A.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(A.error)+'</p></div>'; return; }
+    if(A.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(A.error)+'</p><button class="ksig-btn primary" id="ksigRetryActivity">Coba Lagi</button></div>'; var ab=document.getElementById('ksigRetryActivity'); if(ab) ab.onclick=function(){ loadActivity(); }; return; }
     if(!A.items.length){ body.innerHTML = '<div class="ksig-empty">Belum ada aktivitas terbaru.</div>'; return; }
     body.innerHTML = '<div class="ksig-list ksig-fade">' + A.items.map(activityRowHtml).join('') + '</div>';
   }

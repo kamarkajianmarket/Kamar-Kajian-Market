@@ -141,6 +141,7 @@ html,body{ height:100%; }
 .ksig-badge.buy{ background:rgba(14,95,84,.10); color:#0e5f54; }
 .ksig-badge.sell{ background:rgba(196,60,60,.10); color:#8a2b2b; }
 .ksig-badge.lastcall{ background:rgba(59,95,166,.12); color:#2c4d8a; }
+.ksig-lastcall-banner{ margin:10px 0 0; padding:10px 14px; border-radius:10px; background:rgba(59,95,166,.10); border:1px solid rgba(59,95,166,.28); color:#2c4d8a; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
 
 /* ---------- Login / access-denied ---------- */
 .ksig-center-card{

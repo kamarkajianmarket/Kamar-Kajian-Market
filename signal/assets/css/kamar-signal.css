@@ -140,6 +140,7 @@ html,body{ height:100%; }
 .ksig-badge.loss{ background:rgba(196,60,60,.10); color:#8a2b2b; }
 .ksig-badge.buy{ background:rgba(14,95,84,.10); color:#0e5f54; }
 .ksig-badge.sell{ background:rgba(196,60,60,.10); color:#8a2b2b; }
+.ksig-badge.lastcall{ background:rgba(59,95,166,.12); color:#2c4d8a; }
 
 /* ---------- Login / access-denied ---------- */
 .ksig-center-card{

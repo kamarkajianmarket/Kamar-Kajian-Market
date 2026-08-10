@@ -59,7 +59,7 @@
       {label:'Menu',      href:'#kamar-drawer',                  icon:'menu',  isDrawerToggle:true}
     ],
     affiliate: [
-      {label:'Beranda',  href:'affiliate-dashboard.html',                icon:'home',  match:['affiliate-dashboard.html']},
+      {label:'Dashboard', href:'dashboard.html',                          icon:'home',  match:['dashboard.html']},
       {label:'Referral', href:'affiliate-dashboard.html#referredTable',  icon:'link',  match:[]},
       {label:'Komisi',   href:'affiliate-dashboard.html#commissionTable',icon:'coin',  match:[]},
       {label:'Akun',     href:'member-profile.html',                     icon:'user',  match:['member-profile.html']},

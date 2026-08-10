@@ -972,7 +972,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     HOLD1_HIT:              { label:'TP1', cls:'profit' },
     HOLD2_HIT:              { label:'TP2', cls:'profit' },
     HOLD3_HIT:              { label:'TP3', cls:'profit' },
-    RR_1_1_REACHED:        { label:'RR 1:1', cls:'aktif' },
+    RR_1_1_REACHED:        { label:'LAST CALL', cls:'lastcall' },
     HIGH_RISK_WARNING:      { label:'PERINGATAN', cls:'loss' },
     CRITICAL_ZONE_WARNING:  { label:'PERINGATAN', cls:'loss' },
     HIT_INVALIDASI:         { label:'CUT LOSS', cls:'loss' },
@@ -1014,7 +1014,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     NEW_ZONE:'Signal dibuat', ZONE_ACTIVE:'Signal aktif', RUNNING_UPDATE:'Update berjalan',
     TP1_HIT:'TP1 tercapai', TP2_HIT:'TP2 tercapai', TP3_HIT:'TP3 tercapai',
     HOLD1_HIT:'Target lanjutan 1', HOLD2_HIT:'Target lanjutan 2', HOLD3_HIT:'Target lanjutan 3',
-    RR_1_1_REACHED:'RR 1:1 tercapai', HIGH_RISK_WARNING:'Peringatan risiko tinggi',
+    RR_1_1_REACHED:'Last Call — RR 1:1 tercapai', HIGH_RISK_WARNING:'Peringatan risiko tinggi',
     CRITICAL_ZONE_WARNING:'Peringatan zona kritis', HIT_INVALIDASI:'Invalidasi'
   };
 
@@ -1035,6 +1035,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(!D.signal){ body.innerHTML = '<div class="ksig-empty">Signal tidak ditemukan.</div>'; return; }
     var s = D.signal;
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
+    var lastCallActive = !!(D.events.length && D.events[D.events.length-1].event_type === 'RR_1_1_REACHED');
     var ha = hasilAkhirInfo(s);
     var maxRun = s.max_running_point!=null ? fmtNum(s.max_running_point,1)+' pt' : '-';
     var rows = [
@@ -1056,6 +1057,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
           '<span class="ksig-detail-symbol">'+esc(s.pair)+'</span>'+
           '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span><span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
         '</div>'+
+        (lastCallActive ? '<div class="ksig-lastcall-banner">⚡ LAST CALL — RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
         (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
         '<div class="ksig-detail-rows">' + rows.map(function(r){ return '<div class="ksig-detail-row"><span>'+esc(r[0])+'</span><strong>'+esc(r[1]==null?'-':r[1])+'</strong></div>'; }).join('') + '</div>'+
       '</div>'+

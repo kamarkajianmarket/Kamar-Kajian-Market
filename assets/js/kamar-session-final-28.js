@@ -29,7 +29,17 @@
   }
   function logout(){
     ['kamarAdminSession','KAMAR_ADMIN_SESSION','kamarCurrentAdmin','kamarAuthAdmin','kamarMemberSession','KAMAR_MEMBER_SESSION','kamarCurrentMember','kamarAuthMember','kamarAffiliateSession','KAMAR_AFFILIATE_SESSION','kamarCurrentAffiliate','kamarAuthAffiliate','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(del);
-    location.href='index.html?v='+VERSION;
+    var done=false;
+    function go(){if(done)return;done=true;location.href='index.html?v='+VERSION;}
+    try{
+      if(window.KamarSupabase && window.KamarSupabase.ready){
+        window.KamarSupabase.ready().then(function(client){
+          client=client||(window.KamarSupabase.getClient&&window.KamarSupabase.getClient());
+          if(client&&client.auth&&client.auth.signOut) return client.auth.signOut();
+        }).catch(function(){}).then(go,go);
+        setTimeout(go,2500);
+      } else { go(); }
+    }catch(e){ go(); }
   }
   function guard(){
     bridge();

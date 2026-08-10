@@ -12,3 +12,42 @@ window.kamarFriendlyError=window.kamarFriendlyError||function(e){
   if(low.indexOf('timeout')>-1) return 'Permintaan memakan waktu terlalu lama. Coba lagi beberapa saat.';
   return 'Terjadi kesalahan saat memproses permintaan Anda. Coba lagi, atau hubungi admin bila masalah berlanjut.';
 };
+
+
+(function(){
+'use strict';
+if(window.__KAMAR_BTN_FEEDBACK__) return;
+window.__KAMAR_BTN_FEEDBACK__ = true;
+var css = '.kamar-btn-loading{position:relative!important;pointer-events:none!important;opacity:.7!important;cursor:progress!important}'+
+'.kamar-btn-loading::after{content:"";position:absolute;top:50%;right:14px;width:15px;height:15px;margin-top:-8px;border-radius:50%;border:2px solid rgba(17,20,23,.28);border-top-color:currentColor;animation:kamarBtnSpin .6s linear infinite}'+
+'@keyframes kamarBtnSpin{to{transform:rotate(360deg)}}';
+function injectStyle(){
+var styleEl=document.createElement('style');
+styleEl.id='kamar-btn-feedback-style';
+styleEl.textContent=css;
+document.head.appendChild(styleEl);
+}
+if(document.head) injectStyle(); else document.addEventListener('DOMContentLoaded', injectStyle);
+var SEL='.btn,.admin-button,.header-cta,.kamar-global-btn,.method-card,button[type="submit"],input[type="submit"],[data-todo-action]';
+document.addEventListener('click', function(e){
+var el = e.target && e.target.closest ? e.target.closest(SEL) : null;
+if(!el) return;
+if(el.hasAttribute('data-no-loading')) return;
+if(el.classList.contains('kamar-btn-loading')) return;
+if(el.disabled || el.getAttribute('aria-disabled')==='true') return;
+if(el.tagName==='A'){
+var href = el.getAttribute('href')||'';
+if(!href || href.charAt(0)==='#' || href.toLowerCase().indexOf('javascript:')===0) return;
+}
+el.classList.add('kamar-btn-loading');
+el.setAttribute('aria-busy','true');
+if(el.tagName==='BUTTON'||el.tagName==='INPUT'){
+setTimeout(function(){ try{ el.disabled=true; }catch(err){} }, 0);
+}
+setTimeout(function(){
+el.classList.remove('kamar-btn-loading');
+el.removeAttribute('aria-busy');
+if(el.tagName==='BUTTON'||el.tagName==='INPUT'){ try{ el.disabled=false; }catch(err){} }
+}, 6000);
+}, true);
+})();

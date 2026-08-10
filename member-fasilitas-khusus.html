@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Fasilitas Khusus — Kamar Kajian Market</title><meta content="Daftar fasilitas khusus untuk member Kamar Kajian Market." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<style>
+:root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:800}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.split-sidebar a.disabled{opacity:.4;pointer-events:none}.split-main{display:grid;gap:22px}.split-card,.member-page-panel{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card h1,.split-card h2,.split-card h3,.member-page-panel h3{margin:0 0 10px;color:#fff3d8}.split-card p,.member-page-panel p{color:var(--muted);line-height:1.65}.mini-label,.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#d8cda9;font-weight:1000;margin-bottom:8px}.btn,.admin-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary,.admin-button.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.toast{position:fixed;right:22px;bottom:22px;z-index:99;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:22px;padding:16px 18px;box-shadow:0 16px 60px rgba(0,0,0,.45);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:translateY(0)}.page-note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}.site-footer strong{color:#d8cda9}.hidden{display:none!important}@media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.split-shell{padding-top:92px}}
+</style>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
+<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+<link href="assets/css/kamar-mobile-shell.css" rel="stylesheet"/>
+<style id="fkx-catalog-css">
+.fkx-intro{max-width:720px}
+.fkx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:18px}
+.fkx-card{position:relative;display:flex;flex-direction:column;gap:10px;border:1px solid var(--km-line,var(--line));border-radius:24px;background:var(--km-panel,#fff);padding:22px;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.fkx-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(17,20,23,.10);border-color:rgba(184,138,61,.4)}
+.fkx-card:focus-visible{outline:2px solid var(--km-gold,#b88a3d);outline-offset:2px}
+.fkx-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fkx-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;font-size:10.5px;font-weight:950;letter-spacing:.05em;text-transform:uppercase}
+.fkx-badge.none{background:rgba(184,138,61,.14);color:#8a5a12}
+.fkx-badge.pending{background:rgba(255,198,86,.16);color:#8a5a12}
+.fkx-badge.confirmed{background:rgba(14,95,84,.14);color:#0e5f54}
+.fkx-card h3{margin:0;font-size:18px;font-weight:950;letter-spacing:-.01em;color:var(--km-ink,#fff3d8)}
+.fkx-card p{margin:0;font-size:13.5px;line-height:1.6;color:var(--km-muted,var(--muted))}
+.fkx-price{font-weight:950;font-size:20px;letter-spacing:-.02em;color:var(--km-ink,#fff3d8);margin-top:2px}
+.fkx-price small{display:block;font-size:11px;font-weight:700;color:var(--km-muted,var(--muted));text-transform:none;letter-spacing:0}
+.fkx-pending-note{font-size:12.5px;color:var(--km-muted,var(--muted));line-height:1.5}
+.fkx-card-actions{margin-top:auto;padding-top:6px}
+.fkx-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;border:0;border-radius:999px;font-weight:950;font-size:13.5px;padding:12px 16px;text-decoration:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.fkx-btn.primary{background:linear-gradient(135deg,#c99d51,#f1d893);color:#15120b;box-shadow:0 12px 28px rgba(184,138,61,.22)}
+.fkx-btn.primary:hover{transform:translateY(-1px)}
+.fkx-btn.secondary{background:var(--km-panel-2,rgba(255,255,255,.06));color:var(--km-ink,#f3d985);border:1px solid var(--km-line,var(--line))}
+.fkx-btn.secondary:hover{border-color:rgba(184,138,61,.4)}
+.fkx-empty{padding:30px 18px;text-align:center;color:var(--km-muted,var(--muted));font-size:13.5px}
+.fkx-skel{height:180px;border-radius:24px;background:linear-gradient(90deg,rgba(0,0,0,.06) 25%,rgba(0,0,0,.02) 37%,rgba(0,0,0,.06) 63%);background-size:400% 100%;animation:fkxShimmer 1.4s ease infinite}
+@keyframes fkxShimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion: reduce){.fkx-card{transition:none}.fkx-skel{animation:none}}
+</style>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Perpanjangan / Tambah Fasilitas</a><a class="active" href="member-fasilitas-khusus.html">Fasilitas Khusus</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Signal 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main">
+<div class="split-card kamar-title-card"><h1>Fasilitas Khusus</h1></div>
+<section class="split-card">
+<span class="mini-label">Fasilitas Khusus</span>
+<h2 class="fkx-intro">Kelas dan fasilitas tambahan khusus member</h2>
+<p class="fkx-intro">Daftar fasilitas khusus yang tersedia untuk member Kamar Kajian Market. Harga dan ketersediaan diatur langsung oleh admin. Klik kartu untuk melihat detailnya.</p>
+<div class="fkx-grid" id="fkxGrid"><div class="fkx-skel"></div></div>
+</section>
+</section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
+<script id="kamar-fasilitas-khusus-list-logic">
+(function(){
+function esc(x){ return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]||c;}); }
+function fmtRp(n){ try{ return 'Rp'+Number(n).toLocaleString('id-ID'); }catch(e){ return 'Rp'+n; } }
+async function readyClient(){
+try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+return window.kamarSupabaseClient || null;
+}
+async function resolveProfileId(client){
+try{
+var sess=JSON.parse(localStorage.getItem('kamarMemberSession')||'null');
+if(!sess) return null;
+if(sess.id){
+var r1=await client.from('member_profiles').select('id').eq('user_id',sess.id).maybeSingle();
+if(!r1.error && r1.data) return r1.data.id;
+}
+if(sess.email){
+var r2=await client.from('member_profiles').select('id').ilike('email',sess.email).limit(1);
+if(!r2.error && r2.data && r2.data.length) return r2.data[0].id;
+}
+}catch(e){}
+return null;
+}
+function statusOf(paymentsForKey){
+if(!paymentsForKey || !paymentsForKey.length) return 'none';
+var latest=paymentsForKey[0];
+if(latest.payment_status==='confirmed') return 'confirmed';
+if(latest.payment_status==='pending') return 'pending';
+return 'none';
+}
+function cardHtml(p, state){
+var detailHref='member-fasilitas-khusus-detail.html?key='+encodeURIComponent(p.product_key);
+var price=p.promo_price!=null?p.promo_price:p.base_price;
+var badge = state==='confirmed' ? '<span class="fkx-badge confirmed">Terdaftar</span>' : state==='pending' ? '<span class="fkx-badge pending">Menunggu Konfirmasi</span>' : '<span class="fkx-badge none">Tersedia</span>';
+var actionHtml;
+if(state==='confirmed'){
+actionHtml='<a class="fkx-btn secondary" href="'+detailHref+'">Detail</a>';
+}else if(state==='pending'){
+actionHtml='<a class="fkx-btn secondary" href="'+detailHref+'">Lihat Status</a>';
+}else{
+actionHtml='<a class="fkx-btn primary" href="member-scalping.html?key='+encodeURIComponent(p.product_key)+'" data-fkx-stop>Daftar Kelas Khusus</a>';
+}
+var priceBlock = state==='none' ? '<div class="fkx-price">'+fmtRp(price)+'<small>Harga belum termasuk biaya payment gateway</small></div>' : (state==='pending' ? '<div class="fkx-pending-note">Pembayaran kamu sedang diproses admin. Cek statusnya di halaman detail.</div>' : '<div class="fkx-pending-note">Fasilitas ini sudah aktif untuk akun kamu.</div>');
+return '<article class="fkx-card" data-detail-href="'+detailHref+'" tabindex="0" role="link" aria-label="'+esc(p.title)+'">'+
+'<div class="fkx-card-top">'+badge+'</div>'+
+'<h3>'+esc(p.title)+'</h3>'+
+(p.description?'<p>'+esc(p.description)+'</p>':'')+
+priceBlock+
+'<div class="fkx-card-actions">'+actionHtml+'</div>'+
+'</article>';
+}
+async function load(){
+var grid=document.getElementById('fkxGrid');
+try{
+var c=await readyClient();
+if(!c) throw new Error('no client');
+var prodRes=await c.from('payment_products').select('*').eq('product_type','booking').eq('is_active',true).order('sort_order',{ascending:true});
+if(prodRes.error) throw prodRes.error;
+var products=prodRes.data||[];
+if(!products.length){ grid.innerHTML='<div class="fkx-empty">Belum ada fasilitas khusus yang tersedia saat ini.</div>'; return; }
+var profileId=await resolveProfileId(c);
+var byKey={};
+if(profileId){
+var payRes=await c.from('payments').select('id,payment_status,raw_payload,created_at').eq('profile_id',profileId).order('created_at',{ascending:false});
+if(!payRes.error){
+(payRes.data||[]).forEach(function(row){
+var key=row.raw_payload && row.raw_payload.product_key;
+if(!key) return;
+if(!byKey[key]) byKey[key]=[];
+byKey[key].push(row);
+});
+}
+}
+grid.innerHTML=products.map(function(p){
+var state=statusOf(byKey[p.product_key]);
+return cardHtml(p, state);
+}).join('');
+}catch(e){
+grid.innerHTML='<div class="fkx-empty">Fasilitas khusus belum bisa dimuat. Coba muat ulang halaman.</div>';
+}
+}
+document.addEventListener('click', function(e){
+var stopBtn=e.target.closest ? e.target.closest('[data-fkx-stop]') : null;
+if(stopBtn){ e.stopPropagation(); return; }
+var card=e.target.closest ? e.target.closest('.fkx-card') : null;
+if(!card) return;
+var href=card.getAttribute('data-detail-href');
+if(href) window.location.href=href;
+});
+document.addEventListener('keydown', function(e){
+if(e.key!=='Enter' && e.key!==' ') return;
+var card=e.target.closest ? e.target.closest('.fkx-card') : null;
+if(!card) return;
+e.preventDefault();
+var href=card.getAttribute('data-detail-href');
+if(href) window.location.href=href;
+});
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', load); else load();
+})();
+</script>
+<script id="kamar-global-header-script">
+(function(){
+function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+function shouldShowHeader(){
+var p=pageName();
+if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+if(p==='affiliate-dashboard.html') return true;
+return false;
+}
+function clearSessionAndLogout(e){
+try{
+['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+}catch(err){}
+}
+function buildHeader(){
+if(!shouldShowHeader()) return;
+document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+var header=document.createElement('header');
+header.className='site-header kamar-global-header';
+header.innerHTML=''+
+'<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+'<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.remove()"/>'+
+'<span>Kamar Kajian Market</span>'+
+'</a>'+
+'<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+'<div class="kamar-global-actions">'+
+'<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+'<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+'</div>';
+document.body.insertBefore(header, document.body.firstChild);
+var out=header.querySelector('[data-kamar-logout]');
+if(out) out.addEventListener('click', clearSessionAndLogout);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-mobile-shell.js"></script>
+</body></html>

@@ -89,6 +89,13 @@ body{background:#070707;color:var(--text)}
 <div class="summary" id="summary"><span class="chip">Memuat data...</span></div>
 <div class="member-list" id="requestList"></div>
 </section>
+<section class="split-card" id="memberTokensPanel" style="display:none">
+<span class="mini-label">Token Member</span>
+<h2 id="memberTokensTitle">Token Member</h2>
+<p id="memberTokensSubtitle" style="margin-top:-8px;color:var(--muted)"></p>
+<div class="member-list" id="memberTokensList"></div>
+<div class="summary" style="margin-top:14px"><button class="btn secondary" id="memberTokensBackBtn" type="button">Kembali ke Daftar Member</button></div>
+</section>
 <section class="split-card" id="detailPanel" style="display:none">
 <span class="mini-label">Detail Request License</span>
 <h2 id="detailTitle">Detail Request</h2>
@@ -165,6 +172,36 @@ return Number(q)||1;
 function activeCountFor(profileId,facilityKey){
 return state.licenses.filter(function(l){return l.member_profile_id===profileId&&l.facility_key===facilityKey&&l.request_status==='active'}).length;
 }
+function groupedMembers(){
+var matched=filtered();
+var map={};
+matched.forEach(function(l){
+var pid=l.member_profile_id; if(!pid) return;
+if(!map[pid]) map[pid]={profileId:pid, matched:0};
+map[pid].matched++;
+});
+var groups=Object.keys(map).map(function(pid){
+var allForMember=state.licenses.filter(function(l){return l.member_profile_id===pid});
+var latest=allForMember.reduce(function(mx,l){var t=new Date(l.requested_at||0).getTime();return t>mx?t:mx},0);
+return {profileId:pid, profile:state.profiles.find(function(p){return p.id===pid})||{}, requests:allForMember, matchedCount:map[pid].matched, latest:latest};
+});
+groups.sort(function(a,b){return b.latest-a.latest});
+return groups;
+}
+function memberCardHtml(g){
+var p=g.profile;
+var facKeys=[];
+g.requests.forEach(function(l){ if(facKeys.indexOf(l.facility_key)<0) facKeys.push(l.facility_key); });
+var facHtml=facKeys.map(function(fk){
+var quota=quotaFor(g.profileId,fk);
+var active=activeCountFor(g.profileId,fk);
+var cls=active>=quota?'full':'';
+return '<span class="quota-pill '+cls+'">'+esc(FACILITY_LABEL[fk]||fk)+': '+active+'/'+quota+'</span>';
+}).join(' ');
+var pendingCount=g.requests.filter(function(l){return l.request_status==='pending'||l.request_status==='under_review'||l.request_status==='revision_required'}).length;
+var statusHtml=pendingCount>0?('<span class="chip warn">'+pendingCount+' Menunggu Aksi</span>'):'<span class="chip ok">Tidak Ada Yang Menunggu</span>';
+return '<div class="row" data-member-card="'+esc(g.profileId)+'" style="cursor:pointer"><div><strong>'+esc(p.full_name||'Member Kamar')+'</strong><small>'+esc(p.member_id||p.email||'-')+'</small></div><div>'+esc(p.email||'-')+'</div><div>'+(facHtml||'<span style="color:var(--muted)">Belum ada fasilitas</span>')+'</div><div>'+statusHtml+'</div><div class="actions"><button class="btn mini secondary" type="button" data-member-detail="'+esc(g.profileId)+'">Lihat Token</button></div></div>';
+}
 async function loadData(){
 state.loading=true;state.lastError='';renderShell();
 try{
@@ -206,22 +243,34 @@ byId('summary').innerHTML='<span class="chip '+(state.client?'ok':'bad')+'">Sist
 renderList(list);
 }
 function renderList(list){
-var html='<div class="row header"><div>Member</div><div>Broker / Akun</div><div>Fasilitas</div><div>Status</div><div>Aksi</div></div>';
-if(state.loading){html+='<div class="empty">Memuat data request...</div>'}
-else if(!list.length){html+='<div class="empty">Belum ada request license yang cocok dengan filter ini.</div>'}
-list.forEach(function(l){
-var p=profileOf(l);
-var quota=quotaFor(l.member_profile_id,l.facility_key);
-var activeCount=activeCountFor(l.member_profile_id,l.facility_key);
-var quotaPillCls=activeCount>=quota?'full':'';
-html+='<div class="row"><div><strong>'+esc(p.full_name||'-')+'</strong><small>'+esc(p.member_id||'-')+'</small></div>'+
-'<div>'+esc(l.broker_name||'-')+'<small>Akun: '+esc(l.account_id||'-')+' &middot; '+esc(l.server_name||'-')+'</small></div>'+
-'<div>'+esc(FACILITY_LABEL[l.facility_key]||l.facility_key)+'<small><span class="quota-pill '+quotaPillCls+'">Token aktif: '+activeCount+'/'+quota+'</span></small></div>'+
-'<div>'+statusChip(l)+'</div>'+
-'<div class="actions"><button class="btn mini secondary" data-detail="'+esc(l.id)+'">Detail</button></div></div>';
+var headerHtml='<div class="row header"><div>Member</div><div>Email</div><div>Fasilitas &amp; Token</div><div>Status</div><div>Aksi</div></div>';
+var wrap=byId('requestList');
+if(state.loading){wrap.innerHTML=headerHtml+'<div class="empty">Memuat data request...</div>';return}
+var groups=groupedMembers();
+function renderGroupRow(g){return memberCardHtml(g);}
+if(!state.memberListPager) state.memberListPager=window.KamarCardPager.create({container:wrap,perPage:10,headerHtml:headerHtml,renderItem:renderGroupRow,emptyHtml:'<div class="empty">Belum ada request license yang cocok dengan filter ini.</div>',afterRender:function(){wrap.querySelectorAll('[data-member-detail]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();showMemberTokens(b.getAttribute('data-member-detail'))})});wrap.querySelectorAll('[data-member-card]').forEach(function(row){row.addEventListener('click',function(e){if(e.target.closest('button'))return;showMemberTokens(row.getAttribute('data-member-card'))})})}});
+state.memberListPager.render(groups);
+}
+function showMemberTokens(profileId){
+var p=state.profiles.find(function(x){return x.id===profileId})||{};
+var reqs=state.licenses.filter(function(l){return l.member_profile_id===profileId});
+reqs.sort(function(a,b){return new Date(b.requested_at||0)-new Date(a.requested_at||0)});
+byId('memberTokensTitle').textContent='Token Member \u2014 '+(p.full_name||'Member Kamar');
+byId('memberTokensSubtitle').textContent=(p.email||'-')+' \u00b7 '+(p.member_id||'-');
+var html='';
+if(!reqs.length){
+html='<div class="empty">Member ini belum punya token/request license.</div>';
+} else {
+reqs.forEach(function(l){
+var masked=l.token?('\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'+String(l.token).slice(-6)):'-';
+html+='<div class="row" style="grid-template-columns:1.1fr 1.3fr .9fr 1fr auto"><div><strong>'+esc(FACILITY_LABEL[l.facility_key]||l.facility_key)+'</strong><small>Token: '+esc(masked)+'</small></div><div>'+esc(l.broker_name||'-')+'<small>Akun: '+esc(l.account_id||'-')+' &middot; '+esc(l.server_name||'-')+'</small></div><div>'+statusChip(l)+'</div><div><small>Diajukan '+esc(fmtDate(l.requested_at))+'</small></div><div class="actions"><button class="btn mini secondary" type="button" data-token-detail="'+esc(l.id)+'">Kelola</button></div></div>';
 });
-byId('requestList').innerHTML=html;
-document.querySelectorAll('[data-detail]').forEach(function(b){b.onclick=function(){showDetail(b.getAttribute('data-detail'))}});
+}
+byId('memberTokensList').innerHTML=html;
+byId('memberTokensList').querySelectorAll('[data-token-detail]').forEach(function(b){b.onclick=function(){showDetail(b.getAttribute('data-token-detail'))}});
+byId('detailPanel').style.display='none';
+byId('memberTokensPanel').style.display='block';
+byId('memberTokensPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function findLicense(id){return state.licenses.find(function(l){return String(l.id)===String(id)})}
 async function loadAuditLog(licenseId){
@@ -267,6 +316,7 @@ return html;
 }
 async function showDetail(id){
 state.selectedId=id; var l=findLicense(id); if(!l)return toast('Request tidak ditemukan.');
+var mtp=byId('memberTokensPanel'); if(mtp) mtp.style.display='none';
 var p=profileOf(l);
 var quota=quotaFor(l.member_profile_id,l.facility_key);
 var activeCount=activeCountFor(l.member_profile_id,l.facility_key);
@@ -378,9 +428,10 @@ await loadData();
 showDetail(licenseId);
 }catch(e){ toast(window.kamarFriendlyError(e)); }
 }
-['searchInput','statusFilter','facilityFilter'].forEach(function(id){byId(id).addEventListener(id==='searchInput'?'input':'change',renderShell)});
+['searchInput','statusFilter','facilityFilter'].forEach(function(id){byId(id).addEventListener(id==='searchInput'?'input':'change',function(){if(state.memberListPager)state.memberListPager.resetPage();renderShell()})});
 byId('refreshBtn').onclick=loadData;
 var heroRefresh=byId('heroRefreshBtn'); if(heroRefresh) heroRefresh.onclick=loadData;
+var mtBack=byId('memberTokensBackBtn'); if(mtBack) mtBack.onclick=function(){byId('memberTokensPanel').style.display='none';window.scrollTo({top:0,behavior:'smooth'})};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadData); else loadData();
 })();
 </script>
@@ -423,6 +474,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 </script>
 <script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=30"></script>
 <script src="assets/js/kamar-admin-online-29f.js?v=29I"></script>
+<script src="assets/js/kamar-card-pager.js?v=1"></script>
 <script src="assets/js/kamar-mobile-shell.js"></script>
 </body>
 </html>

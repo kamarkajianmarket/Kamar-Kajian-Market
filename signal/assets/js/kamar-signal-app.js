@@ -807,6 +807,59 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     '</div>';
   }
 
+  function fmtAccessDate(iso){
+    if(!iso) return '-';
+    var d = new Date(iso);
+    if(isNaN(d.getTime())) return '-';
+    var bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    return String(d.getDate()).padStart(2,'0')+' '+bulan[d.getMonth()]+' '+d.getFullYear();
+  }
+  function accessCardHtml(){
+    var A = state.access;
+    if(!A) return '';
+    var now = new Date();
+    var exp = A.expires_kamar_study ? new Date(A.expires_kamar_study) : null;
+    var daysLeft = exp ? Math.ceil((exp - now) / 86400000) : null;
+    var locked = A.locked_by_expired === true;
+    var status, statusCls, sub;
+    if(locked){
+      status = 'EXPIRED'; statusCls = 'expired';
+      sub = 'Akses Kamar Signal telah berakhir'+(exp ? ' pada '+fmtAccessDate(A.expires_kamar_study) : '')+'.';
+    } else if(daysLeft !== null && daysLeft <= 5){
+      status = 'SEGERA BERAKHIR'; statusCls = 'warn';
+      sub = daysLeft+' HARI TERSISA';
+    } else {
+      status = 'ACTIVE'; statusCls = 'active';
+      sub = daysLeft !== null ? (daysLeft+' HARI TERSISA') : 'Akses aktif';
+    }
+    var sourceLabel = A.activation_source === 'ib_kamar' ? 'IB Kamar' : (A.activation_source ? esc(A.activation_source) : '');
+    return '<div class="ksig-access-card '+statusCls+'">'+
+        '<div class="ksig-access-top"><span class="ksig-access-label">KAMAR SIGNAL ACCESS</span><span class="ksig-access-status">'+
+          '<span class="ksig-access-dot"></span>'+status+'</span></div>'+
+        '<div class="ksig-access-days">'+esc(sub)+'</div>'+
+        (exp ? '<div class="ksig-access-until">Aktif hingga '+fmtAccessDate(A.expires_kamar_study)+'</div>' : '')+
+        (sourceLabel ? '<div class="ksig-access-source">'+sourceLabel+'</div>' : '')+
+      '</div>';
+  }
+  function installCardHtml(){
+    if(isStandaloneMode()){
+      return '<div class="ksig-install-card installed">'+
+          '<div class="ksig-install-icon">◇</div>'+
+          '<div class="ksig-install-body">'+
+            '<div class="ksig-install-title">KAMAR SIGNAL APP</div>'+
+            '<div class="ksig-install-desc">Kamar Signal sudah terpasang di perangkat ini.</div>'+
+          '</div>'+
+        '</div>';
+    }
+    return '<div class="ksig-install-card">'+
+        '<div class="ksig-install-icon">◇</div>'+
+        '<div class="ksig-install-body">'+
+          '<div class="ksig-install-title">KAMAR SIGNAL APP</div>'+
+          '<div class="ksig-install-desc">Install Kamar Signal di HP Anda untuk akses yang lebih cepat dan praktis.</div>'+
+          '<button type="button" class="ksig-install-card-btn" id="ksigDashInstallBtn">Instal Kamar Signal</button>'+
+        '</div>'+
+      '</div>';
+  }
   function renderDashboard(){
     var c = state.counts;
     var firstPaint = !dashboardEntered;
@@ -814,6 +867,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     el.innerHTML =
       dashboardHeader(ac(1)) +
       '<div class="ksig-main ksig-dashboard">'+
+        accessCardHtml() +
+        installCardHtml() +
         '<div class="'+('ksig-block'+ac(2)).trim()+'">'+
           sectionLabel('SIGNAL OVERVIEW') +
           '<div class="ksig-grid">'+
@@ -834,6 +889,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     dashboardEntered = true;
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn();
+    (function(){ var dib=document.getElementById('ksigDashInstallBtn'); if(dib) dib.addEventListener('click', openInstallSheet); })();
     bindRecapTabs();
     bindPointerLight();
     renderRecapBody();

@@ -293,7 +293,8 @@
     manual_note: 'Catatan Admin',
     license_request: 'Pengajuan Lisensi',
     affiliate_payout_change: 'Perubahan Rekening Affiliate',
-    ib_kamar_activation: 'Pengajuan IB Kamar'
+    ib_kamar_activation: 'Pengajuan IB Kamar',
+  trial_request: 'Request Trial Kamar Signal'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
@@ -385,7 +386,20 @@
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'IB Kamar disetujui, akses Kamar Signal diaktifkan.':'Pengajuan IB Kamar ditolak.');
   }
-  async function actionAffiliatePayoutChange(todo, approve){
+  async function actionTrialRequest(todo, approve){
+  var payload = todo.action_payload || {};
+  var trialId = payload.trial_id;
+  if(trialId){
+    var c = await ready();
+    if(c){
+      var res = await c.rpc('admin_review_kamar_signal_trial', { p_trial_id: trialId, p_action: approve?'approve':'reject' });
+      if(res.error) throw res.error;
+    }
+  }
+  await markTodoDone(todo.id, approve?'done':'rejected');
+  toast(approve?'Trial disetujui, Kamar Signal aktif 24 jam.':'Permintaan trial ditolak.');
+}
+async function actionAffiliatePayoutChange(todo, approve){
     var payload = todo.action_payload || {};
     if(approve && payload.affiliate_id){
       await update('affiliates', payload.affiliate_id, {
@@ -411,6 +425,7 @@
     if(p.duration_days) subBits.push(p.duration_days+' hari');
     if(p.broker_name) subBits.push(p.broker_name);
     if(p.account_id) subBits.push('Akun '+p.account_id);
+    if(p.trial_count) subBits.push('Trial ke-'+p.trial_count);
     if(p.new_payment_bank_name) subBits.push('Bank baru: '+p.new_payment_bank_name);
     if(p.new_payment_account_number) subBits.push('No. Rek baru: '+p.new_payment_account_number);
     // NEW (2026-08-06): tombol "Tinjau" di setiap baris supaya admin bisa lihat detail
@@ -430,6 +445,8 @@
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'affiliate_payout_change'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'trial_request'){
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_trial" data-todo-id="'+esc(todo.id)+'">Setujui (24 Jam)</button> <button class="btn mini secondary" type="button" data-todo-action="reject_trial" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
@@ -508,6 +525,9 @@
     } else if(todo.todo_type === 'affiliate_payout_change'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'trial_request'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_trial" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_trial" data-todo-id="'+esc(todo.id)+'">Setujui (24 Jam)</button>';
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
@@ -574,6 +594,8 @@
       else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
       else if(action === 'approve_ib_kamar') await actionIbKamarApplication(todo, true);
       else if(action === 'reject_ib_kamar') await actionIbKamarApplication(todo, false);
+      else if(action === 'approve_trial') await actionTrialRequest(todo, true);
+      else if(action === 'reject_trial') await actionTrialRequest(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);
       await renderActionCenter();
     }catch(err){
@@ -655,13 +677,15 @@
     new_registration: 'admin-activation.html?member=',
     new_payment: 'admin-activation.html?member=',
     license_request: 'admin-license-requests.html?member=',
-    access_expired: 'admin-activation.html?member='
+    access_expired: 'admin-activation.html?member=',
+  trial_request: 'admin-activation.html?member='
   };
   var NOTIF_ICON = {
     new_registration: String.fromCodePoint(128100),
     new_payment: String.fromCodePoint(128176),
     license_request: String.fromCodePoint(128273),
-    access_expired: String.fromCodePoint(9200)
+    access_expired: String.fromCodePoint(9200),
+  trial_request: String.fromCodePoint(9889)
   };
   function injectNotifStyles(){
     if(qs('#kamarNotifStyles29F')) return;

@@ -1,4 +1,145 @@
-/* ==========================================================================
+
+
+/* ================================================================== */
+/* v7: EXECUTIVE PRIVATE-BANKING PALETTE -- locked direction, replaces v4-v6 dark+gold */
+/* Ivory bg, Pearl surfaces, Dark Executive selective, Deep Emerald positive, */
+/* Champagne Gold thin accent only. Scoped entirely to .ksig-body / .ksig-* classes. */
+/* ================================================================== */
+:root{
+  --ks-bg:#F3F0E8;
+  --ks-surface:#FBFAF7;
+  --ks-surface-dark:#1C2024;
+  --ks-text:#151719;
+  --ks-text-muted:#666B70;
+  --ks-text-faint:#858A8F;
+  --ks-emerald:#174C42;
+  --ks-emerald-soft:rgba(23,76,66,.10);
+  --ks-gold:#C6AA72;
+  --ks-gold-soft:rgba(198,170,114,.16);
+  --ks-danger:#963F3F;
+  --ks-danger-soft:rgba(150,63,63,.10);
+  --ks-warning:#9C7A3C;
+  --ks-warning-soft:rgba(156,122,60,.12);
+  --ks-notif-red:#e5484d;
+  --ks-border:rgba(21,23,25,.10);
+  --ks-border-gold:rgba(198,170,114,.40);
+  --ks-shadow:0 10px 28px rgba(21,23,25,.07);
+  --ks-radius:18px;
+}
+
+/* App background: warm ivory + very subtle tonal variation, no orb/texture */
+.ksig-body{
+  background:
+    radial-gradient(1200px 700px at 12% -10%, rgba(198,170,114,.07), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(23,76,66,.05), transparent 55%),
+    var(--ks-bg) !important;
+  color:var(--ks-text) !important;
+}
+
+/* ---------- Header: light & clean, remove dark-strip-era decorations ---------- */
+.ksig-header{ background:transparent !important; }
+.ksig-header-title{ color:var(--ks-text) !important; background:none !important; padding-left:0 !important; }
+.ksig-header-title::before{ display:none !important; }
+.ksig-header-title::after{ display:none !important; }
+.ksig-header-sub{ color:var(--ks-text-muted) !important; }
+.ksig-live-dot{ background:var(--ks-emerald) !important; }
+.ksig-install-btn{ background:var(--ks-gold-soft) !important; border:1px solid var(--ks-border-gold) !important; color:var(--ks-emerald) !important; }
+.ksig-install-btn:hover{ background:rgba(198,170,114,.26) !important; }
+
+/* ---------- Login: ivory bg, pearl panel, logo floats above card, dark-executive CTA ---------- */
+.ksig-center-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:var(--ks-shadow) !important;
+  margin-top:16vh !important;
+}
+.ksig-center-card::before{ display:none !important; }
+.ksig-center-card::after{
+  top:-34px !important;
+  background-color:var(--ks-surface-dark) !important;
+  box-shadow:0 12px 26px rgba(21,23,25,.28), 0 0 0 4px var(--ks-surface), 0 0 0 5px var(--ks-border-gold) !important;
+}
+.ksig-center-card h1{ margin:46px 26px 4px !important; color:var(--ks-text) !important; }
+.ksig-center-card p{ color:var(--ks-text-muted) !important; }
+.ksig-field label{ color:var(--ks-text-muted) !important; }
+.ksig-field input{
+  background:#fff !important; border:1px solid var(--ks-border) !important; color:var(--ks-text) !important;
+}
+.ksig-field input:focus{
+  border-color:var(--ks-emerald) !important;
+  box-shadow:0 0 0 3px var(--ks-emerald-soft), 0 0 0 1px var(--ks-gold) !important;
+  outline:none !important;
+}
+.ksig-btn.primary{
+  background:var(--ks-surface-dark) !important;
+  background-image:none !important;
+  border:1px solid var(--ks-surface-dark) !important;
+  color:#F5F1E8 !important;
+  box-shadow:none !important;
+}
+.ksig-btn.primary:hover{ transform:translateY(-1px); box-shadow:0 10px 22px rgba(21,23,25,.22) !important; }
+.ksig-center-card .ksig-login-install{
+  color:var(--ks-emerald) !important; border:1px solid var(--ks-border-gold) !important; background:var(--ks-gold-soft) !important;
+}
+.ksig-center-card .ksig-login-install:hover{ background:rgba(198,170,114,.26) !important; }
+
+/* ---------- Overview cards: pearl surface, semantic accent, gold hairline (always visible) ---------- */
+.ksig-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:var(--ks-shadow) !important;
+}
+.ksig-card::before{
+  background:linear-gradient(90deg,var(--ks-gold),rgba(198,170,114,.10) 75%,transparent) !important;
+  opacity:1 !important;
+}
+.ksig-card.profit::before, .ksig-card.aktif::before{ background:linear-gradient(90deg,var(--ks-emerald),rgba(23,76,66,.10) 75%,transparent) !important; }
+.ksig-card.loss::before{ background:linear-gradient(90deg,var(--ks-danger),rgba(150,63,63,.10) 75%,transparent) !important; }
+.ksig-card.archive::before{ background:linear-gradient(90deg,var(--ks-text-faint),rgba(133,138,143,.10) 75%,transparent) !important; }
+.ksig-card:hover{ border-color:var(--ks-border-gold) !important; }
+.ksig-card-label{ color:var(--ks-text-muted) !important; }
+.ksig-card-label::before{ background:var(--ks-gold) !important; }
+.ksig-card.profit .ksig-card-label::before, .ksig-card.aktif .ksig-card-label::before{ background:var(--ks-emerald) !important; }
+.ksig-card.loss .ksig-card-label::before{ background:var(--ks-danger) !important; }
+.ksig-card.archive .ksig-card-label::before{ background:var(--ks-text-faint) !important; }
+.ksig-card-count{ color:var(--ks-text) !important; }
+.ksig-card.profit .ksig-card-count{ color:var(--ks-emerald) !important; }
+.ksig-card.loss .ksig-card-count{ color:var(--ks-danger) !important; }
+.ksig-card.archive .ksig-card-count{ color:var(--ks-text-faint) !important; }
+.ksig-card-arrow{ color:var(--ks-gold) !important; }
+.ksig-card-badge{ background:var(--ks-notif-red) !important; }
+
+/* ---------- Recap: dark-executive segmented control (selective dark surface) ---------- */
+.ksig-recap-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:none !important;
+}
+.ksig-recap-card::before{ background:linear-gradient(90deg,transparent,var(--ks-border-gold),transparent) !important; }
+.ksig-tabs{ background:var(--ks-surface-dark) !important; }
+.ksig-tab{ color:rgba(245,241,232,.55) !important; }
+.ksig-tab.active{
+  background:linear-gradient(160deg,#2A3138,var(--ks-surface-dark)) !important;
+  color:#F5F1E8 !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.3), inset 0 0 0 1px var(--ks-border-gold) !important;
+}
+.ksig-tab:hover:not(.active){ color:#F5F1E8 !important; }
+
+/* ---------- Activity: pearl surface, gold accent rail ---------- */
+.ksig-activity-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+}
+.ksig-activity-card .ksig-row::before{ background:var(--ks-border-gold) !important; }
+.ksig-row-symbol{ color:var(--ks-text) !important; }
+.ksig-badge.fresh{ background:var(--ks-gold-soft) !important; color:#8a6a2e !important; }
+.ksig-badge.aktif, .ksig-badge.profit, .ksig-badge.buy{ background:var(--ks-emerald-soft) !important; color:var(--ks-emerald) !important; }
+.ksig-badge.loss, .ksig-badge.sell{ background:var(--ks-danger-soft) !important; color:var(--ks-danger) !important; }
+
+/* ---------- Section labels ---------- */
+.ksig-section-label{ color:var(--ks-text-muted) !important; }
+.ksig-section-label::before{ background:var(--ks-gold) !important; box-shadow:0 0 0 3px var(--ks-gold-soft) !important; }
+.ksig-section-action{ color:var(--ks-emerald) !important; }/* ==========================================================================
 Kamar Signal — app stylesheet v2 (professional UI/UX redesign)
 Dibangun di atas token --km-* dari kamar-dashboard-identity-v2.css supaya
 1:1 dengan identitas Kamar Kajian Market. Semua class di sini dinamespace
@@ -619,3 +760,137 @@ overview card accent, recap tab dark-active, header icon mark.
 .ksig-badge{ font-weight:950 !important; }
 
 .ksig-empty, .ksig-recap-empty-icon{ color:#8a5a12; }
+
+/* ================================================================== */
+/* v7-FINAL: EXECUTIVE PRIVATE-BANKING PALETTE -- this copy is the one that WINS cascade (true end of file) */
+/* Ivory bg, Pearl surfaces, Dark Executive selective, Deep Emerald positive, */
+/* Champagne Gold thin accent only. Scoped entirely to .ksig-body / .ksig-* classes. */
+/* ================================================================== */
+:root{
+  --ks-bg:#F3F0E8;
+  --ks-surface:#FBFAF7;
+  --ks-surface-dark:#1C2024;
+  --ks-text:#151719;
+  --ks-text-muted:#666B70;
+  --ks-text-faint:#858A8F;
+  --ks-emerald:#174C42;
+  --ks-emerald-soft:rgba(23,76,66,.10);
+  --ks-gold:#C6AA72;
+  --ks-gold-soft:rgba(198,170,114,.16);
+  --ks-danger:#963F3F;
+  --ks-danger-soft:rgba(150,63,63,.10);
+  --ks-warning:#9C7A3C;
+  --ks-warning-soft:rgba(156,122,60,.12);
+  --ks-notif-red:#e5484d;
+  --ks-border:rgba(21,23,25,.10);
+  --ks-border-gold:rgba(198,170,114,.40);
+  --ks-shadow:0 10px 28px rgba(21,23,25,.07);
+  --ks-radius:18px;
+}
+
+.ksig-body{
+  background:
+    radial-gradient(1200px 700px at 12% -10%, rgba(198,170,114,.07), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(23,76,66,.05), transparent 55%),
+    var(--ks-bg) !important;
+  color:var(--ks-text) !important;
+}
+
+.ksig-header{ background:transparent !important; }
+.ksig-header-title{ color:var(--ks-text) !important; background:none !important; padding-left:0 !important; }
+.ksig-header-title::before{ display:none !important; }
+.ksig-header-title::after{ display:none !important; }
+.ksig-header-sub{ color:var(--ks-text-muted) !important; }
+.ksig-live-dot{ background:var(--ks-emerald) !important; }
+.ksig-install-btn{ background:var(--ks-gold-soft) !important; border:1px solid var(--ks-border-gold) !important; color:var(--ks-emerald) !important; }
+.ksig-install-btn:hover{ background:rgba(198,170,114,.26) !important; }
+
+.ksig-center-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:var(--ks-shadow) !important;
+  margin-top:16vh !important;
+}
+.ksig-center-card::before{ display:none !important; }
+.ksig-center-card::after{
+  top:-34px !important;
+  background-color:var(--ks-surface-dark) !important;
+  box-shadow:0 12px 26px rgba(21,23,25,.28), 0 0 0 4px var(--ks-surface), 0 0 0 5px var(--ks-border-gold) !important;
+}
+.ksig-center-card h1{ margin:46px 26px 4px !important; color:var(--ks-text) !important; }
+.ksig-center-card p{ color:var(--ks-text-muted) !important; }
+.ksig-field label{ color:var(--ks-text-muted) !important; }
+.ksig-field input{
+  background:#fff !important; border:1px solid var(--ks-border) !important; color:var(--ks-text) !important;
+}
+.ksig-field input:focus{
+  border-color:var(--ks-emerald) !important;
+  box-shadow:0 0 0 3px var(--ks-emerald-soft), 0 0 0 1px var(--ks-gold) !important;
+  outline:none !important;
+}
+.ksig-btn.primary{
+  background:var(--ks-surface-dark) !important;
+  background-image:none !important;
+  border:1px solid var(--ks-surface-dark) !important;
+  color:#F5F1E8 !important;
+  box-shadow:none !important;
+}
+.ksig-btn.primary:hover{ transform:translateY(-1px); box-shadow:0 10px 22px rgba(21,23,25,.22) !important; }
+.ksig-center-card .ksig-login-install{
+  color:var(--ks-emerald) !important; border:1px solid var(--ks-border-gold) !important; background:var(--ks-gold-soft) !important;
+}
+.ksig-center-card .ksig-login-install:hover{ background:rgba(198,170,114,.26) !important; }
+
+.ksig-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:var(--ks-shadow) !important;
+}
+.ksig-card::before{
+  background:linear-gradient(90deg,var(--ks-gold),rgba(198,170,114,.10) 75%,transparent) !important;
+  opacity:1 !important;
+}
+.ksig-card.profit::before, .ksig-card.aktif::before{ background:linear-gradient(90deg,var(--ks-emerald),rgba(23,76,66,.10) 75%,transparent) !important; }
+.ksig-card.loss::before{ background:linear-gradient(90deg,var(--ks-danger),rgba(150,63,63,.10) 75%,transparent) !important; }
+.ksig-card.archive::before{ background:linear-gradient(90deg,var(--ks-text-faint),rgba(133,138,143,.10) 75%,transparent) !important; }
+.ksig-card:hover{ border-color:var(--ks-border-gold) !important; }
+.ksig-card-label{ color:var(--ks-text-muted) !important; }
+.ksig-card-label::before{ background:var(--ks-gold) !important; }
+.ksig-card.profit .ksig-card-label::before, .ksig-card.aktif .ksig-card-label::before{ background:var(--ks-emerald) !important; }
+.ksig-card.loss .ksig-card-label::before{ background:var(--ks-danger) !important; }
+.ksig-card.archive .ksig-card-label::before{ background:var(--ks-text-faint) !important; }
+.ksig-card-count{ color:var(--ks-text) !important; }
+.ksig-card.profit .ksig-card-count{ color:var(--ks-emerald) !important; }
+.ksig-card.loss .ksig-card-count{ color:var(--ks-danger) !important; }
+.ksig-card.archive .ksig-card-count{ color:var(--ks-text-faint) !important; }
+.ksig-card-arrow{ color:var(--ks-gold) !important; }
+.ksig-card-badge{ background:var(--ks-notif-red) !important; }
+
+.ksig-recap-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:none !important;
+}
+.ksig-recap-card::before{ background:linear-gradient(90deg,transparent,var(--ks-border-gold),transparent) !important; }
+.ksig-tabs{ background:var(--ks-surface-dark) !important; }
+.ksig-tab{ color:rgba(245,241,232,.55) !important; }
+.ksig-tab.active{
+  background:linear-gradient(160deg,#2A3138,var(--ks-surface-dark)) !important;
+  color:#F5F1E8 !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.3), inset 0 0 0 1px var(--ks-border-gold) !important;
+}
+.ksig-tab:hover:not(.active){ color:#F5F1E8 !important; }
+
+.ksig-activity-card{
+  background:var(--ks-surface) !important;
+  border:1px solid var(--ks-border) !important;
+}
+.ksig-activity-card .ksig-row::before{ background:var(--ks-border-gold) !important; }
+.ksig-row-symbol{ color:var(--ks-text) !important; }
+.ksig-badge.fresh{ background:var(--ks-gold-soft) !important; color:#8a6a2e !important; }
+.ksig-badge.aktif, .ksig-badge.profit, .ksig-badge.buy{ background:var(--ks-emerald-soft) !important; color:var(--ks-emerald) !important; }
+.ksig-badge.loss, .ksig-badge.sell{ background:var(--ks-danger-soft) !important; color:var(--ks-danger) !important; }
+
+.ksig-section-label{ color:var(--ks-text-muted) !important; }
+.ksig-section-label::before{ background:var(--ks-gold) !important; box-shadow:0 0 0 3px var(--ks-gold-soft) !important; }
+.ksig-section-action{ color:var(--ks-emerald) !important; }

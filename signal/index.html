@@ -6,18 +6,19 @@
 <title>Kamar Signal</title>
 <meta name="description" content="Kamar Signal — kajian zona entry, target, dan invalidasi dari Kamar AI, khusus member Kamar Kajian Market."/>
 <meta name="theme-color" content="#111820"/>
-<link rel="icon" href="/assets/favicon.png"/>
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"/>
+<link rel="icon" href="/signal/assets/icons/kamar-signal-icon-192-v2.png"/>
+<link rel="apple-touch-icon" href="/signal/assets/icons/kamar-signal-apple-touch-icon-180-v2.png"/>
 <link rel="manifest" href="/signal/manifest.webmanifest"/>
 <link rel="stylesheet" href="/assets/css/kamar-dashboard-identity-v2.css"/>
-<link rel="stylesheet" href="/signal/assets/css/kamar-signal.css?v=3"/>
+<link rel="stylesheet" href="/signal/assets/css/kamar-signal.css?v=4"/>
 </head>
 <body class="ksig-body">
 <div id="ksigRoot" class="ksig-root">
-  <div class="ksig-boot">
-    <div class="ksig-boot-mark">Kamar Signal</div>
-    <div class="ksig-boot-sub">Memuat…</div>
-  </div>
+<div class="ksig-boot">
+<img class="ksig-boot-logo" src="/signal/assets/icons/kamar-signal-icon-512-v2.png" width="76" height="76" alt="Kamar Signal"/>
+<div class="ksig-boot-mark">KAMAR SIGNAL</div>
+<div class="ksig-boot-sub">KAMAR KAJIAN MARKET</div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -26,9 +27,9 @@
 <script src="/signal/assets/js/kamar-signal-app.js?v=3"></script>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/signal/sw.js').catch(function(){});
-  });
+window.addEventListener('load', function(){
+navigator.serviceWorker.register('/signal/sw.js').catch(function(){});
+});
 }
 </script>
 </body>

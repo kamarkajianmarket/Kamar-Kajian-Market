@@ -48,6 +48,25 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   function installAvailable(){
     return !isStandaloneMode();
   }
+  var ANDROID_EMOJI = '\uD83E\uDD16';
+  var APPLE_EMOJI = '\uD83C\uDF4E';
+  function platformKind(){ return isIOSDevice() ? 'ios' : 'android'; }
+  function installStepsHtml(kind){
+    if(kind==='ios'){
+      return '<ol class="ksig-promo-steps">'+
+        '<li><span class="ksig-promo-num">1</span>Buka Kamar Signal di <strong>Safari</strong> (bukan Chrome).</li>'+
+        '<li><span class="ksig-promo-num">2</span>Tap ikon <strong>Share</strong> (kotak dengan panah ke atas) di bagian bawah layar.</li>'+
+        '<li><span class="ksig-promo-num">3</span>Pilih <strong>"Add to Home Screen"</strong> (Tambah ke Layar Utama).</li>'+
+        '<li><span class="ksig-promo-num">4</span>Tap <strong>"Add"</strong> di pojok kanan atas.</li>'+
+      '</ol>';
+    }
+    return '<ol class="ksig-promo-steps">'+
+      '<li><span class="ksig-promo-num">1</span>Tap tombol <strong>Instal Sekarang</strong> di bawah ini.</li>'+
+      '<li><span class="ksig-promo-num">2</span>Jika tidak muncul otomatis, tap menu titik tiga di pojok kanan atas browser.</li>'+
+      '<li><span class="ksig-promo-num">3</span>Pilih <strong>"Instal aplikasi"</strong> atau <strong>"Tambahkan ke layar Utama"</strong>.</li>'+
+    '</ol>';
+  }
+
   window.addEventListener('beforeinstallprompt', function(e){
     e.preventDefault();
     installPromptEvent = e;
@@ -63,39 +82,50 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var l = document.getElementById('ksigLoginInstall');
     if(l) l.addEventListener('click', openInstallSheet);
   }
-  function openInstallSheet(){
+  function openInstallSheet(forceKind){
     var wrap = document.createElement('div');
     wrap.className = 'ksig-sheet-backdrop';
-    var body;
-    if(installPromptEvent){
-      body = '<div class="ksig-sheet-title">Instal Kamar Signal</div>'+
-        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Instal Kamar Signal sebagai aplikasi di perangkat ini supaya lebih cepat dibuka dan tampil layar penuh seperti aplikasi biasa.</p>'+
-        '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigInstallCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigInstallGo">Instal Sekarang</button></div>';
-    } else if(isIOSDevice()){
-      body = '<div class="ksig-sheet-title">Instal Kamar Signal (iPhone/iPad)</div>'+
-        '<ol style="color:var(--km-muted);font-size:13.5px;line-height:1.85;margin:0 0 16px;padding-left:18px">'+
-          '<li>Tap tombol <strong>Share</strong> (kotak dengan panah ke atas) di Safari.</li>'+
-          '<li>Pilih <strong>"Add to Home Screen"</strong>.</li>'+
-          '<li>Tap <strong>"Add"</strong> di pojok kanan atas.</li>'+
-        '</ol>'+
-        '<div class="ksig-sheet-actions"><button class="ksig-btn primary block" id="ksigInstallCancel">Mengerti</button></div>';
-    } else {
-      body = '<div class="ksig-sheet-title">Instal Kamar Signal</div>'+
-        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Buka menu browser Anda (biasanya ikon titik tiga atau ikon instal di address bar) lalu pilih "Instal Aplikasi" atau "Add to Home Screen".</p>'+
-        '<div class="ksig-sheet-actions"><button class="ksig-btn primary block" id="ksigInstallCancel">Mengerti</button></div>';
+    var kind = forceKind || platformKind();
+    function bodyFor(k){
+      var showGo = (k==='android' && !!installPromptEvent);
+      return '<div class="ksig-promo">'+
+          '<div class="ksig-promo-tabs">'+
+            '<button type="button" class="ksig-promo-tab'+(k==='android'?' active':'')+'" data-kind="android">'+ANDROID_EMOJI+' Android</button>'+
+            '<button type="button" class="ksig-promo-tab'+(k==='ios'?' active':'')+'" data-kind="ios">'+APPLE_EMOJI+' iPhone/iPad</button>'+
+          '</div>'+
+          '<div class="ksig-promo-badge '+k+'">'+(k==='ios'?APPLE_EMOJI:ANDROID_EMOJI)+'</div>'+
+          '<div class="ksig-sheet-title">Instal Kamar Signal ('+(k==='ios'?'iPhone/iPad':'Android')+')</div>'+
+          '<div class="ksig-promo-desc">Akses lebih cepat, tampilan layar penuh, dan notifikasi langsung ke HP Anda seperti aplikasi biasa.</div>'+
+          installStepsHtml(k)+
+        '</div>'+
+        '<div class="ksig-sheet-actions">'+
+          '<button class="ksig-btn'+(showGo?'':' primary block')+'" id="ksigInstallCancel">'+(showGo?'Nanti Saja':'Mengerti')+'</button>'+
+          (showGo?'<button class="ksig-btn primary" id="ksigInstallGo">Instal Sekarang</button>':'')+
+        '</div>';
     }
-    wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div>'+body+'</div>';
+    wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div><div id="ksigInstallSheetBody">'+bodyFor(kind)+'</div></div>';
     document.body.appendChild(wrap);
-    wrap.addEventListener('click', function(e){ if(e.target===wrap) document.body.removeChild(wrap); });
-    var cancelBtn = document.getElementById('ksigInstallCancel');
-    if(cancelBtn) cancelBtn.addEventListener('click', function(){ document.body.removeChild(wrap); });
-    var goBtn = document.getElementById('ksigInstallGo');
-    if(goBtn) goBtn.addEventListener('click', function(){
-      document.body.removeChild(wrap);
-      if(!installPromptEvent) return;
-      installPromptEvent.prompt();
-      installPromptEvent.userChoice.then(function(){ installPromptEvent = null; renderApp(); });
-    });
+    function bindActions(){
+      var cancelBtn = document.getElementById('ksigInstallCancel');
+      if(cancelBtn) cancelBtn.addEventListener('click', function(){ if(wrap.parentNode) document.body.removeChild(wrap); });
+      var goBtn = document.getElementById('ksigInstallGo');
+      if(goBtn) goBtn.addEventListener('click', function(){
+        if(wrap.parentNode) document.body.removeChild(wrap);
+        if(!installPromptEvent) return;
+        installPromptEvent.prompt();
+        installPromptEvent.userChoice.then(function(){ installPromptEvent = null; renderApp(); });
+      });
+      var tabs = wrap.querySelectorAll('.ksig-promo-tab');
+      tabs.forEach(function(t){
+        t.addEventListener('click', function(){
+          kind = t.getAttribute('data-kind');
+          var holder = document.getElementById('ksigInstallSheetBody');
+          if(holder){ holder.innerHTML = bodyFor(kind); bindActions(); }
+        });
+      });
+    }
+    wrap.addEventListener('click', function(e){ if(e.target===wrap && wrap.parentNode) document.body.removeChild(wrap); });
+    bindActions();
   }
 
   /* ---------------- notifikasi (push, additive) ---------------- */
@@ -195,9 +225,33 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">HP Anda akan mendapat pemberitahuan saat ada signal baru, signal aktif, dan hasil akhir (profit/loss). Matikan notifikasi?</p>'+
         '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Batal</button><button class="ksig-btn primary" id="ksigNotifOff">Matikan Notifikasi</button></div>';
     } else {
-      body = '<div class="ksig-sheet-title">Aktifkan Notifikasi</div>'+
-        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Dapatkan pemberitahuan langsung di HP Anda saat ada signal baru, signal aktif, dan hasil akhir (profit/loss). Anda bisa mematikannya kapan saja.</p>'+
-        '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigNotifOn">Aktifkan</button></div>';
+      var ios = isIOSDevice();
+      var standalone = isStandaloneMode();
+      if(ios && !standalone){
+        body = '<div class="ksig-promo">'+
+            '<div class="ksig-promo-badge ios">'+APPLE_EMOJI+'</div>'+
+            '<div class="ksig-sheet-title">Aktifkan Notifikasi (iPhone/iPad)</div>'+
+            '<div class="ksig-promo-desc">Di iPhone/iPad, notifikasi push hanya bisa aktif setelah Kamar Signal dipasang sebagai aplikasi di Layar Utama.</div>'+
+            '<ol class="ksig-promo-steps">'+
+              '<li><span class="ksig-promo-num">1</span>Tap <strong>Instal Aplikasi</strong> di bawah ini, ikuti langkahnya.</li>'+
+              '<li><span class="ksig-promo-num">2</span>Buka Kamar Signal dari ikon di Layar Utama (bukan dari Safari).</li>'+
+              '<li><span class="ksig-promo-num">3</span>Tap ikon lonceng lagi, lalu tap Aktifkan dan izinkan saat diminta.</li>'+
+            '</ol>'+
+          '</div>'+
+          '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigNotifInstallGo">Instal Aplikasi</button></div>';
+      } else {
+        body = '<div class="ksig-promo">'+
+            '<div class="ksig-promo-badge '+(ios?'ios':'android')+'">'+(ios?APPLE_EMOJI:ANDROID_EMOJI)+'</div>'+
+            '<div class="ksig-sheet-title">Aktifkan Notifikasi</div>'+
+            '<div class="ksig-promo-desc">Dapatkan pemberitahuan langsung di HP Anda saat ada signal baru, signal aktif, dan hasil akhir (profit/loss). Bisa dimatikan kapan saja.</div>'+
+            '<ol class="ksig-promo-steps">'+
+              '<li><span class="ksig-promo-num">1</span>Tap <strong>Aktifkan</strong> di bawah ini.</li>'+
+              '<li><span class="ksig-promo-num">2</span>'+(ios?'Sistem akan minta izin, tap ':'Browser akan minta izin, tap ')+'<strong>Izinkan / Allow</strong>.</li>'+
+              '<li><span class="ksig-promo-num">3</span>Selesai, notifikasi aktif otomatis.</li>'+
+            '</ol>'+
+          '</div>'+
+          '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigNotifOn">Aktifkan</button></div>';
+      }
     }
     wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div>'+body+'</div>';
     document.body.appendChild(wrap);
@@ -213,6 +267,11 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(offBtn) offBtn.addEventListener('click', function(){
       document.body.removeChild(wrap);
       unsubscribeNotif().catch(function(){});
+    });
+    var installGoBtn = document.getElementById('ksigNotifInstallGo');
+    if(installGoBtn) installGoBtn.addEventListener('click', function(){
+      document.body.removeChild(wrap);
+      openInstallSheet('ios');
     });
   }
 
@@ -844,7 +903,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   function installCardHtml(){
     if(isStandaloneMode()){
       return '<div class="ksig-install-card installed">'+
-          '<div class="ksig-install-icon">◇</div>'+
+          '<div class="ksig-install-icon">\u25C7</div>'+
           '<div class="ksig-install-body">'+
             '<div class="ksig-install-title">KAMAR SIGNAL APP</div>'+
             '<div class="ksig-install-desc">Kamar Signal sudah terpasang di perangkat ini.</div>'+
@@ -852,11 +911,14 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '</div>';
     }
     return '<div class="ksig-install-card">'+
-        '<div class="ksig-install-icon">◇</div>'+
+        '<div class="ksig-install-icon">\u25C7</div>'+
         '<div class="ksig-install-body">'+
           '<div class="ksig-install-title">KAMAR SIGNAL APP</div>'+
           '<div class="ksig-install-desc">Install Kamar Signal di HP Anda untuk akses yang lebih cepat dan praktis.</div>'+
-          '<button type="button" class="ksig-install-card-btn" id="ksigDashInstallBtn">Instal Kamar Signal</button>'+
+          '<div class="ksig-install-card-actions">'+
+            '<button type="button" class="ksig-install-card-btn android" id="ksigDashInstallBtnAndroid">'+ANDROID_EMOJI+' Android</button>'+
+            '<button type="button" class="ksig-install-card-btn ios" id="ksigDashInstallBtnIOS">'+APPLE_EMOJI+' iPhone/iPad</button>'+
+          '</div>'+
         '</div>'+
       '</div>';
   }
@@ -891,7 +953,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     dashboardEntered = true;
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn();
-    (function(){ var dib=document.getElementById('ksigDashInstallBtn'); if(dib) dib.addEventListener('click', openInstallSheet); })();
+    (function(){ var da=document.getElementById('ksigDashInstallBtnAndroid'); if(da) da.addEventListener('click', function(){ openInstallSheet('android'); }); var di=document.getElementById('ksigDashInstallBtnIOS'); if(di) di.addEventListener('click', function(){ openInstallSheet('ios'); }); })();
     bindRecapTabs();
     bindPointerLight();
     renderRecapBody();

@@ -103,6 +103,7 @@ html,body{ height:100%; }
   transition:border-color .18s ease, transform .18s ease;
 }
 .ksig-install-btn:hover{ border-color:rgba(184,138,61,.4); }
+.ksig-install-btn.on{ border-color:rgba(14,95,84,.5); background:rgba(14,95,84,.08); color:#0e5f54; }
 .ksig-install-btn:active{ transform:scale(.94); }
 .ksig-login-install{ display:block; text-align:center; margin-top:14px; font-size:12.5px; font-weight:800; color:var(--km-muted); text-decoration:none; cursor:pointer; }
 .ksig-login-install:hover{ color:var(--km-ink); }

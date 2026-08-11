@@ -1315,6 +1315,21 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     body.innerHTML = html;
   }
 
-  /* ---------------- start ---------------- */
+    /* ---------------- update PWA (toast) ---------------- */
+  function showUpdateToast(){
+    if(document.getElementById('ksigUpdateToast')) return;
+    var t = document.createElement('div');
+    t.id = 'ksigUpdateToast';
+    t.className = 'ksig-update-toast';
+    t.innerHTML = '<span class="ksig-update-toast-text">Versi baru Kamar Signal tersedia</span>'+
+      '<button type="button" class="ksig-update-toast-btn" id="ksigUpdateReload">Perbarui</button>';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ t.classList.add('show'); }); });
+    var btn = document.getElementById('ksigUpdateReload');
+    if(btn) btn.addEventListener('click', function(){ location.reload(); });
+  }
+  window.ksigShowUpdateToast = showUpdateToast;
+
+/* ---------------- start ---------------- */
   boot();
 })();

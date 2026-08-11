@@ -334,9 +334,11 @@ Prinsip (jangan dilanggar, lihat master prompt user):
 
   function refreshCounts(){
     if(!state.approved) return Promise.resolve();
-    var statuses = ['fresh','aktif','profit','loss'];
+    var statuses = ['fresh','aktif','profit','loss','archive'];
     return Promise.all(statuses.map(function(s){
-      return state.client.from('signals').select('id_zona,updated_at').eq('display_status', s);
+      var q = state.client.from('signals').select('id_zona,updated_at');
+      q = (s === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', s).eq('is_archived', false);
+      return q;
     })).then(function(results){
       var prev = state.unreadCounts;
       var next = {};
@@ -402,7 +404,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var unreadOnly = !!L.filters.unread;
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
-    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at').eq('display_status', L.status);
+    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived');
+    q = (L.status === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', L.status).eq('is_archived', false);
     if(L.search){
       var s = L.search.replace(/[%,]/g,'');
       q = q.or('pair.ilike.%'+s+'%,id_zona.ilike.%'+s+'%,timeframe.ilike.%'+s+'%');
@@ -632,7 +635,8 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     fresh:  { label:'Signal Fresh',  desc:'Signal terbaru' },
     aktif:  { label:'Signal Aktif',  desc:'Signal sedang aktif' },
     profit: { label:'Signal Profit', desc:'Signal selesai profit' },
-    loss:   { label:'Signal Loss',   desc:'Signal selesai loss' }
+    loss:   { label:'Signal Loss',   desc:'Signal selesai loss' },
+    archive:{ label:'Arsip',        desc:'Riwayat signal terarsip' }
   };
 
   function signalStatusBannerHtml(){
@@ -693,7 +697,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div class="'+('ksig-block'+ac(2)).trim()+'">'+
           sectionLabel('SIGNAL OVERVIEW') +
           '<div class="ksig-grid">'+
-            card('fresh') + card('aktif') + card('profit') + card('loss') +
+            card('fresh') + card('aktif') + card('profit') + card('loss') + card('archive') +
           '</div>'+
         '</div>'+
         '<div class="'+('ksig-block'+ac(3)).trim()+'">'+
@@ -731,7 +735,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   }
 
   /* ---------------- signal list ---------------- */
-  var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss' };
+  var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss', archive:'Arsip Signal' };
 
   function renderList(){
     var L = state.list;

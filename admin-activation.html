@@ -382,9 +382,18 @@
         showDetail(state.selectedId);
       }catch(e){ toast(window.kamarFriendlyError(e)); }
     }
-    function profileMatchQuery(c,m,upd){ var q=c.from(TABLE_PROFILE).update(upd); var pid=pick(m,['id','profile_id','user_id']); if(pid) return q.eq('id',pid); if(emailOf(m)) return q.eq('email',emailOf(m)); if(idOf(m)) return q.eq('member_id',idOf(m)); return q}
+    // FIXED (2026-08-11): Aktifkan Member Gratis di halaman ini menulis langsung ke
+// member_profiles tanpa pernah menyentuh admin_todos, beda dengan RPC
+// admin_review_license_request yang sudah benar menutup todo-nya sendiri.
+// Akibatnya todo 'Pendaftaran Member Baru' (new_registration) tetap muncul
+// selamanya di TO DO ADMIN meski member sudah benar-benar diaktifkan lewat
+// halaman ini. closeMatchingTodos() menutup todo terkait profile member yang
+// sama secara best-effort (tidak menggagalkan aksi utama jika gagal).
+async function resolveProfileIdForTodos(m){var pid=pick(m,['id','profile_id']); if(pid) return pid; var email=emailOf(m); if(!email) return null; var c=await initClient(); if(!c) return null; try{var pr=await c.from(TABLE_PROFILE).select('id').eq('email',email).limit(1); if(!pr.error&&pr.data&&pr.data.length) return pr.data[0].id;}catch(e){} return null;}
+async function closeMatchingTodos(m,types){try{var pid=await resolveProfileIdForTodos(m); if(!pid) return; var c=await initClient(); if(!c) return; await c.from('admin_todos').update({todo_status:'done',completed_at:new Date().toISOString()}).eq('profile_id',pid).in('todo_status',['new','processing']).in('todo_type',types);}catch(e){}}
+function profileMatchQuery(c,m,upd){ var q=c.from(TABLE_PROFILE).update(upd); var pid=pick(m,['id','profile_id','user_id']); if(pid) return q.eq('id',pid); if(emailOf(m)) return q.eq('email',emailOf(m)); if(idOf(m)) return q.eq('member_id',idOf(m)); return q}
     function buildProfileUpdate(m){var upd={}; var keys=Object.keys(m||{}); function has(k){return keys.indexOf(k)>=0} if(has('status'))upd.status='active'; if(has('account_status'))upd.account_status='active'; if(has('status_key'))upd.status_key='active'; if(has('approval_status'))upd.approval_status='approved'; if(has('is_active'))upd.is_active=true; if(has('active'))upd.active=true; if(has('confirmed'))upd.confirmed=true; if(has('account_active'))upd.account_active=true; if(has('activated_at'))upd.activated_at=new Date().toISOString(); if(has('updated_at'))upd.updated_at=new Date().toISOString(); if(!Object.keys(upd).length)upd.status='active'; return upd}
-    async function activateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var res=await profileMatchQuery(c,m,buildProfileUpdate(m)); if(res.error)throw res.error; toast('Member berhasil diaktifkan gratis.'); await loadData(); showDetail(id)}catch(e){toast(window.kamarFriendlyError(e))} }
+    async function activateMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var res=await profileMatchQuery(c,m,buildProfileUpdate(m)); if(res.error)throw res.error; await closeMatchingTodos(m,['new_registration']); toast('Member berhasil diaktifkan gratis.'); await loadData(); showDetail(id)}catch(e){toast(window.kamarFriendlyError(e))} }
     // NEW (2026-07-30): suspend/reactivate, backed by account_status_type's
     // real 'suspended' value (previously had no UI entry point at all).
     async function suspendMember(id){var m=findMember(id); if(!m)return toast('Member tidak ditemukan.'); if(!confirm('Suspend/ban member '+nameOf(m)+'? Member tidak akan bisa mengakses dashboard sampai diaktifkan kembali.'))return; var c=await initClient(); if(!c)return toast('Supabase client tidak terbaca.'); try{var upd={account_status:'suspended',updated_at:new Date().toISOString()}; var res=await profileMatchQuery(c,m,upd); if(res.error)throw res.error; toast('Member disuspend.'); await loadData(); showDetail(id)}catch(e){toast(window.kamarFriendlyError(e))} }

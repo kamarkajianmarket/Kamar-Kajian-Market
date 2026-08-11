@@ -963,3 +963,9 @@ overview card accent, recap tab dark-active, header icon mark.
 
 .ksig-empty, .ksig-error{ background:var(--ks-surface) !important; border:1px solid var(--ks-border) !important; border-radius:var(--ks-radius) !important; color:var(--ks-text-muted) !important; }
 .ksig-skel-row{ background:var(--ks-gold-soft) !important; }
+
+
+/* v9: Boot/splash screen -- pin to locked v7 tokens */
+.ksig-boot{ background:var(--ks-bg) !important; }
+.ksig-boot-mark{ color:var(--ks-text) !important; }
+.ksig-boot-sub{ color:var(--ks-text-muted) !important; }

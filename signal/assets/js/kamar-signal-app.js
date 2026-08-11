@@ -46,7 +46,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
   }
   function installAvailable(){
-    return !isStandaloneMode() && (!!installPromptEvent || isIOSDevice());
+    return !isStandaloneMode();
   }
   window.addEventListener('beforeinstallprompt', function(e){
     e.preventDefault();

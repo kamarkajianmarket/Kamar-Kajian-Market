@@ -704,3 +704,49 @@ bisa memakai warna dari <option> itu sendiri utk teks yang ditampilkan.
 ========================================================================== */
 
 select option{ color:var(--km-ink) !important; background:#fff !important; }
+
+
+/* ==========================================================================
+PERLUASAN v2.7 (2026-08-11) — halaman baru Aktivasi Kamar Signal (pilih
+metode Berbayar/IB Kamar) dan Pengajuan IB Kamar memakai beberapa class
+yang belum ada di theme terang: kartu pilihan metode (.method-card), badge
+kecil di dalamnya (.badge), pilihan radio (.radio-pill), item persetujuan
+(.consent-item), catatan peringatan (.warn-note), kode sukses berhasil
+kirim (.success-code), dan pesan error form (.field-error). CSS-only,
+prinsip sama seperti perluasan sebelumnya.
+========================================================================== */
+
+.method-card{
+background:#fff !important;
+border:1px solid var(--km-line) !important;
+box-shadow:0 14px 42px rgba(17,20,23,.07) !important;
+}
+.method-card h3{ color:var(--km-ink) !important; }
+.method-card p{ color:var(--km-muted) !important; }
+.method-card .badge{
+background:#efe3ca !important;
+color:#7a561e !important;
+border:1px solid rgba(184,138,61,.22) !important;
+}
+
+.radio-pill{
+background:#fff !important;
+border:1px solid var(--km-line) !important;
+color:var(--km-ink) !important;
+}
+
+.consent-item{
+background:#fbf7ee !important;
+border:1px solid var(--km-line) !important;
+}
+.consent-item span{ color:var(--km-ink) !important; }
+
+.warn-note{
+border:1px solid rgba(184,138,61,.3) !important;
+background:rgba(184,138,61,.08) !important;
+color:#7a561e !important;
+}
+
+.success-code{ color:#7a561e !important; }
+
+.field-error{ color:#c43c3c !important; }

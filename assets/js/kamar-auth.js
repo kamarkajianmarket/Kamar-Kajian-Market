@@ -157,6 +157,12 @@
       var res = await timeout(c.auth.signInWithPassword({email:email,password:password}),15000);
       if(res.error) throw res.error;
       if(!res.data || !res.data.user) throw new Error('Login gagal. Silakan coba lagi.');
+      try{
+        var rememberEl = form.elements['remember'];
+        var rememberKey = 'kamarRememberedEmail_' + (form.id || 'default');
+        if(rememberEl && rememberEl.checked){ localStorage.setItem(rememberKey, email); }
+        else { localStorage.removeItem(rememberKey); }
+      }catch(e){}
 
       var user = res.data.user;
       var baseMeta = Object.assign({}, user.user_metadata||{}, user.app_metadata||{});
@@ -291,7 +297,22 @@
     f.__kamarBound29E = true;
     f.addEventListener('submit',function(e){ e.preventDefault(); if(e.stopImmediatePropagation) e.stopImmediatePropagation(); else e.stopPropagation(); fn(f); },true);
   }
+  function restoreRememberedEmails(){
+    var ids = ['adminLoginForm','memberLoginForm','kamarLoginForm','affiliateLoginForm'];
+    ids.forEach(function(id){
+      var f = document.getElementById(id);
+      if(!f) return;
+      try{
+        var key = 'kamarRememberedEmail_' + id;
+        var saved = localStorage.getItem(key);
+        var emailEl = f.elements['email'] || qs('input[type="email"]', f);
+        if(saved && emailEl && !emailEl.value) emailEl.value = saved;
+      }catch(e){}
+    });
+  }
+
   function run(){
+    restoreRememberedEmails();
     bind('adminLoginForm',function(f){ doLogin(f,'admin'); });
     bind('memberLoginForm',function(f){ doLogin(f,'member'); });
     bind('kamarLoginForm',function(f){ doLogin(f,'member'); });

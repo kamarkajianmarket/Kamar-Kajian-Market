@@ -470,3 +470,78 @@ Prinsip: gold sebagai aksen tipis, dark surface selektif, tanpa ubah struktur/lo
 .ksig-center-card h1{ letter-spacing:-.02em; }
 .ksig-field input{ transition:border-color .18s ease, box-shadow .18s ease; }
 .ksig-field input:focus{ outline:none; border-color:rgba(184,138,61,.55); box-shadow:0 0 0 3px rgba(184,138,61,.14); }
+
+/* ==========================================================================
+Kamar Signal — Executive Luxury polish layer v5 (deeper pass)
+Fokus: login identity strip + logo, install button lebih terlihat,
+overview card accent, recap tab dark-active, header icon mark.
+========================================================================== */
+
+/* ---------- Login: dark identity strip + logo badge ---------- */
+.ksig-center-card{
+  padding:0; overflow:visible; position:relative; text-align:center;
+  border-radius:26px; border:1px solid var(--km-line);
+  box-shadow:0 30px 70px rgba(17,20,23,.16), 0 10px 26px rgba(184,138,61,.10);
+  background:#fff;
+}
+.ksig-center-card::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:96px; border-radius:26px 26px 0 0;
+  background:
+    radial-gradient(180px circle at 88% -25%, rgba(212,175,120,.38), transparent 62%),
+    linear-gradient(155deg, var(--ksig-dark-2), var(--ksig-dark-1));
+  border-bottom:1px solid var(--ksig-dark-line);
+}
+.ksig-center-card::after{
+  content:""; position:absolute; top:52px; left:50%; transform:translateX(-50%);
+  width:56px; height:56px; border-radius:16px; background-color:#0d1015;
+  background-image:url('/signal/assets/icons/kamar-signal-icon-192-v2.png');
+  background-size:70%; background-position:center; background-repeat:no-repeat;
+  box-shadow:0 10px 24px rgba(17,20,23,.4), 0 0 0 4px #fff, 0 0 0 5px var(--ksig-dark-line);
+}
+.ksig-center-card h1{
+  position:relative; z-index:1; margin:124px 26px 4px; font-size:19px; letter-spacing:-.02em;
+}
+.ksig-center-card > p{ padding:0 26px; margin:0 0 20px; }
+.ksig-center-card form{ padding:0 26px; }
+.ksig-center-card .ksig-status-line{ text-align:left; }
+.ksig-center-card .ksig-field{ text-align:left; }
+
+/* ---------- Install: lebih terlihat, bukan link kecil pudar ---------- */
+.ksig-center-card .ksig-login-install{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  margin:2px 0 26px; padding:10px 20px; border-radius:999px;
+  border:1px solid rgba(184,138,61,.45); background:rgba(184,138,61,.09);
+  color:#8a5a12 !important; font-weight:800; font-size:12.5px; text-decoration:none;
+  transition:background .18s ease, border-color .18s ease;
+}
+.ksig-center-card .ksig-login-install:hover{ background:rgba(184,138,61,.16); border-color:rgba(184,138,61,.65); }
+.ksig-install-btn{
+  background:linear-gradient(135deg, rgba(184,138,61,.18), rgba(184,138,61,.07));
+  border-color:rgba(184,138,61,.5) !important; color:#8a5a12 !important;
+}
+.ksig-install-btn:hover{ background:rgba(184,138,61,.24); }
+
+/* ---------- Header: icon mark kecil sebelum judul dashboard ---------- */
+.ksig-header-title{ padding-left:30px; position:relative; }
+.ksig-header-title::before{
+  content:""; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:22px; height:22px; border-radius:7px; background-color:#0d1015;
+  background-image:url('/signal/assets/icons/kamar-signal-icon-192-v2.png');
+  background-size:80%; background-position:center; background-repeat:no-repeat;
+  box-shadow:0 4px 10px rgba(17,20,23,.3);
+}
+
+/* ---------- Overview card: aksen gold tipis di top saat hover ---------- */
+.ksig-card{ position:relative; }
+.ksig-card::before{
+  content:""; position:absolute; top:0; left:16px; right:16px; height:2px; border-radius:0 0 2px 2px;
+  background:linear-gradient(90deg,var(--ksig-gold-metal),transparent); opacity:0; transition:opacity .2s ease;
+}
+.ksig-card:hover::before{ opacity:1; }
+
+/* ---------- Recap tab aktif: dark executive pill ---------- */
+.ksig-tab.active{
+  background:linear-gradient(180deg,var(--ksig-dark-2),var(--ksig-dark-1)) !important;
+  color:var(--ksig-dark-ink) !important;
+  box-shadow:0 6px 16px rgba(17,20,23,.28) !important;
+}

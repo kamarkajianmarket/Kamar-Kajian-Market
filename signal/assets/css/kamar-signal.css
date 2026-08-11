@@ -980,3 +980,38 @@ overview card accent, recap tab dark-active, header icon mark.
   .ksig-top-row .ksig-install-card{ flex-direction:column; align-items:flex-start; justify-content:center; }
   .ksig-top-row .ksig-install-card .ksig-install-icon{ font-size:22px; }
 }
+
+/* ==========================================================================
+   v11: Promo card (instal & notifikasi) - panduan per platform Android/iOS
+   Scoped .ksig-promo* dan .ksig-install-card-actions saja. Additive.
+   ========================================================================== */
+.ksig-promo-tabs{ display:flex; gap:8px; margin-bottom:14px; }
+.ksig-promo-tab{
+  flex:1; padding:9px 10px; border-radius:12px; border:1px solid var(--ks-border);
+  background:var(--ks-surface); color:var(--ks-text-muted); font-weight:900; font-size:12.5px;
+  cursor:pointer; transition:background .18s ease, color .18s ease, border-color .18s ease; text-align:center;
+}
+.ksig-promo-tab.active{
+  background:linear-gradient(135deg,#c99d51,#f1d893); color:#15120b; border-color:transparent;
+  box-shadow:0 8px 20px rgba(184,138,61,.22);
+}
+.ksig-promo-badge{
+  width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+  font-size:26px; margin-bottom:12px; background:var(--ks-emerald-soft);
+}
+.ksig-promo-badge.ios{ background:var(--ks-gold-soft); }
+.ksig-promo-desc{ color:var(--ks-text-muted); font-size:13.5px; line-height:1.6; margin:0 0 16px; }
+.ksig-promo-steps{ list-style:none; margin:0 0 4px; padding:0; display:flex; flex-direction:column; gap:11px; }
+.ksig-promo-steps li{ display:flex; align-items:flex-start; gap:10px; font-size:13px; line-height:1.6; color:var(--ks-text); }
+.ksig-promo-num{
+  flex:0 0 auto; width:22px; height:22px; border-radius:999px; background:var(--ks-emerald); color:#F5F1E8;
+  font-size:11px; font-weight:950; display:flex; align-items:center; justify-content:center; margin-top:1px;
+}
+
+.ksig-install-card-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:2px; }
+.ksig-install-card-actions .ksig-install-card-btn{ flex:1 1 auto; text-align:center; }
+.ksig-install-card-btn.ios{ background:rgba(245,241,232,.14); color:#F5F1E8; border:1px solid rgba(245,241,232,.35); }
+.ksig-install-card.installed .ksig-install-card-actions{ display:none; }
+@media (min-width:600px){
+  .ksig-install-card-actions{ margin-top:0; }
+}

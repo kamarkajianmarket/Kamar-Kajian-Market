@@ -545,3 +545,77 @@ overview card accent, recap tab dark-active, header icon mark.
   color:var(--ksig-dark-ink) !important;
   box-shadow:0 6px 16px rgba(17,20,23,.28) !important;
 }
+
+/* ============================================================== */
+/* v6: Dashboard executive redesign -- ALWAYS VISIBLE, tidak hover-only */
+/* Card, recap, activity kini punya identitas gold/dark permanen supaya */
+/* terlihat jelas di screenshot statis, bukan cuma saat kursor di atasnya. */
+/* ============================================================== */
+
+.ksig-section-label{ position:relative; padding-left:13px; color:#6b5a3d; }
+.ksig-section-label::before{
+  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:5px; height:5px; border-radius:50%; background:var(--ksig-gold-metal,#b8863d);
+  box-shadow:0 0 0 3px rgba(184,138,61,.14);
+}
+
+.ksig-card{
+  background:linear-gradient(180deg,#ffffff 0%,#fdf9ef 100%) !important;
+  border:1px solid rgba(184,138,61,.26) !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset, 0 10px 26px rgba(17,20,23,.07) !important;
+}
+.ksig-card::before{
+  content:'' !important; position:absolute !important; top:0 !important; left:0 !important; right:0 !important; height:3px !important;
+  border-radius:0 !important;
+  background:linear-gradient(90deg,var(--ksig-gold-metal,#b8863d),rgba(184,138,61,.1) 75%,transparent) !important;
+  opacity:1 !important;
+}
+.ksig-card.profit::before{ background:linear-gradient(90deg,#0e5f54,rgba(14,95,84,.1) 75%,transparent) !important; }
+.ksig-card.aktif::before{ background:linear-gradient(90deg,#0e5f54,rgba(14,95,84,.1) 75%,transparent) !important; }
+.ksig-card.loss::before{ background:linear-gradient(90deg,#8a2b2b,rgba(138,43,43,.1) 75%,transparent) !important; }
+.ksig-card.archive::before{ background:linear-gradient(90deg,#5b6472,rgba(91,100,114,.1) 75%,transparent) !important; }
+.ksig-card:hover{ border-color:rgba(184,138,61,.55) !important; }
+.ksig-card:hover::before{ opacity:1 !important; }
+
+.ksig-card-label{ position:relative; padding-left:13px; color:#6b5a3d; }
+.ksig-card-label::before{
+  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:6px; height:6px; border-radius:50%; background:var(--ksig-gold-metal,#b8863d);
+}
+.ksig-card.profit .ksig-card-label::before,
+.ksig-card.aktif .ksig-card-label::before{ background:#0e5f54; }
+.ksig-card.loss .ksig-card-label::before{ background:#8a2b2b; }
+.ksig-card.archive .ksig-card-label::before{ background:#5b6472; }
+.ksig-card-arrow{ color:rgba(184,138,61,.6) !important; }
+
+.ksig-recap-card{
+  background:linear-gradient(180deg,#ffffff 0%,#fdf9ef 100%) !important;
+  border:1px solid rgba(184,138,61,.24) !important;
+  position:relative;
+}
+.ksig-recap-card::before{
+  content:''; position:absolute; top:0; left:18px; right:18px; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(184,138,61,.55),transparent);
+}
+.ksig-tabs{ background:var(--ksig-dark-1,#12161c) !important; }
+.ksig-tab{ color:rgba(243,236,221,.5) !important; }
+.ksig-tab.active{
+  background:linear-gradient(160deg,#232b35,#12161c) !important;
+  color:#f3ecdd !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.32), inset 0 0 0 1px rgba(212,175,120,.32) !important;
+}
+.ksig-tab:hover:not(.active){ color:#f3ecdd !important; }
+
+.ksig-activity-card{
+  background:linear-gradient(180deg,#ffffff 0%,#fdf9ef 100%) !important;
+  border:1px solid rgba(184,138,61,.22) !important;
+}
+.ksig-activity-card .ksig-row{ position:relative; padding-left:14px; }
+.ksig-activity-card .ksig-row::before{
+  content:''; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:3px;
+  background:rgba(184,138,61,.34);
+}
+.ksig-row-symbol{ font-weight:950 !important; letter-spacing:-.01em; }
+.ksig-badge{ font-weight:950 !important; }
+
+.ksig-empty, .ksig-recap-empty-icon{ color:#8a5a12; }

@@ -1015,3 +1015,22 @@ overview card accent, recap tab dark-active, header icon mark.
 @media (min-width:600px){
   .ksig-install-card-actions{ margin-top:0; }
 }
+
+/* ==========================================================================
+   v12: Toast update PWA (ksigShowUpdateToast). Scoped .ksig-update-toast* saja.
+   ========================================================================== */
+.ksig-update-toast{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%) translateY(20px);
+  opacity:0; pointer-events:none; transition:transform .25s ease, opacity .25s ease;
+  z-index:80; display:flex; align-items:center; gap:12px;
+  background:var(--ks-surface-dark); color:#F5F1E8; border-radius:999px;
+  padding:10px 10px 10px 18px; box-shadow:0 14px 32px rgba(21,23,25,.28);
+  max-width:calc(100vw - 32px);
+}
+.ksig-update-toast.show{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+.ksig-update-toast-text{ font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ksig-update-toast-btn{
+  border:none; border-radius:999px; padding:8px 16px; font-weight:900; font-size:12.5px;
+  background:linear-gradient(135deg,#c99d51,#f1d893); color:#15120b; cursor:pointer;
+  white-space:nowrap; flex:0 0 auto;
+}

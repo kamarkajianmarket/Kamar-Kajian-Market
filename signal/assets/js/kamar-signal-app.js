@@ -98,7 +98,125 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     });
   }
 
-  /* ---------------- helpers ---------------- */
+  /* ---------------- notifikasi (push, additive) ---------------- */
+  var VAPID_PUBLIC_KEY = 'BIKwVi8sVWcL4iyxeJo8POMiWSSEDJA6H3i2dn8jVKxPkXgRIA_lHat0dfldioTWOug-irdQnlUsGc5euOQoZyw';
+  var notifState = { subscribed: false, checked: false };
+
+  function urlBase64ToUint8Array(base64String){
+    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+    var raw = atob(base64);
+    var out = new Uint8Array(raw.length);
+    for (var i=0;i<raw.length;i++) out[i] = raw.charCodeAt(i);
+    return out;
+  }
+
+  function checkNotifStatus(){
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)) return Promise.resolve(false);
+    return navigator.serviceWorker.ready.then(function(reg){
+      return reg.pushManager.getSubscription();
+    }).then(function(sub){
+      notifState.subscribed = !!sub;
+      notifState.checked = true;
+      return notifState.subscribed;
+    }).catch(function(){ notifState.checked = true; return false; });
+  }
+
+  function subscribeNotif(){
+    if(!state.profile) return Promise.reject(new Error('belum login'));
+    return Notification.requestPermission().then(function(perm){
+      if(perm !== 'granted') throw new Error('izin ditolak');
+      return navigator.serviceWorker.ready;
+    }).then(function(reg){
+      return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) });
+    }).then(function(sub){
+      var j = sub.toJSON();
+      return state.client.from('push_subscriptions').upsert({
+        profile_id: state.profile.id,
+        endpoint: j.endpoint,
+        p256dh: j.keys.p256dh,
+        auth_key: j.keys.auth,
+        device_label: navigator.userAgent.slice(0,120),
+        last_seen_at: new Date().toISOString()
+      }, { onConflict: 'endpoint' }).then(function(){
+        return state.client.from('notification_prefs').upsert({
+          profile_id: state.profile.id,
+          push_enabled: true,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'profile_id' });
+      });
+    }).then(function(){
+      notifState.subscribed = true;
+      renderApp();
+    });
+  }
+
+  function unsubscribeNotif(){
+    return navigator.serviceWorker.ready.then(function(reg){
+      return reg.pushManager.getSubscription();
+    }).then(function(sub){
+      if(!sub) return;
+      var endpoint = sub.endpoint;
+      return sub.unsubscribe().then(function(){
+        return state.client.from('push_subscriptions').delete().eq('endpoint', endpoint);
+      });
+    }).then(function(){
+      if(state.profile){
+        return state.client.from('notification_prefs').upsert({
+          profile_id: state.profile.id,
+          push_enabled: false,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'profile_id' });
+      }
+    }).then(function(){
+      notifState.subscribed = false;
+      renderApp();
+    });
+  }
+
+  function notifBtnHtml(){
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)) return '';
+    var on = notifState.subscribed;
+    return '<button type="button" class="ksig-install-btn'+(on?' on':'')+'" id="ksigNotifBtn" title="'+(on?"Notifikasi aktif":"Aktifkan Notifikasi")+'">'+(on?"\uD83D\uDD14":"\uD83D\uDD15")+'</button>';
+  }
+
+  function bindNotifBtn(){
+    var b = document.getElementById('ksigNotifBtn');
+    if(b) b.addEventListener('click', openNotifSheet);
+    if(!notifState.checked){ checkNotifStatus().then(function(){ renderApp(); }); }
+  }
+
+  function openNotifSheet(){
+    var wrap = document.createElement('div');
+    wrap.className = 'ksig-sheet-backdrop';
+    var body;
+    if(notifState.subscribed){
+      body = '<div class="ksig-sheet-title">Notifikasi Aktif</div>'+
+        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">HP Anda akan mendapat pemberitahuan saat ada signal baru, signal aktif, dan hasil akhir (profit/loss). Matikan notifikasi?</p>'+
+        '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Batal</button><button class="ksig-btn primary" id="ksigNotifOff">Matikan Notifikasi</button></div>';
+    } else {
+      body = '<div class="ksig-sheet-title">Aktifkan Notifikasi</div>'+
+        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Dapatkan pemberitahuan langsung di HP Anda saat ada signal baru, signal aktif, dan hasil akhir (profit/loss). Anda bisa mematikannya kapan saja.</p>'+
+        '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigNotifOn">Aktifkan</button></div>';
+    }
+    wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div>'+body+'</div>';
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', function(e){ if(e.target===wrap) document.body.removeChild(wrap); });
+    var cancelBtn = document.getElementById('ksigNotifCancel');
+    if(cancelBtn) cancelBtn.addEventListener('click', function(){ document.body.removeChild(wrap); });
+    var onBtn = document.getElementById('ksigNotifOn');
+    if(onBtn) onBtn.addEventListener('click', function(){
+      document.body.removeChild(wrap);
+      subscribeNotif().catch(function(){});
+    });
+    var offBtn = document.getElementById('ksigNotifOff');
+    if(offBtn) offBtn.addEventListener('click', function(){
+      document.body.removeChild(wrap);
+      unsubscribeNotif().catch(function(){});
+    });
+  }
+
+/* ---------------- helpers ---------------- */
   function esc(s){
     return String(s==null?'':s).replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -597,7 +715,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         (installAvailable() ? '<a class="ksig-login-install" id="ksigLoginInstall" tabindex="0">⇩ Instal Kamar Signal sebagai Aplikasi</a>' : '')+
       '</div>'+
       '</div>';
-    bindInstallBtn();
+    bindInstallBtn(); bindNotifBtn();
     var form = document.getElementById('ksigLoginForm');
     form.addEventListener('submit', function(e){
       e.preventDefault();
@@ -627,7 +745,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<a class="ksig-btn block" href="/dashboard.html">Kembali ke Dashboard</a>'+
       '</div></div>';
     updateLiveDot();
-    bindInstallBtn();
+    bindInstallBtn(); bindNotifBtn();
   }
 
   /* ---------------- dashboard ---------------- */
@@ -651,6 +769,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   function dashboardHeader(animCls){
     var updatedTxt = state.lastUpdate ? 'Terakhir Diperbarui • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…';
     var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
+    var notifBtn = notifBtnHtml();
     return '<div class="ksig-header'+animCls+'">'+
       '<div class="ksig-header-row">'+
         '<div class="ksig-header-titles">'+
@@ -661,6 +780,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div class="ksig-header-meta">'+
           '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>'+
           '<div class="ksig-header-updated">'+esc(updatedTxt)+'</div>'+
+          notifBtn+
           install+
         '</div>'+
       '</div>'+
@@ -713,7 +833,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       '</div>';
     dashboardEntered = true;
     updateLiveDot();
-    bindInstallBtn();
+    bindInstallBtn(); bindNotifBtn();
     bindRecapTabs();
     bindPointerLight();
     renderRecapBody();
@@ -764,7 +884,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
         '<div id="ksigListBody"></div>'+
       '</div>';
     updateLiveDot();
-    bindInstallBtn();
+    bindInstallBtn(); bindNotifBtn();
     renderListBody();
     var search = document.getElementById('ksigSearchInput');
     search.addEventListener('input', debounce(function(){ L.search = search.value.trim(); loadList(true); }, 400));
@@ -957,7 +1077,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       appBar('Rekap Signal', { back:'/signal/' }) +
       '<div class="ksig-main">'+ recapCardHtml() +'</div>';
     updateLiveDot();
-    bindInstallBtn();
+    bindInstallBtn(); bindNotifBtn();
     bindRecapTabs();
     renderRecapBody();
     if(!state.recap.loaded && !state.recap.loading) loadRecap(state.recap.type);
@@ -1027,7 +1147,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     if(D.id_zona !== state.route.id_zona) loadDetail(state.route.id_zona);
     el.innerHTML = appBar('Detail Signal', { back:'/signal/list/'+(state.list.status||'fresh') }) + '<div class="ksig-main" id="ksigDetailBody"></div>';
     updateLiveDot();
-    bindInstallBtn();
+    bindInstallBtn(); bindNotifBtn();
     renderDetailBody();
   }
   function renderDetailBody(){

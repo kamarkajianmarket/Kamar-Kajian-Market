@@ -969,3 +969,14 @@ overview card accent, recap tab dark-active, header icon mark.
 .ksig-boot{ background:var(--ks-bg) !important; }
 .ksig-boot-mark{ color:var(--ks-text) !important; }
 .ksig-boot-sub{ color:var(--ks-text-muted) !important; }
+
+
+/* v10: Access Card + Install Card side-by-side on wider viewports -- fixes empty-looking full-width banners on desktop */
+.ksig-top-row{ display:flex; flex-direction:column; gap:14px; margin-bottom:0; }
+.ksig-top-row .ksig-access-card, .ksig-top-row .ksig-install-card{ margin-bottom:0 !important; }
+@media (min-width:760px){
+  .ksig-top-row{ flex-direction:row; align-items:stretch; }
+  .ksig-top-row .ksig-access-card, .ksig-top-row .ksig-install-card{ flex:1 1 0; min-width:0; }
+  .ksig-top-row .ksig-install-card{ flex-direction:column; align-items:flex-start; justify-content:center; }
+  .ksig-top-row .ksig-install-card .ksig-install-icon{ font-size:22px; }
+}

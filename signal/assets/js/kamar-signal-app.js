@@ -867,8 +867,10 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     el.innerHTML =
       dashboardHeader(ac(1)) +
       '<div class="ksig-main ksig-dashboard">'+
-        accessCardHtml() +
+'<div class="ksig-top-row">'+
+                accessCardHtml() +
         installCardHtml() +
+        '</div>'+
         '<div class="'+('ksig-block'+ac(2)).trim()+'">'+
           sectionLabel('SIGNAL OVERVIEW') +
           '<div class="ksig-grid">'+

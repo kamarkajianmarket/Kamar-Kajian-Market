@@ -73,7 +73,7 @@ body{background:#070707;color:var(--text)}
 <p>Pengajuan IB Kamar kamu sudah masuk ke antrean admin. Simpan kode pengajuan di bawah ini, lalu kirim bukti akun ke admin agar proses verifikasi lebih cepat.</p>
 <div class="success-code" id="ibSuccessCode">-</div>
 <div class="button-row">
-<a class="btn" id="ibChatAdminLink" href="https://telegram.me/kajianmarketkamar" target="_blank" rel="noopener">Kirim Bukti ke Admin</a>
+<a class="btn" id="ibChatAdminLink" href="https://telegram.me/kamarkajianmarket" target="_blank" rel="noopener">Kirim Bukti ke Admin</a>
 <a class="btn secondary" href="dashboard.html">Kembali ke Dashboard</a>
 </div>
 </section>
@@ -83,7 +83,7 @@ body{background:#070707;color:var(--text)}
 <h2>Kamu Sudah Punya Pengajuan Aktif</h2>
 <div class="warn-note" id="ibPendingText">Pengajuan IB Kamar kamu masih diproses admin.</div>
 <div class="button-row">
-<a class="btn" id="ibPendingChatLink" href="https://telegram.me/kajianmarketkamar" target="_blank" rel="noopener">Hubungi Admin</a>
+<a class="btn" id="ibPendingChatLink" href="https://telegram.me/kamarkajianmarket" target="_blank" rel="noopener">Hubungi Admin</a>
 <a class="btn secondary" href="dashboard.html">Kembali ke Dashboard</a>
 </div>
 </section>
@@ -141,7 +141,7 @@ body{background:#070707;color:var(--text)}
 
   function buildAdminMessage(code){
     var lines=['Halo Admin Kamar, saya baru mengirim pengajuan IB Kamar.','Kode Pengajuan: '+code,'Berikut saya lampirkan bukti akun trading saya.'];
-    return 'https://telegram.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
+    return 'https://telegram.me/kamarkajianmarket?text='+encodeURIComponent(lines.join('\n'));
   }
 
   async function init(){
@@ -243,4 +243,5 @@ body{background:#070707;color:var(--text)}
 })();
 </script>
 <script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="/assets/js/kamar-livechat.js?v=1" defer></script>
 </body></html>

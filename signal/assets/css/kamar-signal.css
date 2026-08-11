@@ -938,3 +938,28 @@ overview card accent, recap tab dark-active, header icon mark.
   .ksig-install-card{ flex-direction:row; align-items:center; justify-content:space-between; }
   .ksig-install-card-btn{ align-self:center; margin-top:0; white-space:nowrap; }
 }
+
+
+/* ============================================================
+   v8: List / Detail / Timeline / Appbar -- align to v7-FINAL tokens
+   Scoped .ksig-* only. Additive polish, no logic touched.
+   ============================================================ */
+.ksig-appbar{ background:var(--ks-bg) !important; }
+.ksig-appbar.scrolled{ background:rgba(243,240,232,.92) !important; border-bottom-color:var(--ks-border) !important; box-shadow:var(--ks-shadow) !important; }
+.ksig-appbar-back{ background:var(--ks-surface) !important; border-color:var(--ks-border) !important; color:var(--ks-text) !important; }
+.ksig-appbar-title{ color:var(--ks-text) !important; }
+
+.ksig-row{ background:var(--ks-surface) !important; border:1px solid var(--ks-border) !important; border-radius:var(--ks-radius) !important; box-shadow:none !important; }
+.ksig-row:hover{ border-color:var(--ks-border-gold) !important; box-shadow:var(--ks-shadow) !important; }
+.ksig-row-chev{ color:var(--ks-gold) !important; }
+
+.ksig-detail-head{ background:var(--ks-surface) !important; border:1px solid var(--ks-border) !important; border-radius:var(--ks-radius) !important; box-shadow:var(--ks-shadow) !important; position:relative; overflow:hidden; }
+.ksig-detail-head::before{ content:''; position:absolute; left:0; right:0; top:0; height:3px; background:var(--ks-gold); opacity:.55; }
+.ksig-detail-row{ border-bottom-color:var(--ks-border) !important; }
+.ksig-detail-symbol{ color:var(--ks-text) !important; }
+
+.ksig-timeline-card{ background:var(--ks-surface) !important; border:1px solid var(--ks-border) !important; border-radius:var(--ks-radius) !important; box-shadow:var(--ks-shadow) !important; }
+.ksig-timeline-title{ color:var(--ks-text) !important; }
+
+.ksig-empty, .ksig-error{ background:var(--ks-surface) !important; border:1px solid var(--ks-border) !important; border-radius:var(--ks-radius) !important; color:var(--ks-text-muted) !important; }
+.ksig-skel-row{ background:var(--ks-gold-soft) !important; }

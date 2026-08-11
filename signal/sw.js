@@ -1,11 +1,11 @@
 // Kamar Signal — service worker v2
 // Hanya cache APP SHELL (HTML/CSS/JS/ikon). JANGAN pernah cache data signal —
 // semua request ke Supabase/API selalu diambil fresh dari network, tidak lewat sini.
-var SHELL_CACHE = 'kamar-signal-shell-v2';
+var SHELL_CACHE = 'kamar-signal-shell-v3';
 var SHELL_FILES = [
   '/signal/',
   '/signal/index.html',
-  '/signal/assets/css/kamar-signal.css?v=5',
+  '/signal/assets/css/kamar-signal.css?v=6
   '/signal/assets/js/kamar-signal-app.js?v=4',
   '/signal/manifest.webmanifest'
 ];

@@ -311,6 +311,91 @@
     });
   }
 
+  async function requestPasswordReset(form){
+    var email = (val(form,'email') || val(form,'loginEmail')).toLowerCase();
+    if(!email){ status(form,'Masukkan email akun yang terdaftar.',false); return; }
+    processing(form,'Mengirim link reset...',true);
+    try{
+      await ensureReady();
+      var c = client();
+      var cc = cfg();
+      if(!c || !cc.url || !cc.key) throw new Error(configError());
+      var redirectTo = window.location.origin + '/reset-password.html';
+      var res = await timeout(c.auth.resetPasswordForEmail(email, { redirectTo: redirectTo }), 15000);
+      if(res.error) throw res.error;
+      status(form,'Jika email tersebut terdaftar, link reset password sudah dikirim. Silakan cek inbox atau folder spam.',true);
+      form.reset();
+    }catch(e){
+      status(form,authMessage(e),false);
+    }finally{
+      processing(form,'',false);
+    }
+  }
+
+  async function updatePasswordFromRecovery(form){
+    var pwEl = form.elements['password'];
+    var cfEl = form.elements['password_confirm'];
+    var password = pwEl ? pwEl.value : '';
+    var confirm = cfEl ? cfEl.value : '';
+    if(!password || password.length < 6){ status(form,'Password minimal 6 karakter.',false); return; }
+    if(password !== confirm){ status(form,'Konfirmasi password tidak sama.',false); return; }
+    processing(form,'Menyimpan password baru...',true);
+    try{
+      await ensureReady();
+      var c = client();
+      if(!c) throw new Error(configError());
+      var res = await timeout(c.auth.updateUser({ password: password }), 15000);
+      if(res.error) throw res.error;
+      status(form,'Password berhasil diperbarui. Mengarahkan ke halaman login...',true);
+      try{ await c.auth.signOut(); }catch(e){}
+      setTimeout(function(){ location.href = 'member.html'; },1500);
+    }catch(e){
+      status(form,authMessage(e),false);
+    }finally{
+      processing(form,'',false);
+    }
+  }
+
+  function initPasswordRecoveryGuard(form){
+    var submitBtn = form.querySelector('button[type="submit"]');
+    if(submitBtn) submitBtn.disabled = true;
+    status(form,'Memeriksa link reset...',true);
+    var resolved = false;
+    function markReady(session){
+      if(resolved) return;
+      resolved = true;
+      if(session){
+        if(submitBtn) submitBtn.disabled = false;
+        status(form,'Silakan masukkan password baru kamu.',true);
+      } else {
+        status(form,'Link reset tidak valid atau sudah kedaluwarsa. Silakan minta link baru dari halaman Lupa Password.',false);
+      }
+    }
+    ensureReady().then(function(){
+      var c = client();
+      if(!c){ markReady(null); return; }
+      try{
+        c.auth.onAuthStateChange(function(event,session){
+          if(event === 'PASSWORD_RECOVERY') markReady(session);
+        });
+      }catch(e){}
+      var start = Date.now();
+      (function poll(){
+        if(resolved) return;
+        c.auth.getSession().then(function(res){
+          if(resolved) return;
+          var session = res && res.data && res.data.session;
+          if(session){ markReady(session); return; }
+          if(Date.now() - start > 4000){ markReady(null); return; }
+          setTimeout(poll, 300);
+        }).catch(function(){
+          if(Date.now() - start > 4000) markReady(null);
+          else setTimeout(poll, 300);
+        });
+      })();
+    }).catch(function(){ markReady(null); });
+  }
+
   function run(){
     restoreRememberedEmails();
     bind('adminLoginForm',function(f){ doLogin(f,'admin'); });
@@ -320,6 +405,9 @@
     bind('memberRegisterForm',registerMember);
     bind('kamarRegisterForm',registerMember);
     bind('affiliateRegisterForm',registerAffiliate);
+    bind('forgotPasswordForm', requestPasswordReset);
+    bind('resetPasswordForm', updatePasswordFromRecovery);
+    (function(){ var rf = document.getElementById('resetPasswordForm'); if(rf) initPasswordRecoveryGuard(rf); })();
     // FIXED (2026-07-29): intentionally NOT binding 'kamarAffiliateForm' here.
     // affiliate.html has its own dedicated submit handler for that exact form id,
     // which correctly writes the full application (payout account, approval_status,

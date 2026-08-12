@@ -42,7 +42,21 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   function isStandaloneMode(){
     return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
   }
-  function isIOSDevice(){
+    function ksigBackNavHtml(){
+    if (isStandaloneMode()) return '';
+    return '<div class="ksig-backnav">' +
+        '<a class="ksig-btn ksig-backnav-btn" href="/dashboard.html">' +
+          '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>' +
+          '<span>Dashboard Member</span>' +
+        '</a>' +
+        '<a class="ksig-btn ksig-backnav-btn" href="/index.html">' +
+          '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>' +
+          '<span>Beranda Website</span>' +
+        '</a>' +
+      '</div>';
+  }
+
+function isIOSDevice(){
     return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
   }
   function installAvailable(){
@@ -829,7 +843,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     var updatedTxt = state.lastUpdate ? 'Terakhir Diperbarui • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…';
     var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
     var notifBtn = notifBtnHtml();
-    return '<div class="ksig-header'+animCls+'">'+
+    return ksigBackNavHtml() + '<div class="ksig-header'+animCls+'">'+
       '<div class="ksig-header-row">'+
         '<div class="ksig-header-titles">'+
           '<div class="ksig-header-title">Kamar Signal</div>'+

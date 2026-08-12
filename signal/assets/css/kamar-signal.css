@@ -275,6 +275,10 @@ html,body{ height:100%; }
 .ksig-btn.block{ width:100%; }
 .ksig-btn:disabled{ opacity:.5; cursor:default; }
 
+.ksig-backnav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px;}
+.ksig-backnav-btn{padding:7px 14px;font-size:12px;gap:5px;}
+@media (max-width:479px){.ksig-backnav{margin-bottom:8px;}}
+
 .ksig-badge{ display:inline-flex; align-items:center; padding:2px 9px; border-radius:999px; font-size:10.5px; font-weight:950; letter-spacing:.03em; text-transform:uppercase; }
 .ksig-badge.fresh{ background:rgba(184,138,61,.14); color:#8a5a12; }
 .ksig-badge.aktif{ background:rgba(14,95,84,.10); color:#0e5f54; }

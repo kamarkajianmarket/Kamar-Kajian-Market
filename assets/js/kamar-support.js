@@ -171,6 +171,28 @@ document.body.appendChild(overlay);
 document.body.appendChild(panel);
 document.body.appendChild(launcher);
 
+function hideLauncher(){ launcher.style.display = 'none'; }
+function showLauncher(){ launcher.style.display = ''; }
+
+try{
+  window.Tawk_API = window.Tawk_API || {};
+  var prevOnChatMaximized = window.Tawk_API.onChatMaximized;
+  window.Tawk_API.onChatMaximized = function(){
+    hideLauncher();
+    if (typeof prevOnChatMaximized === 'function') prevOnChatMaximized();
+  };
+  var prevOnChatMinimized = window.Tawk_API.onChatMinimized;
+  window.Tawk_API.onChatMinimized = function(){
+    showLauncher();
+    if (typeof prevOnChatMinimized === 'function') prevOnChatMinimized();
+  };
+  var prevOnChatHidden = window.Tawk_API.onChatHidden;
+  window.Tawk_API.onChatHidden = function(){
+    showLauncher();
+    if (typeof prevOnChatHidden === 'function') prevOnChatHidden();
+  };
+}catch(e){}
+
 var activeContext = 'general';
 var activeTelegramUrl = TELEGRAM_ADMIN_URL;
 var lastFocused = null;
@@ -257,3 +279,4 @@ setTimeout(function(){
 }, 8000);
 
 })();
+hideLauncher

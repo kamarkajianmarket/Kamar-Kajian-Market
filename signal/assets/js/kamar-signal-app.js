@@ -291,7 +291,7 @@ function isIOSDevice(){
 
 /* ---------------- helpers ---------------- */
   /* ---------------- telegram connect (additive) ---------------- */
-var TELEGRAM_BOT_USERNAME = 'GANTI_USERNAME_BOT';
+var TELEGRAM_BOT_USERNAME = 'kamarsignalbot';
 function genTelegramToken(){
   if(window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID().replace(/-/g,'');
   return 'tg' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);

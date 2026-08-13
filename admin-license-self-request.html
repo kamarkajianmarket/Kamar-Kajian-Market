@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Request License Admin — Kamar Kajian Market</title>
+<meta content="Form internal admin untuk request token license sendiri (Kamar Robot / Kamar Signal), tanpa approval." name="description"/>
+<meta content="#070707" name="theme-color"/>
+<link href="assets/favicon.png" rel="icon"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="style.css" rel="stylesheet"/>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
+<link href="assets/css/kamar-mobile-shell.css" rel="stylesheet"/>
+<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+</head>
+<body>
+<main class="split-shell">
+<div class="split-app">
+<aside class="split-sidebar">
+<div class="brand-small">Admin Kamar</div>
+<a href="admin.html">Dashboard Admin</a>
+</aside>
+<section class="split-main">
+<section class="split-card hero license-hero">
+<div class="hero-copy">
+<span class="mini-label">Token Internal Admin</span>
+<h1>Request License Admin</h1>
+<p>Form untuk admin request token license SENDIRI langsung — tidak melalui alur approval member. Pilih fasilitas, isi data akun trading, token langsung aktif begitu disimpan. Dipakai untuk kebutuhan internal admin sendiri (broadcaster EA, akun testing, dsb), bukan untuk member.</p>
+</div>
+</section>
+
+<section class="split-card">
+<span class="mini-label">Form Request Token</span>
+<h2 style="margin:8px 0 18px">Buat Token Baru</h2>
+<form id="selfLicenseForm" class="grid-2 kamar-form-grid">
+<label class="field">
+<span>Fasilitas *</span>
+<select id="slFacility" required>
+<option value="">Pilih fasilitas...</option>
+<option value="kamar_robot">Kamar Robot (Auto Entry, Online License)</option>
+<option value="kamar_signal_master">Kamar Signal Advisor (Online License)</option>
+<option value="custom">Lainnya (isi manual)</option>
+</select>
+</label>
+<label class="field" id="slFacilityCustomWrap" style="display:none">
+<span>Kode Fasilitas Manual *</span>
+<input type="text" id="slFacilityCustom" placeholder="Contoh: kamar_robot_v2"/>
+</label>
+<label class="field">
+<span>Nomor Akun Trading *</span>
+<input type="number" id="slAccount" placeholder="Contoh: 30026345" required/>
+</label>
+<label class="field">
+<span>Nama Broker (lengkap) *</span>
+<input type="text" id="slBroker" placeholder="Contoh: TradeMax Global Limited" required/>
+</label>
+<label class="field">
+<span>Nama Server MT5 *</span>
+<input type="text" id="slServer" placeholder="Contoh: TradeMaxGlobal-Live" required/>
+</label>
+<label class="field">
+<span>Nama Pemilik Akun</span>
+<input type="text" id="slOwner" placeholder="Opsional"/>
+</label>
+<label class="field">
+<span>Durasi License *</span>
+<select id="slDuration" required>
+<option value="lifetime">Lifetime (tanpa expired)</option>
+<option value="30">30 Hari</option>
+<option value="60">60 Hari</option>
+<option value="90">90 Hari</option>
+<option value="180">180 Hari</option>
+<option value="custom">Custom (pilih tanggal)</option>
+</select>
+</label>
+<label class="field" id="slCustomDateWrap" style="display:none">
+<span>Tanggal Expired</span>
+<input type="date" id="slCustomDate"/>
+</label>
+<label class="field" style="grid-column:1/-1">
+<span>Catatan (opsional)</span>
+<input type="text" id="slNote" placeholder="Contoh: token broadcaster EA Signal akun admin"/>
+</label>
+</form>
+<div class="hero-actions" style="margin-top:18px">
+<button type="button" class="btn" id="slSubmitBtn">Buat Token Sekarang</button>
+<button type="button" class="btn secondary" id="slResetBtn">Reset Form</button>
+</div>
+<div id="slResultBox" style="display:none;margin-top:18px;padding:16px;border:1px solid var(--line,rgba(238,206,122,.3));border-radius:16px;background:rgba(158,255,202,.08)">
+<div style="font-weight:1000;letter-spacing:.06em;margin-bottom:8px">Token Berhasil Dibuat</div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<code id="slTokenOut" style="font-size:15px;word-break:break-all"></code>
+<button type="button" class="btn mini" id="slCopyBtn">Copy</button>
+</div>
+</div>
+<div id="slErrorBox" style="display:none;margin-top:18px;padding:16px;border:1px solid rgba(255,180,180,.4);border-radius:16px;background:rgba(255,180,180,.08);color:#ffb4b4"></div>
+</section>
+
+<section class="split-card">
+<span class="mini-label">Riwayat Token Internal Admin</span>
+<h2 style="margin:8px 0 18px">Token yang Sudah Dibuat Lewat Halaman Ini</h2>
+<div id="slHistoryList">Memuat riwayat...</div>
+</section>
+</section>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js?v=29F"></script>
+<script src="assets/js/kamar-supabase.js?v=30H"></script>
+<script src="assets/js/kamar-data-online-25e.js?v=30G"></script>
+<script src="assets/js/kamar-session-final-28.js?v=29D"></script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29I"></script>
+<script src="assets/js/kamar-mobile-shell.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  function esc(v){ return String(v==null?'':v); }
+
+  function genToken(){
+    var bytes = new Uint8Array(24);
+    (window.crypto || window.msCrypto).getRandomValues(bytes);
+    var hex = '';
+    for(var i=0;i<bytes.length;i++) hex += bytes[i].toString(16).padStart(2,'0');
+    return hex;
+  }
+
+  async function getClient(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{
+      if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready();
+    }catch(e){}
+    return window.kamarSupabaseClient || null;
+  }
+
+  function showError(msg){
+    var box = document.getElementById('slErrorBox');
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+  function hideError(){
+    document.getElementById('slErrorBox').style.display = 'none';
+  }
+  function showResult(token){
+    document.getElementById('slTokenOut').textContent = token;
+    document.getElementById('slResultBox').style.display = 'block';
+  }
+
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+  ready(function(){
+    var facilitySelect = document.getElementById('slFacility');
+    var facilityCustomWrap = document.getElementById('slFacilityCustomWrap');
+    var durationSelect = document.getElementById('slDuration');
+    var customDateWrap = document.getElementById('slCustomDateWrap');
+
+    facilitySelect.addEventListener('change', function(){
+      facilityCustomWrap.style.display = (facilitySelect.value === 'custom') ? '' : 'none';
+    });
+    durationSelect.addEventListener('change', function(){
+      customDateWrap.style.display = (durationSelect.value === 'custom') ? '' : 'none';
+    });
+
+    document.getElementById('slResetBtn').addEventListener('click', function(){
+      document.getElementById('selfLicenseForm').reset();
+      facilityCustomWrap.style.display = 'none';
+      customDateWrap.style.display = 'none';
+      document.getElementById('slResultBox').style.display = 'none';
+      hideError();
+    });
+
+    document.getElementById('slCopyBtn').addEventListener('click', function(){
+      var text = document.getElementById('slTokenOut').textContent;
+      navigator.clipboard && navigator.clipboard.writeText(text);
+      if(window.toast) window.toast('Token disalin ke clipboard.');
+    });
+
+    async function loadHistory(){
+      var wrap = document.getElementById('slHistoryList');
+      try{
+        var c = await getClient();
+        if(!c){ wrap.textContent = 'Client Supabase tidak terbaca.'; return; }
+        var res = await c.from('kamar_licenses')
+          .select('token,product_code,account_id,broker_name,server_name,status,license_type,expired_at,created_at')
+          .is('member_profile_id', null)
+          .order('created_at', { ascending: false })
+          .limit(30);
+        if(res.error){ wrap.textContent = 'Gagal memuat riwayat: ' + res.error.message; return; }
+        var rows = res.data || [];
+        if(!rows.length){ wrap.textContent = 'Belum ada token internal yang dibuat lewat halaman ini.'; return; }
+        var html = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">';
+        html += '<thead><tr style="text-align:left;opacity:.7"><th style="padding:8px 10px">Fasilitas</th><th style="padding:8px 10px">Akun</th><th style="padding:8px 10px">Broker / Server</th><th style="padding:8px 10px">Status</th><th style="padding:8px 10px">Expired</th><th style="padding:8px 10px">Token</th></tr></thead><tbody>';
+        rows.forEach(function(r){
+          html += '<tr style="border-top:1px solid rgba(238,206,122,.15)">'
+            + '<td style="padding:8px 10px">'+esc(r.product_code)+'</td>'
+            + '<td style="padding:8px 10px">'+esc(r.account_id)+'</td>'
+            + '<td style="padding:8px 10px">'+esc(r.broker_name)+' / '+esc(r.server_name)+'</td>'
+            + '<td style="padding:8px 10px">'+esc(r.status)+'</td>'
+            + '<td style="padding:8px 10px">'+(r.expired_at ? esc(r.expired_at).substring(0,10) : 'Lifetime')+'</td>'
+            + '<td style="padding:8px 10px"><code style="font-size:11px">'+esc(r.token)+'</code></td>'
+            + '</tr>';
+        });
+        html += '</tbody></table></div>';
+        wrap.innerHTML = html;
+      }catch(e){
+        wrap.textContent = 'Gagal memuat riwayat: ' + (e && e.message ? e.message : e);
+      }
+    }
+    loadHistory();
+
+    document.getElementById('slSubmitBtn').addEventListener('click', async function(){
+      hideError();
+      document.getElementById('slResultBox').style.display = 'none';
+
+      var facility = facilitySelect.value;
+      if(facility === 'custom') facility = document.getElementById('slFacilityCustom').value.trim();
+      var accountId = parseInt(document.getElementById('slAccount').value, 10);
+      var broker = document.getElementById('slBroker').value.trim();
+      var server = document.getElementById('slServer').value.trim();
+      var owner = document.getElementById('slOwner').value.trim();
+      var duration = durationSelect.value;
+      var note = document.getElementById('slNote').value.trim();
+
+      if(!facility){ showError('Pilih atau isi fasilitas terlebih dahulu.'); return; }
+      if(!accountId){ showError('Nomor akun trading wajib diisi.'); return; }
+      if(!broker){ showError('Nama broker wajib diisi.'); return; }
+      if(!server){ showError('Nama server MT5 wajib diisi.'); return; }
+
+      var expiredAt = null;
+      if(duration === 'custom'){
+        var d = document.getElementById('slCustomDate').value;
+        if(!d){ showError('Pilih tanggal expired untuk durasi custom.'); return; }
+        expiredAt = new Date(d + 'T23:59:59Z').toISOString();
+      } else if(duration !== 'lifetime'){
+        var days = parseInt(duration, 10);
+        expiredAt = new Date(Date.now() + days*86400000).toISOString();
+      }
+
+      var token = genToken();
+      var nowIso = new Date().toISOString();
+      var row = {
+        token: token,
+        product_code: facility,
+        account_id: accountId,
+        broker_name: broker,
+        server_name: server,
+        account_holder_name: owner || null,
+        license_type: (duration === 'lifetime') ? 'lifetime' : (duration === 'custom' ? 'custom' : duration + '_days'),
+        status: 'active',
+        request_status: 'active',
+        member_profile_id: null,
+        requested_at: nowIso,
+        reviewed_at: nowIso,
+        recheck_interval_hours: 168,
+        grace_period_hours: 720,
+        max_failed_checks: 5,
+        expired_at: expiredAt,
+        note: note || ('Token internal dibuat sendiri oleh admin lewat halaman Request License Admin, ' + nowIso.substring(0,10) + '.')
+      };
+
+      var btn = document.getElementById('slSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Menyimpan...';
+      try{
+        var c = await getClient();
+        if(!c) throw new Error('Client Supabase tidak terbaca.');
+        var res = await c.from('kamar_licenses').insert(row).select().single();
+        if(res.error) throw new Error(res.error.message);
+        showResult(token);
+        if(window.toast) window.toast('Token berhasil dibuat dan langsung aktif.');
+        loadHistory();
+      }catch(e){
+        showError('Gagal membuat token: ' + (e && e.message ? e.message : e));
+      }finally{
+        btn.disabled = false;
+        btn.textContent = 'Buat Token Sekarang';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

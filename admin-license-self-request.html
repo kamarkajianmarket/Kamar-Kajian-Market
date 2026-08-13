@@ -41,14 +41,12 @@
 <span>Fasilitas *</span>
 <select id="slFacility" required>
 <option value="">Pilih fasilitas...</option>
-<option value="kamar_robot">Kamar Robot (Auto Entry, Online License)</option>
-<option value="kamar_signal_master">Kamar Signal Advisor (Online License)</option>
+<option value="kamar_robot">Kamar Robot (Auto Entry, Online License)</option><option value="kamar_signal_master">Kamar Signal Advisor (Online License)</option><option value="kamar_indikator">Kamar Indikator (Local License)</option>
 <option value="custom">Lainnya (isi manual)</option>
 </select>
 </label>
 <label class="field" id="slFacilityCustomWrap" style="display:none">
-<span>Kode Fasilitas Manual *</span>
-<input type="text" id="slFacilityCustom" placeholder="Contoh: kamar_robot_v2"/>
+<span>Kode Fasilitas Manual *</span><input type="text" id="slFacilityCustom" placeholder="huruf kecil + underscore, contoh: kamar_robot_v2 -- harus sama persis dengan License_Product_Code di EA/indikator"/>
 </label>
 <label class="field">
 <span>Nomor Akun Trading *</span>

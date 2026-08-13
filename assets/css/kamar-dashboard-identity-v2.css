@@ -264,6 +264,7 @@ background:linear-gradient(180deg,#fff,#fbf4e7) !important;
 .profile-detail-row{ border-bottom:1px solid var(--km-line) !important; }
 .profile-detail-row>span{ color:var(--km-muted) !important; }
 .profile-detail-row>strong{ color:var(--km-ink) !important; }
+.member-mini-row strong{ color:var(--km-ink) !important; }
 
 .eyebrow{
 background:#efe3ca !important;

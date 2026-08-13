@@ -544,6 +544,7 @@ function isIOSDevice(){
       });
       state.unreadCounts = next;
       state.badgeJustChanged = changed;
+      try{ if(Object.keys(changed).some(function(k){return changed[k];})){ if(!window.__kamarSigSnd){window.__kamarSigSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');window.__kamarSigSnd.volume=0.5;} window.__kamarSigSnd.currentTime=0; window.__kamarSigSnd.play().catch(function(){}); } }catch(kSigSndErr){}
       state.lastUpdate = new Date().toISOString();
       if(state.route.view === 'dashboard') renderApp();
     }).catch(function(){});

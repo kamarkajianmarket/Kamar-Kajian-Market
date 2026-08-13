@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Lisensi EA Internal — Kamar Kajian Market</title><meta content="Kelola token lisensi online untuk EA milik admin sendiri (Kamar Signal Advisor, dll)." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<style>
+:root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:800}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.split-sidebar a.disabled{opacity:.4;pointer-events:none}.split-main{display:grid;gap:22px}.split-card,.member-page-panel{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:30px;padding:26px}.split-card h1,.split-card h2,.split-card h3,.member-page-panel h3{margin:0 0 10px;color:#fff3d8}.split-card p,.member-page-panel p{color:var(--muted);line-height:1.65}.mini-label,.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#d8cda9;font-weight:1000;margin-bottom:8px}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.stat-card,.action-card,.member-card,.todo-item,.setting-card,.video-card{border:1px solid rgba(238,206,122,.14);border-radius:24px;background:rgba(255,255,255,.025);padding:18px}.stat-card strong{display:block;font-size:34px;color:#fff;margin:6px 0}.stat-card span,.member-card span,.todo-item span{display:block;color:#d8cda9;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:900}.stat-card small,.member-card small,.todo-item small{display:block;color:var(--muted);margin-top:6px}.btn,.admin-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:12px 18px;text-decoration:none;cursor:pointer}.btn.secondary,.admin-button.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.28)}.btn.mini{padding:8px 12px;font-size:12px}.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8d0bd}input,select,textarea{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.32);color:#f5f0e6;border-radius:16px;padding:13px 15px;outline:none}textarea{min-height:80px;resize:vertical}.status-pill{display:inline-flex;align-items:center;border:1px solid rgba(238,206,122,.18);border-radius:999px;padding:6px 12px;color:#d8cda9;font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em}.status-pill.on{color:var(--green);background:rgba(28,97,65,.12);border-color:rgba(158,255,202,.25)}.status-pill.warn{color:#ffd582;background:rgba(255,198,86,.08)}.status-pill.off{color:#aaa}.page-note{border:1px solid rgba(158,255,202,.22);background:rgba(28,97,65,.08);border-radius:22px;padding:16px;color:#c9ffe1}.expired-note{border:1px solid rgba(255,96,96,.24);background:rgba(255,96,96,.07);border-radius:22px;padding:16px;color:#ffd8d8}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}.site-footer strong{color:#d8cda9}.nav-links.centered-admin{gap:22px}.hidden{display:none!important}.table-box{overflow-x:auto;border:1px solid rgba(238,206,122,.14);border-radius:20px}.table-box table{width:100%;border-collapse:collapse;font-size:13px}.table-box th,.table-box td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(238,206,122,.08);white-space:nowrap}.table-box th{color:#d8cda9;text-transform:uppercase;letter-spacing:.08em;font-size:11px}.token-cell{font-family:monospace;font-size:12px;color:#f4df90}@media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.split-shell{padding-top:92px}}
+</style>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<meta name="kamar-step" content="46-luxury-atelier-formation"/>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="index.html">Beranda</a></nav><div class="header-actions"><a class="header-cta" href="index.html">Beranda</a><a class="header-cta header-member-cta" data-kamar-logout="" href="index.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div>
+<div class="admin-menu-section">Utama</div>
+<a class="" href="admin.html">Dashboard Admin</a>
+<div class="admin-menu-section">Member & Akses</div>
+<a class="" href="admin-members.html">Data Member</a>
+<a class="" href="admin-activation-v2.html">Aktivasi Akun & Fasilitas</a>
+<div class="admin-menu-section">Affiliate</div>
+<a href="admin-affiliate-v2.html?view=overview&v=24dx">Data Affiliate</a>
+<a href="admin-affiliate-v2.html?view=list&v=24dx">Daftar Affiliator</a>
+<a href="admin-affiliate-v2.html?view=reward&v=24dx">Reward / Komisi</a>
+<div class="admin-menu-section">Konten Website</div>
+<a class="" href="admin-banner.html">Banner Pengumuman</a>
+<a class="" href="admin-video.html">Konten Video</a>
+<a class="" href="admin-materials.html">Konten & Materi</a>
+<a class="" href="admin-tools.html">File Tools</a>
+<div class="admin-menu-section">Kontrol Sistem</div>
+<a class="" href="admin-license-requests.html">Request License</a>
+<a class="active" href="admin-internal-license.html">Lisensi EA (Internal)</a>
+<a class="" href="admin-connection-check.html?v=24dv">Cek Koneksi DB</a>
+<a class="" href="admin-maintenance.html">Maintenance Fasilitas</a>
+<a class="" href="admin-page-control.html">Kontrol Halaman Utama</a>
+<a class="" href="admin-dashboard-control.html">Kontrol Dashboard Member</a>
+<a class="" href="admin-payment.html">Payment Gateway</a>
+<a class="" href="admin-links.html">Pengaturan Link</a>
+<a class="" href="admin-settings.html">Pengaturan Umum</a>
+<div class="admin-menu-section">Akun</div>
+<a class="" data-kamar-logout="" href="index.html">Logout</a>
+</aside><section class="split-main">
+<section class="split-card kamar-title-card"><h1>Lisensi EA Internal</h1><p>Kelola token lisensi online untuk EA yang Anda pakai sendiri (bukan produk member) — misalnya Kamar Signal Advisor. Saat akun trading atau broker Anda berganti, cukup edit baris token di sini, tanpa perlu minta bantuan Supabase manual lagi.</p></section>
+
+<section class="split-card">
+<span class="mini-label" id="klFormMode">Tambah Token Baru</span>
+<h2 id="klFormTitle">Buat Token Lisensi</h2>
+<form id="klForm" class="grid-2">
+<input type="hidden" id="klId" value=""/>
+<label class="field"><span>Kode Produk</span><input id="klProduct" placeholder="contoh: kamar_signal_master" required value="kamar_signal_master"/></label>
+<label class="field"><span>Account ID (Login MT5)</span><input id="klAccount" type="number" placeholder="contoh: 30026345" required/></label>
+<label class="field"><span>Nama Broker</span><input id="klBroker" placeholder="contoh: TradeMax Global Limited" required/></label>
+<label class="field"><span>Nama Server</span><input id="klServer" placeholder="contoh: TradeMaxGlobal-Live" required/></label>
+<label class="field"><span>Tipe Lisensi</span><select id="klType"><option value="lifetime">Lifetime</option><option value="yearly">Tahunan</option><option value="monthly">Bulanan</option><option value="trial">Trial</option></select></label>
+<label class="field"><span>Status</span><select id="klStatus"><option value="active">Active</option><option value="suspended">Suspended</option><option value="revoked">Revoked</option></select></label>
+<label class="field"><span>Kedaluwarsa (kosongkan jika lifetime)</span><input id="klExpired" type="date"/></label>
+<label class="field"><span>Token</span><div class="button-row" style="margin-top:0"><input id="klToken" readonly placeholder="klik Buat Token" style="flex:1;font-family:monospace"/><button class="btn secondary mini" type="button" id="klGenToken">Buat Token</button></div></label>
+<label class="field" style="grid-column:1/-1"><span>Catatan (opsional)</span><textarea id="klNote" placeholder="catatan internal, misal: EA broadcast utama grup signal"></textarea></label>
+<div class="button-row" style="grid-column:1/-1">
+<button class="btn" type="submit">Simpan Token</button>
+<button class="btn secondary" type="button" id="klCancelEdit">Batal Edit</button>
+<span id="klFormMsg" style="color:var(--muted);align-self:center"></span>
+</div>
+</form>
+</section>
+
+<section class="split-card">
+<span class="mini-label">Daftar Token Internal</span>
+<h2>Token Aktif & Nonaktif</h2>
+<div class="button-row"><button class="btn secondary mini" type="button" id="klReload">Refresh Data</button></div>
+<div id="klTableWrap" style="margin-top:14px">Memuat data...</div>
+</section>
+
+</section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
+<script id="kamar-global-header-script">
+(function(){
+  function pageName(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
+  function shouldShowHeader(){
+    var p=pageName();
+    if(p==='admin.html' || p.indexOf('admin-')===0) return true;
+    if(p==='dashboard.html' || p.indexOf('member-')===0) return true;
+    if(p==='affiliate-dashboard.html') return true;
+    return false;
+  }
+  function clearSessionAndLogout(e){
+    try{
+      ['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});
+    }catch(err){}
+  }
+  function buildHeader(){
+    if(!shouldShowHeader()) return;
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');
+    header.className='site-header kamar-global-header';
+    header.innerHTML=''+
+      '<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html">'+
+        '<img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/>'+
+        '<span>Kamar Kajian Market</span>'+
+      '</a>'+
+      '<nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav>'+
+      '<div class="kamar-global-actions">'+
+        '<a class="kamar-global-btn" href="index.html">Beranda</a>'+
+        '<a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a>'+
+      '</div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');
+    if(out) out.addEventListener('click', clearSessionAndLogout);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', buildHeader); else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29F"></script>
+<script id="kamar-internal-license-mgr">
+(function(){
+  'use strict';
+  var TABLE='kamar_licenses';
+  var editingId=null;
+  var rowsCache=[];
+
+  function esc(v){ return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
+  function fmtDate(v){ if(!v) return '-'; try{ return new Date(v).toLocaleString('id-ID'); }catch(e){ return v; } }
+
+  async function client(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready();
+    return window.kamarSupabaseClient || null;
+  }
+
+  function genToken(){
+    var bytes = new Uint8Array(24);
+    (window.crypto || window.msCrypto).getRandomValues(bytes);
+    return Array.prototype.map.call(bytes, function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+
+  function resetForm(){
+    editingId=null;
+    document.getElementById('klId').value='';
+    document.getElementById('klProduct').value='kamar_signal_master';
+    document.getElementById('klAccount').value='';
+    document.getElementById('klBroker').value='';
+    document.getElementById('klServer').value='';
+    document.getElementById('klType').value='lifetime';
+    document.getElementById('klStatus').value='active';
+    document.getElementById('klExpired').value='';
+    document.getElementById('klToken').value='';
+    document.getElementById('klNote').value='';
+    document.getElementById('klFormMode').textContent='Tambah Token Baru';
+    document.getElementById('klFormTitle').textContent='Buat Token Lisensi';
+    document.getElementById('klFormMsg').textContent='';
+  }
+
+  function fillFormForEdit(row){
+    editingId=row.id;
+    document.getElementById('klId').value=row.id;
+    document.getElementById('klProduct').value=row.product_code||'';
+    document.getElementById('klAccount').value=row.account_id||'';
+    document.getElementById('klBroker').value=row.broker_name||'';
+    document.getElementById('klServer').value=row.server_name||'';
+    document.getElementById('klType').value=row.license_type||'lifetime';
+    document.getElementById('klStatus').value=row.status||'active';
+    document.getElementById('klExpired').value=row.expired_at ? String(row.expired_at).slice(0,10) : '';
+    document.getElementById('klToken').value=row.token||'';
+    document.getElementById('klNote').value=row.note||'';
+    document.getElementById('klFormMode').textContent='Mode Edit';
+    document.getElementById('klFormTitle').textContent='Edit Token: '+ (row.product_code||'');
+    document.getElementById('klFormMsg').textContent='';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function renderTable(rows){
+    var wrap=document.getElementById('klTableWrap');
+    if(!rows.length){ wrap.innerHTML='<div class="page-note">Belum ada token lisensi internal. Isi form di atas untuk membuat yang pertama.</div>'; return; }
+    var html='<div class="table-box"><table><thead><tr><th>Produk</th><th>Account</th><th>Broker</th><th>Server</th><th>Status</th><th>Tipe</th><th>Kedaluwarsa</th><th>Terakhir Cek</th><th>Token</th><th>Aksi</th></tr></thead><tbody>';
+    rows.forEach(function(r){
+      var pill = r.status==='active' ? 'on' : (r.status==='suspended' ? 'warn' : 'off');
+      html+='<tr>'+
+        '<td>'+esc(r.product_code)+'</td>'+
+        '<td>'+esc(r.account_id)+'</td>'+
+        '<td>'+esc(r.broker_name)+'</td>'+
+        '<td>'+esc(r.server_name)+'</td>'+
+        '<td><span class="status-pill '+pill+'">'+esc(r.status)+'</span></td>'+
+        '<td>'+esc(r.license_type)+'</td>'+
+        '<td>'+fmtDate(r.expired_at)+'</td>'+
+        '<td>'+fmtDate(r.last_check_at)+'</td>'+
+        '<td class="token-cell">'+esc(String(r.token||'').slice(0,10))+'…</td>'+
+        '<td><div class="button-row" style="margin-top:0">'+
+          '<button class="btn mini secondary" data-act="edit" data-id="'+esc(r.id)+'">Edit</button>'+
+          '<button class="btn mini secondary" data-act="copy" data-id="'+esc(r.id)+'">Salin Token</button>'+
+          '<button class="btn mini secondary" data-act="regen" data-id="'+esc(r.id)+'">Token Baru</button>'+
+          '<button class="btn mini danger" data-act="del" data-id="'+esc(r.id)+'">Hapus</button>'+
+        '</div></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+    wrap.innerHTML=html;
+  }
+
+  async function loadRows(){
+    var wrap=document.getElementById('klTableWrap');
+    wrap.innerHTML='Memuat data...';
+    try{
+      var c=await client();
+      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      var res=await c.from(TABLE).select('*').is('facility_key', null).order('created_at',{ascending:false});
+      if(res.error) throw res.error;
+      rowsCache=res.data||[];
+      renderTable(rowsCache);
+    }catch(e){
+      wrap.innerHTML='<div class="expired-note"><strong>Gagal membaca data token.</strong><br>'+esc(e.message||e)+'<br><br>Jika ini error izin (permission denied), coba logout lalu login ulang dengan akun admin asli.</div>';
+    }
+  }
+
+  async function saveForm(e){
+    e.preventDefault();
+    var msg=document.getElementById('klFormMsg');
+    var token=document.getElementById('klToken').value.trim();
+    if(!token){ msg.textContent='Klik "Buat Token" dulu sebelum simpan.'; return; }
+    var payload={
+      product_code: document.getElementById('klProduct').value.trim(),
+      account_id: Number(document.getElementById('klAccount').value),
+      broker_name: document.getElementById('klBroker').value.trim(),
+      server_name: document.getElementById('klServer').value.trim(),
+      license_type: document.getElementById('klType').value,
+      status: document.getElementById('klStatus').value,
+      expired_at: document.getElementById('klExpired').value ? new Date(document.getElementById('klExpired').value).toISOString() : null,
+      note: document.getElementById('klNote').value.trim() || null,
+      token: token,
+      updated_at: new Date().toISOString()
+    };
+    if(!payload.product_code || !payload.account_id || !payload.broker_name || !payload.server_name){
+      msg.textContent='Produk, Account ID, Broker, dan Server wajib diisi.'; return;
+    }
+    try{
+      var c=await client();
+      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      if(editingId){
+        var res=await c.from(TABLE).update(payload).eq('id', editingId).select();
+        if(res.error) throw res.error;
+        toast('Token berhasil diupdate.');
+      }else{
+        payload.member_profile_id=null;
+        payload.facility_key=null;
+        var res2=await c.from(TABLE).insert(payload).select();
+        if(res2.error) throw res2.error;
+        toast('Token baru berhasil dibuat.');
+      }
+      resetForm();
+      await loadRows();
+    }catch(err){
+      msg.textContent='Gagal simpan: '+(err.message||err);
+    }
+  }
+
+  async function handleTableClick(e){
+    var btn=e.target.closest('button[data-act]');
+    if(!btn) return;
+    var id=btn.getAttribute('data-id');
+    var row=rowsCache.find(function(r){ return String(r.id)===String(id); });
+    if(!row) return;
+    var act=btn.getAttribute('data-act');
+    if(act==='edit'){ fillFormForEdit(row); return; }
+    if(act==='copy'){
+      try{ await navigator.clipboard.writeText(row.token); toast('Token disalin ke clipboard.'); }
+      catch(e){ prompt('Salin token secara manual:', row.token); }
+      return;
+    }
+    if(act==='regen'){
+      if(!confirm('Buat token baru untuk '+row.product_code+' ('+row.broker_name+')? EA dengan token lama akan berhenti tervalidasi sampai Anda update token baru di EA.')) return;
+      try{
+        var c=await client();
+        var nt=genToken();
+        var res=await c.from(TABLE).update({ token:nt, updated_at:new Date().toISOString() }).eq('id', row.id).select();
+        if(res.error) throw res.error;
+        toast('Token baru dibuat. Update token ini di parameter EA Anda.');
+        await loadRows();
+      }catch(err){ toast('Gagal buat token baru: '+(err.message||err)); }
+      return;
+    }
+    if(act==='del'){
+      if(!confirm('Hapus token '+row.product_code+' ('+row.broker_name+')? EA yang memakai token ini akan langsung berhenti tervalidasi.')) return;
+      try{
+        var c=await client();
+        var res=await c.from(TABLE).delete().eq('id', row.id);
+        if(res.error) throw res.error;
+        toast('Token dihapus.');
+        if(editingId===row.id) resetForm();
+        await loadRows();
+      }catch(err){ toast('Gagal hapus: '+(err.message||err)); }
+    }
+  }
+
+  function init(){
+    document.getElementById('klGenToken').addEventListener('click', function(){
+      document.getElementById('klToken').value=genToken();
+    });
+    document.getElementById('klForm').addEventListener('submit', saveForm);
+    document.getElementById('klCancelEdit').addEventListener('click', resetForm);
+    document.getElementById('klReload').addEventListener('click', loadRows);
+    document.getElementById('klTableWrap').addEventListener('click', handleTableClick);
+    resetForm();
+    loadRows();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body></html>
+

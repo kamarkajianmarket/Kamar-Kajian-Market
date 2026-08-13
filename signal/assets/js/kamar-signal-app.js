@@ -290,7 +290,86 @@ function isIOSDevice(){
   }
 
 /* ---------------- helpers ---------------- */
-  function esc(s){
+  /* ---------------- telegram connect (additive) ---------------- */
+var TELEGRAM_BOT_USERNAME = 'GANTI_USERNAME_BOT';
+function genTelegramToken(){
+  if(window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID().replace(/-/g,'');
+  return 'tg' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
+}
+function telegramBtnHtml(){
+  if(!state.profile) return '';
+  var on = !!state.profile.telegram_chat_id;
+  return '<button type="button" class="ksig-install-btn'+(on?' on':'')+'" id="ksigTelegramBtn" title="'+(on?"Telegram terhubung":"Hubungkan Telegram")+'">\u2708\uFE0F</button>';
+}
+function bindTelegramBtn(){
+  var b = document.getElementById('ksigTelegramBtn');
+  if(b) b.addEventListener('click', openTelegramSheet);
+}
+function connectTelegram(preOpenedWin){
+  if(!state.profile) return Promise.reject(new Error('belum login'));
+  var token = genTelegramToken();
+  return state.client.from('telegram_connect_tokens').insert({
+    token: token,
+    profile_id: state.profile.id
+  }).then(function(res){
+    if(res.error) throw res.error;
+    var url = 'https://t.me/'+TELEGRAM_BOT_USERNAME+'?start='+token;
+    if(preOpenedWin && !preOpenedWin.closed){ preOpenedWin.location = url; }
+    else { window.open(url, '_blank'); }
+  });
+}
+function disconnectTelegram(){
+  if(!state.profile) return Promise.reject(new Error('belum login'));
+  return state.client.from('member_profiles').update({
+    telegram_chat_id: null,
+    telegram_connected_at: null
+  }).eq('id', state.profile.id).then(function(res){
+    if(res.error) throw res.error;
+    state.profile.telegram_chat_id = null;
+    renderApp();
+  });
+}
+function openTelegramSheet(){
+  var wrap = document.createElement('div');
+  wrap.className = 'ksig-sheet-backdrop';
+  var connected = !!(state.profile && state.profile.telegram_chat_id);
+  var body;
+  if(connected){
+    body = '<div class="ksig-sheet-title">Telegram Terhubung</div>'+
+      '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">Kamu akan menerima notifikasi signal baru langsung lewat chat Telegram. Putuskan koneksi ini?</p>'+
+      '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigTgCancel">Batal</button><button class="ksig-btn primary" id="ksigTgOff">Lepaskan Telegram</button></div>';
+  } else {
+    body = '<div class="ksig-promo">'+
+      '<div class="ksig-promo-badge android">\u2708\uFE0F</div>'+
+      '<div class="ksig-sheet-title">Hubungkan Telegram</div>'+
+      '<div class="ksig-promo-desc">Dapatkan notifikasi signal baru langsung ke Telegram kamu, selain lewat notifikasi HP. Prosesnya cuma 2 tap.</div>'+
+      '<ol class="ksig-promo-steps">'+
+      '<li><span class="ksig-promo-num">1</span>Tap <strong>Hubungkan</strong> di bawah ini, Telegram akan terbuka otomatis.</li>'+
+      '<li><span class="ksig-promo-num">2</span>Tap tombol <strong>Start</strong> di chat bot yang muncul.</li>'+
+      '<li><span class="ksig-promo-num">3</span>Selesai, bot akan konfirmasi kalau sudah terhubung.</li>'+
+      '</ol>'+
+      '</div>'+
+      '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigTgCancel">Nanti Saja</button><button class="ksig-btn primary" id="ksigTgOn">Hubungkan</button></div>';
+  }
+  wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div>'+body+'</div>';
+  document.body.appendChild(wrap);
+  wrap.addEventListener('click', function(e){ if(e.target===wrap) document.body.removeChild(wrap); });
+  var cancelBtn = document.getElementById('ksigTgCancel');
+  if(cancelBtn) cancelBtn.addEventListener('click', function(){ document.body.removeChild(wrap); });
+  var onBtn = document.getElementById('ksigTgOn');
+  if(onBtn) onBtn.addEventListener('click', function(){
+    document.body.removeChild(wrap);
+    var win = window.open('', '_blank');
+    connectTelegram(win).catch(function(){ if(win && !win.closed) win.close(); });
+  });
+  var offBtn = document.getElementById('ksigTgOff');
+  if(offBtn) offBtn.addEventListener('click', function(){
+    document.body.removeChild(wrap);
+    disconnectTelegram().catch(function(){});
+  });
+}
+
+function esc(s){
     return String(s==null?'':s).replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
@@ -425,7 +504,7 @@ function isIOSDevice(){
   }
 
   function loadProfileAndAccess(){
-    return state.client.from('member_profiles').select('id,account_status,full_name,email').eq('user_id', state.user.id).maybeSingle()
+    return state.client.from('member_profiles').select('id,account_status,full_name,email,telegram_chat_id').eq('user_id', state.user.id).maybeSingle()
       .then(function(res){
         if(res.error) throw res.error;
         state.profile = res.data || null;
@@ -789,7 +868,7 @@ function isIOSDevice(){
         (installAvailable() ? '<a class="ksig-login-install" id="ksigLoginInstall" tabindex="0">⇩ Instal Kamar Signal sebagai Aplikasi</a>' : '')+
       '</div>'+
       '</div>';
-    bindInstallBtn(); bindNotifBtn();
+    bindInstallBtn(); bindNotifBtn(); bindTelegramBtn();
     var form = document.getElementById('ksigLoginForm');
     form.addEventListener('submit', function(e){
       e.preventDefault();
@@ -819,7 +898,7 @@ function isIOSDevice(){
         '<a class="ksig-btn block" href="/dashboard.html">Kembali ke Dashboard</a>'+
       '</div></div>';
     updateLiveDot();
-    bindInstallBtn(); bindNotifBtn();
+    bindInstallBtn(); bindNotifBtn(); bindTelegramBtn();
   }
 
   /* ---------------- dashboard ---------------- */
@@ -844,6 +923,7 @@ function isIOSDevice(){
     var updatedTxt = state.lastUpdate ? 'Terakhir Diperbarui • '+fmtTimeShort(state.lastUpdate) : 'Memuat data…';
     var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
     var notifBtn = notifBtnHtml();
+  var telegramBtn = telegramBtnHtml();
     return ksigBackNavHtml() + '<div class="ksig-header'+animCls+'">'+
       '<div class="ksig-header-row">'+
         '<div class="ksig-header-titles">'+
@@ -855,6 +935,7 @@ function isIOSDevice(){
           '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>'+
           '<div class="ksig-header-updated">'+esc(updatedTxt)+'</div>'+
           notifBtn+
+  telegramBtn+
           install+
         '</div>'+
       '</div>'+
@@ -967,7 +1048,7 @@ function isIOSDevice(){
       '</div>';
     dashboardEntered = true;
     updateLiveDot();
-    bindInstallBtn(); bindNotifBtn();
+    bindInstallBtn(); bindNotifBtn(); bindTelegramBtn();
     (function(){ var da=document.getElementById('ksigDashInstallBtnAndroid'); if(da) da.addEventListener('click', function(){ openInstallSheet('android'); }); var di=document.getElementById('ksigDashInstallBtnIOS'); if(di) di.addEventListener('click', function(){ openInstallSheet('ios'); }); })();
     bindRecapTabs();
     bindPointerLight();
@@ -1019,7 +1100,7 @@ function isIOSDevice(){
         '<div id="ksigListBody"></div>'+
       '</div>';
     updateLiveDot();
-    bindInstallBtn(); bindNotifBtn();
+    bindInstallBtn(); bindNotifBtn(); bindTelegramBtn();
     renderListBody();
     var search = document.getElementById('ksigSearchInput');
     search.addEventListener('input', debounce(function(){ L.search = search.value.trim(); loadList(true); }, 400));
@@ -1212,7 +1293,7 @@ function isIOSDevice(){
       appBar('Rekap Signal', { back:'/signal/' }) +
       '<div class="ksig-main">'+ recapCardHtml() +'</div>';
     updateLiveDot();
-    bindInstallBtn(); bindNotifBtn();
+    bindInstallBtn(); bindNotifBtn(); bindTelegramBtn();
     bindRecapTabs();
     renderRecapBody();
     if(!state.recap.loaded && !state.recap.loading) loadRecap(state.recap.type);
@@ -1282,7 +1363,7 @@ function isIOSDevice(){
     if(D.id_zona !== state.route.id_zona) loadDetail(state.route.id_zona);
     el.innerHTML = appBar('Detail Signal', { back:'/signal/list/'+(state.list.status||'fresh') }) + '<div class="ksig-main" id="ksigDetailBody"></div>';
     updateLiveDot();
-    bindInstallBtn(); bindNotifBtn();
+    bindInstallBtn(); bindNotifBtn(); bindTelegramBtn();
     renderDetailBody();
   }
   function renderDetailBody(){

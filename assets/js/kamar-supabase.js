@@ -287,7 +287,8 @@
   async function run(){
     var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
     if(PAGES.indexOf(file) === -1) return;
-    if(document.getElementById('kamarMemberNotifs64')) return;
+    
+if(document.getElementById('kamarMemberNotifs64')) return;
     try{
       var client = window.kamarSupabaseClient || (window.KamarSupabase && await window.KamarSupabase.ready());
       if(!client) return;
@@ -297,6 +298,7 @@
         .order('created_at', { ascending:true })
         .limit(5);
       if(res.error || !res.data || !res.data.length) return;
+      try{var kNotifSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');kNotifSnd.volume=0.55;kNotifSnd.play().catch(function(){});}catch(kNotifErr){}
       if(document.getElementById('kamarMemberNotifs64')) return;
       var main = document.querySelector('.split-main') || document.querySelector('main');
       var wrap = document.createElement('div');

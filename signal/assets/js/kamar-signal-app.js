@@ -250,6 +250,44 @@ function isIOSDevice(){
     });
   }
 
+  // v2: kalau VAPID key server pernah dirotasi (mis. karena private key lama
+  // hilang, lihat riwayat 2026-08-14), device yang SUDAH punya subscription
+  // lama tetap kelihatan "Aktif" di layar (getSubscription() cuma cek ada/
+  // tidak ada di browser, tidak tahu key-nya masih cocok dengan server atau
+  // tidak) padahal push ke device itu diam-diam gagal terus. Fungsi ini
+  // dipanggil otomatis tiap kali member sukses login/masuk approved, tanpa
+  // perlu member sadar atau buka Pengaturan sama sekali - kalau ada
+  // subscription lokal, dicoba disegarkan ke VAPID_PUBLIC_KEY yang berlaku
+  // sekarang; kalau ditolak browser karena key beda dari yang lama, lepas dulu
+  // baru pasang ulang, lalu simpan subscription barunya ke server.
+  function ensureFreshPushSubscription(){
+    if(!state.profile) return Promise.resolve();
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)) return Promise.resolve();
+    if(Notification.permission !== 'granted') return Promise.resolve();
+    return navigator.serviceWorker.ready.then(function(reg){
+      return reg.pushManager.getSubscription().then(function(sub){
+        if(!sub) return null; // member belum pernah aktifkan di device ini, tidak ada yang perlu disegarkan
+        return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) })
+          .catch(function(){
+            return sub.unsubscribe().then(function(){
+              return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) });
+            });
+          });
+      });
+    }).then(function(freshSub){
+      if(!freshSub) return;
+      var j = freshSub.toJSON();
+      return state.client.from('push_subscriptions').upsert({
+        profile_id: state.profile.id,
+        endpoint: j.endpoint,
+        p256dh: j.keys.p256dh,
+        auth_key: j.keys.auth,
+        device_label: navigator.userAgent.slice(0,120),
+        last_seen_at: new Date().toISOString()
+      }, { onConflict: 'endpoint' });
+    }).catch(function(){});
+  }
+
   function notifBtnHtml(){
     if(!('serviceWorker' in navigator) || !('PushManager' in window)) return '';
     var on = notifState.subscribed;
@@ -672,6 +710,7 @@ function esc(s){
         if(state.approved){
           startRealtime();
           loadReadsMap();
+          ensureFreshPushSubscription();
         }
       })
       .catch(function(err){

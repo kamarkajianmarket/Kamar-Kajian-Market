@@ -27,8 +27,7 @@ export default async function handler(req, res) {
 
   try {
     const rawBody = await readRawBody(req);
-
-    const response = await fetch(
+      console.log("[kamar-signal proxy] raw body preview:", rawBody.toString("utf8").slice(0, 800));    const response = await fetch(
       "https://moxcqojvtglssftskouj.supabase.co/functions/v1/kamar-signal-ingest",
       {
         method: "POST",
@@ -41,8 +40,7 @@ export default async function handler(req, res) {
     );
 
     const text = await response.text();
-
-    res.setHeader("Content-Type", "application/json");
+      console.log("[kamar-signal proxy] downstream status:", response.status, "body preview:", text.slice(0, 800));    res.setHeader("Content-Type", "application/json");
 
     return res.status(response.status).send(text);
   } catch (error) {

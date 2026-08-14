@@ -3,7 +3,7 @@
   if(window.__KAMAR_AUTH_29F__) return;
   window.__KAMAR_AUTH_29F__ = true;
   var VERSION = '29F';
-  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com'];
+  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com','superadmin@akun.kamar'];
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function norm(v){ return String(v||'').trim().toLowerCase(); }

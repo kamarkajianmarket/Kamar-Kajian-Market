@@ -394,11 +394,14 @@ function esc(s){
     return f.toLocaleString('id-ID', { maximumFractionDigits:(d==null?2:d), minimumFractionDigits:0 });
   }
   function pipsOf(s){
-    // Angka pip yang ditampilkan ke member: kalau signal sudah benar-benar selesai
-    // (INVALID), pakai hasil final (result_point). Selama masih berjalan (FRESH/ACTIVE),
-    // pakai rekor tertinggi yang pernah dicapai (max_running_point) supaya update live
-    // mengikuti tiap event TP Hit, tidak menunggu signal ditutup.
-    if(s.status==='INVALID' && s.result_point!=null) return Number(s.result_point)*10;
+    // Angka pip yang ditampilkan ke member. Catatan penting: EA TIDAK PERNAH mengirim
+    // result_pips/result_point (selalu kosong/0) -- untuk event HIT_INVALIDASI, EA menaruh
+    // besaran cut-loss (nilai absolut/positif) di running_pips, bukan result_pips. Jadi:
+    // - Pure cut loss (INVALID, belum sempat TP): pakai running_point (nilai saat event
+    //   invalidasi itu terjadi), tampilkan NEGATIF karena ini kerugian.
+    // - Selain itu (FRESH/ACTIVE/atau sempat TP sebelum invalid): pakai rekor tertinggi
+    //   yang pernah dicapai (max_running_point) supaya update live mengikuti tiap TP Hit.
+    if(s.status==='INVALID' && (s.farthest_tp_level||0)===0){ var lossMag=s.running_point!=null?Number(s.running_point):(s.max_running_point!=null?Number(s.max_running_point):null); return lossMag!=null?-Math.abs(lossMag)*10:null; }
     if(s.max_running_point!=null) return Number(s.max_running_point)*10;
     return s.running_point!=null ? Number(s.running_point)*10 : null;
   }
@@ -623,7 +626,7 @@ function esc(s){
       });
       state.unreadCounts = next;
       state.badgeJustChanged = changed;
-      try{ if(Object.keys(changed).some(function(k){return changed[k];})){ if(!window.__kamarSigSnd){window.__kamarSigSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');window.__kamarSigSnd.volume=0.5;} window.__kamarSigSnd.currentTime=0; window.__kamarSigSnd.play().catch(function(){}); } }catch(kSigSndErr){}
+      try{ var freshIncreased = state.readsLoaded && Number(next.fresh||0) > Number(prev.fresh||0); if(freshIncreased){ if(!window.__kamarSigSnd){window.__kamarSigSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');window.__kamarSigSnd.volume=0.5;} window.__kamarSigSnd.currentTime=0; window.__kamarSigSnd.play().catch(function(){}); } }catch(kSigSndErr){}
       state.lastUpdate = new Date().toISOString();
       if(state.route.view === 'dashboard') renderApp();
     }).catch(function(){});

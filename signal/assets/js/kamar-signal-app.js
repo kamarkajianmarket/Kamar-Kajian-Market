@@ -724,14 +724,25 @@ function esc(s){
     if(rtChannel){ try{ state.client.removeChannel(rtChannel); }catch(e){} rtChannel = null; }
     state.realtimeStatus = 'off';
   }
+  // v2: _rtRender dulunya dimatikan pakai timer tetap 2.5 detik. Kalau koneksi
+  // member lambat, refreshCounts/loadList/loadDetail/loadActivity kadang baru
+  // selesai SETELAH 2.5 detik itu - akibatnya render ulang datang saat flag
+  // sudah balik false, jadi angka/kartu update instan tanpa animasi fade atau
+  // count-up/down sama sekali (dilaporkan member 2026-08-14). Fix: flag dimatikan
+  // setelah semua request beneran selesai (Promise.all), bukan pakai jangka waktu
+  // tebakan. Timer 8 detik cuma jaring pengaman kalau ada request yang nyangkut.
   var onLiveEventDebounced = debounce(function(){
     state._rtRender = true;
     clearTimeout(window.__kamarRtFlagTimer);
-    window.__kamarRtFlagTimer = setTimeout(function(){ state._rtRender = false; }, 2500);
-    refreshCounts();
-    if(state.route.view === 'list') loadList(true);
-    if(state.route.view === 'detail') loadDetail(state.route.id_zona);
-    if(state.route.view === 'dashboard') loadActivity();
+    window.__kamarRtFlagTimer = setTimeout(function(){ state._rtRender = false; }, 8000);
+    var kamarRtTasks = [refreshCounts()];
+    if(state.route.view === 'list') kamarRtTasks.push(loadList(true));
+    if(state.route.view === 'detail') kamarRtTasks.push(loadDetail(state.route.id_zona));
+    if(state.route.view === 'dashboard') kamarRtTasks.push(loadActivity());
+    Promise.all(kamarRtTasks).catch(function(){}).then(function(){
+      clearTimeout(window.__kamarRtFlagTimer);
+      state._rtRender = false;
+    });
   }, 600);
   function onLiveEvent(payload){
     state.lastUpdate = new Date().toISOString();
@@ -739,6 +750,26 @@ function esc(s){
   }
   window.addEventListener('online', function(){ if(state.approved) startRealtime(); });
   window.addEventListener('offline', function(){ state.realtimeStatus = 'off'; updateLiveDot(); });
+
+  // Sebagian browser (terutama Safari/iOS dan PWA yang sudah lama dibiarkan
+  // terbuka di background) memblokir Audio.play() otomatis kalau tidak ada
+  // interaksi user baru-baru ini - notifikasi baru (NEW_ZONE / Signal Fresh)
+  // sering datang saat member TIDAK sedang menyentuh layar, jadi play()
+  // gagal diam-diam (di-catch, tidak ada error terlihat). Fix: begitu member
+  // sentuh layar pertama kali, siapkan dan "buka kunci" elemen suara yang
+  // sama persis dipakai chime (window.__kamarSigSnd) lewat play+pause cepat -
+  // beberapa browser lalu mengizinkan play() berikutnya tanpa perlu sentuhan
+  // baru lagi.
+  function unlockKamarSigSnd(){
+    try{
+      if(!window.__kamarSigSnd){ window.__kamarSigSnd = new Audio('/assets/sounds/kamar-notif-A-chime.mp3'); window.__kamarSigSnd.volume = 0.5; }
+      var snd = window.__kamarSigSnd;
+      var p = snd.play();
+      if(p && p.then) p.then(function(){ snd.pause(); snd.currentTime = 0; }).catch(function(){});
+    }catch(e){}
+  }
+  document.addEventListener('pointerdown', unlockKamarSigSnd, { once:true, passive:true });
+  document.addEventListener('touchstart', unlockKamarSigSnd, { once:true, passive:true });
 
   /* ---------------- data layer ---------------- */
   // Unread adalah PERSONAL STATE PER MEMBER (bukan status signal). Signal dianggap

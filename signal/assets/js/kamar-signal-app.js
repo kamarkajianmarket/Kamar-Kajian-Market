@@ -377,8 +377,10 @@ function openSettingsSheet(){
 
   var tgBlock;
   if(!tgConnected){
-    tgBlock = '<p style="color:var(--km-muted);font-size:13px;line-height:1.6;margin:4px 0 10px">Dapatkan notifikasi signal baru juga lewat chat Telegram.</p>'+
-      '<button type="button" class="ksig-btn primary" id="ksigSettingsTgConnect" style="width:100%;display:flex;align-items:center;justify-content:center;gap:4px">'+TG_ICON+'Hubungkan Telegram</button>';
+    tgBlock = '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">'+
+      '<span style="font-size:18px;line-height:1">\uD83D\uDD12</span>'+
+      '<span style="color:var(--km-muted);font-size:12.5px;line-height:1.6">Koneksi Telegram baru sedang dikunci sementara untuk peningkatan keamanan. Akan dibuka kembali setelah sistem proteksi anti-bocor signal selesai dipasang.</span>'+
+    '</div>';
   } else {
     tgBlock = '<div class="ksig-chip-row" data-settings-row="telegram">'+
         '<div class="ksig-chip-opt'+(tgOn?' active':'')+'" data-val="on">Aktif</div>'+

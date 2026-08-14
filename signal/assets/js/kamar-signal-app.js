@@ -621,13 +621,21 @@ function esc(s){
   function boot(){
     routeFromLocation();
     renderBoot('Menghubungkan ke Kamar Signal…');
-    (window.KamarSupabase && window.KamarSupabase.ready ? window.KamarSupabase.ready() : Promise.resolve(null))
+    var readyPromise = (window.KamarSupabase && window.KamarSupabase.ready ? window.KamarSupabase.ready() : Promise.resolve(null));
+    var timeoutPromise = new Promise(function(resolve, reject){ setTimeout(function(){ reject(new Error('TIMEOUT')); }, 9000); });
+    Promise.race([readyPromise, timeoutPromise])
       .then(function(client){
         state.client = client || (window.KamarSupabase && window.KamarSupabase.getClient && window.KamarSupabase.getClient());
         if(!state.client){ renderBootError('Koneksi database belum siap. Muat ulang halaman.'); return; }
         return checkSession();
       })
-      .catch(function(err){ renderBootError('Gagal memuat Kamar Signal: ' + (err && err.message || err)); });
+      .catch(function(err){
+        if(err && err.message === 'TIMEOUT'){
+          renderBootError('Koneksi ke server lambat atau tersangkut. Coba Muat Ulang. Jika masih gagal terus, hapus aplikasi Kamar Signal dari Home Screen lalu instal ulang dari awal.');
+        } else {
+          renderBootError('Gagal memuat Kamar Signal: ' + (err && err.message || err));
+        }
+      });
   }
 
   function checkSession(){
@@ -1086,17 +1094,17 @@ function esc(s){
   }
 
   function panduanSectionHtml(animCls){
-    var PANDUAN_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf';
-    function guideCard(icon,title,desc,href){
-      if(href){
-        return '<a class="ksig-guide-card ksig-guide-card-active" href="'+esc(href)+'" target="_blank" rel="noopener">'+
+    function guideCard(icon,title,desc,opts){
+      opts = opts || {};
+      if(opts.sheetId){
+        return '<div class="ksig-guide-card ksig-guide-card-active" id="'+opts.sheetId+'" tabindex="0" role="button">'+
           '<div class="ksig-guide-icon" aria-hidden="true">'+icon+'</div>'+
           '<div class="ksig-guide-body">'+
             '<div class="ksig-guide-title">'+esc(title)+'</div>'+
             '<div class="ksig-guide-desc">'+esc(desc)+'</div>'+
           '</div>'+
           '<div class="ksig-guide-cta">Lihat Panduan \u2192</div>'+
-        '</a>';
+        '</div>';
       }
       return '<div class="ksig-guide-card" aria-disabled="true">'+
         '<div class="ksig-guide-icon" aria-hidden="true">'+icon+'</div>'+
@@ -1111,9 +1119,42 @@ function esc(s){
       sectionLabel('PANDUAN KAMAR SIGNAL') +
       '<div class="ksig-guide-grid">'+
         guideCard('\u25C7','Aturan Kamar Signal','Ketentuan penggunaan dan panduan member Kamar Signal.') +
-        guideCard('\u25C7','Informasi Teknis','Panduan instalasi aplikasi, aktivasi notifikasi, dan koneksi Telegram.', PANDUAN_PDF_URL) +
+        guideCard('\u25C7','Informasi Teknis','Kumpulan panduan teknis: instalasi, notifikasi, Telegram, dan lainnya.', {sheetId:'ksigInfoTeknisCard'}) +
       '</div>'+
     '</div>';
+  }
+  function openInformasiTeknisSheet(){
+    var wrap = document.createElement('div');
+    wrap.className = 'ksig-sheet-backdrop';
+    var PANDUAN_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf';
+    function row(title,desc,href){
+      if(href){
+        return '<a class="ksig-info-row ksig-info-row-active" href="'+esc(href)+'" target="_blank" rel="noopener">'+
+          '<div class="ksig-info-row-body"><div class="ksig-info-row-title">'+esc(title)+'</div><div class="ksig-info-row-desc">'+esc(desc)+'</div></div>'+
+          '<div class="ksig-info-row-arrow" aria-hidden="true">\u2192</div>'+
+        '</a>';
+      }
+      return '<div class="ksig-info-row" aria-disabled="true">'+
+        '<div class="ksig-info-row-body"><div class="ksig-info-row-title">'+esc(title)+'</div><div class="ksig-info-row-desc">'+esc(desc)+'</div></div>'+
+        '<div class="ksig-info-row-tag">Segera Hadir</div>'+
+      '</div>';
+    }
+    wrap.innerHTML = '<div class="ksig-sheet">'+
+      '<div class="ksig-sheet-handle"></div>'+
+      '<div class="ksig-sheet-title">Informasi Teknis</div>'+
+      '<div class="ksig-info-list">'+
+        row('Instalasi Aplikasi & Notifikasi','Cara instal ke HP, aktifkan notifikasi push, dan hubungkan Telegram.', PANDUAN_PDF_URL) +
+        row('Cara Membaca Signal','Panduan memahami format, status, dan istilah pada Kamar Signal.') +
+      '</div>'+
+      '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigInfoTeknisClose" style="width:100%">Tutup</button></div>'+
+    '</div>';
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', function(e){ if(e.target===wrap) wrap.remove(); });
+    document.getElementById('ksigInfoTeknisClose').addEventListener('click', function(){ wrap.remove(); });
+  }
+  function bindInfoTeknisCard(){
+    var card = document.getElementById('ksigInfoTeknisCard');
+    if(card) card.addEventListener('click', openInformasiTeknisSheet);
   }
 
   function fmtAccessDate(iso){
@@ -1206,6 +1247,7 @@ function esc(s){
     bindInstallBtn(); bindNotifBtn(); bindTelegramBtn(); bindSettingsBtn();
     (function(){ var da=document.getElementById('ksigDashInstallBtnAndroid'); if(da) da.addEventListener('click', function(){ openInstallSheet('android'); }); var di=document.getElementById('ksigDashInstallBtnIOS'); if(di) di.addEventListener('click', function(){ openInstallSheet('ios'); }); })();
     bindRecapTabs();
+    bindInfoTeknisCard();
     bindPointerLight();
     renderRecapBody();
     renderActivityBody();

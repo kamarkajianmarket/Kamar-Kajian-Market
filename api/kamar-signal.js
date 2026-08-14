@@ -1,3 +1,17 @@
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+async function readRawBody(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -12,6 +26,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    const rawBody = await readRawBody(req);
+
     const response = await fetch(
       "https://moxcqojvtglssftskouj.supabase.co/functions/v1/kamar-signal-ingest",
       {
@@ -20,7 +36,7 @@ export default async function handler(req, res) {
           "Content-Type": "application/json",
           "x-kamar-signal-key": req.headers["x-kamar-signal-key"] || "",
         },
-        body: JSON.stringify(req.body),
+        body: rawBody,
       }
     );
 
@@ -40,4 +56,3 @@ export default async function handler(req, res) {
     });
   }
 }
-

@@ -32,15 +32,27 @@ var CONTEXT_LABEL = {
 var tawkReady = false;
 function markReady(){ tawkReady = true; }
 
+// Kadang widget default tawk.to (bubble + layar Home bawaan mereka) sempat
+// nongol sesaat sebelum/ setelah hideWidget() pertama terpanggil (race
+// condition saat SDK-nya baru selesai load), jadi ikut kepanggil ulang
+// beberapa kali di awal supaya benar-benar tidak nongol/menumpuk dengan
+// panel KAMAR SUPPORT kita sendiri.
+function forceHideDefaultWidget(){
+  try{ if (window.Tawk_API && typeof window.Tawk_API.hideWidget === 'function') window.Tawk_API.hideWidget(); }catch(e){}
+}
+
 try{
   window.Tawk_API = window.Tawk_API || {};
   var prevOnLoad = window.Tawk_API.onLoad;
   window.Tawk_API.onLoad = function(){
     markReady();
-    try{ window.Tawk_API.hideWidget(); }catch(e){}
+    forceHideDefaultWidget();
+    setTimeout(forceHideDefaultWidget, 800);
+    setTimeout(forceHideDefaultWidget, 2000);
+    setTimeout(forceHideDefaultWidget, 4000);
     if (typeof prevOnLoad === 'function') prevOnLoad();
   };
-  try{ window.Tawk_API.hideWidget(); }catch(e){}
+  forceHideDefaultWidget();
 }catch(e){}
 
 function openLiveChat(context){

@@ -186,6 +186,7 @@ html,body{ height:100%; }
 
 /* ---------- Entrance / content-swap animation ---------- */
 @keyframes ksigFadeUp{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.ksig-cnum{ font-variant-numeric: tabular-nums; }
 .ksig-fade{ animation: ksigFadeUp .28s ease both; }
 .ksig-stagger-1{ animation-delay:0ms; }
 .ksig-stagger-2{ animation-delay:50ms; }

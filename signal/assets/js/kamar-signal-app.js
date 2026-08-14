@@ -16,6 +16,38 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   var ROOT_PATH = '/signal/';
   var el = document.getElementById('ksigRoot');
   var dashboardEntered = false;
+  var _kamarNumSnap = {};
+  function fmtCountNum(v, digits){
+    digits = digits || 0;
+    if(digits > 0){ var s = Math.abs(v).toFixed(digits).replace('.', ','); return (v < 0 ? '-' : '') + s; }
+    return String(Math.round(v));
+  }
+  function applyCountAnimations(container){
+    if(!container || !container.querySelectorAll) return;
+    var nodes = container.querySelectorAll('[data-cnum]');
+    for(var i=0; i<nodes.length; i++){
+      (function(node){
+        var key = node.getAttribute('data-cnum');
+        var val = parseFloat(node.getAttribute('data-cval'));
+        var digits = parseInt(node.getAttribute('data-cdigits') || '0', 10);
+        var prev = _kamarNumSnap[key];
+        _kamarNumSnap[key] = val;
+        if(!state._rtRender || prev === undefined || isNaN(prev) || isNaN(val) || prev === val){
+          node.textContent = fmtCountNum(val, digits);
+          return;
+        }
+        var start = prev, end = val, t0 = null, dur = 650;
+        function step(ts){
+          if(!t0) t0 = ts;
+          var p = Math.min(1, (ts - t0) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          node.textContent = fmtCountNum(start + (end - start) * eased, digits);
+          if(p < 1) requestAnimationFrame(step); else node.textContent = fmtCountNum(end, digits);
+        }
+        requestAnimationFrame(step);
+      })(nodes[i]);
+    }
+  }
 
   var state = {
     client: null,
@@ -646,6 +678,9 @@ function esc(s){
     state.realtimeStatus = 'off';
   }
   var onLiveEventDebounced = debounce(function(){
+    state._rtRender = true;
+    clearTimeout(window.__kamarRtFlagTimer);
+    window.__kamarRtFlagTimer = setTimeout(function(){ state._rtRender = false; }, 2500);
     refreshCounts();
     if(state.route.view === 'list') loadList(true);
     if(state.route.view === 'detail') loadDetail(state.route.id_zona);
@@ -1094,7 +1129,7 @@ function esc(s){
   function renderDashboard(){
     var c = state.counts;
     var firstPaint = !dashboardEntered;
-    function ac(n){ return firstPaint ? ' ksig-fade ksig-stagger-'+n : ''; }
+    function ac(n){ return (firstPaint || state._rtRender) ? ' ksig-fade ksig-stagger-'+n : ''; }
     el.innerHTML =
       dashboardHeader(ac(1)) +
       '<div class="ksig-main ksig-dashboard">'+
@@ -1120,6 +1155,7 @@ function esc(s){
         '<div class="ksig-minifooter">KAMAR KAJIAN MARKET • KAMAR SIGNAL</div>'+
       '</div>';
     dashboardEntered = true;
+    applyCountAnimations(el);
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn(); bindTelegramBtn(); bindSettingsBtn();
     (function(){ var da=document.getElementById('ksigDashInstallBtnAndroid'); if(da) da.addEventListener('click', function(){ openInstallSheet('android'); }); var di=document.getElementById('ksigDashInstallBtnIOS'); if(di) di.addEventListener('click', function(){ openInstallSheet('ios'); }); })();
@@ -1132,7 +1168,7 @@ function esc(s){
     if(!state.activity.loaded && !state.activity.loading) loadActivity();
     function card(status){
       var meta = OVERVIEW_META[status];
-      var countHtml = state.lastUpdate!=null ? c[status] : '<span class="ksig-skel-inline"></span>';
+      var countHtml = state.lastUpdate!=null ? ('<span class="ksig-cnum" data-cnum="dash-'+status+'" data-cval="'+c[status]+'">'+c[status]+'</span>') : '<span class="ksig-skel-inline"></span>';
       var unread = state.readsLoaded ? (state.unreadCounts[status]||0) : 0;
       var badgeHtml = unread>0 ? '<span class="ksig-card-badge'+(state.badgeJustChanged[status]?' ksig-badge-pop':'')+'">'+(unread>99?'99+':unread)+'</span>' : '';
       return '<div class="ksig-card ksig-pointer-light '+status+'" data-ksig-nav="/signal/list/'+status+'" tabindex="0" role="link">'+
@@ -1181,7 +1217,7 @@ function esc(s){
     ) : '';
     el.innerHTML =
       appBar(STATUS_LABEL[L.status] || 'Signal', { back:'/signal/' }) +
-      '<div class="ksig-main">'+
+      '<div class="ksig-main'+(state._rtRender?' ksig-fade':'')+'">'+
         '<div class="ksig-toolbar">'+
           '<div class="ksig-search"><span aria-hidden="true">🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona…" value="'+esc(L.search)+'"/></div>'+
           '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter">⚙</div>'+
@@ -1468,7 +1504,8 @@ function esc(s){
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
     var lastCallActive = !!(D.events.length && D.events[D.events.length-1].event_type === 'RR_1_1_REACHED');
     var ha = hasilAkhirInfo(s);
-    var maxRun = s.max_running_point!=null ? fmtNum(s.max_running_point*10,1)+' Pips' : '-';
+    var maxRunVal = s.max_running_point!=null ? s.max_running_point*10 : null;
+    var maxRun = maxRunVal!=null ? fmtNum(maxRunVal,1)+' Pips' : '-';
     var rows = [
       ['Signal', (s.skenario||'-') + ' • ' + (s.timeframe||'-')],
       ['Jenis Zona', s.jenis_zona],
@@ -1490,7 +1527,7 @@ function esc(s){
         '</div>'+
         (lastCallActive ? '<div class="ksig-lastcall-banner">⚡ LAST CALL — RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
         (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
-        '<div class="ksig-detail-rows">' + rows.map(function(r){ return '<div class="ksig-detail-row"><span>'+esc(r[0])+'</span><strong>'+esc(r[1]==null?'-':r[1])+'</strong></div>'; }).join('') + '</div>'+
+        '<div class="ksig-detail-rows">' + rows.map(function(r){ var isRun = (r[0]==='Running Profit') && maxRunVal!=null; var valInner = isRun ? ('<span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span>') : esc(r[1]==null?'-':r[1]); return '<div class="ksig-detail-row"><span>'+esc(r[0])+'</span><strong>'+valInner+'</strong></div>'; }).join('') + '</div>'+
       '</div>'+
       '<div class="ksig-timeline-card">'+
         '<div class="ksig-timeline-title">Riwayat Perkembangan</div>'+
@@ -1500,6 +1537,7 @@ function esc(s){
       '</div>'+
       '</div>';
     body.innerHTML = html;
+    applyCountAnimations(body);
   }
 
     /* ---------------- update PWA (toast) ---------------- */

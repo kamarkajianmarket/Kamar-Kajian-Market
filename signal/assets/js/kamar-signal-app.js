@@ -1073,6 +1073,24 @@ function esc(s){
   /* ---------------- signal list ---------------- */
   var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss', archive:'Arsip Signal' };
 
+  var TIMEFRAME_ORDER = ['M1','M5','M15','M30','H1','H4','Daily'];
+  function groupedRowsHtml(items){
+    var groups = {}; var order = [];
+    items.forEach(function(s){
+      var key = (s.timeframe && String(s.timeframe).trim()) ? String(s.timeframe).trim() : 'Lainnya';
+      if(!groups[key]){ groups[key] = []; order.push(key); }
+      groups[key].push(s);
+    });
+    var ordered = TIMEFRAME_ORDER.filter(function(k){ return groups[k]; });
+    order.forEach(function(k){ if(ordered.indexOf(k)===-1) ordered.push(k); });
+    return ordered.map(function(k){
+      return '<div class="ksig-tf-section">' +
+        '<div class="ksig-tf-header">'+esc(k)+'<span class="ksig-tf-count">'+groups[k].length+'</span></div>' +
+        groups[k].map(rowHtml).join('') +
+        '</div>';
+    }).join('');
+  }
+
   function renderList(){
     var L = state.list;
     var isStatusChange = L.status !== L.loadedForStatus && !L.loading;
@@ -1131,7 +1149,7 @@ function esc(s){
       body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada '+esc((STATUS_LABEL[L.status]||'signal').toLowerCase())+' saat ini.</div>Cek kembali beberapa saat lagi.</div>';
       return;
     }
-    var html = '<div class="ksig-list ksig-fade">' + L.items.map(rowHtml).join('') + '</div>';
+    var html = '<div class="ksig-list ksig-fade">' + groupedRowsHtml(L.items) + '</div>';
     if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');

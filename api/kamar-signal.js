@@ -30,6 +30,14 @@ export default async function handler(req, res) {
 
     return res.status(response.status).send(text);
   } catch (error) {
-    return res.status(500).json({ ok: false, message: "Kamar Signal proxy error" });
+    console.error("[kamar-signal proxy] fetch to edge function failed:", error);
+    return res.status(500).json({
+      ok: false,
+      message: "Kamar Signal proxy error",
+      debug_error_name: error && error.name,
+      debug_error_message: error && error.message,
+      debug_error_cause: error && error.cause ? String(error.cause) : null,
+    });
   }
 }
+

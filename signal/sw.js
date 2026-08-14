@@ -1,12 +1,12 @@
 // Kamar Signal — service worker v2
 // Hanya cache APP SHELL (HTML/CSS/JS/ikon). JANGAN pernah cache data signal —
 // semua request ke Supabase/API selalu diambil fresh dari network, tidak lewat sini.
-  var SHELL_CACHE = 'kamar-signal-shell-v16';
+  var SHELL_CACHE = 'kamar-signal-shell-v17';
 var SHELL_FILES = [
   '/signal/',
   '/signal/index.html',
     '/signal/assets/css/kamar-signal.css?v=15',
-    '/signal/assets/js/kamar-signal-app.js?v=18',
+    '/signal/assets/js/kamar-signal-app.js?v=19',
   '/signal/manifest.webmanifest'
 ];
 
@@ -62,8 +62,8 @@ self.addEventListener('push', function(event){
   var title = data.title || 'Kamar Signal';
   var options = {
     body: data.body || '',
-    icon: '/signal/assets/icons/kamar-signal-icon-192-v2.png',
-    badge: '/signal/assets/icons/kamar-signal-icon-192-v2.png',
+    icon: '/signal/assets/icons/kamar-signal-icon-192-v3.png',
+    badge: '/signal/assets/icons/kamar-signal-icon-192-v3.png',
     data: { url: data.url || '/signal/' }
   };
   event.waitUntil(self.registration.showNotification(title, options));

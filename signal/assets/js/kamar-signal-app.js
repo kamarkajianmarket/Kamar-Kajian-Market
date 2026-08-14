@@ -398,14 +398,14 @@ function esc(s){
     // (INVALID), pakai hasil final (result_point). Selama masih berjalan (FRESH/ACTIVE),
     // pakai rekor tertinggi yang pernah dicapai (max_running_point) supaya update live
     // mengikuti tiap event TP Hit, tidak menunggu signal ditutup.
-    if(s.status==='INVALID' && s.result_point!=null) return Number(s.result_point);
-    if(s.max_running_point!=null) return Number(s.max_running_point);
-    return s.running_point!=null ? Number(s.running_point) : null;
+    if(s.status==='INVALID' && s.result_point!=null) return Number(s.result_point)*10;
+    if(s.max_running_point!=null) return Number(s.max_running_point)*10;
+    return s.running_point!=null ? Number(s.running_point)*10 : null;
   }
   function hasilAkhirInfo(s){
     var farthest = s.farthest_tp_level || 0;
     var pips = pipsOf(s);
-    var pipsText = pips!=null ? (pips>=0?'+':'')+fmtNum(pips,1)+' pt' : '';
+    var pipsText = pips!=null ? (pips>=0?'+':'')+fmtNum(pips,1)+' Pips' : '';
     if(s.status==='INVALID' && farthest===0){
       return { text: 'Kena Cut Loss' + (pipsText?' ('+pipsText+')':''), cls:'neg' };
     }
@@ -1163,7 +1163,7 @@ function esc(s){
     if(s.area_low!=null && s.area_high!=null) infoParts.push('Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high));
     if(s.display_status!=='fresh'){
       var pips = pipsOf(s);
-      if(pips!=null) infoParts.push((pips>=0?'+':'')+fmtNum(pips,1)+' pt');
+      if(pips!=null) infoParts.push((pips>=0?'+':'')+fmtNum(pips,1)+' Pips');
     }
     var info = infoParts.join(' • ');
     return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
@@ -1395,7 +1395,7 @@ function esc(s){
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
     var lastCallActive = !!(D.events.length && D.events[D.events.length-1].event_type === 'RR_1_1_REACHED');
     var ha = hasilAkhirInfo(s);
-    var maxRun = s.max_running_point!=null ? fmtNum(s.max_running_point,1)+' pt' : '-';
+    var maxRun = s.max_running_point!=null ? fmtNum(s.max_running_point*10,1)+' Pips' : '-';
     var rows = [
       ['Signal', (s.skenario||'-') + ' • ' + (s.timeframe||'-')],
       ['Jenis Zona', s.jenis_zona],

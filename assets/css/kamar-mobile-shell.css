@@ -426,3 +426,50 @@
     font-size: 12.5px !important;
   }
 }
+
+
+/* --- Premium dark drawer polish for .split-sidebar (2026-08-14, additive, does not touch .admin-sidebar) --- */
+.split-sidebar{
+  background: radial-gradient(140% 60% at 0% 0%, rgba(244,223,144,.08), transparent 55%), linear-gradient(180deg,#171410 0%,#0b0a08 60%) !important;
+}
+.split-sidebar .brand-small{
+  display: block !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 8px !important;
+  border-bottom: 1px solid rgba(244,223,144,.2) !important;
+}
+.split-sidebar a{
+  display: flex !important;
+  align-items: center !important;
+  padding: 11px 14px !important;
+  margin: 2px 0 !important;
+  border-left: 3px solid transparent !important;
+  font-weight: 700 !important;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.split-sidebar a.active{
+  background: rgba(244,223,144,.10) !important;
+  border-left-color: var(--km-gold) !important;
+  color: var(--km-gold) !important;
+}
+.split-sidebar a:hover{
+  background: rgba(255,255,255,.05) !important;
+  border-left-color: rgba(244,223,144,.35) !important;
+}
+.split-sidebar details.sidebar-group{
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+.split-sidebar details.sidebar-group summary{
+  padding: 11px 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: .02em !important;
+  cursor: pointer !important;
+}
+.split-sidebar a[data-kamar-logout]{
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+  color: #e28b8b !important;
+}

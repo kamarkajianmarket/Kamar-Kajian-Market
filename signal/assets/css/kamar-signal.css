@@ -510,8 +510,12 @@ html,body{ height:100%; }
 .ksig-skel-row{ height:64px; border-radius:16px; background:linear-gradient(90deg,#f1ede2 25%,#f8f4ea 37%,#f1ede2 63%); background-size:400% 100%; animation:ksigShimmer 1.4s ease infinite; }
 @keyframes ksigShimmer{ 0%{background-position:100% 0} 100%{background-position:0 0} }
 
-/* ---------- Pagination / load more ---------- */
-.ksig-loadmore{ margin-top:12px; }
+/* ---------- Pagination / load more ---------- */.ksig-loadmore{ margin-top:12px; }
+
+/* ---------- Section timeframe (M1/M5/M15/M30/H1/H4/Daily) ---------- */
+.ksig-tf-section{ margin-bottom:4px; }
+.ksig-tf-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 4px 6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--km-muted); }
+.ksig-tf-count{ font-weight:700; color:var(--km-muted); opacity:.7; text-transform:none; letter-spacing:0; }
 
 /* ---------- Filter sheet ---------- */
 .ksig-sheet-backdrop{ position:fixed; inset:0; background:rgba(17,20,23,.42); z-index:60; display:flex; align-items:flex-end; }

@@ -358,28 +358,51 @@ function openSettingsSheet(){
   wrap.className = 'ksig-sheet-backdrop';
   var pushOn = notifState.subscribed;
   var pushSupported = ('serviceWorker' in navigator) && ('PushManager' in window);
+  var iosNeedsInstall = isIOSDevice() && !isStandaloneMode();
   var tgConnected = !!state.profile.telegram_chat_id;
   var tgOn = (state.notifPrefs && state.notifPrefs.telegram_enabled === false) ? false : true;
+  var TG_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" style="vertical-align:-5px;margin-right:6px" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#29A9EB"/><path d="M17.5 7.5L6.8 11.6c-.7.3-.7.9-.1 1.1l2.7.9 1 3.3c.1.4.3.5.6.5.3 0 .4-.1.6-.3l1.5-1.5 2.8 2.1c.5.4 1 .2 1.1-.4l2-9.1c.2-.7-.2-1-1-.7z" fill="#fff"/></svg>';
+
+  var pushBlock;
+  if(!pushSupported){
+    pushBlock = iosNeedsInstall
+      ? '<p style="color:var(--km-muted);font-size:13px;line-height:1.6;margin:4px 0 0">Instal Kamar Signal ke Home Screen dulu supaya bisa aktifkan notifikasi push di iPhone/iPad.</p><button type="button" class="ksig-btn" id="ksigSettingsInstallGo" style="margin-top:8px;width:100%">Cara Instal</button>'
+      : '<p style="color:var(--km-muted);font-size:13px;line-height:1.6;margin:4px 0 0">Tidak didukung di perangkat/browser ini.</p>';
+  } else {
+    pushBlock = '<div class="ksig-chip-row" data-settings-row="push">'+
+      '<div class="ksig-chip-opt'+(pushOn?' active':'')+'" data-val="on">Aktif</div>'+
+      '<div class="ksig-chip-opt'+(!pushOn?' active':'')+'" data-val="off">Nonaktif</div>'+
+    '</div>';
+  }
+
+  var tgBlock;
+  if(!tgConnected){
+    tgBlock = '<p style="color:var(--km-muted);font-size:13px;line-height:1.6;margin:4px 0 10px">Dapatkan notifikasi signal baru juga lewat chat Telegram.</p>'+
+      '<button type="button" class="ksig-btn primary" id="ksigSettingsTgConnect" style="width:100%;display:flex;align-items:center;justify-content:center;gap:4px">'+TG_ICON+'Hubungkan Telegram</button>';
+  } else {
+    tgBlock = '<div class="ksig-chip-row" data-settings-row="telegram">'+
+        '<div class="ksig-chip-opt'+(tgOn?' active':'')+'" data-val="on">Aktif</div>'+
+        '<div class="ksig-chip-opt'+(!tgOn?' active':'')+'" data-val="off">Nonaktif</div>'+
+      '</div>'+
+      '<button type="button" id="ksigSettingsTgDisconnect" style="margin-top:8px;font-size:12.5px;color:var(--km-muted);background:none;border:none;text-decoration:underline;cursor:pointer;padding:0">Putuskan koneksi Telegram</button>';
+  }
+
   wrap.innerHTML =
     '<div class="ksig-sheet">'+
       '<div class="ksig-sheet-handle"></div>'+
       '<div class="ksig-sheet-title">Pengaturan Notifikasi</div>'+
-      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">Notifikasi Push</div><div class="ksig-chip-row" data-settings-row="push">'+
-        (pushSupported ?
-          ('<div class="ksig-chip-opt'+(pushOn?' active':'')+'" data-val="on">Aktif</div><div class="ksig-chip-opt'+(!pushOn?' active':'')+'" data-val="off">Nonaktif</div>')
-          : '<div style="color:var(--km-muted);font-size:13px;padding:6px 2px">Tidak didukung di perangkat ini</div>') +
-      '</div></div>'+
-      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">Notifikasi Telegram</div><div class="ksig-chip-row" data-settings-row="telegram">'+
-        (tgConnected ?
-          ('<div class="ksig-chip-opt'+(tgOn?' active':'')+'" data-val="on">Aktif</div><div class="ksig-chip-opt'+(!tgOn?' active':'')+'" data-val="off">Nonaktif</div>')
-          : '<div style="color:var(--km-muted);font-size:13px;padding:6px 2px">Hubungkan Telegram dulu lewat tombol \u2708\uFE0F</div>') +
-      '</div></div>'+
+      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">\uD83D\uDD14 Notifikasi Push</div>'+pushBlock+'</div>'+
+      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label" style="display:flex;align-items:center">'+TG_ICON+'Notifikasi Telegram</div>'+tgBlock+'</div>'+
       '<p style="color:var(--km-muted);font-size:12.5px;line-height:1.6;margin:14px 0 0">Notifikasi (bunyi/pesan) hanya dikirim untuk Signal FRESH (baru). Perubahan status signal lain tetap tampil sebagai tanda "Baru" di daftar, tanpa notifikasi.</p>'+
       '<div class="ksig-sheet-actions"><button class="ksig-btn primary" id="ksigSettingsClose" style="width:100%">Selesai</button></div>'+
     '</div>';
   document.body.appendChild(wrap);
   wrap.addEventListener('click', function(e){ if(e.target===wrap) wrap.remove(); });
   document.getElementById('ksigSettingsClose').addEventListener('click', function(){ wrap.remove(); });
+
+  var installGoBtn = document.getElementById('ksigSettingsInstallGo');
+  if(installGoBtn) installGoBtn.addEventListener('click', function(){ wrap.remove(); openInstallSheet('ios'); });
+
   var pushRow = wrap.querySelector('[data-settings-row="push"]');
   if(pushRow) pushRow.addEventListener('click', function(e){
     var opt = e.target.closest('.ksig-chip-opt'); if(!opt) return;
@@ -387,6 +410,20 @@ function openSettingsSheet(){
     if(val==='on' && !pushOn){ wrap.remove(); subscribeNotif().then(function(){ renderApp(); }).catch(function(err){ alert('Gagal mengaktifkan notifikasi: '+(err && err.message ? err.message : err)); }); }
     else if(val==='off' && pushOn){ wrap.remove(); unsubscribeNotif().then(function(){ renderApp(); }); }
   });
+
+  var tgConnectBtn = document.getElementById('ksigSettingsTgConnect');
+  if(tgConnectBtn) tgConnectBtn.addEventListener('click', function(){
+    wrap.remove();
+    var win = window.open('', '_blank');
+    connectTelegram(win).catch(function(){ if(win && !win.closed) win.close(); });
+  });
+
+  var tgDisconnectBtn = document.getElementById('ksigSettingsTgDisconnect');
+  if(tgDisconnectBtn) tgDisconnectBtn.addEventListener('click', function(){
+    wrap.remove();
+    disconnectTelegram().catch(function(){});
+  });
+
   var tgRow = wrap.querySelector('[data-settings-row="telegram"]');
   if(tgRow) tgRow.addEventListener('click', function(e){
     var opt = e.target.closest('.ksig-chip-opt'); if(!opt) return;
@@ -1041,9 +1078,7 @@ function esc(s){
         '<div class="ksig-header-meta">'+
           '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>'+
           '<div class="ksig-header-updated">'+esc(updatedTxt)+'</div>'+
-          notifBtn+
-  telegramBtn+
-  settingsBtn+
+          settingsBtn+
           install+
         '</div>'+
       '</div>'+

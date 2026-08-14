@@ -16,6 +16,15 @@
           var m=findCurrentMember();
           var unlocked=!!(m&&isActive(m)&&m[accessCol]===true&&!m.locked_by_expired&&!m.is_expired_by_date);
           if(!unlocked){ box.innerHTML='<div class="facility-locked-box"><span>Kamu belum memiliki akses ke fasilitas ini. Aktifkan dulu supaya bisa membuka materi dan tools di halaman ini.</span><a class="btn mini" href="member-renewal.html">Aktifkan Fasilitas</a></div>'; return; }
+          if (f === 'member-study.html'){
+            box.outerHTML = '<div class="split-card"><span class="eyebrow">Kamar Signal</span><h2>Kenapa Kamar Signal?</h2>'+
+              '<div class="facility-content-grid">'+
+              '<article class="facility-content-card"><h3>Real-time ke HP</h3><p>Signal terkirim otomatis dari EA ke dashboard dan notifikasi kamu \u2014 tidak perlu pantau chart manual sepanjang hari.</p></article>'+
+              '<article class="facility-content-card"><h3>Notifikasi dan Telegram</h3><p>Aktifkan push notification atau DM Telegram lewat pengaturan di dalam Kamar Signal supaya tahu begitu ada Signal Fresh baru.</p><div class="button-row"><a class="btn mini" href="/signal/" target="_blank" rel="noopener">Atur Notifikasi \u2192</a></div></article>'+
+              '<article class="facility-content-card"><h3>Panduan Teknis</h3><p>Cara instal aplikasi, aktivasi notifikasi, dan hubungkan Telegram \u2014 lengkap dalam satu panduan.</p><div class="button-row"><a class="btn mini" href="https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf" target="_blank" rel="noopener">Lihat Panduan \u2192</a></div></article>'+
+              '</div></div>';
+            return;
+          }
           var dbKey=FACILITY_DB_KEY[f];
           var okAccess=['public','member',dbKey,'all_paid'];
           box.innerHTML='<div class="admin-empty-state">Memuat konten fasilitas...</div>';

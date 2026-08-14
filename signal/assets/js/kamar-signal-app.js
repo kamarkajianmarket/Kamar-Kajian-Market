@@ -143,7 +143,7 @@ function isIOSDevice(){
   }
 
   /* ---------------- notifikasi (push, additive) ---------------- */
-  var VAPID_PUBLIC_KEY = 'BIKwVi8sVWcL4iyxeJo8POMiWSSEDJA6H3i2dn8jVKxPkXgRIA_lHat0dfldioTWOug-irdQnlUsGc5euOQoZyw';
+  var VAPID_PUBLIC_KEY = 'BDLdP5GTvWHEKDY_BEnHl0Q8J5KT1aBNsLT1E5-lDbGvoHhL1a1mVUszB3ww9pHzmpJn7NelEslGO6ljGDB05CQ';
   var notifState = { subscribed: false, checked: false };
 
   function urlBase64ToUint8Array(base64String){

@@ -1086,7 +1086,18 @@ function esc(s){
   }
 
   function panduanSectionHtml(animCls){
-    function guideCard(icon,title,desc){
+    var PANDUAN_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf';
+    function guideCard(icon,title,desc,href){
+      if(href){
+        return '<a class="ksig-guide-card ksig-guide-card-active" href="'+esc(href)+'" target="_blank" rel="noopener">'+
+          '<div class="ksig-guide-icon" aria-hidden="true">'+icon+'</div>'+
+          '<div class="ksig-guide-body">'+
+            '<div class="ksig-guide-title">'+esc(title)+'</div>'+
+            '<div class="ksig-guide-desc">'+esc(desc)+'</div>'+
+          '</div>'+
+          '<div class="ksig-guide-cta">Lihat Panduan \u2192</div>'+
+        '</a>';
+      }
       return '<div class="ksig-guide-card" aria-disabled="true">'+
         '<div class="ksig-guide-icon" aria-hidden="true">'+icon+'</div>'+
         '<div class="ksig-guide-body">'+
@@ -1099,8 +1110,8 @@ function esc(s){
     return '<div class="'+animCls.trim()+'">'+
       sectionLabel('PANDUAN KAMAR SIGNAL') +
       '<div class="ksig-guide-grid">'+
-        guideCard('◇','Aturan Kamar Signal','Ketentuan penggunaan dan panduan member Kamar Signal.') +
-        guideCard('◇','Cara Membaca Signal','Panduan memahami format, status, dan informasi Kamar Signal.') +
+        guideCard('\u25C7','Aturan Kamar Signal','Ketentuan penggunaan dan panduan member Kamar Signal.') +
+        guideCard('\u25C7','Informasi Teknis','Panduan instalasi aplikasi, aktivasi notifikasi, dan koneksi Telegram.', PANDUAN_PDF_URL) +
       '</div>'+
     '</div>';
   }

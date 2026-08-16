@@ -142,7 +142,8 @@
     if(/is invalid$/i.test(m) && /email/i.test(m)) return 'Format email tidak valid. Coba pakai alamat email lain.';
     return m;
   }
-  async function doLogin(form,requestedRole){
+  async function doLogin(form,requestedRole,opts){
+    opts = opts || {};
     var email = (val(form,'email') || val(form,'loginEmail')).toLowerCase();
     var password = val(form,'password') || val(form,'loginPassword');
     if(!email || !password){ status(form,'Email dan password wajib diisi.',false); return; }
@@ -175,6 +176,18 @@
       if(requestedRole==='affiliate' && !admin){ finalRole = 'affiliate'; }
       if(requestedRole==='member' && !admin){ finalRole = 'member'; }
 
+      // FITUR 2026-08-17: verifikasi kode email khusus akun member asli (bukan admin,
+      // bukan akun internal @akun.kamar) - lihat startOtpFlow(). Mencegah login lanjut
+      // hanya bermodal email+password yang bocor/dicuri, karena tetap butuh akses inbox
+      // email terdaftar. Hanya berlaku saat login BARU (bukan sesi yang sudah tersimpan).
+      if(opts.otpGate && !admin && !/@akun\.kamar$/i.test(email)){
+        try{ await c.auth.signOut(); }catch(e){}
+        var otpRes = await c.auth.signInWithOtp({ email: email, options:{ shouldCreateUser:false } });
+        if(otpRes.error) throw otpRes.error;
+        startOtpFlow(form, email, finalRole, profile);
+        return;
+      }
+
       var s = sessionFromAuthUser(user,finalRole,profile);
       saveRole(finalRole,s);
       status(form,'Login berhasil. Membuka dashboard...',true);
@@ -187,6 +200,96 @@
       processing(form,'',false);
     }
   }
+
+  function finishLoginRedirect(finalRole,user,profile){
+    var s = sessionFromAuthUser(user,finalRole,profile);
+    saveRole(finalRole,s);
+    setTimeout(function(){
+      location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;
+    },300);
+  }
+
+  function startOtpFlow(loginForm, email, finalRole, profile){
+    var otpForm = document.getElementById('memberOtpForm');
+    if(!otpForm){ status(loginForm,'Kode verifikasi dikirim, tapi form kode tidak ditemukan di halaman ini.',false); loginForm.hidden=false; return; }
+    loginForm.hidden = true;
+    otpForm.hidden = false;
+    otpForm.dataset.otpEmail = email;
+    otpForm.dataset.otpRole = finalRole;
+    otpForm.dataset.otpProfile = JSON.stringify(profile||{});
+    var emailLabel = document.getElementById('memberOtpEmailLabel');
+    if(emailLabel) emailLabel.textContent = email;
+    status(otpForm,'Kode verifikasi telah dikirim ke email kamu.',true);
+    var codeInput = document.getElementById('memberOtpInput');
+    if(codeInput){ codeInput.value=''; codeInput.focus(); }
+
+    if(otpForm.__kamarOtpBound29E) return;
+    otpForm.__kamarOtpBound29E = true;
+
+    otpForm.addEventListener('submit', async function(e){
+      e.preventDefault();
+      var code = (codeInput && codeInput.value || '').trim();
+      if(!code){ status(otpForm,'Masukkan kode verifikasi.',false); return; }
+      processing(otpForm,'Memverifikasi...',true);
+      try{
+        await ensureReady();
+        var c2 = client();
+        var res2 = await timeout(c2.auth.verifyOtp({ email: otpForm.dataset.otpEmail, token: code, type:'email' }),15000);
+        if(res2.error) throw res2.error;
+        if(!res2.data || !res2.data.user) throw new Error('Verifikasi gagal. Coba lagi.');
+        status(otpForm,'Verifikasi berhasil. Membuka dashboard...',true);
+        finishLoginRedirect(otpForm.dataset.otpRole, res2.data.user, JSON.parse(otpForm.dataset.otpProfile||'{}'));
+      }catch(err){
+        status(otpForm, authMessage(err), false);
+      }finally{
+        processing(otpForm,'',false);
+      }
+    });
+
+    var resendBtn = document.getElementById('memberOtpResendBtn');
+    if(resendBtn && !resendBtn.__kamarOtpResendBound29E){
+      resendBtn.__kamarOtpResendBound29E = true;
+      resendBtn.addEventListener('click', async function(e){
+        e.preventDefault();
+        if(resendBtn.dataset.cooling==='1') return;
+        try{
+          await ensureReady();
+          var c3 = client();
+          var r2 = await c3.auth.signInWithOtp({ email: otpForm.dataset.otpEmail, options:{ shouldCreateUser:false } });
+          if(r2.error) throw r2.error;
+          status(otpForm,'Kode baru telah dikirim.',true);
+        }catch(err){
+          status(otpForm, authMessage(err), false);
+        }
+        resendBtn.dataset.cooling = '1';
+        var oldText = resendBtn.textContent;
+        var left = 30;
+        resendBtn.textContent = 'Kirim Ulang (' + left + 's)';
+        var iv = setInterval(function(){
+          left -= 1;
+          if(left <= 0){
+            clearInterval(iv);
+            resendBtn.dataset.cooling = '0';
+            resendBtn.textContent = oldText;
+          } else {
+            resendBtn.textContent = 'Kirim Ulang (' + left + 's)';
+          }
+        },1000);
+      });
+    }
+
+    var backBtn = document.getElementById('memberOtpBackBtn');
+    if(backBtn && !backBtn.__kamarOtpBackBound29E){
+      backBtn.__kamarOtpBackBound29E = true;
+      backBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        otpForm.hidden = true;
+        loginForm.hidden = false;
+        otpForm.reset();
+      });
+    }
+  }
+
   async function registerMember(form){
     var email = (val(form,'email') || val(form,'registerEmail')).toLowerCase();
     var password = val(form,'password') || val(form,'registerPassword');
@@ -399,7 +502,7 @@
   function run(){
     restoreRememberedEmails();
     bind('adminLoginForm',function(f){ doLogin(f,'admin'); });
-    bind('memberLoginForm',function(f){ doLogin(f,'member'); });
+    bind('memberLoginForm',function(f){ doLogin(f,'member',{otpGate:true}); });
     bind('kamarLoginForm',function(f){ doLogin(f,'member'); });
     bind('affiliateLoginForm',function(f){ doLogin(f,'affiliate'); });
     bind('memberRegisterForm',registerMember);

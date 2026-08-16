@@ -176,11 +176,12 @@
       if(requestedRole==='affiliate' && !admin){ finalRole = 'affiliate'; }
       if(requestedRole==='member' && !admin){ finalRole = 'member'; }
 
-      // FITUR 2026-08-17: verifikasi kode email khusus akun member asli (bukan admin,
-      // bukan akun internal @akun.kamar) - lihat startOtpFlow(). Mencegah login lanjut
-      // hanya bermodal email+password yang bocor/dicuri, karena tetap butuh akses inbox
-      // email terdaftar. Hanya berlaku saat login BARU (bukan sesi yang sudah tersimpan).
-      if(opts.otpGate && !admin && !/@akun\.kamar$/i.test(email)){
+      // FITUR 2026-08-17: verifikasi kode email wajib untuk SEMUA akun (termasuk admin
+      // resmi), kecuali akun internal @akun.kamar (tidak punya inbox asli) - lihat
+      // startOtpFlow(). Mencegah login lanjut hanya bermodal email+password yang
+      // bocor/dicuri, karena tetap butuh akses inbox email terdaftar. Hanya berlaku
+      // saat login BARU (bukan sesi yang sudah tersimpan).
+      if(opts.otpGate && !/@akun\.kamar$/i.test(email)){
         try{ await c.auth.signOut(); }catch(e){}
         var otpRes = await c.auth.signInWithOtp({ email: email, options:{ shouldCreateUser:false } });
         if(otpRes.error) throw otpRes.error;

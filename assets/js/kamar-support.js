@@ -87,9 +87,10 @@ function isTawkWidgetExpanded(){
     var frames = document.querySelectorAll('body > div > iframe');
     for (var i=0;i<frames.length;i++){
       var f = frames[i];
-      var w = parseInt(f.style.width,10) || 0;
-      var h = parseInt(f.style.height,10) || 0;
-      if (w > 200 && h > 200) return true;
+      var cs = window.getComputedStyle(f);
+      if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+      var rect = f.getBoundingClientRect();
+      if (rect.width > 200 || rect.height > 200) return true;
     }
   }catch(e){}
   return false;

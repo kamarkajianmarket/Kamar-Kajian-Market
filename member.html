@@ -15,7 +15,7 @@
 <link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
 <link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
   <link href="assets/css/kamar-bundle.css?v=1" rel="stylesheet"/>
-<link href="assets/css/kamar-auth-palace-v1.css?v=1" rel="stylesheet"/>
+<link href="assets/css/kamar-auth-palace-v1.css?v=2" rel="stylesheet"/>
 <meta name="kamar-step" content="57-login-register-live"/>
 </head>
 <body class="public-home kamar-v47-palace">
@@ -40,14 +40,40 @@
 <main id="top">
 <section class="section-shell compact-section">
 <div class="shell">
-  <div class="auth-card auth-card-solo">
+  <div class="auth-grid">
+      <div class="auth-hero">
+        <div>
+          <span class="kicker">Member Kamar</span>
+          <h1>Masuk untuk Lanjut Belajar Market Logic.</h1>
+          <p class="desc">Akses dashboard member untuk memantau fasilitas aktif, signal, dan progres belajar kamu di Kamar Kajian Market.</p>
+          <div class="chips">
+            <span class="chip">Kamar Edukasi</span>
+            <span class="chip">Kamar Signal</span>
+            <span class="chip">Kamar Private</span>
+            <span class="chip">Kamar Indikator</span>
+            <span class="chip">Kamar Robot</span>
+          </div>
+        </div>
+        <div class="notice">Belum jadi member? <a href="register.html">Daftar di sini</a> dan mulai belajar market logic bersama Kamar.</div>
+      </div>
+      <div class="auth-card">
       <h2>Form Login</h2>
       <form autocomplete="on" class="form" id="memberLoginForm">
         <label class="full">Email
-          <input autocomplete="email" name="email" required type="email"/>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            <input autocomplete="email" name="email" required type="email"/>
+          </div>
         </label>
         <label class="full">Password
-          <input autocomplete="current-password" name="password" required type="password"/>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <input autocomplete="current-password" id="loginPasswordInput" name="password" required type="password"/>
+            <button aria-label="Tampilkan password" class="pw-toggle" id="loginPwToggle" type="button">
+              <svg class="pw-toggle-icon-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <svg class="pw-toggle-icon-hide" hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.53 13.53 0 0 0 1 12s4 8 11 8a9.26 9.26 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path></svg>
+            </button>
+          </div>
         </label>
         <label class="toggle-row full">
           <input id="loginRemember" name="remember" type="checkbox"/>
@@ -127,5 +153,24 @@
 </script>
 <script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-premium-v29.js?v=30"></script>
 <script src="/assets/js/kamar-livechat.js?v=1" defer></script>
+<script>
+(function(){
+  function initPwToggle(){
+    var btn = document.getElementById('loginPwToggle');
+    var inp = document.getElementById('loginPasswordInput');
+    if(!btn||!inp) return;
+    var showIcon = btn.querySelector('.pw-toggle-icon-show');
+    var hideIcon = btn.querySelector('.pw-toggle-icon-hide');
+    btn.addEventListener('click', function(){
+      var isPw = inp.type === 'password';
+      inp.type = isPw ? 'text' : 'password';
+      btn.setAttribute('aria-label', isPw ? 'Sembunyikan password' : 'Tampilkan password');
+      if(showIcon) showIcon.hidden = isPw;
+      if(hideIcon) hideIcon.hidden = !isPw;
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initPwToggle); else initPwToggle();
+})();
+</script>
 </body>
 </html>

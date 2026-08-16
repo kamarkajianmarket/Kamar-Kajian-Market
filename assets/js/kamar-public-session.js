@@ -8,7 +8,7 @@
   'use strict';
 
   function swapToDashboard(){
-    var links = document.querySelectorAll('a[href="register.html"]');
+    var links = document.querySelectorAll('a');
     links.forEach(function(a){
       if(a.textContent.trim().toLowerCase().indexOf('daftar') === -1) return;
       a.textContent = 'Dashboard';

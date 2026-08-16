@@ -4,7 +4,8 @@
 // v2 (2026-08-16): tombol untuk fasilitas AKTIF diganti jadi PERPANJANGAN - klik langsung
 // mengajukan perpanjangan pakai data lama lewat RPC member_request_facility_renewal,
 // masuk otomatis ke TO DO ADMIN (tinggal admin Setujui/Tolak). Tidak lagi mengarahkan
-// member ke halaman aktivasi dari awal.
+// member ke halaman aktivasi dari awal. Konfirmasi & pesan pakai UI inline (klik-2x),
+// BUKAN window.confirm/alert - dialog native itu memblokir thread & jelek di mobile.
 (function(){
   'use strict';
 
@@ -36,40 +37,73 @@
     }
   }
 
+  function setMsg(msgEl, text, isError){
+    if(!msgEl) return;
+    msgEl.textContent = text || '';
+    msgEl.style.color = isError ? '#963F3F' : '#1c6141';
+  }
+
+  function ensureMsgEl(link){
+    var row = link.closest('.activate-row') || link.parentNode;
+    var msgEl = row.querySelector('.renewal-msg');
+    if(!msgEl){
+      msgEl = document.createElement('div');
+      msgEl.className = 'renewal-msg';
+      msgEl.style.cssText = 'font-size:11px;font-weight:700;margin-top:6px;width:100%;';
+      row.appendChild(msgEl);
+    }
+    return msgEl;
+  }
+
   function bindRenewalClick(link, meta, isPending){
     link.removeAttribute('href');
     link.style.cursor = 'pointer';
+    var msgEl = ensureMsgEl(link);
     if(isPending){
       setLinkState(link, 'MENUNGGU ADMIN', true);
+      setMsg(msgEl, 'Pengajuan perpanjangan sedang menunggu persetujuan admin.', false);
     } else {
       setLinkState(link, 'PERPANJANGAN', false);
     }
     if(link.dataset.renewalBound) return;
     link.dataset.renewalBound = '1';
+    var confirmTimer = null;
     link.addEventListener('click', function(e){
       e.preventDefault();
       if(link.getAttribute('aria-disabled') === 'true') return;
-      var confirmMsg = 'Ajukan perpanjangan fasilitas ini menggunakan data yang sama seperti sebelumnya? Pengajuan langsung masuk ke admin untuk disetujui.';
-      if(!window.confirm(confirmMsg)) return;
+      if(link.dataset.confirmStep !== '1'){
+        link.dataset.confirmStep = '1';
+        setLinkState(link, 'YAKIN? KLIK LAGI', false);
+        setMsg(msgEl, 'Klik sekali lagi untuk ajukan perpanjangan pakai data yang sama seperti sebelumnya.', false);
+        confirmTimer = setTimeout(function(){
+          link.dataset.confirmStep = '';
+          setLinkState(link, 'PERPANJANGAN', false);
+          setMsg(msgEl, '', false);
+        }, 5000);
+        return;
+      }
+      clearTimeout(confirmTimer);
+      link.dataset.confirmStep = '';
       setLinkState(link, 'MENGIRIM...', true);
+      setMsg(msgEl, 'Mengirim pengajuan...', false);
       var client = window.kamarSupabaseClient;
       if(!client){
         setLinkState(link, 'PERPANJANGAN', false);
-        window.alert('Koneksi belum siap, coba lagi sebentar.');
+        setMsg(msgEl, 'Koneksi belum siap, coba lagi sebentar.', true);
         return;
       }
       client.rpc('member_request_facility_renewal', { p_facility_key: meta.key }).then(function(res){
         var data = res && res.data;
         if(!res || res.error || !data || data.success !== true){
           setLinkState(link, 'PERPANJANGAN', false);
-          window.alert((data && data.message) || (res && res.error && res.error.message) || 'Gagal mengirim pengajuan perpanjangan.');
+          setMsg(msgEl, (data && data.message) || (res && res.error && res.error.message) || 'Gagal mengirim pengajuan perpanjangan.', true);
           return;
         }
         setLinkState(link, 'MENUNGGU ADMIN', true);
-        window.alert(data.message || 'Pengajuan perpanjangan terkirim. Menunggu persetujuan admin.');
+        setMsg(msgEl, data.message || 'Pengajuan perpanjangan terkirim. Menunggu persetujuan admin.', false);
       }).catch(function(err){
         setLinkState(link, 'PERPANJANGAN', false);
-        window.alert((err && err.message) || 'Gagal mengirim pengajuan perpanjangan.');
+        setMsg(msgEl, (err && err.message) || 'Gagal mengirim pengajuan perpanjangan.', true);
       });
     });
   }

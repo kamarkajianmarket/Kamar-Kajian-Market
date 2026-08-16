@@ -101,6 +101,7 @@ function dismissedTodoSet(){return new Set(getJSON('kamarDismissedTodos',[]))}
 function addDismissedTodo(id){var s=dismissedTodoSet();s.add(id);setJSON('kamarDismissedTodos',Array.from(s))}
 function renderTodo(){
   var el=byId('adminTodoList');if(!el)return;
+  if(el.getAttribute('data-kamar-actioncenter-bound'))return;
   var dismissed=dismissedTodoSet();
   var pending=regularMembers().filter(isPending).filter(function(m){return !dismissed.has('member:'+(m._id||idOf(m)||emailOf(m)))});
   var h='';

@@ -20,8 +20,8 @@
             box.outerHTML = '<div class="split-card"><span class="eyebrow">Kamar Signal</span><h2>Kenapa Kamar Signal?</h2>'+
               '<div class="facility-content-grid">'+
               '<article class="facility-content-card"><h3>Real-time ke HP</h3><p>Signal terkirim otomatis dari EA ke dashboard dan notifikasi kamu \u2014 tidak perlu pantau chart manual sepanjang hari.</p></article>'+
-              '<article class="facility-content-card"><h3>Notifikasi dan Telegram</h3><p>Aktifkan push notification atau DM Telegram lewat pengaturan di dalam Kamar Signal supaya tahu begitu ada Signal Fresh baru.</p><div class="button-row"><a class="btn mini" href="/signal/" target="_blank" rel="noopener">Atur Notifikasi \u2192</a></div></article>'+
-              '<article class="facility-content-card"><h3>Panduan Teknis</h3><p>Cara instal aplikasi, aktivasi notifikasi, dan hubungkan Telegram \u2014 lengkap dalam satu panduan.</p><div class="button-row"><a class="btn mini" href="https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf" target="_blank" rel="noopener">Lihat Panduan \u2192</a></div></article>'+
+              '<article class="facility-content-card"><h3>Status Signal Lengkap</h3><p>Setiap signal punya status jelas: FRESH \u2192 AKTIF \u2192 PROFIT/LOSS, lengkap dengan rekap performa per timeframe dan arsip otomatis untuk signal yang sudah selesai.</p></article>'+
+              '<article class="facility-content-card"><h3>Notifikasi dan Telegram</h3><p>Push notification dan DM Telegram supaya kamu tahu begitu ada Signal Fresh baru. Integrasi Telegram sedang kami siapkan.</p><div class="button-row"><span class="btn mini disabled" aria-disabled="true">Segera Hadir</span></div></article>'+
               '</div></div>';
             return;
           }

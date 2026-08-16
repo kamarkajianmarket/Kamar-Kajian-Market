@@ -69,6 +69,8 @@ function openLiveChat(context){
   try{
     if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function'){
       window.Tawk_API.maximize();
+      if (typeof hideLauncher === 'function') hideLauncher();
+      if (typeof watchTawkWidgetVisibility === 'function') watchTawkWidgetVisibility();
       return true;
     }
   }catch(e){}
@@ -77,6 +79,36 @@ function openLiveChat(context){
 
 function openTelegram(url){
   window.open(url || TELEGRAM_ADMIN_URL, '_blank', 'noopener');
+}
+
+var __kmrTawkVisObserverAttached = false;
+function isTawkWidgetExpanded(){
+  try{
+    var frames = document.querySelectorAll('body > div > iframe');
+    for (var i=0;i<frames.length;i++){
+      var f = frames[i];
+      var w = parseInt(f.style.width,10) || 0;
+      var h = parseInt(f.style.height,10) || 0;
+      if (w > 200 && h > 200) return true;
+    }
+  }catch(e){}
+  return false;
+}
+function watchTawkWidgetVisibility(){
+  if (__kmrTawkVisObserverAttached) return;
+  __kmrTawkVisObserverAttached = true;
+  var check = function(){
+    if (isTawkWidgetExpanded()){
+      if (typeof hideLauncher === 'function') hideLauncher();
+    } else {
+      if (typeof showLauncher === 'function') showLauncher();
+    }
+  };
+  try{
+    var mo = new MutationObserver(function(){ check(); });
+    mo.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['style'] });
+  }catch(e){}
+  setInterval(check, 700);
 }
 
 var css = ''

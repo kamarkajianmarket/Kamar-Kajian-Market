@@ -53,3 +53,7 @@ a.header-cta[href="register.html"],a.pill[href="register.html"],a.pill[href="mem
 .auth-hero{gap:22px}
 .auth-hero .chip{color:#f2d69a!important}
 @media(max-width:820px){.auth-card{order:-1}}
+
+.label-with-link{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.label-link{font-size:12px;font-weight:800!important;color:var(--km-emerald)!important;text-decoration:none;text-transform:none;letter-spacing:0}
+.label-link:hover{text-decoration:underline}

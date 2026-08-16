@@ -349,7 +349,8 @@
     if(appId){
       var c = await ready();
       if(c){
-        var res = await c.rpc('admin_review_ib_kamar_application', { p_application_id: appId, p_action: approve?'approve':'reject' });
+        var overrideDur = approve ? getReviewDurationOverride(todo.id) : null;
+        var res = await c.rpc('admin_review_ib_kamar_application', { p_application_id: appId, p_action: approve?'approve':'reject', p_duration_days: overrideDur });
         if(res.error) throw res.error;
       }
     }
@@ -365,7 +366,7 @@
       p_profile_id: todo.profile_id,
       p_facility_key: payload.facility_key,
       p_on: true,
-      p_duration_days: payload.duration_days || 30,
+      p_duration_days: getReviewDurationOverride(todo.id) || payload.duration_days || 30,
       p_lifetime: false
     });
     if(res.error) throw res.error;
@@ -488,6 +489,10 @@ async function actionAffiliatePayoutChange(todo, approve){
       '.kamar-review-grid div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(238,206,122,.10);padding-bottom:8px;font-size:13px}'+
       '.kamar-review-grid span:first-child{color:#a99d82;font-weight:900;flex-shrink:0}'+
       '.kamar-review-grid span:last-child{color:#f5f0e6;text-align:right;overflow-wrap:anywhere}'+
+      '.kamar-review-duration{margin-bottom:18px;background:rgba(238,206,122,.06);border:1px solid rgba(238,206,122,.18);border-radius:14px;padding:12px 14px}'+
+      '.kamar-review-duration label{display:block;color:#eece7a;font-weight:900;font-size:12px;margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase}'+
+      '.kamar-review-duration input{width:100%;box-sizing:border-box;background:#1c1a16;border:1px solid rgba(238,206,122,.3);border-radius:10px;color:#f5f0e6;font-size:14px;font-weight:800;padding:9px 12px}'+
+      '.kamar-review-duration small{display:block;color:#a99d82;font-size:11px;margin-top:6px}'+
       '.kamar-review-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}';
     document.head.appendChild(style);
     var wrap = document.createElement('div');
@@ -532,6 +537,13 @@ async function actionAffiliatePayoutChange(todo, approve){
     }
     return actions;
   }
+  function getReviewDurationOverride(todoId){
+    var input = document.getElementById('kamarReviewDurationInput29F');
+    if(!input || input.dataset.todoId !== String(todoId)) return null;
+    if(input.value === '' || input.value === null) return null;
+    var v = Number(input.value);
+    return (!isNaN(v) && v > 0) ? Math.round(v) : null;
+  }
   function openReviewModal(todo){
     injectReviewModal();
     var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
@@ -555,6 +567,15 @@ async function actionAffiliatePayoutChange(todo, approve){
       grid += '<div><span>'+esc(fmtFieldKey(k))+'</span><span>'+fmtFieldVal(v)+'</span></div>';
     });
     html += '<div class="kamar-review-grid">'+grid+'</div>';
+    var DURATION_EDIT_TYPES = {'ib_kamar_activation':1, 'facility_renewal_request':1};
+    if(DURATION_EDIT_TYPES[todo.todo_type]){
+      var defDur = (p.duration_days !== undefined && p.duration_days !== null && p.duration_days !== '') ? p.duration_days : '';
+      html += '<div class="kamar-review-duration">'+
+        '<label for="kamarReviewDurationInput29F">Masa Berlaku (hari)</label>'+
+        '<input type="number" min="1" id="kamarReviewDurationInput29F" data-todo-id="'+esc(todo.id)+'" value="'+esc(defDur)+'" placeholder="Default sistem"/>'+
+        '<small>Ubah jika mau kasih masa berlaku berbeda dari yang diajukan. Kosongkan untuk pakai durasi default.</small>'+
+      '</div>';
+    }
     html += '<div class="kamar-review-actions">'+reviewActionButtons(todo)+'</div>';
     box.innerHTML = html;
     box.querySelectorAll('[data-review-close]:not([data-todo-action])').forEach(function(b){

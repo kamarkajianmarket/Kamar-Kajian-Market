@@ -263,7 +263,7 @@
     license_request: 'Pengajuan Lisensi',
     affiliate_payout_change: 'Perubahan Rekening Affiliate',
     ib_kamar_activation: 'Pengajuan IB Kamar',
-  renewal_request: 'Perpanjangan Fasilitas',
+  facility_renewal_request: 'Perpanjangan Fasilitas',
   trial_request: 'Request Trial Kamar Signal'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
@@ -436,7 +436,7 @@ async function actionAffiliatePayoutChange(todo, approve){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_trial" data-todo-id="'+esc(todo.id)+'">Setujui (24 Jam)</button> <button class="btn mini secondary" type="button" data-todo-action="reject_trial" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
-    } else if(todo.todo_type === 'renewal_request'){
+    } else if(todo.todo_type === 'facility_renewal_request'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
       actionsHtml = reviewBtn+'<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
@@ -520,7 +520,7 @@ async function actionAffiliatePayoutChange(todo, approve){
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'renewal_request'){
+    } else if(todo.todo_type === 'facility_renewal_request'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'new_registration'){

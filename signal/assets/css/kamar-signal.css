@@ -1003,7 +1003,7 @@ overview card accent, recap tab dark-active, header icon mark.
 
 
 /* v10: Access Card + Install Card side-by-side on wider viewports -- fixes empty-looking full-width banners on desktop */
-.ksig-top-row{ display:flex; flex-direction:column; gap:14px; margin-bottom:0; }
+.ksig-top-row{ display:flex; flex-direction:column; gap:14px; margin-bottom:22px; }
 .ksig-top-row .ksig-access-card, .ksig-top-row .ksig-install-card{ margin-bottom:0 !important; }
 @media (min-width:760px){
   .ksig-top-row{ flex-direction:row; align-items:stretch; }

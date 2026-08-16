@@ -667,11 +667,23 @@ function esc(s){
       .then(function(client){
         state.client = client || (window.KamarSupabase && window.KamarSupabase.getClient && window.KamarSupabase.getClient());
         if(!state.client){ renderBootError('Koneksi database belum siap. Muat ulang halaman.'); return; }
-        return checkSession();
+        // FIX 2026-08-16: checkSession() (lewat state.client.auth.getSession()) pernah
+        // ditemukan bisa nyangkut TANPA PERNAH resolve/reject di sebagian browser berbasis
+        // WebKit/iOS (termasuk Chrome di iPhone, mesinnya tetap Safari/WebKit) -- dugaan
+        // kuat terkait Web Locks API internal Supabase-js yang tidak konsisten di WebKit.
+        // Sebelum fix ini, kalau itu terjadi, layar macet SELAMANYA di "Menghubungkan ke
+        // Kamar Signal..." karena langkah ini belum punya batas waktu (beda dari langkah
+        // connect Supabase di atas yang sudah punya timeoutPromise 9 detik). Sekarang
+        // dibungkus timeout yang sama supaya SELALU berakhir dengan pesan + tombol Muat
+        // Ulang, tidak pernah diam macet tanpa penjelasan.
+        var sessionTimeoutPromise = new Promise(function(resolve, reject){ setTimeout(function(){ reject(new Error('SESSION_TIMEOUT')); }, 9000); });
+        return Promise.race([checkSession(), sessionTimeoutPromise]);
       })
       .catch(function(err){
         if(err && err.message === 'TIMEOUT'){
           renderBootError('Koneksi ke server lambat atau tersangkut. Coba Muat Ulang. Jika masih gagal terus, hapus aplikasi Kamar Signal dari Home Screen lalu instal ulang dari awal.');
+        } else if(err && err.message === 'SESSION_TIMEOUT'){
+          renderBootError('Sesi login tersangkut saat memuat. Coba Muat Ulang halaman. Jika masih macet, tutup total browser (bukan cuma tab) lalu buka lagi.');
         } else {
           renderBootError('Gagal memuat Kamar Signal: ' + (err && err.message || err));
         }
@@ -1256,11 +1268,14 @@ function esc(s){
     }
     var sourceLabel = A.activation_source === 'ib_kamar' ? 'IB Kamar' : (A.activation_source ? esc(A.activation_source) : '');
     return '<div class="ksig-access-card '+statusCls+'">'+
-        '<div class="ksig-access-top"><span class="ksig-access-label">KAMAR SIGNAL ACCESS</span><span class="ksig-access-status">'+
-          '<span class="ksig-access-dot"></span>'+status+'</span></div>'+
-        '<div class="ksig-access-days">'+esc(sub)+'</div>'+
-        (exp ? '<div class="ksig-access-until">Aktif hingga '+fmtAccessDate(A.expires_kamar_study)+'</div>' : '')+
-        (sourceLabel ? '<div class="ksig-access-source">'+sourceLabel+'</div>' : '')+
+        '<div class="ksig-access-top-group">'+
+          '<div class="ksig-access-top"><span class="ksig-access-label">KAMAR SIGNAL ACCESS</span><span class="ksig-access-status">'+
+            '<span class="ksig-access-dot"></span>'+status+'</span></div>'+
+          '<div class="ksig-access-days">'+esc(sub)+'</div>'+
+          (exp ? '<div class="ksig-access-until">Aktif hingga '+fmtAccessDate(A.expires_kamar_study)+'</div>' : '')+
+          (sourceLabel ? '<div class="ksig-access-source">'+sourceLabel+'</div>' : '')+
+        '</div>'+
+        '<div class="ksig-access-foot"><span class="ksig-access-foot-icon">\u25C7</span><span class="ksig-access-foot-text">Kamar Kajian Market</span></div>'+
       '</div>';
   }
   function installCardHtml(){

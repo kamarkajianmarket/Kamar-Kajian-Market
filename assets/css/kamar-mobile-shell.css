@@ -40,9 +40,10 @@
     box-shadow: 20px 0 60px rgba(0,0,0,.45);
     /* Latar aslinya cuma tint tipis (dibuat untuk nempel di atas background
        gelap yang sama), jadi kalau dipakai sebagai panel drawer yang berdiri
-       sendiri, konten di belakangnya keliatan tembus. Kasih latar solid. */
-    background: var(--panel, var(--bg, #0b0a08)) !important;
-    background-image: none !important;
+       sendiri, konten di belakangnya keliatan tembus. Kasih latar solid TAPI
+       tetap pakai gradient tipis + aksen gold biar tidak flat/polos. */
+    background: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.015) 60%), var(--panel, var(--bg, #0b0a08)) !important;
+    border-right: 1px solid rgba(184,138,61,.28) !important;
   }
   html.kamar-drawer-open .split-sidebar{
     transform: translateX(0);

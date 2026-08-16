@@ -229,19 +229,27 @@
     }
 
     if(isActive){
-      link.textContent = 'RENEWAL';
-      var perpanjBtn = ensurePerpanjanganButton(card, link);
-      if(perpanjBtn) bindRenewalClick(perpanjBtn, meta, !!(pendingSet && pendingSet[meta.key]));
-      if(expIso){
-        var daysLeft = Math.ceil((new Date(expIso) - now) / 86400000);
-        statusEl.textContent = 'Aktif \u2014 ' + (daysLeft>0 ? daysLeft+' hari tersisa' : 'berakhir hari ini') + ' (s.d ' + fmtDate(expIso) + ')';
+      if(!expIso){
+        link.style.display = 'none';
+        removePerpanjanganButton(card);
+        statusEl.textContent = 'Aktif \u2014 tanpa batas waktu';
         statusEl.style.color = '#1c6141';
       } else {
-        statusEl.textContent = 'Aktif \u2014 tanpa batas waktu';
+        link.style.display = '';
+        link.textContent = 'RENEWAL';
+        if(meta.key === 'kamar_study'){
+          var perpanjBtn = ensurePerpanjanganButton(card, link);
+          if(perpanjBtn) bindRenewalClick(perpanjBtn, meta, !!(pendingSet && pendingSet[meta.key]));
+        } else {
+          removePerpanjanganButton(card);
+        }
+        var daysLeft = Math.ceil((new Date(expIso) - now) / 86400000);
+        statusEl.textContent = 'Aktif \u2014 ' + (daysLeft>0 ? daysLeft+' hari tersisa' : 'berakhir hari ini') + ' (s.d ' + fmtDate(expIso) + ')';
         statusEl.style.color = '#1c6141';
       }
       renderSourceBlock(card, sourceInfo);
     } else {
+      link.style.display = '';
       link.textContent = 'AKTIFKAN';
       removePerpanjanganButton(card);
       if(isExpired){

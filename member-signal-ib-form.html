@@ -25,7 +25,12 @@ body{background:#070707;color:var(--text)}
 <input id="ibFullName" type="text" placeholder="Nama sesuai akun broker" required/>
 </label>
 <label class="field">Broker
-<input id="ibBroker" type="text" placeholder="Contoh: Exness, XM, dst" required/>
+<select id="ibBroker" required>
+<option value="" disabled selected>Pilih Broker</option>
+<option value="TradeMax Global">TradeMax Global</option>
+<option value="Vantage">Vantage</option>
+<option value="Exness">Exness</option>
+</select>
 </label>
 <label class="field">Nomor Akun Trading
 <input id="ibAccountId" type="text" placeholder="Nomor akun MT4/MT5" required/>
@@ -54,12 +59,13 @@ body{background:#070707;color:var(--text)}
 <label class="consent-item"><input type="checkbox" data-consent="ib_registration"/><span>Saya memahami dan menyatakan akun ini terdaftar/akan didaftarkan di bawah IB (Introducing Broker) Kamar sesuai ketentuan yang berlaku.</span></label>
 <label class="consent-item"><input type="checkbox" data-consent="data_accuracy"/><span>Saya menyatakan seluruh data pada form ini benar dan dapat diverifikasi oleh admin.</span></label>
 <label class="consent-item"><input type="checkbox" data-consent="proof_on_request"/><span>Saya bersedia menunjukkan bukti akun (screenshot/verifikasi broker) kepada admin apabila diminta.</span></label>
-<label class="consent-item"><input type="checkbox" data-consent="revocation_risk"/><span>Saya memahami akses Kamar Signal dapat dicabut sewaktu-waktu (Force Off) apabila data yang saya berikan terbukti tidak valid.</span></label>
+<label class="consent-item"><input type="checkbox" data-consent="revocation_risk"/><span>Saya memahami fasilitas dapat dicabut sewaktu-waktu tanpa pemberitahuan, jika didapati data yang diberikan tidak benar, atau melanggar aturan atau ketentuan dari Kamar Kajian Market.</span></label>
 <label class="consent-item"><input type="checkbox" data-consent="terms_agreement"/><span>Saya menyetujui syarat &amp; ketentuan program IB Kamar dan kebijakan Kamar Kajian Market yang berlaku.</span></label>
 </div>
 </div>
 
 <div class="field-error hidden" id="ibFormError"></div>
+<div class="warn-note" style="margin-bottom:4px">Catatan: fasilitas IB Kamar wajib diperpanjang 1x/minggu, setiap hari Sabtu/Minggu, dengan klik tombol Perpanjang pada halaman Fasilitas Kamar.</div>
 <div class="button-row">
 <button class="btn" id="ibSubmitBtn" type="submit">Kirim Pengajuan</button>
 <a class="btn secondary" href="member-signal-activate-select.html">Kembali</a>

@@ -1211,6 +1211,8 @@ function esc(s){
     var wrap = document.createElement('div');
     wrap.className = 'ksig-sheet-backdrop';
     var PANDUAN_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf';
+    var TELEGRAM_GUIDE_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan%20Arti%20Alert%20Kamar%20Signal%20-%20TELEGRAM.pdf';
+    var WEBSITE_GUIDE_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan%20Arti%20Tampilan%20Kamar%20Signal%20-%20WEBSITE%20PWA.pdf';
     function row(title,desc,href){
       if(href){
         return '<a class="ksig-info-row ksig-info-row-active" href="'+esc(href)+'" target="_blank" rel="noopener">'+
@@ -1228,7 +1230,8 @@ function esc(s){
       '<div class="ksig-sheet-title">Informasi Teknis</div>'+
       '<div class="ksig-info-list">'+
         row('Instalasi Aplikasi & Notifikasi','Cara instal ke HP, aktifkan notifikasi push, dan hubungkan Telegram.', PANDUAN_PDF_URL) +
-        row('Cara Membaca Signal','Panduan memahami format, status, dan istilah pada Kamar Signal.') +
+        row('Cara Membaca Signal (Telegram)','Panduan arti alert & format pesan Signal di grup Telegram.', TELEGRAM_GUIDE_PDF_URL) +
+        row('Cara Membaca Signal (Website/PWA)','Panduan arti tampilan, badge status, dan card pada Kamar Signal Website/PWA.', WEBSITE_GUIDE_PDF_URL) +
       '</div>'+
       '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigInfoTeknisClose" style="width:100%">Tutup</button></div>'+
     '</div>';

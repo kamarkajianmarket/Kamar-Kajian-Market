@@ -263,6 +263,7 @@
     license_request: 'Pengajuan Lisensi',
     affiliate_payout_change: 'Perubahan Rekening Affiliate',
     ib_kamar_activation: 'Pengajuan IB Kamar',
+  renewal_request: 'Perpanjangan Fasilitas',
   trial_request: 'Request Trial Kamar Signal'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
@@ -355,7 +356,24 @@
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'IB Kamar disetujui, akses Kamar Signal diaktifkan.':'Pengajuan IB Kamar ditolak.');
   }
-  async function actionTrialRequest(todo, approve){
+  async function actionFacilityRenewal(todo, approve){
+  var payload = todo.action_payload || {};
+  if(approve){
+    var c = await ready();
+    if(!c) throw new Error('Supabase client tidak terbaca.');
+    var res = await c.rpc('admin_set_facility_access', {
+      p_profile_id: todo.profile_id,
+      p_facility_key: payload.facility_key,
+      p_on: true,
+      p_duration_days: payload.duration_days || 30,
+      p_lifetime: false
+    });
+    if(res.error) throw res.error;
+  }
+  await markTodoDone(todo.id, approve?'done':'rejected');
+  toast(approve?'Perpanjangan disetujui, akses fasilitas diperpanjang.':'Pengajuan perpanjangan ditolak.');
+}
+async function actionTrialRequest(todo, approve){
   var payload = todo.action_payload || {};
   var trialId = payload.trial_id;
   if(trialId){
@@ -418,6 +436,8 @@ async function actionAffiliatePayoutChange(todo, approve){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_trial" data-todo-id="'+esc(todo.id)+'">Setujui (24 Jam)</button> <button class="btn mini secondary" type="button" data-todo-action="reject_trial" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+    } else if(todo.todo_type === 'renewal_request'){
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else {
       actionsHtml = reviewBtn+'<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
@@ -500,6 +520,9 @@ async function actionAffiliatePayoutChange(todo, approve){
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'renewal_request'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'new_registration'){
       actions += ' <button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
@@ -563,6 +586,8 @@ async function actionAffiliatePayoutChange(todo, approve){
       else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
       else if(action === 'approve_ib_kamar') await actionIbKamarApplication(todo, true);
       else if(action === 'reject_ib_kamar') await actionIbKamarApplication(todo, false);
+      else if(action === 'approve_renewal') await actionFacilityRenewal(todo, true);
+      else if(action === 'reject_renewal') await actionFacilityRenewal(todo, false);
       else if(action === 'approve_trial') await actionTrialRequest(todo, true);
       else if(action === 'reject_trial') await actionTrialRequest(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);

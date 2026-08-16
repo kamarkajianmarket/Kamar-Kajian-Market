@@ -24,7 +24,87 @@
     return d.getDate()+' '+bulan[d.getMonth()]+' '+d.getFullYear();
   }
 
-  function setLinkState(link, text, disabled){
+  function escText(v){
+    return String(v==null||v===''?'-':v).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function computeSourceInfo(key, ctx){
+    var candidates = [];
+    if(ctx.ibApp && key === 'kamar_study'){
+      candidates.push({
+        source:'ib_kamar',
+        label:'IB TradeMax' + (ctx.ibApp.broker_name ? ' (' + ctx.ibApp.broker_name + ')' : ''),
+        ts: ctx.ibApp.reviewed_at ? new Date(ctx.ibApp.reviewed_at) : new Date(0),
+        detail: [
+          {label:'Broker', value: ctx.ibApp.broker_name},
+          {label:'Akun Trading', value: ctx.ibApp.trading_account_id},
+          {label:'Kode Pengajuan', value: ctx.ibApp.application_code},
+          {label:'Disetujui', value: fmtDate(ctx.ibApp.reviewed_at)}
+        ]
+      });
+    }
+    if(ctx.trial && key === 'kamar_study'){
+      candidates.push({
+        source:'trial',
+        label:'Trial 24 Jam',
+        ts: ctx.trial.reviewed_at ? new Date(ctx.trial.reviewed_at) : new Date(0),
+        detail: [
+          {label:'Disetujui', value: fmtDate(ctx.trial.reviewed_at)},
+          {label:'Berlaku s.d', value: fmtDate(ctx.trial.expires_at)}
+        ]
+      });
+    }
+    var pay = (ctx.payments||[]).find(function(p){ return Array.isArray(p.selected_facilities) && p.selected_facilities.indexOf(key) >= 0; });
+    if(pay){
+      candidates.push({
+        source:'paid',
+        label:'Berbayar',
+        ts: pay.confirmed_at ? new Date(pay.confirmed_at) : (pay.paid_at ? new Date(pay.paid_at) : new Date(0)),
+        detail: [
+          {label:'Jumlah', value: pay.amount!=null ? ('Rp' + Number(pay.amount).toLocaleString('id-ID')) : '-'},
+          {label:'Metode', value: pay.payment_method},
+          {label:'Durasi', value: pay.duration_days ? (pay.duration_days + ' hari') : '-'},
+          {label:'Dikonfirmasi', value: fmtDate(pay.confirmed_at || pay.paid_at)}
+        ]
+      });
+    }
+    if(!candidates.length){
+      return {source:'admin', label:'Admin (aktivasi langsung)', detail:[]};
+    }
+    candidates.sort(function(a,b){ return b.ts - a.ts; });
+    return candidates[0];
+  }
+
+  function renderSourceBlock(card, info){
+    if(!info) return;
+    var activateRow = card.querySelector('.activate-row');
+    if(!activateRow) return;
+    var wrap = card.querySelector('.facility-source-wrap');
+    if(!wrap){
+      wrap = document.createElement('div');
+      wrap.className = 'facility-source-wrap';
+      wrap.style.cssText = 'margin-top:8px;';
+      activateRow.parentNode.insertBefore(wrap, activateRow);
+    }
+    var detailHtml = '';
+    if(info.detail && info.detail.length){
+      detailHtml = '<div class="facility-source-detail" style="margin-top:6px;background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:8px 10px;">' +
+        info.detail.map(function(d){
+          return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:11px;padding:2px 0;"><span style="color:#7a7568;font-weight:700;">'+escText(d.label)+'</span><span style="color:#2b2a26;font-weight:700;text-align:right;">'+escText(d.value)+'</span></div>';
+        }).join('') +
+      '</div>';
+    }
+    wrap.innerHTML = '<div class="facility-source-line" style="font-size:11px;font-weight:800;color:#8a5a12;">Diaktifkan via: '+escText(info.label)+'</div>' + detailHtml;
+  }
+
+  function removeSourceBlock(card){
+    var wrap = card.querySelector('.facility-source-wrap');
+    if(wrap) wrap.remove();
+  }
+
+    function setLinkState(link, text, disabled){
     link.textContent = text;
     if(disabled){
       link.setAttribute('aria-disabled','true');
@@ -108,7 +188,7 @@
     });
   }
 
-  function applyStatus(card, meta, row, pendingSet){
+  function applyStatus(card, meta, row, pendingSet, sourceInfo){
     if(!row) return;
     var accessOn = row[meta.access] === true;
     var expIso = row[meta.expires];
@@ -133,11 +213,12 @@
       if(expIso){
         var daysLeft = Math.ceil((new Date(expIso) - now) / 86400000);
         statusEl.textContent = 'Aktif \u2014 ' + (daysLeft>0 ? daysLeft+' hari tersisa' : 'berakhir hari ini') + ' (s.d ' + fmtDate(expIso) + ')';
-        statusEl.style.color = daysLeft<=5 ? '#9C7A3C' : '#1c6141';
+        statusEl.style.color = '#1c6141';
       } else {
         statusEl.textContent = 'Aktif \u2014 tanpa batas waktu';
         statusEl.style.color = '#1c6141';
       }
+      renderSourceBlock(card, sourceInfo);
     } else {
       link.textContent = 'AKTIFKAN';
       if(isExpired){
@@ -146,6 +227,7 @@
       } else {
         statusEl.textContent = '';
       }
+      removeSourceBlock(card);
     }
   }
 
@@ -177,14 +259,34 @@
             .select('action_payload')
             .eq('profile_id', profileId)
             .eq('todo_type', 'facility_renewal_request')
-            .in('todo_status', ['new','processing'])
+            .in('todo_status', ['new','processing']),
+          client.from('payments')
+            .select('selected_facilities,duration_days,amount,payment_method,confirmed_at,paid_at')
+            .eq('profile_id', profileId).eq('payment_status', 'confirmed')
+            .order('confirmed_at', { ascending: false }),
+          client.from('ib_kamar_applications')
+            .select('broker_name,trading_account_id,application_code,reviewed_at')
+            .eq('profile_id', profileId).eq('status', 'approved')
+            .order('reviewed_at', { ascending: false }).limit(1),
+          client.from('kamar_signal_trial_requests')
+            .select('reviewed_at,expires_at')
+            .eq('profile_id', profileId).eq('status', 'approved')
+            .order('reviewed_at', { ascending: false }).limit(1)
         ]);
       }).then(function(results){
         if(!results) return;
         var ares = results[0];
         var tres = results[1];
+        var payRes = results[2];
+        var ibRes = results[3];
+        var trialRes = results[4];
         if(!ares || ares.error || !ares.data) return;
         var row = ares.data;
+        var srcCtx = {
+          payments: (payRes && !payRes.error && payRes.data) ? payRes.data : [],
+          ibApp: (ibRes && !ibRes.error && ibRes.data && ibRes.data[0]) ? ibRes.data[0] : null,
+          trial: (trialRes && !trialRes.error && trialRes.data && trialRes.data[0]) ? trialRes.data[0] : null
+        };
         var pendingSet = {};
         if(tres && !tres.error && tres.data){
           tres.data.forEach(function(t){
@@ -198,7 +300,8 @@
           if(!h3) return;
           var meta = FACILITY_MAP[h3.textContent.trim()];
           if(!meta) return;
-          applyStatus(card, meta, row, pendingSet);
+          var sourceInfo = computeSourceInfo(meta.key, srcCtx);
+          applyStatus(card, meta, row, pendingSet, sourceInfo);
         });
       });
     }).catch(function(){});

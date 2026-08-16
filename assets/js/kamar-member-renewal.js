@@ -176,7 +176,7 @@
           client.from('admin_todos')
             .select('action_payload')
             .eq('profile_id', profileId)
-            .eq('todo_type', 'renewal_request')
+            .eq('todo_type', 'facility_renewal_request')
             .in('todo_status', ['new','processing'])
         ]);
       }).then(function(results){

@@ -104,6 +104,26 @@
     if(wrap) wrap.remove();
   }
 
+  function ensurePerpanjanganButton(card, refLink){
+    var row = refLink.closest('.activate-row');
+    if(!row) return null;
+    var btn = row.querySelector('.perpanjangan-btn');
+    if(!btn){
+      btn = document.createElement('a');
+      btn.className = 'btn perpanjangan-btn';
+      btn.setAttribute('aria-label', 'PERPANJANGAN');
+      row.insertBefore(btn, refLink.nextSibling);
+    }
+    return btn;
+  }
+
+  function removePerpanjanganButton(card){
+    var btn = card.querySelector('.perpanjangan-btn');
+    if(btn) btn.remove();
+    var msg = card.querySelector('.renewal-msg');
+    if(msg) msg.remove();
+  }
+
     function setLinkState(link, text, disabled){
     link.textContent = text;
     if(disabled){
@@ -209,7 +229,9 @@
     }
 
     if(isActive){
-      bindRenewalClick(link, meta, !!(pendingSet && pendingSet[meta.key]));
+      link.textContent = 'RENEWAL';
+      var perpanjBtn = ensurePerpanjanganButton(card, link);
+      if(perpanjBtn) bindRenewalClick(perpanjBtn, meta, !!(pendingSet && pendingSet[meta.key]));
       if(expIso){
         var daysLeft = Math.ceil((new Date(expIso) - now) / 86400000);
         statusEl.textContent = 'Aktif \u2014 ' + (daysLeft>0 ? daysLeft+' hari tersisa' : 'berakhir hari ini') + ' (s.d ' + fmtDate(expIso) + ')';
@@ -221,6 +243,7 @@
       renderSourceBlock(card, sourceInfo);
     } else {
       link.textContent = 'AKTIFKAN';
+      removePerpanjanganButton(card);
       if(isExpired){
         statusEl.textContent = 'Kedaluwarsa pada ' + fmtDate(expIso);
         statusEl.style.color = '#963F3F';

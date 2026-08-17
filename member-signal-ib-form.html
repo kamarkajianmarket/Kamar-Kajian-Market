@@ -19,6 +19,7 @@ body{background:#070707;color:var(--text)}
 <span class="mini-label">Form Pengajuan</span>
 <h2>Data Akun IB Kamar</h2>
 <p>Pastikan akun trading yang kamu daftarkan benar-benar terdaftar di bawah IB Kamar. Pengajuan dengan data tidak valid dapat ditolak atau dicabut aksesnya.</p>
+<div class="warn-note hidden" id="ibRevisionNoteBox" style="margin-bottom:4px"><strong>Catatan dari Admin:</strong> <span id="ibRevisionNoteText"></span></div>
 <form id="ibForm" style="display:grid;gap:16px;margin-top:12px">
 <div class="grid-2">
 <label class="field">Nama Lengkap
@@ -137,6 +138,7 @@ body{background:#070707;color:var(--text)}
 (function(){
   function toast(msg){var t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2600)}
   function show(id){['ibFormCard','ibSuccessCard','ibPendingCard'].forEach(function(x){var el=document.getElementById(x); if(el) el.classList.toggle('hidden', x!==id)})}
+  var revisionAppId = null;
 
   async function getClient(){
     if(window.KamarSupabase && window.KamarSupabase.ready){
@@ -150,6 +152,33 @@ body{background:#070707;color:var(--text)}
     return 'https://telegram.me/kajianmarketkamar?text='+encodeURIComponent(lines.join('\n'));
   }
 
+  function prefillRevisionForm(app){
+      revisionAppId = app.id;
+      var noteBox = document.getElementById('ibRevisionNoteBox');
+      var noteText = document.getElementById('ibRevisionNoteText');
+      if(noteText) noteText.textContent = app.admin_notes || 'Admin meminta kamu memperbaiki data pengajuan ini.';
+      if(noteBox) noteBox.classList.remove('hidden');
+      var nameInput = document.getElementById('ibFullName');
+      if(nameInput) nameInput.value = app.full_name || nameInput.value;
+      var brokerSel = document.getElementById('ibBroker');
+      if(brokerSel && app.broker_name) brokerSel.value = app.broker_name;
+      var accIdInput = document.getElementById('ibAccountId');
+      if(accIdInput) accIdInput.value = app.trading_account_id || '';
+      if(app.account_type){
+        var radio = document.querySelector('input[name="ibAccountType"][value="'+app.account_type+'"]');
+        if(radio) radio.checked = true;
+      }
+      var depositInput = document.getElementById('ibDeposit');
+      if(depositInput) depositInput.value = (app.deposit_amount !== null && app.deposit_amount !== undefined) ? app.deposit_amount : '';
+      var depositDateInput = document.getElementById('ibDepositDate');
+      if(depositDateInput) depositDateInput.value = app.deposit_date || '';
+      var noteInput = document.getElementById('ibNote');
+      if(noteInput) noteInput.value = app.note || '';
+      var submitBtn = document.getElementById('ibSubmitBtn');
+      if(submitBtn) submitBtn.textContent = 'Kirim Revisi';
+      var titleEl = document.querySelector('#ibFormCard h2');
+      if(titleEl) titleEl.textContent = 'Perbaiki Data Pengajuan IB Kamar';
+    }
   async function init(){
     var client = await getClient();
     if(!client){ return; }
@@ -168,14 +197,19 @@ body{background:#070707;color:var(--text)}
 
     // Cek pengajuan yang masih terbuka
     try{
-      var existing = await client.from('ib_kamar_applications').select('application_code, status').in('status',['submitted','under_review','need_revision']).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      var existing = await client.from('ib_kamar_applications').select('id, application_code, status, full_name, broker_name, trading_account_id, account_type, deposit_amount, deposit_date, note, admin_notes').in('status',['submitted','under_review','need_revision']).order('created_at',{ascending:false}).limit(1).maybeSingle();
       if(existing && existing.data){
-        var labels={submitted:'menunggu ditinjau admin',under_review:'sedang ditinjau admin',need_revision:'perlu revisi data — hubungi admin untuk detail'};
-        var t=document.getElementById('ibPendingText');
-        if(t) t.textContent='Kode pengajuan '+existing.data.application_code+' saat ini '+(labels[existing.data.status]||existing.data.status)+'.';
-        var link=document.getElementById('ibPendingChatLink');
-        if(link) link.href=buildAdminMessage(existing.data.application_code);
-        show('ibPendingCard');
+        if(existing.data.status === 'need_revision'){
+          prefillRevisionForm(existing.data);
+          show('ibFormCard');
+        } else {
+          var labels={submitted:'menunggu ditinjau admin',under_review:'sedang ditinjau admin'};
+          var t=document.getElementById('ibPendingText');
+          if(t) t.textContent='Kode pengajuan '+existing.data.application_code+' saat ini '+(labels[existing.data.status]||existing.data.status)+'.';
+          var link=document.getElementById('ibPendingChatLink');
+          if(link) link.href=buildAdminMessage(existing.data.application_code);
+          show('ibPendingCard');
+        }
         return;
       }
     }catch(e){}
@@ -205,7 +239,7 @@ body{background:#070707;color:var(--text)}
         if(errBox){ errBox.textContent='Lengkapi nama, broker, nomor akun, dan jenis akun.'; errBox.classList.remove('hidden'); }
         return;
       }
-      if(checkedCount < 6){
+      if(!revisionAppId && checkedCount < 6){
         if(errBox){ errBox.textContent='Semua 6 pernyataan persetujuan wajib dicentang.'; errBox.classList.remove('hidden'); }
         return;
       }
@@ -214,7 +248,16 @@ body{background:#070707;color:var(--text)}
       if(btn){ btn.disabled = true; btn.textContent='Mengirim...'; }
 
       try{
-        var res = await client.rpc('submit_ib_kamar_application', {
+        var res = revisionAppId ? await client.rpc('member_resubmit_ib_kamar_application', {
+          p_application_id: revisionAppId,
+          p_full_name: fullName,
+          p_broker_name: broker,
+          p_trading_account_id: accountId,
+          p_account_type: accountType,
+          p_deposit_amount: deposit ? Number(deposit) : null,
+          p_deposit_date: depositDate || null,
+          p_note: note || null
+        }) : await client.rpc('submit_ib_kamar_application', {
           p_full_name: fullName,
           p_broker_name: broker,
           p_trading_account_id: accountId,
@@ -237,7 +280,7 @@ body{background:#070707;color:var(--text)}
         var chatLink = document.getElementById('ibChatAdminLink');
         if(chatLink) chatLink.href = buildAdminMessage(data.application_code || '');
         show('ibSuccessCard');
-        toast('Pengajuan IB Kamar terkirim.');
+        toast(revisionAppId ? 'Revisi pengajuan terkirim. Menunggu peninjauan admin.' : 'Pengajuan IB Kamar terkirim.');
       }catch(err){
         if(errBox){ errBox.textContent = 'Terjadi kesalahan. Coba lagi.'; errBox.classList.remove('hidden'); }
         if(btn){ btn.disabled=false; btn.textContent='Kirim Pengajuan'; }

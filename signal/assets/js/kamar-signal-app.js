@@ -1555,7 +1555,9 @@ function esc(s){
       if(!map[tf]){ map[tf] = []; order.push(tf); }
       map[tf].push(r);
     });
-    return order.map(function(tf){ return { timeframe: tf, rows: map[tf] }; });
+    var ordered = TIMEFRAME_ORDER.filter(function(k){ return map[k]; });
+    order.forEach(function(k){ if(ordered.indexOf(k)===-1) ordered.push(k); });
+    return ordered.map(function(tf){ return { timeframe: tf, rows: map[tf] }; });
   }
   function recapRowLine(label, r, sub){
     var pipsVal = r.total_pips!=null ? Number(r.total_pips) : null;

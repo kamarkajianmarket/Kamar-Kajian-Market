@@ -119,6 +119,20 @@ body{background:#070707;color:var(--text)}
 <div class="summary" id="listSummary"><span class="chip">Memuat data...</span></div>
 <div class="row-list" id="filesList"></div>
 </section>
+<section class="split-card">
+<span class="mini-label">Pengumuman Umum</span>
+<h2>Kirim Notifikasi ke Semua Member</h2>
+<p>Notifikasi ini akan muncul di lonceng notifikasi setiap member aktif (semua fasilitas). Gunakan untuk pengumuman umum, bukan update file tertentu (pakai tombol "Kirim Notifikasi" per file untuk itu).</p>
+<form id="broadcastForm" class="grid-2">
+<label class="field" style="grid-column:1/-1">Judul *<input id="bTitle" placeholder="Contoh: Maintenance Server Malam Ini" required/></label>
+<label class="field" style="grid-column:1/-1">Pesan *<textarea id="bMessage" rows="3" placeholder="Isi pengumuman..." required></textarea></label>
+<label class="field" style="grid-column:1/-1">Link (opsional)<input id="bLink" placeholder="Contoh: member-study.html"/></label>
+<div class="summary" style="grid-column:1/-1">
+<button class="btn" type="submit" id="bSubmitBtn">Kirim ke Semua Member</button>
+<span id="bStatusMsg"></span>
+</div>
+</form>
+</section>
 </section>
 </div>
 </main>
@@ -172,6 +186,7 @@ html+='<div class="row">'+
 Object.keys(STATUS_LABEL).map(function(k){return '<option value="'+k+'"'+(r.publish_status===k?' selected':'')+'>'+STATUS_LABEL[k]+'</option>'}).join('')+
 '</select><br/><label style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px"><input type="checkbox" data-quick-active="'+esc(r.id)+'" '+(r.is_active?'checked':'')+' style="width:18px;height:18px"/> Aktif</label></div>'+
 '<div class="actions">'+(r.file_url?'<a class="btn mini secondary" href="'+esc(r.file_url)+'" target="_blank" rel="noopener">Buka File</a>':'')+
+'<button class="btn mini secondary" type="button" data-notify="'+esc(r.id)+'">Kirim Notifikasi</button>'+
 '<button class="btn mini secondary" type="button" data-edit="'+esc(r.id)+'">Edit</button>'+
 '<button class="btn mini danger" type="button" data-delete="'+esc(r.id)+'">Hapus</button></div>'+
 '</div>';
@@ -181,9 +196,21 @@ wrap.querySelectorAll('[data-edit]').forEach(function(b){b.onclick=function(){st
 wrap.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=function(){deleteFile(b.getAttribute('data-delete'))}});
 wrap.querySelectorAll('[data-quick-status]').forEach(function(s){s.onchange=function(){quickUpdate(s.getAttribute('data-quick-status'),{publish_status:s.value})}});
 wrap.querySelectorAll('[data-quick-active]').forEach(function(cb){cb.onchange=function(){quickUpdate(cb.getAttribute('data-quick-active'),{is_active:cb.checked})}});
+wrap.querySelectorAll('[data-notify]').forEach(function(b){b.onclick=function(){sendNotify(b.getAttribute('data-notify'))}});
 }
 
-async function quickUpdate(id,patch){
+async function quickUpdate(id,patch){async function sendNotify(id){
+var r=findRow(id); if(!r)return;
+if(!confirm('Kirim notifikasi update untuk "'+r.title+'" ke semua member yang punya akses fasilitas ini?'))return;
+var c=await initClient(); if(!c)return toast('Supabase belum siap.');
+try{
+var res=await c.rpc('admin_notify_tool_update',{p_tool_file_id:id});
+if(res.error) throw res.error;
+toast('Notifikasi terkirim ke '+(res.data||0)+' member.');
+}catch(e){ toast(window.kamarFriendlyError(e)); }
+}
+
+
 var c=await initClient(); if(!c)return toast('Supabase belum siap.');
 try{
 patch.updated_at=new Date().toISOString();
@@ -294,6 +321,30 @@ await loadFiles();
 }
 byId('fSubmitBtn').disabled=false;
 });
+
+var broadcastFormEl=byId('broadcastForm');
+if(broadcastFormEl){
+broadcastFormEl.addEventListener('submit', async function(e){
+e.preventDefault();
+var statusEl=byId('bStatusMsg');
+var title=byId('bTitle').value.trim();
+var message=byId('bMessage').value.trim();
+var link=byId('bLink').value.trim()||null;
+if(!title||!message){ statusEl.innerHTML='<span class="chip bad">Judul dan pesan wajib diisi.</span>'; return; }
+if(!confirm('Kirim pengumuman ini ke SEMUA member aktif?'))return;
+var c=await initClient(); if(!c){ toast('Supabase belum siap.'); return; }
+byId('bSubmitBtn').disabled=true;
+statusEl.innerHTML='<span class="chip warn">Mengirim...</span>';
+try{
+var res=await c.rpc('admin_notify_broadcast',{p_title:title,p_message:message,p_link_url:link});
+if(res.error) throw res.error;
+statusEl.innerHTML='<span class="chip ok">Terkirim ke '+(res.data||0)+' member.</span>';
+toast('Pengumuman terkirim ke '+(res.data||0)+' member.');
+broadcastFormEl.reset();
+}catch(e){ statusEl.innerHTML='<span class="chip bad">'+esc(window.kamarFriendlyError(e))+'</span>'; }
+byId('bSubmitBtn').disabled=false;
+});
+}
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadFiles); else loadFiles();
 })();

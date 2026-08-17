@@ -31,44 +31,71 @@
   }
 
   function computeSourceInfo(key, ctx){
+    // FIX 2026-08-17: member_access.activation_source adalah status aktivasi TERKINI
+    // (ditulis ulang tiap admin approve IB/trial/pembayaran/aktivasi manual). Sebelumnya
+    // fungsi ini menebak sumber dari baris trial/IB/payment mana yang timestamp-nya paling
+    // baru -- kalau member diaktifkan ulang lewat jalur yang tidak selalu bikin baris baru
+    // di payments (mis. admin aktivasi manual), baris TRIAL LAMA yang basi justru "menang"
+    // karena itu satu-satunya baris nyata yang ditemukan, padahal activation_source sudah
+    // berubah jadi 'paid'/'ib_kamar'. Sekarang activation_source dipakai sebagai penentu
+    // utama; tabel trial/ib/payments cuma dipakai untuk isi detail tambahan kalau cocok.
+    var src = (key === 'kamar_study') ? ctx.activationSource : null;
+    var pay = (ctx.payments||[]).find(function(p){ return Array.isArray(p.selected_facilities) && p.selected_facilities.indexOf(key) >= 0; });
+
+    if(src === 'ib_kamar'){
+      if(ctx.ibApp){
+        return {
+          source:'ib_kamar',
+          label:'IB TradeMax' + (ctx.ibApp.broker_name ? ' (' + ctx.ibApp.broker_name + ')' : ''),
+          detail: [
+            {label:'Broker', value: ctx.ibApp.broker_name},
+            {label:'Akun Trading', value: ctx.ibApp.trading_account_id},
+            {label:'Kode Pengajuan', value: ctx.ibApp.application_code},
+            {label:'Disetujui', value: fmtDate(ctx.ibApp.reviewed_at)}
+          ]
+        };
+      }
+      return {source:'ib_kamar', label:'IB Kamar', detail:[]};
+    }
+    if(src === 'trial'){
+      if(ctx.trial){
+        return {
+          source:'trial',
+          label:'Trial 24 Jam',
+          detail: [
+            {label:'Disetujui', value: fmtDate(ctx.trial.reviewed_at)},
+            {label:'Berlaku s.d', value: fmtDate(ctx.trial.expires_at)}
+          ]
+        };
+      }
+      return {source:'trial', label:'Trial 24 Jam', detail:[]};
+    }
+    if(src === 'paid'){
+      if(pay){
+        return {
+          source:'paid',
+          label:'Berbayar',
+          detail: [
+            {label:'Jumlah', value: pay.amount!=null ? ('Rp' + Number(pay.amount).toLocaleString('id-ID')) : '-'},
+            {label:'Metode', value: pay.payment_method},
+            {label:'Durasi', value: pay.duration_days ? (pay.duration_days + ' hari') : '-'},
+            {label:'Dikonfirmasi', value: fmtDate(pay.confirmed_at || pay.paid_at)}
+          ]
+        };
+      }
+      return {source:'paid', label:'Berbayar', detail:[]};
+    }
+    // Fallback untuk data lama (activation_source belum terisi): pola lama, pilih yang
+    // timestamp-nya paling baru di antara baris yang benar-benar ada.
     var candidates = [];
     if(ctx.ibApp && key === 'kamar_study'){
-      candidates.push({
-        source:'ib_kamar',
-        label:'IB TradeMax' + (ctx.ibApp.broker_name ? ' (' + ctx.ibApp.broker_name + ')' : ''),
-        ts: ctx.ibApp.reviewed_at ? new Date(ctx.ibApp.reviewed_at) : new Date(0),
-        detail: [
-          {label:'Broker', value: ctx.ibApp.broker_name},
-          {label:'Akun Trading', value: ctx.ibApp.trading_account_id},
-          {label:'Kode Pengajuan', value: ctx.ibApp.application_code},
-          {label:'Disetujui', value: fmtDate(ctx.ibApp.reviewed_at)}
-        ]
-      });
+      candidates.push({source:'ib_kamar', label:'IB TradeMax'+(ctx.ibApp.broker_name?' ('+ctx.ibApp.broker_name+')':''), ts: ctx.ibApp.reviewed_at?new Date(ctx.ibApp.reviewed_at):new Date(0), detail:[{label:'Broker',value:ctx.ibApp.broker_name},{label:'Akun Trading',value:ctx.ibApp.trading_account_id},{label:'Kode Pengajuan',value:ctx.ibApp.application_code},{label:'Disetujui',value:fmtDate(ctx.ibApp.reviewed_at)}]});
     }
     if(ctx.trial && key === 'kamar_study'){
-      candidates.push({
-        source:'trial',
-        label:'Trial 24 Jam',
-        ts: ctx.trial.reviewed_at ? new Date(ctx.trial.reviewed_at) : new Date(0),
-        detail: [
-          {label:'Disetujui', value: fmtDate(ctx.trial.reviewed_at)},
-          {label:'Berlaku s.d', value: fmtDate(ctx.trial.expires_at)}
-        ]
-      });
+      candidates.push({source:'trial', label:'Trial 24 Jam', ts: ctx.trial.reviewed_at?new Date(ctx.trial.reviewed_at):new Date(0), detail:[{label:'Disetujui',value:fmtDate(ctx.trial.reviewed_at)},{label:'Berlaku s.d',value:fmtDate(ctx.trial.expires_at)}]});
     }
-    var pay = (ctx.payments||[]).find(function(p){ return Array.isArray(p.selected_facilities) && p.selected_facilities.indexOf(key) >= 0; });
     if(pay){
-      candidates.push({
-        source:'paid',
-        label:'Berbayar',
-        ts: pay.confirmed_at ? new Date(pay.confirmed_at) : (pay.paid_at ? new Date(pay.paid_at) : new Date(0)),
-        detail: [
-          {label:'Jumlah', value: pay.amount!=null ? ('Rp' + Number(pay.amount).toLocaleString('id-ID')) : '-'},
-          {label:'Metode', value: pay.payment_method},
-          {label:'Durasi', value: pay.duration_days ? (pay.duration_days + ' hari') : '-'},
-          {label:'Dikonfirmasi', value: fmtDate(pay.confirmed_at || pay.paid_at)}
-        ]
-      });
+      candidates.push({source:'paid', label:'Berbayar', ts: pay.confirmed_at?new Date(pay.confirmed_at):(pay.paid_at?new Date(pay.paid_at):new Date(0)), detail:[{label:'Jumlah',value:pay.amount!=null?('Rp'+Number(pay.amount).toLocaleString('id-ID')):'-'},{label:'Metode',value:pay.payment_method},{label:'Durasi',value:pay.duration_days?(pay.duration_days+' hari'):'-'},{label:'Dikonfirmasi',value:fmtDate(pay.confirmed_at||pay.paid_at)}]});
     }
     if(!candidates.length){
       return {source:'admin', label:'Admin (aktivasi langsung)', detail:[]};
@@ -284,7 +311,7 @@
         var profileId = pres.data.id;
         return Promise.all([
           client.from('member_access')
-            .select('access_kamar_study,expires_kamar_study,access_materi_edukasi,expires_materi_edukasi,access_kamar_private,expires_kamar_private,access_kamar_indikator,expires_kamar_indikator,access_kamar_robot,expires_kamar_robot')
+            .select('access_kamar_study,expires_kamar_study,access_materi_edukasi,expires_materi_edukasi,access_kamar_private,expires_kamar_private,access_kamar_indikator,expires_kamar_indikator,access_kamar_robot,expires_kamar_robot,activation_source')
             .eq('profile_id', profileId).maybeSingle(),
           client.from('admin_todos')
             .select('action_payload')
@@ -314,6 +341,7 @@
         if(!ares || ares.error || !ares.data) return;
         var row = ares.data;
         var srcCtx = {
+          activationSource: row.activation_source || null,
           payments: (payRes && !payRes.error && payRes.data) ? payRes.data : [],
           ibApp: (ibRes && !ibRes.error && ibRes.data && ibRes.data[0]) ? ibRes.data[0] : null,
           trial: (trialRes && !trialRes.error && trialRes.data && trialRes.data[0]) ? trialRes.data[0] : null

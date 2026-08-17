@@ -209,8 +209,8 @@ body{background:#070707;color:var(--text)}
           var link=document.getElementById('ibPendingChatLink');
           if(link) link.href=buildAdminMessage(existing.data.application_code);
           show('ibPendingCard');
+          return;
         }
-        return;
       }
     }catch(e){}
 

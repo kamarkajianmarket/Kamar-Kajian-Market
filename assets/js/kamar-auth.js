@@ -371,8 +371,8 @@
       }
 
       status(form, affiliate
-        ? ('Pendaftaran berhasil dengan kode referral dari '+affiliate.full_name+'. Jika email konfirmasi aktif, cek email kamu. Jika tidak, silakan login.')
-        : 'Pendaftaran berhasil. Jika email konfirmasi aktif, cek email kamu. Jika tidak, silakan login.', true);
+        ? ('Pendaftaran berhasil dengan kode referral dari '+affiliate.full_name+'! Cek email kamu jika perlu verifikasi, lalu login untuk mulai menggunakan akun.')
+        : 'Pendaftaran berhasil! Cek email kamu jika perlu verifikasi, lalu login untuk mulai menggunakan akun.', true);
       form.reset();
     }catch(e){ status(form,'Gagal daftar: '+authMessage(e),false); }
     finally{ processing(form,'',false); }

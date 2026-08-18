@@ -425,6 +425,28 @@ html,body{ height:100%; }
 .ksig-recap-empty-title{ font-weight:900; color:var(--km-ink); font-size:13px; margin-bottom:3px; }
 .ksig-recap-empty-desc{ font-size:11.5px; color:var(--km-muted); line-height:1.5; max-width:280px; margin:0 auto; }
 
+.ksig-recap-card{ position:relative; }
+.ksig-recap-picker{ position:absolute; top:16px; right:16px; z-index:5; }
+.ksig-recap-picker-btn{ display:flex; align-items:center; gap:5px; background:#f1ede2; border:1px solid var(--km-line); border-radius:999px; padding:6px 12px; font-size:11.5px; font-weight:800; color:var(--km-ink); cursor:pointer; transition:background .15s ease; }
+.ksig-recap-picker-btn:hover{ background:#e9e3d4; }
+.ksig-recap-picker-menu{ position:absolute; top:calc(100% + 6px); right:0; min-width:150px; max-height:260px; overflow-y:auto; background:#fff; border:1px solid var(--km-line); border-radius:12px; box-shadow:0 12px 30px rgba(17,20,23,.14); padding:6px; display:none; z-index:20; }
+.ksig-recap-picker-menu.open{ display:block; }
+.ksig-recap-picker-item{ padding:8px 10px; border-radius:8px; font-size:12px; font-weight:700; color:var(--km-ink); cursor:pointer; transition:background .12s ease; }
+.ksig-recap-picker-item:hover{ background:#f5f1e8; }
+.ksig-recap-picker-item.active{ background:var(--km-gold); color:#fff; }
+
+.ksig-recap-summary{ margin:14px 0 4px; padding:14px; background:#faf7f0; border:1px solid var(--km-line); border-radius:14px; }
+.ksig-recap-summary-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.ksig-recap-summary-head strong{ font-size:12.5px; font-weight:900; color:var(--km-ink); }
+.ksig-recap-summary-pips{ font-size:14px; font-weight:900; }
+.ksig-recap-summary-pips.pos{ color:#0e5f54; }
+.ksig-recap-summary-pips.neg{ color:#8a2b2b; }
+.ksig-recap-summary-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.ksig-recap-summary-item{ text-align:center; }
+.ksig-recap-summary-val{ display:block; font-size:15px; font-weight:900; color:var(--km-ink); }
+.ksig-recap-summary-label{ display:block; font-size:10.5px; color:var(--km-muted); margin-top:2px; }
+@media(max-width:480px){ .ksig-recap-summary-grid{ grid-template-columns:repeat(2,1fr); } }
+
 /* ---------- Activity card ---------- */
 .ksig-activity-card{ background:#fff; border:1px solid var(--km-line); border-radius:var(--km-radius-lg); box-shadow:var(--km-shadow); padding:8px 14px; }
 .ksig-activity-card .ksig-list{ margin-top:0; gap:0; }

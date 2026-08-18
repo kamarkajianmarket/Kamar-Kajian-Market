@@ -271,6 +271,8 @@ affiliate_activation_request: 'Pengajuan Affiliate'
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
     if(todo.profile_id) return todo.profile_id;
+    var payload = todo.action_payload || {};
+    if(payload.member_profile_id) return payload.member_profile_id;
     var email = todo.action_payload && todo.action_payload.email;
     if(!email) return null;
     var c = await ready(); if(!c) return null;
@@ -278,7 +280,18 @@ affiliate_activation_request: 'Pengajuan Affiliate'
     if(res.error || !res.data || !res.data.length) return null;
     return res.data[0].id;
   }
-  async function markTodoDone(todoId, statusVal){
+  async function notifyMemberForTodo(todo, title, message, opts){
+    try{
+        var pid = await resolveProfileId(todo);
+        if(!pid) return;
+        var c = await ready(); if(!c) return;
+        var row = { profile_id: pid, title: title, message: message, is_read:false, created_at:new Date().toISOString() };
+        if(opts && opts.link) row.link_url = opts.link;
+        if(opts && opts.category) row.category = opts.category;
+        await c.from('member_notifications').insert(row);
+    }catch(e){}
+}
+async function markTodoDone(todoId, statusVal){
     await update('admin_todos', todoId, { todo_status: statusVal || 'done', completed_at: new Date().toISOString() });
   }
   async function actionActivateRegistration(todo){
@@ -286,6 +299,7 @@ affiliate_activation_request: 'Pengajuan Affiliate'
     if(!pid){ toast('Tidak menemukan profil member untuk diaktifkan.'); return; }
     await update('member_profiles', pid, { account_status:'active', updated_at:new Date().toISOString() });
     await markTodoDone(todo.id);
+    notifyMemberForTodo(todo, 'Akun Anda Sudah Aktif', 'Selamat! Akun Anda telah diaktifkan oleh Admin Kamar. Anda sekarang bisa login dan mengakses dashboard.', { link:'dashboard.html', category:'account' });
     toast('Member diaktifkan.');
   }
   async function actionConfirmPayment(todo){
@@ -306,6 +320,7 @@ affiliate_activation_request: 'Pengajuan Affiliate'
       if(c) await c.from('member_access').upsert(accessRow, { onConflict:'profile_id' });
     }
     await markTodoDone(todo.id);
+    notifyMemberForTodo(todo, 'Pembayaran Dikonfirmasi', 'Pembayaran Anda sudah dikonfirmasi admin dan fasilitas terkait sudah aktif. Selamat belajar!', { link:'dashboard.html', category:'payment' });
     toast('Pembayaran dikonfirmasi & fasilitas diaktifkan.');
   }
   async function actionProfileChange(todo, approve){
@@ -318,6 +333,7 @@ affiliate_activation_request: 'Pengajuan Affiliate'
       await update('profile_change_requests', payload.profile_change_request_id, { status: approve?'approved':'rejected', reviewed_at:new Date().toISOString() });
     }
     await markTodoDone(todo.id, approve?'done':'rejected');
+    notifyMemberForTodo(todo, approve?'Perubahan Profil Disetujui':'Perubahan Profil Ditolak', approve?'Pengajuan perubahan data profil Anda sudah disetujui admin.':'Pengajuan perubahan data profil Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'member-profile.html', category:'profile' });
     toast(approve?'Perubahan profil disetujui.':'Perubahan profil ditolak.');
   }
   async function actionDismiss(todo){
@@ -343,6 +359,7 @@ affiliate_activation_request: 'Pengajuan Affiliate'
       }
     }
     await markTodoDone(todo.id, approve?'done':'rejected');
+    notifyMemberForTodo(todo, approve?'Lisensi Disetujui':'Pengajuan Lisensi Ditolak', approve?'Pengajuan lisensi Anda sudah disetujui admin dan siap digunakan.':'Pengajuan lisensi Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'dashboard.html', category:'license' });
     toast(approve?'License disetujui.':'Pengajuan license ditolak.');
   }
   async function actionIbKamarApplication(todo, action){
@@ -358,6 +375,7 @@ affiliate_activation_request: 'Pengajuan Affiliate'
       }
     }
     await markTodoDone(todo.id, action === 'reject' ? 'rejected' : 'done');
+    notifyMemberForTodo(todo, action === 'approve' ? 'Pengajuan IB Kamar Disetujui' : (action === 'reject' ? 'Pengajuan IB Kamar Ditolak' : 'Pengajuan IB Kamar Perlu Revisi'), action === 'approve' ? 'Pengajuan IB Kamar Anda sudah disetujui admin. Akses Kamar Signal sudah aktif!' : (action === 'reject' ? 'Pengajuan IB Kamar Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.' : ('Pengajuan IB Kamar Anda dikembalikan untuk revisi.' + (note ? (' Catatan admin: '+note) : ''))), { link:'member-study.html', category:'ib_kamar' });
     toast(action === 'approve' ? 'IB Kamar disetujui, akses Kamar Signal diaktifkan.' : (action === 'reject' ? 'Pengajuan IB Kamar ditolak.' : 'Pengajuan dikembalikan ke member untuk revisi.'));
   }
   async function actionFacilityRenewal(todo, approve){
@@ -375,6 +393,7 @@ affiliate_activation_request: 'Pengajuan Affiliate'
     if(res.error) throw res.error;
   }
   await markTodoDone(todo.id, approve?'done':'rejected');
+  notifyMemberForTodo(todo, approve?'Perpanjangan Fasilitas Disetujui':'Perpanjangan Fasilitas Ditolak', approve?'Pengajuan perpanjangan fasilitas Anda sudah disetujui admin dan aksesnya sudah diperpanjang.':'Pengajuan perpanjangan fasilitas Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'member-renewal.html', category:'facility' });
   toast(approve?'Perpanjangan disetujui, akses fasilitas diperpanjang.':'Pengajuan perpanjangan ditolak.');
 }
 async function actionTrialRequest(todo, approve){
@@ -388,6 +407,7 @@ async function actionTrialRequest(todo, approve){
     }
   }
   await markTodoDone(todo.id, approve?'done':'rejected');
+  notifyMemberForTodo(todo, approve?'Trial Kamar Signal Disetujui':'Request Trial Ditolak', approve?'Request trial Kamar Signal Anda disetujui. Akses aktif selama 24 jam, selamat mencoba!':'Request trial Kamar Signal Anda ditolak admin.', { link:'member-study.html', category:'trial' });
   toast(approve?'Trial disetujui, Kamar Signal aktif 24 jam.':'Permintaan trial ditolak.');
 }
 async function actionAffiliatePayoutChange(todo, approve){
@@ -403,6 +423,7 @@ async function actionAffiliatePayoutChange(todo, approve){
       });
     }
     await markTodoDone(todo.id, approve?'done':'rejected');
+    notifyMemberForTodo(todo, approve?'Perubahan Rekening Affiliate Disetujui':'Perubahan Rekening Affiliate Ditolak', approve?'Perubahan data rekening affiliate Anda sudah disetujui admin.':'Perubahan data rekening affiliate Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'affiliate-dashboard.html', category:'affiliate' });
     toast(approve?'Perubahan rekening affiliate disetujui.':'Perubahan rekening affiliate ditolak.');
   }
   async function actionAffiliateActivation(todo, approve){
@@ -415,6 +436,7 @@ if(res.error) throw res.error;
 }
 }
 await markTodoDone(todo.id, approve?'done':'rejected');
+notifyMemberForTodo(todo, approve?'Pengajuan Affiliate Disetujui':'Pengajuan Affiliate Ditolak', approve?'Selamat! Pengajuan affiliate Anda disetujui dan kode referral Anda sudah aktif digunakan.':'Pengajuan affiliate Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'affiliate-dashboard.html', category:'affiliate' });
 toast(approve?'Affiliate disetujui dan aktif. Kode referral sudah bisa dipakai.':'Pengajuan affiliate ditolak.');
 }
 function todoCard(todo){

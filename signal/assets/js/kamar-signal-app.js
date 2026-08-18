@@ -910,7 +910,7 @@ function esc(s){
     var unreadOnly = !!L.filters.unread;
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
-    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived');
+    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
     q = (L.status === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', L.status).eq('is_archived', false);
     if(L.search){
       var s = L.search.replace(/[%,]/g,'');
@@ -1430,8 +1430,8 @@ if(state.recap.type === type) renderApp();
       '<div class="ksig-main'+(state._rtRender?' ksig-fade':'')+'">'+
         '<div class="ksig-toolbar">'+
           '<div class="ksig-search"><span aria-hidden="true">🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona…" value="'+esc(L.search)+'"/></div>'+
-          '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter">⚙</div>'+
-          '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan">↕</div>'+
+          '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter"><span class="ksig-tool-icon">⚙</span><span class="ksig-tool-label">Filter</span></div>'+
+          '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan"><span class="ksig-tool-icon">↕</span><span class="ksig-tool-label">Urutkan</span></div>'+
         '</div>'+
         unreadBarHtml+
         '<div id="ksigListBody"></div>'+
@@ -1487,7 +1487,7 @@ if(state.recap.type === type) renderApp();
     var info = infoParts.join(' • ');
     return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
-        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
+        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
         (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
@@ -1585,8 +1585,8 @@ var active = p === R.selectedPeriod;
 return '<div class="ksig-recap-picker-item'+(active?' active':'')+'" data-period="'+esc(p)+'">'+esc(recapPeriodLabel(p, R.type))+'</div>';
 }).join('');
 return '<div class="ksig-recap-picker">'+
-'<button type="button" class="ksig-recap-picker-btn" id="ksigRecapPeriodBtn">'+esc(label)+
-'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+'<button type="button" class="ksig-recap-picker-btn" id="ksigRecapPeriodBtn" aria-label="Pilih tanggal" title="'+esc(label)+'">'+
+'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'+
 '</button>'+
 '<div class="ksig-recap-picker-menu'+(R.pickerOpen?' open':'')+'" id="ksigRecapPeriodMenu">'+menu+'</div>'+
 '</div>';
@@ -1943,9 +1943,10 @@ var groups = groupRecapRows(R.rows);
       '<div class="ksig-detail-head">'+
         '<div class="ksig-detail-top">'+
           '<span class="ksig-detail-symbol">'+esc(s.pair)+'</span>'+
-          '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span><span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
+          '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+<span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
         '</div>'+
         (lastCallActive ? '<div class="ksig-lastcall-banner">⚡ LAST CALL — RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
+(s.is_critical_zone ? '<div class="ksig-critical-banner">⚠ ZONA KRITIS — pantau ketat, pertimbangkan kurangi risiko/lot</div>' : '') +
         (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
         '<div class="ksig-detail-rows">' + rows.map(function(r){ var isRun = (r[0]==='Running Profit') && maxRunVal!=null; var valInner = isRun ? ('<span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span>') : esc(r[1]==null?'-':r[1]); return '<div class="ksig-detail-row"><span>'+esc(r[0])+'</span><strong>'+valInner+'</strong></div>'; }).join('') + '</div>'+
       '</div>'+

@@ -1242,9 +1242,9 @@ if(state.recap.type === type) renderApp();
   function openInformasiTeknisSheet(){
     var wrap = document.createElement('div');
     wrap.className = 'ksig-sheet-backdrop';
-    var PANDUAN_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf';
-    var TELEGRAM_GUIDE_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan%20Arti%20Alert%20Kamar%20Signal%20-%20TELEGRAM.pdf';
-    var WEBSITE_GUIDE_PDF_URL = 'https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan%20Arti%20Tampilan%20Kamar%20Signal%20-%20WEBSITE%20PWA.pdf';
+    var PANDUAN_PDF_URL = 'https://www.kamarkajianmarket.com/panduan/kamar-signal.pdf';
+    var TELEGRAM_GUIDE_PDF_URL = 'https://www.kamarkajianmarket.com/panduan/kamar-signal-alert-telegram.pdf';
+    var WEBSITE_GUIDE_PDF_URL = 'https://www.kamarkajianmarket.com/panduan/kamar-signal-tampilan-website.pdf';
     function row(title,desc,href){
       if(href){
         return '<a class="ksig-info-row ksig-info-row-active" href="'+esc(href)+'" target="_blank" rel="noopener">'+

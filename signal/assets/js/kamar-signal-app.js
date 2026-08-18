@@ -64,7 +64,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     readsLoaded: false,
     realtimeStatus: 'off', // off | connecting | on | warn
     list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0 },
-    recap: { type:'DAILY', rows:[], loaded:false, loading:false },
+    recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false },
     activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
   };
@@ -950,32 +950,64 @@ function esc(s){
     });
   }
 
-  function loadRecap(type){
-    var R = state.recap;
-    R.type = type; R.loading = true; R.error = null;
-    renderApp();
-    // Ambil rekap existing apa adanya. Struktur bisnis existing: satu periode bisa
-    // mempunyai lebih dari satu baris (per timeframe, dan per pair kalau ada).
-    // UI hanya mengelompokkan baris-baris ini untuk ditampilkan — tidak menghitung ulang,
-    // tidak menggabungkan angka, tidak membuat timeframe baru.
-    return state.client.from('signal_recaps').select('*').eq('recap_type', type)
-      .order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(50)
-      .then(function(res){
-        if(res.error) throw res.error;
-        var rows = res.data || [];
-        if(rows.length){
-          var latestEnd = rows[0].period_end_wib;
-          rows = rows.filter(function(r){ return r.period_end_wib === latestEnd; });
-        }
-        R.rows = rows;
-        R.loading = false;
-        R.loaded = true;
-        renderApp();
-      }).catch(function(err){
-        R.loading = false; R.error = 'Data belum dapat dimuat.';
-        renderApp();
-      });
-  }
+  function loadRecap(type, periodEndWib){
+var R = state.recap;
+if(R.type !== type){ R.periods = []; R.periodsLoaded = false; R.periodsLoading = false; }
+R.type = type; R.loading = true; R.error = null; R.pickerOpen = false;
+renderApp();
+// Ambil rekap existing apa adanya. Struktur bisnis existing: satu periode bisa
+// mempunyai lebih dari satu baris (per timeframe, dan per pair kalau ada).
+// UI hanya mengelompokkan baris-baris ini untuk ditampilkan - tidak menghitung ulang,
+// tidak menggabungkan angka, tidak membuat timeframe baru.
+// periodEndWib opsional: kalau diisi, ambil periode spesifik itu (dari picker),
+// kalau kosong pakai periode terbaru seperti semula.
+var q = state.client.from('signal_recaps').select('*').eq('recap_type', type);
+if(periodEndWib) q = q.eq('period_end_wib', periodEndWib);
+return q.order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(periodEndWib ? 200 : 50)
+.then(function(res){
+if(res.error) throw res.error;
+var rows = res.data || [];
+if(!periodEndWib && rows.length){
+var latestEnd = rows[0].period_end_wib;
+rows = rows.filter(function(r){ return r.period_end_wib === latestEnd; });
+}
+R.rows = rows;
+R.selectedPeriod = rows.length ? rows[0].period_end_wib : (periodEndWib || null);
+R.loading = false;
+R.loaded = true;
+renderApp();
+if(!R.periodsLoaded && !R.periodsLoading) loadRecapPeriods(type);
+}).catch(function(err){
+R.loading = false; R.error = 'Data belum dapat dimuat.';
+renderApp();
+});
+}
+
+function loadRecapPeriods(type){
+var R = state.recap;
+R.periodsLoading = true;
+return state.client.from('signal_recaps').select('period_end_wib').eq('recap_type', type)
+.order('period_end_wib', { ascending:false }).limit(500)
+.then(function(res){
+if(res.error) throw res.error;
+var seen = {}; var list = [];
+(res.data||[]).forEach(function(r){
+var k = r.period_end_wib;
+if(seen[k]) return; seen[k] = true;
+list.push(k);
+});
+if(type === 'DAILY'){
+// Rekap Harian sengaja dibatasi ke bulan berjalan (WIB) saja - tanggal bulan
+// lalu otomatis tidak muncul lagi di picker begitu bulan berganti.
+var monthStartMs = new Date(wibNowBoundaries().month).getTime();
+list = list.filter(function(k){ return new Date(k).getTime() >= monthStartMs; });
+}
+R.periods = list.slice(0, type === 'DAILY' ? 31 : 24);
+R.periodsLoaded = true;
+R.periodsLoading = false;
+if(state.recap.type === type) renderApp();
+}).catch(function(){ R.periodsLoading = false; });
+}
 
   function loadActivity(){
     var A = state.activity;
@@ -1140,8 +1172,8 @@ function esc(s){
   var OVERVIEW_META = {
     fresh:  { label:'Signal Fresh',  desc:'Signal terbaru' },
     aktif:  { label:'Signal Aktif',  desc:'Signal sedang aktif' },
-    profit: { label:'Signal Profit', desc:'Signal selesai profit' },
-    loss:   { label:'Signal Loss',   desc:'Signal selesai loss' },
+    profit: { label:'Signal Profit', desc:'Total signal profit' },
+    loss:   { label:'Signal Loss',   desc:'Total signal loss' },
     archive:{ label:'Arsip',        desc:'Riwayat signal terarsip' }
   };
 
@@ -1532,13 +1564,63 @@ function esc(s){
       '<div class="ksig-tabs" role="tablist">'+
         tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') +
       '</div>'+
+      recapPeriodPickerHtml() +
       '<div id="ksigRecapBody"></div>'+
     '</div>';
     function tab(type,label){
       return '<div class="ksig-tab'+(R.type===type?' active':'')+'" data-type="'+type+'" tabindex="0" role="tab" aria-selected="'+(R.type===type?'true':'false')+'">'+label+'</div>';
     }
   }
-  function bindRecapTabs(){
+  function recapPeriodLabel(iso, type){
+if(!iso) return 'Terbaru';
+if(type === 'MONTHLY') return fmtWIB(iso, { day:undefined, month:'long', year:'numeric', hour:undefined, minute:undefined });
+return fmtWIB(iso, { hour:undefined, minute:undefined });
+}
+function recapPeriodPickerHtml(){
+var R = state.recap;
+if(!R.periods || R.periods.length <= 1) return '';
+var label = recapPeriodLabel(R.selectedPeriod, R.type);
+var menu = R.periods.map(function(p){
+var active = p === R.selectedPeriod;
+return '<div class="ksig-recap-picker-item'+(active?' active':'')+'" data-period="'+esc(p)+'">'+esc(recapPeriodLabel(p, R.type))+'</div>';
+}).join('');
+return '<div class="ksig-recap-picker">'+
+'<button type="button" class="ksig-recap-picker-btn" id="ksigRecapPeriodBtn">'+esc(label)+
+'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+'</button>'+
+'<div class="ksig-recap-picker-menu'+(R.pickerOpen?' open':'')+'" id="ksigRecapPeriodMenu">'+menu+'</div>'+
+'</div>';
+}
+function recapSummaryHtml(rows){
+var buyN=0, sellN=0, profitN=0, lossN=0, pipsN=0, signalN=0;
+rows.forEach(function(r){
+buyN += Number(r.total_buy||0);
+sellN += Number(r.total_sell||0);
+profitN += Number(r.total_profit||0);
+lossN += Number(r.total_loss||0);
+pipsN += Number(r.total_pips||0);
+signalN += Number(r.total_signal||0);
+});
+var decided = profitN + lossN;
+var winrateN = decided > 0 ? (profitN/decided*100) : null;
+var pipsTxt = (pipsN>=0?'+':'')+fmtNum(pipsN,1)+' Pips';
+var pipsCls = pipsN<0 ? 'neg' : 'pos';
+function sumItem(label, val){
+return '<div class="ksig-recap-summary-item"><span class="ksig-recap-summary-val">'+esc(val)+'</span><span class="ksig-recap-summary-label">'+esc(label)+'</span></div>';
+}
+return '<div class="ksig-recap-summary">'+
+'<div class="ksig-recap-summary-head"><span>Ringkasan Periode</span><span class="ksig-recap-summary-pips '+pipsCls+'">'+esc(pipsTxt)+'</span></div>'+
+'<div class="ksig-recap-summary-grid">'+
+sumItem('Total Signal', signalN) +
+sumItem('Buy', buyN) +
+sumItem('Sell', sellN) +
+sumItem('Profit', profitN) +
+sumItem('Loss', lossN) +
+sumItem('Winrate', winrateN!=null ? (fmtNum(winrateN,1)+'%') : '-') +
+'</div>'+
+'</div>';
+}
+function bindRecapTabs(){
     document.querySelectorAll('.ksig-tab').forEach(function(t){
       t.addEventListener('click', function(){ if(t.getAttribute('data-type')!==state.recap.type) loadRecap(t.getAttribute('data-type')); });
       t.addEventListener('keydown', function(e){
@@ -1547,7 +1629,30 @@ function esc(s){
         if(t.getAttribute('data-type')!==state.recap.type) loadRecap(t.getAttribute('data-type'));
       });
     });
+  
+  var pbtn = document.getElementById('ksigRecapPeriodBtn');
+  if(pbtn){
+    pbtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      state.recap.pickerOpen = !state.recap.pickerOpen;
+      renderApp();
+    });
   }
+  document.querySelectorAll('.ksig-recap-picker-item').forEach(function(it){
+    it.addEventListener('click', function(){
+      var p = it.getAttribute('data-period');
+      state.recap.pickerOpen = false;
+      if(p !== state.recap.selectedPeriod) loadRecap(state.recap.type, p);
+      else renderApp();
+    });
+  });
+  if(state.recap.pickerOpen){
+    document.addEventListener('click', function closePicker(e){
+      if(!e.target.closest('.ksig-recap-picker')){ state.recap.pickerOpen = false; renderApp(); }
+      document.removeEventListener('click', closePicker);
+    }, { once:true });
+  }
+}
   function groupRecapRows(rows){
     var order = [], map = {};
     rows.forEach(function(r){
@@ -1592,6 +1697,7 @@ function esc(s){
     var periodRef = R.rows[0];
     body.innerHTML =
       '<div class="ksig-recap-list ksig-fade">' + groups.map(recapTimeframeGroupHtml).join('') + '</div>' +
+      recapSummaryHtml(R.rows) +
       '<div class="ksig-recap-period">'+fmtWIB(periodRef.period_start_wib,{hour:undefined,minute:undefined})+' – '+fmtWIB(periodRef.period_end_wib,{hour:undefined,minute:undefined})+'</div>';
   }
 

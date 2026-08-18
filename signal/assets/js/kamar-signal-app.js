@@ -969,7 +969,7 @@ function refreshCounts(){
     var unreadOnly = !!L.filters.unread;
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
-    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
+    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,tp1,invalidasi,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
     q = (L.status === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', L.status).eq('is_archived', false);
     if(L.search){
       var s = L.search.replace(/[%,]/g,'');
@@ -1527,7 +1527,8 @@ if(state.recap.type === type) renderApp();
       body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada '+esc((STATUS_LABEL[L.status]||'signal').toLowerCase())+' saat ini.</div>Cek kembali beberapa saat lagi.</div>';
       return;
     }
-    var html = '<div class="ksig-list ksig-fade">' + groupedRowsHtml(L.items) + '</div>';
+    var rowsHtml = (L.sort === 'timeframe') ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
+    var html = '<div class="ksig-list ksig-fade">' + rowsHtml + '</div>';
     if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');
@@ -1539,6 +1540,8 @@ if(state.recap.type === type) renderApp();
     var infoParts = [];
     if(s.jenis_zona) infoParts.push(s.jenis_zona);
     if(s.area_low!=null && s.area_high!=null) infoParts.push('Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high));
+    if(s.tp1!=null) infoParts.push('TP1 '+fmtNum(s.tp1));
+    if(s.invalidasi!=null) infoParts.push('CL '+fmtNum(s.invalidasi));
     if(s.display_status!=='fresh'){
       var pips = pipsOf(s);
       if(pips!=null) infoParts.push((pips>=0?'+':'')+fmtNum(pips,1)+' Pips');
@@ -1600,7 +1603,7 @@ if(state.recap.type === type) renderApp();
 
   function openSortSheet(){
     var L = state.list;
-    var options = [ ['terbaru','Terbaru'], ['terlama','Terlama'], ['update','Update Terbaru'], ['pips','Pips Terbesar'] ];
+    var options = [ ['terbaru','Terbaru'], ['terlama','Terlama'], ['update','Update Terbaru'], ['pips','Pips Terbesar'], ['timeframe','Berdasarkan Timeframe'] ];
     var wrap = document.createElement('div');
     wrap.className = 'ksig-sheet-backdrop';
     wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div><div class="ksig-sheet-title">Urutkan</div><div class="ksig-chip-row">'+

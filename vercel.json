@@ -4,7 +4,10 @@
 { "source": "/register", "destination": "/register.html" },{ "source": "/login", "destination": "/member.html" },
 { "source": "/signal/id/(.*)", "destination": "/signal/index.html" },
 { "source": "/signal/list/(.*)", "destination": "/signal/index.html" },
-{ "source": "/signal/recap", "destination": "/signal/index.html" }
+{ "source": "/signal/recap", "destination": "/signal/index.html" },
+{ "source": "/panduan/kamar-signal.pdf", "destination": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan-Kamar-Signal.pdf" },
+{ "source": "/panduan/kamar-signal-alert-telegram.pdf", "destination": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan%20Arti%20Alert%20Kamar%20Signal%20-%20TELEGRAM.pdf" },
+{ "source": "/panduan/kamar-signal-tampilan-website.pdf", "destination": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/panduan/Panduan%20Arti%20Tampilan%20Kamar%20Signal%20-%20WEBSITE%20PWA.pdf" }
   ],
   "headers": [
     { "source": "/assets/js/kamar-mobile-shell.js", "headers": [ { "key": "Cache-Control", "value": "no-cache, must-revalidate" } ] },

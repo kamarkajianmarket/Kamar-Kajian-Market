@@ -265,6 +265,8 @@
     ib_kamar_activation: 'Pengajuan IB Kamar',
   facility_renewal_request: 'Perpanjangan Fasilitas',
   trial_request: 'Request Trial Kamar Signal'
+,
+affiliate_activation_request: 'Pengajuan Affiliate'
   };
   function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
@@ -403,7 +405,19 @@ async function actionAffiliatePayoutChange(todo, approve){
     await markTodoDone(todo.id, approve?'done':'rejected');
     toast(approve?'Perubahan rekening affiliate disetujui.':'Perubahan rekening affiliate ditolak.');
   }
-  function todoCard(todo){
+  async function actionAffiliateActivation(todo, approve){
+var payload = todo.action_payload || {};
+if(payload.affiliate_id){
+var c = await ready();
+if(c){
+var res = await c.rpc('admin_review_affiliate_activation', { p_affiliate_id: payload.affiliate_id, p_action: approve?'approve':'reject', p_admin_note: null });
+if(res.error) throw res.error;
+}
+}
+await markTodoDone(todo.id, approve?'done':'rejected');
+toast(approve?'Affiliate disetujui dan aktif. Kode referral sudah bisa dipakai.':'Pengajuan affiliate ditolak.');
+}
+function todoCard(todo){
     var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
     var p = todo.action_payload || {};
     var subBits = [];
@@ -440,7 +454,10 @@ async function actionAffiliatePayoutChange(todo, approve){
       actionsHtml = '<button class="btn mini secondary" type="button" data-todo-action="reject_ib_kamar" data-todo-id="'+esc(todo.id)+'">Tolak</button> '+reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'facility_renewal_request'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
-    } else {
+    
+} else if(todo.todo_type === 'affiliate_activation_request'){
+actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_affiliate_activation" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_activation" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+} else {
       actionsHtml = reviewBtn+'<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
     return '<div class="todo-row">'
@@ -533,7 +550,11 @@ async function actionAffiliatePayoutChange(todo, approve){
       actions += ' <button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
       actions += ' <button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
-    } else {
+    
+    } else if(todo.todo_type === 'affiliate_activation_request'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_activation" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_activation" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+} else {
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Tandai Selesai</button>';
     }
     return actions;
@@ -624,6 +645,8 @@ async function actionAffiliatePayoutChange(todo, approve){
       else if(action === 'reject_license') await actionLicenseRequest(todo, false);
       else if(action === 'approve_affiliate_payout') await actionAffiliatePayoutChange(todo, true);
       else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
+    else if(action === 'approve_affiliate_activation') await actionAffiliateActivation(todo, true);
+    else if(action === 'reject_affiliate_activation') await actionAffiliateActivation(todo, false);
       else if(action === 'approve_ib_kamar') await actionIbKamarApplication(todo, 'approve');
       else if(action === 'reject_ib_kamar') await actionIbKamarApplication(todo, 'reject');
       else if(action === 'revise_ib_kamar') await actionIbKamarApplication(todo, 'need_revision');

@@ -64,7 +64,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     readsLoaded: false,
     realtimeStatus: 'off', // off | connecting | on | warn
     list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0 },
-    recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false },
+    recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false, customPreset:null, customFrom:'', customTo:'', customRangeLabel:'' },
     activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
   };
@@ -1368,7 +1368,7 @@ if(state.recap.type === type) renderApp();
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn(); bindTelegramBtn(); bindSettingsBtn();
     (function(){ var da=document.getElementById('ksigDashInstallBtnAndroid'); if(da) da.addEventListener('click', function(){ openInstallSheet('android'); }); var di=document.getElementById('ksigDashInstallBtnIOS'); if(di) di.addEventListener('click', function(){ openInstallSheet('ios'); }); })();
-    bindRecapTabs();
+    bindRecapTabs(); bindRecapCustomControls();
     bindInfoTeknisCard();
     bindPointerLight();
     renderRecapBody();
@@ -1562,9 +1562,9 @@ if(state.recap.type === type) renderApp();
     var R = state.recap;
     return '<div class="ksig-recap-card">'+
       '<div class="ksig-tabs" role="tablist">'+
-        tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') +
+        tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') + tab('CUSTOM','Custom') +
       '</div>'+
-      recapPeriodPickerHtml() +
+      (R.type==='CUSTOM' ? recapCustomRangeHtml() : recapPeriodPickerHtml()) +
       '<div id="ksigRecapBody"></div>'+
     '</div>';
     function tab(type,label){
@@ -1590,6 +1590,121 @@ return '<div class="ksig-recap-picker">'+
 '</button>'+
 '<div class="ksig-recap-picker-menu'+(R.pickerOpen?' open':'')+'" id="ksigRecapPeriodMenu">'+menu+'</div>'+
 '</div>';
+}
+var CUSTOM_PRESETS = [
+['today','Hari Ini'],
+['yesterday','Kemarin'],
+['3d','3 Hari Terakhir'],
+['1w','1 Minggu'],
+['1m','1 Bulan'],
+['custom','Pilih Tanggal']
+];
+function wibTodayYmd(){
+var wib = new Date(Date.now() + 7*3600*1000);
+return { y: wib.getUTCFullYear(), m: wib.getUTCMonth(), d: wib.getUTCDate() };
+}
+function ymdStr(y,m,d){ return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+function recapCustomRangeHtml(){
+var R = state.recap;
+var preset = R.customPreset || 'today';
+var chips = CUSTOM_PRESETS.map(function(p){
+return '<button type="button" class="ksig-recap-preset-btn'+(preset===p[0]?' active':'')+'" data-preset="'+p[0]+'">'+esc(p[1])+'</button>';
+}).join('');
+var dateRow = '';
+if(preset === 'custom'){
+dateRow = '<div class="ksig-recap-daterange-row">'+
+'<input type="date" class="ksig-recap-date-input" id="ksigCustomFrom" value="'+esc(R.customFrom||'')+'">'+
+'<span class="ksig-recap-daterange-sep">\u2013</span>'+
+'<input type="date" class="ksig-recap-date-input" id="ksigCustomTo" value="'+esc(R.customTo||'')+'">'+
+'<button type="button" class="ksig-recap-apply-btn" id="ksigCustomApply">Terapkan</button>'+
+'</div>';
+}
+return '<div class="ksig-recap-customrange">'+
+'<div class="ksig-recap-preset-row">'+chips+'</div>'+
+dateRow+
+'</div>';
+}
+function loadRecapCustomRange(startIso, endIso, label){
+var R = state.recap;
+R.loading = true; R.error = null;
+renderApp();
+return state.client.from('signal_recaps').select('*').eq('recap_type','DAILY')
+.gte('period_end_wib', startIso).lt('period_end_wib', endIso)
+.order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(1000)
+.then(function(res){
+if(res.error) throw res.error;
+R.rows = res.data || [];
+R.customRangeLabel = label;
+R.loading = false;
+R.loaded = true;
+renderApp();
+}).catch(function(err){
+R.loading = false; R.error = 'Data belum dapat dimuat.';
+renderApp();
+});
+}
+function applyCustomPreset(key){
+var R = state.recap;
+R.customPreset = key;
+if(key === 'custom'){
+if(!R.customFrom || !R.customTo){
+var t0 = wibTodayYmd();
+R.customFrom = ymdStr(t0.y,t0.m,t0.d);
+R.customTo = ymdStr(t0.y,t0.m,t0.d);
+}
+renderApp();
+return;
+}
+var t = wibTodayYmd();
+var todayStart = Date.UTC(t.y,t.m,t.d,0,0,0);
+var DAY = 86400000;
+var startMs, endMs, label;
+if(key==='today'){ startMs=todayStart; endMs=todayStart+DAY; label='Hari Ini'; }
+else if(key==='yesterday'){ startMs=todayStart-DAY; endMs=todayStart; label='Kemarin'; }
+else if(key==='3d'){ startMs=todayStart-2*DAY; endMs=todayStart+DAY; label='3 Hari Terakhir'; }
+else if(key==='1w'){ startMs=todayStart-6*DAY; endMs=todayStart+DAY; label='1 Minggu Terakhir'; }
+else if(key==='1m'){ startMs=todayStart-29*DAY; endMs=todayStart+DAY; label='1 Bulan Terakhir'; }
+else { return; }
+var startIso = new Date(startMs - 7*3600*1000).toISOString();
+var endIso = new Date(endMs - 7*3600*1000).toISOString();
+loadRecapCustomRange(startIso, endIso, label);
+}
+function applyCustomRange(){
+var R = state.recap;
+if(!R.customFrom || !R.customTo) return;
+var fp = R.customFrom.split('-').map(Number);
+var tp = R.customTo.split('-').map(Number);
+var startMs = Date.UTC(fp[0], fp[1]-1, fp[2], 0,0,0);
+var endMs = Date.UTC(tp[0], tp[1]-1, tp[2], 0,0,0) + 86400000;
+if(endMs <= startMs) return;
+var startIso = new Date(startMs - 7*3600*1000).toISOString();
+var endIso = new Date(endMs - 7*3600*1000).toISOString();
+var lbl = (R.customFrom === R.customTo)
+? fmtWIB(startIso,{hour:undefined,minute:undefined})
+: (fmtWIB(startIso,{hour:undefined,minute:undefined}) + ' \u2013 ' + fmtWIB(new Date(endMs-86400000-7*3600*1000).toISOString(),{hour:undefined,minute:undefined}));
+loadRecapCustomRange(startIso, endIso, lbl);
+}
+function aggregateRecapRowsByTimeframe(rows){
+var map = {}, order = [];
+rows.forEach(function(r){
+var tf = r.timeframe || 'Semua Timeframe';
+if(!map[tf]){ map[tf] = { timeframe: tf, total_signal:0, total_buy:0, total_sell:0, total_profit:0, total_loss:0, total_pips:0 }; order.push(tf); }
+var g = map[tf];
+g.total_signal += Number(r.total_signal||0);
+g.total_buy += Number(r.total_buy||0);
+g.total_sell += Number(r.total_sell||0);
+g.total_profit += Number(r.total_profit||0);
+g.total_loss += Number(r.total_loss||0);
+g.total_pips += Number(r.total_pips||0);
+});
+var ordered = TIMEFRAME_ORDER.filter(function(k){ return map[k]; });
+order.forEach(function(k){ if(ordered.indexOf(k)===-1) ordered.push(k); });
+return ordered.map(function(tf){
+var g = map[tf];
+var decided = g.total_profit + g.total_loss;
+g.winrate = decided>0 ? (g.total_profit/decided*100) : null;
+return g;
+});
 }
 function recapSummaryHtml(rows){
 var buyN=0, sellN=0, profitN=0, lossN=0, pipsN=0, signalN=0;
@@ -1622,11 +1737,11 @@ sumItem('Winrate', winrateN!=null ? (fmtNum(winrateN,1)+'%') : '-') +
 }
 function bindRecapTabs(){
     document.querySelectorAll('.ksig-tab').forEach(function(t){
-      t.addEventListener('click', function(){ if(t.getAttribute('data-type')!==state.recap.type) loadRecap(t.getAttribute('data-type')); });
+      t.addEventListener('click', function(){ var ty=t.getAttribute('data-type'); if(ty===state.recap.type) return; if(ty==='CUSTOM'){ state.recap.type='CUSTOM'; applyCustomPreset(state.recap.customPreset||'today'); } else { loadRecap(ty); } });
       t.addEventListener('keydown', function(e){
         if(e.key!=='Enter' && e.key!==' ') return;
         e.preventDefault();
-        if(t.getAttribute('data-type')!==state.recap.type) loadRecap(t.getAttribute('data-type'));
+        var ty=t.getAttribute('data-type'); if(ty===state.recap.type) return; if(ty==='CUSTOM'){ state.recap.type='CUSTOM'; applyCustomPreset(state.recap.customPreset||'today'); } else { loadRecap(ty); }
       });
     });
   
@@ -1653,7 +1768,18 @@ function bindRecapTabs(){
     }, { once:true });
   }
 }
-  function groupRecapRows(rows){
+  function bindRecapCustomControls(){
+document.querySelectorAll('.ksig-recap-preset-btn').forEach(function(b){
+b.addEventListener('click', function(){ applyCustomPreset(b.getAttribute('data-preset')); });
+});
+var fromInput = document.getElementById('ksigCustomFrom');
+if(fromInput) fromInput.addEventListener('change', function(){ state.recap.customFrom = fromInput.value; });
+var toInput = document.getElementById('ksigCustomTo');
+if(toInput) toInput.addEventListener('change', function(){ state.recap.customTo = toInput.value; });
+var applyBtn = document.getElementById('ksigCustomApply');
+if(applyBtn) applyBtn.addEventListener('click', applyCustomRange);
+}
+function groupRecapRows(rows){
     var order = [], map = {};
     rows.forEach(function(r){
       var tf = r.timeframe || 'Semua Timeframe';
@@ -1689,11 +1815,19 @@ function bindRecapTabs(){
     if(R.loading){ body.innerHTML = '<div class="ksig-skel"><div class="ksig-skel-row" style="height:52px"></div><div class="ksig-skel-row" style="height:52px"></div></div>'; return; }
     if(R.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(R.error)+'</p><button class="ksig-btn primary" id="ksigRetryRecap">Coba Lagi</button></div>'; var rb=document.getElementById('ksigRetryRecap'); if(rb) rb.onclick=function(){ loadRecap(R.type); }; return; }
     if(!R.rows || !R.rows.length){
-      var periodLabel = R.type==='DAILY' ? 'Harian' : (R.type==='WEEKLY' ? 'Mingguan' : 'Bulanan');
+      var periodLabel = R.type==='DAILY' ? 'Harian' : (R.type==='WEEKLY' ? 'Mingguan' : (R.type==='MONTHLY' ? 'Bulanan' : (R.customRangeLabel || 'periode ini')));
       body.innerHTML = '<div class="ksig-recap-empty"><div class="ksig-recap-empty-icon" aria-hidden="true">◇</div><div class="ksig-recap-empty-title">Belum ada rekap '+esc(periodLabel)+'</div><div class="ksig-recap-empty-desc">Rekap akan tampil ketika data pada periode ini tersedia.</div></div>';
       return;
     }
-    var groups = groupRecapRows(R.rows);
+    if(R.type === 'CUSTOM'){
+var aggGroups = aggregateRecapRowsByTimeframe(R.rows);
+body.innerHTML =
+'<div class="ksig-recap-list ksig-fade">' + aggGroups.map(function(g){ return recapRowLine(g.timeframe, g); }).join('') + '</div>' +
+recapSummaryHtml(R.rows) +
+'<div class="ksig-recap-period">'+esc(R.customRangeLabel||'')+'</div>';
+return;
+}
+var groups = groupRecapRows(R.rows);
     var periodRef = R.rows[0];
     body.innerHTML =
       '<div class="ksig-recap-list ksig-fade">' + groups.map(recapTimeframeGroupHtml).join('') + '</div>' +
@@ -1707,7 +1841,7 @@ function bindRecapTabs(){
       '<div class="ksig-main">'+ recapCardHtml() +'</div>';
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn(); bindTelegramBtn(); bindSettingsBtn();
-    bindRecapTabs();
+    bindRecapTabs(); bindRecapCustomControls();
     renderRecapBody();
     if(!state.recap.loaded && !state.recap.loading) loadRecap(state.recap.type);
   }

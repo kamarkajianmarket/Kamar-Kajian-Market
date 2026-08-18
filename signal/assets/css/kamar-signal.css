@@ -447,6 +447,18 @@ html,body{ height:100%; }
 .ksig-recap-summary-label{ display:block; font-size:10.5px; color:var(--km-muted); margin-top:2px; }
 @media(max-width:480px){ .ksig-recap-summary-grid{ grid-template-columns:repeat(2,1fr); } }
 
+.ksig-recap-customrange{ margin-bottom:14px; }
+.ksig-recap-preset-row{ display:flex; flex-wrap:wrap; gap:6px; }
+.ksig-recap-preset-btn{ background:#f1ede2; border:1px solid var(--km-line); border-radius:999px; padding:7px 13px; font-size:11.5px; font-weight:800; color:var(--km-ink); cursor:pointer; transition:background .15s ease, color .15s ease; }
+.ksig-recap-preset-btn:hover{ background:#e9e3d4; }
+.ksig-recap-preset-btn.active{ background:var(--km-gold); color:#fff; border-color:var(--km-gold); }
+.ksig-recap-daterange-row{ display:flex; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
+.ksig-recap-date-input{ border:1px solid var(--km-line); border-radius:10px; padding:8px 10px; font-size:12.5px; font-weight:700; color:var(--km-ink); background:#fff; font-family:inherit; }
+.ksig-recap-daterange-sep{ color:var(--km-muted); font-size:12px; }
+.ksig-recap-apply-btn{ background:var(--km-gold); color:#fff; border:none; border-radius:10px; padding:8px 16px; font-size:12px; font-weight:900; cursor:pointer; transition:filter .15s ease; }
+.ksig-recap-apply-btn:hover{ filter:brightness(1.06); }
+@media(max-width:480px){ .ksig-recap-date-input{ flex:1; min-width:0; } }
+
 /* ---------- Activity card ---------- */
 .ksig-activity-card{ background:#fff; border:1px solid var(--km-line); border-radius:var(--km-radius-lg); box-shadow:var(--km-shadow); padding:8px 14px; }
 .ksig-activity-card .ksig-list{ margin-top:0; gap:0; }

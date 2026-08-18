@@ -399,6 +399,8 @@ function openSettingsSheet(){
   var iosNeedsInstall = isIOSDevice() && !isStandaloneMode();
   var tgConnected = !!state.profile.telegram_chat_id;
   var tgOn = (state.notifPrefs && state.notifPrefs.telegram_enabled === false) ? false : true;
+  var chimeActiveOn = getChimePrefs().active === true;
+  var chimeResultOn = getChimePrefs().result === true;
   var TG_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" style="vertical-align:-5px;margin-right:6px" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#29A9EB"/><path d="M17.5 7.5L6.8 11.6c-.7.3-.7.9-.1 1.1l2.7.9 1 3.3c.1.4.3.5.6.5.3 0 .4-.1.6-.3l1.5-1.5 2.8 2.1c.5.4 1 .2 1.1-.4l2-9.1c.2-.7-.2-1-1-.7z" fill="#fff"/></svg>';
 
   var pushBlock;
@@ -433,7 +435,17 @@ function openSettingsSheet(){
       '<div class="ksig-sheet-title">Pengaturan Notifikasi</div>'+
       '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">\uD83D\uDD14 Notifikasi Push</div>'+pushBlock+'</div>'+
       '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label" style="display:flex;align-items:center">'+TG_ICON+'Notifikasi Telegram</div>'+tgBlock+'</div>'+
-      '<p style="color:var(--km-muted);font-size:12.5px;line-height:1.6;margin:14px 0 0">Notifikasi (bunyi/pesan) hanya dikirim untuk Signal FRESH (baru). Perubahan status signal lain tetap tampil sebagai tanda "Baru" di daftar, tanpa notifikasi.</p>'+
+      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">🔔 Bunyi Signal Aktif</div>'+
+        '<div class="ksig-chip-row" data-settings-row="chime-active">'+
+          '<div class="ksig-chip-opt'+(chimeActiveOn?' active':'')+'" data-val="on">Aktif</div>'+
+          '<div class="ksig-chip-opt'+(!chimeActiveOn?' active':'')+'" data-val="off">Nonaktif</div>'+
+        '</div></div>'+
+      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">🔔 Bunyi Signal Profit/Loss</div>'+
+        '<div class="ksig-chip-row" data-settings-row="chime-result">'+
+          '<div class="ksig-chip-opt'+(chimeResultOn?' active':'')+'" data-val="on">Aktif</div>'+
+          '<div class="ksig-chip-opt'+(!chimeResultOn?' active':'')+'" data-val="off">Nonaktif</div>'+
+        '</div></div>'+
+      '<p style="color:var(--km-muted);font-size:12.5px;line-height:1.6;margin:14px 0 0">Notifikasi (bunyi/pesan) selalu aktif untuk Signal FRESH (baru). Untuk Signal Aktif & Profit/Loss, bunyi baru berbunyi jika diaktifkan di atas — perubahan status tetap tampil sebagai tanda "Baru" di daftar walau bunyi dimatikan.</p>'+
       '<div class="ksig-sheet-actions"><button class="ksig-btn primary" id="ksigSettingsClose" style="width:100%">Selesai</button></div>'+
     '</div>';
   document.body.appendChild(wrap);
@@ -471,6 +483,26 @@ function openSettingsSheet(){
     var want = (val==='on');
     if(want===tgOn) return;
     setTelegramEnabled(want).then(function(){ wrap.remove(); openSettingsSheet(); });
+  });
+
+  var chimeActiveRow = wrap.querySelector('[data-settings-row="chime-active"]');
+  if(chimeActiveRow) chimeActiveRow.addEventListener('click', function(e){
+    var opt = e.target.closest('.ksig-chip-opt'); if(!opt) return;
+    var val = opt.getAttribute('data-val');
+    var want = (val === 'on');
+    if(want === chimeActiveOn) return;
+    setChimePrefLocal('active', want);
+    wrap.remove(); openSettingsSheet();
+  });
+
+  var chimeResultRow = wrap.querySelector('[data-settings-row="chime-result"]');
+  if(chimeResultRow) chimeResultRow.addEventListener('click', function(e){
+    var opt = e.target.closest('.ksig-chip-opt'); if(!opt) return;
+    var val = opt.getAttribute('data-val');
+    var want = (val === 'on');
+    if(want === chimeResultOn) return;
+    setChimePrefLocal('result', want);
+    wrap.remove(); openSettingsSheet();
   });
 }
 function telegramBtnHtml(){
@@ -837,32 +869,59 @@ function esc(s){
     return seenMs < updMs;
   }
 
-  function refreshCounts(){
-    if(!state.approved) return Promise.resolve();
-    var statuses = ['fresh','aktif','profit','loss','archive'];
-    return Promise.all(statuses.map(function(s){
-      var q = state.client.from('signals').select('id_zona,updated_at');
-      q = (s === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', s).eq('is_archived', false);
-      return q;
-    })).then(function(results){
-      var prev = state.unreadCounts;
-      var next = {};
-      var changed = {};
-      results.forEach(function(r,i){
-        var st = statuses[i];
-        var rows = (r && r.data) || [];
-        state.counts[st] = rows.length;
-        var u = state.readsLoaded ? rows.filter(function(row){ return isUnread(row.id_zona, row.updated_at); }).length : (prev[st]||0);
-        next[st] = u;
-        changed[st] = state.readsLoaded && u !== (prev[st]||0);
-      });
-      state.unreadCounts = next;
-      state.badgeJustChanged = changed;
-      try{ var freshIncreased = state.readsLoaded && Number(next.fresh||0) > Number(prev.fresh||0); if(freshIncreased){ if(!window.__kamarSigSnd){window.__kamarSigSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');window.__kamarSigSnd.volume=0.5;} window.__kamarSigSnd.currentTime=0; window.__kamarSigSnd.play().catch(function(){}); } }catch(kSigSndErr){}
-      state.lastUpdate = new Date().toISOString();
-      if(state.route.view === 'dashboard') renderApp();
-    }).catch(function(){});
-  }
+  function getChimePrefs(){
+  try{ return JSON.parse(localStorage.getItem('kamarSigChimePrefs')||'{}'); }catch(e){ return {}; }
+}
+function setChimePrefLocal(key, val){
+  var p = getChimePrefs();
+  p[key] = val;
+  try{ localStorage.setItem('kamarSigChimePrefs', JSON.stringify(p)); }catch(e){}
+}
+
+function refreshCounts(){
+  if(!state.approved) return Promise.resolve();
+  if(!state.__knownStatusIds){ state.__knownStatusIds = {fresh:null,aktif:null,profit:null,loss:null}; }
+  var statuses = ['fresh','aktif','profit','loss','archive'];
+  return Promise.all(statuses.map(function(s){
+    var q = state.client.from('signals').select('id_zona,updated_at');
+    q = (s === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', s).eq('is_archived', false);
+    return q;
+  })).then(function(results){
+    var prev = state.unreadCounts;
+    var next = {};
+    var changed = {};
+    var newIdsByStatus = {};
+    results.forEach(function(r,i){
+      var st = statuses[i];
+      var rows = (r && r.data) || [];
+      state.counts[st] = rows.length;
+      var u = state.readsLoaded ? rows.filter(function(row){ return isUnread(row.id_zona, row.updated_at); }).length : (prev[st]||0);
+      next[st] = u;
+      changed[st] = state.readsLoaded && u !== (prev[st]||0);
+      if(st !== 'archive'){
+        var curIds = rows.map(function(row){ return row.id_zona; });
+        var knownSet = state.__knownStatusIds[st];
+        newIdsByStatus[st] = knownSet ? curIds.filter(function(id){ return !knownSet.has(id); }) : [];
+        state.__knownStatusIds[st] = new Set(curIds);
+      }
+    });
+    state.unreadCounts = next;
+    state.badgeJustChanged = changed;
+    try{
+      var chimePrefs = getChimePrefs();
+      var hasNewFresh = newIdsByStatus.fresh && newIdsByStatus.fresh.length > 0;
+      var hasNewAktif = (newIdsByStatus.aktif && newIdsByStatus.aktif.length > 0) && chimePrefs.active === true;
+      var hasNewResult = ((newIdsByStatus.profit && newIdsByStatus.profit.length > 0) || (newIdsByStatus.loss && newIdsByStatus.loss.length > 0)) && chimePrefs.result === true;
+      if(hasNewFresh || hasNewAktif || hasNewResult){
+        if(!window.__kamarSigSnd){window.__kamarSigSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');window.__kamarSigSnd.volume=0.5;}
+        window.__kamarSigSnd.currentTime=0;
+        window.__kamarSigSnd.play().catch(function(){});
+      }
+    }catch(kSigSndErr){}
+    state.lastUpdate = new Date().toISOString();
+    if(state.route.view === 'dashboard') renderApp();
+  }).catch(function(){});
+}
 
   function loadReadsMap(){
     if(!state.profile) return Promise.resolve();

@@ -1943,7 +1943,7 @@ var groups = groupRecapRows(R.rows);
       '<div class="ksig-detail-head">'+
         '<div class="ksig-detail-top">'+
           '<span class="ksig-detail-symbol">'+esc(s.pair)+'</span>'+
-          '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+<span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
+          '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+'<span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
         '</div>'+
         (lastCallActive ? '<div class="ksig-lastcall-banner">⚡ LAST CALL — RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
 (s.is_critical_zone ? '<div class="ksig-critical-banner">⚠ ZONA KRITIS — pantau ketat, pertimbangkan kurangi risiko/lot</div>' : '') +

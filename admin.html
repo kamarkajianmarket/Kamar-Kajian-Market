@@ -63,6 +63,7 @@
 
 </section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script>
+<script src="assets/js/kamar-ui.js?v=28"></script>
 <script>
 (function(){
 'use strict';
@@ -146,6 +147,7 @@ document.addEventListener('click',function(e){
   }
 });
 async function load(){state.errors=[];state.client=await initClient();try{var view=await query('admin_member_overview');var prof=await query('member_profiles');state.members=mergeMembers(view,prof)}catch(e){state.errors.push('Member: '+window.kamarFriendlyError(e));state.members=[]}try{state.payments=await query('payments')}catch(e){state.payments=[]}try{state.affiliates=await query('affiliates')}catch(e){state.affiliates=getJSON('kamarAffiliateList',[])}renderStatus();renderSummary();renderTodo();renderRecentMembers()}
+window.kamarReloadAdminDashboard = load;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
 })();
 </script>

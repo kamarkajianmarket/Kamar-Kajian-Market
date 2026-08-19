@@ -79,7 +79,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
       <label class="field">Nomor Rekening<input id="pmAccountNumber" inputmode="numeric" placeholder="Nomor rekening aktif" type="text"/></label>
     </div>
     <label class="field" style="margin-top:12px">Nama Pemilik Rekening<input id="pmAccountHolder" placeholder="Sesuai buku tabungan/KTP" type="text"/></label>
-    <label class="field" style="margin-top:12px">Nominal Pencairan (Rp)<input id="pmAmount" inputmode="numeric" placeholder="Contoh: 100000" type="number"/></label>
+    <label class="field" style="margin-top:12px">Nominal Pencairan (Rp)<input id="pmAmount" inputmode="numeric" placeholder="Contoh: 100.000" type="text"/></label>
     <label class="field" style="margin-top:12px">Catatan (opsional)<textarea id="pmNote" placeholder="Catatan tambahan"></textarea></label>
     <div class="auth-status hidden" id="pmStatus"></div>
     <div class="button-row"><button class="btn secondary" id="pmCancelBtn" type="button">Batal</button><button class="btn" id="pmSubmitBtn" type="button">Kirim Pengajuan</button></div>
@@ -102,6 +102,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29G"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29E"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
+<script src="assets/js/kamar-format.js"></script>
 <script id="kamar-step24CN-maintenance-notice">(function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.94);color:#fff3d8;border-radius:18px;padding:14px 16px;font-weight:900;box-shadow:0 12px 40px rgba(0,0,0,.35)';bar.innerHTML='<strong>Maintenance</strong><br><span style="color:#cfc5ad;font-weight:700">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();</script><script id="kamar-step24CO-maintenance-notice">
 
 (function(){var map={"index.html":["home"],"member.html":["member_dashboard"],"dashboard.html":["member_dashboard"],"affiliate-dashboard.html":["affiliate_dashboard"],"affiliate.html":["register_affiliate"],"register.html":["register_member"],"member-materials.html":["kamar_edukasi"],"member-study.html":["kamar_study"],"member-private.html":["kamar_private"],"member-indicator.html":["kamar_indikator"],"member-robot.html":["kamar_robot"],"member-activate.html":["payment"],"member-activate-edukasi.html":["payment","kamar_edukasi"],"member-activate-study.html":["payment","kamar_study"]};function get(){try{return JSON.parse(localStorage.getItem('kamarMaintenanceSettings')||'{}')}catch(e){return {}}}function run(){if(document.getElementById('kamarMaintenanceNotice'))return;var file=(location.pathname.split('/').pop()||'index.html');var keys=map[file]||[];var data=get();var active=keys.find(function(k){return data[k]&&data[k].enabled;});if(!active)return;var msg=(data[active]&&data[active].message)||'Maintenance sedang berlangsung. Silakan cek kembali nanti.';var bar=document.createElement('div');bar.id='kamarMaintenanceNotice';bar.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:99999;border:1px solid rgba(238,206,122,.42);background:rgba(9,9,8,.96);color:#fff3d8;border-radius:18px;padding:16px 18px;font-weight:900;box-shadow:0 16px 50px rgba(0,0,0,.45);text-align:left';bar.innerHTML='<strong style="letter-spacing:.12em;text-transform:uppercase">Maintenance</strong><br><span style="color:#cfc5ad;font-weight:800;line-height:1.5">'+msg+'</span>';document.body.appendChild(bar);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();})();
@@ -284,7 +285,7 @@ function copyText(text, btn){
     var bank=el('pmBankName').value.trim();
     var acc=el('pmAccountNumber').value.trim();
     var holder=el('pmAccountHolder').value.trim();
-    var amount=Number(el('pmAmount').value||0);
+    var amount=(window.KamarFormat?KamarFormat.rawNumber(el('pmAmount').value):Number(el('pmAmount').value||0));
     var note=el('pmNote').value.trim()||null;
     if(!bank||!acc||!holder||!amount||amount<=0){ showPmStatus('Lengkapi semua data dan pastikan nominal lebih dari 0.', false); return; }
     if(amount>state.available){ showPmStatus('Nominal melebihi saldo tersedia ('+rupiah(state.available)+').', false); return; }
@@ -308,6 +309,7 @@ function copyText(text, btn){
   }
 
   function init(){
+    if(window.KamarFormat && el('pmAmount')) KamarFormat.liveFormat(el('pmAmount'));
     el('copyCodeBtn').addEventListener('click',function(){copyText(el('affCode').textContent,this)});
     el('copyLinkBtn').addEventListener('click',function(){copyText(el('affLink').textContent,this)});
     el('openPaymentModalBtn').addEventListener('click',openModal);

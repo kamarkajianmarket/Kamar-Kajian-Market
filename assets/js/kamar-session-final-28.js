@@ -48,7 +48,7 @@
     var memberPages=['dashboard.html','member-profile.html','member-materials.html','member-study.html','member-private.html','member-indicator.html','member-robot.html','member-activate.html','member-activate-edukasi.html','member-activate-study.html','member-renewal.html','member-affiliate-activate.html','affiliate-dashboard.html'];
     var affiliatePages=[];
     if(adminPages.indexOf(f)>=0 && !isAdmin(get('kamarAdminSession'))) location.replace('admin-login.html?v='+VERSION);
-    if(memberPages.indexOf(f)>=0 && !isMember(get('kamarMemberSession'))) location.replace('member.html?v='+VERSION);
+    if(memberPages.indexOf(f)>=0 && !get('kamarMemberSession')) location.replace('member.html?v='+VERSION);
     if(affiliatePages.indexOf(f)>=0 && !get('kamarAffiliateSession')) location.replace('affiliate.html?v='+VERSION);
   }
   document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('[data-kamar-logout],a[href*="logout=1"]'); if(!t)return; e.preventDefault(); e.stopImmediatePropagation(); logout();},true);

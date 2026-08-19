@@ -678,6 +678,15 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
       else if(action === 'reject_trial') await actionTrialRequest(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);
       await renderActionCenter();
+      // Additive 2026-08-19: setelah approve/reject sukses, dashboard admin (Member Terbaru,
+      // Ringkasan Admin) sebelumnya cuma ke-refresh sekali saat halaman pertama dimuat, jadi
+      // masih kelihatan status lama sampai admin reload manual. window.kamarReloadAdminDashboard
+      // (di-expose dari admin.html) menarik data terbaru dari Supabase dan render ulang widget
+      // itu. Dibungkus try/catch sendiri supaya kalau gagal, tidak pernah menganggap action
+      // approve/reject-nya sendiri gagal.
+      if(typeof window.kamarReloadAdminDashboard === 'function'){
+        try{ await window.kamarReloadAdminDashboard(); }catch(e){}
+      }
     }catch(err){
       toast(window.kamarFriendlyError(err));
       btn.disabled = false;

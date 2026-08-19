@@ -34,8 +34,13 @@
   .tc-badge.expiring{color:#b8590f;background:rgba(184,89,15,.1);border-color:rgba(184,89,15,.24)}
   .tc-actions{display:flex;gap:8px;margin-top:2px}
   .tc-actions .btn{flex:1;text-align:center}
-  #tokenDetailModal,#tokenConfirmModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(20,16,8,.5);backdrop-filter:blur(3px)}
-  #tokenDetailModal.open,#tokenConfirmModal.open{display:flex}
+  .tc-pick{position:absolute;top:14px;right:14px;width:18px;height:18px;cursor:pointer}
+  .token-card{position:relative}
+  .bulk-bar{display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0 0;padding:12px 16px;border-radius:16px;background:rgba(184,138,61,.08);border:1px solid rgba(184,138,61,.22)}
+  .bulk-bar.open{display:flex}
+  .bulk-bar span{font-size:13px;font-weight:700;color:#6f6858}
+  #tokenDetailModal,#tokenConfirmModal,#tokenEditModal,#tokenBulkModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(20,16,8,.5);backdrop-filter:blur(3px)}
+  #tokenDetailModal.open,#tokenConfirmModal.open,#tokenEditModal.open,#tokenBulkModal.open{display:flex}
   .token-modal-card{width:100%;max-width:580px;max-height:86vh;overflow:auto;background:#fffdf8;border:1px solid rgba(184,138,61,.22);border-radius:26px;padding:26px;box-shadow:0 30px 90px rgba(30,20,5,.25)}
   .token-modal-card h3{margin:2px 0 0;color:#1c1a16;font-size:19px}
   .token-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:18px}
@@ -160,6 +165,15 @@
     <select id="tokFilterFacility"><option value="">Semua Fasilitas</option></select>
   </label>
   <button type="button" class="btn secondary" id="tokRefreshBtn">Refresh</button>
+  <button type="button" class="btn secondary" id="tokExportBtn">Export CSV</button>
+  <button type="button" class="btn secondary" id="tokBulkToggleBtn">Pilih Massal</button>
+</div>
+<div class="bulk-bar" id="bulkBar">
+  <span id="bulkCountLabel">0 token dipilih</span>
+  <div class="button-row" style="margin:0">
+    <button type="button" class="btn mini secondary" id="bulkSelectAllBtn">Pilih Semua</button>
+    <button type="button" class="btn mini danger" id="bulkHapusBtn">Hapus Token Terpilih</button>
+  </div>
 </div>
 <div id="tokenListStatus" class="page-note" style="margin-top:14px">Memuat token aktif...</div>
 <div class="token-grid" id="tokenGrid"></div>
@@ -179,6 +193,7 @@
 <div class="token-audit-list"><span class="mini-label">Riwayat Aktivitas</span><div id="tdAuditList" style="margin-top:8px;font-size:12.5px;color:#7a7266">Memuat...</div></div>
 <div class="button-row" style="margin-top:18px">
 <button type="button" class="btn mini" id="tdCopyToken">Salin Token</button>
+<button type="button" class="btn mini secondary" id="tdEditBtn">Edit Data Akun</button>
 <button type="button" class="btn mini danger" id="tdHapusBtn">Hapus Token Ini</button>
 </div>
 </div>
@@ -192,6 +207,46 @@
 <div class="button-row" style="margin-top:16px">
 <button type="button" class="btn secondary" id="tcCancelBtn">Batal</button>
 <button type="button" class="btn danger" id="tcConfirmBtn">Ya, Hapus Token</button>
+</div>
+</div>
+</div>
+
+<div id="tokenEditModal">
+<div class="token-modal-card">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+<div><span class="mini-label" id="teFacility">-</span><h3>Edit Data Akun Token</h3></div>
+<button type="button" class="btn mini secondary" id="teCloseBtn">Tutup</button>
+</div>
+<p class="token-desc" style="margin-top:10px">Ubah data akun token ini kalau member ganti nomor akun, broker, atau server — tanpa perlu membuat token baru. Fasilitas dan masa berlaku token tidak berubah lewat form ini.</p>
+<form id="editLicenseForm" class="token-form-grid" style="margin-top:10px">
+<label class="field"><span>Nomor Akun Trading *</span><input type="text" id="teAccount" required/></label>
+<label class="field"><span>Nama Broker (lengkap) *</span><input type="text" id="teBroker" required/></label>
+<label class="field"><span>Nama Server MT5 *</span><input type="text" id="teServer" required/></label>
+<label class="field"><span>Nama Pemilik Akun</span><input type="text" id="teOwner"/></label>
+<label class="field"><span>Tipe Akun Trading</span><input type="text" id="teAccType" placeholder="Contoh: Standard, ECN"/></label>
+<label class="field"><span>Tipe Akun Broker</span><input type="text" id="teBrokerType" placeholder="Contoh: Real, Demo"/></label>
+<label class="field"><span>Mata Uang</span><input type="text" id="teCurrency" placeholder="Contoh: USD"/></label>
+<label class="field"><span>Leverage</span><input type="text" id="teLeverage" placeholder="Contoh: 1:500"/></label>
+<label class="field"><span>Terminal Build</span><input type="text" id="teTerminal"/></label>
+<label class="field"><span>Device ID</span><input type="text" id="teDevice"/></label>
+<label class="field field-full"><span>Catatan Admin (opsional)</span><input type="text" id="teNote" placeholder="Alasan perubahan, contoh: member ganti broker"/></label>
+</form>
+<div id="teErrorBox" style="display:none;margin-top:14px;padding:14px;border:1px solid rgba(200,60,60,.3);border-radius:14px;background:rgba(200,60,60,.07);color:#a33;font-size:13px"></div>
+<div class="button-row" style="margin-top:16px">
+<button type="button" class="btn secondary" id="teCancelBtn">Batal</button>
+<button type="button" class="btn" id="teSaveBtn">Simpan Perubahan</button>
+</div>
+</div>
+</div>
+
+<div id="tokenBulkModal">
+<div class="token-modal-card" style="max-width:420px">
+<h3>Hapus <span id="tbCount">0</span> Token Terpilih?</h3>
+<p class="token-desc" style="margin-top:10px">Semua token yang dipilih akan dinonaktifkan (revoked) sekaligus. Riwayatnya tetap tersimpan untuk audit — bukan dihapus permanen dari database.</p>
+<label class="field"><span>Catatan (opsional, berlaku untuk semua)</span><input type="text" id="tbNote" placeholder="Alasan penghapusan massal..."/></label>
+<div class="button-row" style="margin-top:16px">
+<button type="button" class="btn secondary" id="tbCancelBtn">Batal</button>
+<button type="button" class="btn danger" id="tbConfirmBtn">Ya, Hapus Semua</button>
 </div>
 </div>
 </div>
@@ -327,6 +382,8 @@
   }
 
   var ALL_TOKENS = [];
+  var BULK_MODE = false;
+  var SELECTED_IDS = {};
 
   async function loadTokens(){
     var status = el('tokenListStatus');
@@ -387,7 +444,9 @@
       else if(dl!==null && dl<0) expiryBadge = '<span class="tc-badge expiring">Sudah Lewat Expired</span>';
     }
     var typeLabel = t.license_type==='lifetime' ? 'Lifetime' : (t.expired_at ? ('Exp ' + String(t.expired_at).slice(0,10)) : (t.license_type||'-'));
+    var picked = SELECTED_IDS[t.id] ? 'checked' : '';
     return '<div class="token-card">' +
+      (BULK_MODE ? '<input type="checkbox" class="tc-pick" data-tok-pick="' + esc(t.id) + '" ' + picked + '/>' : '') +
       '<div><div class="tc-facility">' + esc(facilityLabel(t.product_code)) + '</div>' +
       '<div class="tc-sub">' + esc(t.account_id||'-') + ' &middot; ' + esc(t.broker_name||'-') + '</div>' +
       '<div class="tc-sub" style="opacity:.85">' + esc(t.server_name||'-') + '</div></div>' +
@@ -395,6 +454,7 @@
       '<span class="tc-badge">' + esc(typeLabel) + '</span>' + expiryBadge + '</div>' +
       '<div class="tc-actions">' +
       '<button type="button" class="btn mini secondary" data-tok-detail="' + esc(t.id) + '">Detail</button>' +
+      '<button type="button" class="btn mini secondary" data-tok-edit="' + esc(t.id) + '">Edit</button>' +
       '<button type="button" class="btn mini danger" data-tok-hapus="' + esc(t.id) + '">Hapus</button>' +
       '</div></div>';
   }
@@ -525,17 +585,191 @@
     }
   }
 
+  var editTargetId = null;
+  function openEdit(id){
+    var t = findToken(id);
+    if(!t) return;
+    editTargetId = id;
+    el('teFacility').textContent = facilityLabel(t.product_code);
+    el('teAccount').value = t.account_id || '';
+    el('teBroker').value = t.broker_name || '';
+    el('teServer').value = t.server_name || '';
+    el('teOwner').value = t.account_holder_name || '';
+    el('teAccType').value = t.trading_account_type || '';
+    el('teBrokerType').value = t.broker_account_type || '';
+    el('teCurrency').value = t.account_currency || '';
+    el('teLeverage').value = t.leverage || '';
+    el('teTerminal').value = t.terminal_build || '';
+    el('teDevice').value = t.device_id || '';
+    el('teNote').value = '';
+    el('teErrorBox').style.display = 'none';
+    el('tokenEditModal').classList.add('open');
+  }
+
+  async function submitEdit(){
+    if(!editTargetId) return;
+    var account = el('teAccount').value.trim();
+    var broker = el('teBroker').value.trim();
+    var server = el('teServer').value.trim();
+    if(!account || !broker || !server){
+      el('teErrorBox').style.display = '';
+      el('teErrorBox').textContent = 'Nomor akun, broker, dan server wajib diisi.';
+      return;
+    }
+    var btn = el('teSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    try{
+      var c = await getClient();
+      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      var res = await c.rpc('admin_edit_license_account', {
+        p_license_id: editTargetId,
+        p_account_id: account,
+        p_broker_name: broker,
+        p_server_name: server,
+        p_account_holder_name: el('teOwner').value.trim() || null,
+        p_trading_account_type: el('teAccType').value.trim() || null,
+        p_broker_account_type: el('teBrokerType').value.trim() || null,
+        p_account_currency: el('teCurrency').value.trim() || null,
+        p_leverage: el('teLeverage').value.trim() || null,
+        p_terminal_build: el('teTerminal').value.trim() || null,
+        p_device_id: el('teDevice').value.trim() || null,
+        p_admin_note: el('teNote').value.trim() || null
+      });
+      if(res.error) throw new Error(res.error.message);
+      var data = res.data;
+      if(data && data.success===false) throw new Error(data.message || 'Gagal menyimpan perubahan.');
+      if(window.toast) window.toast('Data akun token berhasil diperbarui.');
+      el('tokenEditModal').classList.remove('open');
+      el('tokenDetailModal').classList.remove('open');
+      editTargetId = null;
+      loadTokens();
+    }catch(e){
+      el('teErrorBox').style.display = '';
+      el('teErrorBox').textContent = 'Gagal menyimpan: ' + (e && e.message ? e.message : e);
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Simpan Perubahan';
+    }
+  }
+
+  function csvEscape(v){
+    var s = String(v==null?'':v);
+    if(/[",\n]/.test(s)) s = '"' + s.replace(/"/g,'""') + '"';
+    return s;
+  }
+
+  function exportCsv(){
+    var rows = currentFiltered();
+    if(!rows.length){ if(window.toast) window.toast('Tidak ada token untuk diekspor.'); return; }
+    var header = ['Token','Fasilitas','Sumber','Nomor Akun','Broker','Server','Pemilik Akun','Jenis License','Expired','Dibuat','Status'];
+    var lines = [header.map(csvEscape).join(',')];
+    rows.forEach(function(t){
+      var isInternal = !t.member_profile_id;
+      var memberName = t.member_profiles && (t.member_profiles.full_name || t.member_profiles.email);
+      lines.push([
+        t.token, facilityLabel(t.product_code), isInternal?'Internal Admin':('Member: '+(memberName||'-')),
+        t.account_id, t.broker_name, t.server_name, t.account_holder_name||'',
+        t.license_type, t.expired_at ? new Date(t.expired_at).toISOString().slice(0,10) : 'Lifetime',
+        t.created_at ? new Date(t.created_at).toISOString().slice(0,10) : '', t.status
+      ].map(csvEscape).join(','));
+    });
+    var blob = new Blob(['\uFEFF' + lines.join('\r\n')], {type:'text/csv;charset=utf-8;'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'kamar-token-admin-' + new Date().toISOString().slice(0,10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+    if(window.toast) window.toast('CSV berhasil diunduh (' + rows.length + ' token).');
+  }
+
+  function toggleBulkMode(){
+    BULK_MODE = !BULK_MODE;
+    if(!BULK_MODE) SELECTED_IDS = {};
+    el('tokBulkToggleBtn').textContent = BULK_MODE ? 'Batal Pilih Massal' : 'Pilih Massal';
+    el('bulkBar').classList.toggle('open', BULK_MODE);
+    updateBulkCount();
+    renderGrid();
+  }
+
+  function updateBulkCount(){
+    var n = Object.keys(SELECTED_IDS).filter(function(k){ return SELECTED_IDS[k]; }).length;
+    el('bulkCountLabel').textContent = n + ' token dipilih';
+  }
+
+  function selectAllVisible(){
+    var rows = currentFiltered();
+    var allSelected = rows.length && rows.every(function(t){ return SELECTED_IDS[t.id]; });
+    rows.forEach(function(t){ SELECTED_IDS[t.id] = !allSelected; });
+    updateBulkCount();
+    renderGrid();
+  }
+
+  function openBulkConfirm(){
+    var ids = Object.keys(SELECTED_IDS).filter(function(k){ return SELECTED_IDS[k]; });
+    if(!ids.length){ if(window.toast) window.toast('Pilih minimal satu token terlebih dahulu.'); return; }
+    el('tbCount').textContent = ids.length;
+    el('tbNote').value = '';
+    el('tokenBulkModal').classList.add('open');
+  }
+
+  async function doBulkDelete(){
+    var ids = Object.keys(SELECTED_IDS).filter(function(k){ return SELECTED_IDS[k]; });
+    if(!ids.length) return;
+    var btn = el('tbConfirmBtn');
+    btn.disabled = true;
+    btn.textContent = 'Menghapus...';
+    var note = el('tbNote').value.trim() || 'Token dihapus massal oleh admin lewat halaman Token Admin.';
+    var okCount = 0, failCount = 0;
+    try{
+      var c = await getClient();
+      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      for(var i=0;i<ids.length;i++){
+        try{
+          var res = await c.rpc('admin_update_license', { p_license_id: ids[i], p_new_status: 'revoked', p_admin_note: note });
+          if(res.error || (res.data && res.data.success===false)) failCount++; else okCount++;
+        }catch(e){ failCount++; }
+      }
+      if(window.toast) window.toast(okCount + ' token berhasil dihapus' + (failCount ? (', ' + failCount + ' gagal') : '') + '.');
+      el('tokenBulkModal').classList.remove('open');
+      SELECTED_IDS = {};
+      BULK_MODE = false;
+      el('tokBulkToggleBtn').textContent = 'Pilih Massal';
+      el('bulkBar').classList.remove('open');
+      loadTokens();
+    }catch(e){
+      var msg = 'Gagal menghapus token terpilih: ' + (e && e.message ? e.message : e);
+      if(window.toast) window.toast(msg); else alert(msg);
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Ya, Hapus Semua';
+    }
+  }
+
   function initList(){
     el('tokCari').addEventListener('input', renderGrid);
     el('tokFilterSource').addEventListener('change', renderGrid);
     el('tokFilterFacility').addEventListener('change', renderGrid);
     el('tokRefreshBtn').addEventListener('click', loadTokens);
+    el('tokExportBtn').addEventListener('click', exportCsv);
+    el('tokBulkToggleBtn').addEventListener('click', toggleBulkMode);
+    el('bulkSelectAllBtn').addEventListener('click', selectAllVisible);
+    el('bulkHapusBtn').addEventListener('click', openBulkConfirm);
 
     el('tokenGrid').addEventListener('click', function(e){
       var d = e.target.closest('[data-tok-detail]');
       if(d){ openDetail(d.getAttribute('data-tok-detail')); return; }
+      var ed = e.target.closest('[data-tok-edit]');
+      if(ed){ openEdit(ed.getAttribute('data-tok-edit')); return; }
       var h = e.target.closest('[data-tok-hapus]');
       if(h){ openConfirm(h.getAttribute('data-tok-hapus')); return; }
+    });
+    el('tokenGrid').addEventListener('change', function(e){
+      var p = e.target.closest('[data-tok-pick]');
+      if(p){ SELECTED_IDS[p.getAttribute('data-tok-pick')] = p.checked; updateBulkCount(); }
     });
 
     el('tdCloseBtn').addEventListener('click', function(){ el('tokenDetailModal').classList.remove('open'); });
@@ -543,10 +777,18 @@
       var t = findToken(currentDetailId);
       if(t && t.token && navigator.clipboard){ navigator.clipboard.writeText(t.token); if(window.toast) window.toast('Token disalin.'); }
     });
+    el('tdEditBtn').addEventListener('click', function(){ openEdit(currentDetailId); });
     el('tdHapusBtn').addEventListener('click', function(){ openConfirm(currentDetailId); });
 
     el('tcCancelBtn').addEventListener('click', function(){ el('tokenConfirmModal').classList.remove('open'); confirmTargetId=null; });
     el('tcConfirmBtn').addEventListener('click', doDelete);
+
+    el('teCloseBtn').addEventListener('click', function(){ el('tokenEditModal').classList.remove('open'); editTargetId=null; });
+    el('teCancelBtn').addEventListener('click', function(){ el('tokenEditModal').classList.remove('open'); editTargetId=null; });
+    el('teSaveBtn').addEventListener('click', submitEdit);
+
+    el('tbCancelBtn').addEventListener('click', function(){ el('tokenBulkModal').classList.remove('open'); });
+    el('tbConfirmBtn').addEventListener('click', doBulkDelete);
   }
 
   function init(){

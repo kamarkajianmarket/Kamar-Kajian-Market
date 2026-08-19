@@ -30,7 +30,9 @@ style.textContent =
 '.kamar-scam-telegram{display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;background:#b88a3d;color:#fff;font-weight:900;font-size:14px;padding:13px 18px;border-radius:14px;box-shadow:0 10px 26px rgba(184,138,61,.35);transition:filter .15s}'+
 '.kamar-scam-telegram:hover{filter:brightness(1.06)}'+
 '.kamar-scam-footnote{margin-top:14px;color:#8b8f94;font-size:11.5px;line-height:1.6;text-align:center}'+
-'@media(max-width:480px){.kamar-scam-card{padding:26px 20px 22px;border-radius:20px}}';
+'@media(max-width:480px){.kamar-scam-card{padding:26px 20px 22px;border-radius:20px}}'+
+'html.kamar-scam-lock .kmr-sup-launcher{display:none!important}'+
+'@media(max-height:700px){.kamar-scam-card{max-height:82vh;padding:20px 18px 16px}.kamar-scam-icon{width:44px;height:44px;margin-bottom:10px}.kamar-scam-card h2{font-size:18px;margin-bottom:8px}.kamar-scam-card p{font-size:13.5px;margin-bottom:8px}.kamar-scam-highlight{padding:10px 12px;margin:10px 0}.kamar-scam-actions{margin-top:12px}}';
 document.head.appendChild(style);
 }
 

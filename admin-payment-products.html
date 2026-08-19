@@ -32,6 +32,7 @@ body{background:#070707;color:var(--text)}
 <a class="" data-kamar-logout="" href="index.html">Logout</a>
 </aside><section class="split-main"><section class="split-card kamar-title-card"><span class="mini-label">Katalog Harga</span><h1>Katalog Harga & Produk</h1><p>Atur semua produk/paket yang bisa dibeli member: harga, diskon, masa berlaku, dan status aktif. Perubahan di sini langsung dipakai saat member membuat invoice pembayaran.</p></section><section class="split-card"><div class="manager-help"><strong>Cara pakai halaman ini:</strong><ol><li>Untuk menambah produk baru, isi form "Tambah Produk Baru" lalu klik Tambah Produk.</li><li>Untuk mengubah harga/diskon produk yang sudah ada, ubah langsung angkanya di kartu produk lalu klik Simpan Perubahan.</li><li>Nonaktifkan (jangan hapus) produk yang sedang tidak dijual, supaya riwayat transaksi lama tetap rapi. Hapus hanya untuk produk yang salah input.</li></ol></div></section><section class="split-card"><span class="mini-label">Tambah Produk Baru</span><div id="newProductBox"></div></section><section class="split-card"><span class="mini-label">Daftar Produk & Paket</span><div id="productList" class="online-card-list">Memuat data produk...</div></section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-admin-core.js?v=28"></script>
+<script src="assets/js/kamar-format.js"></script>
 <script id="kamar-step48-payment-products">
 (function(){
 var FACILITY_OPTIONS = [
@@ -73,8 +74,8 @@ return ''+
 '<label class="field"><span>Masa Berlaku (Hari)</span><input type="number" min="1" name="duration_days" value="'+(p.duration_days!=null?p.duration_days:'')+'" placeholder="Contoh: 30"></label>'+
 '<label class="toggle-row"><span><strong>Lifetime</strong><small>Aktifkan jika paket berlaku selamanya (mengabaikan Masa Berlaku)</small></span><input type="checkbox" name="is_lifetime" '+(p.is_lifetime?'checked':'')+'></label>'+
 '<label class="toggle-row"><span><strong>Aktif Dijual</strong><small>Tampilkan produk ini ke member</small></span><input type="checkbox" name="is_active" '+((isNew || p.is_active!==false)?'checked':'')+'></label>'+
-'<label class="field"><span>Harga Normal (Rp)</span><input type="number" min="0" step="1000" name="base_price" value="'+(p.base_price!=null?p.base_price:'')+'" placeholder="Contoh: 3150000" required></label>'+
-'<label class="field"><span>Harga Promo (Rp)</span><input type="number" min="0" step="1000" name="promo_price" value="'+(p.promo_price!=null?p.promo_price:'')+'" placeholder="Kosongkan jika sama dengan harga normal"></label>'+
+'<label class="field"><span>Harga Normal (Rp)</span><input type="text" inputmode="numeric" name="base_price" value="'+(p.base_price!=null?KamarFormat.number(p.base_price):'')+'" placeholder="Contoh: 3.150.000" required></label>'+
+'<label class="field"><span>Harga Promo (Rp)</span><input type="text" inputmode="numeric" name="promo_price" value="'+(p.promo_price!=null?KamarFormat.number(p.promo_price):'')+'" placeholder="Kosongkan jika sama dengan harga normal"></label>'+
 '<label class="field"><span>Catatan Diskon (opsional)</span><input type="text" name="discount_note" value="'+esc(p.discount_note||'')+'" placeholder="Contoh: Hemat Rp550.000"></label>'+
 '<label class="field full"><span>Link PDF Aturan (opsional)</span><input type="url" name="detail_pdf_url" value="'+esc(p.detail_pdf_url||'')+'" placeholder="https://..."></label>'+
 '<label class="field full"><span>Deskripsi Singkat (opsional)</span><input type="text" name="description" value="'+esc(p.description||'')+'" placeholder="Keterangan singkat untuk member"></label>'+
@@ -113,11 +114,11 @@ e.preventDefault();
 var id = form.getAttribute('data-id');
 var fd = new FormData(form);
 var title = String(fd.get('title')||'').trim();
-var base_price = Number(fd.get('base_price')||0);
+var base_price = (window.KamarFormat?KamarFormat.rawNumber(fd.get('base_price')):Number(fd.get('base_price')||0));
 if(!title){ toast('Nama produk wajib diisi.'); return; }
 if(!base_price){ toast('Harga normal wajib diisi.'); return; }
 var is_lifetime = fd.get('is_lifetime') === 'on';
-var promoRaw = fd.get('promo_price');
+var promoRaw = (window.KamarFormat?KamarFormat.raw(fd.get('promo_price')):fd.get('promo_price'));
 var payload = {
 title: title,
 facility_key: String(fd.get('facility_key')||'').trim() || null,
@@ -176,6 +177,7 @@ var newBox = document.getElementById('newProductBox');
 var list = document.getElementById('productList');
 if(newBox){ newBox.addEventListener('submit', onSubmit); newBox.addEventListener('click', onClick); }
 if(list){ list.addEventListener('submit', onSubmit); list.addEventListener('click', onClick); }
+if(window.KamarFormat){ KamarFormat.delegate(newBox, 'input[name="base_price"], input[name="promo_price"]'); KamarFormat.delegate(list, 'input[name="base_price"], input[name="promo_price"]'); }
 load();
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();

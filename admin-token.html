@@ -18,6 +18,23 @@
 <meta name="kamar-step" content="64-token-admin"/>
 <style>
   .token-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:2px}
+  .token-ringkasan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
+  .token-ringkasan-card{display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:24px;border:1px solid rgba(184,138,61,.16);background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,253,248,.92));box-shadow:0 14px 42px rgba(17,20,23,.07);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+  .token-ringkasan-card:hover{transform:translateY(-3px);box-shadow:0 20px 54px rgba(17,20,23,.10);border-color:rgba(184,138,61,.36)}
+  .token-ringkasan-icon{flex:0 0 auto;width:50px;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+  .token-ringkasan-icon svg{width:24px;height:24px}
+  .token-ringkasan-body{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .token-ringkasan-body strong{font-size:27px;font-weight:900;color:#1c1a16;letter-spacing:-.02em;line-height:1.1}
+  .token-ringkasan-body span{font-size:11.5px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#7a7266}
+  .token-ringkasan-body small{font-size:11.5px;color:#a08a5f}
+  .token-ringkasan-card.rk-total .token-ringkasan-icon{background:rgba(184,138,61,.13);color:#8a6a2c}
+  .token-ringkasan-card.rk-internal .token-ringkasan-icon{background:rgba(37,99,168,.13);color:#2563a8}
+  .token-ringkasan-card.rk-member .token-ringkasan-icon{background:rgba(31,143,95,.13);color:#1f8f5f}
+  .token-ringkasan-card.rk-expiring .token-ringkasan-icon{background:rgba(184,89,15,.13);color:#b8590f}
+  .token-pagination{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:18px;flex-wrap:wrap}
+  .token-pagination button{min-width:36px;height:36px;padding:0 10px;border-radius:12px;border:1px solid rgba(184,138,61,.22);background:#fffdf8;color:#7a7266;font-weight:800;font-size:13px;cursor:pointer}
+  .token-pagination button.active{background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;border-color:transparent}
+  .token-pagination button:disabled{opacity:.4;cursor:not-allowed}
   .token-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
   .token-form-grid .field-full{grid-column:1/-1}
   .token-desc{color:var(--muted,#8a8272);line-height:1.65;margin:-8px 0 16px;font-size:14.5px}
@@ -76,11 +93,23 @@
 
 <section class="split-card">
 <span class="mini-label">Ringkasan</span>
-<div class="token-stats-grid" style="margin-top:10px">
-  <div class="stat-card"><span>Total Token Aktif</span><strong id="statTotalActive">-</strong><small>Semua sumber</small></div>
-  <div class="stat-card"><span>Token Internal Admin</span><strong id="statInternal">-</strong><small>Dibuat lewat halaman ini</small></div>
-  <div class="stat-card"><span>Token Member</span><strong id="statMember">-</strong><small>Dari request &amp; approval member</small></div>
-  <div class="stat-card"><span>Segera Expired</span><strong id="statExpiring">-</strong><small>≤ 7 hari lagi</small></div>
+<div class="token-ringkasan-grid">
+  <div class="token-ringkasan-card rk-total">
+    <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/></svg></div>
+    <div class="token-ringkasan-body"><strong id="statTotalActive">-</strong><span>Total Token Aktif</span><small>Semua sumber</small></div>
+  </div>
+  <div class="token-ringkasan-card rk-internal">
+    <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 20c1-4 4-6 7.5-6s6.5 2 7.5 6" stroke="currentColor" stroke-width="1.8"/></svg></div>
+    <div class="token-ringkasan-body"><strong id="statInternal">-</strong><span>Token Internal Admin</span><small>Dibuat lewat halaman ini</small></div>
+  </div>
+  <div class="token-ringkasan-card rk-member">
+    <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="1.7"/><path d="M14 20c.2-2.6 2.2-4.6 4.8-4.9" stroke="currentColor" stroke-width="1.7"/></svg></div>
+    <div class="token-ringkasan-body"><strong id="statMember">-</strong><span>Token Member</span><small>Dari request &amp; approval member</small></div>
+  </div>
+  <div class="token-ringkasan-card rk-expiring">
+    <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+    <div class="token-ringkasan-body"><strong id="statExpiring">-</strong><span>Segera Expired</span><small>&le; 7 hari lagi</small></div>
+  </div>
 </div>
 </section>
 
@@ -178,6 +207,7 @@
 </div>
 <div id="tokenListStatus" class="page-note" style="margin-top:14px">Memuat token aktif...</div>
 <div class="token-grid" id="tokenGrid"></div>
+<div class="token-pagination" id="tokenPagination"></div>
 </section>
 
 </section>
@@ -400,6 +430,7 @@
         .limit(300);
       if(res.error){ status.textContent = 'Gagal memuat: ' + res.error.message; return; }
       ALL_TOKENS = res.data || [];
+      currentPage = 1;
       populateFacilityFilter();
       renderStats();
       renderGrid();
@@ -478,17 +509,44 @@
     });
   }
 
+  var PAGE_SIZE = 10;
+  var currentPage = 1;
+
   function renderGrid(){
     var grid = el('tokenGrid');
     var rows = currentFiltered();
     if(!rows.length){
       grid.innerHTML = '';
+      el('tokenPagination').innerHTML = '';
       el('tokenListStatus').style.display = '';
       el('tokenListStatus').textContent = ALL_TOKENS.length ? 'Tidak ada token yang cocok dengan pencarian/filter.' : 'Belum ada token aktif.';
       return;
     }
     el('tokenListStatus').style.display = 'none';
-    grid.innerHTML = rows.map(tokenCardHtml).join('');
+    var totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    if(currentPage > totalPages) currentPage = totalPages;
+    if(currentPage < 1) currentPage = 1;
+    var start = (currentPage - 1) * PAGE_SIZE;
+    var pageRows = rows.slice(start, start + PAGE_SIZE);
+    grid.innerHTML = pageRows.map(tokenCardHtml).join('');
+    renderPagination(totalPages, rows.length);
+  }
+
+  function goToPage(p){
+    currentPage = p;
+    renderGrid();
+  }
+
+  function renderPagination(totalPages, totalRows){
+    var wrap = el('tokenPagination');
+    if(totalPages <= 1){ wrap.innerHTML = ''; return; }
+    var html = '';
+    html += '<button type="button" data-page="' + (currentPage-1) + '"' + (currentPage<=1?' disabled':'') + '>&lsaquo;</button>';
+    for(var i=1;i<=totalPages;i++){
+      html += '<button type="button" data-page="' + i + '" class="' + (i===currentPage?'active':'') + '">' + i + '</button>';
+    }
+    html += '<button type="button" data-page="' + (currentPage+1) + '"' + (currentPage>=totalPages?' disabled':'') + '>&rsaquo;</button>';
+    wrap.innerHTML = html;
   }
 
   function findToken(id){ return ALL_TOKENS.find(function(t){ return t.id===id; }); }
@@ -751,9 +809,16 @@
   }
 
   function initList(){
-    el('tokCari').addEventListener('input', renderGrid);
-    el('tokFilterSource').addEventListener('change', renderGrid);
-    el('tokFilterFacility').addEventListener('change', renderGrid);
+    function filterChanged(){ currentPage = 1; renderGrid(); }
+    el('tokCari').addEventListener('input', filterChanged);
+    el('tokFilterSource').addEventListener('change', filterChanged);
+    el('tokFilterFacility').addEventListener('change', filterChanged);
+    el('tokenPagination').addEventListener('click', function(e){
+      var b = e.target.closest('button[data-page]');
+      if(!b || b.disabled) return;
+      var p = parseInt(b.getAttribute('data-page'), 10);
+      if(!isNaN(p)) goToPage(p);
+    });
     el('tokRefreshBtn').addEventListener('click', loadTokens);
     el('tokExportBtn').addEventListener('click', exportCsv);
     el('tokBulkToggleBtn').addEventListener('click', toggleBulkMode);

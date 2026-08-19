@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Token Admin — Kamar Kajian Market</title>
+<meta content="Kelola semua token license Kamar dari satu halaman: buat token internal admin, lihat daftar token aktif, detail lengkap, dan hapus token yang tidak dipakai." name="description"/>
+<meta content="#070707" name="theme-color"/>
+<link href="assets/favicon.png" rel="icon"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="style.css" rel="stylesheet"/>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
+<link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"/>
+<link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+<link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
+<meta name="kamar-step" content="64-token-admin"/>
+<style>
+  .token-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:2px}
+  .token-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+  .token-form-grid .field-full{grid-column:1/-1}
+  .token-desc{color:var(--muted,#8a8272);line-height:1.65;margin:-8px 0 16px;font-size:14.5px}
+  .btn.mini{padding:8px 14px;font-size:12.5px;border-radius:999px}
+  .token-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:16px 0 4px}
+  .token-toolbar .field{min-width:190px;flex:1;margin:0}
+  .token-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
+  .token-card{border:1px solid rgba(184,138,61,.18);border-radius:22px;padding:18px;background:#fffdf8;box-shadow:0 8px 26px rgba(60,45,20,.06);display:flex;flex-direction:column;gap:12px}
+  .token-card .tc-facility{font-weight:900;color:#1c1a16;font-size:15.5px}
+  .token-card .tc-sub{color:#7a7266;font-size:13px;line-height:1.5}
+  .tc-meta{display:flex;flex-wrap:wrap;gap:6px}
+  .tc-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;border:1px solid rgba(184,138,61,.22);color:#8a6a2c;background:rgba(184,138,61,.08)}
+  .tc-badge.source-internal{color:#2563a8;background:rgba(37,99,168,.08);border-color:rgba(37,99,168,.2)}
+  .tc-badge.source-member{color:#1f8f5f;background:rgba(31,143,95,.08);border-color:rgba(31,143,95,.2)}
+  .tc-badge.expiring{color:#b8590f;background:rgba(184,89,15,.1);border-color:rgba(184,89,15,.24)}
+  .tc-actions{display:flex;gap:8px;margin-top:2px}
+  .tc-actions .btn{flex:1;text-align:center}
+  #tokenDetailModal,#tokenConfirmModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(20,16,8,.5);backdrop-filter:blur(3px)}
+  #tokenDetailModal.open,#tokenConfirmModal.open{display:flex}
+  .token-modal-card{width:100%;max-width:580px;max-height:86vh;overflow:auto;background:#fffdf8;border:1px solid rgba(184,138,61,.22);border-radius:26px;padding:26px;box-shadow:0 30px 90px rgba(30,20,5,.25)}
+  .token-modal-card h3{margin:2px 0 0;color:#1c1a16;font-size:19px}
+  .token-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:18px}
+  .token-detail-grid div span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#a08a5f;font-weight:800;margin-bottom:3px}
+  .token-detail-grid div strong{display:block;color:#22201b;font-size:13.5px;word-break:break-word;font-weight:700}
+  .token-audit-list{margin-top:18px;border-top:1px solid rgba(184,138,61,.16);padding-top:12px}
+  .token-audit-row{font-size:12.5px;color:#6f6858;padding:7px 0;border-bottom:1px dashed rgba(184,138,61,.14);line-height:1.5}
+  @media(max-width:980px){
+    .token-form-grid{grid-template-columns:1fr}
+    .token-detail-grid{grid-template-columns:1fr}
+    .token-toolbar .field{min-width:100%}
+    .token-modal-card{padding:20px;border-radius:20px}
+  }
+</style>
+</head>
+<body>
+<main class="split-shell">
+<div class="split-app">
+<aside class="split-sidebar">
+<div class="brand-small">Admin Kamar</div>
+<a href="admin.html">Dashboard Admin</a>
+</aside>
+<section class="split-main">
+
+<section class="split-card hero license-hero">
+<div class="hero-copy">
+<span class="mini-label">Token Admin</span>
+<h1>Kelola Semua Token License Kamar.</h1>
+<p>Buat token internal admin langsung aktif, pantau seluruh token yang sedang aktif dari satu tempat (baik dibuat admin maupun hasil approval member), lihat detail lengkap, dan hapus token yang sudah tidak dipakai.</p>
+</div>
+</section>
+
+<section class="split-card">
+<span class="mini-label">Ringkasan</span>
+<div class="token-stats-grid" style="margin-top:10px">
+  <div class="stat-card"><span>Total Token Aktif</span><strong id="statTotalActive">-</strong><small>Semua sumber</small></div>
+  <div class="stat-card"><span>Token Internal Admin</span><strong id="statInternal">-</strong><small>Dibuat lewat halaman ini</small></div>
+  <div class="stat-card"><span>Token Member</span><strong id="statMember">-</strong><small>Dari request &amp; approval member</small></div>
+  <div class="stat-card"><span>Segera Expired</span><strong id="statExpiring">-</strong><small>≤ 7 hari lagi</small></div>
+</div>
+</section>
+
+<section class="split-card">
+<span class="mini-label">Form Request Token</span>
+<h2 style="margin:8px 0 4px">Buat Token Internal Admin</h2>
+<p class="token-desc">Form untuk admin request token license SENDIRI langsung — tidak melalui alur approval member. Token langsung aktif begitu disimpan. Dipakai untuk kebutuhan internal admin (broadcaster EA, akun testing, dsb), bukan untuk member.</p>
+<form id="selfLicenseForm" class="token-form-grid">
+<label class="field">
+<span>Fasilitas *</span>
+<select id="slFacility" required>
+<option value="">Pilih fasilitas...</option>
+<option value="kamar_robot">Kamar Robot (Auto Entry, Online License)</option>
+<option value="kamar_signal_master">Kamar Signal Advisor (Online License)</option>
+<option value="kamar_indikator">Kamar Indikator (Online License)</option>
+<option value="custom">Lainnya (isi manual)</option>
+</select>
+</label>
+<label class="field" id="slFacilityCustomWrap" style="display:none">
+<span>Kode Fasilitas Manual *</span>
+<input type="text" id="slFacilityCustom" placeholder="huruf kecil + underscore, contoh: kamar_robot_v2"/>
+</label>
+<label class="field">
+<span>Nomor Akun Trading *</span>
+<input type="text" id="slAccount" placeholder="Contoh: 30026345" required/>
+</label>
+<label class="field">
+<span>Nama Broker (lengkap) *</span>
+<input type="text" id="slBroker" placeholder="Contoh: TradeMax Global Limited" required/>
+</label>
+<label class="field">
+<span>Nama Server MT5 *</span>
+<input type="text" id="slServer" placeholder="Contoh: TradeMaxGlobal-Live" required/>
+</label>
+<label class="field">
+<span>Nama Pemilik Akun</span>
+<input type="text" id="slOwner" placeholder="Opsional"/>
+</label>
+<label class="field">
+<span>Durasi License *</span>
+<select id="slDuration" required>
+<option value="lifetime">Lifetime (tanpa expired)</option>
+<option value="30">30 Hari</option>
+<option value="60">60 Hari</option>
+<option value="90">90 Hari</option>
+<option value="180">180 Hari</option>
+<option value="custom">Custom (pilih tanggal)</option>
+</select>
+</label>
+<label class="field" id="slCustomDateWrap" style="display:none">
+<span>Tanggal Expired</span>
+<input type="date" id="slCustomDate"/>
+</label>
+<label class="field field-full">
+<span>Catatan (opsional)</span>
+<input type="text" id="slNote" placeholder="Contoh: token broadcaster EA akun testing"/>
+</label>
+</form>
+<div class="button-row" style="margin-top:6px">
+<button type="button" class="btn" id="slSubmitBtn">Buat Token Sekarang</button>
+<button type="button" class="btn secondary" id="slResetBtn">Reset Form</button>
+</div>
+<div id="slResultBox" style="display:none;margin-top:18px;padding:16px;border:1px solid rgba(184,138,61,.3);border-radius:16px;background:rgba(31,143,95,.07)">
+<div style="font-weight:900;letter-spacing:.04em;margin-bottom:8px;color:#1f8f5f">Token Berhasil Dibuat</div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<code id="slTokenOut" style="font-size:14px;word-break:break-all"></code>
+<button type="button" class="btn mini" id="slCopyBtn">Copy</button>
+</div>
+</div>
+<div id="slErrorBox" style="display:none;margin-top:18px;padding:16px;border:1px solid rgba(200,60,60,.3);border-radius:16px;background:rgba(200,60,60,.07);color:#a33"></div>
+</section>
+
+<section class="split-card">
+<span class="mini-label">Daftar Token</span>
+<h2 style="margin:8px 0 4px">Token yang Sedang Aktif</h2>
+<p class="token-desc">Semua token dengan status aktif, dari sumber mana pun. Klik <strong>Detail</strong> untuk data lengkap dan riwayat aktivitas, atau <strong>Hapus</strong> kalau token ini dianggap sudah tidak akan dipakai lagi.</p>
+<div class="token-toolbar">
+  <label class="field"><span>Cari</span><input type="text" id="tokCari" placeholder="Token, akun, broker, nama member..."/></label>
+  <label class="field"><span>Sumber</span>
+    <select id="tokFilterSource"><option value="">Semua Sumber</option><option value="internal">Internal Admin</option><option value="member">Member</option></select>
+  </label>
+  <label class="field"><span>Fasilitas</span>
+    <select id="tokFilterFacility"><option value="">Semua Fasilitas</option></select>
+  </label>
+  <button type="button" class="btn secondary" id="tokRefreshBtn">Refresh</button>
+</div>
+<div id="tokenListStatus" class="page-note" style="margin-top:14px">Memuat token aktif...</div>
+<div class="token-grid" id="tokenGrid"></div>
+</section>
+
+</section>
+</div>
+</main>
+
+<div id="tokenDetailModal">
+<div class="token-modal-card">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+<div><span class="mini-label" id="tdFacility">-</span><h3 id="tdAccount">-</h3></div>
+<button type="button" class="btn mini secondary" id="tdCloseBtn">Tutup</button>
+</div>
+<div class="token-detail-grid" id="tdGrid"></div>
+<div class="token-audit-list"><span class="mini-label">Riwayat Aktivitas</span><div id="tdAuditList" style="margin-top:8px;font-size:12.5px;color:#7a7266">Memuat...</div></div>
+<div class="button-row" style="margin-top:18px">
+<button type="button" class="btn mini" id="tdCopyToken">Salin Token</button>
+<button type="button" class="btn mini danger" id="tdHapusBtn">Hapus Token Ini</button>
+</div>
+</div>
+</div>
+
+<div id="tokenConfirmModal">
+<div class="token-modal-card" style="max-width:420px">
+<h3>Hapus Token Ini?</h3>
+<p class="token-desc" id="tcMessage" style="margin-top:10px">Token akan dinonaktifkan (revoked) dan tidak bisa dipakai lagi untuk cek license. Riwayatnya tetap tersimpan untuk audit — bukan dihapus permanen dari database.</p>
+<label class="field"><span>Catatan (opsional)</span><input type="text" id="tcNote" placeholder="Alasan penghapusan..."/></label>
+<div class="button-row" style="margin-top:16px">
+<button type="button" class="btn secondary" id="tcCancelBtn">Batal</button>
+<button type="button" class="btn danger" id="tcConfirmBtn">Ya, Hapus Token</button>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/kamar-config.js?v=29F"></script>
+<script src="assets/js/kamar-supabase.js?v=30H"></script>
+<script src="assets/js/kamar-data-online-25e.js?v=30G"></script>
+<script src="assets/js/kamar-ui.js?v=28"></script>
+<script src="assets/js/kamar-session-final-28.js?v=29D"></script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-admin-online-29f.js?v=29I"></script>
+<script src="assets/js/kamar-mobile-shell.js"></script>
+<script id="kamar-token-admin-logic">
+(function(){
+  function esc(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function el(id){return document.getElementById(id);}
+  var FACILITY_LABELS = {kamar_robot:'Kamar Robot', kamar_signal_master:'Kamar Signal Advisor', kamar_indikator:'Kamar Indikator'};
+  function facilityLabel(k){return FACILITY_LABELS[k] || k || '-';}
+
+  async function getClient(){
+    try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+    try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c = await window.KamarSupabase.ready(); if(c) return c; } }catch(e){}
+    if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
+    return null;
+  }
+
+  function genToken(){
+    var bytes = new Uint8Array(24);
+    (window.crypto || window.msCrypto).getRandomValues(bytes);
+    var hex = '';
+    for(var i=0;i<bytes.length;i++) hex += bytes[i].toString(16).padStart(2,'0');
+    return hex;
+  }
+
+  function showResult(token){
+    el('slErrorBox').style.display='none';
+    el('slTokenOut').textContent=token;
+    el('slResultBox').style.display='';
+  }
+  function showError(msg){
+    el('slResultBox').style.display='none';
+    el('slErrorBox').style.display='';
+    el('slErrorBox').textContent=msg;
+  }
+
+  async function submitForm(){
+    var facility = el('slFacility').value;
+    if(facility==='custom') facility = el('slFacilityCustom').value.trim();
+    var accountId = el('slAccount').value.trim();
+    var broker = el('slBroker').value.trim();
+    var server = el('slServer').value.trim();
+    var owner = el('slOwner').value.trim();
+    var duration = el('slDuration').value;
+    var note = el('slNote').value.trim();
+
+    if(!facility || !accountId || !broker || !server || !duration){
+      showError('Lengkapi semua field wajib (*) terlebih dahulu.');
+      return;
+    }
+
+    var expiredAt = null;
+    if(duration==='custom'){
+      var d = el('slCustomDate').value;
+      if(!d){ showError('Pilih tanggal expired untuk durasi custom.'); return; }
+      expiredAt = new Date(d+'T23:59:59Z').toISOString();
+    } else if(duration!=='lifetime'){
+      var days = parseInt(duration,10);
+      expiredAt = new Date(Date.now()+days*86400000).toISOString();
+    }
+
+    var token = genToken();
+    var nowIso = new Date().toISOString();
+    var row = {
+      token: token,
+      product_code: facility,
+      account_id: accountId,
+      broker_name: broker,
+      server_name: server,
+      account_holder_name: owner || null,
+      license_type: (duration==='lifetime') ? 'lifetime' : (duration==='custom' ? 'custom' : duration+'_days'),
+      status: 'active',
+      request_status: 'active',
+      member_profile_id: null,
+      requested_at: nowIso,
+      reviewed_at: nowIso,
+      recheck_interval_hours: 168,
+      grace_period_hours: 720,
+      max_failed_checks: 5,
+      expired_at: expiredAt,
+      note: note || ('Token internal dibuat sendiri oleh admin lewat halaman Token Admin, ' + nowIso.substring(0,10) + '.')
+    };
+
+    var btn = el('slSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+    try{
+      var c = await getClient();
+      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      var res = await c.from('kamar_licenses').insert(row).select().single();
+      if(res.error) throw new Error(res.error.message);
+      showResult(token);
+      if(window.toast) window.toast('Token berhasil dibuat dan langsung aktif.');
+      loadTokens();
+    }catch(e){
+      showError('Gagal membuat token: ' + (e && e.message ? e.message : e));
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Buat Token Sekarang';
+    }
+  }
+
+  function initForm(){
+    el('slFacility').addEventListener('change', function(){
+      el('slFacilityCustomWrap').style.display = this.value==='custom' ? '' : 'none';
+    });
+    el('slDuration').addEventListener('change', function(){
+      el('slCustomDateWrap').style.display = this.value==='custom' ? '' : 'none';
+    });
+    el('slResetBtn').addEventListener('click', function(){
+      el('selfLicenseForm').reset();
+      el('slFacilityCustomWrap').style.display='none';
+      el('slCustomDateWrap').style.display='none';
+      el('slResultBox').style.display='none';
+      el('slErrorBox').style.display='none';
+    });
+    el('slSubmitBtn').addEventListener('click', submitForm);
+    el('slCopyBtn').addEventListener('click', function(){
+      var t = el('slTokenOut').textContent;
+      if(t && navigator.clipboard) navigator.clipboard.writeText(t);
+      if(window.toast) window.toast('Token disalin ke clipboard.');
+    });
+  }
+
+  var ALL_TOKENS = [];
+
+  async function loadTokens(){
+    var status = el('tokenListStatus');
+    status.style.display = '';
+    status.textContent = 'Memuat token aktif...';
+    try{
+      var c = await getClient();
+      if(!c){ status.textContent = 'Client Supabase tidak terbaca.'; return; }
+      var res = await c.from('kamar_licenses')
+        .select('id,token,product_code,account_id,broker_name,server_name,account_holder_name,license_type,status,expired_at,note,member_profile_id,last_check_at,created_at,requested_at,trading_account_type,broker_account_type,account_currency,leverage,terminal_build,device_id,request_reason,member_note,admin_note,member_profiles(full_name,email)')
+        .eq('status','active')
+        .order('created_at',{ascending:false})
+        .limit(300);
+      if(res.error){ status.textContent = 'Gagal memuat: ' + res.error.message; return; }
+      ALL_TOKENS = res.data || [];
+      populateFacilityFilter();
+      renderStats();
+      renderGrid();
+    }catch(e){
+      status.textContent = 'Gagal memuat token: ' + (e && e.message ? e.message : e);
+    }
+  }
+
+  function populateFacilityFilter(){
+    var sel = el('tokFilterFacility');
+    var current = sel.value;
+    var keys = {};
+    ALL_TOKENS.forEach(function(t){ if(t.product_code) keys[t.product_code]=true; });
+    var html = '<option value="">Semua Fasilitas</option>';
+    Object.keys(keys).sort().forEach(function(k){ html += '<option value="'+esc(k)+'">'+esc(facilityLabel(k))+'</option>'; });
+    sel.innerHTML = html;
+    sel.value = current;
+  }
+
+  function daysLeft(expiresAt){
+    if(!expiresAt) return null;
+    return Math.ceil((new Date(expiresAt).getTime() - Date.now())/86400000);
+  }
+
+  function renderStats(){
+    el('statTotalActive').textContent = ALL_TOKENS.length;
+    el('statInternal').textContent = ALL_TOKENS.filter(function(t){ return !t.member_profile_id; }).length;
+    el('statMember').textContent = ALL_TOKENS.filter(function(t){ return !!t.member_profile_id; }).length;
+    el('statExpiring').textContent = ALL_TOKENS.filter(function(t){
+      var dl = daysLeft(t.expired_at);
+      return dl!==null && dl<=7;
+    }).length;
+  }
+
+  function tokenCardHtml(t){
+    var isInternal = !t.member_profile_id;
+    var memberName = t.member_profiles && (t.member_profiles.full_name || t.member_profiles.email);
+    var sourceLabel = isInternal ? 'Internal Admin' : ('Member: ' + (memberName || '-'));
+    var dl = daysLeft(t.expired_at);
+    var expiryBadge = '';
+    if(t.expired_at){
+      if(dl!==null && dl>=0 && dl<=7) expiryBadge = '<span class="tc-badge expiring">Expired ' + dl + ' hari lagi</span>';
+      else if(dl!==null && dl<0) expiryBadge = '<span class="tc-badge expiring">Sudah Lewat Expired</span>';
+    }
+    var typeLabel = t.license_type==='lifetime' ? 'Lifetime' : (t.expired_at ? ('Exp ' + String(t.expired_at).slice(0,10)) : (t.license_type||'-'));
+    return '<div class="token-card">' +
+      '<div><div class="tc-facility">' + esc(facilityLabel(t.product_code)) + '</div>' +
+      '<div class="tc-sub">' + esc(t.account_id||'-') + ' &middot; ' + esc(t.broker_name||'-') + '</div>' +
+      '<div class="tc-sub" style="opacity:.85">' + esc(t.server_name||'-') + '</div></div>' +
+      '<div class="tc-meta"><span class="tc-badge ' + (isInternal?'source-internal':'source-member') + '">' + esc(sourceLabel) + '</span>' +
+      '<span class="tc-badge">' + esc(typeLabel) + '</span>' + expiryBadge + '</div>' +
+      '<div class="tc-actions">' +
+      '<button type="button" class="btn mini secondary" data-tok-detail="' + esc(t.id) + '">Detail</button>' +
+      '<button type="button" class="btn mini danger" data-tok-hapus="' + esc(t.id) + '">Hapus</button>' +
+      '</div></div>';
+  }
+
+  function currentFiltered(){
+    var q = (el('tokCari').value || '').trim().toLowerCase();
+    var src = el('tokFilterSource').value;
+    var fac = el('tokFilterFacility').value;
+    return ALL_TOKENS.filter(function(t){
+      if(src==='internal' && t.member_profile_id) return false;
+      if(src==='member' && !t.member_profile_id) return false;
+      if(fac && t.product_code!==fac) return false;
+      if(q){
+        var hay = [t.token,t.account_id,t.broker_name,t.server_name,t.account_holder_name,
+          t.member_profiles && t.member_profiles.full_name, t.member_profiles && t.member_profiles.email
+        ].join(' ').toLowerCase();
+        if(hay.indexOf(q)<0) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderGrid(){
+    var grid = el('tokenGrid');
+    var rows = currentFiltered();
+    if(!rows.length){
+      grid.innerHTML = '';
+      el('tokenListStatus').style.display = '';
+      el('tokenListStatus').textContent = ALL_TOKENS.length ? 'Tidak ada token yang cocok dengan pencarian/filter.' : 'Belum ada token aktif.';
+      return;
+    }
+    el('tokenListStatus').style.display = 'none';
+    grid.innerHTML = rows.map(tokenCardHtml).join('');
+  }
+
+  function findToken(id){ return ALL_TOKENS.find(function(t){ return t.id===id; }); }
+
+  var currentDetailId = null;
+
+  async function openDetail(id){
+    var t = findToken(id);
+    if(!t) return;
+    currentDetailId = id;
+    el('tdFacility').textContent = facilityLabel(t.product_code);
+    el('tdAccount').textContent = (t.account_id||'-') + ' — ' + (t.broker_name||'-');
+    var isInternal = !t.member_profile_id;
+    var memberName = t.member_profiles && (t.member_profiles.full_name || '-');
+    var memberEmail = t.member_profiles && t.member_profiles.email;
+    function dt(v){ return v ? new Date(v).toLocaleString('id-ID') : '-'; }
+    var fields = [
+      ['Token', t.token],
+      ['Status', t.status],
+      ['Sumber', isInternal ? 'Internal Admin' : (memberName || 'Member')],
+      ['Email Member', memberEmail || '-'],
+      ['Nomor Akun', t.account_id],
+      ['Broker', t.broker_name],
+      ['Server MT5', t.server_name],
+      ['Nama Pemilik Akun', t.account_holder_name],
+      ['Tipe Akun Trading', t.trading_account_type],
+      ['Tipe Akun Broker', t.broker_account_type],
+      ['Mata Uang', t.account_currency],
+      ['Leverage', t.leverage],
+      ['Terminal Build', t.terminal_build],
+      ['Device ID', t.device_id],
+      ['Jenis License', t.license_type],
+      ['Expired', t.expired_at ? dt(t.expired_at) : 'Lifetime'],
+      ['Dibuat', dt(t.created_at)],
+      ['Diminta', dt(t.requested_at)],
+      ['Terakhir Dicek EA/Indikator', t.last_check_at ? dt(t.last_check_at) : 'Belum pernah'],
+      ['Alasan Request', t.request_reason],
+      ['Catatan Member', t.member_note],
+      ['Catatan Admin', t.admin_note || t.note]
+    ];
+    el('tdGrid').innerHTML = fields.map(function(f){
+      return '<div><span>' + esc(f[0]) + '</span><strong>' + esc(f[1]||'-') + '</strong></div>';
+    }).join('');
+    el('tdAuditList').textContent = 'Memuat riwayat...';
+    el('tokenDetailModal').classList.add('open');
+    try{
+      var c = await getClient();
+      var res = await c.from('kamar_license_audit_log')
+        .select('action,from_status,to_status,note,actor_email,created_at')
+        .eq('license_id', id)
+        .order('created_at',{ascending:false})
+        .limit(10);
+      if(res.error || !res.data || !res.data.length){
+        el('tdAuditList').textContent = 'Belum ada riwayat aktivitas tercatat.';
+      } else {
+        el('tdAuditList').innerHTML = res.data.map(function(a){
+          return '<div class="token-audit-row"><strong style="color:#8a6a2c">' + esc(a.action) + '</strong> oleh ' + esc(a.actor_email||'-') +
+            ' &middot; ' + new Date(a.created_at).toLocaleString('id-ID') + (a.note ? ('<br/>' + esc(a.note)) : '') + '</div>';
+        }).join('');
+      }
+    }catch(e){ el('tdAuditList').textContent = 'Gagal memuat riwayat.'; }
+  }
+
+  var confirmTargetId = null;
+  function openConfirm(id){
+    confirmTargetId = id;
+    el('tcNote').value = '';
+    el('tokenConfirmModal').classList.add('open');
+  }
+
+  async function doDelete(){
+    if(!confirmTargetId) return;
+    var btn = el('tcConfirmBtn');
+    btn.disabled = true;
+    btn.textContent = 'Menghapus...';
+    try{
+      var c = await getClient();
+      if(!c) throw new Error('Client Supabase tidak terbaca.');
+      var note = el('tcNote').value.trim() || 'Token dihapus manual oleh admin lewat halaman Token Admin (dianggap tidak akan digunakan lagi).';
+      var res = await c.rpc('admin_update_license', { p_license_id: confirmTargetId, p_new_status: 'revoked', p_admin_note: note });
+      if(res.error) throw new Error(res.error.message);
+      var data = res.data;
+      if(data && data.success===false) throw new Error(data.message || 'Gagal menghapus token.');
+      if(window.toast) window.toast('Token berhasil dihapus.');
+      el('tokenConfirmModal').classList.remove('open');
+      el('tokenDetailModal').classList.remove('open');
+      confirmTargetId = null;
+      loadTokens();
+    }catch(e){
+      var msg = 'Gagal menghapus token: ' + (e && e.message ? e.message : e);
+      if(window.toast) window.toast(msg); else alert(msg);
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Ya, Hapus Token';
+    }
+  }
+
+  function initList(){
+    el('tokCari').addEventListener('input', renderGrid);
+    el('tokFilterSource').addEventListener('change', renderGrid);
+    el('tokFilterFacility').addEventListener('change', renderGrid);
+    el('tokRefreshBtn').addEventListener('click', loadTokens);
+
+    el('tokenGrid').addEventListener('click', function(e){
+      var d = e.target.closest('[data-tok-detail]');
+      if(d){ openDetail(d.getAttribute('data-tok-detail')); return; }
+      var h = e.target.closest('[data-tok-hapus]');
+      if(h){ openConfirm(h.getAttribute('data-tok-hapus')); return; }
+    });
+
+    el('tdCloseBtn').addEventListener('click', function(){ el('tokenDetailModal').classList.remove('open'); });
+    el('tdCopyToken').addEventListener('click', function(){
+      var t = findToken(currentDetailId);
+      if(t && t.token && navigator.clipboard){ navigator.clipboard.writeText(t.token); if(window.toast) window.toast('Token disalin.'); }
+    });
+    el('tdHapusBtn').addEventListener('click', function(){ openConfirm(currentDetailId); });
+
+    el('tcCancelBtn').addEventListener('click', function(){ el('tokenConfirmModal').classList.remove('open'); confirmTargetId=null; });
+    el('tcConfirmBtn').addEventListener('click', doDelete);
+  }
+
+  function init(){
+    initForm();
+    initList();
+    loadTokens();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body>
+</html>

@@ -478,3 +478,20 @@
 }
 
 }
+
+/* --- FIX: tombol tutup drawer (X) cuma dipakai di mobile (sidebar jadi drawer
+   slide-in), tapi di desktop sidebar sudah sticky/statis jadi tombol ini tidak
+   ada gunanya. Sebelumnya rule .kamar-drawer-close-btn{display:none!important}
+   di atas SELALU KALAH spesifisitas dari .kamar-v46-atelier button{display:
+         inline-flex!important} (kamar-luxury-atelier-v46.css), jadi tombol tetap
+   tampil sebagai kotak gradasi emas kosong (ikon X-nya svg width:18px cuma
+   ada di dalam @media(max-width:1024px) di atas, jadi di desktop ikonnya 0px).
+   Fix: sembunyikan tombol ini secara eksplisit >=1025px dengan selector yang
+   spesifisitasnya sengaja dinaikkan (4x class) supaya menang lawan rule
+   .kamar-v46-atelier button. Tidak menyentuh apa pun di dalam @media
+   (max-width:1024px) di atas, jadi tidak mengubah perilaku mobile. --- */
+@media (min-width: 1025px) {
+     .kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn.kamar-drawer-close-btn{
+            display: none !important;
+     }
+}

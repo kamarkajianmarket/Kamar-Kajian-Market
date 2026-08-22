@@ -130,8 +130,7 @@ body{background:#070707;color:var(--text)}
 <script src="assets/js/kamar-ui.js?v=28"></script>
 <script>
 (function(){
-'use strict';
-var BUCKET='kamar-content';
+'use strict';var BUCKET='kamar-content';function bucketForAccess(acc){return (acc==='kamar_study'||acc==='public')?'kamar-content':'kamar-protected';}
 var TABLE='materials';
 var AREA_LABEL={public:'Publik',member:'Member',both:'Publik & Member'};
 var FACILITY_LABEL={public:'Publik',member:'Semua Member',kamar_study:'Kamar Study/Signal',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',materi_edukasi:'Kamar Edukasi',all_paid:'Semua Berbayar'};
@@ -241,7 +240,7 @@ if(!confirm('Hapus materi "'+r.title+'"? File fisik di storage (jika ada) juga a
 var c=await initClient(); if(!c)return toast('Supabase belum siap.');
 try{
 if(r.storage_path){
-var rm=await c.storage.from(BUCKET).remove([r.storage_path]);
+var rm=await c.storage.from(bucketForAccess(r.access_required)).remove([r.storage_path]);
 if(rm.error) console.warn('Gagal hapus file fisik:',rm.error.message);
 }
 var res=await c.from(TABLE).delete().eq('id',id);
@@ -280,9 +279,9 @@ try{
 if(file){
 statusEl.innerHTML='<span class="chip warn">Mengupload file...</span>';
 var path='materials/'+payload.access_required+'/'+Date.now()+'-'+slugify(file.name.replace(/\.[^.]+$/,''))+(file.name.match(/\.[^.]+$/)?file.name.match(/\.[^.]+$/)[0]:'');
-var up=await c.storage.from(BUCKET).upload(path,file,{cacheControl:'3600',upsert:false});
+var up=await c.storage.from(bucketForAccess(payload.access_required)).upload(path,file,{cacheControl:'3600',upsert:false});
 if(up.error) throw up.error;
-var pub=c.storage.from(BUCKET).getPublicUrl(path);
+var pub=c.storage.from(bucketForAccess(payload.access_required)).getPublicUrl(path);
 payload.material_url=pub.data.publicUrl;
 payload.storage_path=path;
 }

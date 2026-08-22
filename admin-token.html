@@ -19,8 +19,8 @@
 <style>
   .token-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:2px}
   .token-ringkasan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
-  .token-ringkasan-card{display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:24px;border:1px solid rgba(184,138,61,.16);background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,253,248,.92));box-shadow:0 14px 42px rgba(17,20,23,.07);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-  .token-ringkasan-card:hover{transform:translateY(-3px);box-shadow:0 20px 54px rgba(17,20,23,.10);border-color:rgba(184,138,61,.36)}
+  .token-ringkasan-card{display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:24px;border:1px solid rgba(184,138,61,.16);background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,253,248,.92));box-shadow:0 14px 42px rgba(17,20,23,.07);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;cursor:pointer}
+  .token-ringkasan-card:hover{transform:translateY(-3px);box-shadow:0 20px 54px rgba(17,20,23,.10);border-color:rgba(184,138,61,.36)} .token-ringkasan-card:focus-visible{outline:2px solid rgba(184,138,61,.55);outline-offset:2px} .token-ringkasan-card.is-active{border-color:#b88a3d;box-shadow:0 20px 54px rgba(184,138,61,.22);background:linear-gradient(135deg,rgba(184,138,61,.10),rgba(255,253,248,.92))}
   .token-ringkasan-icon{flex:0 0 auto;width:50px;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center}
   .token-ringkasan-icon svg{width:24px;height:24px}
   .token-ringkasan-body{display:flex;flex-direction:column;gap:1px;min-width:0}
@@ -98,19 +98,19 @@
 <section class="split-card">
 <span class="mini-label">Ringkasan</span>
 <div class="token-ringkasan-grid">
-  <div class="token-ringkasan-card rk-total">
+  <div class="token-ringkasan-card rk-total" data-filter="total" role="button" tabindex="0">
     <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.8"/></svg></div>
     <div class="token-ringkasan-body"><strong id="statTotalActive">-</strong><span>Total Token Aktif</span><small>Semua sumber</small></div>
   </div>
-  <div class="token-ringkasan-card rk-internal">
+  <div class="token-ringkasan-card rk-internal" data-filter="internal" role="button" tabindex="0">
     <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 20c1-4 4-6 7.5-6s6.5 2 7.5 6" stroke="currentColor" stroke-width="1.8"/></svg></div>
     <div class="token-ringkasan-body"><strong id="statInternal">-</strong><span>Token Internal Admin</span><small>Dibuat lewat halaman ini</small></div>
   </div>
-  <div class="token-ringkasan-card rk-member">
+  <div class="token-ringkasan-card rk-member" data-filter="member" role="button" tabindex="0">
     <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="1.7"/><path d="M14 20c.2-2.6 2.2-4.6 4.8-4.9" stroke="currentColor" stroke-width="1.7"/></svg></div>
     <div class="token-ringkasan-body"><strong id="statMember">-</strong><span>Token Member</span><small>Dari request &amp; approval member</small></div>
   </div>
-  <div class="token-ringkasan-card rk-expiring">
+  <div class="token-ringkasan-card rk-expiring" data-filter="expiring" role="button" tabindex="0">
     <div class="token-ringkasan-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
     <div class="token-ringkasan-body"><strong id="statExpiring">-</strong><span>Segera Expired</span><small>&le; 7 hari lagi</small></div>
   </div>
@@ -518,7 +518,7 @@
     var rows = ALL_TOKENS.filter(function(t){
       if(src==='internal' && t.member_profile_id) return false;
       if(src==='member' && !t.member_profile_id) return false;
-      if(fac && t.product_code!==fac) return false;
+      if(fac && t.product_code!==fac) return false; if(expiringOnly){ var dl=daysLeft(t.expired_at); if(dl===null || dl>7 || dl<0) return false; }
       if(q){
         var hay = [t.token,t.account_id,t.broker_name,t.server_name,t.account_holder_name,
           t.member_profiles && t.member_profiles.full_name, t.member_profiles && t.member_profiles.email
@@ -530,7 +530,7 @@
     return sortTokensGrouped(rows);
   }
 
-  var PAGE_SIZE = 10;
+  var PAGE_SIZE = 10; var expiringOnly = false;
   var currentPage = 1;
 
   function renderGrid(){
@@ -830,7 +830,7 @@
   }
 
   function initList(){
-    function filterChanged(){ currentPage = 1; renderGrid(); }
+    function filterChanged(){ expiringOnly=false; document.querySelectorAll('.token-ringkasan-card').forEach(function(c){c.classList.remove('is-active');}); currentPage = 1; renderGrid(); } function setActiveCard(type){ document.querySelectorAll('.token-ringkasan-card').forEach(function(c){ c.classList.toggle('is-active', c.getAttribute('data-filter')===type); }); } function applyCardFilter(type){ expiringOnly = (type==='expiring'); el('tokFilterSource').value = (type==='internal'||type==='member') ? type : ''; el('tokFilterFacility').value=''; el('tokCari').value=''; currentPage=1; renderGrid(); setActiveCard(type==='total'?'':type); var tgt=document.querySelector('.token-toolbar'); if(tgt) tgt.scrollIntoView({behavior:'smooth',block:'start'}); } document.querySelectorAll('.token-ringkasan-card').forEach(function(c){ c.addEventListener('click', function(){ applyCardFilter(c.getAttribute('data-filter')); }); c.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); applyCardFilter(c.getAttribute('data-filter')); } }); });
     el('tokCari').addEventListener('input', filterChanged);
     el('tokFilterSource').addEventListener('change', filterChanged);
     el('tokFilterFacility').addEventListener('change', filterChanged);

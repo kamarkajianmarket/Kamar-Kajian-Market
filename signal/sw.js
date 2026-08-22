@@ -1,7 +1,7 @@
 // Kamar Signal — service worker v2
 // Hanya cache APP SHELL (HTML/CSS/JS/ikon). JANGAN pernah cache data signal —
 // semua request ke Supabase/API selalu diambil fresh dari network, tidak lewat sini.
-  var SHELL_CACHE = 'kamar-signal-shell-v24';
+  var SHELL_CACHE = 'kamar-signal-shell-v25';
 var SHELL_FILES = [
   '/signal/',
   '/signal/index.html',
@@ -39,16 +39,25 @@ self.addEventListener('fetch', function(event){
 
   // Hanya app-shell (file statis di bawah /signal/) yang boleh cache-first.
   if(url.pathname.indexOf('/signal/') === 0){
+    // FIX 2026-08-22: strategi diganti dari cache-first ke NETWORK-FIRST. Sebelumnya
+    // "return cached || network" bikin device yang SUDAH PERNAH buka /signal/ SELALU
+    // dapat versi HTML/JS LAMA yang ke-cache -- walau kode sumbernya sudah diperbaiki di
+    // server -- karena SHELL_CACHE namanya tidak pernah berubah antar deploy, jadi cache
+    // lama tidak pernah kehapus otomatis (activate cuma hapus cache dgn NAMA beda). Lebih
+    // parah lagi, proses "revalidate" latar belakang sebelumnya TIDAK dibungkus
+    // event.waitUntil(), jadi gampang dimatikan browser (terutama iOS Safari yang sangat
+    // agresif mematikan proses background) sebelum sempat update cache -- device iOS bisa
+    // macet permanen di versi lama walau sudah online dan kode server sudah benar. Sekarang:
+    // selalu coba network dulu; cache CUMA dipakai kalau network gagal (offline).
     event.respondWith(
-      caches.match(req).then(function(cached){
-        var network = fetch(req).then(function(res){
-          if(res && res.ok){
-            var copy = res.clone();
-            caches.open(SHELL_CACHE).then(function(cache){ cache.put(req, copy); });
-          }
-          return res;
-        }).catch(function(){ return cached; });
-        return cached || network;
+      fetch(req).then(function(res){
+        if(res && res.ok){
+          var copy = res.clone();
+          event.waitUntil(caches.open(SHELL_CACHE).then(function(cache){ return cache.put(req, copy); }));
+        }
+        return res;
+      }).catch(function(){
+        return caches.match(req);
       })
     );
   }

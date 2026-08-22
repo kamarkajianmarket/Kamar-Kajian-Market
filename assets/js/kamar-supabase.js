@@ -3,6 +3,16 @@
   if(window.__KAMAR_SUPABASE_29F__) return;
   window.__KAMAR_SUPABASE_29F__ = true;
 
+  // FIX 2026-08-22: lock kustom no-op untuk bypass navigator.locks (Web Locks API) milik
+  // supabase-js. Default supabase-js v2 pakai navigator.locks saat auth.getSession()/refresh,
+  // dan ini diketahui bisa NYANGKUT TANPA PERNAH resolve di browser berbasis WebKit/iOS
+  // (Safari iOS, termasuk Chrome-di-iPhone karena mesinnya tetap WebKit) -- akar masalah
+  // dashboard Kamar Signal macet selamanya di iPhone padahal normal di Android. Lock ini
+  // langsung jalankan fn() tanpa antre lock browser sama sekali.
+  function kamarNoopAuthLock(name, acquireTimeout, fn){
+    return fn();
+  }
+
   function trim(v){ return String(v == null ? '' : v).trim(); }
   function normalizeUrl(url){
     url = trim(url);
@@ -33,7 +43,12 @@
     if(!(window.supabase && window.supabase.createClient)) return null;
     if(!cfg.url || !cfg.key) return null;
     window.kamarSupabaseClient = window.supabase.createClient(cfg.url, cfg.key, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        lock: kamarNoopAuthLock
+      }
     });
     window.KamarSupabase.client = window.kamarSupabaseClient;
     window.KamarSupabaseClient = window.kamarSupabaseClient;

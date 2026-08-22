@@ -17,7 +17,7 @@ return d.toLocaleDateString('id-ID', {day:'numeric',month:'short',year:'numeric'
 }catch(e){ return ''; }
 }
 
-var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="19" height="19"><path d="M12 3C9.5 3 7.6 5 7.6 7.5V11c0 .8-.3 1.6-.9 2.2L5.4 14.5c-.6.6-.2 1.5.6 1.5h12c.8 0 1.2-.9.6-1.5l-1.3-1.3c-.6-.6-.9-1.4-.9-2.2V7.5C16.4 5 14.5 3 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="21" height="21"><path d="M12 3C9.5 3 7.6 5 7.6 7.5V11c0 .8-.3 1.6-.9 2.2L5.4 14.5c-.6.6-.2 1.5.6 1.5h12c.8 0 1.2-.9.6-1.5l-1.3-1.3c-.6-.6-.9-1.4-.9-2.2V7.5C16.4 5 14.5 3 12 3Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
 
 var state = { items: [], unread: 0, open: false, profileId: null, client: null, loaded:false, btn:null, panel:null, badge:null };
 

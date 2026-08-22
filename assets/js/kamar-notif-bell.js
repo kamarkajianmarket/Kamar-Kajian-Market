@@ -17,7 +17,7 @@ return d.toLocaleDateString('id-ID', {day:'numeric',month:'short',year:'numeric'
 }catch(e){ return ''; }
 }
 
-var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="21" height="21"><path d="M12 3C9.5 3 7.6 5 7.6 7.5V11c0 .8-.3 1.6-.9 2.2L5.4 14.5c-.6.6-.2 1.5.6 1.5h12c.8 0 1.2-.9.6-1.5l-1.3-1.3c-.6-.6-.9-1.4-.9-2.2V7.5C16.4 5 14.5 3 12 3Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="23" height="23"><path d="M12 3C9.5 3 7.6 5 7.6 7.5V11c0 .8-.3 1.6-.9 2.2L5.4 14.5c-.6.6-.2 1.5.6 1.5h12c.8 0 1.2-.9.6-1.5l-1.3-1.3c-.6-.6-.9-1.4-.9-2.2V7.5C16.4 5 14.5 3 12 3Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
 
 var state = { items: [], unread: 0, open: false, profileId: null, client: null, loaded:false, btn:null, panel:null, badge:null };
 
@@ -42,7 +42,7 @@ var btn = document.createElement('button');
 btn.type = 'button';
 btn.className = 'kamar-notif-btn';
 btn.setAttribute('aria-label','Notifikasi');
-btn.style.cssText = 'position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;border:1px solid rgba(238,206,122,.3);background:rgba(255,255,255,.06);color:#f3d985;cursor:pointer';
+btn.style.cssText = 'position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;border:1px solid rgba(120,90,20,.25);background:linear-gradient(135deg,#f4df90,#c69a39);color:#1c1a16;cursor:pointer;box-shadow:0 3px 10px rgba(184,138,61,.45)';
 btn.innerHTML = BELL_SVG + '<span class="kamar-notif-badge" style="display:none;position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:linear-gradient(135deg,#ff8a8a,#e24b4b);color:#fff;font-size:10px;font-weight:1000;line-height:17px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.35)"></span>';
 
 var panel = document.createElement('div');

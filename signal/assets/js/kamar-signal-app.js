@@ -15,6 +15,22 @@ Prinsip (jangan dilanggar, lihat master prompt user):
 
   var ROOT_PATH = '/signal/';
   var el = document.getElementById('ksigRoot');
+  var __ksigT0 = Date.now();
+  var __ksigLogEl = null;
+  function dbg(msg){
+    try{
+      if(!__ksigLogEl){
+        __ksigLogEl = document.createElement('div');
+        __ksigLogEl.id = '__ksigDebugLog';
+        __ksigLogEl.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
+        (document.body||document.documentElement).appendChild(__ksigLogEl);
+      }
+      var line = document.createElement('div');
+      line.textContent = '[' + (Date.now()-__ksigT0) + 'ms] ' + msg;
+      __ksigLogEl.appendChild(line);
+    }catch(e){}
+  }
+  dbg('script kamar-signal-app.js mulai jalan');
   var dashboardEntered = false;
   var _kamarNumSnap = {};
   function fmtCountNum(v, digits){
@@ -693,10 +709,12 @@ function esc(s){
   function boot(){
     routeFromLocation();
     renderBoot('Menghubungkan ke Kamar Signal…');
+    dbg('boot() mulai, renderBoot ditampilkan, akan panggil KamarSupabase.ready()');
     var readyPromise = (window.KamarSupabase && window.KamarSupabase.ready ? window.KamarSupabase.ready() : Promise.resolve(null));
     var timeoutPromise = new Promise(function(resolve, reject){ setTimeout(function(){ reject(new Error('TIMEOUT')); }, 9000); });
     Promise.race([readyPromise, timeoutPromise])
       .then(function(client){
+        dbg('KamarSupabase.ready() SELESAI, client ada: ' + (!!client));
         state.client = client || (window.KamarSupabase && window.KamarSupabase.getClient && window.KamarSupabase.getClient());
         if(!state.client){ renderBootError('Koneksi database belum siap. Muat ulang halaman.'); return; }
         // FIX 2026-08-16: checkSession() (lewat state.client.auth.getSession()) pernah
@@ -712,6 +730,7 @@ function esc(s){
         return Promise.race([checkSession(), sessionTimeoutPromise]);
       })
       .catch(function(err){
+        dbg('boot chain GAGAL/catch: ' + (err && (err.message||String(err))));
         if(err && err.message === 'TIMEOUT'){
           renderBootError('Koneksi ke server lambat atau tersangkut. Coba Muat Ulang. Jika masih gagal terus, hapus aplikasi Kamar Signal dari Home Screen lalu instal ulang dari awal.');
         } else if(err && err.message === 'SESSION_TIMEOUT'){
@@ -723,8 +742,10 @@ function esc(s){
   }
 
   function checkSession(){
+    dbg('checkSession: memanggil auth.getSession()');
     return state.client.auth.getSession().then(function(res){
       var session = res && res.data && res.data.session;
+      dbg('checkSession: getSession() SELESAI, ada session: ' + (!!session));
       if(!session || !session.user){
         state.user = null; state.approved = false;
         renderApp();
@@ -736,10 +757,12 @@ function esc(s){
   }
 
   function loadProfileAndAccess(){
+    dbg('loadProfileAndAccess: query member_profiles mulai');
     return state.client.from('member_profiles').select('id,account_status,full_name,email,telegram_chat_id').eq('user_id', state.user.id).maybeSingle()
       .then(function(res){
         if(res.error) throw res.error;
         state.profile = res.data || null;
+        dbg('loadProfileAndAccess: member_profiles SELESAI, profil ditemukan: ' + (!!state.profile) + ', akan query member_access');
         if(!state.profile){ state.approved = false; renderApp(); return null; }
         return state.client.from('member_access').select('access_kamar_study,locked_by_expired,expires_kamar_study,activation_source').eq('profile_id', state.profile.id).maybeSingle();
       })
@@ -2068,5 +2091,6 @@ var groups = groupRecapRows(R.rows);
     try{ renderBootError('Macet lebih dari 15 detik tanpa respons (watchdog darurat). Coba Muat Ulang. Kalau masih macet, ini kemungkinan bug spesifik browser di HP ini.'); }catch(e){}
   }, 15000);
 
+  dbg('memanggil boot() sekarang');
   boot();
 })();

@@ -56,7 +56,7 @@
     __dbgc('config kosong, mulai coba endpoint fallback satu-satu');
     for(var i=0; i<endpoints.length; i++){
       try{
-        __dbgc('mencoba fetch: ' + endpoints[i]); var res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache:'no-store' }); __dbgc('fetch ' + endpoints[i] + ' SELESAI, status: ' + res.status);
+        __dbgc('mencoba fetch: ' + endpoints[i]); var __ac = (typeof AbortController !== 'undefined') ? new AbortController() : null; var __to = __ac ? setTimeout(function(){ __ac.abort(); }, 6000) : null; var res; try { res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache:'no-store', signal: __ac && __ac.signal }); } finally { if(__to) clearTimeout(__to); } __dbgc('fetch ' + endpoints[i] + ' SELESAI, status: ' + res.status);
         if(!res.ok) continue;
         var data = await res.json();
         cfg = normalize(data);

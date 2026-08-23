@@ -1,7 +1,7 @@
 // Kamar Signal — service worker v2
 // Hanya cache APP SHELL (HTML/CSS/JS/ikon). JANGAN pernah cache data signal —
 // semua request ke Supabase/API selalu diambil fresh dari network, tidak lewat sini.
-  var SHELL_CACHE = 'kamar-signal-shell-v26';
+  var SHELL_CACHE = 'kamar-signal-shell-v27';
 var SHELL_FILES = [
   '/signal/',
   '/signal/index.html',
@@ -28,52 +28,19 @@ self.addEventListener('activate', function(event){
 });
 
 self.addEventListener('fetch', function(event){
-  var req = event.request;
-  if(req.method !== 'GET') return;
-
-  var url = new URL(req.url);
-
-  // Jangan pernah campur tangan request ke Supabase, endpoint API, atau domain lain.
-  if(url.origin !== self.location.origin) return;
-  if(url.pathname.indexOf('/api/') === 0) return;
-
-  // FIX 2026-08-23: request navigasi (load dokumen HTML utama, termasuk /signal/ dan
-  // /signal/index.html) TIDAK PERNAH dicegat SW lagi -- dibiarkan lewat langsung ke
-  // jaringan native browser tanpa event.respondWith() sama sekali. Alasan: ada kelas bug
-  // WebKit/iOS di mana fetch() yang dipanggil DARI DALAM service worker bisa macet tanpa
-  // pernah resolve/reject khusus utk request navigasi -- akibatnya event.respondWith()
-  // tidak pernah selesai, browser akhirnya nyerah dan tampilkan error native "Safari
-  // Tidak Dapat Membuka Halaman", SEBELUM sempat kamar-signal-app.js jalan sama sekali
-  // (makanya watchdog di dalam JS aplikasi pun tidak pernah sempat muncul -- errornya
-  // terjadi di layer network/SW, bukan di layer JS aplikasi). Membiarkan browser native
-  // yang urus request dokumen adalah best-practice PWA yang direkomendasikan persis utk
-  // menghindari kelas bug ini.
-  if(req.mode === 'navigate') return;
-
-  // Sisanya (asset statis JS/CSS/ikon di bawah /signal/) tetap network-first, TAPI
-  // sekarang dibungkus timeout 8 detik supaya fetch() yang macet tidak pernah bikin
-  // respondWith() nyangkut selamanya, dan fallback akhir tidak pernah resolve ke
-  // undefined (yang sebelumnya bisa terjadi kalau caches.match() tidak ketemu apa-apa --
-  // respondWith(undefined) dianggap error jaringan oleh browser).
-  if(url.pathname.indexOf('/signal/') === 0){
-    event.respondWith((function(){
-      var timer;
-      var timeoutPromise = new Promise(function(resolve){ timer = setTimeout(function(){ resolve(null); }, 8000); });
-      return Promise.race([
-        fetch(req).then(function(res){ clearTimeout(timer); return res; }),
-        timeoutPromise
-      ]).then(function(res){
-        if(res && res.ok){
-          var copy = res.clone();
-          event.waitUntil(caches.open(SHELL_CACHE).then(function(cache){ return cache.put(req, copy); }));
-          return res;
-        }
-        return caches.match(req).then(function(cached){ return cached || fetch(req); });
-      }).catch(function(){
-        return caches.match(req).then(function(cached){ return cached || fetch(req); });
-      });
-    })());
-  }
+  // FIX 2026-08-23 (nuklir): signal/sw.js SEKARANG TIDAK PERNAH intercept fetch APAPUN.
+  // Setelah beberapa fix bertingkat (navigate-bypass, timeout wrapper) TETAP gagal di
+  // device iOS asli (bahkan setelah clear semua data situs + fresh install), padahal
+  // homepage (dikontrol SW root yang beda) normal -- kesimpulan: SW /signal/ inilah
+  // satu-satunya perbedaan arsitektur signifikan antara halaman yang jalan vs macet.
+  // /signal/ memuat lebih banyak script (supabase-js CDN, kamar-config, kamar-supabase,
+  // kamar-signal-app) yang SEMUA dicegat SW ini sekaligus -- kemungkinan WebKit iOS
+  // tidak sanggup proses banyak fetch yang dicegat SW secara bersamaan tanpa macet/lambat
+  // parah, walau masing-masing sudah dikasih timeout 8 detik individual.
+  // SW ini TETAP terdaftar (supaya syarat PWA installable tetap terpenuhi), tapi TIDAK
+  // PERNAH lagi ikut campur di request apapun -- browser native yang urus semuanya,
+  // sama seperti halaman lain yang sudah terbukti normal.
+  return;
 });
 
 // --- Notifikasi (additive, tidak mengubah cache app-shell di atas) ---

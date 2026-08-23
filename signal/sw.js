@@ -1,7 +1,7 @@
 // Kamar Signal — service worker v2
 // Hanya cache APP SHELL (HTML/CSS/JS/ikon). JANGAN pernah cache data signal —
 // semua request ke Supabase/API selalu diambil fresh dari network, tidak lewat sini.
-  var SHELL_CACHE = 'kamar-signal-shell-v25';
+  var SHELL_CACHE = 'kamar-signal-shell-v26';
 var SHELL_FILES = [
   '/signal/',
   '/signal/index.html',
@@ -37,32 +37,44 @@ self.addEventListener('fetch', function(event){
   if(url.origin !== self.location.origin) return;
   if(url.pathname.indexOf('/api/') === 0) return;
 
-  // Hanya app-shell (file statis di bawah /signal/) yang boleh cache-first.
+  // FIX 2026-08-23: request navigasi (load dokumen HTML utama, termasuk /signal/ dan
+  // /signal/index.html) TIDAK PERNAH dicegat SW lagi -- dibiarkan lewat langsung ke
+  // jaringan native browser tanpa event.respondWith() sama sekali. Alasan: ada kelas bug
+  // WebKit/iOS di mana fetch() yang dipanggil DARI DALAM service worker bisa macet tanpa
+  // pernah resolve/reject khusus utk request navigasi -- akibatnya event.respondWith()
+  // tidak pernah selesai, browser akhirnya nyerah dan tampilkan error native "Safari
+  // Tidak Dapat Membuka Halaman", SEBELUM sempat kamar-signal-app.js jalan sama sekali
+  // (makanya watchdog di dalam JS aplikasi pun tidak pernah sempat muncul -- errornya
+  // terjadi di layer network/SW, bukan di layer JS aplikasi). Membiarkan browser native
+  // yang urus request dokumen adalah best-practice PWA yang direkomendasikan persis utk
+  // menghindari kelas bug ini.
+  if(req.mode === 'navigate') return;
+
+  // Sisanya (asset statis JS/CSS/ikon di bawah /signal/) tetap network-first, TAPI
+  // sekarang dibungkus timeout 8 detik supaya fetch() yang macet tidak pernah bikin
+  // respondWith() nyangkut selamanya, dan fallback akhir tidak pernah resolve ke
+  // undefined (yang sebelumnya bisa terjadi kalau caches.match() tidak ketemu apa-apa --
+  // respondWith(undefined) dianggap error jaringan oleh browser).
   if(url.pathname.indexOf('/signal/') === 0){
-    // FIX 2026-08-22: strategi diganti dari cache-first ke NETWORK-FIRST. Sebelumnya
-    // "return cached || network" bikin device yang SUDAH PERNAH buka /signal/ SELALU
-    // dapat versi HTML/JS LAMA yang ke-cache -- walau kode sumbernya sudah diperbaiki di
-    // server -- karena SHELL_CACHE namanya tidak pernah berubah antar deploy, jadi cache
-    // lama tidak pernah kehapus otomatis (activate cuma hapus cache dgn NAMA beda). Lebih
-    // parah lagi, proses "revalidate" latar belakang sebelumnya TIDAK dibungkus
-    // event.waitUntil(), jadi gampang dimatikan browser (terutama iOS Safari yang sangat
-    // agresif mematikan proses background) sebelum sempat update cache -- device iOS bisa
-    // macet permanen di versi lama walau sudah online dan kode server sudah benar. Sekarang:
-    // selalu coba network dulu; cache CUMA dipakai kalau network gagal (offline).
-    event.respondWith(
-      fetch(req).then(function(res){
+    event.respondWith((function(){
+      var timer;
+      var timeoutPromise = new Promise(function(resolve){ timer = setTimeout(function(){ resolve(null); }, 8000); });
+      return Promise.race([
+        fetch(req).then(function(res){ clearTimeout(timer); return res; }),
+        timeoutPromise
+      ]).then(function(res){
         if(res && res.ok){
           var copy = res.clone();
           event.waitUntil(caches.open(SHELL_CACHE).then(function(cache){ return cache.put(req, copy); }));
+          return res;
         }
-        return res;
+        return caches.match(req).then(function(cached){ return cached || fetch(req); });
       }).catch(function(){
-        return caches.match(req);
-      })
-    );
+        return caches.match(req).then(function(cached){ return cached || fetch(req); });
+      });
+    })());
   }
 });
-
 
 // --- Notifikasi (additive, tidak mengubah cache app-shell di atas) ---
 self.addEventListener('push', function(event){

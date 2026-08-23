@@ -58,7 +58,7 @@
     var endpoints = ['/api/kamar-config', '/supabase-config.json', '/kamar-config.json'];
     for(var i=0;i<endpoints.length;i++){
       try{
-        var res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache: 'no-store' });
+        var __ac = (typeof AbortController !== 'undefined') ? new AbortController() : null; var __to = __ac ? setTimeout(function(){ __ac.abort(); }, 6000) : null; var res; try { res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache: 'no-store', signal: __ac && __ac.signal }); } finally { if(__to) clearTimeout(__to); }
         if(!res.ok) continue;
         var data = await res.json();
         var cfg = {
@@ -82,7 +82,7 @@
       }
       var line = document.createElement('div');
       line.textContent = '[sup ' + Date.now()%100000 + 'ms] ' + msg;
-      elx.appendChild(line);
+      elx.appendChild(line); elx.scrollTop = elx.scrollHeight;
     }catch(e){}
   }
   async function ready(){

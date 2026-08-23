@@ -2039,5 +2039,34 @@ var groups = groupRecapRows(R.rows);
   window.ksigShowUpdateToast = showUpdateToast;
 
 /* ---------------- start ---------------- */
+  // FIX 2026-08-23: watchdog diagnostik darurat. User laporkan HP iOS (iPhone x2 + iPad,
+  // browser apapun) macet total di layar loading tanpa pesan error apapun -- padahal boot()
+  // sudah dibungkus timeout 9 detik lewat Promise.race. Kalau tetap macet tanpa pesan sama
+  // sekali, kemungkinan ada error JS/promise yang lolos dari try/catch yang sudah ada. Tiga
+  // lapis jaring pengaman independen ditambahkan di sini supaya SELALU ada pesan error yang
+  // muncul (tidak pernah diam macet tanpa penjelasan lagi), dan supaya pesan errornya bisa
+  // dipakai buat diagnosis akar masalah sebenarnya di percobaan berikutnya:
+  var __ksigBootSettled = false;
+  var __origRenderBootError = renderBootError;
+  renderBootError = function(msg){ __ksigBootSettled = true; __origRenderBootError(msg); };
+  var __origRenderApp = (typeof renderApp === 'function') ? renderApp : null;
+  if(__origRenderApp){ renderApp = function(){ __ksigBootSettled = true; return __origRenderApp.apply(this, arguments); }; }
+  window.addEventListener('error', function(ev){
+    if(__ksigBootSettled) return;
+    try{ renderBootError('Error JS: ' + (ev && ev.message || 'unknown') + (ev && ev.filename ? ' ('+ev.filename.split('/').pop()+':'+ev.lineno+')' : '')); }catch(e){}
+  });
+  window.addEventListener('unhandledrejection', function(ev){
+    if(__ksigBootSettled) return;
+    try{
+      var reason = ev && ev.reason;
+      var msg = (reason && reason.message) ? reason.message : String(reason);
+      renderBootError('Promise gagal tanpa tertangani: ' + msg);
+    }catch(e){}
+  });
+  setTimeout(function(){
+    if(__ksigBootSettled) return;
+    try{ renderBootError('Macet lebih dari 15 detik tanpa respons (watchdog darurat). Coba Muat Ulang. Kalau masih macet, ini kemungkinan bug spesifik browser di HP ini.'); }catch(e){}
+  }, 15000);
+
   boot();
 })();

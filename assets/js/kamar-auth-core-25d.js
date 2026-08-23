@@ -3,7 +3,8 @@
   if(window.__KAMAR_AUTH_29F__) return;
   window.__KAMAR_AUTH_29F__ = true;
   var VERSION = '29F';
-  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com','superadmin@akun.kamar'];
+  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com','superadmin@akun.kamar','supermaster@akun.kamar'];
+  var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function norm(v){ return String(v||'').trim().toLowerCase(); }
@@ -152,7 +153,14 @@
       if(requestedRole==='member' && !admin){ finalRole = 'member'; }
 
       var s = sessionFromAuthUser(user,finalRole,profile);
-      saveRole(finalRole,s);
+      if(ALL_ROLE_EMAILS.indexOf(email)>=0){
+        /* FIX 2026-08-23: akun ALL_ROLE_EMAILS dapat sesi admin DAN member sekaligus */
+        /* (biasanya keduanya saling menghapus -- lihat saveRole di kamar-session-final-28.js) */
+        saveRole('admin', sessionFromAuthUser(user,'admin',profile));
+        saveRole('member', sessionFromAuthUser(user,'member',profile));
+      } else {
+        saveRole(finalRole,s);
+      }
       status(form,'Login berhasil. Membuka dashboard...',true);
       setTimeout(function(){
         location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;

@@ -27,10 +27,35 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       }
       var line = document.createElement('div');
       line.textContent = '[' + (Date.now()-__ksigT0) + 'ms] ' + msg;
-      __ksigLogEl.appendChild(line);
+      __ksigLogEl.appendChild(line); __ksigLogEl.scrollTop = __ksigLogEl.scrollHeight;
     }catch(e){}
   }
   dbg('script kamar-signal-app.js mulai jalan');
+  // DIAGNOSTIK 2026-08-23: PerformanceObserver longtask -- deteksi PERSIS tugas mana
+  // yang macetin main thread lama (>150ms), biar ketahuan sumber CPU-pinning tanpa
+  // nebak-nebak lagi. Dibatasi max 40 entry + ringkasan tiap 5 detik biar diagnostik
+  // ini sendiri TIDAK nambah beban (dicurigai debug logging lama bisa jadi beban).
+  try{
+    var __ksigLtCount = 0, __ksigLtTotalMs = 0, __ksigLtLogged = 0;
+    if(typeof PerformanceObserver !== 'undefined'){
+      var __ksigLtObs = new PerformanceObserver(function(list){
+        list.getEntries().forEach(function(entry){
+          __ksigLtCount++; __ksigLtTotalMs += entry.duration;
+          if(__ksigLtLogged < 40 && entry.duration > 150){
+            __ksigLtLogged++;
+            dbg('LONGTASK #' + __ksigLtCount + ': ' + Math.round(entry.duration) + 'ms, name=' + entry.name + ', start=' + Math.round(entry.startTime) + 'ms');
+          }
+        });
+      });
+      __ksigLtObs.observe({ type: 'longtask', buffered: true });
+      setInterval(function(){
+        if(__ksigLtCount > 0){ dbg('RINGKASAN longtask: ' + __ksigLtCount + ' tugas, total ' + Math.round(__ksigLtTotalMs) + 'ms sejak awal'); }
+      }, 5000);
+    } else {
+      dbg('PerformanceObserver/longtask TIDAK didukung browser ini');
+    }
+  }catch(__ksigLtErr){ dbg('setup longtask observer GAGAL: ' + (__ksigLtErr && __ksigLtErr.message)); }
+
   var dashboardEntered = false;
   var _kamarNumSnap = {};
   function fmtCountNum(v, digits){

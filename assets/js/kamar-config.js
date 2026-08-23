@@ -31,21 +31,39 @@
 
   apply(current());
 
+  function __dbgc(msg){
+    try{
+      var elx = document.getElementById('__ksigDebugLog');
+      if(!elx){
+        elx = document.createElement('div');
+        elx.id = '__ksigDebugLog';
+        elx.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
+        (document.body||document.documentElement).appendChild(elx);
+      }
+      var line = document.createElement('div');
+      line.textContent = '[cfg ' + Date.now()%100000 + 'ms] ' + msg;
+      elx.appendChild(line);
+    }catch(e){}
+  }
+
   window.KAMAR_CONFIG_READY = (async function(){
+    __dbgc('IIFE mulai jalan');
     var cfg = current();
+    __dbgc('current() selesai, hasConfig awal: ' + !!(cfg.supabaseUrl && cfg.supabaseAnonKey));
     if(cfg.supabaseUrl && cfg.supabaseAnonKey) return apply(cfg);
 
     var endpoints = ['/api/kamar-config', '/api/kamar-config.js', '/supabase-config.json', '/kamar-config.json'];
+    __dbgc('config kosong, mulai coba endpoint fallback satu-satu');
     for(var i=0; i<endpoints.length; i++){
       try{
-        var res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache:'no-store' });
+        __dbgc('mencoba fetch: ' + endpoints[i]); var res = await fetch(endpoints[i] + '?t=' + Date.now(), { cache:'no-store' }); __dbgc('fetch ' + endpoints[i] + ' SELESAI, status: ' + res.status);
         if(!res.ok) continue;
         var data = await res.json();
         cfg = normalize(data);
         if(cfg.supabaseUrl && cfg.supabaseAnonKey) return apply(cfg);
-      }catch(e){}
+      catch(e){ __dbgc('fetch endpoint ke-' + i + ' GAGAL: ' + (e && (e.message||String(e)))); }
     }
-    return apply(current());
+    __dbgc('SEMUA endpoint gagal, fallback ke config kosong/asli'); return apply(current());
   })();
 
   window.KamarConfigReady = window.KAMAR_CONFIG_READY;

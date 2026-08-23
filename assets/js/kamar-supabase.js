@@ -89,6 +89,16 @@
     __dbg('ready() dipanggil');
     
     __dbg('ready(): window.kamarSupabaseClient sudah ada? ' + (!!window.kamarSupabaseClient));if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
+    // FIX 2026-08-23: cache promise ready() supaya HANYA SATU proses fetch-config +
+    // buat-client yang pernah jalan per page load, tidak peduli berapa banyak pemanggil
+    // independen (boot(), auto-init bawah file ini, maintenance-check, dll). SEBELUM fix
+    // ini, tiap pemanggil ready() memicu eksekusi BARU sendiri-sendiri secara paralel --
+    // dibuktikan lewat log debug: createClientFromConfig() berhasil dipanggil ULANG
+    // beberapa kali oleh pemanggil BERBEDA di HP iOS yang sama, dan salah satu
+    // pemanggilnya (punya boot()) tidak pernah dapat balasan sama sekali -- diduga kuat
+    // race/deadlock WebKit saat beberapa instance client Supabase dibuat bersamaan.
+    if(window.__kamarReadyInFlight) return window.__kamarReadyInFlight;
+    window.__kamarReadyInFlight = (async function(){
     __dbg('ready(): akan tunggu KAMAR_CONFIG_READY, ada: ' + (!!window.KAMAR_CONFIG_READY)); try { if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; } catch(e) {} __dbg('ready(): selesai tunggu KAMAR_CONFIG_READY');
     var cfg = readConfig();
     __dbg('ready(): readConfig() selesai, hasConfig: ' + (cfg && cfg.hasConfig));
@@ -96,6 +106,8 @@
     __dbg('ready(): akan panggil createClientFromConfig'); var client = createClientFromConfig(cfg); __dbg('ready(): createClientFromConfig SELESAI, client ada: ' + (!!client));
     window.dispatchEvent(new CustomEvent('kamar:supabase-ready', { detail: { ok: !!client, config: cfg } }));
     return client;
+    })();
+    return window.__kamarReadyInFlight;
   }
   async function select(table, options){
     options = options || {};

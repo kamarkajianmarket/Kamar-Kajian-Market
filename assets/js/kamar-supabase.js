@@ -71,12 +71,29 @@
     }
     return applyConfig(readConfig());
   }
+  function __dbg(msg){
+    try{
+      var elx = document.getElementById('__ksigDebugLog');
+      if(!elx){
+        elx = document.createElement('div');
+        elx.id = '__ksigDebugLog';
+        elx.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
+        (document.body||document.documentElement).appendChild(elx);
+      }
+      var line = document.createElement('div');
+      line.textContent = '[sup ' + Date.now()%100000 + 'ms] ' + msg;
+      elx.appendChild(line);
+    }catch(e){}
+  }
   async function ready(){
-    if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
-    try { if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; } catch(e) {}
+    __dbg('ready() dipanggil');
+    
+    __dbg('ready(): window.kamarSupabaseClient sudah ada? ' + (!!window.kamarSupabaseClient));if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
+    __dbg('ready(): akan tunggu KAMAR_CONFIG_READY, ada: ' + (!!window.KAMAR_CONFIG_READY)); try { if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; } catch(e) {} __dbg('ready(): selesai tunggu KAMAR_CONFIG_READY');
     var cfg = readConfig();
-    if(!cfg.hasConfig) cfg = await fetchConfigFallback();
-    var client = createClientFromConfig(cfg);
+    __dbg('ready(): readConfig() selesai, hasConfig: ' + (cfg && cfg.hasConfig));
+    __dbg('ready(): akan panggil fetchConfigFallback (cfg blm ada)'); if(!cfg.hasConfig) cfg = await fetchConfigFallback(); __dbg('ready(): fetchConfigFallback selesai, hasConfig: ' + (cfg && cfg.hasConfig));
+    __dbg('ready(): akan panggil createClientFromConfig'); var client = createClientFromConfig(cfg); __dbg('ready(): createClientFromConfig SELESAI, client ada: ' + (!!client));
     window.dispatchEvent(new CustomEvent('kamar:supabase-ready', { detail: { ok: !!client, config: cfg } }));
     return client;
   }

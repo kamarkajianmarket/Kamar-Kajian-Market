@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Diagnostik 2 Kamar Signal</title>
-<link rel="stylesheet" href="/signal/assets/css/kamar-signal.css?v=diag3">
+<link rel="stylesheet" href="/signal/assets/css/kamar-signal.css?v=diag4">
 </head>
 <body style="margin:0;">
 <div id="ksigRoot"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/assets/js/kamar-config.js?v=diag3"></script>
-<script src="/assets/js/kamar-supabase.js?v=diag3"></script>
+<script src="/assets/js/kamar-config.js?v=diag4"></script>
+<script src="/assets/js/kamar-supabase.js?v=diag4"></script>
 <script>
 (function(){
   var t0 = Date.now();
@@ -26,57 +26,51 @@
         }
       }
       var line = document.createElement('div');
-      line.textContent = '[diag3 ' + (Date.now()-t0) + 'ms] ' + msg;
+      line.textContent = '[diag4 ' + (Date.now()-t0) + 'ms] ' + msg;
       logEl.appendChild(line);
       logEl.scrollTop = logEl.scrollHeight;
     }catch(e){}
   }
 
-  // PENTING: pasang error catcher SEBELUM load kamar-signal-app.js, supaya kalau ada
-  // error sinkron di baris PALING AWAL file itu, kita TETAP bisa lihat pesannya
-  // (watchdog error-catcher yang sudah ada di dalam kamar-signal-app.js sendiri baru
-  // aktif di baris TERAKHIR file itu, jadi tidak berguna kalau error terjadi di awal).
-  window.addEventListener('error', function(ev){
-    dlog('WINDOW ERROR TERTANGKAP: ' + (ev && ev.message) + ' @ ' + (ev && ev.filename ? ev.filename.split('/').pop() + ':' + ev.lineno : '?'));
-  });
-  window.addEventListener('unhandledrejection', function(ev){
-    dlog('UNHANDLED REJECTION: ' + (ev && ev.reason && (ev.reason.message || String(ev.reason))));
-  });
+  window.addEventListener('error', function(ev){ dlog('WINDOW ERROR: ' + (ev && ev.message)); });
+  window.addEventListener('unhandledrejection', function(ev){ dlog('UNHANDLED REJECTION: ' + (ev && ev.reason && (ev.reason.message||String(ev.reason)))); });
 
-  var ltCount = 0;
-  try{
-    if(typeof PerformanceObserver !== 'undefined'){
-      var obs = new PerformanceObserver(function(list){
-        list.getEntries().forEach(function(entry){ ltCount++; dlog('LONGTASK #' + ltCount + ': ' + Math.round(entry.duration) + 'ms'); });
-      });
-      obs.observe({ type: 'longtask', buffered: true });
-    }
-  }catch(e){ dlog('observer gagal: ' + e.message); }
-
-  dlog('TAHAP A: render markup boot + CSS kamar-signal.css (TANPA kamar-signal-app.js dulu)');
+  dlog('TAHAP A: render markup boot + CSS');
   var el = document.getElementById('ksigRoot');
-  el.innerHTML = '<div class="ksig-boot"><div class="ksig-boot-mark">Kamar Signal</div><div class="ksig-boot-sub">Diagnostik tahap A (CSS only)...</div></div>';
+  el.innerHTML = '<div class="ksig-boot"><div class="ksig-boot-mark">Kamar Signal</div><div class="ksig-boot-sub">Diagnostik tahap A...</div></div>';
 
   var hbCount = 0;
-  setInterval(function(){ hbCount++; dlog('HEARTBEAT #' + hbCount + ' (setInterval hidup), longtask: ' + ltCount); }, 3000);
-
-  var rafCount = 0;
-  var lastRafLog = 0;
+  setInterval(function(){ hbCount++; dlog('HEARTBEAT #' + hbCount + ' (setInterval hidup)'); }, 3000);
+  var rafCount = 0, lastRafLog = 0;
   function rafLoop(ts){
     rafCount++;
-    if(ts - lastRafLog > 3000){ lastRafLog = ts; dlog('RAF-TICK #' + rafCount + ' (requestAnimationFrame hidup)'); }
+    if(ts - lastRafLog > 3000){ lastRafLog = ts; dlog('RAF-TICK #' + rafCount); }
     requestAnimationFrame(rafLoop);
   }
   requestAnimationFrame(rafLoop);
 
   setTimeout(function(){
-    dlog('TAHAP B: sekarang load kamar-signal-app.js SUNGGUHAN (file asli, 2121 baris)');
-    var s = document.createElement('script');
-    s.src = '/signal/assets/js/kamar-signal-app.js?v=diag3';
-    s.onload = function(){ dlog('kamar-signal-app.js SELESAI DIMUAT (event onload terpicu)'); };
-    s.onerror = function(){ dlog('kamar-signal-app.js GAGAL DIMUAT (event onerror terpicu)'); };
-    document.body.appendChild(s);
-    dlog('tag <script> utk kamar-signal-app.js SUDAH ditambahkan ke DOM, menunggu browser proses...');
+    dlog('TAHAP B: coba fetch() PLAIN (TEKS SAJA, TIDAK dieksekusi) kamar-signal-app.js');
+    var ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var to = ac ? setTimeout(function(){ dlog('TAHAP B: 15 detik lewat, ABORT fetch plain'); ac.abort(); }, 15000) : null;
+    fetch('/signal/assets/js/kamar-signal-app.js?v=diag4b', { cache: 'no-store', signal: ac && ac.signal })
+      .then(function(res){
+        if(to) clearTimeout(to);
+        dlog('TAHAP B: fetch() SELESAI, status=' + res.status);
+        return res.text();
+      })
+      .then(function(txt){
+        dlog('TAHAP B: .text() SELESAI, panjang=' + txt.length + ' -- FETCH PLAIN BERHASIL TOTAL, TIDAK macet.');
+        dlog('TAHAP C: sekarang coba jalankan file itu SEBAGAI SCRIPT (eksekusi sungguhan)');
+        var s = document.createElement('script');
+        s.src = '/signal/assets/js/kamar-signal-app.js?v=diag4c';
+        s.onload = function(){ dlog('TAHAP C: kamar-signal-app.js SELESAI DIMUAT (onload)'); };
+        s.onerror = function(){ dlog('TAHAP C: kamar-signal-app.js GAGAL (onerror)'); };
+        document.body.appendChild(s);
+      })
+      .catch(function(err){
+        dlog('TAHAP B: fetch() PLAIN GAGAL/ABORT: ' + (err && err.message) + ' -- INI BUKTI: bahkan fetch teks biasa (tanpa eksekusi) SUDAH macet duluan!');
+      });
   }, 6000);
 })();
 </script>

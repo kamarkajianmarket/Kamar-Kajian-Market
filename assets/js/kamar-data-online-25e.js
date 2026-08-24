@@ -119,7 +119,8 @@
   function fillMemberDashboard(){
 if((location.pathname.split('/').pop()||'').toLowerCase()!=='dashboard.html')return;
 var m=findCurrentMember(); if(!m)return;
-setText('memberWelcomeTitle','Selamat datang, '+nameOf(m)+'.');
+var __isMaster=(emailOf(m)||'').toLowerCase()==='supermaster@akun.kamar';
+setText('memberWelcomeTitle', __isMaster ? 'SELAMAT DATANG MASTER' : ('Selamat datang, '+nameOf(m)+'.'));
 setText('memberWelcomeText','ID: '+(idOf(m)||'-'));
 var ref=referralOf(m)||'Tidak ada';
 var refLine=el('memberReferralLine'); if(refLine)refLine.textContent='Referral: '+ref;

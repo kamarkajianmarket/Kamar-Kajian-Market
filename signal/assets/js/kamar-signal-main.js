@@ -782,6 +782,36 @@ function esc(s){
     });
   }
 
+  function fetchMemberAccessWithRetry(profileId, attemptsLeft){
+    var attemptNum = 4 - attemptsLeft;
+    dbg('member_access: raw fetch percobaan ke-' + attemptNum + ' dari 3 (bypass supabase-js .from())');
+    var url = state.client.supabaseUrl + '/rest/v1/member_access?select=access_kamar_study,locked_by_expired,expires_kamar_study,activation_source&profile_id=eq.' + encodeURIComponent(profileId);
+    var ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var to = ac ? setTimeout(function(){ dbg('member_access: percobaan ke-' + attemptNum + ' 5 detik lewat, ABORT'); ac.abort(); }, 5000) : null;
+    return fetch(url, {
+      method: 'GET',
+      headers: { 'apikey': state.client.supabaseKey, 'Authorization': 'Bearer ' + (state.accessToken || state.client.supabaseKey) },
+      signal: ac ? ac.signal : undefined
+    }).then(function(res2){
+      if(to) clearTimeout(to);
+      dbg('member_access: percobaan ke-' + attemptNum + ' response DITERIMA, status=' + res2.status);
+      if(!res2.ok) return res2.text().then(function(t){ throw new Error('HTTP ' + res2.status + ': ' + t); });
+      return res2.json();
+    }).then(function(arr){
+      dbg('member_access: percobaan ke-' + attemptNum + ' .json() SELESAI, jumlah baris: ' + (Array.isArray(arr) ? arr.length : 'bukan-array'));
+      return { data: (Array.isArray(arr) && arr.length) ? arr[0] : null, error: null };
+    }).catch(function(err){
+      if(to) clearTimeout(to);
+      dbg('member_access: percobaan ke-' + attemptNum + ' GAGAL: ' + (err && (err.message||String(err))));
+      if(attemptsLeft > 1){
+        dbg('member_access: coba lagi (percobaan berikutnya)...');
+        return fetchMemberAccessWithRetry(profileId, attemptsLeft - 1);
+      }
+      var e2 = new Error('QUERY_TIMEOUT:member_access (3x percobaan gagal semua)');
+      throw e2;
+    });
+  }
+
   function loadProfileAndAccess(){
     dbg('loadProfileAndAccess: query member_profiles mulai');
     function withTimeout(p, ms, label){
@@ -796,29 +826,7 @@ function esc(s){
         state.profile = res.data || null;
         dbg('loadProfileAndAccess: member_profiles SELESAI, profil ditemukan: ' + (!!state.profile) + ', akan query member_access');
         if(!state.profile){ state.approved = false; renderApp(); return null; }
-        dbg('member_access: PAKAI RAW FETCH() MANUAL, bypass supabase-js .from() -- eksperimen krn .from() terbukti macet total di titik ini');
-        return (function(){
-          var url = state.client.supabaseUrl + '/rest/v1/member_access?select=access_kamar_study,locked_by_expired,expires_kamar_study,activation_source&profile_id=eq.' + encodeURIComponent(state.profile.id);
-          var ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-          var to = ac ? setTimeout(function(){ dbg('member_access: raw fetch 8 detik lewat, ABORT'); ac.abort(); }, 8000) : null;
-          return fetch(url, {
-            method: 'GET',
-            headers: { 'apikey': state.client.supabaseKey, 'Authorization': 'Bearer ' + (state.accessToken || state.client.supabaseKey) },
-            signal: ac ? ac.signal : undefined
-          }).then(function(res2){
-            if(to) clearTimeout(to);
-            dbg('member_access: raw fetch response DITERIMA, status=' + res2.status);
-            if(!res2.ok) return res2.text().then(function(t){ throw new Error('HTTP ' + res2.status + ': ' + t); });
-            return res2.json();
-          }).then(function(arr){
-            dbg('member_access: raw fetch .json() SELESAI, jumlah baris: ' + (Array.isArray(arr) ? arr.length : 'bukan-array'));
-            return { data: (Array.isArray(arr) && arr.length) ? arr[0] : null, error: null };
-          }).catch(function(err){
-            if(to) clearTimeout(to);
-            if(err && err.name === 'AbortError'){ var e2 = new Error('QUERY_TIMEOUT:member_access'); throw e2; }
-            throw err;
-          });
-        })();
+        return fetchMemberAccessWithRetry(state.profile.id, 3);
       })
       .then(function(res){
         dbg('loadProfileAndAccess: member_access query SELESAI, res ada: ' + (!!res));

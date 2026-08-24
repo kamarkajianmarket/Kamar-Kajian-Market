@@ -22,7 +22,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
       __ksigLogEl = __ksigLogEl || document.getElementById('__ksigDebugLog'); if(!__ksigLogEl){
         __ksigLogEl = document.createElement('div');
         __ksigLogEl.id = '__ksigDebugLog';
-        __ksigLogEl.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
+        __ksigLogEl.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;pointer-events:none;white-space:pre-wrap;word-break:break-all;';
         (document.body||document.documentElement).appendChild(__ksigLogEl);
       }
       var line = document.createElement('div');

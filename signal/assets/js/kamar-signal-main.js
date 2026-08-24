@@ -97,6 +97,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     access: null,
     approved: false,
     route: { view: 'dashboard' },
+    navCount: 0,
     counts: { fresh:0, aktif:0, profit:0, loss:0 },
     unreadCounts: { fresh:0, aktif:0, profit:0, loss:0 },
     badgeJustChanged: { fresh:false, aktif:false, profit:false, loss:false },
@@ -105,7 +106,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     readsLoaded: false,
     realtimeStatus: 'off', // off | connecting | on | warn
     list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0 },
-    recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false, customPreset:null, customFrom:'', customTo:'', customRangeLabel:'' },
+    recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false, customPreset:null, customFrom:'', customTo:'', customRangeLabel:'', calOpen:false, calViewYear:null, calViewMonth:null, calStart:null, calEnd:null },
     activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
   };
@@ -699,7 +700,9 @@ function esc(s){
   function navigate(path, replace){
     if(state.route.view === 'list') state.list.scrollY = window.scrollY;
     if(replace) history.replaceState({}, '', path);
-    else history.pushState({}, '', path);
+    else { history.pushState({}, '', path); state.navCount = (state.navCount||0) + 1; }
+    
+    
     routeFromLocation();
     renderApp();
   }
@@ -716,7 +719,22 @@ function esc(s){
     e.preventDefault();
     navigate(a.getAttribute('data-ksig-nav'));
   });
-  window.addEventListener('popstate', function(){ routeFromLocation(); renderApp(); });
+  document.addEventListener('click', function(e){
+  var b = e.target.closest && e.target.closest('[data-ksig-back]');
+  if(!b) return;
+  e.preventDefault();
+  if(state.navCount > 0){ state.navCount--; history.back(); }
+  else { navigate(b.getAttribute('data-ksig-back'), true); }
+});
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  var b = e.target.closest && e.target.closest('[data-ksig-back]');
+  if(!b) return;
+  e.preventDefault();
+  if(state.navCount > 0){ state.navCount--; history.back(); }
+  else { navigate(b.getAttribute('data-ksig-back'), true); }
+});
+window.addEventListener('popstate', function(){ routeFromLocation(); renderApp(); });
 
   function routeFromLocation(){
     var p = location.pathname;
@@ -1104,11 +1122,21 @@ function refreshCounts(){
     });
   }
 
+  function renderRecapCard(){
+    var wrap = document.getElementById('ksigRecapCard');
+    if(!wrap){ renderApp(); return; }
+    var scrollY = window.scrollY;
+    wrap.outerHTML = recapCardHtml();
+    bindRecapTabs(); bindRecapCustomControls(); bindRecapCalendar();
+    renderRecapBody();
+    if(Math.abs(window.scrollY - scrollY) > 1) window.scrollTo(0, scrollY);
+  }
+
   function loadRecap(type, periodEndWib){
 var R = state.recap;
 if(R.type !== type){ R.periods = []; R.periodsLoaded = false; R.periodsLoading = false; }
 R.type = type; R.loading = true; R.error = null; R.pickerOpen = false;
-renderApp();
+renderRecapCard();
 // Ambil rekap existing apa adanya. Struktur bisnis existing: satu periode bisa
 // mempunyai lebih dari satu baris (per timeframe, dan per pair kalau ada).
 // UI hanya mengelompokkan baris-baris ini untuk ditampilkan - tidak menghitung ulang,
@@ -1129,11 +1157,11 @@ R.rows = rows;
 R.selectedPeriod = rows.length ? rows[0].period_end_wib : (periodEndWib || null);
 R.loading = false;
 R.loaded = true;
-renderApp();
+renderRecapCard();
 if(!R.periodsLoaded && !R.periodsLoading) loadRecapPeriods(type);
 }).catch(function(err){
 R.loading = false; R.error = 'Data belum dapat dimuat.';
-renderApp();
+renderRecapCard();
 });
 }
 
@@ -1159,7 +1187,7 @@ list = list.filter(function(k){ return new Date(k).getTime() >= monthStartMs; })
 R.periods = list.slice(0, type === 'DAILY' ? 31 : 24);
 R.periodsLoaded = true;
 R.periodsLoading = false;
-if(state.recap.type === type) renderApp();
+if(state.recap.type === type) renderRecapCard();
 }).catch(function(){ R.periodsLoading = false; });
 }
 
@@ -1254,7 +1282,7 @@ if(state.recap.type === type) renderApp();
 
   function appBar(title, opts){
     opts = opts || {};
-    var back = opts.back ? '<div class="ksig-appbar-back" data-ksig-nav="'+esc(opts.back)+'" tabindex="0" role="link" aria-label="Kembali">‹</div>' : '';
+    var back = opts.back ? '<div class="ksig-appbar-back" data-ksig-back="'+esc(opts.back)+'" tabindex="0" role="link" aria-label="Kembali">‹</div>' : '';
     var live = '<div class="ksig-live off" id="ksigLive"><span class="ksig-live-dot"></span><span class="ksig-live-label">Offline</span></div>';
     var install = installAvailable() ? '<button type="button" class="ksig-install-btn" id="ksigInstallBtn" title="Instal Aplikasi">⇩</button>' : '';
     return '<div class="ksig-appbar"><div class="ksig-appbar-inner">'+back+'<div class="ksig-appbar-title">'+esc(title)+'</div>'+install+live+'</div></div>';
@@ -1522,7 +1550,7 @@ if(state.recap.type === type) renderApp();
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn(); bindTelegramBtn(); bindSettingsBtn();
     (function(){ var da=document.getElementById('ksigDashInstallBtnAndroid'); if(da) da.addEventListener('click', function(){ openInstallSheet('android'); }); var di=document.getElementById('ksigDashInstallBtnIOS'); if(di) di.addEventListener('click', function(){ openInstallSheet('ios'); }); })();
-    bindRecapTabs(); bindRecapCustomControls();
+    bindRecapTabs(); bindRecapCustomControls(); bindRecapCalendar();
     bindInfoTeknisCard();
     bindPointerLight();
     renderRecapBody();
@@ -1629,23 +1657,25 @@ if(state.recap.type === type) renderApp();
     var lm = document.getElementById('ksigLoadMore');
     if(lm) lm.addEventListener('click', function(){ loadList(false); });
   }
-  function rowHtml(s){
+  function ksigInfoChip(cls, text){ return '<span class="ksig-info-chip '+cls+'">'+esc(text)+'</span>'; }
+function rowHtml(s){
     var unread = state.readsLoaded && isUnread(s.id_zona, s.updated_at);
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
     var infoParts = [];
-    if(s.jenis_zona) infoParts.push(s.jenis_zona);
-    if(s.area_low!=null && s.area_high!=null) infoParts.push('Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high));
-    if(s.tp1!=null) infoParts.push('TP1 '+fmtNum(s.tp1));
-    if(s.invalidasi!=null) infoParts.push('CL '+fmtNum(s.invalidasi));
+    if(s.jenis_zona) infoParts.push(ksigInfoChip('ksig-chip-zona', s.jenis_zona));
+    if(s.area_low!=null && s.area_high!=null) infoParts.push(ksigInfoChip('ksig-chip-area','Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high)));
+    var tpVals = [s.tp1,s.tp2,s.tp3].filter(function(v){ return v!=null; }).map(function(v){ return fmtNum(v); });
+if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('/')));
+    if(s.invalidasi!=null) infoParts.push(ksigInfoChip('ksig-chip-cl','CL '+fmtNum(s.invalidasi)));
     if(s.display_status!=='fresh'){
       var pips = pipsOf(s);
-      if(pips!=null) infoParts.push((pips>=0?'+':'')+fmtNum(pips,1)+' Pips');
+      if(pips!=null) infoParts.push(ksigInfoChip(pips>=0?'ksig-chip-tp':'ksig-chip-cl',(pips>=0?'+':'')+fmtNum(pips,1)+' Pips'));
     }
-    var info = infoParts.join(' • ');
+    var info = infoParts.join('');
     return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
         '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
-        (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+
+        (info ? '<div class="ksig-row-info">'+info+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
       '<div class="ksig-row-chev" aria-hidden="true">›</div>'+
@@ -1717,18 +1747,119 @@ if(state.recap.type === type) renderApp();
   /* ---------------- rekap signal ---------------- */
   function recapCardHtml(){
     var R = state.recap;
-    return '<div class="ksig-recap-card">'+
+    return '<div class="ksig-recap-card" id="ksigRecapCard">'+
+'<div class="ksig-recap-toprow">'+
       '<div class="ksig-tabs" role="tablist">'+
         tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') + tab('CUSTOM','Custom') +
       '</div>'+
-      (R.type==='CUSTOM' ? recapCustomRangeHtml() : recapPeriodPickerHtml()) +
+      '<button type="button" class="ksig-cal-btn" id="ksigRecapCalBtn" aria-label="Pilih rentang tanggal" title="Pilih rentang tanggal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>'+
+'</div>'+
+(R.type==='CUSTOM' ? recapCustomRangeHtml() : recapPeriodPickerHtml()) +
       '<div id="ksigRecapBody"></div>'+
+(R.calOpen ? ksigCalPopupHtml() : '') +
     '</div>';
     function tab(type,label){
       return '<div class="ksig-tab'+(R.type===type?' active':'')+'" data-type="'+type+'" tabindex="0" role="tab" aria-selected="'+(R.type===type?'true':'false')+'">'+label+'</div>';
     }
   }
-  function recapPeriodLabel(iso, type){
+  var CAL_MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+var CAL_DOW_ID = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+function ksigCalEnsureView(){
+var R = state.recap;
+if(R.calViewYear==null || R.calViewMonth==null){
+var t0 = wibTodayYmd();
+R.calViewYear = t0.y; R.calViewMonth = t0.m;
+}
+}
+function ksigDateLabel(dStr){
+var p = dStr.split('-').map(Number);
+return p[2]+' '+CAL_MONTHS_ID[p[1]-1]+' '+p[0];
+}
+function ksigCalPopupHtml(){
+ksigCalEnsureView();
+var R = state.recap;
+var y = R.calViewYear, m = R.calViewMonth;
+var firstDow = (new Date(Date.UTC(y,m,1)).getUTCDay()+6)%7;
+var daysInMonth = new Date(Date.UTC(y,m+1,0)).getUTCDate();
+var t0 = wibTodayYmd();
+var todayStr = ymdStr(t0.y,t0.m,t0.d);
+var cells = '';
+for(var i=0;i<firstDow;i++) cells += '<div class="ksig-cal-cell empty"></div>';
+for(var d=1; d<=daysInMonth; d++){
+var dStr = ymdStr(y,m,d);
+var isSel = (R.calStart===dStr) || (R.calEnd===dStr);
+var inRange = !!(R.calStart && R.calEnd && dStr>R.calStart && dStr<R.calEnd);
+var isFuture = dStr>todayStr;
+var cls = 'ksig-cal-cell'+(isSel?' selected':'')+(inRange?' in-range':'')+(dStr===todayStr?' today':'')+(isFuture?' disabled':'');
+cells += '<div class="'+cls+'" data-date="'+(isFuture?'':dStr)+'">'+d+'</div>';
+}
+var rangeTxt = R.calStart ? (ksigDateLabel(R.calStart) + (R.calEnd && R.calEnd!==R.calStart ? ' \u2013 '+ksigDateLabel(R.calEnd) : '')) : 'Pilih tanggal mulai';
+return '<div class="ksig-cal-popup-backdrop" id="ksigCalBackdrop">'+
+'<div class="ksig-cal-popup" id="ksigCalPopup">'+
+'<div class="ksig-cal-head">'+
+'<button type="button" class="ksig-cal-nav" id="ksigCalPrev" aria-label="Bulan sebelumnya">\u2039</button>'+
+'<div class="ksig-cal-title">'+CAL_MONTHS_ID[m]+' '+y+'</div>'+
+'<button type="button" class="ksig-cal-nav" id="ksigCalNext" aria-label="Bulan berikutnya">\u203a</button>'+
+'</div>'+
+'<div class="ksig-cal-dow">'+CAL_DOW_ID.map(function(dn){return '<div>'+dn+'</div>';}).join('')+'</div>'+
+'<div class="ksig-cal-grid">'+cells+'</div>'+
+'<div class="ksig-cal-range-label">'+esc(rangeTxt)+'</div>'+
+'<div class="ksig-cal-actions"><button type="button" class="ksig-btn" id="ksigCalCancel">Batal</button><button type="button" class="ksig-btn primary" id="ksigCalApply"'+(!(R.calStart&&R.calEnd)?' disabled':'')+'>Terapkan</button></div>'+
+'</div>'+
+'</div>';
+}
+function bindRecapCalendar(){
+var btn = document.getElementById('ksigRecapCalBtn');
+if(btn) btn.addEventListener('click', function(e){
+e.stopPropagation();
+state.recap.calOpen = true;
+renderRecapCard();
+});
+var backdrop = document.getElementById('ksigCalBackdrop');
+if(!backdrop) return;
+backdrop.addEventListener('click', function(e){ if(e.target===backdrop){ state.recap.calOpen=false; renderRecapCard(); } });
+var prevBtn = document.getElementById('ksigCalPrev');
+if(prevBtn) prevBtn.addEventListener('click', function(){
+ksigCalEnsureView();
+var R=state.recap; R.calViewMonth--; if(R.calViewMonth<0){R.calViewMonth=11; R.calViewYear--;}
+renderRecapCard();
+});
+var nextBtn = document.getElementById('ksigCalNext');
+if(nextBtn) nextBtn.addEventListener('click', function(){
+ksigCalEnsureView();
+var R=state.recap; R.calViewMonth++; if(R.calViewMonth>11){R.calViewMonth=0; R.calViewYear++;}
+renderRecapCard();
+});
+document.querySelectorAll('.ksig-cal-cell[data-date]').forEach(function(cell){
+cell.addEventListener('click', function(){
+var dStr = cell.getAttribute('data-date');
+if(!dStr) return;
+var R = state.recap;
+if(!R.calStart || (R.calStart && R.calEnd)){ R.calStart = dStr; R.calEnd = null; }
+else { if(dStr < R.calStart){ R.calEnd = R.calStart; R.calStart = dStr; } else { R.calEnd = dStr; } }
+renderRecapCard();
+});
+});
+var calCancelBtn = document.getElementById('ksigCalCancel');
+if(calCancelBtn) calCancelBtn.addEventListener('click', function(){ state.recap.calOpen=false; state.recap.calStart=null; state.recap.calEnd=null; renderRecapCard(); });
+var calApplyBtn = document.getElementById('ksigCalApply');
+if(calApplyBtn) calApplyBtn.addEventListener('click', function(){
+var R = state.recap;
+if(!R.calStart || !R.calEnd) return;
+var fp = R.calStart.split('-').map(Number), tp = R.calEnd.split('-').map(Number);
+var startMs = Date.UTC(fp[0], fp[1]-1, fp[2], 0,0,0);
+var endMs = Date.UTC(tp[0], tp[1]-1, tp[2], 0,0,0) + 86400000;
+var startIso = new Date(startMs - 7*3600*1000).toISOString();
+var endIso = new Date(endMs - 7*3600*1000).toISOString();
+var lbl = ksigDateLabel(R.calStart) + (R.calStart!==R.calEnd ? ' \u2013 '+ksigDateLabel(R.calEnd) : '');
+R.calOpen = false;
+R.type = 'CUSTOM';
+R.customPreset = 'custom';
+R.customFrom = R.calStart; R.customTo = R.calEnd;
+loadRecapCustomRange(startIso, endIso, lbl);
+});
+}
+function recapPeriodLabel(iso, type){
 if(!iso) return 'Terbaru';
 if(type === 'MONTHLY') return fmtWIB(iso, { day:undefined, month:'long', year:'numeric', hour:undefined, minute:undefined });
 return fmtWIB(iso, { hour:undefined, minute:undefined });
@@ -1784,7 +1915,7 @@ dateRow+
 function loadRecapCustomRange(startIso, endIso, label){
 var R = state.recap;
 R.loading = true; R.error = null;
-renderApp();
+renderRecapCard();
 return state.client.from('signal_recaps').select('*').eq('recap_type','DAILY')
 .gte('period_end_wib', startIso).lt('period_end_wib', endIso)
 .order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(1000)
@@ -1794,10 +1925,10 @@ R.rows = res.data || [];
 R.customRangeLabel = label;
 R.loading = false;
 R.loaded = true;
-renderApp();
+renderRecapCard();
 }).catch(function(err){
 R.loading = false; R.error = 'Data belum dapat dimuat.';
-renderApp();
+renderRecapCard();
 });
 }
 function applyCustomPreset(key){
@@ -1809,7 +1940,7 @@ var t0 = wibTodayYmd();
 R.customFrom = ymdStr(t0.y,t0.m,t0.d);
 R.customTo = ymdStr(t0.y,t0.m,t0.d);
 }
-renderApp();
+renderRecapCard();
 return;
 }
 var t = wibTodayYmd();
@@ -1907,7 +2038,7 @@ function bindRecapTabs(){
     pbtn.addEventListener('click', function(e){
       e.stopPropagation();
       state.recap.pickerOpen = !state.recap.pickerOpen;
-      renderApp();
+      renderRecapCard();
     });
   }
   document.querySelectorAll('.ksig-recap-picker-item').forEach(function(it){
@@ -1915,12 +2046,12 @@ function bindRecapTabs(){
       var p = it.getAttribute('data-period');
       state.recap.pickerOpen = false;
       if(p !== state.recap.selectedPeriod) loadRecap(state.recap.type, p);
-      else renderApp();
+      else renderRecapCard();
     });
   });
   if(state.recap.pickerOpen){
     document.addEventListener('click', function closePicker(e){
-      if(!e.target.closest('.ksig-recap-picker')){ state.recap.pickerOpen = false; renderApp(); }
+      if(!e.target.closest('.ksig-recap-picker')){ state.recap.pickerOpen = false; renderRecapCard(); }
       document.removeEventListener('click', closePicker);
     }, { once:true });
   }
@@ -1998,7 +2129,7 @@ var groups = groupRecapRows(R.rows);
       '<div class="ksig-main">'+ recapCardHtml() +'</div>';
     updateLiveDot();
     bindInstallBtn(); bindNotifBtn(); bindTelegramBtn(); bindSettingsBtn();
-    bindRecapTabs(); bindRecapCustomControls();
+    bindRecapTabs(); bindRecapCustomControls(); bindRecapCalendar();
     renderRecapBody();
     if(!state.recap.loaded && !state.recap.loading) loadRecap(state.recap.type);
   }
@@ -2105,7 +2236,7 @@ var groups = groupRecapRows(R.rows);
         (lastCallActive ? '<div class="ksig-lastcall-banner">⚡ LAST CALL — RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
 (s.is_critical_zone ? '<div class="ksig-critical-banner">⚠ ZONA KRITIS — pantau ketat, pertimbangkan kurangi risiko/lot</div>' : '') +
         (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
-        '<div class="ksig-detail-rows">' + rows.map(function(r){ var isRun = (r[0]==='Running Profit') && maxRunVal!=null; var valInner = isRun ? ('<span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span>') : esc(r[1]==null?'-':r[1]); return '<div class="ksig-detail-row"><span>'+esc(r[0])+'</span><strong>'+valInner+'</strong></div>'; }).join('') + '</div>'+
+        '<div class="ksig-detail-rows">' + rows.map(function(r){ var isRun = (r[0]==='Running Profit') && maxRunVal!=null; var valInner = isRun ? ('<span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span>') : esc(r[1]==null?'-':r[1]); var rowCls = (r[0]==='Jenis Zona') ? ' ksig-detail-row-zona' : (r[0]==='Area') ? ' ksig-detail-row-area' : (r[0]==='Take Profit') ? ' ksig-detail-row-tp' : (r[0]==='Cut Loss') ? ' ksig-detail-row-cl' : ''; return '<div class="ksig-detail-row'+rowCls+'"><span>'+esc(r[0])+'</span><strong>'+valInner+'</strong></div>'; }).join('') + '</div>'+
       '</div>'+
       '<div class="ksig-timeline-card">'+
         '<div class="ksig-timeline-title">Riwayat Perkembangan</div>'+

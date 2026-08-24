@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diagnostik 2 Kamar Signal</title>
+<link rel="stylesheet" href="/signal/assets/css/kamar-signal.css?v=diag2">
+</head>
+<body style="margin:0;">
+<div id="ksigRoot"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/kamar-config.js?v=diag2"></script>
+<script src="/assets/js/kamar-supabase.js?v=diag2"></script>
+<script>
+(function(){
+  var t0 = Date.now();
+  var logEl = null;
+  function dlog(msg){
+    try{
+      if(!logEl){
+        logEl = document.getElementById('__ksigDebugLog') || document.createElement('div');
+        if(!logEl.id){
+          logEl.id = '__ksigDebugLog';
+          logEl.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
+          (document.body||document.documentElement).appendChild(logEl);
+        }
+      }
+      var line = document.createElement('div');
+      line.textContent = '[diag2 ' + (Date.now()-t0) + 'ms] ' + msg;
+      logEl.appendChild(line);
+      logEl.scrollTop = logEl.scrollHeight;
+    }catch(e){}
+  }
+  var ltCount = 0;
+  try{
+    if(typeof PerformanceObserver !== 'undefined'){
+      var obs = new PerformanceObserver(function(list){
+        list.getEntries().forEach(function(entry){ ltCount++; dlog('LONGTASK #' + ltCount + ': ' + Math.round(entry.duration) + 'ms'); });
+      });
+      obs.observe({ type: 'longtask', buffered: true });
+    }
+  }catch(e){ dlog('observer gagal: ' + e.message); }
+
+  dlog('TAHAP A: render markup boot + CSS kamar-signal.css (TANPA kamar-signal-app.js dulu)');
+  var el = document.getElementById('ksigRoot');
+  el.innerHTML = '<div class="ksig-boot"><div class="ksig-boot-mark">Kamar Signal</div><div class="ksig-boot-sub">Diagnostik tahap A (CSS only)...</div></div>';
+
+  setInterval(function(){ dlog('heartbeat, longtask sejauh ini: ' + ltCount); }, 5000);
+
+  setTimeout(function(){
+    dlog('TAHAP B: sekarang load kamar-signal-app.js SUNGGUHAN (file asli, 2121 baris)');
+    var s = document.createElement('script');
+    s.src = '/signal/assets/js/kamar-signal-app.js?v=diag2';
+    s.onload = function(){ dlog('kamar-signal-app.js SELESAI DIMUAT (tapi mungkin sudah otomatis jalan boot() sendiri)'); };
+    s.onerror = function(){ dlog('kamar-signal-app.js GAGAL DIMUAT'); };
+    document.body.appendChild(s);
+  }, 8000);
+})();
+</script>
+</body>
+</html>

@@ -757,6 +757,7 @@ color:#7a561e !important;
 .split-sidebar{
   padding: 20px 16px !important;
 }
+.split-sidebar{ max-height: calc(100vh - 110px) !important; overflow-y: auto !important; }
 .split-sidebar .brand-small{
   display: block !important;
   padding-bottom: 12px !important;

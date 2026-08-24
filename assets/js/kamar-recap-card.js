@@ -12,13 +12,13 @@
       '.kamar-recap-period{font-size:12px;opacity:.6;margin:2px 0 4px}' +
       '.kamar-recap-live-card{grid-column:1/-1;margin-top:18px;padding:26px 30px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,248,232,.55));border:1px solid rgba(184,138,61,.22);box-shadow:0 10px 32px rgba(184,138,61,.12)}' +
       '.kamar-recap-live-card h4{margin:8px 0 4px;font-size:21px}' +
-      '.kamar-recap-live-card .kamar-recap-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:18px 0 22px}' +
+      '.kamar-recap-live-card .kamar-recap-stats{display:grid;gap:16px;margin:18px 0 22px}' +
       '.kamar-recap-live-card .kamar-recap-stats>div{padding:20px 22px;border-radius:16px;background:rgba(255,255,255,.7);border:1px solid rgba(184,138,61,.2);text-align:left;transition:transform .15s ease}' +
       '.kamar-recap-live-card .kamar-recap-stats>div:hover{transform:translateY(-2px)}' +
       '.kamar-recap-live-card .kamar-recap-stats>div strong{font-size:19px;margin-bottom:6px;color:#3a2d10}' +
       '.kamar-recap-live-card .kamar-recap-stats>div span{font-size:14px;opacity:.75}' +
       '.kamar-recap-live-card .btn{margin-top:6px}' +
-      '@media(max-width:640px){.kamar-recap-live-card{padding:20px}.kamar-recap-live-card .kamar-recap-stats{grid-template-columns:repeat(2,1fr)}}';
+      '@media(max-width:640px){.kamar-recap-live-card{padding:20px}.kamar-recap-live-card .kamar-recap-stats{grid-template-columns:repeat(2,1fr) !important}}';
     document.head.appendChild(st);
   }
   function fmtPips(n){
@@ -64,6 +64,10 @@
     }
     periodEl.textContent = fmtPeriodRange(rows[0].period_start_wib, rows[0].period_end_wib);
     var sorted = rows.slice().sort(function(a,b){ return TF_ORDER.indexOf(a.timeframe) - TF_ORDER.indexOf(b.timeframe); });
+    if(container.closest('.kamar-recap-live-card')){
+      var cols = Math.min(sorted.length, 4) || 1;
+      container.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+    }
     container.innerHTML = sorted.map(function(r){
       return '<div><strong>' + esc(r.timeframe) + ' • ' + fmtWinrate(r.winrate) + ' WR</strong><span>' + fmtPips(r.total_pips) + ' pips (' + (r.total_signal||0) + ' signal)</span></div>';
     }).join('');

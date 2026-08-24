@@ -7,10 +7,10 @@
     st.textContent = '.kamar-recap-stats{display:grid;gap:10px;margin:14px 0}' +
       '.kamar-recap-stats>div{padding:10px 14px;border-radius:14px;background:rgba(184,138,61,.07);border:1px solid rgba(184,138,61,.18)}' +
       '.kamar-recap-stats>div strong{display:block;font-size:15px;margin-bottom:2px}' +
-      '.kamar-recap-stats>div strong .wr{color:#8a6420;font-weight:800}' +
+      '.kamar-recap-stats>div strong .wr{color:#8a6420 !important;font-weight:800}' +
       '.kamar-recap-stats>div span.pips{display:block;font-size:13px;font-weight:700}' +
-      '.kamar-recap-stats>div span.pips.pos{color:#15803d}' +
-      '.kamar-recap-stats>div span.pips.neg{color:#b91c1c}' +
+      '.kamar-recap-stats>div span.pips.pos{color:#15803d !important}' +
+      '.kamar-recap-stats>div span.pips.neg{color:#b91c1c !important}' +
       '.kamar-recap-empty{opacity:.6;font-size:14px}' +
       '.kamar-recap-period{font-size:12px;opacity:.6;margin:2px 0 4px}' +
       '.kamar-recap-daily-section{margin-top:22px;padding-top:18px;border-top:1px dashed rgba(184,138,61,.28)}' +

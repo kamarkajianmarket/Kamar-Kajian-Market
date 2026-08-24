@@ -61,7 +61,7 @@
     __settled = true;
     dbg('sesi valid, memuat kamar-signal-main.js (file besar)');
     var s = document.createElement('script');
-    s.src = '/signal/assets/js/kamar-signal-main.js?v=1';
+    s.src = '/signal/assets/js/kamar-signal-main.js?v=' + Date.now();
     s.onerror = function(){
       dbg('GAGAL memuat kamar-signal-main.js');
       renderBootError('Gagal memuat Kamar Signal. Coba Muat Ulang.');

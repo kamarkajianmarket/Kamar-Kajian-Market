@@ -792,17 +792,22 @@ function esc(s){
         return state.client.from('member_access').select('access_kamar_study,locked_by_expired,expires_kamar_study,activation_source').eq('profile_id', state.profile.id).maybeSingle();
       })
       .then(function(res){
+        dbg('loadProfileAndAccess: member_access query SELESAI, res ada: ' + (!!res));
         if(!res) return;
         if(res.error) throw res.error;
         state.access = res.data || null;
         var accountOk = state.profile && state.profile.account_status === 'active';
         var accessOk = state.access && state.access.access_kamar_study === true && state.access.locked_by_expired !== true;
         state.approved = !!(accountOk && accessOk);
+        dbg('loadProfileAndAccess: approved dihitung: ' + state.approved + ', akan panggil renderApp()');
         renderApp();
+        dbg('renderApp() SELESAI dipanggil');
         if(state.approved){
+          dbg('approved true, akan panggil startRealtime/loadReadsMap/ensureFreshPushSubscription');
           startRealtime();
           loadReadsMap();
           ensureFreshPushSubscription();
+          dbg('startRealtime/loadReadsMap/ensureFreshPushSubscription SELESAI dipanggil (bagian sinkron)');
         }
       })
       .catch(function(err){

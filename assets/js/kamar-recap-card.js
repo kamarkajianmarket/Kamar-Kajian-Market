@@ -1,5 +1,18 @@
 (function(){
   'use strict';
+  function injectStyle(){
+    if(document.getElementById('kamarRecapCardStyle')) return;
+    var st = document.createElement('style');
+    st.id = 'kamarRecapCardStyle';
+    st.textContent = '.kamar-recap-stats{display:grid;gap:10px;margin:14px 0}' +
+      '.kamar-recap-stats>div{padding:10px 14px;border-radius:14px;background:rgba(184,138,61,.07);border:1px solid rgba(184,138,61,.18)}' +
+      '.kamar-recap-stats>div strong{display:block;font-size:15px;margin-bottom:2px}' +
+      '.kamar-recap-stats>div span{display:block;font-size:13px;opacity:.7}' +
+      '.kamar-recap-empty{opacity:.6;font-size:14px}' +
+      '.kamar-recap-live-card{margin-top:18px;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(184,138,61,.18)}' +
+      '.kamar-recap-live-card h4{margin:4px 0 2px}';
+    document.head.appendChild(st);
+  }
   function fmtPips(n){
     n = Number(n)||0;
     var s = Math.round(n).toLocaleString('id-ID');
@@ -24,6 +37,7 @@
   async function loadAndRender(){
     var targets = document.querySelectorAll('[data-kamar-recap-stats]');
     if(!targets.length) return;
+    injectStyle();
     try{
       var client = window.kamarSupabaseClient;
       if(!client && window.KamarSupabase && window.KamarSupabase.ready) client = await window.KamarSupabase.ready();

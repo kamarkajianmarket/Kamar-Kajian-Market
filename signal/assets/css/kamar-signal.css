@@ -1112,5 +1112,41 @@ overview card accent, recap tab dark-active, header icon mark.
 .ksig-update-toast-btn{
   border:none; border-radius:999px; padding:8px 16px; font-weight:900; font-size:12.5px;
   background:linear-gradient(135deg,#c99d51,#f1d893); color:#15120b; cursor:pointer;
-  white-space:nowrap; flex:0 0 auto;
-}
+  white-space:nowrap; flex:0 0 auto;}
+
+/* ==== KSIG info chips (list & detail rows) - ditambahkan 2026-08-24 ==== */
+.ksig-info-chip{ display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:11.5px; font-weight:800; margin:0 4px 4px 0; }
+.ksig-chip-zona{ background:rgba(21,23,25,.06); color:#15120b; }
+.ksig-chip-area{ background:rgba(21,23,25,.06); color:#15120b; }
+.ksig-chip-tp{ background:rgba(14,95,84,.14); color:#0e5f54; }
+.ksig-chip-cl{ background:rgba(196,60,60,.14); color:#8a2b2b; }
+.ksig-row-info{ display:flex; flex-wrap:wrap; align-items:center; }
+
+.ksig-detail-row-zona strong, .ksig-detail-row-area strong{ background:rgba(21,23,25,.06) !important; color:#15120b !important; padding:3px 10px; border-radius:999px; font-weight:900; }
+.ksig-detail-row-tp strong{ background:rgba(14,95,84,.14) !important; color:#0e5f54 !important; padding:3px 10px; border-radius:999px; font-weight:900; }
+.ksig-detail-row-cl strong{ background:rgba(196,60,60,.14) !important; color:#8a2b2b !important; padding:3px 10px; border-radius:999px; font-weight:900; }
+
+/* ==== recap toprow + kalender rentang tanggal - ditambahkan 2026-08-24 ==== */
+.ksig-recap-toprow{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.ksig-recap-toprow .ksig-tabs{ flex:1; margin-bottom:0; }
+.ksig-cal-btn{ flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:34px; height:34px; background:#f1ede2; border:1px solid var(--km-line); border-radius:999px; color:var(--km-ink); cursor:pointer; transition:background .15s ease, border-color .15s ease; }
+.ksig-cal-btn:hover{ background:#e9e3d4; }
+
+.ksig-cal-popup-backdrop{ position:fixed; inset:0; background:rgba(21,23,25,.4); z-index:200; display:flex; align-items:center; justify-content:center; padding:16px; }
+.ksig-cal-popup{ background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(21,23,25,.28); padding:16px; width:100%; max-width:320px; }
+.ksig-cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.ksig-cal-nav{ width:30px; height:30px; border-radius:999px; border:1px solid var(--km-line); background:#f8f5ec; color:var(--km-ink); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.ksig-cal-nav:hover{ background:#efe9d8; }
+.ksig-cal-title{ font-weight:900; font-size:14px; color:var(--km-ink); }
+.ksig-cal-dow{ display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-size:11px; font-weight:800; color:var(--km-muted); margin-bottom:4px; }
+.ksig-cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.ksig-cal-cell{ aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; color:var(--km-ink); border-radius:8px; cursor:pointer; }
+.ksig-cal-cell.empty{ cursor:default; }
+.ksig-cal-cell:not(.empty):not(.disabled):hover{ background:#f1ede2; }
+.ksig-cal-cell.in-range{ background:rgba(184,138,61,.16); border-radius:0; }
+.ksig-cal-cell.selected{ background:var(--km-gold); color:#fff; font-weight:900; }
+.ksig-cal-cell.today:not(.selected){ box-shadow:inset 0 0 0 1.5px var(--km-gold); }
+.ksig-cal-cell.disabled{ color:rgba(21,23,25,.25); cursor:not-allowed; }
+.ksig-cal-range-label{ margin-top:10px; text-align:center; font-size:12.5px; font-weight:800; color:var(--km-ink); }
+.ksig-cal-actions{ display:flex; gap:8px; margin-top:12px; }
+.ksig-cal-actions .ksig-btn{ flex:1; }

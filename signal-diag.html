@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diagnostik Kamar Signal</title>
+</head>
+<body style="margin:0;font-family:-apple-system,sans-serif;">
+<div style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+  <div style="font-weight:900;font-size:20px;">Diagnostik Kamar Signal</div>
+  <div id="diagStatus" style="font-size:13px;color:#666;">Memuat Supabase client (TANPA kamar-signal-app.js)...</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/kamar-config.js?v=diag1"></script>
+<script src="/assets/js/kamar-supabase.js?v=diag1"></script>
+<script>
+(function(){
+  var t0 = Date.now();
+  var logEl = null;
+  function dlog(msg){
+    try{
+      if(!logEl){
+        logEl = document.getElementById('__ksigDebugLog') || document.createElement('div');
+        if(!logEl.id){
+          logEl.id = '__ksigDebugLog';
+          logEl.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
+          (document.body||document.documentElement).appendChild(logEl);
+        }
+      }
+      var line = document.createElement('div');
+      line.textContent = '[diag ' + (Date.now()-t0) + 'ms] ' + msg;
+      logEl.appendChild(line);
+      logEl.scrollTop = logEl.scrollHeight;
+    }catch(e){}
+  }
+  dlog('diag script mulai jalan, TIDAK ada service worker, TIDAK ada kamar-signal-app.js');
+
+  try{
+    var ltCount = 0;
+    if(typeof PerformanceObserver !== 'undefined'){
+      var obs = new PerformanceObserver(function(list){
+        list.getEntries().forEach(function(entry){
+          ltCount++;
+          dlog('LONGTASK #' + ltCount + ': ' + Math.round(entry.duration) + 'ms');
+        });
+      });
+      obs.observe({ type: 'longtask', buffered: true });
+      setInterval(function(){ dlog('heartbeat hidup, longtask sejauh ini: ' + ltCount); }, 5000);
+    }
+  }catch(e){ dlog('setup observer gagal: ' + e.message); }
+
+  function boot(){
+    dlog('boot() diag mulai, akan panggil KamarSupabase.ready()');
+    var readyPromise = (window.KamarSupabase && window.KamarSupabase.ready ? window.KamarSupabase.ready() : Promise.resolve(null));
+    var timeoutPromise = new Promise(function(resolve, reject){ setTimeout(function(){ reject(new Error('TIMEOUT')); }, 9000); });
+    Promise.race([readyPromise, timeoutPromise]).then(function(client){
+      dlog('ready() SELESAI, client ada: ' + (!!client));
+      document.getElementById('diagStatus').textContent = client ? 'BERHASIL: client Supabase terbentuk.' : 'Client null (config gagal), tapi TIDAK macet/crash.';
+    }).catch(function(err){
+      dlog('boot diag GAGAL: ' + (err && err.message));
+      document.getElementById('diagStatus').textContent = 'Gagal: ' + (err && err.message);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+</body>
+</html>

@@ -172,6 +172,14 @@ var hero=qs('.hero')||qs('.split-main'); if(hero&&!el('memberOnlineDetailCard'))
     }catch(e){}
   }
   function attachLogoutOnly(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('[data-kamar-logout],a[href*="logout=1"]'); if(!a)return; e.preventDefault(); ['kamarMemberSession','KAMAR_MEMBER_SESSION','kamarAdminSession','KAMAR_ADMIN_SESSION','kamarCurrentUser'].forEach(function(k){try{localStorage.removeItem(k)}catch(x){}}); location.href='index.html?v='+VERSION;},true)}
-  async function run(){attachLogoutOnly(); var protectedPage=/admin|dashboard|member-/i.test(location.pathname); if(protectedPage){ try{await loadAll()}catch(e){state.error=e.message; state.source='error'} fillMemberDashboard(); fillMemberProfile(); fillAdminDashboard(); fillAdminMembers(); unlockSidebarFacilities(); fillFacilityContent(); injectAffiliateMenu(); } }
+  function showSkeletons(){
+    var barIds=['memberWelcomeText','memberReferralLine'];
+    barIds.forEach(function(id){ var x=el(id); if(x) x.innerHTML='<span class="kamar-skel-bar inline"></span>'; });
+    var boxIds=['memberStatusBox','memberContentList'];
+    boxIds.forEach(function(id){ var x=el(id); if(x) x.innerHTML='<div class="kamar-skel"><div class="kamar-skel-bar" style="width:70%"></div><div class="kamar-skel-bar" style="width:45%"></div></div>'; });
+    var profileIds=['profileFullName','profileMemberId','profileEmail','profileWhatsapp','profileTelegram','profileStatus','profileAccessDate','profileFacilities','profileReferralCode','profileBroker','profileModal'];
+    profileIds.forEach(function(id){ var x=el(id); if(x) x.innerHTML='<span class="kamar-skel-bar inline"></span>'; });
+  }
+  async function run(){attachLogoutOnly(); var protectedPage=/admin|dashboard|member-/i.test(location.pathname); if(protectedPage){ showSkeletons(); try{await loadAll()}catch(e){state.error=e.message; state.source='error'} fillMemberDashboard(); fillMemberProfile(); fillAdminDashboard(); fillAdminMembers(); unlockSidebarFacilities(); fillFacilityContent(); injectAffiliateMenu(); } }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run); else run();
 })();

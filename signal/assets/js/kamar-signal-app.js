@@ -19,14 +19,14 @@ Prinsip (jangan dilanggar, lihat master prompt user):
   var __ksigLogEl = null;
   function dbg(msg){
     try{
-      if(!__ksigLogEl){
+      __ksigLogEl = __ksigLogEl || document.getElementById('__ksigDebugLog'); if(!__ksigLogEl){
         __ksigLogEl = document.createElement('div');
         __ksigLogEl.id = '__ksigDebugLog';
         __ksigLogEl.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
         (document.body||document.documentElement).appendChild(__ksigLogEl);
       }
       var line = document.createElement('div');
-      line.textContent = '[' + (Date.now()-__ksigT0) + 'ms] ' + msg;
+      line.textContent = '[app ' + (Date.now()-__ksigT0) + 'ms] ' + msg;
       __ksigLogEl.appendChild(line); __ksigLogEl.scrollTop = __ksigLogEl.scrollHeight;
     }catch(e){}
   }

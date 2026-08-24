@@ -172,6 +172,59 @@ var hero=qs('.hero')||qs('.split-main'); if(hero&&!el('memberOnlineDetailCard'))
       anchor.parentNode.insertBefore(link,anchor);
     }catch(e){}
   }
+  function injectMasterDualSidebar(){
+try{
+var sess=session('member')||session('admin')||{};
+var email=(emailOf(sess)||'').toLowerCase();
+if(email!=='supermaster@akun.kamar')return;
+var sidebar=document.querySelector('.split-sidebar');
+if(!sidebar||sidebar.hasAttribute('data-kamar-dual-sidebar'))return;
+sidebar.setAttribute('data-kamar-dual-sidebar','1');
+var path=(location.pathname.split('/').pop()||'').toLowerCase();
+var isAdminPage=path.indexOf('admin')===0&&path!=='admin-login.html';
+if(!document.getElementById('kamarMasterSidebarStyle')){
+var st=document.createElement('style'); st.id='kamarMasterSidebarStyle';
+st.textContent='.kamar-master-sidebar-divider{border:none;border-top:1px dashed rgba(184,138,61,.35);margin:14px 0}';
+document.head.appendChild(st);
+}
+function appendHtml(html){
+var div=document.createElement('div');
+div.innerHTML='<hr class="kamar-master-sidebar-divider">'+html;
+while(div.firstChild)sidebar.appendChild(div.firstChild);
+}
+if(isAdminPage){
+fetch('/dashboard.html').then(function(r){return r.text();}).then(function(html){
+var m=html.match(/<aside class="split-sidebar">([\s\S]*?)<\/aside>/);
+if(!m)return;
+var inner=m[1];
+inner=inner.replace(/ class="disabled"/g,'').replace(/ aria-disabled="true"/g,'').replace(/\s*\uD83D\uDD12/g,'');
+inner=inner.replace(' class="active"','');
+inner=inner.replace(/<div class="brand-small">[^<]*<\/div>/,'<div class="brand-small">MENU MEMBER</div>');
+inner=inner.replace(/<a[^>]*data-kamar-logout[^>]*>[\s\S]*?<\/a>/,'');
+appendHtml(inner);
+}).catch(function(){});
+}else{
+fetch('/assets/js/kamar-admin-online-29f.js').then(function(r){return r.text();}).then(function(js){
+var marker='var SIDEBAR_SECTIONS =';
+var start=js.indexOf(marker); if(start===-1)return;
+start+=marker.length;
+var i=js.indexOf('[',start),depth=0,end=-1;
+for(var j=i;j<js.length;j++){var c=js[j]; if(c==='[')depth++; else if(c===']'){depth--; if(depth===0){end=j+1;break;}}}
+var sections;
+try{sections=new Function('return '+js.slice(i,end))();}catch(e){return;}
+var html='<div class="brand-small">MENU ADMIN</div>';
+sections.forEach(function(sec){
+var items=sec.items.filter(function(it){return it[1]!=='Logout';});
+if(!items.length)return;
+var links=items.map(function(it){return '<a href="'+esc(it[0])+'">'+esc(it[1])+'</a>';}).join('');
+if(items.length<=1){html+='<div class="admin-menu-section">'+esc(sec.label)+'</div>'+links;}
+else{html+='<details><summary>'+esc(sec.label)+'</summary>'+links+'</details>';}
+});
+appendHtml(html);
+}).catch(function(){});
+}
+}catch(e){}
+}
   function attachLogoutOnly(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('[data-kamar-logout],a[href*="logout=1"]'); if(!a)return; e.preventDefault(); ['kamarMemberSession','KAMAR_MEMBER_SESSION','kamarAdminSession','KAMAR_ADMIN_SESSION','kamarCurrentUser'].forEach(function(k){try{localStorage.removeItem(k)}catch(x){}}); location.href='index.html?v='+VERSION;},true)}
   function showSkeletons(){
     var barIds=['memberWelcomeText','memberReferralLine'];
@@ -181,6 +234,6 @@ var hero=qs('.hero')||qs('.split-main'); if(hero&&!el('memberOnlineDetailCard'))
     var profileIds=['profileFullName','profileMemberId','profileEmail','profileWhatsapp','profileTelegram','profileStatus','profileAccessDate','profileFacilities','profileReferralCode','profileBroker','profileModal'];
     profileIds.forEach(function(id){ var x=el(id); if(x) x.innerHTML='<span class="kamar-skel-bar inline"></span>'; });
   }
-  async function run(){attachLogoutOnly(); var protectedPage=/admin|dashboard|member-/i.test(location.pathname); if(protectedPage){ showSkeletons(); try{await loadAll()}catch(e){state.error=e.message; state.source='error'} fillMemberDashboard(); fillMemberProfile(); fillAdminDashboard(); fillAdminMembers(); unlockSidebarFacilities(); fillFacilityContent(); injectAffiliateMenu(); } }
+  async function run(){attachLogoutOnly(); injectMasterDualSidebar(); var protectedPage=/admin|dashboard|member-/i.test(location.pathname); if(protectedPage){ showSkeletons(); try{await loadAll()}catch(e){state.error=e.message; state.source='error'} fillMemberDashboard(); fillMemberProfile(); fillAdminDashboard(); fillAdminMembers(); unlockSidebarFacilities(); fillFacilityContent(); injectAffiliateMenu(); } }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run); else run();
 })();

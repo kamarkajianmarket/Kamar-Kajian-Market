@@ -783,13 +783,19 @@ function esc(s){
 
   function loadProfileAndAccess(){
     dbg('loadProfileAndAccess: query member_profiles mulai');
-    return state.client.from('member_profiles').select('id,account_status,full_name,email,telegram_chat_id').eq('user_id', state.user.id).maybeSingle()
+    function withTimeout(p, ms, label){
+      return Promise.race([
+        p,
+        new Promise(function(resolve, reject){ setTimeout(function(){ reject(new Error('QUERY_TIMEOUT:' + label)); }, ms); })
+      ]);
+    }
+    return withTimeout(state.client.from('member_profiles').select('id,account_status,full_name,email,telegram_chat_id').eq('user_id', state.user.id).maybeSingle(), 8000, 'member_profiles')
       .then(function(res){
         if(res.error) throw res.error;
         state.profile = res.data || null;
         dbg('loadProfileAndAccess: member_profiles SELESAI, profil ditemukan: ' + (!!state.profile) + ', akan query member_access');
         if(!state.profile){ state.approved = false; renderApp(); return null; }
-        return state.client.from('member_access').select('access_kamar_study,locked_by_expired,expires_kamar_study,activation_source').eq('profile_id', state.profile.id).maybeSingle();
+        return withTimeout(state.client.from('member_access').select('access_kamar_study,locked_by_expired,expires_kamar_study,activation_source').eq('profile_id', state.profile.id).maybeSingle(), 8000, 'member_access');
       })
       .then(function(res){
         dbg('loadProfileAndAccess: member_access query SELESAI, res ada: ' + (!!res));
@@ -811,6 +817,11 @@ function esc(s){
         }
       })
       .catch(function(err){
+        dbg('loadProfileAndAccess: GAGAL/catch: ' + (err && (err.message||String(err))));
+        if(err && err.message && err.message.indexOf('QUERY_TIMEOUT') === 0){
+          renderBootError('Query ke database (' + err.message.split(':')[1] + ') macet/lambat lebih dari 8 detik. Coba Muat Ulang.');
+          return;
+        }
         state.approved = false;
         renderApp();
       });

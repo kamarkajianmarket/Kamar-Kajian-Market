@@ -813,49 +813,49 @@ function esc(s){
   }
 
   function loadProfileAndAccess(){
-    dbg('loadProfileAndAccess: query member_profiles mulai');
-    function withTimeout(p, ms, label){
-      return Promise.race([
-        p,
-        new Promise(function(resolve, reject){ setTimeout(function(){ reject(new Error('QUERY_TIMEOUT:' + label)); }, ms); })
-      ]);
-    }
-    return withTimeout(state.client.from('member_profiles').select('id,account_status,full_name,email,telegram_chat_id').eq('user_id', state.user.id).maybeSingle(), 8000, 'member_profiles')
-      .then(function(res){
-        if(res.error) throw res.error;
-        state.profile = res.data || null;
-        dbg('loadProfileAndAccess: member_profiles SELESAI, profil ditemukan: ' + (!!state.profile) + ', akan query member_access');
-        if(!state.profile){ state.approved = false; renderApp(); return null; }
-        return fetchMemberAccessWithRetry(state.profile.id, 3);
-      })
-      .then(function(res){
-        dbg('loadProfileAndAccess: member_access query SELESAI, res ada: ' + (!!res));
-        if(!res) return;
-        if(res.error) throw res.error;
-        state.access = res.data || null;
-        var accountOk = state.profile && state.profile.account_status === 'active';
-        var accessOk = state.access && state.access.access_kamar_study === true && state.access.locked_by_expired !== true;
-        state.approved = !!(accountOk && accessOk);
-        dbg('loadProfileAndAccess: approved dihitung: ' + state.approved + ', akan panggil renderApp()');
-        renderApp();
-        dbg('renderApp() SELESAI dipanggil');
-        if(state.approved){
-          dbg('approved true, akan panggil startRealtime/loadReadsMap/ensureFreshPushSubscription');
-          startRealtime();
-          loadReadsMap();
-          ensureFreshPushSubscription();
-          dbg('startRealtime/loadReadsMap/ensureFreshPushSubscription SELESAI dipanggil (bagian sinkron)');
-        }
-      })
-      .catch(function(err){
-        dbg('loadProfileAndAccess: GAGAL/catch: ' + (err && (err.message||String(err))));
-        if(err && err.message && err.message.indexOf('QUERY_TIMEOUT') === 0){
-          renderBootError('Query ke database (' + err.message.split(':')[1] + ') macet/lambat lebih dari 8 detik. Coba Muat Ulang.');
-          return;
-        }
-        state.approved = false;
-        renderApp();
-      });
+    dbg('loadProfileAndAccess: 1 REQUEST GABUNGAN (profile+access via PostgREST embed) mulai -- eksperimen krn 2 request terpisah terbukti macet total secara intermiten di request kedua');
+    var url = state.client.supabaseUrl + '/rest/v1/member_profiles?select=id,account_status,full_name,email,telegram_chat_id,member_access(access_kamar_study,locked_by_expired,expires_kamar_study,activation_source)&user_id=eq.' + encodeURIComponent(state.user.id);
+    var ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var to = ac ? setTimeout(function(){ dbg('loadProfileAndAccess: gabungan 8 detik lewat, ABORT'); ac.abort(); }, 8000) : null;
+    return fetch(url, {
+      method: 'GET',
+      headers: { 'apikey': state.client.supabaseKey, 'Authorization': 'Bearer ' + (state.accessToken || state.client.supabaseKey) },
+      signal: ac ? ac.signal : undefined
+    }).then(function(res){
+      if(to) clearTimeout(to);
+      dbg('loadProfileAndAccess: gabungan response DITERIMA, status=' + res.status);
+      if(!res.ok) return res.text().then(function(t){ throw new Error('HTTP ' + res.status + ': ' + t); });
+      return res.json();
+    }).then(function(arr){
+      dbg('loadProfileAndAccess: gabungan .json() SELESAI, jumlah baris: ' + (Array.isArray(arr) ? arr.length : 'bukan-array'));
+      var row = (Array.isArray(arr) && arr.length) ? arr[0] : null;
+      state.profile = row ? { id: row.id, account_status: row.account_status, full_name: row.full_name, email: row.email, telegram_chat_id: row.telegram_chat_id } : null;
+      if(!state.profile){ state.approved = false; renderApp(); return; }
+      var accessRaw = row.member_access;
+      state.access = Array.isArray(accessRaw) ? (accessRaw[0]||null) : (accessRaw || null);
+      var accountOk = state.profile && state.profile.account_status === 'active';
+      var accessOk = state.access && state.access.access_kamar_study === true && state.access.locked_by_expired !== true;
+      state.approved = !!(accountOk && accessOk);
+      dbg('loadProfileAndAccess: approved dihitung: ' + state.approved + ', akan panggil renderApp()');
+      renderApp();
+      dbg('renderApp() SELESAI dipanggil');
+      if(state.approved){
+        dbg('approved true, akan panggil startRealtime/loadReadsMap/ensureFreshPushSubscription');
+        startRealtime();
+        loadReadsMap();
+        ensureFreshPushSubscription();
+        dbg('startRealtime/loadReadsMap/ensureFreshPushSubscription SELESAI dipanggil (bagian sinkron)');
+      }
+    }).catch(function(err){
+      if(to) clearTimeout(to);
+      dbg('loadProfileAndAccess: GAGAL/catch: ' + (err && (err.message||String(err))));
+      if(err && err.name === 'AbortError'){
+        renderBootError('Query ke database macet/lambat lebih dari 8 detik. Coba Muat Ulang.');
+        return;
+      }
+      state.approved = false;
+      renderApp();
+    });
   }
 
   function doLogin(email, password, onDone){

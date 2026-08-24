@@ -1754,7 +1754,7 @@ if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('
       '</div>'+
       '<button type="button" class="ksig-cal-btn" id="ksigRecapCalBtn" aria-label="Pilih rentang tanggal" title="Pilih rentang tanggal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>'+
 '</div>'+
-(R.type==='CUSTOM' ? recapCustomRangeHtml() : recapPeriodPickerHtml()) +
+(R.type==='CUSTOM' ? recapCustomRangeHtml() : '') +
       '<div id="ksigRecapBody"></div>'+
 (R.calOpen ? ksigCalPopupHtml() : '') +
     '</div>';
@@ -1798,7 +1798,7 @@ return '<div class="ksig-cal-popup-backdrop" id="ksigCalBackdrop">'+
 '<div class="ksig-cal-popup" id="ksigCalPopup">'+
 '<div class="ksig-cal-head">'+
 '<button type="button" class="ksig-cal-nav" id="ksigCalPrev" aria-label="Bulan sebelumnya">\u2039</button>'+
-'<div class="ksig-cal-title">'+CAL_MONTHS_ID[m]+' '+y+'</div>'+
+'<div class="ksig-cal-title"><span class="ksig-cal-month-part" id="ksigCalMonthPart" title="Gulir untuk ganti bulan">'+CAL_MONTHS_ID[m]+'</span> <span class="ksig-cal-year-part" id="ksigCalYearPart" title="Gulir untuk ganti tahun">'+y+'</span></div>'+
 '<button type="button" class="ksig-cal-nav" id="ksigCalNext" aria-label="Bulan berikutnya">\u203a</button>'+
 '</div>'+
 '<div class="ksig-cal-dow">'+CAL_DOW_ID.map(function(dn){return '<div>'+dn+'</div>';}).join('')+'</div>'+
@@ -1807,6 +1807,20 @@ return '<div class="ksig-cal-popup-backdrop" id="ksigCalBackdrop">'+
 '<div class="ksig-cal-actions"><button type="button" class="ksig-btn" id="ksigCalCancel">Batal</button><button type="button" class="ksig-btn primary" id="ksigCalApply"'+(!(R.calStart&&R.calEnd)?' disabled':'')+'>Terapkan</button></div>'+
 '</div>'+
 '</div>';
+}
+function ksigCalWheelStep(isYear, deltaY){
+var R = state.recap;
+if(R.__calWheelBusy) return;
+R.__calWheelBusy = true;
+setTimeout(function(){ R.__calWheelBusy = false; }, 180);
+ksigCalEnsureView();
+if(isYear){
+if(deltaY > 0) R.calViewYear++; else if(deltaY < 0) R.calViewYear--;
+} else {
+if(deltaY > 0){ R.calViewMonth++; if(R.calViewMonth>11){R.calViewMonth=0; R.calViewYear++;} }
+else if(deltaY < 0){ R.calViewMonth--; if(R.calViewMonth<0){R.calViewMonth=11; R.calViewYear--;} }
+}
+renderRecapCard();
 }
 function bindRecapCalendar(){
 var btn = document.getElementById('ksigRecapCalBtn');
@@ -1830,6 +1844,10 @@ ksigCalEnsureView();
 var R=state.recap; R.calViewMonth++; if(R.calViewMonth>11){R.calViewMonth=0; R.calViewYear++;}
 renderRecapCard();
 });
+var monthPart = document.getElementById('ksigCalMonthPart');
+if(monthPart) monthPart.addEventListener('wheel', function(e){ e.preventDefault(); ksigCalWheelStep(false, e.deltaY); }, { passive:false });
+var yearPart = document.getElementById('ksigCalYearPart');
+if(yearPart) yearPart.addEventListener('wheel', function(e){ e.preventDefault(); ksigCalWheelStep(true, e.deltaY); }, { passive:false });
 document.querySelectorAll('.ksig-cal-cell[data-date]').forEach(function(cell){
 cell.addEventListener('click', function(){
 var dStr = cell.getAttribute('data-date');

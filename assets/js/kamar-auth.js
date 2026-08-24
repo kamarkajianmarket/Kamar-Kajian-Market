@@ -3,7 +3,11 @@
   if(window.__KAMAR_AUTH_29F__) return;
   window.__KAMAR_AUTH_29F__ = true;
   var VERSION = '29F';
-  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com'];
+  var ADMIN_EMAILS = ['kamarkajianmarket@gmail.com','supermaster@akun.kamar'];
+/* FIX 2026-08-24: akun ALL_ROLE_EMAILS dapat sesi admin DAN member sekaligus saat login */
+/* (saveRole('admin',...) menghapus kamarMemberSession, tapi saveRole('member',...) TIDAK */
+/* menghapus kamarAdminSession -- urutan admin-dulu-baru-member membuat KEDUANYA tetap ada) */
+var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function norm(v){ return String(v||'').trim().toLowerCase(); }
@@ -190,7 +194,7 @@
       }
 
       var s = sessionFromAuthUser(user,finalRole,profile);
-      saveRole(finalRole,s);
+      if(ALL_ROLE_EMAILS.indexOf(email)>=0){ saveRole('admin', sessionFromAuthUser(user,'admin',profile)); saveRole('member', sessionFromAuthUser(user,'member',profile)); } else { saveRole(finalRole,s); }
       status(form,'Login berhasil. Membuka dashboard...',true);
       setTimeout(function(){
         location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;
@@ -204,7 +208,7 @@
 
   function finishLoginRedirect(finalRole,user,profile){
     var s = sessionFromAuthUser(user,finalRole,profile);
-    saveRole(finalRole,s);
+    if(ALL_ROLE_EMAILS.indexOf(norm(user&&user.email))>=0){ saveRole('admin', sessionFromAuthUser(user,'admin',profile)); saveRole('member', sessionFromAuthUser(user,'member',profile)); } else { saveRole(finalRole,s); }
     setTimeout(function(){
       location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;
     },300);

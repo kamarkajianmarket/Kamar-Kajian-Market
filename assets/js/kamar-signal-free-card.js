@@ -23,13 +23,24 @@
     document.head.appendChild(st);
   }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  function fmtNum(n){ return (n===null||n===undefined) ? '-' : Number(n).toLocaleString('id-ID'); }
-  function pipsText(n){
-    if(n===null||n===undefined) return null;
-    var num = Number(n);
-    if(isNaN(num)) return null;
-    var sign = num > 0 ? '+' : '';
-    return sign + num.toLocaleString('id-ID') + ' pips';
+  function fmtNum(n, d){ return (n===null||n===undefined) ? '-' : Number(n).toLocaleString('id-ID', { maximumFractionDigits:(d==null?2:d), minimumFractionDigits:0 }); }
+  // Rumus ini SENGAJA disamakan persis dengan pipsOf() di signal/assets/js/kamar-signal-main.js
+  // supaya angka yang tampil di Signal Free selalu identik dengan sinyal aslinya di Kamar Signal.
+  // - Cut loss murni (INVALID, belum sempat kena TP manapun): pakai running_point (nilai saat
+  //   event invalidasi terjadi), tampilkan NEGATIF, dikali 10 (konversi ke pip broker 3-digit).
+  // - Selain itu (FRESH/ACTIVE/atau sempat TP sebelum invalid): pakai rekor tertinggi yang
+  //   pernah dicapai (max_running_point) supaya angka mengikuti tiap TP Hit, dikali 10.
+  function pipsOf(row){
+    if(row.status === 'INVALID' && (row.farthest_tp_level||0) === 0){
+      var lossMag = row.running_point!=null ? Number(row.running_point) : (row.max_running_point!=null ? Number(row.max_running_point) : null);
+      return lossMag!=null ? -Math.abs(lossMag)*10 : null;
+    }
+    if(row.max_running_point!=null) return Number(row.max_running_point)*10;
+    return row.running_point!=null ? Number(row.running_point)*10 : null;
+  }
+  function pipsText(pips){
+    if(pips===null||pips===undefined) return null;
+    return (pips>=0?'+':'') + fmtNum(pips,1) + ' pips';
   }
   function statusInfo(status){
     var s = String(status||'').toUpperCase();
@@ -46,17 +57,14 @@
     }
     var s = String(row.status||'').toUpperCase();
     var info = statusInfo(row.status);
+    var pips = pipsOf(row);
+    var pText = pipsText(pips);
+    var pCls = pips!=null ? (pips >= 0 ? 'pos' : 'neg') : '';
     var progressHtml = '';
     if(s==='ACTIVE'){
-      var rp = pipsText(row.running_point);
-      var rpNum = Number(row.running_point);
-      var rpCls = rpNum > 0 ? 'pos' : (rpNum < 0 ? 'neg' : '');
-      progressHtml = '<div class="progress">Running saat ini: <strong class="' + rpCls + '">' + (rp || '0 pips') + '</strong></div>';
+      progressHtml = '<div class="progress">Running saat ini: <strong class="' + pCls + '">' + (pText || '0 pips') + '</strong></div>';
     } else if(s==='INVALID'){
-      var rsp = pipsText(row.result_point);
-      var rspNum = Number(row.result_point);
-      var rspCls = rspNum > 0 ? 'pos' : (rspNum < 0 ? 'neg' : '');
-      progressHtml = '<div class="progress">Hasil akhir: <strong class="' + rspCls + '">' + (rsp || '0 pips') + '</strong></div>';
+      progressHtml = '<div class="progress">Hasil akhir: <strong class="' + pCls + '">' + (pText || '0 pips') + '</strong></div>';
     } else if(s==='FRESH'){
       progressHtml = '<div class="progress muted">Menunggu harga masuk area&hellip;</div>';
     }
@@ -87,7 +95,7 @@
         cachedToken = token;
       }
       if(!token) return;
-      var url = client.supabaseUrl + '/rest/v1/signals?select=id,timeframe,jenis_zona,skenario,setup_title,area_high,area_low,tp1,tp2,invalidasi,status,running_point,result_point,created_at&timeframe=eq.M5&visibility=in.(public,both)&order=created_at.desc&limit=1';
+      var url = client.supabaseUrl + '/rest/v1/signals?select=id,timeframe,jenis_zona,skenario,setup_title,area_high,area_low,tp1,tp2,invalidasi,status,running_point,max_running_point,farthest_tp_level,result_point,created_at&timeframe=eq.M5&visibility=in.(public,both)&order=created_at.desc&limit=1';
       var res = await fetch(url, { headers: { apikey: client.supabaseKey, Authorization: 'Bearer ' + token } });
       if(res.status === 401 || res.status === 403){ cachedToken = null; return; }
       if(!res.ok) return;

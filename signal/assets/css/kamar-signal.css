@@ -1150,3 +1150,7 @@ overview card accent, recap tab dark-active, header icon mark.
 .ksig-cal-range-label{ margin-top:10px; text-align:center; font-size:12.5px; font-weight:800; color:var(--km-ink); }
 .ksig-cal-actions{ display:flex; gap:8px; margin-top:12px; }
 .ksig-cal-actions .ksig-btn{ flex:1; }
+
+/* ==== scroll wheel bulan/tahun kalender - ditambahkan 2026-08-24 ==== */
+.ksig-cal-month-part, .ksig-cal-year-part{ cursor:ns-resize; padding:2px 5px; border-radius:6px; transition:background .15s ease; }
+.ksig-cal-month-part:hover, .ksig-cal-year-part:hover{ background:rgba(184,138,61,.12); }

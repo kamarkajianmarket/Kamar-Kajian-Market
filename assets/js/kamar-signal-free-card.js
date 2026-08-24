@@ -75,8 +75,8 @@
         progressHtml +
         '<div class="levels">' +
           '<div><strong>Area</strong>' + fmtNum(row.area_low) + ' - ' + fmtNum(row.area_high) + '</div>' +
-          '<div><strong>TP1</strong>' + fmtNum(row.tp1) + '</div>' +
-          '<div><strong>Invalidasi</strong>' + fmtNum(row.invalidasi) + '</div>' +
+          '<div><strong>Take Profit</strong>' + [row.tp1,row.tp2,row.tp3].map(function(v){return v!=null?fmtNum(v):'-';}).join(' / ') + '</div>' +
+          '<div><strong>Cut Loss</strong>' + fmtNum(row.invalidasi) + '</div>' +
         '</div>' +
       '</div>';
   }
@@ -95,7 +95,7 @@
         cachedToken = token;
       }
       if(!token) return;
-      var url = client.supabaseUrl + '/rest/v1/signals?select=id,timeframe,jenis_zona,skenario,setup_title,area_high,area_low,tp1,tp2,invalidasi,status,running_point,max_running_point,farthest_tp_level,result_point,created_at&timeframe=eq.M5&visibility=in.(public,both)&order=created_at.desc&limit=1';
+      var url = client.supabaseUrl + '/rest/v1/signals?select=id,timeframe,jenis_zona,skenario,setup_title,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,farthest_tp_level,result_point,created_at&timeframe=eq.M5&visibility=in.(public,both)&order=created_at.desc&limit=1';
       var res = await fetch(url, { headers: { apikey: client.supabaseKey, Authorization: 'Bearer ' + token } });
       if(res.status === 401 || res.status === 403){ cachedToken = null; return; }
       if(!res.ok) return;

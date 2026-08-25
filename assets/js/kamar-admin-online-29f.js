@@ -268,7 +268,21 @@
 ,
 affiliate_activation_request: 'Pengajuan Affiliate'
   };
-  function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
+  var FACILITY_LABEL = {
+materi_edukasi:'Kamar Edukasi',
+kamar_study:'Kamar Signal',
+kamar_private:'Kamar Private',
+kamar_indikator:'Kamar Indikator',
+kamar_robot:'Kamar Robot'
+};
+var FACILITY_COLUMN = {
+materi_edukasi:'access_materi_edukasi',
+kamar_study:'access_kamar_study',
+kamar_private:'access_kamar_private',
+kamar_indikator:'access_kamar_indikator',
+kamar_robot:'access_kamar_robot'
+};
+function fmtMoney(n){ try{ return 'Rp '+Number(n).toLocaleString('id-ID'); }catch(e){ return String(n); } }
   async function resolveProfileId(todo){
     if(todo.profile_id) return todo.profile_id;
     var payload = todo.action_payload || {};
@@ -323,7 +337,16 @@ async function markTodoDone(todoId, statusVal){
     notifyMemberForTodo(todo, 'Pembayaran Dikonfirmasi', 'Pembayaran Anda sudah dikonfirmasi admin dan fasilitas terkait sudah aktif. Selamat belajar!', { link:'dashboard.html', category:'payment' });
     toast('Pembayaran dikonfirmasi & fasilitas diaktifkan.');
   }
-  async function actionProfileChange(todo, approve){
+  async function actionRejectPayment(todo){
+var payload = todo.action_payload || {};
+if(payload.payment_id){
+try{ await update('payments', payload.payment_id, { payment_status:'rejected', confirmed_at:new Date().toISOString() }); }catch(e){}
+}
+await markTodoDone(todo.id, 'rejected');
+notifyMemberForTodo(todo, 'Pembayaran Ditolak', 'Pembayaran Anda belum bisa dikonfirmasi admin. Silakan hubungi admin untuk info lebih lanjut atau kirim ulang bukti pembayaran.', { link:'member-renewal.html', category:'payment' });
+toast('Pembayaran ditolak.');
+}
+async function actionProfileChange(todo, approve){
     var payload = todo.action_payload || {};
     var pid = await resolveProfileId(todo);
     if(approve && pid && payload.new_data){
@@ -463,7 +486,7 @@ function todoCard(todo){
     if(todo.todo_type === 'new_registration'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
-      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button> <button class="btn mini secondary" type="button" data-todo-action="reject_payment" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'profile_change'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'license_request'){
@@ -661,6 +684,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     try{
       if(action === 'activate') await actionActivateRegistration(todo);
       else if(action === 'confirm_payment') await actionConfirmPayment(todo);
+else if(action === 'reject_payment') await actionRejectPayment(todo);
       else if(action === 'approve_profile') await actionProfileChange(todo, true);
       else if(action === 'reject_profile') await actionProfileChange(todo, false);
       else if(action === 'approve_license') await actionLicenseRequest(todo, true);

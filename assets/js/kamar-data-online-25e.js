@@ -184,13 +184,16 @@ var path=(location.pathname.split('/').pop()||'').toLowerCase();
 var isAdminPage=path.indexOf('admin')===0&&path!=='admin-login.html';
 if(!document.getElementById('kamarMasterSidebarStyle')){
 var st=document.createElement('style'); st.id='kamarMasterSidebarStyle';
-st.textContent='.kamar-master-sidebar-divider{border:none;border-top:1px dashed rgba(184,138,61,.35);margin:14px 0}';
+st.textContent='.kamar-master-sidebar-divider{border:none;border-top:1px dashed rgba(184,138,61,.35);margin:14px 0}.kamar-master-admin-block .admin-menu-section{margin:18px 10px 8px !important;font-size:11px !important;letter-spacing:.18em !important;text-transform:uppercase !important;font-weight:1000 !important;opacity:.86 !important;color:var(--km-gold) !important;}.kamar-master-admin-block summary{font-size:11px !important;letter-spacing:.16em !important;text-transform:uppercase !important;font-weight:1000 !important;color:#f1dda2 !important;}.kamar-master-member-block summary{font-size:16px !important;letter-spacing:normal !important;text-transform:none !important;font-weight:900 !important;color:var(--km-muted) !important;}';
 document.head.appendChild(st);
 }
-function appendHtml(html){
-var div=document.createElement('div');
-div.innerHTML='<hr class="kamar-master-sidebar-divider">'+html;
-while(div.firstChild)sidebar.appendChild(div.firstChild);
+function appendHtml(html,blockClass){
+var hr=document.createElement('hr'); hr.className='kamar-master-sidebar-divider';
+sidebar.appendChild(hr);
+var wrap=document.createElement('div');
+if(blockClass)wrap.className=blockClass;
+wrap.innerHTML=html;
+sidebar.appendChild(wrap);
 }
 if(isAdminPage){
 fetch('/dashboard.html').then(function(r){return r.text();}).then(function(html){
@@ -201,7 +204,7 @@ inner=inner.replace(/ class="disabled"/g,'').replace(/ aria-disabled="true"/g,''
 inner=inner.replace(' class="active"','');
 inner=inner.replace(/<div class="brand-small">[^<]*<\/div>/,'<div class="brand-small">MENU MEMBER</div>');
 inner=inner.replace(/<a[^>]*data-kamar-logout[^>]*>[\s\S]*?<\/a>/,'');
-appendHtml(inner);
+appendHtml(inner,'kamar-master-member-block');
 }).catch(function(){});
 }else{
 fetch('/assets/js/kamar-admin-online-29f.js').then(function(r){return r.text();}).then(function(js){
@@ -220,7 +223,7 @@ var links=items.map(function(it){return '<a href="'+esc(it[0])+'">'+esc(it[1])+'
 if(items.length<=1){html+='<div class="admin-menu-section">'+esc(sec.label)+'</div>'+links;}
 else{html+='<details><summary>'+esc(sec.label)+'</summary>'+links+'</details>';}
 });
-appendHtml(html);
+appendHtml(html,'kamar-master-admin-block');
 }).catch(function(){});
 }
 }catch(e){}

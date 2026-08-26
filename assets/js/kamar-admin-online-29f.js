@@ -266,7 +266,7 @@
   facility_renewal_request: 'Perpanjangan Fasilitas',
   trial_request: 'Request Trial Kamar Signal'
 ,
-affiliate_activation_request: 'Pengajuan Affiliate'
+affiliate_activation_request: 'Pengajuan Affiliate', download_request: 'Request Download File'
   };
   var FACILITY_LABEL = {
 materi_edukasi:'Kamar Edukasi',
@@ -385,7 +385,7 @@ async function actionProfileChange(todo, approve){
     notifyMemberForTodo(todo, approve?'Lisensi Disetujui':'Pengajuan Lisensi Ditolak', approve?'Pengajuan lisensi Anda sudah disetujui admin dan siap digunakan.':'Pengajuan lisensi Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'dashboard.html', category:'license' });
     toast(approve?'License disetujui.':'Pengajuan license ditolak.');
   }
-  async function actionIbKamarApplication(todo, action){
+  async function actionDownloadRequest(todo, approve){ var payload = todo.action_payload || {}; var pid = todo.profile_id || await resolveProfileId(todo); if(pid && payload.file_id){ var c2 = await ready(); if(c2){ var res2 = await c2.from('kamar_download_requests').select('id').eq('member_profile_id', pid).eq('file_id', payload.file_id).eq('request_status', 'pending').order('created_at',{ascending:false}).limit(1); if(res2.error) throw res2.error; if(res2.data && res2.data.length){ var reqId = res2.data[0].id; if(approve){ await update('kamar_download_requests', reqId, { request_status:'approved', reviewed_at:new Date().toISOString(), approved_expires_at:new Date(Date.now()+48*3600*1000).toISOString() }); } else { await update('kamar_download_requests', reqId, { request_status:'rejected', reviewed_at:new Date().toISOString() }); } } } } await markTodoDone(todo.id, approve?'done':'rejected'); notifyMemberForTodo(todo, approve?'Request Download Disetujui':'Request Download Ditolak', approve?('Request download "'+(payload.file_title||'file')+'" sudah disetujui admin. Klik tombol Download di halaman '+(payload.facility_label||'Fasilitas')+' Anda dalam 48 jam sebelum kedaluwarsa.'):('Request download "'+(payload.file_title||'file')+'" ditolak admin. Hubungi admin untuk info lebih lanjut.'), { link: payload.facility_key==='kamar_indikator' ? 'member-indicator.html' : 'member-robot.html', category:'download' }); toast(approve?'Request download disetujui.':'Request download ditolak.'); } async function actionIbKamarApplication(todo, action){
     var payload = todo.action_payload || {};
     var appId = payload.application_id;
     var note = getReviewNote(todo.id);
@@ -475,7 +475,7 @@ function todoCard(todo){
     if(p.account_id) subBits.push('Akun '+p.account_id);
     if(p.trial_count) subBits.push('Trial ke-'+p.trial_count);
     if(p.new_payment_bank_name) subBits.push('Bank baru: '+p.new_payment_bank_name);
-    if(p.new_payment_account_number) subBits.push('No. Rek baru: '+p.new_payment_account_number);
+    if(p.new_payment_account_number) subBits.push('No. Rek baru: '+p.new_payment_account_number); if(p.file_title) subBits.push(p.file_title+(p.file_version?(' v'+p.file_version):'')); if(p.total_requests!=null) subBits.push('Request ke-'+p.total_requests); if(p.total_downloads!=null) subBits.push('Sudah download '+p.total_downloads+'x');
     // NEW (2026-08-06): tombol "Tinjau" di setiap baris supaya admin bisa lihat detail
     // lengkap isi permintaan (field yang diubah, nilai lama -> baru, dsb) SEBELUM
     // menekan Setujui/Tolak. Sebelumnya admin harus memutuskan tanpa detail karena
@@ -491,7 +491,7 @@ function todoCard(todo){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'license_request'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
-    } else if(todo.todo_type === 'affiliate_payout_change'){
+    } else if(todo.todo_type === 'download_request'){ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_download" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_download" data-todo-id="'+esc(todo.id)+'">Tolak</button>'; } else if(todo.todo_type === 'affiliate_payout_change'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
     } else if(todo.todo_type === 'trial_request'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_trial" data-todo-id="'+esc(todo.id)+'">Setujui (24 Jam)</button> <button class="btn mini secondary" type="button" data-todo-action="reject_trial" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
@@ -579,7 +579,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     } else if(todo.todo_type === 'license_request'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'affiliate_payout_change'){
+    } else if(todo.todo_type === 'download_request'){ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_download" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_download" data-todo-id="'+esc(todo.id)+'">Tolak</button>'; } else if(todo.todo_type === 'affiliate_payout_change'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'trial_request'){
@@ -688,7 +688,7 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
       else if(action === 'approve_profile') await actionProfileChange(todo, true);
       else if(action === 'reject_profile') await actionProfileChange(todo, false);
       else if(action === 'approve_license') await actionLicenseRequest(todo, true);
-      else if(action === 'reject_license') await actionLicenseRequest(todo, false);
+      else if(action === 'reject_license') await actionLicenseRequest(todo, false); else if(action === 'approve_download') await actionDownloadRequest(todo, true); else if(action === 'reject_download') await actionDownloadRequest(todo, false);
       else if(action === 'approve_affiliate_payout') await actionAffiliatePayoutChange(todo, true);
       else if(action === 'reject_affiliate_payout') await actionAffiliatePayoutChange(todo, false);
     else if(action === 'approve_affiliate_activation') await actionAffiliateActivation(todo, true);

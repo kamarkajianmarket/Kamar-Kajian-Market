@@ -579,7 +579,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     } else if(todo.todo_type === 'license_request'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'download_request'){ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_download" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_download" data-todo-id="'+esc(todo.id)+'">Tolak</button>'; } else if(todo.todo_type === 'affiliate_payout_change'){
+    } else if(todo.todo_type === 'download_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_download" data-todo-id="'+esc(todo.id)+'">Tolak</button>'; actions += ' <button class="btn mini" type="button" data-todo-action="approve_download" data-todo-id="'+esc(todo.id)+'">Setujui</button>'; } else if(todo.todo_type === 'affiliate_payout_change'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'trial_request'){

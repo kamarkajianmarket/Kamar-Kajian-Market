@@ -140,7 +140,7 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
     if(/email not confirmed/i.test(m)) return 'Login gagal. Email akun belum dikonfirmasi. Silakan cek email kamu.';
     if(/fetch|network|failed to fetch/i.test(m)) return 'Gagal terhubung ke server. Cek koneksi internet kamu lalu coba lagi.';
     if(/already registered|already exists|user already/i.test(m)) return 'Email ini sudah terdaftar. Silakan login menggunakan email tersebut.';
-    if(/rate limit/i.test(m)) return 'Terlalu banyak percobaan dalam waktu singkat. Coba lagi dalam beberapa menit.';
+    if(/rate limit/i.test(m)) return 'Terlalu cepat meminta kode baru. Cek dulu email kamu, kode sebelumnya mungkin masih berlaku. Kalau belum ada email masuk, tunggu sekitar 1 menit lalu coba lagi.';
     var pw = m.match(/password should be at least (\d+)/i);
     if(pw) return 'Password minimal '+pw[1]+' karakter.';
     if(/is invalid$/i.test(m) && /email/i.test(m)) return 'Format email tidak valid. Coba pakai alamat email lain.';
@@ -268,7 +268,7 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
         }
         resendBtn.dataset.cooling = '1';
         var oldText = resendBtn.textContent;
-        var left = 30;
+        var left = 65; // FIX 2026-08-26: server Supabase batasi kirim ulang OTP 60 detik, client dulu cuma nunggu 30 detik lalu kena 429
         resendBtn.textContent = 'Kirim Ulang (' + left + 's)';
         var iv = setInterval(function(){
           left -= 1;

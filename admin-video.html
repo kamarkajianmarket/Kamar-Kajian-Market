@@ -65,7 +65,7 @@ body{background:#070707;color:var(--text)}
 <label class="field" style="grid-column:1/-1">Judul Video *<input id="fJudul" placeholder="Contoh: Cara Membaca Zona Supply Demand" required/></label>
 <label class="field" style="grid-column:1/-1">Link YouTube *<input id="fUrl" placeholder="https://www.youtube.com/watch?v=..." required/></label>
 <div class="preview-box" id="fPreview" style="display:none"><span class="chip">Preview Thumbnail</span><img id="fPreviewImg" alt="Preview thumbnail video"/></div>
-<label class="field">Kategori<input id="fKategori" placeholder="Contoh: Kamar Study"/></label>
+<label class="field">Kategori<input id="fKategori" placeholder="Contoh: Kamar Signal"/></label>
 <label class="field">Tampil Untuk
 <select id="fArea">
 <option value="public">Publik (halaman utama)</option>
@@ -78,7 +78,7 @@ body{background:#070707;color:var(--text)}
 <select id="fFasilitas">
 <option value="public">Publik (tanpa login)</option>
 <option value="member">Semua Member (fasilitas apa saja)</option>
-<option value="kamar_study">Kamar Study / Signal</option>
+<option value="kamar_study">Kamar Signal</option>
 <option value="kamar_private">Kamar Private</option>
 <option value="kamar_indikator">Kamar Indikator</option>
 <option value="kamar_robot">Kamar Robot</option>
@@ -123,7 +123,7 @@ body{background:#070707;color:var(--text)}
 'use strict';
 var TABLE='videos';
 var AREA_LABEL={public:'Publik',member:'Member',both:'Publik & Member'};
-var FACILITY_LABEL={public:'Publik',member:'Semua Member',kamar_study:'Kamar Study/Signal',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',materi_edukasi:'Kamar Edukasi',all_paid:'Semua Berbayar'};
+var FACILITY_LABEL={public:'Publik',member:'Semua Member',kamar_study:'Kamar Signal',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',materi_edukasi:'Kamar Edukasi',all_paid:'Semua Berbayar'};
 var STATUS_LABEL={draft:'Draft',published:'Published',hidden:'Hidden'};
 var state={client:null,rows:[],editingId:null};
 function byId(id){return document.getElementById(id)}

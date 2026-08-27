@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Kamar Study Control — Kamar Kajian Market</title><meta content="Atur status Kamar Study, publik/member, dan target evaluasi." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Kamar Signal Control — Kamar Kajian Market</title><meta content="Atur status Kamar Signal, publik/member, dan target evaluasi." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="assets/apple-touch-icon.png" rel="apple-touch-icon"/><link href="manifest.webmanifest" rel="manifest"/><link href="style.css" rel="stylesheet"/>
 <style>
 :root{--gold:#d4a63f;--gold2:#f4df90;--bg:#070707;--panel:rgba(255,255,255,.035);--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6;--green:#9effca;--red:#ffb4b4}
 body{background:#070707;color:var(--text)}
@@ -51,14 +51,14 @@ body{background:#070707;color:var(--text)}
 <a class="" href="admin-settings.html">Pengaturan Umum</a>
 <div class="admin-menu-section">Akun</div>
 <a class="" data-kamar-logout="" href="index.html">Logout</a>
-</aside><section class="split-main"><section class="split-card kamar-title-card"><h1>Kamar Study Control</h1></section>
+</aside><section class="split-main"><section class="split-card kamar-title-card"><h1>Kamar Signal Control</h1></section>
 <section class="split-card">
 <span class="mini-label">Hiatus Signal Website</span>
 <h2>Kontrol signal live dihentikan sementara.</h2>
 <p class="study-note">Project signal website sedang diparkir dulu. Admin panel ini tidak lagi menampilkan card signal, fresh zone, active zone, running point, atau update harga live.</p>
 <div class="grid-3" style="margin-top:16px">
 <article class="setting-card"><h3>Fokus Baru</h3><p>Website sebagai pusat informasi fasilitas, pendaftaran, dan pembayaran.</p></article>
-<article class="setting-card"><h3>Kamar Study</h3><p>Aktivitas kajian diarahkan ke Telegram dan pengelolaan akses member.</p></article>
+<article class="setting-card"><h3>Kamar Signal</h3><p>Aktivitas kajian diarahkan ke Telegram dan pengelolaan akses member.</p></article>
 <article class="setting-card"><h3>Signal Live</h3><p>API dan EA tidak dilanjutkan dulu sampai ada keputusan pengembangan ulang.</p></article>
 </div>
 </section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>

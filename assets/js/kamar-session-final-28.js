@@ -2,7 +2,7 @@
   'use strict';
   if(window.__KAMAR_SESSION_FINAL_28__) return;
   window.__KAMAR_SESSION_FINAL_28__ = true;
-  var VERSION='28_24DZ_LOCKED';
+  var VERSION='28_24DZ_LOCKED';var ALL_ROLE_EMAILS=['supermaster@akun.kamar'];
   function file(){return (location.pathname.split('/').pop()||'index.html').toLowerCase().split('?')[0];}
   function get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
   function set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
@@ -13,7 +13,7 @@
   function isAdmin(s){var r=roleText(s);return !!s&&(/admin|internal|owner|superadmin|staff|team/.test(r)||norm(emailOf(s))==='kamarkajianmarket@gmail.com'||norm(s&&s.name)==='kamarkajianmarket'||norm(s&&s.fullName)==='kamarkajianmarket');}
   function isAffiliate(s){var r=roleText(s);return !!s&&/affiliate|affiliator|referral/.test(r);}
   function isMember(s){return !!s&&!isAdmin(s)&&!isAffiliate(s);}
-  function bridge(){
+  function bridge(){var _pa=get('kamarAdminSession');var _pm=get('kamarMemberSession');if(_pa&&_pm){var _pae=norm(emailOf(_pa));var _pme=norm(emailOf(_pm));if(!(ALL_ROLE_EMAILS.indexOf(_pae)>=0&&_pae===_pme)){del('kamarMemberSession');del('KAMAR_MEMBER_SESSION');del('kamarCurrentMember');del('kamarAuthMember');}}
     var a=get('kamarAdminSession');
     var m=get('kamarMemberSession');
     var af=get('kamarAffiliateSession');

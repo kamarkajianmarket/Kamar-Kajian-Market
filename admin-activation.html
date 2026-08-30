@@ -501,7 +501,14 @@ window.__KAMAR_SUBHISTORY_ACTIVATION__ = true;
 var PAGE = (location.pathname.split('/').pop()||'').toLowerCase();
 if(PAGE !== 'admin-activation.html') return;
 
-var FACILITY_MAP = {
+if(!document.getElementById('kamarPayRowStyle29F')){
+    var st29F = document.createElement('style');
+    st29F.id = 'kamarPayRowStyle29F';
+    st29F.textContent = '#kamarSubHistoryWrap29F{padding:4px 0}.pay-section-label{color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em;margin:4px 0 10px}.pay-empty{color:var(--muted);font-size:13px;padding:10px 0}.pay-list{display:flex;flex-direction:column;gap:8px}.pay-row{border:1px solid rgba(238,206,122,.14);border-radius:14px;background:rgba(255,255,255,.02);overflow:hidden}.pay-row-expired{opacity:.62}.pay-row-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;padding:12px 14px;cursor:pointer;color:inherit;font:inherit}.pay-row-head:hover{background:rgba(255,255,255,.035)}.pay-date{flex:0 0 auto;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#e7d391;min-width:112px}.pay-type{flex:1 1 auto;font-size:13.5px;font-weight:900;color:#fff6e2;text-transform:capitalize}.pay-amount{flex:0 0 auto;font-size:14.5px;font-weight:1000;color:#ffffff;letter-spacing:-.01em}.pay-badge{flex:0 0 auto;display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:10.5px;font-weight:1000;text-transform:uppercase;letter-spacing:.06em}.pay-badge-ok{background:rgba(31,143,95,.2);color:#7dffbb}.pay-badge-bad{background:rgba(255,90,90,.18);color:#ffadad}.pay-badge-warn{background:rgba(255,198,86,.18);color:#ffd582}.pay-badge-expired{background:rgba(170,163,147,.16);color:#d6cdb8}.pay-chevron{flex:0 0 auto;color:#d8cda9;font-size:16px;transition:transform .18s ease}.pay-row-head.pay-row-open .pay-chevron{transform:rotate(90deg)}.pay-row-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:7px;border-top:1px solid rgba(238,206,122,.1)}.pay-detail-line{display:flex;justify-content:space-between;gap:10px;font-size:12.5px}.pay-detail-line span{color:#a89f8a;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:10.5px;flex:0 0 auto}.pay-detail-line strong{color:#f5f0e6;font-weight:800;text-align:right}.pay-expired-note{color:#e0a0a0;font-style:italic;font-size:12px;justify-content:flex-start}@media(max-width:640px){.pay-row-head{flex-wrap:wrap}.pay-date{min-width:0}.pay-amount{order:3}}';
+    document.head.appendChild(st29F);
+}
+    
+    var FACILITY_MAP = {
 kamar_study: {access:'access_kamar_study', expires:'expires_kamar_study', label:'Kamar Signal'},
 materi_edukasi: {access:'access_materi_edukasi', expires:'expires_materi_edukasi', label:'Kamar Edukasi'},
 kamar_private: {access:'access_kamar_private', expires:'expires_kamar_private', label:'Kamar Private'},
@@ -540,49 +547,67 @@ return card;
 }
 async function loadSubHistoryForEmail(email){
 ensureCard();
-var wrap = qs('#kamarSubHistoryWrap29F');
-if(!wrap) return;
-if(!email || email === '-'){ wrap.innerHTML = '<span style="color:var(--muted)">Email member tidak ditemukan.</span>'; return; }
-wrap.innerHTML = 'Memuat riwayat berlangganan...';
-try{
-var c = await ready();
-if(!c) throw new Error('Supabase client tidak terbaca.');
-var pr = await c.from('member_profiles').select('id').eq('email', email).limit(1);
-if(pr.error) throw pr.error;
-if(!pr.data || !pr.data.length) throw new Error('Profil member tidak ditemukan untuk email ini.');
-var profileId = pr.data[0].id;
-var res = await c.rpc('admin_get_member_subscription_history', { p_profile_id: profileId });
-if(res.error) throw res.error;
-var data = res.data || {};
-var access = data.access || {};
-var payments = data.payments || [];
-var now = Date.now();
-var accessHtml = Object.keys(FACILITY_MAP).map(function(key){
-var m = FACILITY_MAP[key];
-var active = !!access[m.access];
-var exp = access[m.expires];
-var expTs = exp ? new Date(exp).getTime() : null;
-var expired = expTs && expTs < now;
-var statusLabel = (active && !expired) ? 'Aktif' : (expired ? 'Expired' : 'Belum Aktif');
-var chipCls = (active && !expired) ? 'ok' : (expired ? 'bad' : '');
-return '<div class="info-box" style="padding:12px;margin-bottom:8px"><span>'+esc(m.label)+'</span><strong>'+statusLabel+(exp ? ' &middot; Berlaku sampai '+esc(fmtDate(exp)) : '')+'</strong></div>';
-}).join('');
-var paymentsHtml;
-if(!payments.length){
-paymentsHtml = '<div class="empty">Belum ada riwayat pembayaran untuk member ini.</div>';
-} else {
-paymentsHtml = payments.slice(0,8).map(function(p){
-var facs = (p.selected_facilities||[]).map(function(f){ return (FACILITY_MAP[f]&&FACILITY_MAP[f].label) || f; }).join(', ') || '-';
-var statusCls = p.payment_status==='confirmed' ? 'ok' : (p.payment_status==='rejected' ? 'bad' : 'warn');
-return '<div style="border-bottom:1px solid rgba(238,206,122,.1);padding:10px 0;font-size:13px"><div style="color:#e7d391;font-size:11px;text-transform:uppercase;letter-spacing:.08em">'+esc(fmtDate(p.created_at))+'</div><strong style="display:block;color:#fff4db;margin-top:4px">'+esc(p.payment_type||'-')+' &middot; '+esc(fmtMoney(p.amount))+'</strong><small style="display:block;color:var(--muted);margin-top:3px">'+esc(facs)+(p.duration_days ? (' &middot; '+p.duration_days+' hari') : '')+' &middot; <span class="chip '+statusCls+'" style="margin-left:4px">'+esc(p.payment_status||'-')+'</span></small></div>';
-}).join('');
-}
-wrap.innerHTML = '<div style="margin-bottom:6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Status Akses Fasilitas Saat Ini</div>'
-+ accessHtml
-+ '<div style="margin:14px 0 6px;color:#e7d391;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.12em">Riwayat Pembayaran ('+payments.length+')</div>'
-+ paymentsHtml;
-}catch(e){wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(window.kamarFriendlyError(e))+'</span>';
-}
+    var wrap = qs('#kamarSubHistoryWrap29F');
+    if(!wrap) return;
+    if(!email || email === '-'){ wrap.innerHTML = '<span style="color:var(--muted)">Email member tidak ditemukan.</span>'; return; }
+    wrap.innerHTML = 'Memuat riwayat berlangganan...';
+    try{
+        var c = await ready();
+        if(!c) throw new Error('Supabase client tidak terbaca.');
+        var pr = await c.from('member_profiles').select('id').eq('email', email).limit(1);
+        if(pr.error) throw pr.error;
+        if(!pr.data || !pr.data.length) throw new Error('Profil member tidak ditemukan untuk email ini.');
+        var profileId = pr.data[0].id;
+        var res = await c.rpc('admin_get_member_subscription_history', { p_profile_id: profileId });
+        if(res.error) throw res.error;
+        var data = res.data || {};
+        var payments = data.payments || [];
+        var now = Date.now();
+        var PENDING_EXPIRY_HOURS = 24;
+        var STATUS_LABEL = {confirmed:'Confirmed', rejected:'Ditolak', failed:'Gagal', refunded:'Refund', pending:'Pending', expired:'Kedaluwarsa'};
+        var STATUS_CLASS = {confirmed:'ok', rejected:'bad', failed:'bad', refunded:'warn', pending:'warn', expired:'expired'};
+        var paymentsHtml;
+        if(!payments.length){
+            paymentsHtml = '<div class="pay-empty">Belum ada riwayat pembayaran untuk member ini.</div>';
+        } else {
+            paymentsHtml = payments.slice(0,12).map(function(p, idx){
+                var facs = (p.selected_facilities||[]).map(function(f){ return (FACILITY_MAP[f]&&FACILITY_MAP[f].label) || f; }).join(', ') || '-';
+                var createdTs = p.created_at ? new Date(p.created_at).getTime() : 0;
+                var isExpiredPending = p.payment_status==='pending' && createdTs && (now-createdTs) > PENDING_EXPIRY_HOURS*3600*1000;
+                var statusKey = isExpiredPending ? 'expired' : (p.payment_status||'pending');
+                var statusLabel = STATUS_LABEL[statusKey] || (p.payment_status||'-');
+                var statusCls = STATUS_CLASS[statusKey] || 'warn';
+                return '<div class="pay-row'+(isExpiredPending?' pay-row-expired':'')+'">'+
+                    '<button type="button" class="pay-row-head" data-pay-toggle="'+idx+'">'+
+                    '<span class="pay-date">'+esc(fmtDate(p.created_at))+'</span>'+
+                    '<span class="pay-type">'+esc(p.payment_type||'-')+'</span>'+
+                    '<span class="pay-amount">'+esc(fmtMoney(p.amount))+'</span>'+
+                    '<span class="pay-badge pay-badge-'+statusCls+'">'+esc(statusLabel)+'</span>'+
+                    '<span class="pay-chevron">&rsaquo;</span>'+
+                    '</button>'+
+                    '<div class="pay-row-body" id="payBody'+idx+'" hidden>'+
+                    '<div class="pay-detail-line"><span>Fasilitas</span><strong>'+esc(facs)+'</strong></div>'+
+                    (p.duration_days ? ('<div class="pay-detail-line"><span>Durasi</span><strong>'+esc(p.duration_days)+' hari</strong></div>') : '')+
+                    '<div class="pay-detail-line"><span>Metode</span><strong>'+esc(p.payment_method||'-')+'</strong></div>'+
+                    (p.confirmed_at ? ('<div class="pay-detail-line"><span>Dikonfirmasi</span><strong>'+esc(fmtDate(p.confirmed_at))+'</strong></div>') : '')+
+                    (p.admin_notes ? ('<div class="pay-detail-line"><span>Catatan Admin</span><strong>'+esc(p.admin_notes)+'</strong></div>') : '')+
+                    (isExpiredPending ? '<div class="pay-detail-line pay-expired-note">Tidak diselesaikan dalam '+PENDING_EXPIRY_HOURS+' jam, dianggap kedaluwarsa.</div>' : '')+
+                    '</div>'+
+                    '</div>';
+            }).join('');
+        }
+        wrap.innerHTML = '<div class="pay-section-label">Riwayat Pembayaran ('+payments.length+')</div>'+'<div class="pay-list">'+paymentsHtml+'</div>';
+        wrap.querySelectorAll('[data-pay-toggle]').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var body = qs('#payBody'+btn.getAttribute('data-pay-toggle'), wrap);
+                if(!body) return;
+                var isOpen = !body.hasAttribute('hidden');
+                if(isOpen){ body.setAttribute('hidden',''); btn.classList.remove('pay-row-open'); }
+                else{ body.removeAttribute('hidden'); btn.classList.add('pay-row-open'); }
+            });
+        });
+    }catch(e){wrap.innerHTML = '<span style="color:var(--muted)">Gagal memuat riwayat: '+esc(window.kamarFriendlyError(e))+'</span>';
+             }
 }
 var lastEmail = '';
 function checkAndLoad(){

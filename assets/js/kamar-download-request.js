@@ -25,11 +25,21 @@
     setTimeout(function(){ if(toastEl===t){ t.remove(); toastEl=null; } }, 4200);
   }
 
+ function setNote(card, state, expiresAt){
+   var note = card && card.querySelector('.dl-state-note');
+   if(!note) return;
+   if(state==='pending'){ note.style.display='block'; note.style.color='#ffd582'; note.textContent='Request Anda sedang ditinjau admin.'; }
+   else if(state==='approved'){ note.style.display='block'; note.style.color='var(--green)'; note.textContent='Disetujui'+(expiresAt?(', berlaku sampai '+expiresAt):'')+'.'; }
+   else{ note.style.display='none'; note.textContent=''; }
+ }
+
  async function requestDownload(btn){
    var facilityKey = btn.getAttribute('data-facility-key') || '';
    var fileId = btn.getAttribute('data-file-id') || '';
    if(!fileId || !facilityKey) return;
    var oldText = btn.textContent;
+   var card = btn.closest('.setting-card');
+   var dlBtn = card ? card.querySelector('[data-claim-download]') : null;
    btn.disabled = true; btn.textContent = 'Mengirim...';
    try{
      var c = await client();
@@ -37,9 +47,21 @@
      var res = await c.rpc('request_file_download', { p_facility_key: facilityKey, p_file_id: fileId });
      if(res.error){ toast(res.error.message || 'Gagal mengirim request download.', 'error'); btn.disabled=false; btn.textContent=oldText; return; }
      var data = res.data || {};
-     if(!data.success){ toast(data.message || 'Gagal mengirim request download.', 'error'); btn.disabled=false; btn.textContent=oldText; if(!data.already_pending && !data.already_approved) return; }
-     else{ toast(data.message || 'Permintaan download terkirim. Menunggu persetujuan admin.', 'ok'); }
-     setTimeout(function(){ location.reload(); }, 1200);
+     if(!data.success && !data.already_pending && !data.already_approved){
+       toast(data.message || 'Gagal mengirim request download.', 'error');
+       btn.disabled=false; btn.textContent=oldText;
+       return;
+     }
+     toast(data.message || 'Permintaan download terkirim. Menunggu persetujuan admin.', data.success?'ok':undefined);
+     if(data.already_approved){
+       btn.textContent = 'Sudah Disetujui'; btn.disabled = true;
+       if(dlBtn) dlBtn.disabled = false;
+       setNote(card, 'approved', null);
+     } else {
+       btn.textContent = 'Menunggu Approval'; btn.disabled = true;
+       if(dlBtn) dlBtn.disabled = true;
+       setNote(card, 'pending', null);
+     }
    }catch(e){
      toast('Gagal mengirim request: ' + (e.message||String(e)), 'error');
      btn.disabled = false; btn.textContent = oldText;
@@ -50,6 +72,8 @@
    var requestId = btn.getAttribute('data-request-id') || '';
    if(!requestId){ toast('Request download tidak ditemukan. Muat ulang halaman.', 'error'); return; }
    var oldText = btn.textContent;
+   var card = btn.closest('.setting-card');
+   var reqBtn = card ? card.querySelector('[data-request-download]') : null;
    btn.disabled = true; btn.textContent = 'Memproses...';
    try{
      var c = await client();
@@ -59,13 +83,20 @@
      if(res.error || !data.ok){
        var msg = (data && data.message) || (res.error && res.error.message) || 'Gagal memproses download.';
        toast(msg, 'error');
-       btn.disabled = false; btn.textContent = oldText;
-       if(data && (data.expired || /sudah pernah dipakai/i.test(msg))) setTimeout(function(){ location.reload(); }, 1500);
+       if(data && (data.expired || /sudah pernah dipakai/i.test(msg))){
+         btn.disabled = true; btn.textContent = 'Download'; btn.removeAttribute('data-request-id');
+         if(reqBtn){ reqBtn.disabled = false; reqBtn.textContent = 'Request Download'; }
+         setNote(card, 'none', null);
+       } else {
+         btn.disabled = false; btn.textContent = oldText;
+       }
        return;
      }
      toast('Berhasil. File sedang diunduh...', 'ok');
      window.open(data.url, '_blank', 'noopener');
-     setTimeout(function(){ location.reload(); }, 1200);
+     btn.disabled = true; btn.textContent = 'Download'; btn.removeAttribute('data-request-id');
+     if(reqBtn){ reqBtn.disabled = false; reqBtn.textContent = 'Request Download'; }
+     setNote(card, 'none', null);
    }catch(e){
      toast('Gagal memproses download: ' + (e.message||String(e)), 'error');
      btn.disabled = false; btn.textContent = oldText;

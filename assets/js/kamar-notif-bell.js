@@ -120,10 +120,10 @@ var markAll = document.getElementById('kamarNotifMarkAll');
 if(markAll) markAll.addEventListener('click', markAllRead);
 
 panel.querySelectorAll('.kamar-notif-item').forEach(function(el){
-el.addEventListener('click', function(){
+el.addEventListener('click', async function(){
 var id = el.getAttribute('data-id');
 var link = el.getAttribute('data-link');
-markRead(id);
+await markRead(id);           
 if(link) window.location.href = link;
 });
 });

@@ -67,7 +67,7 @@
 <script>
 (function(){
 'use strict';
-var state={client:null,members:[],payments:[],affiliates:[],errors:[]};
+var state={client:null,members:[],payments:[],affiliates:[],errors:[],todos:[],todoProfiles:{}};
 function byId(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function norm(v){return String(v||'').toLowerCase().trim()}
@@ -98,23 +98,39 @@ function mergeMembers(rows1,rows2){var map={};function add(r){var key=norm(email
 function setText(id,v){var el=byId(id);if(el)el.textContent=String(v)}
 function renderStatus(){var box=byId('adminConnectionStatus');if(!box)return;var members=regularMembers();var internal=internalAccounts();var html='<span class="chip '+(state.client?'ok':'bad')+'">Supabase: '+(state.client?'Terhubung':'Tidak Terbaca')+'</span>';html+='<span class="chip">Member: '+members.length+'</span>';html+='<span class="chip">Internal: '+internal.length+'</span>';html+='<span class="chip">Payment: '+state.payments.length+'</span>';if(state.errors.length)html+='<span class="chip bad">Error: '+esc(state.errors[0])+'</span>';box.innerHTML=html}
 function renderSummary(){var members=regularMembers();var internal=internalAccounts();var active=members.filter(isActive).length;var pending=members.filter(isPending).length;setText('totalMember',members.length);setText('internalAccount',internal.length);setText('activeMember',active);setText('pendingMember',pending);setText('totalAffiliate',state.affiliates.length)}
-function dismissedTodoSet(){return new Set(getJSON('kamarDismissedTodos',[]))}
-function addDismissedTodo(id){var s=dismissedTodoSet();s.add(id);setJSON('kamarDismissedTodos',Array.from(s))}
+var TODO_TYPE_LABEL={new_registration:'Pendaftaran Member Baru',new_payment:'Pembayaran Baru',renewal_request:'Perpanjangan Akses',upgrade_request:'Upgrade / Tambah Fasilitas',access_expiring:'Akses Akan Habis',access_expired:'Akses Sudah Habis',profile_change:'Perubahan Profil',support_request:'Request Bantuan',manual_note:'Catatan Manual',license_request:'Request License EA',affiliate_payout_change:'Perubahan Payout Affiliate',affiliate_activation_request:'Aktivasi Affiliate',affiliate_payment_request:'Pembayaran Komisi Affiliate',ib_kamar_activation:'Aktivasi IB Kamar',trial_request:'Request Trial',facility_renewal_request:'Perpanjangan Fasilitas',download_request:'Request Download File'};
+var TODO_TYPE_LINK={new_registration:'admin-activation.html',profile_change:'admin-activation.html',new_payment:'admin-activation.html',renewal_request:'admin-activation.html',upgrade_request:'admin-activation.html',facility_renewal_request:'admin-activation.html',access_expiring:'admin-activation.html',access_expired:'admin-activation.html',download_request:'admin-activation.html',license_request:'admin-license-requests.html',trial_request:'admin-license-requests.html',affiliate_activation_request:'admin-affiliate-list.html',affiliate_payout_change:'admin-affiliate-reward.html',affiliate_payment_request:'admin-affiliate-reward.html',ib_kamar_activation:'admin-affiliate-list.html'};
+async function loadTodos(){
+  try{
+    var c=state.client||await initClient();
+    if(!c){state.todos=[];state.todoProfiles={};return}
+    var res=await c.from('admin_todos').select('*').in('todo_status',['new','processing']).order('priority',{ascending:true}).order('created_at',{ascending:true}).limit(60);
+    if(res.error) throw res.error;
+    state.todos=res.data||[];
+    var ids=Array.from(new Set(state.todos.map(function(t){return t.profile_id}).filter(Boolean)));
+    if(ids.length){
+      var pr=await c.from('member_profiles').select('id,full_name,email,member_id,whatsapp,telegram_username').in('id',ids);
+      var map={};
+      (pr.data||[]).forEach(function(p){map[p.id]=p});
+      state.todoProfiles=map;
+    } else { state.todoProfiles={}; }
+  }catch(e){state.todos=[];state.todoProfiles={};}
+}
+function priorityBadge(p){p=Number(p)||3;if(p<=1)return '<span class="chip bad">Prioritas Tinggi</span>';if(p===2)return '<span class="chip warn">Prioritas Sedang</span>';return '<span class="chip">Prioritas Normal</span>'}
+function todoMemberInfo(t){var p=state.todoProfiles[t.profile_id];if(!p)return {name:'Member tidak diketahui',email:'-'};return {name:p.full_name||p.email||p.member_id||'Member',email:p.email||'-'}}
+function todoDeepLink(t){var page=TODO_TYPE_LINK[t.todo_type];if(!page)return null;var p=state.todoProfiles[t.profile_id];var email=p?encodeURIComponent(p.email||''):'';var mid=p?encodeURIComponent(p.member_id||p.id||''):'';return page+(email?('?email='+email+(mid?('&member='+mid):'')):'')}
 function renderTodo(){
   var el=byId('adminTodoList');if(!el)return;
-  if(el.getAttribute('data-kamar-actioncenter-bound'))return;
-  var dismissed=dismissedTodoSet();
-  var pending=regularMembers().filter(isPending).filter(function(m){return !dismissed.has('member:'+(m._id||idOf(m)||emailOf(m)))});
-  var h='';
-  if(!pending.length){h='<div class="empty">Tidak ada member pending. Aktivasi akun gratis sudah bersih.</div>'}
-  else{
-    pending.forEach(function(m){
-      var tid='member:'+(m._id||idOf(m)||emailOf(m));
-      h+='<div class="todo-row" data-todo-id="'+esc(tid)+'"><div><strong>Aktivasi member gratis</strong><small>'+esc(nameOf(m))+'<br>'+esc(m._id||idOf(m)||emailOf(m))+'</small></div><div>'+esc(emailOf(m)||'-')+'</div><div>'+label(m)+'</div><div class="todo-actions"><a class="btn" href="admin-activation.html?v=24dh">Aktivasi</a><button class="btn secondary todo-dismiss" type="button" data-dismiss="'+esc(tid)+'" title="Tolak / sembunyikan dari daftar">&times;</button></div></div>'
-    });
-  }
-  el.innerHTML=h;
-  var pc=byId('pendingTodoCount'); if(pc) pc.textContent=String(pending.length);
+  var list=state.todos||[];
+  var pc=byId('pendingTodoCount');if(pc)pc.textContent=String(list.length);
+  if(!list.length){el.innerHTML='<div class="empty">Tidak ada to do yang perlu ditinjau. Semua sudah bersih.</div>';return}
+  el.innerHTML=list.map(function(t){
+    var link=todoDeepLink(t);
+    var typeLabel=TODO_TYPE_LABEL[t.todo_type]||t.todo_type;
+    var info=todoMemberInfo(t);
+    var desc=(t.description||'').split('\n').map(esc).join('<br>');
+    return '<div class="todo-row" data-todo-id="'+esc(t.id)+'"><div><strong>'+esc(typeLabel)+'</strong><small>'+esc(t.title||'')+(desc?('<br>'+desc):'')+'</small></div><div>'+esc(info.name)+'<br><small>'+esc(info.email)+'</small></div><div>'+priorityBadge(t.priority)+'</div><div class="todo-actions" style="flex-wrap:wrap">'+(link?('<a class="btn mini" href="'+esc(link)+'">Buka</a>'):'')+'<button class="btn mini secondary" type="button" data-todo-note="'+esc(t.id)+'">Kirim Note</button><button class="btn mini secondary" type="button" style="color:#ffd582;border-color:rgba(255,213,130,.35)" data-todo-revise="'+esc(t.id)+'">Kembalikan Revisi</button><button class="btn mini secondary" type="button" data-todo-done="'+esc(t.id)+'">Selesai</button><button class="btn mini secondary" type="button" style="color:#ffb4b4;border-color:rgba(255,96,96,.35)" data-todo-reject="'+esc(t.id)+'">Tolak</button></div></div>';
+  }).join('');
 }
 function renderRecentMembers(){
   var el=byId('adminRecentMembers'); if(!el) return;
@@ -130,13 +146,35 @@ function renderRecentMembers(){
     return '<div class="member-mini-card'+(isOpen?' is-open':'')+'" data-member-mini="'+mid+'"><div class="member-mini-row"><div><strong>'+esc(nameOf(m))+'</strong><small>'+esc(emailOf(m)||'-')+'</small></div>'+label(m)+'<button class="btn mini secondary" type="button" data-toggle-mini="'+mid+'">'+(isOpen?'Tutup':'Detail')+'</button></div>'+detail+'</div>';
   }).join('');
 }
+async function actOnTodo(id,status,note){
+  var c=state.client||await initClient(); if(!c)return toast('Supabase client tidak terbaca.');
+  try{
+    var r=await c.rpc('admin_update_todo_status',{target_todo_id:id,new_status:status,admin_note:note||null});
+    if(r.error) throw r.error;
+    toast(status==='done'?'To Do ditandai selesai.':(status==='rejected'?'To Do ditolak.':'To Do dikembalikan untuk revisi.'));
+    await loadTodos(); renderTodo();
+  }catch(e){ toast('Gagal memproses: '+window.kamarFriendlyError(e)); }
+}
+async function sendTodoNote(id){
+  var c=state.client||await initClient(); if(!c)return toast('Supabase client tidak terbaca.');
+  try{
+    var r=await c.rpc('admin_get_todo_contact_template',{target_todo_id:id,channel:'whatsapp'});
+    if(r.error) throw r.error;
+    var data=r.data||{};
+    if(data.whatsapp_url){ window.open(data.whatsapp_url,'_blank'); toast('Membuka WhatsApp untuk kirim note.'); }
+    else if(data.telegram_url){ window.open(data.telegram_url,'_blank'); toast('Membuka Telegram (WhatsApp member tidak tersedia).'); }
+    else { toast('Kontak member tidak tersedia. Pesan: '+(data.message||'-')); }
+  }catch(e){ toast('Gagal membuat note: '+window.kamarFriendlyError(e)); }
+}
 document.addEventListener('click',function(e){
-  var dismissBtn=e.target.closest('.todo-dismiss');
-  if(dismissBtn){
-    var tid=dismissBtn.getAttribute('data-dismiss');
-    if(tid && confirm('Tolak & sembunyikan item ini dari To Do Admin?')){addDismissedTodo(tid);renderTodo()}
-    return;
-  }
+  var doneBtn=e.target.closest('[data-todo-done]');
+  if(doneBtn){ actOnTodo(doneBtn.getAttribute('data-todo-done'),'done'); return; }
+  var rejectBtn=e.target.closest('[data-todo-reject]');
+  if(rejectBtn){ var note=prompt('Catatan penolakan (opsional, akan tercatat di riwayat):',''); if(note===null)return; actOnTodo(rejectBtn.getAttribute('data-todo-reject'),'rejected',note); return; }
+  var reviseBtn=e.target.closest('[data-todo-revise]');
+  if(reviseBtn){ var note2=prompt('Catatan revisi untuk member (wajib diisi, jelaskan apa yang perlu diperbaiki):',''); if(note2===null)return; if(!note2.trim()){toast('Catatan revisi wajib diisi.');return;} actOnTodo(reviseBtn.getAttribute('data-todo-revise'),'processing',note2); return; }
+  var noteBtn=e.target.closest('[data-todo-note]');
+  if(noteBtn){ sendTodoNote(noteBtn.getAttribute('data-todo-note')); return; }
   var toggleBtn=e.target.closest('[data-toggle-mini]');
   if(toggleBtn){
     var el=byId('adminRecentMembers');
@@ -146,7 +184,7 @@ document.addEventListener('click',function(e){
     renderRecentMembers();
   }
 });
-async function load(){state.errors=[];state.client=await initClient();try{var view=await query('admin_member_overview');var prof=await query('member_profiles');state.members=mergeMembers(view,prof)}catch(e){state.errors.push('Member: '+window.kamarFriendlyError(e));state.members=[]}try{state.payments=await query('payments')}catch(e){state.payments=[]}try{state.affiliates=await query('affiliates')}catch(e){state.affiliates=getJSON('kamarAffiliateList',[])}renderStatus();renderSummary();renderTodo();renderRecentMembers()}
+async function load(){state.errors=[];state.client=await initClient();try{var view=await query('admin_member_overview');var prof=await query('member_profiles');state.members=mergeMembers(view,prof)}catch(e){state.errors.push('Member: '+window.kamarFriendlyError(e));state.members=[]}try{state.payments=await query('payments')}catch(e){state.payments=[]}try{state.affiliates=await query('affiliates')}catch(e){state.affiliates=getJSON('kamarAffiliateList',[])}renderStatus();renderSummary();await loadTodos();renderTodo();renderRecentMembers()}
 window.kamarReloadAdminDashboard = load;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
 })();

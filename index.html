@@ -139,14 +139,6 @@
 <div><strong>Tanpa Janji Profit</strong><span>Edukasi objektif, disiplin, dan risk management.</span></div>
 </div>
 </section>
-<section class="section-shell compact-section" hidden="" id="kamarVideoSection">
-<div class="section-heading centered">
-<span class="eyebrow">Referensi Video</span>
-<h2>Kajian Video Pilihan dari YouTube Kamar.</h2>
-<p>Bagian ini disiapkan untuk menampilkan video edukasi pilihan. Link video bisa dipasang manual agar yang tampil tetap rapi, relevan, dan tidak bergantung pada sistem otomatis.</p>
-</div>
-<div class="kamar-content-grid" id="kamarVideoGrid"></div>
-</section>
 <section class="section-shell compact-section" hidden="" id="kamarMaterialSection">
 <div class="section-heading centered">
 <span class="eyebrow">Materi &amp; Tools</span>
@@ -241,7 +233,8 @@
 <div class="facility-note">Pendampingan berfokus pada proses belajar, evaluasi, disiplin, dan risk management—bukan pemberian hasil instan.</div>
 <a class="btn btn-primary" href="https://telegram.me/kamarkajianmarket" rel="noopener" target="_blank">Konsultasi Kamar Private</a>
 </div>
-<div class="private-course-explorer" id="privateCourseExplorer">
+<button type="button" class="private-detail-toggle" id="privateDetailToggle" aria-expanded="false"><span class="private-detail-toggle-text">Lihat Kurikulum Lengkap</span><span class="private-detail-toggle-icon">↓</span></button>
+<div class="private-course-explorer private-detail-collapse" id="privateCourseExplorer">
 <div class="private-course-topbar">
 <div><span class="course-eyebrow">Kurikulum Kamar Private</span><strong>20 Chapter Materi Terstruktur</strong></div>
 <div class="course-nav-arrows"><button aria-label="Chapter sebelumnya" class="chapter-prev" type="button">←</button><button aria-label="Chapter berikutnya" class="chapter-next" type="button">→</button></div>
@@ -270,7 +263,7 @@
 <div class="chapter-objective"><strong>Tujuan Pembelajaran</strong><p></p></div>
 </div>
 </div>
-<section class="private-continuous-section">
+<section class="private-continuous-section private-detail-collapse">
 <div class="continuous-heading"><span>Setelah 20 Chapter Wajib Selesai</span><h4>Graduation &amp; Continuous Mentoring</h4><p>Menyelesaikan seluruh chapter bukan akhir proses belajar. Peserta melanjutkan ke sesi latihan, evaluasi, dan pendampingan yang berlangsung lifetime.</p></div>
 <div class="continuous-grid">
 <article><span>01</span><h5>Latihan &amp; Evaluasi Lifetime</h5><p>Review analisis, evaluasi trading, diskusi kasus market terbaru, dan penyempurnaan Market Logic dilakukan secara berkelanjutan.</p></article>
@@ -457,6 +450,23 @@
 <button class="btn btn-secondary traktir-qris-close" id="traktirQrisClose" type="button">Tutup</button>
 </div>
 </article>
+</div>
+</section>
+<section class="section-shell compact-section" id="kamarVideoSection" data-kamar-ambient-reveal="">
+<div class="section-heading centered premium-reveal" data-premium-bound="1" data-delay="2">
+<span class="eyebrow">Referensi Video</span>
+<h2>Kajian Video Pilihan dari YouTube Kamar.</h2>
+<p>Tonton pembahasan terbaru seputar market logic dan cara membaca struktur market secara objektif di kanal YouTube Kamar.</p>
+</div>
+<div class="kamar-content-grid kamar-featured-video-grid" id="kamarVideoGrid">
+<div class="kamar-featured-video">
+<div class="kamar-featured-video-media"><iframe src="https://www.youtube.com/embed/vs_efAHByzY" title="Kajian Video Kamar Kajian Market" loading="lazy" allowfullscreen=""></iframe></div>
+<div class="kamar-featured-video-copy">
+<h3>Kajian &amp; Edukasi Terbaru</h3>
+<p>Pembahasan market logic dan struktur market terbaru dari Kamar Kajian Market.</p>
+<a class="btn btn-secondary" href="https://www.youtube.com/@kamarkajianmarket" target="_blank" rel="noopener">Lihat YouTube →</a>
+</div>
+</div>
 </div>
 </section>
 <section class="social section-shell compact-section">
@@ -826,5 +836,20 @@ loadDenoms();
 <script src="assets/js/kamar-content-display.js?v=1"></script>
 <script src="/assets/js/kamar-livechat.js?v=1" defer></script>
 <script src="/assets/js/kamar-scam-warning.js?v=1" defer></script>
+<script>
+(function(){
+  var btn = document.getElementById('privateDetailToggle');
+  var box1 = document.getElementById('privateCourseExplorer');
+  var box2 = document.querySelector('.private-continuous-section');
+  if(!btn || !box1) return;
+  btn.addEventListener('click', function(){
+    var open = box1.classList.toggle('is-expanded');
+    if(box2) box2.classList.toggle('is-expanded', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Kurikulum' : 'Lihat Kurikulum Lengkap';
+    btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
+  });
+})();
+</script>
 </body>
 </html>

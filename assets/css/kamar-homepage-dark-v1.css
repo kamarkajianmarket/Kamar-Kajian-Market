@@ -38,6 +38,9 @@
   body.public-home .site-header .brand img{ transition: width .22s ease, height .22s ease; }
   body.public-home .site-header.is-kamar-scrolled .header-cta{ padding:8px 14px !important; font-size:14px !important; }
   body.public-home .site-header .header-cta{ transition: padding .22s ease, font-size .22s ease; }
+  body.public-home .site-header .header-cta{ transition: padding .22s ease, font-size .22s ease, transform .2s ease, filter .2s ease, box-shadow .2s ease; }
+  body.public-home .site-header .header-cta:hover{ transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 6px 18px rgba(184,138,61,.28); }
+  body.public-home .site-header .header-cta:active{ transform: translateY(0); filter: brightness(0.97); }
 
   /* universal section shell */
   body.public-home .section-shell{

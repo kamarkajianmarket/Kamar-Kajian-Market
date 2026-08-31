@@ -452,3 +452,21 @@
   /* Fix: <strong>Kamar Kajian Market</strong> tak terbaca di modal scam */
   body.public-home .kamar-scam-card strong{ color:#F4F6F8 !important; }
 }
+
+@media (min-width: 981px) {
+  /* Fix: box Cakupan Materi / Yang Tersedia Pada Chapter Ini masih cream */
+  body.public-home .chapter-detail-grid > section{
+    background: rgba(244,246,248,.05) !important;
+    border-color: rgba(244,246,248,.1) !important;
+  }
+  /* Fix: box Tujuan Pembelajaran masih putih (gradient cream) */
+  body.public-home .chapter-objective{
+    background: linear-gradient(135deg, rgba(160,120,220,.14), rgba(244,246,248,.04)) !important;
+  }
+  /* Fix: tombol stage roadmap (Core Entry/Advanced/Professional/Master Framework) masih cream */
+  body.public-home .learning-roadmap button:not(.active){
+    background: rgba(244,246,248,.05) !important;
+    color:#C7D1DC !important;
+    border-color: rgba(244,246,248,.12) !important;
+  }
+}

@@ -711,46 +711,49 @@ body.public-home .about-stats-grid span{
 }
 
 /* ===== Task #109: de-emphasize Rp3.000.000+ jadi chip kecil, bukan headline besar ===== */
-body.public-home .affiliate-commission{
+body.public-home #affiliate-kamar .affiliate-commission{
   display:inline-flex !important;
   align-items:center !important;
-  gap:6px !important;
   flex-direction:row !important;
   flex-wrap:wrap !important;
+  gap:6px !important;
   padding:6px 12px !important;
   margin:10px 0 !important;
   border:1px solid rgba(184,138,61,.25) !important;
   border-radius:999px !important;
   background:rgba(184,138,61,.06) !important;
 }
-body.public-home .affiliate-commission small{
+body.public-home #affiliate-kamar .affiliate-commission small{
+  display:inline !important;
   font-size:10.5px !important;
   line-height:1.3 !important;
   color:#93A0AF !important;
 }
-body.public-home .affiliate-commission small:first-child{
-  display:inline !important;
-}
-body.public-home .affiliate-commission small:first-child br{
+body.public-home #affiliate-kamar .affiliate-commission small br{
   display:none !important;
 }
-body.public-home .affiliate-commission small:first-child::after{
-  content:" " !important;
-}
-body.public-home .affiliate-commission strong{
+body.public-home #affiliate-kamar .affiliate-commission strong{
   font-size:15px !important;
   color:#C7B889 !important;
   font-weight:700 !important;
 }
-body.public-home .affiliate-actions{
+body.public-home #affiliate-kamar .affiliate-actions{
   display:flex !important;
   flex-wrap:wrap !important;
   gap:10px !important;
   align-items:center !important;
 }
-body.public-home .affiliate-actions .private-detail-toggle{
+body.public-home #affiliate-kamar .affiliate-actions .private-detail-toggle{
   width:auto !important;
   margin:0 !important;
   flex:0 0 auto !important;
+}
+/* Task #109 fix: pastikan collapse benar-benar clip konten (base CSS punya overflow:visible utk .affiliate-note-card) */
+body.public-home #affiliate-kamar .private-detail-collapse{
+  overflow:hidden !important;
+  max-height:180px !important;
+}
+body.public-home #affiliate-kamar .private-detail-collapse.is-expanded{
+  max-height:4000px !important;
 }
 }

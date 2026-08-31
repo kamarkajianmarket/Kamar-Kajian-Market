@@ -501,6 +501,7 @@
 }
 
 
+@media (min-width: 981px){
 /* ===== Section X: YouTube Featured Video (Brief Referensi Video) ===== */
 .kamar-featured-video-grid{
   display:block !important;
@@ -645,4 +646,40 @@ body.public-home .facility-selector-v2 .facility-private{
   color:#C7B889 !important;
   border-color:rgba(215,180,109,.32) !important;
   background:rgba(215,180,109,.06) !important;
+}
+
+/* ===== Refinement brief bagian J: compact About/Trust jadi credibility strip ===== */
+body.public-home #tentang{
+  padding-top: 28px !important;
+  padding-bottom: 28px !important;
+}
+body.public-home #tentang .section-heading{
+  margin-bottom: 20px !important;
+}
+body.public-home #tentang .section-heading h2{
+  font-size: 30px !important;
+  line-height: 1.25 !important;
+}
+body.public-home #tentang .section-heading p{
+  max-width: 640px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}
+body.public-home .about-stats-grid{
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px !important;
+}
+body.public-home .about-stats-grid > div{
+  padding: 14px 12px !important;
+}
+body.public-home .about-stats-grid strong{
+  font-size: 16px !important;
+}
+body.public-home .about-stats-grid span{
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+}
+
 }

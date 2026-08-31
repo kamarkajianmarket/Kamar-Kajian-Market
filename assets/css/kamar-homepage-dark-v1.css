@@ -97,4 +97,10 @@
   body.public-home .hero-badges-on-visual span{
     background:rgba(16,23,32,.85) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.14) !important;
   }
+
+  /* fix regresi: teks di dalam mini-card stats (bg sekarang gelap) */
+  body.public-home .stats-grid strong{ color:#F4F6F8 !important; }
+
+  /* fix regresi: chip akses (Akses Gratis/Berbayar) bg tetap krem, teks harus gelap */
+  body.public-home .access-option h3{ color:#1B2228 !important; }
 }

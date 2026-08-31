@@ -261,3 +261,55 @@
     color:#F4F6F8 !important;
   }
 }
+
+@media (min-width: 981px) {
+  /* Compact: Affiliate - reward number jadi detail sekunder, bukan headline utama */
+  body.public-home #affiliate-kamar.section-shell{
+    padding: 28px 24px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-program-grid{
+    gap: 18px !important;
+    max-width: 960px !important;
+    margin: 0 auto !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-main-card,
+  body.public-home #affiliate-kamar .affiliate-note-card{
+    padding: 22px !important;
+  }
+  body.public-home #affiliate-kamar .section-heading h2{
+    font-size: 26px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-main-card h3{
+    font-size: 22px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission{
+    padding: 14px 18px !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission strong{
+    font-size: 22px !important;
+    line-height: 1.2 !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-commission small{
+    font-size: 10px !important;
+    letter-spacing: .04em !important;
+  }
+
+  /* Compact: Traktir Kamar - section kecil, bukan lagi section besar setara fasilitas utama */
+  body.public-home #traktir-kamar.section-shell{
+    padding: 28px 24px !important;
+  }
+  body.public-home #traktir-kamar .traktir-grid,
+  body.public-home #traktir-kamar .simple-traktir-grid{
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+  body.public-home #traktir-kamar .traktir-card{
+    padding: 22px !important;
+  }
+  body.public-home #traktir-kamar .section-heading h2{
+    font-size: 24px !important;
+  }
+  body.public-home #traktir-kamar .traktir-card h3{
+    font-size: 18px !important;
+  }
+}

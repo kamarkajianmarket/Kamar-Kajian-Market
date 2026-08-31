@@ -447,3 +447,8 @@
     color:#F4C95D !important;
   }
 }
+
+@media (min-width: 981px) {
+  /* Fix: <strong>Kamar Kajian Market</strong> tak terbaca di modal scam */
+  body.public-home .kamar-scam-card strong{ color:#F4F6F8 !important; }
+}

@@ -313,3 +313,58 @@
     font-size: 18px !important;
   }
 }
+
+@media (min-width: 981px) {
+  /* Compact Utility Grid: kartu kecil "Explore" ke YouTube/Resources/FAQ/Telegram/Affiliate */
+  body.public-home #utility-grid-kamar.section-shell{
+    padding: 28px 24px !important;
+  }
+  body.public-home #utility-grid-kamar .section-heading h2{
+    font-size: 24px !important;
+  }
+  body.public-home .utility-grid{
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 14px !important;
+    max-width: 1080px !important;
+    margin: 0 auto !important;
+  }
+  body.public-home .utility-card{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding: 18px 16px !important;
+    border-radius: 14px !important;
+    background: linear-gradient(160deg, rgba(16,23,32,.9), rgba(11,16,23,.88)) !important;
+    border: 1px solid rgba(244,246,248,.08) !important;
+    text-decoration: none !important;
+    transition: border-color .18s ease, transform .18s ease !important;
+  }
+  body.public-home a.utility-card:hover{
+    border-color: rgba(215,180,109,.4) !important;
+    transform: translateY(-2px);
+  }
+  body.public-home .utility-card-label{
+    color:#F4F6F8 !important;
+    font-weight:800 !important;
+    font-size:15px !important;
+  }
+  body.public-home .utility-card-desc{
+    color:#8E98A8 !important;
+    font-size:12.5px !important;
+    line-height:1.4 !important;
+  }
+  body.public-home .utility-card-cta{
+    color:#D7B46D !important;
+    font-weight:700 !important;
+    font-size:12px !important;
+    margin-top:auto !important;
+  }
+  body.public-home .utility-card-disabled{
+    opacity:.55 !important;
+    cursor:not-allowed !important;
+  }
+  body.public-home .utility-card-disabled .utility-card-cta{
+    color:#8E98A8 !important;
+  }
+}

@@ -682,4 +682,31 @@ body.public-home .about-stats-grid span{
   line-height: 1.4 !important;
 }
 
+
+/* ===== Task #106: preview kurikulum ringkas Kamar Private (6 stage) ===== */
+.private-curriculum-preview{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  flex-wrap:wrap !important;
+  margin:14px 0 16px !important;
+  padding:10px 14px !important;
+  border:1px solid rgba(184,138,61,.22) !important;
+  border-radius:10px !important;
+  background:rgba(184,138,61,.05) !important;
+  font-size:12.5px !important;
+  line-height:1.5 !important;
+  color:#B9C2CE !important;
+}
+.private-curriculum-preview-label{
+  flex-shrink:0 !important;
+  font-weight:700 !important;
+  font-size:10.5px !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  color:#C7B889 !important;
+}
+.private-curriculum-preview-stages{
+  color:#93A0AF !important;
+}
 }

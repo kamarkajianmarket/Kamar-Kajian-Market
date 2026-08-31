@@ -104,3 +104,43 @@
   /* fix regresi: chip akses (Akses Gratis/Berbayar) bg tetap krem, teks harus gelap */
   body.public-home .access-option h3{ color:#1B2228 !important; }
 }
+
+@media (min-width: 981px) {
+  /* ===== Phase 3: panel detail fasilitas (Edukasi/Signal/Private/Indikator/Robot) — dark ===== */
+  body.public-home .facility-panel-v2,
+  body.public-home .facility-detail-card,
+  body.public-home .private-course-panel{
+    background-image:linear-gradient(145deg,#101720 0%,#0B0F14 100%) !important;
+    background-color:#101720 !important;
+    --kamar-ink:#F4F6F8;
+    --kamar-text:#F4F6F8;
+    --kamar-text-secondary:#B8C2CE;
+    --km-ink:#F4F6F8;
+    --km-muted:#8E98A8;
+  }
+  body.public-home .facility-panel-v2 h2, body.public-home .facility-panel-v2 h3,
+  body.public-home .facility-detail-card h2, body.public-home .facility-detail-card h3,
+  body.public-home .private-course-panel h2, body.public-home .private-course-panel h3{
+    color:#F4F6F8 !important;
+  }
+  body.public-home .facility-info-grid h4{ color:#F4F6F8 !important; }
+  body.public-home .facility-info-grid ul{ color:#B8C2CE !important; }
+  body.public-home .facility-info-grid section{ background:rgba(244,246,248,.06) !important; }
+  body.public-home .chapter-detail-grid h5,
+  body.public-home .chapter-objective strong,
+  body.public-home .facility-system-heading strong,
+  body.public-home .facility-panel-v2 .eyebrow,
+  body.public-home .facility-panel-v2 .section-label{ color:#D7B46D !important; }
+
+  /* chip/kotak yang tetap terang di dalam panel gelap: teks tetap gelap */
+  body.public-home .facility-note, body.public-home .facility-note p,
+  body.public-home .course-note, body.public-home .course-note p,
+  body.public-home .facility-benefit-card, body.public-home .facility-benefit-card p,
+  body.public-home .facility-info-card, body.public-home .facility-info-card p{
+    color:#1B2228 !important;
+  }
+
+  /* recap card di dalam panel Signal */
+  body.public-home .kamar-recap-live-card h4{ color:#F4F6F8 !important; }
+  body.public-home .kamar-recap-period{ color:#8E98A8 !important; }
+}

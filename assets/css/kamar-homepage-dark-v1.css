@@ -252,3 +252,12 @@
   }
   body.public-home #traktir-kamar .traktir-qty-value{ color:#F4F6F8 !important; }
 }
+
+/* fix step chip Affiliate: span sendiri punya bg krem terpisah dari note-card, kena flip putih-di-atas-putih */
+@media (min-width: 981px) {
+  body.public-home #affiliate-kamar .affiliate-steps span{
+    background: rgba(244,246,248,.07) !important;
+    border-color: rgba(244,246,248,.14) !important;
+    color:#F4F6F8 !important;
+  }
+}

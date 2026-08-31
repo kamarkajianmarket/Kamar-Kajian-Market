@@ -368,3 +368,82 @@
     color:#8E98A8 !important;
   }
 }
+
+@media (min-width: 981px) {
+  /* Fix: modal scam warning masih cream */
+  body.public-home .kamar-scam-card{
+    background: linear-gradient(160deg, rgba(16,23,32,.98), rgba(11,16,23,.97)) !important;
+    border: 1px solid rgba(244,246,248,.10) !important;
+  }
+  body.public-home .kamar-scam-card h2{ color:#F4F6F8 !important; }
+  body.public-home .kamar-scam-card > p{ color:#8E98A8 !important; }
+  body.public-home .kamar-scam-highlight{
+    background: rgba(215,180,109,.12) !important;
+    border-color: rgba(215,180,109,.3) !important;
+    color:#F4F6F8 !important;
+  }
+  body.public-home .kamar-scam-highlight strong{ color:#F4F6F8 !important; }
+  body.public-home .kamar-scam-footnote{ color:#8E98A8 !important; }
+  body.public-home .kamar-scam-close{
+    background: rgba(244,246,248,.08) !important;
+    color:#F4F6F8 !important;
+  }
+
+  /* Fix: card Akses Gratis/Berbayar masih cream */
+  body.public-home #akses .access-option{
+    background: linear-gradient(160deg, rgba(16,23,32,.92), rgba(11,16,23,.9)) !important;
+    border-color: rgba(244,246,248,.08) !important;
+  }
+  body.public-home #akses .access-option h3{ color:#F4F6F8 !important; }
+  body.public-home #akses .access-option p{ color:#8E98A8 !important; }
+  body.public-home #akses .access-option span{ color:#D7B46D !important; }
+
+  /* Fix: box facility-note masih biru muda */
+  body.public-home .facility-note{
+    background: rgba(53,132,229,.10) !important;
+    border-left-color: rgba(90,150,235,.7) !important;
+    color:#C7D3E0 !important;
+  }
+
+  /* Fix: panel Kamar Support masih putih */
+  body.public-home .kmr-sup-panel{
+    background: linear-gradient(160deg, rgba(16,23,32,.98), rgba(11,16,23,.97)) !important;
+    border-color: rgba(244,246,248,.10) !important;
+  }
+  body.public-home .kmr-sup-opt{
+    background: rgba(244,246,248,.05) !important;
+    border-color: rgba(244,246,248,.12) !important;
+  }
+  body.public-home .kmr-sup-opt-title{ color:#F4F6F8 !important; }
+  body.public-home .kmr-sup-opt-desc{ color:#8E98A8 !important; }
+  body.public-home .kmr-sup-opt-arrow{ color:#D7B46D !important; }
+
+  /* Fix: chapter explorer Kamar Private masih terang */
+  body.public-home .chapter-visual{
+    background: rgba(244,246,248,.06) !important;
+    color:#F4F6F8 !important;
+  }
+  body.public-home .chapter-framework{
+    background: rgba(160,120,220,.16) !important;
+    color:#D9C6F5 !important;
+  }
+  body.public-home .chapter-category{
+    background: rgba(244,246,248,.06) !important;
+    color:#8E98A8 !important;
+  }
+
+  /* Fix: simetri chip nominal Traktir + warna total lebih atraktif */
+  body.public-home #traktir-kamar .traktir-denom-row{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    justify-content:center !important;
+  }
+  body.public-home #traktir-kamar .traktir-denom-chip{
+    flex:0 0 auto !important;
+    min-width:112px !important;
+    text-align:center !important;
+  }
+  body.public-home #traktir-kamar #traktirTotalValue{
+    color:#F4C95D !important;
+  }
+}

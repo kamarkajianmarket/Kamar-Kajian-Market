@@ -345,17 +345,20 @@
 <h3>Referensikan Kamar, dapatkan komisi.</h3>
 <div class="affiliate-commission"><small>Potensi Reward<br/>Hingga</small><strong>Rp3.000.000+</strong><small>/ Referral*</small></div>
 <p>Program ini disiapkan untuk Member Kamar yang ingin membantu memperluas edukasi market logic secara sehat, profesional, dan tidak berlebihan.</p>
+<div class="affiliate-actions affiliate-actions-admin-only">
+<a class="btn btn-primary" href="https://telegram.me/kamarkajianmarket" rel="noopener" target="_blank">Tanya Admin</a>
+<button type="button" class="private-detail-toggle" id="affiliateDetailToggle" aria-expanded="false"><span class="private-detail-toggle-text">Lihat Detail Program</span><span class="private-detail-toggle-icon">↓</span></button>
+</div>
+<div class="private-detail-collapse" id="affiliateDetailExplorer">
 <div class="affiliate-benefit-list">
 <div class="affiliate-benefit-item"><span>Referral Reward</span><small>Reward dari referral valid yang mendaftar dan mengaktifkan fasilitas Kamar.</small></div>
 <div class="affiliate-benefit-item"><span>Study Partner Reward</span><small>Gajian setiap bulan dari referral yang aktif dalam program Kamar Signal, sesuai validasi dan ketentuan berlaku.</small></div>
 <div class="affiliate-benefit-item"><span>Renewal Reward</span><small>Reward lanjutan saat referral memperpanjang fasilitas Kamar yang digunakan.</small></div>
 </div>
-<div class="affiliate-actions affiliate-actions-admin-only">
-<a class="btn btn-primary" href="https://telegram.me/kamarkajianmarket" rel="noopener" target="_blank">Tanya Admin</a>
-</div>
 <p class="affiliate-footnote">*Syarat dan ketentuan berlaku. Reward bergantung pada jenis fasilitas, validasi transaksi, status pembayaran, aktivitas referral, dan ketentuan resmi Team Kamar Kajian Market.</p>
+</div>
 </article>
-<article class="affiliate-note-card">
+<article class="affiliate-note-card private-detail-collapse affiliate-continuous-section">
 <h3>Cara kerja sederhana.</h3>
 <p>Setelah pendaftaran disetujui, affiliate akan mendapatkan kode referral untuk dibagikan kepada calon member.</p>
 <div class="affiliate-steps">
@@ -828,6 +831,21 @@ loadDenoms();
     if(box2) box2.classList.toggle('is-expanded', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Kurikulum' : 'Lihat Kurikulum Lengkap';
+    btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
+  });
+})();
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('affiliateDetailToggle');
+  var box1 = document.getElementById('affiliateDetailExplorer');
+  var box2 = document.querySelector('.affiliate-continuous-section');
+  if(!btn || !box1) return;
+  btn.addEventListener('click', function(){
+    var open = box1.classList.toggle('is-expanded');
+    if(box2) box2.classList.toggle('is-expanded', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Detail' : 'Lihat Detail Program';
     btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
   });
 })();

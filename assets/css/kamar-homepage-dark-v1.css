@@ -324,7 +324,7 @@
   }
   body.public-home .utility-grid{
     display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 14px !important;
     max-width: 1080px !important;
     margin: 0 auto !important;

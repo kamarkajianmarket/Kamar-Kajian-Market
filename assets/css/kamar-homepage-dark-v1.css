@@ -1,0 +1,100 @@
+/* ===== KAMAR HOMEPAGE DARK OVERRIDE v1 (Desktop only) =====
+   Layer terpisah di atas kamar-bundle.css (Step 47 Neo Minimal Palace / cream).
+   Tujuan: ubah homepage index.html ke dark institutional premium sesuai brief,
+   TANPA menghapus sistem cream yang sudah ada (supaya gampang revert: cukup
+   lepas <link> file ini dari index.html).
+   Scope: desktop (>=981px) saja, index.html saja. Tidak menyentuh member/admin. */
+
+@media (min-width: 981px) {
+
+  body.public-home,
+  body.kamar-v46-atelier{
+    background:
+      radial-gradient(circle at 10% -6%, rgba(184,138,61,.16), transparent 36rem),
+      radial-gradient(circle at 88% 10%, rgba(14,95,84,.20), transparent 32rem),
+      linear-gradient(180deg,#0B0F14 0%,#070A0F 55%,#0B0F14 100%) !important;
+    color:#F4F6F8 !important;
+  }
+
+  body.public-home h1, body.public-home h2, body.public-home h3{ color:#F4F6F8 !important; }
+  body.public-home p{ color:#93A0AF; }
+
+  /* navbar */
+  body.public-home .site-header{
+    background:rgba(11,15,20,.86) !important;
+    border-color:rgba(244,246,248,.10) !important;
+    box-shadow:0 18px 50px rgba(0,0,0,.45) !important;
+  }
+  body.public-home .site-header .brand{ color:#F4F6F8 !important; }
+  body.public-home .nav-links a,
+  body.public-home .quick-mobile-nav a{ color:#B8C2CE !important; }
+  body.public-home .nav-links a:hover{ color:#F4F6F8 !important; background:rgba(244,246,248,.06) !important; }
+
+  /* universal section shell */
+  body.public-home .section-shell{
+    background:rgba(16,23,32,.88) !important;
+    border-color:rgba(244,246,248,.08) !important;
+    box-shadow:0 20px 70px rgba(0,0,0,.40) !important;
+  }
+  body.public-home .section-shell:not(.hero) .btn-secondary{
+    background:rgba(244,246,248,.06) !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+
+  /* facility cards */
+  body.public-home .facility-card,
+  body.public-home .facility-selector-v2 .facility-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+    box-shadow:0 14px 42px rgba(0,0,0,.35) !important;
+  }
+  body.public-home .facility-card h3{ color:#F4F6F8 !important; }
+  body.public-home .facility-card p{ color:#8E98A8 !important; }
+  body.public-home .facility-status-badge{ background:rgba(244,246,248,.08) !important; color:#D7B46D !important; }
+  body.public-home .facility-pill{ background:rgba(244,246,248,.06) !important; color:#B8C2CE !important; }
+
+  /* trust strip / stats */
+  body.public-home .stats-grid>div{ background:#101720 !important; border-color:rgba(244,246,248,.10) !important; box-shadow:0 10px 30px rgba(0,0,0,.30) !important; }
+  body.public-home .detail-grid>div{ background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; }
+
+  /* Signal recap */
+  body.public-home .recap-copy, body.public-home .recap-card{ background:rgba(16,23,32,.85) !important; border-color:rgba(244,246,248,.10) !important; }
+  body.public-home .showcase-tab{ background:rgba(244,246,248,.06) !important; color:#B8C2CE !important; }
+
+  /* access / social / traktir / faq */
+  body.public-home .access-box, body.public-home .access-split-box,
+  body.public-home .social-box, body.public-home .traktir-card,
+  body.public-home .faq-category, body.public-home .faq-item{
+    background:#101720 !important; border-color:rgba(244,246,248,.10) !important; box-shadow:0 12px 38px rgba(0,0,0,.35) !important;
+  }
+  body.public-home .social-link{ background:rgba(244,246,248,.06) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.12) !important; }
+
+  /* affiliate */
+  body.public-home #affiliate-kamar .affiliate-benefit-item,
+  body.public-home #affiliate-kamar .affiliate-note-card{ background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; }
+
+  /* Kamar Private course explorer */
+  body.public-home .private-course-explorer{ background:rgba(16,23,32,.85) !important; border-color:rgba(215,180,109,.28) !important; }
+  body.public-home .chapter-copy-card{ background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; }
+  body.public-home .chapter-tabs button, body.public-home .gallery-tabs button, body.public-home .course-nav-arrows button{
+    background:rgba(244,246,248,.06) !important; color:#B8C2CE !important; border-color:rgba(244,246,248,.14) !important;
+  }
+  body.public-home .continuous-heading span{ color:#D7B46D !important; }
+
+  /* indicator / robot preview */
+  body.public-home .indicator-badges article, body.public-home .mechanism-grid div,
+  body.public-home .robot-flow span, body.public-home .facility-info-grid section{
+    background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; color:#B8C2CE !important;
+  }
+
+  /* lightbox */
+  body.public-home .lightbox-close, body.public-home .lightbox-nav{
+    background:rgba(16,23,32,.85) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.14) !important;
+  }
+
+  /* hero floating badges */
+  body.public-home .hero-badges-on-visual span{
+    background:rgba(16,23,32,.85) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.14) !important;
+  }
+}

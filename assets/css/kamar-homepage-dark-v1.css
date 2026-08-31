@@ -322,6 +322,12 @@
   body.public-home #utility-grid-kamar .section-heading h2{
     font-size: 24px !important;
   }
+
+  /* Task #112: compact FAQ teaser section */
+  body.public-home #faq{ padding-top: 28px !important; padding-bottom: 28px !important; }
+  body.public-home #faq .section-heading h2{ font-size: 22px !important; max-width: 520px !important; margin-left: auto !important; margin-right: auto !important; }
+  body.public-home #faq .section-heading p{ font-size: 13.5px !important; max-width: 480px !important; margin-left: auto !important; margin-right: auto !important; margin-top: 8px !important; margin-bottom: 0px !important; }
+  body.public-home #faq .btn{ margin-top: 4px !important; }
   body.public-home .utility-grid{
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;

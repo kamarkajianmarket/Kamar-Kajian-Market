@@ -610,3 +610,39 @@
 .private-detail-toggle[aria-expanded="true"] .private-detail-toggle-icon{
   transform:rotate(180deg) !important;
 }
+
+
+/* ===== Refinement brief bagian M/N: unify facility card accent line ===== */
+/* Signal (POPULER) pakai Kamar green, Private (PREMIUM) pakai gold, 3 lainnya netral (bukan multicolor) */
+body.public-home .facility-selector-v2 .facility-edukasi,
+body.public-home .facility-selector-v2 .facility-indikator,
+body.public-home .facility-selector-v2 .facility-robot{
+  --card-accent: rgba(244,246,248,.4) !important;
+}
+body.public-home .facility-selector-v2 .facility-signal{
+  --card-accent: #0E5F54 !important;
+}
+body.public-home .facility-selector-v2 .facility-private{
+  --card-accent: #B88A3D !important;
+}
+
+/* ===== Refinement brief bagian O: badge status akses (compact, secondary, understated) ===== */
+.facility-access-badge{
+  display:inline-block !important;
+  margin-top:10px !important;
+  padding:3px 10px !important;
+  border-radius:999px !important;
+  border:1px solid rgba(244,246,248,.16) !important;
+  background:rgba(244,246,248,.05) !important;
+  color:#8E98A8 !important;
+  font-size:10px !important;
+  font-weight:600 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  line-height:1.4 !important;
+}
+.facility-access-badge-mixed{
+  color:#C7B889 !important;
+  border-color:rgba(215,180,109,.32) !important;
+  background:rgba(215,180,109,.06) !important;
+}

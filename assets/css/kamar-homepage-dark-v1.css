@@ -213,3 +213,42 @@
   }
   body.public-home .traktir-qty-value{ color:#F4F6F8 !important; }
 }
+
+/* ===== FIX SPESIFISITAS 2026-08-31 v2: kamar-bundle.css pakai selector #affiliate-kamar/#traktir-kamar (ID) + !important, harus disamakan spesifisitasnya biar menang ===== */
+@media (min-width: 981px) {
+
+  body.public-home #affiliate-kamar.section-shell{
+    background:
+      radial-gradient(circle at 12% 16%, rgba(201,157,81,.14), rgba(0,0,0,0) 384px),
+      radial-gradient(circle at 88% 10%, rgba(14,95,84,.20), rgba(0,0,0,0) 32rem),
+      linear-gradient(180deg,#0B1017 0%,#070A0F 100%) !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-note-card{
+    background: linear-gradient(160deg, rgba(16,23,32,.92), rgba(11,16,23,.9)) !important;
+    border-color: rgba(244,246,248,.08) !important;
+  }
+  body.public-home #affiliate-kamar .affiliate-note-card h3{ color:#F4F6F8 !important; }
+  body.public-home #affiliate-kamar .affiliate-note-card > p{ color:#8E98A8 !important; }
+  body.public-home #affiliate-kamar .affiliate-note-card span{ color:#F4F6F8 !important; }
+
+  body.public-home #traktir-kamar .traktir-card,
+  body.public-home #traktir-kamar .simple-traktir-card{
+    background-image:
+      radial-gradient(circle at 85% 0%, rgba(215,180,109,.14), rgba(0,0,0,0) 22rem),
+      linear-gradient(160deg, rgba(16,23,32,.95) 0%, rgba(11,16,23,.93) 100%) !important;
+    border-color: rgba(244,246,248,.10) !important;
+  }
+  body.public-home #traktir-kamar .traktir-card h3{ color:#F4F6F8 !important; }
+  body.public-home #traktir-kamar .traktir-card > p{ color:#8E98A8 !important; }
+  body.public-home #traktir-kamar .traktir-denom-chip:not(.active){
+    background: rgba(244,246,248,.06) !important;
+    border-color: rgba(244,246,248,.18) !important;
+    color:#F4F6F8 !important;
+  }
+  body.public-home #traktir-kamar .traktir-qty-label{ color:#8E98A8 !important; }
+  body.public-home #traktir-kamar .traktir-qty-btn{
+    background: rgba(244,246,248,.10) !important;
+    color:#F4F6F8 !important;
+  }
+  body.public-home #traktir-kamar .traktir-qty-value{ color:#F4F6F8 !important; }
+}

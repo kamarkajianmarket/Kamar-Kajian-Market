@@ -754,4 +754,30 @@ body.public-home #affiliate-kamar .private-detail-collapse{
 body.public-home #affiliate-kamar .private-detail-collapse.is-expanded{
   max-height:4000px !important;
 }
+
+/* ===== Task #110: de-prioritize visual Traktir Kamar (compact, bukan hide) ===== */
+body.public-home #traktir-kamar{
+  padding-top: 40px !important;
+  padding-bottom: 40px !important;
+}
+body.public-home #traktir-kamar .section-heading h2{
+  font-size: 24px !important;
+}
+body.public-home #traktir-kamar .section-heading p{
+  font-size: 13.5px !important;
+  max-width: 520px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body.public-home #traktir-kamar .traktir-card-v2{
+  max-width: 460px !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+}
+body.public-home #traktir-kamar .traktir-card-v2 h3{
+  font-size: 16px !important;
+}
+body.public-home #traktir-kamar .traktir-card-v2 p{
+  font-size: 12.5px !important;
+}
 }

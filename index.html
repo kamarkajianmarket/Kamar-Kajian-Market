@@ -411,8 +411,6 @@
 <span class="kamar-badge">Support Sukarela</span>
 <h3>Kirim Traktiran</h3>
 <p>Jika edukasi Kamar membantu proses belajar Anda, traktiran ini bisa menjadi bentuk apresiasi sederhana. Tidak wajib, bukan pembayaran sinyal, dan bukan jaminan profit.</p>
-<button type="button" class="private-detail-toggle" id="traktirDetailToggle" aria-expanded="false"><span class="private-detail-toggle-text">Pilih Nominal &amp; Kirim</span><span class="private-detail-toggle-icon">↓</span></button>
-<div class="private-detail-collapse" id="traktirDetailExplorer">
 <div class="traktir-denom-row" id="traktirDenomRow"></div>
 <div class="traktir-qty-row">
 <span class="traktir-qty-label">Jumlah</span>
@@ -434,7 +432,6 @@
 <div class="traktir-qris-amount" id="traktirQrisAmount"></div>
 <p class="traktir-qris-note" id="traktirQrisNote">Scan kode QRIS di atas menggunakan aplikasi e-wallet atau mobile banking Anda.</p>
 <button class="btn btn-secondary traktir-qris-close" id="traktirQrisClose" type="button">Tutup</button>
-</div>
 </div>
 </article>
 </div>
@@ -849,19 +846,6 @@ loadDenoms();
     if(box2) box2.classList.toggle('is-expanded', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Detail' : 'Lihat Detail Program';
-    btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
-  });
-})();
-</script>
-<script>
-(function(){
-  var btn = document.getElementById('traktirDetailToggle');
-  var box1 = document.getElementById('traktirDetailExplorer');
-  if(!btn || !box1) return;
-  btn.addEventListener('click', function(){
-    var open = box1.classList.toggle('is-expanded');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan' : 'Pilih Nominal & Kirim';
     btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
   });
 })();

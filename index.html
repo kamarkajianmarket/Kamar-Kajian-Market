@@ -570,7 +570,20 @@
     return hashMap[hash] || null;
   }
 
-  document.addEventListener('DOMContentLoaded',function(){
+    function hideAllFacilityDetails(){
+    var tabs=document.querySelectorAll('.facility-tab[data-facility]');
+    var details=document.querySelectorAll('.facility-detail-card[data-detail]');
+    tabs.forEach(function(tab){
+      tab.classList.remove('active');
+      tab.setAttribute('aria-pressed','false');
+    });
+    details.forEach(function(card){
+      card.setAttribute('hidden','');
+      card.classList.remove('active');
+    });
+  }
+
+document.addEventListener('DOMContentLoaded',function(){
     var tabs=document.querySelectorAll('.facility-tab[data-facility]');
     tabs.forEach(function(tab){
       tab.addEventListener('click',function(){
@@ -597,7 +610,7 @@
     if(initial){
       setFacilityDetail(initial,{scroll:true,updateHash:false});
     }else{
-      setFacilityDetail('signal');
+      hideAllFacilityDetails();
     }
   });
 

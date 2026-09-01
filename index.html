@@ -258,7 +258,8 @@
 <img alt="Chapter 1 Pengantar Market Structure" loading="lazy" src="assets/facilities/private/chapters/chapter-01.png"/>
 <span class="chapter-visual-caption"><strong>Chapter 1</strong><small>Pengantar Market Structure</small></span>
 </button>
-<div class="chapter-copy-card">
+<button type="button" class="private-detail-toggle chapter-detail-toggle" id="chapterDetailToggle" aria-expanded="false" aria-controls="chapterCopyCard"><span class="private-detail-toggle-text">Lihat Detail Chapter</span><span class="private-detail-toggle-icon">↓</span></button>
+<div class="chapter-copy-card chapter-copy-reveal" id="chapterCopyCard">
 <div class="chapter-meta"><span class="chapter-level">Foundation</span><span class="chapter-framework">Foundation Framework</span><span class="chapter-category">Market Structure Foundation</span></div>
 <h4 class="chapter-title">Pengantar Market Structure</h4>
 <p class="chapter-description"></p>
@@ -813,6 +814,19 @@ loadDenoms();
     if(box2) box2.classList.toggle('is-expanded', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Kurikulum' : 'Lihat Kurikulum Lengkap';
+    btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
+  });
+})();
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('chapterDetailToggle');
+  var box1 = document.getElementById('chapterCopyCard');
+  if(!btn || !box1) return;
+  btn.addEventListener('click', function(){
+    var open = box1.classList.toggle('is-expanded');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Detail' : 'Lihat Detail Chapter';
     btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
   });
 })();

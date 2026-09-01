@@ -90,6 +90,10 @@ body{background:#070707;color:var(--text)}
 <p>Kelas dan fasilitas tambahan khusus member Kamar Kajian Market. Lihat daftar lengkap, status pendaftaran, dan detail masing-masing fasilitas.</p>
 <div class="button-row"><a class="btn primary" href="member-fasilitas-khusus.html">Lihat Fasilitas Khusus &rarr;</a></div>
 </section>
+<section class="split-card kamar-profile-access-card">
+<span class="mini-label">Akun</span>
+<div class="button-row"><div><span class="status-pill on">&#9679; Terhubung</span><p>Profil dan data akun tersinkronisasi.</p></div><a class="btn secondary" href="member-profile.html">Buka Profil Akun &rarr;</a></div>
+</section>
 <section class="split-card" hidden="" id="kamarVideoSection">
 <span class="mini-label">Video Edukasi</span>
 <h2>Video sesuai fasilitas aktif kamu.</h2>
@@ -165,4 +169,35 @@ body{background:#070707;color:var(--text)}
 <script src="assets/js/kamar-content-display.js?v=1"></script><script src="assets/js/kamar-mobile-shell.js"></script>
 <script src="/assets/js/kamar-livechat.js?v=1" defer></script>
 <script src="assets/js/kamar-notif-bell.js?v=1"></script>
+<script id="kamar-step-dashboard-recap-reveal">
+(function(){
+  function pageOk(){ return (location.pathname.split('/').pop()||'').toLowerCase()==='dashboard.html'; }
+  function setupRecapReveal(){
+    var card = document.getElementById('kamarRecapDashboardCard');
+    if(!card) return;
+    var daily = card.querySelector('.kamar-recap-daily-section');
+    if(!daily || daily.dataset.kamarRevealWired) return;
+    daily.dataset.kamarRevealWired = '1';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn mini secondary kamar-recap-toggle';
+    btn.textContent = 'Lihat Detail Rekap \u2193';
+    btn.addEventListener('click', function(){
+      var open = daily.classList.toggle('is-open');
+      btn.textContent = open ? 'Tutup Detail \u2191' : 'Lihat Detail Rekap \u2193';
+    });
+    daily.parentNode.insertBefore(btn, daily);
+  }
+  function watch(){
+    if(!pageOk()) return;
+    var target = document.getElementById('kamarRecapDashboardCard');
+    if(!target) return;
+    setupRecapReveal();
+    var mo = new MutationObserver(setupRecapReveal);
+    mo.observe(target, {childList:true, subtree:true});
+    setTimeout(function(){ mo.disconnect(); }, 20000);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', watch); else watch();
+})();
+</script>
 </body></html>

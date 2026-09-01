@@ -167,7 +167,8 @@
   function setMsg(msgEl, text, isError){
     if(!msgEl) return;
     msgEl.textContent = text || '';
-    msgEl.style.color = isError ? '#963F3F' : '#1c6141';
+    msgEl.classList.remove('is-ok','is-bad');
+    if(text) msgEl.classList.add(isError ? 'is-bad' : 'is-ok');
   }
 
   function ensureMsgEl(link){
@@ -190,7 +191,7 @@
       setLinkState(link, 'MENUNGGU ADMIN', true);
       setMsg(msgEl, 'Pengajuan perpanjangan sedang menunggu persetujuan admin.', false);
     } else {
-      setLinkState(link, 'PERPANJANGAN', false);
+      setLinkState(link, 'PERPANJANG CEPAT', false);
     }
     if(link.dataset.renewalBound) return;
     link.dataset.renewalBound = '1';
@@ -204,7 +205,7 @@
         setMsg(msgEl, 'Klik sekali lagi untuk ajukan perpanjangan pakai data yang sama seperti sebelumnya.', false);
         confirmTimer = setTimeout(function(){
           link.dataset.confirmStep = '';
-          setLinkState(link, 'PERPANJANGAN', false);
+          setLinkState(link, 'PERPANJANG CEPAT', false);
           setMsg(msgEl, '', false);
         }, 5000);
         return;
@@ -215,21 +216,21 @@
       setMsg(msgEl, 'Mengirim pengajuan...', false);
       var client = window.kamarSupabaseClient;
       if(!client){
-        setLinkState(link, 'PERPANJANGAN', false);
+        setLinkState(link, 'PERPANJANG CEPAT', false);
         setMsg(msgEl, 'Koneksi belum siap, coba lagi sebentar.', true);
         return;
       }
       client.rpc('member_request_facility_renewal', { p_facility_key: meta.key }).then(function(res){
         var data = res && res.data;
         if(!res || res.error || !data || data.success !== true){
-          setLinkState(link, 'PERPANJANGAN', false);
+          setLinkState(link, 'PERPANJANG CEPAT', false);
           setMsg(msgEl, (data && data.message) || (res && res.error && res.error.message) || 'Gagal mengirim pengajuan perpanjangan.', true);
           return;
         }
         setLinkState(link, 'MENUNGGU ADMIN', true);
         setMsg(msgEl, data.message || 'Pengajuan perpanjangan terkirim. Menunggu persetujuan admin.', false);
       }).catch(function(err){
-        setLinkState(link, 'PERPANJANGAN', false);
+        setLinkState(link, 'PERPANJANG CEPAT', false);
         setMsg(msgEl, (err && err.message) || 'Gagal mengirim pengajuan perpanjangan.', true);
       });
     });
@@ -255,15 +256,16 @@
       if(p && p.parentNode) p.parentNode.insertBefore(statusEl, p.nextSibling);
     }
 
+    statusEl.classList.remove('is-ok','is-bad');
     if(isActive){
       if(!expIso){
         link.style.display = 'none';
         removePerpanjanganButton(card);
         statusEl.textContent = 'Aktif \u2014 tanpa batas waktu';
-        statusEl.style.color = '#1c6141';
+        statusEl.classList.add('is-ok');
       } else {
         link.style.display = '';
-        link.textContent = 'RENEWAL';
+        link.textContent = (meta.key === 'kamar_study') ? 'AKTIVASI ULANG' : 'PERPANJANG';
         if(meta.key === 'kamar_study'){
           var perpanjBtn = ensurePerpanjanganButton(card, link);
           if(perpanjBtn) bindRenewalClick(perpanjBtn, meta, !!(pendingSet && pendingSet[meta.key]));
@@ -272,7 +274,7 @@
         }
         var daysLeft = Math.ceil((new Date(expIso) - now) / 86400000);
         statusEl.textContent = 'Aktif \u2014 ' + (daysLeft>0 ? daysLeft+' hari tersisa' : 'berakhir hari ini') + ' (s.d ' + fmtDate(expIso) + ')';
-        statusEl.style.color = '#1c6141';
+        statusEl.classList.add('is-ok');
       }
       renderSourceBlock(card, sourceInfo);
     } else {
@@ -280,8 +282,8 @@
       link.textContent = 'AKTIFKAN';
       removePerpanjanganButton(card);
       if(isExpired){
-        statusEl.textContent = 'Kedaluwarsa pada ' + fmtDate(expIso);
-        statusEl.style.color = '#963F3F';
+        statusEl.textContent = 'Berakhir \u2014 ' + fmtDate(expIso);
+        statusEl.classList.add('is-bad');
       } else {
         statusEl.textContent = '';
       }

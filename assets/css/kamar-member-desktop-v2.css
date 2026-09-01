@@ -667,3 +667,25 @@
     gap: 16px !important;
   }
 }
+
+/* ==========================================================================
+   PHASE 7 — Profil Akun (brief Section 22)
+   Flat 11-row table -> 4 grouped 2-col cards (Identitas/Kontak/Membership/
+   Trading Profile). Data/permission untouched - kamar-data-online-25e.js's
+   fillMemberProfile() looks up every field by id (profileFullName, etc.),
+   confirmed via source inspection, so regrouping the wrapping DOM is purely
+   presentational. Existing change-request/referral/broker-capital forms
+   below are untouched.
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  body.kamar-member-desktop-v2 .profile-group-grid{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 20px;
+  }
+  body.kamar-member-desktop-v2 .profile-group-grid .profile-panel{
+    margin:0 !important;
+  }
+}

@@ -320,4 +320,112 @@
     max-height:900px;
     opacity:1;
   }
+
+  /* ==========================================================================
+     GLOSS / MOTION (per brief Section 5) + Phase 3 dashboard-specific fixes
+     added 2026-09-02.
+     ========================================================================== */
+
+  /* subtle glossy top highlight line on cards (not on kamar-title-card, which
+     already has its own radial-glow ::before - gets the gloss via ::after instead) */
+  body.kamar-member-desktop-v2 .split-card:not(.kamar-title-card),
+  body.kamar-member-desktop-v2 .stat-card,
+  body.kamar-member-desktop-v2 .member-card,
+  body.kamar-member-desktop-v2 .action-card,
+  body.kamar-member-desktop-v2 .member-payment-card,
+  body.kamar-member-desktop-v2 .setting-card{
+    position: relative;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  body.kamar-member-desktop-v2 .split-card:not(.kamar-title-card)::before,
+  body.kamar-member-desktop-v2 .stat-card::before,
+  body.kamar-member-desktop-v2 .member-card::before,
+  body.kamar-member-desktop-v2 .action-card::before,
+  body.kamar-member-desktop-v2 .member-payment-card::before{
+    content:"";
+    position:absolute; left:18px; right:18px; top:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent);
+    pointer-events:none;
+  }
+  body.kamar-member-desktop-v2 .split-card.kamar-title-card{ position:relative; }
+  body.kamar-member-desktop-v2 .split-card.kamar-title-card::after{
+    content:"";
+    position:absolute; left:22px; right:22px; top:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.26), transparent);
+    pointer-events:none;
+  }
+
+  /* click feedback: scale ~0.98-0.99, per brief */
+  body.kamar-member-desktop-v2 .btn:active{ transform: scale(.985); }
+  body.kamar-member-desktop-v2 .member-card:active,
+  body.kamar-member-desktop-v2 .action-card:active,
+  body.kamar-member-desktop-v2 .todo-item:active,
+  body.kamar-member-desktop-v2 .member-payment-card:active{ transform: scale(.99); }
+
+  /* normal transition 180-300ms (brief Section 5) */
+  body.kamar-member-desktop-v2 .btn{
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease !important;
+  }
+  body.kamar-member-desktop-v2 .split-card,
+  body.kamar-member-desktop-v2 .stat-card,
+  body.kamar-member-desktop-v2 .member-card,
+  body.kamar-member-desktop-v2 .action-card,
+  body.kamar-member-desktop-v2 .todo-item,
+  body.kamar-member-desktop-v2 .member-payment-card{
+    transition: transform .2s ease, border-color .2s ease, background .2s ease !important;
+  }
+  body.kamar-member-desktop-v2 .split-sidebar a{
+    transition: background .18s ease, color .18s ease, border-color .18s ease !important;
+  }
+
+  /* reveal: 250-350ms, height + opacity + translateY ~8px, no bounce/no layout jump.
+     Generic hook [data-kamar-reveal] for future use, plus a direct hook on the
+     daily-recap section that kamar-recap-card.js injects (.kamar-recap-daily-section)
+     so the daily block starts collapsed and reveals in place without touching that
+     script's own data-fetch logic. */
+  body.kamar-member-desktop-v2 [data-kamar-reveal],
+  body.kamar-member-desktop-v2 .kamar-recap-daily-section{
+    overflow:hidden !important;
+    max-height:0 !important;
+    opacity:0 !important;
+    transform: translateY(8px) !important;
+    transition: max-height .3s cubic-bezier(.22,1,.36,1), opacity .3s cubic-bezier(.22,1,.36,1), transform .3s cubic-bezier(.22,1,.36,1) !important;
+    margin-top:0 !important;
+    padding-top:0 !important;
+    border-top:0 !important;
+  }
+  body.kamar-member-desktop-v2 [data-kamar-reveal].is-open,
+  body.kamar-member-desktop-v2 .kamar-recap-daily-section.is-open{
+    max-height:900px !important;
+    opacity:1 !important;
+    transform: translateY(0) !important;
+    margin-top:22px !important;
+    padding-top:18px !important;
+    border-top:1px dashed rgba(255,255,255,.14) !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-recap-toggle{ margin-top:14px !important; }
+
+  /* Phase 3: remove the giant duplicate "Detail Akun Online" block that
+     kamar-data-online-25e.js appends to .split-main (id=memberOnlineDetailCard,
+     class="card") - the function itself is untouched (still runs, still computes),
+     this only hides the visual output. Full detail stays on Profil Akun.
+     Also hide the now-redundant standalone referral line, since memberStatusBox's
+     own text already includes "Kode referral: ..." - avoids showing it twice. */
+  body.kamar-member-desktop-v2 #memberOnlineDetailCard{ display:none !important; }
+  body.kamar-member-desktop-v2 #memberReferralLine{ display:none !important; }
+
+  /* compact "AKUN - TERHUBUNG" replacement card (static, added in dashboard.html) */
+  body.kamar-member-desktop-v2 .kamar-profile-access-card .button-row{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:6px;
+  }
+  body.kamar-member-desktop-v2 .kamar-profile-access-card p{ margin:8px 0 0 !important; }
+}
+
+@media (min-width:981px) and (prefers-reduced-motion: reduce){
+  body.kamar-member-desktop-v2 *{
+    transition-duration: .001ms !important;
+    animation-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

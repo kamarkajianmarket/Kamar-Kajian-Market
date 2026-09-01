@@ -828,6 +828,22 @@ loadDenoms();
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.querySelector('.private-detail-toggle-text').textContent = open ? 'Sembunyikan Detail' : 'Lihat Detail Chapter';
     btn.querySelector('.private-detail-toggle-icon').textContent = open ? '↑' : '↓';
+    if(open){
+      var outerBox = document.getElementById('privateCourseExplorer');
+      if(outerBox && !outerBox.classList.contains('is-expanded')){
+        outerBox.classList.add('is-expanded');
+        var outerBtn = document.getElementById('privateDetailToggle');
+        if(outerBtn){
+          outerBtn.setAttribute('aria-expanded','true');
+          var t = outerBtn.querySelector('.private-detail-toggle-text');
+          var i = outerBtn.querySelector('.private-detail-toggle-icon');
+          if(t) t.textContent = 'Sembunyikan Kurikulum';
+          if(i) i.textContent = '↑';
+        }
+        var cont = document.querySelector('.private-continuous-section');
+        if(cont) cont.classList.add('is-expanded');
+      }
+    }
   });
 })();
 </script>

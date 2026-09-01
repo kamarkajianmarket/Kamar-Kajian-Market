@@ -429,3 +429,90 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   PHASE 4 — Tambah/Perpanjang Fasilitas (brief Section 17-19)
+   Facility card header (name + POPULER/PREMIUM badge), status pill system,
+   quick-renewal message states, source-of-activation block, 2-col grid.
+   Presentation-layer only. Colors below override inline styles that
+   kamar-member-renewal.js sets on statusEl/msgEl via classList (is-ok/
+   is-bad) instead of hardcoded hex, and via plain CSS !important for the
+   source block (always same semantic, no state to distinguish).
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  body.kamar-member-desktop-v2 .member-payment-grid{
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 20px !important;
+  }
+
+  body.kamar-member-desktop-v2 .facility-card-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+  body.kamar-member-desktop-v2 .facility-card-head h3{ margin:0 !important; }
+
+  body.kamar-member-desktop-v2 .facility-badge-recommended{
+    position:static !important; top:auto !important; right:auto !important;
+    background: linear-gradient(135deg,#C99D51,#F1D893) !important;
+    color:#15120B !important;
+    box-shadow:none !important;
+    white-space:nowrap;
+  }
+  body.kamar-member-desktop-v2 .facility-badge-premium{
+    display:inline-flex; align-items:center; white-space:nowrap;
+    border-radius:999px !important; padding:6px 14px !important;
+    font-size:10.5px !important; font-weight:1000 !important;
+    letter-spacing:.10em !important; text-transform:uppercase !important;
+    background: rgba(255,255,255,.08) !important;
+    color:#FFF6E8 !important;
+    border:1px solid rgba(255,255,255,.22) !important;
+  }
+  body.kamar-member-desktop-v2 .member-payment-card-highlight{
+    border-color: rgba(14,95,84,.42) !important;
+    box-shadow:none !important;
+  }
+  body.kamar-member-desktop-v2 .member-payment-card-premium{
+    border-color: rgba(255,255,255,.20) !important;
+  }
+
+  /* status pill: replaces JS-set inline colors (#1c6141/#963F3F) with
+     classList-driven state so it can follow the dark palette */
+  body.kamar-member-desktop-v2 .facility-status-line{
+    display:inline-flex !important; align-items:center !important; gap:6px !important;
+    padding:4px 12px !important; border-radius:999px !important;
+    font-size:11px !important; font-weight:900 !important;
+    letter-spacing:.05em !important; text-transform:uppercase !important;
+    color:#B8C2CE !important; background:rgba(255,255,255,.05) !important;
+    border:1px solid rgba(255,255,255,.12) !important;
+  }
+  body.kamar-member-desktop-v2 .facility-status-line:empty{ display:none !important; padding:0 !important; border:0 !important; }
+  body.kamar-member-desktop-v2 .facility-status-line.is-ok{
+    background: rgba(14,95,84,.16) !important; color:#8EFFC0 !important; border-color: rgba(14,95,84,.38) !important;
+  }
+  body.kamar-member-desktop-v2 .facility-status-line.is-bad{
+    background: rgba(255,96,96,.10) !important; color:#ffb4b4 !important; border-color: rgba(255,96,96,.28) !important;
+  }
+
+  body.kamar-member-desktop-v2 .renewal-msg{ font-size:12px !important; color:#8E98A8 !important; }
+  body.kamar-member-desktop-v2 .renewal-msg.is-ok{ color:#8EFFC0 !important; }
+  body.kamar-member-desktop-v2 .renewal-msg.is-bad{ color:#ffb4b4 !important; }
+
+  body.kamar-member-desktop-v2 .facility-source-wrap{ margin-top:10px !important; }
+  body.kamar-member-desktop-v2 .facility-source-line{
+    color:#E6D4A9 !important; font-size:11px !important; font-weight:800 !important;
+  }
+  body.kamar-member-desktop-v2 .facility-source-detail{
+    background: rgba(255,255,255,.04) !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    border-radius: 14px !important;
+  }
+  body.kamar-member-desktop-v2 .facility-source-detail > div span:first-child{ color:#8E98A8 !important; }
+  body.kamar-member-desktop-v2 .facility-source-detail > div span:last-child{ color:#F4F6F8 !important; }
+
+  body.kamar-member-desktop-v2 .activate-row .perpanjangan-btn{
+    background: rgba(255,255,255,.08) !important;
+    color:#FFF6E8 !important;
+    border:1px solid rgba(255,255,255,.18) !important;
+  }
+}

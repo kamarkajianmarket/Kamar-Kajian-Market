@@ -915,3 +915,8 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
   body.public-home .chapter-copy-reveal.is-expanded{ display:block !important; }
   body.public-home .chapter-detail-toggle{ margin-top:14px !important; margin-bottom:0 !important; }
 }
+
+@media (min-width: 981px) {
+  /* Fix: naikkan collapsed height khusus #privateCourseExplorer supaya picker+gambar+tombol reveal tidak clipped overflow:hidden (task #139) */
+  body.public-home #privateCourseExplorer.private-detail-collapse{ max-height:660px !important; }
+}

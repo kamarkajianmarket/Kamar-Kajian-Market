@@ -604,3 +604,66 @@
     padding:32px 16px !important;
   }
 }
+
+/* ==========================================================================
+   PHASE 6 — Affiliate Program (brief Section 21)
+   IA/logic untouched (brief: "Existing information architecture sudah baik.
+   Pertahankan urutan... Redesign visual + compactness, bukan logic").
+   .kamar-table/.referral-box/.kamar-modal already had their OWN dark inline
+   styles (not white-bug like Phase 5's .fkx-card) since kamar-dashboard-
+   identity-v2.css's blanket !important list doesn't include these classes -
+   but they used the OLDER gold-heavy token set (#d8cda9/#f5f0e6/rgba(238,
+   206,122,..)) instead of this redesign's palette, so retinting only for
+   visual consistency across all 5 pages, not fixing a rendering bug.
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  body.kamar-member-desktop-v2 .kamar-table th{
+    color:#8E98A8 !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-table td{
+    background: rgba(255,255,255,.05) !important;
+    color:#F4F6F8 !important;
+    border-top:1px solid rgba(255,255,255,.10) !important;
+    border-bottom:1px solid rgba(255,255,255,.10) !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-table td:first-child{ border-left:1px solid rgba(255,255,255,.10) !important; }
+  body.kamar-member-desktop-v2 .kamar-table td:last-child{ border-right:1px solid rgba(255,255,255,.10) !important; }
+
+  body.kamar-member-desktop-v2 .referral-box{
+    border:1px dashed rgba(255,255,255,.18) !important;
+    background: rgba(255,255,255,.03) !important;
+    border-radius:18px !important;
+  }
+  body.kamar-member-desktop-v2 .referral-box code{
+    color:#F1D893 !important;
+  }
+  body.kamar-member-desktop-v2 .referral-box .btn.mini.secondary{
+    background: rgba(255,255,255,.08) !important;
+    color:#FFF6E8 !important;
+    border:1px solid rgba(255,255,255,.18) !important;
+  }
+  body.kamar-member-desktop-v2 .referral-box .btn.mini.secondary.copied,
+  body.kamar-member-desktop-v2 .referral-box .btn.mini.secondary[data-copied="1"]{
+    background: rgba(14,95,84,.18) !important;
+    color:#8EFFC0 !important;
+    border-color: rgba(14,95,84,.42) !important;
+  }
+
+  body.kamar-member-desktop-v2 .kamar-modal-backdrop{
+    background: rgba(4,6,9,.72) !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-modal{
+    background: linear-gradient(135deg, rgba(20,24,30,.98), rgba(11,15,20,.98)) !important;
+    border:1px solid rgba(255,255,255,.12) !important;
+    box-shadow: 0 30px 90px rgba(0,0,0,.5) !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-modal h3{ color:#FFFAF0 !important; }
+  body.kamar-member-desktop-v2 .kamar-modal p{ color:#8E98A8 !important; }
+  body.kamar-member-desktop-v2 .kamar-modal label.field{ color:#B8C2CE !important; }
+
+  body.kamar-member-desktop-v2 .grid-4{
+    gap: 16px !important;
+  }
+}

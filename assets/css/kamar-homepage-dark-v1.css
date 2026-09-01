@@ -905,3 +905,13 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
     box-sizing: border-box !important;
   }
 }
+
+@media (min-width: 981px) {
+  /* Fix: kontras "20 Chapter Materi Terstruktur" tak terbaca di dark theme (task #139) */
+  body.public-home .private-course-topbar strong{ color:#F4F6F8 !important; }
+
+  /* Redesign: kurikulum Kamar Private default cuma tampilkan picker+gambar, detail chapter di-reveal (task #139) */
+  body.public-home .chapter-copy-reveal{ display:none !important; }
+  body.public-home .chapter-copy-reveal.is-expanded{ display:block !important; }
+  body.public-home .chapter-detail-toggle{ margin-top:14px !important; margin-bottom:0 !important; }
+}

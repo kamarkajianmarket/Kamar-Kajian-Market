@@ -835,4 +835,20 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
   body.public-home .utility-grid .utility-card{
     flex: 0 1 350px !important;
   }
+
+
+  /* Fix: text FAQ page (category title, pertanyaan, jawaban) hitam-di-atas-gelap tak terbaca setelah link dark CSS (task #127 FAQ) */
+  body.public-home .faq-category summary span,
+  body.public-home .faq-category summary strong{
+    color: #F4F6F8 !important;
+  }
+  body.public-home .faq-category summary small{
+    color: #8E98A8 !important;
+  }
+  body.public-home .faq-item summary{
+    color: #F4F6F8 !important;
+  }
+  body.public-home .faq-item p{
+    color: #93A0AF !important;
+  }
 }

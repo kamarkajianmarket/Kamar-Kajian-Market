@@ -851,4 +851,14 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
   body.public-home .faq-item p{
     color: #93A0AF !important;
   }
+
+
+  /* Fix: .private-course-explorer height:420px terlalu kecil utk konten (topbar+roadmap+tabs+visual+copy), chapter-visual (gambar chapter) ke-squeeze jadi 0px oleh flexbox (task #134) */
+  body.public-home .private-course-explorer.private-detail-collapse{
+    height: auto !important;
+    max-height: none !important;
+  }
+  body.public-home .chapter-visual{
+    flex-shrink: 0 !important;
+  }
 }

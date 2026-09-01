@@ -21,16 +21,6 @@
   /* Fix: reveal-on-scroll animation gagal trigger utk sebagian elemen (empty space bug), matikan animasi paksa tampil */
   body.public-home .premium-reveal{ opacity: 1 !important; transform: none !important; }
 
-  /* Fix: utility-grid jadi 5 tile setelah FAQ dihapus, flex-center biar row ke-2 simetris (task #124) */
-  body.public-home .utility-grid{
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-  }
-  body.public-home .utility-grid .utility-card{
-    flex: 0 1 350px !important;
-  }
-
   /* Fix: formasi 5 facility card jadi flex-center biar row ke-2 (2 card) simetris, tidak nempel kiri (task #126) */
   body.public-home .facility-grid.facility-selector-v2{
     display: flex !important;
@@ -834,4 +824,15 @@ body.public-home #traktir-kamar .traktir-card-v2 h3{
 body.public-home #traktir-kamar .traktir-card-v2 p{
   font-size: 12.5px !important;
 }
+
+
+  /* Fix: utility-grid jadi 5 tile setelah FAQ dihapus, flex-center biar row ke-2 simetris - dipindah ke akhir file biar menang cascade order vs rule asli (task #124) */
+  body.public-home .utility-grid{
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+  body.public-home .utility-grid .utility-card{
+    flex: 0 1 350px !important;
+  }
 }

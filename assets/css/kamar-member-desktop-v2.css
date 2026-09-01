@@ -1,0 +1,227 @@
+/* ==========================================================================
+   KAMAR MEMBER DASHBOARD DESKTOP REDESIGN v2
+   Phase 2 — Shared Design System (navbar, sidebar, page header, cards,
+   buttons, badges/status, empty/loading/error, reveal, inputs, footer)
+
+   Scope: DESKTOP ONLY (min-width:981px), and ONLY on pages whose <body>
+   carries the "kamar-member-desktop-v2" marker class - Dashboard Member,
+   Tambah/Perpanjang Fasilitas, Fasilitas Khusus, Affiliate Program, Profil
+   Akun. This guarantees zero effect on mobile/tablet (existing breakpoint
+   is max-width:980px sitewide) and zero effect on Admin Dashboard pages,
+   which reuse the same generic .split-shell/.split-card classes but do
+   NOT get the marker class.
+
+   Presentation-layer only. No IDs, data-attributes, JS hooks, routes, or
+   Supabase/auth logic are touched by this file.
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  body.kamar-member-desktop-v2 {
+    background: linear-gradient(180deg,#0B0F14 0%,#070A0F 55%,#0B0F14 100%);
+    background-image:
+      radial-gradient(circle at 10% -6%, rgba(184,138,61,.16), transparent 576px),
+      radial-gradient(circle at 88% 10%, rgba(14,95,84,.20), transparent 512px),
+      linear-gradient(180deg,#0B0F14 0%,#070A0F 55%,#0B0F14 100%);
+    color: #F4F6F8;
+  }
+
+  body.kamar-member-desktop-v2 header.kamar-global-header{
+    background: rgba(11,15,20,.86);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(244,246,248,.10);
+    box-shadow: none;
+  }
+  body.kamar-member-desktop-v2 .kamar-global-brand{ color:#FFFAF0; }
+  body.kamar-member-desktop-v2 .kamar-global-brand span{ color:#FFFAF0; font-weight:900; }
+  body.kamar-member-desktop-v2 .kamar-global-center a{
+    color:#B8C2CE; text-decoration:none; font-weight:700;
+  }
+  body.kamar-member-desktop-v2 .kamar-global-center a:hover{ color:#F4F6F8; }
+  body.kamar-member-desktop-v2 .kamar-global-actions .kamar-global-btn{
+    background: rgba(255,255,255,.08);
+    color:#FFF6E8;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:999px;
+    padding:9px 16px;
+    font-weight:800;
+    text-decoration:none;
+  }
+  body.kamar-member-desktop-v2 .kamar-global-actions .kamar-global-btn:hover{
+    border-color: rgba(255,255,255,.32);
+  }
+  body.kamar-member-desktop-v2 .kamar-global-actions .kamar-global-logout{
+    background: rgba(255,96,96,.08);
+    color:#ffb4b4;
+    border:1px solid rgba(255,96,96,.22);
+  }
+
+  body.kamar-member-desktop-v2 .split-sidebar{
+    background: linear-gradient(135deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:28px;
+    box-shadow:none;
+  }
+  body.kamar-member-desktop-v2 .split-sidebar .brand-small{ color:#E6D4A9; }
+  body.kamar-member-desktop-v2 .split-sidebar a{
+    color:#B8C2CE;
+    font-weight:700;
+    border-radius:14px;
+    border:1px solid transparent;
+  }
+  body.kamar-member-desktop-v2 .split-sidebar a:hover{
+    background: rgba(255,255,255,.05);
+    color:#F4F6F8;
+  }
+  body.kamar-member-desktop-v2 .split-sidebar a.active{
+    background: linear-gradient(135deg, rgba(14,95,84,.22), rgba(14,95,84,.05));
+    color:#F4F6F8;
+    border-left:3px solid #0E5F54;
+    padding-left:11px;
+  }
+  body.kamar-member-desktop-v2 .split-sidebar a.disabled{ opacity:.35; }
+  body.kamar-member-desktop-v2 .split-sidebar a[data-kamar-logout]{ color:#ffb4b4; }
+  body.kamar-member-desktop-v2 .split-sidebar summary{ color:#B8C2CE; font-weight:800; cursor:pointer; }
+  body.kamar-member-desktop-v2 .split-sidebar details[open] summary{ color:#F4F6F8; }
+
+  body.kamar-member-desktop-v2 .split-card.kamar-title-card{
+    background: linear-gradient(135deg, rgba(14,95,84,.18), rgba(11,15,20,.94));
+    border:1px solid rgba(255,255,255,.10);
+    position:relative;
+    overflow:hidden;
+  }
+  body.kamar-member-desktop-v2 .split-card.kamar-title-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(480px circle at 85% -10%, rgba(184,138,61,.18), transparent 60%);
+    pointer-events:none;
+  }
+  body.kamar-member-desktop-v2 .split-card.kamar-title-card h1{
+    color:#FFFAF0; font-weight:950; letter-spacing:-.02em; position:relative;
+  }
+
+  body.kamar-member-desktop-v2 .split-card,
+  body.kamar-member-desktop-v2 .member-page-panel,
+  body.kamar-member-desktop-v2 .stat-card,
+  body.kamar-member-desktop-v2 .action-card,
+  body.kamar-member-desktop-v2 .member-card,
+  body.kamar-member-desktop-v2 .setting-card,
+  body.kamar-member-desktop-v2 .todo-item{
+    background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.024));
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:28px;
+    box-shadow:none;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  body.kamar-member-desktop-v2 .member-card:hover,
+  body.kamar-member-desktop-v2 .action-card:hover,
+  body.kamar-member-desktop-v2 .todo-item:hover{
+    transform: translateY(-3px);
+    border-color: rgba(14,95,84,.42);
+  }
+  body.kamar-member-desktop-v2 .split-card h1,
+  body.kamar-member-desktop-v2 .split-card h2,
+  body.kamar-member-desktop-v2 .split-card h3,
+  body.kamar-member-desktop-v2 .member-page-panel h3{ color:#FFFAF0; }
+  body.kamar-member-desktop-v2 .split-card p,
+  body.kamar-member-desktop-v2 .member-page-panel p{ color:#8E98A8; }
+  body.kamar-member-desktop-v2 .stat-card strong{ color:#F4F6F8; }
+  body.kamar-member-desktop-v2 .stat-card span,
+  body.kamar-member-desktop-v2 .member-card span,
+  body.kamar-member-desktop-v2 .todo-item span{ color:#B8C2CE; }
+  body.kamar-member-desktop-v2 .stat-card small,
+  body.kamar-member-desktop-v2 .member-card small,
+  body.kamar-member-desktop-v2 .todo-item small{ color:#8E98A8; }
+  body.kamar-member-desktop-v2 .mini-label,
+  body.kamar-member-desktop-v2 .eyebrow{
+    background: rgba(215,180,109,.14);
+    color:#E6D4A9;
+    border-radius:999px;
+    padding:4px 12px;
+    display:inline-flex;
+  }
+
+  body.kamar-member-desktop-v2 .btn,
+  body.kamar-member-desktop-v2 .admin-button{
+    background: linear-gradient(135deg,#C99D51,#F1D893);
+    color:#15120B;
+    border-radius:999px;
+    font-weight:900;
+    border:0;
+  }
+  body.kamar-member-desktop-v2 .btn.primary{
+    background: linear-gradient(135deg,#0E5F54,#17483F 58%,#B88A3D);
+    color:#FFFAF0;
+  }
+  body.kamar-member-desktop-v2 .btn.secondary,
+  body.kamar-member-desktop-v2 .admin-button.secondary{
+    background: rgba(255,255,255,.08);
+    color:#FFF6E8;
+    border:1px solid rgba(255,255,255,.18);
+  }
+  body.kamar-member-desktop-v2 .btn.danger{
+    background: rgba(255,96,96,.10);
+    color:#ffb4b4;
+    border:1px solid rgba(255,96,96,.25);
+  }
+  body.kamar-member-desktop-v2 .btn:disabled{ opacity:.5; }
+
+  body.kamar-member-desktop-v2 .status-pill{
+    border:1px solid rgba(255,255,255,.14);
+    color:#B8C2CE;
+    background: rgba(255,255,255,.04);
+  }
+  body.kamar-member-desktop-v2 .status-pill.on{
+    color:#8EFFC0; background: rgba(14,95,84,.16); border-color: rgba(14,95,84,.40);
+  }
+  body.kamar-member-desktop-v2 .status-pill.warn{
+    color:#F1D893; background: rgba(184,138,61,.12); border-color: rgba(184,138,61,.32);
+  }
+  body.kamar-member-desktop-v2 .status-pill.off{ color:#7A8494; }
+  body.kamar-member-desktop-v2 .status-pill.bad{
+    color:#ffb4b4; background: rgba(255,96,96,.10); border-color: rgba(255,96,96,.28);
+  }
+
+  body.kamar-member-desktop-v2 .page-note{
+    background: rgba(14,95,84,.08);
+    border:1px solid rgba(14,95,84,.28);
+    color:#C9FFE1;
+  }
+  body.kamar-member-desktop-v2 .expired-note{
+    background: rgba(255,96,96,.07);
+    border:1px solid rgba(255,96,96,.24);
+    color:#ffd8d8;
+  }
+  body.kamar-member-desktop-v2 .kamar-skel,
+  body.kamar-member-desktop-v2 .kamar-skel-bar,
+  body.kamar-member-desktop-v2 .fkx-skel{
+    background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.09) 37%, rgba(255,255,255,.05) 63%);
+    background-size:400% 100%;
+  }
+
+  body.kamar-member-desktop-v2 input,
+  body.kamar-member-desktop-v2 select,
+  body.kamar-member-desktop-v2 textarea{
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.14);
+    color:#F4F6F8;
+  }
+  body.kamar-member-desktop-v2 input::placeholder,
+  body.kamar-member-desktop-v2 textarea::placeholder{ color:#7A8494; }
+  body.kamar-member-desktop-v2 label.field{ color:#B8C2CE; }
+
+  body.kamar-member-desktop-v2 .site-footer{ color:#7A8494; }
+  body.kamar-member-desktop-v2 .site-footer strong{ color:#B8C2CE; }
+
+  body.kamar-member-desktop-v2 [data-kamar-reveal]{
+    overflow:hidden;
+    max-height:0;
+    opacity:0;
+    transition: max-height .3s ease, opacity .3s ease;
+  }
+  body.kamar-member-desktop-v2 [data-kamar-reveal].is-open{
+    max-height:900px;
+    opacity:1;
+  }
+}

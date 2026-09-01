@@ -919,4 +919,6 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
 @media (min-width: 981px) {
   /* Fix: naikkan collapsed height khusus #privateCourseExplorer supaya picker+gambar+tombol reveal tidak clipped overflow:hidden (task #139) */
   body.public-home #privateCourseExplorer.private-detail-collapse{ max-height:660px !important; }
+  /* Fix: saat is-expanded (buka detail chapter/kurikulum), lepas cap 660px biar konten chapter-copy-card yg direveal tidak clipped overflow:hidden (task #139 fix 2) */
+  body.public-home #privateCourseExplorer.private-detail-collapse.is-expanded{ max-height:none !important; overflow:visible !important; }
 }

@@ -516,3 +516,91 @@
     border:1px solid rgba(255,255,255,.18) !important;
   }
 }
+
+/* ==========================================================================
+   PHASE 5 — Fasilitas Khusus page (brief Section 20)
+   .fkx-card was rendering solid WHITE live (bug found during audit): its
+   background is `var(--km-panel, #fff)` and --km-panel is never defined
+   on this page, so it silently fell back to the #fff default. Fixing by
+   overriding background directly (not by defining --km-panel, since that
+   custom property isn't scoped/used anywhere else - simpler and safer).
+   Grid stays auto-fill (adaptive - brief: "Jika fasilitas bertambah, grid
+   berkembang"), NOT forced to a fixed column count like Phase 4's fixed
+   catalog of 5.
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  body.kamar-member-desktop-v2 .fkx-card{
+    background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.024)) !important;
+    border: 1px solid rgba(255,255,255,.10) !important;
+    box-shadow: none !important;
+    position: relative;
+  }
+  body.kamar-member-desktop-v2 .fkx-card:hover{
+    transform: translateY(-3px);
+    border-color: rgba(14,95,84,.42) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.03)) !important;
+  }
+  body.kamar-member-desktop-v2 .fkx-card::before{
+    content:"";
+    position:absolute; left:18px; right:18px; top:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent);
+    pointer-events:none;
+  }
+  body.kamar-member-desktop-v2 .fkx-card h3{ color:#FFFAF0 !important; margin:0 !important; }
+  body.kamar-member-desktop-v2 .fkx-card p{ color:#8E98A8 !important; }
+  body.kamar-member-desktop-v2 .fkx-card-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+
+  body.kamar-member-desktop-v2 .fkx-badge{
+    display:inline-flex; align-items:center; white-space:nowrap;
+    border-radius:999px !important; padding:4px 12px !important;
+    font-size:10.5px !important; font-weight:1000 !important;
+    letter-spacing:.10em !important; text-transform:uppercase !important;
+    background: rgba(255,255,255,.06) !important;
+    color:#B8C2CE !important;
+    border:1px solid rgba(255,255,255,.16) !important;
+  }
+  body.kamar-member-desktop-v2 .fkx-badge.none{
+    background: rgba(255,255,255,.06) !important; color:#B8C2CE !important; border-color: rgba(255,255,255,.16) !important;
+  }
+  body.kamar-member-desktop-v2 .fkx-badge.pending{
+    background: rgba(184,138,61,.14) !important; color:#F1D893 !important; border-color: rgba(184,138,61,.32) !important;
+  }
+  body.kamar-member-desktop-v2 .fkx-badge.confirmed{
+    background: rgba(14,95,84,.16) !important; color:#8EFFC0 !important; border-color: rgba(14,95,84,.38) !important;
+  }
+
+  body.kamar-member-desktop-v2 .fkx-price{
+    color:#FFFAF0 !important;
+    font-weight: 950 !important;
+  }
+  body.kamar-member-desktop-v2 .fkx-price small{
+    display:block; color:#8E98A8 !important; font-weight:700 !important; font-size:11px !important; margin-top:4px !important;
+  }
+
+  body.kamar-member-desktop-v2 .fkx-card-actions{ margin-top:auto; }
+  body.kamar-member-desktop-v2 .fkx-btn.primary{
+    background: linear-gradient(135deg,#C99D51,#F1D893) !important;
+    color:#15120B !important;
+    box-shadow:none !important;
+  }
+  body.kamar-member-desktop-v2 .fkx-btn.secondary{
+    background: rgba(255,255,255,.08) !important;
+    color:#FFF6E8 !important;
+    border:1px solid rgba(255,255,255,.18) !important;
+  }
+
+  body.kamar-member-desktop-v2 .fkx-pending-note{
+    background: rgba(184,138,61,.08) !important;
+    border:1px solid rgba(184,138,61,.28) !important;
+    color:#F1D893 !important;
+    border-radius:16px !important;
+  }
+
+  body.kamar-member-desktop-v2 .fkx-empty{
+    color:#8E98A8 !important;
+    text-align:center !important;
+    padding:32px 16px !important;
+  }
+}

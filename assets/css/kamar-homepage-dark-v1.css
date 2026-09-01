@@ -893,3 +893,15 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
   }
 }
 }
+
+@media (min-width: 981px) {
+  /* Fix: dead-space grid row kurikulum Kamar Private - beri wrapper stretch+card treatment (task #135) */
+  body.public-home .facility-detail-card.theme-private .private-right-stack{
+    align-self: stretch !important;
+    background: rgba(16,23,32,.55) !important;
+    border: 1px solid rgba(215,180,109,.16) !important;
+    border-radius: 22px !important;
+    padding: 18px !important;
+    box-sizing: border-box !important;
+  }
+}

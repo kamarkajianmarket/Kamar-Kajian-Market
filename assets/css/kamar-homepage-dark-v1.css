@@ -19,7 +19,7 @@
   body.public-home h1, body.public-home h2, body.public-home h3{ color:#F4F6F8 !important; }
   body.public-home p{ color:#93A0AF; }
   /* Fix: reveal-on-scroll animation gagal trigger utk sebagian elemen (empty space bug), matikan animasi paksa tampil */
-  body.public-home .premium-reveal{ opacity: 1 !important; transform: none !important; }
+  body.public-home .premium-reveal{ opacity: 1 !important; transform: none !important; filter: none !important; }
 
   /* Fix: formasi 5 facility card jadi flex-center biar row ke-2 (2 card) simetris, tidak nempel kiri (task #126) */
   body.public-home .facility-grid.facility-selector-v2{

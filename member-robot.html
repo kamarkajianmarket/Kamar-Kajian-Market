@@ -99,6 +99,23 @@ try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
 try{ if(window.KamarSupabase && window.KamarSupabase.ready){ var c=await window.KamarSupabase.ready(); if(c) return c; } }catch(e){}
 return window.kamarSupabaseClient||null;
 }
+async function kamarResilientGetUser(c){
+function withTimeout(p, ms){
+return Promise.race([
+p,
+new Promise(function(resolve){ setTimeout(function(){ resolve({data:{user:null}}); }, ms); })
+]);
+}
+for(var attempt=0; attempt<3; attempt++){
+try{
+var res = await withTimeout(c.auth.getUser(), 9000);
+var user = res && res.data && res.data.user;
+if(user) return user;
+}catch(e){}
+if(attempt<2) await new Promise(function(r){ setTimeout(r, 600 * (attempt+1)); });
+}
+return null;
+}
 var REQUEST_STATUS_LABEL = {pending:'Menunggu Persetujuan', under_review:'Sedang Ditinjau / Ditahan', revision_required:'Perlu Revisi', active:'Disetujui Admin', rejected:'Ditolak'};
 var REQUEST_STATUS_CLASS = {pending:'warn', under_review:'warn', revision_required:'warn', active:'on', rejected:'off'};
 function requestStatusPill(rs){ var lbl=REQUEST_STATUS_LABEL[rs]||rs||'-'; var cls=REQUEST_STATUS_CLASS[rs]||'off'; return '<span class="status-pill '+cls+'">'+esc(lbl)+'</span>'; }
@@ -347,9 +364,8 @@ var box = document.getElementById('memberContentList');
 if(!box) return;
 var c = await client();
 if(!c){ box.innerHTML='<div class="expired-note">Koneksi database belum siap. Muat ulang halaman.</div>'; return; }
-var userRes = await c.auth.getUser();
-var user = userRes.data && userRes.data.user;
-if(!user){ box.innerHTML='<div class="expired-note">Sesi login tidak ditemukan.</div>'; return; }
+var user = await kamarResilientGetUser(c);
+if(!user){ box.innerHTML='<div class="expired-note">Sesi login tidak ditemukan. <button type="button" class="btn mini" onclick="location.reload()">Muat Ulang</button></div>'; return; }
 var profRes = await c.from('member_profiles').select('id').eq('user_id', user.id).limit(1);
 var profile = profRes.data && profRes.data[0];
 if(!profile){ box.innerHTML='<div class="expired-note">Profil member tidak ditemukan.</div>'; return; }

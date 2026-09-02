@@ -1680,7 +1680,15 @@ if(state.recap.type === type) renderRecapCard();
       return;
     }
     if(L.items.length===0){
-      body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada '+esc((STATUS_LABEL[L.status]||'signal').toLowerCase())+' saat ini.</div>Cek kembali beberapa saat lagi.</div>';
+      if(hasActiveFilter(L.filters)){
+        body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada signal yang sesuai filter ini.</div><button type="button" class="ksig-btn" id="ksigEmptyResetFilter">Reset Filter</button></div>';
+        var rb = document.getElementById('ksigEmptyResetFilter');
+        if(rb) rb.onclick = function(){ L.filters = { symbol: L.filters.symbol, timeframe:'', dir:'', period:'', unread:false }; loadList(true); renderList(); };
+      } else if(L.status === 'aktif'){
+        body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada signal aktif saat ini.</div>Signal baru akan muncul otomatis ketika status berubah.</div>';
+      } else {
+        body.innerHTML = '<div class="ksig-empty"><div class="ksig-empty-title">Tidak ada '+esc((STATUS_LABEL[L.status]||'signal').toLowerCase())+' saat ini.</div>Cek kembali beberapa saat lagi.</div>';
+      }
       return;
     }
     var rowsHtml = (L.sort === 'timeframe') ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');

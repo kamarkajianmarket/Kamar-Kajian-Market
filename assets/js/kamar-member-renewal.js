@@ -236,8 +236,18 @@
     });
   }
 
+  function revealCardRow(card){
+    if(!card) return;
+    var row = card.querySelector('.activate-row');
+    if(row && window.KamarUI && window.KamarUI.reveal) window.KamarUI.reveal(row);
+  }
+
+  function revealAllGates(){
+    if(window.KamarUI && window.KamarUI.revealAll) window.KamarUI.revealAll('.member-payment-grid .kamar-skel-gate');
+  }
+
   function applyStatus(card, meta, row, pendingSet, sourceInfo){
-    if(!row) return;
+    if(!row){ revealCardRow(card); return; }
     var accessOn = row[meta.access] === true;
     var expIso = row[meta.expires];
     var now = new Date();
@@ -289,6 +299,7 @@
       }
       removeSourceBlock(card);
     }
+    revealCardRow(card);
   }
 
   function run(){
@@ -300,16 +311,16 @@
       var iv = setInterval(function(){
         tries++;
         if(window.kamarSupabaseClient){ clearInterval(iv); run(); }
-        else if(tries > 40){ clearInterval(iv); }
+        else if(tries > 40){ clearInterval(iv); revealAllGates(); }
       }, 150);
       return;
     }
 
     client.auth.getSession().then(function(res){
       var session = res && res.data ? res.data.session : null;
-      if(!session || !session.user){ return; }
+      if(!session || !session.user){ revealAllGates(); return; }
       return client.from('member_profiles').select('id').eq('user_id', session.user.id).maybeSingle().then(function(pres){
-        if(!pres || pres.error || !pres.data) return;
+        if(!pres || pres.error || !pres.data){ revealAllGates(); return; }
         var profileId = pres.data.id;
         return Promise.all([
           client.from('member_access')
@@ -334,13 +345,13 @@
             .order('reviewed_at', { ascending: false }).limit(1)
         ]);
       }).then(function(results){
-        if(!results) return;
+        if(!results){ revealAllGates(); return; }
         var ares = results[0];
         var tres = results[1];
         var payRes = results[2];
         var ibRes = results[3];
         var trialRes = results[4];
-        if(!ares || ares.error || !ares.data) return;
+        if(!ares || ares.error || !ares.data){ revealAllGates(); return; }
         var row = ares.data;
         var srcCtx = {
           activationSource: row.activation_source || null,
@@ -365,7 +376,7 @@
           applyStatus(card, meta, row, pendingSet, sourceInfo);
         });
       });
-    }).catch(function(){});
+    }).catch(function(){ revealAllGates(); });
   }
 
   if(document.readyState === 'loading'){

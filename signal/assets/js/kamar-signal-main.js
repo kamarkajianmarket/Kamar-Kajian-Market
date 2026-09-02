@@ -1395,7 +1395,7 @@ if(state.recap.type === type) renderRecapCard();
     function guideCard(icon,title,desc,opts){
       opts = opts || {};
       if(opts.sheetId){
-        return '<div class="ksig-guide-card ksig-guide-card-active" id="'+opts.sheetId+'" tabindex="0" role="button">'+
+        return '<div class="ksig-guide-card ksig-guide-card-active ksig-pointer-light" id="'+opts.sheetId+'" tabindex="0" role="button">'+
           '<div class="ksig-guide-icon" aria-hidden="true">'+icon+'</div>'+
           '<div class="ksig-guide-body">'+
             '<div class="ksig-guide-title">'+esc(title)+'</div>'+
@@ -1484,7 +1484,7 @@ if(state.recap.type === type) renderRecapCard();
       sub = daysLeft !== null ? (daysLeft+' HARI TERSISA') : 'Akses aktif';
     }
     var sourceLabel = A.activation_source === 'ib_kamar' ? 'IB Kamar' : (A.activation_source === 'paid' ? 'Akses Berbayar' : (A.activation_source ? esc(A.activation_source) : ''));
-    return '<div class="ksig-access-card '+statusCls+'">'+
+    return '<div class="ksig-access-card ksig-pointer-light '+statusCls+'">'+
         '<div class="ksig-access-top-group">'+
           '<div class="ksig-access-top"><span class="ksig-access-label">KAMAR SIGNAL ACCESS</span><span class="ksig-access-status">'+
             '<span class="ksig-access-dot"></span>'+status+'</span></div>'+
@@ -1497,7 +1497,7 @@ if(state.recap.type === type) renderRecapCard();
   }
   function installCardHtml(){
     if(isStandaloneMode()){
-      return '<div class="ksig-install-card installed">'+
+      return '<div class="ksig-install-card installed ksig-pointer-light">'+
           '<div class="ksig-install-icon">\u25C7</div>'+
           '<div class="ksig-install-body">'+
             '<div class="ksig-install-title">KAMAR SIGNAL APP</div>'+
@@ -1505,7 +1505,7 @@ if(state.recap.type === type) renderRecapCard();
           '</div>'+
         '</div>';
     }
-    return '<div class="ksig-install-card">'+
+    return '<div class="ksig-install-card ksig-pointer-light">'+
         '<div class="ksig-install-icon">\u25C7</div>'+
         '<div class="ksig-install-body">'+
           '<div class="ksig-install-title">KAMAR SIGNAL APP</div>'+
@@ -1672,7 +1672,7 @@ if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('
       if(pips!=null) infoParts.push(ksigInfoChip(pips>=0?'ksig-chip-tp':'ksig-chip-cl',(pips>=0?'+':'')+fmtNum(pips,1)+' Pips'));
     }
     var info = infoParts.join('');
-    return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
+    return '<div class="ksig-row ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
         '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
         (info ? '<div class="ksig-row-info">'+info+'</div>' : '')+
@@ -2183,7 +2183,7 @@ var groups = groupRecapRows(R.rows);
     } else {
       info = item.event_description || item.event_title || EVENT_LABEL[item.event_type] || '';
     }
-    return '<div class="ksig-row'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(item.id_zona)+'" tabindex="0" role="link">'+
+    return '<div class="ksig-row ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(item.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
         '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(sig.pair||'-')+'</span><span class="ksig-row-tf">'+esc(sig.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(sig.skenario||'-')+'</span><span class="ksig-badge '+esc(badgeMeta.cls)+'">'+esc(badgeMeta.label)+'</span>'+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
         (info ? '<div class="ksig-row-info">'+esc(info)+'</div>' : '')+

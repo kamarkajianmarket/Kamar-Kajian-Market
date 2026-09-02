@@ -704,3 +704,115 @@
 @media (max-width: 980px){
   body.kamar-member-desktop-v2 .facility-badge-premium{ display:none; }
 }
+
+
+/* ==========================================================================
+   FACILITY PAGES DESKTOP REDESIGN — Phase 2 Shared Design System
+   Kamar Edukasi / Kamar Private / Kamar Indikator / Kamar Robot /
+   member-activate.html. Presentation-layer only — no IDs, data-attributes,
+   JS hooks, routes, or Supabase/auth logic touched. Reuses the same
+   body.kamar-member-desktop-v2 marker + min-width:981px scoping from the
+   Member Dashboard redesign, so this is invisible on mobile/tablet and on
+   every page that doesn't carry the marker class (incl. Kamar Signal).
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  /* Compact facility page header (~120-160px) — additive class applied to
+     the existing .split-card.kamar-title-card wrapper on the 4 facility
+     pages only. Markup itself (h1 text) is untouched. */
+  body.kamar-member-desktop-v2 .kamar-facility-header{
+    padding: 26px 30px !important;
+    display:flex !important; align-items:center !important; justify-content:space-between !important;
+    gap:16px !important; flex-wrap:wrap !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-facility-header h1{
+    font-size: 26px !important;
+    margin:0 !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-facility-header .kamar-facility-eyebrow{
+    display:block !important; margin-bottom:6px !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-facility-header .kamar-facility-sub{
+    color:#C9C0AE !important; font-size:13px !important; font-weight:600 !important; margin-top:6px !important;
+  }
+  /* subtle gold micro-accent for Kamar Private (premium differentiation) */
+  body.kamar-member-desktop-v2 .kamar-facility-header.is-premium{ position:relative !important; }
+  body.kamar-member-desktop-v2 .kamar-facility-header.is-premium::after{
+    content:"";
+    position:absolute; left:22px; right:22px; top:0; height:2px;
+    background: linear-gradient(90deg, transparent, rgba(244,223,144,.55), transparent);
+    pointer-events:none;
+  }
+
+  /* Guide / installation accordion (.kamar-guide-box family) — retint from
+     the old always-light teal look (#0e5f54 on near-white bg, authored
+     before this dark redesign existed) to the shared dark palette.
+     Structure and the global kamar-guide-accordion-toggle script are
+     untouched — CSS only. */
+  body.kamar-member-desktop-v2 .kamar-guide-box{
+    background: rgba(14,95,84,.10) !important;
+    border: 1px solid rgba(14,95,84,.30) !important;
+    border-radius: 20px !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-guide-head{
+    border-bottom-color: rgba(14,95,84,.22) !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-guide-title{ color:#8EFFC0 !important; }
+  body.kamar-member-desktop-v2 .kamar-guide-sub{ color:#8EFFC0 !important; opacity:.72 !important; }
+  body.kamar-member-desktop-v2 .kamar-guide-step{ border-bottom-color: rgba(14,95,84,.18) !important; }
+  body.kamar-member-desktop-v2 .kamar-guide-step-head{ color:#C9FFE1 !important; }
+  body.kamar-member-desktop-v2 .kamar-guide-step-num{
+    background: rgba(14,95,84,.24) !important; color:#8EFFC0 !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-guide-step-title{ color:#C9FFE1 !important; }
+  body.kamar-member-desktop-v2 .kamar-guide-step-arrow{ color:#8EFFC0 !important; }
+  body.kamar-member-desktop-v2 .kamar-guide-step-body p{ color:#9FB5AE !important; }
+
+  /* Tool/download + license detail grids used inside the request/download/
+     history cards on Indikator & Robot (.admin-detail-panel, .admin-empty-
+     state) — new classes not covered by the earlier Dashboard-phase CSS
+     since they only appear on the facility pages. */
+  body.kamar-member-desktop-v2 .admin-detail-panel{
+    display:grid !important;
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 14px !important;
+  }
+  body.kamar-member-desktop-v2 .admin-detail-panel .setting-card span{ color:#8E98A8 !important; }
+  body.kamar-member-desktop-v2 .admin-detail-panel .setting-card strong{ color:#F4F6F8 !important; font-weight:800 !important; }
+  body.kamar-member-desktop-v2 .admin-empty-state{
+    color:#8E98A8 !important;
+    text-align:center !important;
+    padding:28px 16px !important;
+    background: rgba(255,255,255,.03) !important;
+    border: 1px dashed rgba(255,255,255,.14) !important;
+    border-radius: 18px !important;
+  }
+
+  /* Loading placeholder shown before fillFacilityContent()/license scripts
+     replace #memberContentList */
+  body.kamar-member-desktop-v2 .kamar-empty{
+    color:#8E98A8 !important;
+    text-align:center !important;
+    padding:40px 16px !important;
+  }
+
+  /* Grouped request-license form (01/02/03 sections) */
+  body.kamar-member-desktop-v2 .kamar-form-group{ margin-top:18px !important; }
+  body.kamar-member-desktop-v2 .kamar-form-group:first-of-type{ margin-top:6px !important; }
+  body.kamar-member-desktop-v2 .kamar-form-group-title{
+    display:flex !important; align-items:center !important; gap:10px !important;
+    color:#E6D4A9 !important; font-weight:1000 !important; font-size:11.5px !important;
+    text-transform:uppercase !important; letter-spacing:.12em !important;
+    margin-bottom:12px !important;
+  }
+  body.kamar-member-desktop-v2 .kamar-form-group-title .kamar-form-group-num{
+    display:inline-flex !important; align-items:center !important; justify-content:center !important;
+    width:20px !important; height:20px !important; border-radius:50% !important;
+    background: rgba(215,180,109,.16) !important; color:#E6D4A9 !important;
+    font-size:10.5px !important; font-weight:1000 !important;
+  }
+
+  /* license/history token row spacing */
+  body.kamar-member-desktop-v2 .setting-card .btn.mini.secondary{ margin-left:6px !important; }
+}

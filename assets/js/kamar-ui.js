@@ -1,4 +1,39 @@
 window.KamarUI=window.KamarUI||{toast:function(msg){console.log('[Kamar]',msg)}};
+
+// ==========================================================================
+// KAMAR SKELETON LOADING SYSTEM v1 - reveal/gate helpers
+// Pair with assets/css/kamar-skeleton-v1.css (.kamar-skel-gate / .kamar-skel-revealed).
+// Usage: mark an element "kamar-skel-gate" directly in the page's static HTML
+// (so it's hidden before first paint, no flash), then call KamarUI.reveal(el)
+// once the async data that decides its real content has resolved (success
+// OR failure/empty - always reveal, never leave it stuck).
+// A blanket failsafe below force-reveals any leftover gated element after
+// 10s in case a page's script errors before calling reveal(), so a bug in
+// one script can never permanently hide content.
+// ==========================================================================
+window.KamarUI.gate = window.KamarUI.gate || function(el){
+  if(!el) return;
+  el.classList.add('kamar-skel-gate');
+};
+window.KamarUI.reveal = window.KamarUI.reveal || function(el){
+  if(!el) return;
+  el.classList.remove('kamar-skel-gate');
+  el.classList.add('kamar-skel-revealed');
+};
+window.KamarUI.revealAll = window.KamarUI.revealAll || function(selector){
+  document.querySelectorAll(selector || '.kamar-skel-gate').forEach(function(el){
+    window.KamarUI.reveal(el);
+  });
+};
+(function(){
+  if(window.__KAMAR_SKEL_FAILSAFE__) return;
+  window.__KAMAR_SKEL_FAILSAFE__ = true;
+  setTimeout(function(){
+    document.querySelectorAll('.kamar-skel-gate').forEach(function(el){
+      window.KamarUI.reveal(el);
+    });
+  }, 10000);
+})();
 window.kamarFriendlyError=window.kamarFriendlyError||function(e){
   var raw=String((e&&e.message)||e||'');
   var low=raw.toLowerCase();

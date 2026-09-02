@@ -1476,3 +1476,14 @@ overview card accent, recap tab dark-active, header icon mark.
 @media (min-width:1024px){
   .ksig-detail-split{ flex-direction:row; }
 }
+
+/* Active filter chips (brief Section 9) */
+.ksig-active-filters{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0 4px; }
+.ksig-filter-chip{ display:inline-flex; align-items:center; gap:6px; padding:5px 8px 5px 12px; border-radius:999px; background:var(--km-panel-2,#1c2230); border:1px solid var(--km-line,#2a3242); color:var(--km-ink,#e8ecf4); font-size:12px; font-weight:600; line-height:1; }
+.ksig-filter-chip-x{ appearance:none; border:none; background:transparent; color:var(--km-muted,#8a93a6); cursor:pointer; font-size:14px; line-height:1; padding:2px 2px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; }
+.ksig-filter-chip-x:hover{ color:var(--km-ink,#e8ecf4); background:rgba(255,255,255,0.08); }
+.ksig-filter-clearall{ appearance:none; border:none; background:transparent; color:var(--km-accent,#c9a24b); font-size:12px; font-weight:700; cursor:pointer; padding:5px 4px; text-decoration:underline; text-underline-offset:2px; }
+.ksig-filter-clearall:hover{ opacity:0.85; }
+@media (min-width:1024px){
+  .ksig-active-filters{ margin:12px 0 6px; }
+}

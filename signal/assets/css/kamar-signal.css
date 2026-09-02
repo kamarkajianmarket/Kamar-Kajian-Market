@@ -1283,3 +1283,70 @@ overview card accent, recap tab dark-active, header icon mark.
     border-color:rgba(244,246,248,.16) !important;
   }
 }
+
+
+/* =====================================================================
+   KAMAR SIGNAL - DARK SURFACE COVERAGE PART 2 (Phase 2c, additive)
+   Continuation of the dark-card fix above: covers hardcoded #fff/#f1ede2/
+   cream selectors NOT yet reached -- generic secondary button, custom
+   date range picker + inputs, Informasi Teknis modal rows, list-page
+   sticky search/filter toolbar, Detail Signal timeline card, calendar
+   popup, and the bottom sheet/modal shell used by Notification Settings
+   and Filter. Desktop-only (min-width:1024px), additive. */
+@media (min-width:1024px){
+
+  .ksig-btn{
+    background:#1E2833 !important;
+    border-color:rgba(244,246,248,.14) !important;
+    color:#F4F6F8 !important;
+  }
+  .ksig-btn:hover{ border-color:rgba(198,170,114,.4) !important; }
+
+  .ksig-recap-picker-menu{
+    background:#1E2833 !important;
+    border-color:rgba(244,246,248,.14) !important;
+  }
+  .ksig-recap-picker-btn:hover{ background:rgba(244,246,248,.08) !important; }
+  .ksig-recap-date-input{
+    background:rgba(244,246,248,.05) !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+  .ksig-recap-summary{
+    background:#0D131B !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+  .ksig-recap-summary-pips.pos{ color:#42B48C !important; }
+  .ksig-recap-summary-pips.neg{ color:#E56E69 !important; }
+
+  .ksig-info-row{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+
+  .ksig-toolbar{
+    background:rgba(11,16,23,.92) !important;
+  }
+  .ksig-search{
+    background:rgba(244,246,248,.05) !important;
+    border-color:rgba(244,246,248,.16) !important;
+  }
+  .ksig-search input{ color:#F4F6F8 !important; }
+  .ksig-search input::placeholder{ color:#5C6672 !important; }
+
+  .ksig-timeline-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+
+  .ksig-cal-popup{
+    background:#1E2833 !important;
+  }
+  .ksig-cal-popup-backdrop{ background:rgba(3,5,8,.55) !important; }
+
+  .ksig-sheet{
+    background:#131B25 !important;
+  }
+  .ksig-sheet-handle{ background:rgba(244,246,248,.20) !important; }
+  .ksig-sheet-backdrop{ background:rgba(3,5,8,.55) !important; }
+}

@@ -21,6 +21,17 @@ body{background:#070707;color:var(--text)}
 .toggle-row:has(input[type="checkbox"]:checked){border-color:rgba(158,255,202,.28);background:linear-gradient(135deg,rgba(28,97,65,.12),rgba(255,255,255,.018));}
 @media(max-width:680px){.toggle-row{grid-template-columns:1fr;align-items:flex-start}.toggle-switch{margin-top:4px}}
 #signalStatusActions:empty{display:none;margin:0}
+#signalHeaderBadge{display:none}
+#signalHeaderBadge.show{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+#signalHeaderBadge.is-active{background:rgba(31,143,107,.16);color:#5fe0b4;border:1px solid rgba(31,143,107,.35)}
+#signalHeaderBadge.is-active::before{content:"";width:6px;height:6px;border-radius:999px;background:#5fe0b4}
+#signalHeaderBadge.is-inactive{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.14)}
+#signalHeaderBadge.is-inactive::before{content:"";width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.4)}
+#signalStatusUntil{font-size:13px;color:rgba(255,255,255,.55);margin:2px 0 12px}
+#signalQuickAccess .ksig-quick-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+#signalQuickAccess .ksig-quick-link{padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;font-weight:700;text-decoration:none;color:rgba(255,255,255,.85);transition:transform .15s ease,border-color .15s ease,background .15s ease}
+#signalQuickAccess .ksig-quick-link:hover{transform:translateY(-1px);border-color:rgba(212,166,99,.5);background:rgba(255,255,255,.07)}
+.kamar-title-card .ksig-header-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 
 </style>
 <link href="assets/css/kamar-full-online.css" rel="stylesheet"/>
@@ -29,9 +40,12 @@ body{background:#070707;color:var(--text)}
   <link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/>
 <meta name="kamar-step" content="46-luxury-atelier-formation"/>
 <link href="assets/css/kamar-mobile-shell.css?v=1" rel="stylesheet"/>
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Tambah / Perpanjang Fasilitas</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><details class="sidebar-group" open><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Signal 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main"><div class="split-card kamar-title-card"><h1>Kamar Signal</h1></div>
-<section class="split-card hidden" id="signalStatusCard"><span class="mini-label" id="signalStatusLabel">Status Aktivasi</span><h2 id="signalStatusTitle">Memuat status...</h2><p id="signalStatusText"></p><div class="button-row" id="signalStatusActions"></div></section>
-<section class="split-card"><div class="facility-guide-box">Petunjuk: bagian ini otomatis menampilkan Download materi dan Tools sesuai status aktivasi Kamar Signal kamu. Kalau belum aktif, klik tombol Aktifkan Fasilitas di bawah.</div><div class="ksig-live-cta" style="margin:0 0 16px"><a class="btn" href="/signal/">Buka Kamar Signal (Live) →</a></div><div class="kamar-empty" id="memberContentList">Memuat konten Kamar Signal...</div></section>
+<link href="assets/css/kamar-member-desktop-v2.css?v=1" rel="stylesheet"/>
+<link href="assets/css/kamar-skeleton-v1.css?v=1" rel="stylesheet"/>
+</head><body class="kamar-member-desktop-v2"><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header><main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-renewal.html">Tambah / Perpanjang Fasilitas</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><details class="sidebar-group" open><summary>Fasilitas Kamar</summary><a class="disabled" href="member-materials.html" aria-disabled="true">Kamar Edukasi 🔒</a><a class="disabled" href="member-study.html" aria-disabled="true">Kamar Signal 🔒</a><a class="disabled" href="member-private.html" aria-disabled="true">Kamar Private 🔒</a><a class="disabled" href="member-indicator.html" aria-disabled="true">Kamar Indikator 🔒</a><a class="disabled" href="member-robot.html" aria-disabled="true">Kamar Robot 🔒</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside><section class="split-main"><div class="split-card kamar-title-card"><div class="ksig-header-row"><h1>Kamar Signal</h1><span class="ksig-access-pill" id="signalHeaderBadge"></span></div></div>
+<section class="split-card hidden" id="signalStatusCard"><span class="mini-label" id="signalStatusLabel">Status Akses</span><h2 id="signalStatusTitle">Memuat status...</h2><p id="signalStatusText"></p><p id="signalStatusUntil"></p><div class="button-row" id="signalStatusActions"></div></section>
+<section class="split-card hidden" id="signalQuickAccess"><span class="mini-label">Akses Cepat</span><div class="ksig-quick-row"><a class="ksig-quick-link" href="/signal/">Dashboard Signal</a><a class="ksig-quick-link" href="dashboard.html">Dashboard Member</a><a class="ksig-quick-link" href="/signal/">Panduan</a></div></section>
+<section class="split-card"><div class="facility-guide-box">Petunjuk: bagian ini otomatis menampilkan Download materi dan Tools sesuai status aktivasi Kamar Signal kamu. Kalau belum aktif, klik tombol Aktifkan Fasilitas di bawah.</div><div class="kamar-empty" id="memberContentList">Memuat konten Kamar Signal...</div></section>
 </section></section></div></main><footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer><div class="toast" id="toast">Aksi berhasil diproses.</div><script>function toast(msg){const t=document.getElementById('toast'); if(!t)return; t.textContent=msg||'Aksi berhasil diproses.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400)}document.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.toast)));document.querySelectorAll('.toggle-row input').forEach(t=>t.addEventListener('change',()=>toast((t.checked?'ON: ':'OFF: ')+(t.closest('.toggle-row')?.querySelector('span')?.textContent||'Kontrol'))));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.open;document.querySelectorAll('.open-target').forEach(x=>x.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}));</script>
 <script>
 (function(){
@@ -78,26 +92,47 @@ body{background:#070707;color:var(--text)}
       var row = acc && acc.data;
       var title = document.getElementById('signalStatusTitle');
       var text = document.getElementById('signalStatusText');
+      var until = document.getElementById('signalStatusUntil');
       var actions = document.getElementById('signalStatusActions');
-      var sourceLabel = row && row.activation_source === 'ib_kamar' ? 'IB Kamar' : (row && row.activation_source === 'paid' ? 'Berbayar' : null);
+      var badge = document.getElementById('signalHeaderBadge');
+      var quickAccess = document.getElementById('signalQuickAccess');
+      var sourceLabel = row && row.activation_source === 'ib_kamar' ? 'IB Kamar' : (row && row.activation_source === 'paid' ? 'Akses Berbayar' : null);
+      var dashboardBtn = '<a class="btn" href="/signal/">Buka Dashboard Signal \u2192</a>';
       if(row && row.access_kamar_study){
         var dl = daysLeft(row.expires_kamar_study);
         if(dl === null){
-          if(title) title.textContent = 'Aktif — Lifetime';
-          if(text) text.textContent = sourceLabel ? ('Sumber aktivasi: '+sourceLabel+'.') : '';
+          if(title) title.textContent = 'Aktif \u2014 Lifetime';
+          if(text) text.textContent = sourceLabel || '';
+          if(until) until.textContent = '';
+          if(actions) actions.innerHTML = dashboardBtn;
+          if(badge){ badge.className='show is-active'; badge.textContent='\u25CF ACTIVE'; }
+          if(quickAccess) quickAccess.classList.remove('hidden');
         } else if(dl < 0){
           if(title) title.textContent = 'Akses Berakhir';
           if(text) text.textContent = 'Masa aktif Kamar Signal kamu sudah berakhir. Aktifkan kembali untuk lanjut akses.';
+          if(until) until.textContent = '';
           if(actions) actions.innerHTML = '<a class="btn" href="member-signal-activate-select.html">Aktifkan Kembali</a>';
+          if(badge){ badge.className='show is-inactive'; badge.textContent='\u25CB BERAKHIR'; }
+          if(quickAccess) quickAccess.classList.add('hidden');
         } else {
-          if(title) title.textContent = dl===0 ? 'Berakhir Hari Ini' : ('Sisa '+dl+' Hari Lagi');
-          if(text) text.textContent = (sourceLabel ? ('Sumber aktivasi: '+sourceLabel+'. ') : '') + (dl<=7 ? 'Segera perpanjang supaya akses tidak terputus.' : 'Akses Kamar Signal kamu masih aktif.');
-          if(dl<=7 && actions) actions.innerHTML = '<a class="btn" href="member-signal-activate-select.html">Perpanjang Sekarang</a>';
+          if(title) title.textContent = dl===0 ? 'BERAKHIR HARI INI' : (dl+' HARI TERSISA');
+          if(text) text.textContent = sourceLabel || '';
+          if(until) until.textContent = row.expires_kamar_study ? ('Aktif hingga '+new Date(row.expires_kamar_study).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})) : '';
+          if(dl<=7){
+            if(actions) actions.innerHTML = dashboardBtn + '<a class="btn secondary" href="member-signal-activate-select.html">Perpanjang Sekarang</a>';
+          } else {
+            if(actions) actions.innerHTML = dashboardBtn;
+          }
+          if(badge){ badge.className='show is-active'; badge.textContent='\u25CF ACTIVE'; }
+          if(quickAccess) quickAccess.classList.remove('hidden');
         }
       } else {
         if(title) title.textContent = 'Belum Aktif';
         if(text) text.textContent = 'Aktifkan Kamar Signal lewat Berbayar atau IB Kamar untuk mulai akses sinyal live.';
+        if(until) until.textContent = '';
         if(actions) actions.innerHTML = '<a class="btn" href="member-signal-activate-select.html">Aktifkan Kamar Signal</a>';
+        if(badge){ badge.className='show is-inactive'; badge.textContent='\u25CB BELUM AKTIF'; }
+        if(quickAccess) quickAccess.classList.add('hidden');
       }
       card.classList.remove('hidden');
     }catch(e){}

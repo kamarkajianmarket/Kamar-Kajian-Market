@@ -1389,3 +1389,16 @@ overview card accent, recap tab dark-active, header icon mark.
     border:1px solid rgba(244,246,248,.16) !important;
   }
 }
+
+@media (min-width:1024px){
+  .ksig-recap-date-input{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+    -webkit-appearance:none !important;
+    color-scheme:dark !important;
+  }
+  .ksig-recap-date-input::-webkit-calendar-picker-indicator{
+    filter:invert(1) !important;
+  }
+}

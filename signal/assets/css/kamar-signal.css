@@ -1203,3 +1203,83 @@ overview card accent, recap tab dark-active, header icon mark.
   }
   .ksig-pointer-light:hover::after{ opacity:.65 !important; }
 }
+
+
+/* =====================================================================
+   KAMAR SIGNAL - FULL DARK CARD SURFACE (Phase 2b, additive)
+   User explicitly confirmed after reviewing screenshots: match the LIVE
+   homepage's full-dark card language (facility cards = #101720), not a
+   light "paper card on dark shell" hybrid. Root cause of the previous
+   "cards still cream" bug: the Overview/Recap/Tabs/Guide/Field/Row/
+   AppbarBack rules hardcode background:#fff / #f1ede2 directly (NOT
+   var(--ks-surface)) and use the site-wide --km-line/--km-muted/--km-ink
+   tokens (from kamar-dashboard-identity-v2.css) for border/text, not the
+   --ks-* tokens the Phase 2 block above only touched. This block fixes
+   BOTH systems in one place: token redeclaration for anything already
+   using var(), PLUS direct !important overrides for the hardcoded
+   selectors token overrides can't reach. Desktop-only (min-width:1024px),
+   additive, does not edit any existing rule above. Mobile keeps the
+   original light ivory theme untouched. */
+@media (min-width:1024px){
+
+  :root{
+    --ks-surface:#101720 !important;
+    --ks-surface-dark:#1E2833 !important;
+    --ks-text:#F4F6F8 !important;
+    --ks-text-muted:#8E98A8 !important;
+    --ks-text-faint:#5C6672 !important;
+    --ks-border:rgba(244,246,248,.10) !important;
+    --ks-shadow:0 14px 42px rgba(0,0,0,.35) !important;
+    --ks-emerald-soft:rgba(66,180,140,.16) !important;
+    --ks-gold-soft:rgba(198,170,114,.18) !important;
+    --ks-danger-soft:rgba(229,110,105,.16) !important;
+    --ks-warning-soft:rgba(198,150,80,.18) !important;
+    --km-line:rgba(244,246,248,.12) !important;
+    --km-muted:#8E98A8 !important;
+    --km-ink:#F4F6F8 !important;
+  }
+
+  .ksig-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+    box-shadow:0 14px 42px rgba(0,0,0,.35) !important;
+  }
+  .ksig-card-count, .ksig-row-symbol{ color:#F4F6F8 !important; }
+
+  .ksig-recap-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+  .ksig-tabs{ background:#1E2833 !important; }
+  .ksig-tab{ color:rgba(244,246,248,.55) !important; }
+
+  .ksig-guide-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+  .ksig-guide-icon{ color:#C6AA72 !important; }
+  .ksig-badge.fresh{ color:#D7B46D !important; }
+
+  .ksig-row{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+  .ksig-row:hover{ border-color:rgba(198,170,114,.35) !important; }
+
+  .ksig-field input{
+    background:rgba(244,246,248,.05) !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+  .ksig-field input::placeholder{ color:#5C6672 !important; }
+
+  .ksig-center-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+  }
+
+  .ksig-appbar-back, .ksig-tool-btn, .ksig-install-btn{
+    background:rgba(244,246,248,.06) !important;
+    border-color:rgba(244,246,248,.16) !important;
+  }
+}

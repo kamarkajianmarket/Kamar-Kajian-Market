@@ -1615,6 +1615,7 @@ if(state.recap.type === type) renderRecapCard();
           '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter"><span class="ksig-tool-icon">⚙</span><span class="ksig-tool-label">Filter</span></div>'+
           '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan"><span class="ksig-tool-icon">↕</span><span class="ksig-tool-label">Urutkan</span></div>'+
         '</div>'+
+        filterChipsHtml(L.filters)+
         unreadBarHtml+
         '<div id="ksigListBody"></div>'+
       '</div>';
@@ -1625,6 +1626,7 @@ if(state.recap.type === type) renderRecapCard();
     search.addEventListener('input', debounce(function(){ L.search = search.value.trim(); loadList(true); }, 400));
     document.getElementById('ksigFilterBtn').addEventListener('click', openFilterSheet);
     document.getElementById('ksigSortBtn').addEventListener('click', openSortSheet);
+    bindFilterChips();
     var markAllBtn = document.getElementById('ksigMarkAllRead');
     if(markAllBtn) markAllBtn.addEventListener('click', function(){
       markAllBtn.disabled = true;
@@ -1636,6 +1638,37 @@ if(state.recap.type === type) renderRecapCard();
     if(restoreScroll) window.requestAnimationFrame(function(){ window.scrollTo(0, L.scrollY); });
   }
   function hasActiveFilter(f){ return !!(f.symbol||f.timeframe||f.dir||f.period||f.unread); }
+
+  var PERIOD_LABEL = { today:'Hari Ini', week:'Minggu Ini', month:'Bulan Ini' };
+  function filterChipsHtml(f){
+    var chips = [];
+    if(f.dir) chips.push({key:'dir', label:f.dir});
+    if(f.timeframe) chips.push({key:'timeframe', label:f.timeframe});
+    if(f.period) chips.push({key:'period', label:PERIOD_LABEL[f.period]||f.period});
+    if(f.unread) chips.push({key:'unread', label:'Belum Dibaca'});
+    if(!chips.length) return '';
+    return '<div class="ksig-active-filters">'+
+      chips.map(function(c){ return '<span class="ksig-filter-chip">'+esc(c.label)+' <button type="button" class="ksig-filter-chip-x" data-clear-key="'+c.key+'" aria-label="Hapus filter '+esc(c.label)+'">\u00d7</button></span>'; }).join('')+
+      '<button type="button" class="ksig-filter-clearall" id="ksigFilterClearAll">Hapus Semua</button>'+
+    '</div>';
+  }
+  function bindFilterChips(){
+    var wrap = document.querySelector('.ksig-active-filters');
+    if(!wrap) return;
+    wrap.querySelectorAll('[data-clear-key]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var key = btn.getAttribute('data-clear-key');
+        if(key==='unread'){ state.list.filters.unread = false; } else { state.list.filters[key] = ''; }
+        loadList(true); renderList();
+      });
+    });
+    var clearAll = document.getElementById('ksigFilterClearAll');
+    if(clearAll) clearAll.addEventListener('click', function(){
+      state.list.filters = { symbol: state.list.filters.symbol, timeframe:'', dir:'', period:'', unread:false };
+      loadList(true); renderList();
+    });
+  }
+
 
   function renderListBody(){
     var body = document.getElementById('ksigListBody');

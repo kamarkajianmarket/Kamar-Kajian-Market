@@ -1,0 +1,78 @@
+/* ========= KAMAR AUTH DARK OVERRIDE v1 (Desktop only) =========
+   Layer di atas kamar-auth-palace-v1.css (cream) + kamar-bundle.css,
+   dipasang SETELAH kamar-homepage-dark-v1.css supaya nyambung dengan
+   tema dark terbaru homepage (index.html). Tujuan: samakan tampilan
+   member.html (login) dan register.html (daftar) dengan homepage,
+   TANPA mengubah kamar-auth-palace-v1.css (mudah revert).
+   Scope: desktop (>=981px) saja, body.public-home saja (member.html/
+   register.html). Tidak menyentuh mobile/tablet sama sekali - sama
+   seperti pola kamar-homepage-dark-v1.css yang sudah ada. */
+
+@media (min-width: 981px) {
+
+  /* auth card (form panel) -> dark surface, senada .facility-card/.section-shell homepage */
+  body.public-home .auth-card{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.10) !important;
+    box-shadow:0 20px 70px rgba(0,0,0,.40) !important;
+    color:#F4F6F8 !important;
+  }
+  body.public-home .auth-card h2{ color:#F4F6F8 !important; }
+  body.public-home .auth-card .desc,
+  body.public-home .auth-card p{ color:#8E98A8 !important; }
+
+  /* form labels + fields */
+  body.public-home label{ color:#B8C2CE !important; }
+  body.public-home input,
+  body.public-home select,
+  body.public-home textarea{
+    background:rgba(244,246,248,.05) !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+  body.public-home input::placeholder,
+  body.public-home select::placeholder,
+  body.public-home textarea::placeholder{ color:#5C6672 !important; }
+  body.public-home input:focus,
+  body.public-home select:focus,
+  body.public-home textarea:focus{ border-color:#D7B46D !important; }
+
+  /* password show/hide + input icons (login-facility-card-polish-v1) */
+  body.public-home .input-icon-wrap svg{ color:#5C6672 !important; }
+  body.public-home .pw-toggle{ color:#8E98A8 !important; }
+  body.public-home .pw-toggle:hover{ background:rgba(244,246,248,.08) !important; color:#F4F6F8 !important; }
+
+  /* "Ingat Saya" / "Setuju S&K" toggle switch */
+  body.public-home .toggle-switch{
+    background:rgba(244,246,248,.14) !important;
+    border-color:rgba(244,246,248,.20) !important;
+  }
+  body.public-home .toggle-row input[type=checkbox]:checked+.toggle-switch{
+    background:linear-gradient(135deg,#0e5f54,#1c8a76) !important;
+  }
+
+  /* bottom switch row ("Belum punya akun?" / "Sudah punya akun?") */
+  body.public-home .switch-row{
+    color:#8E98A8 !important;
+    border-top-color:rgba(244,246,248,.10) !important;
+  }
+  body.public-home .switch-row a,
+  body.public-home .auth-switch a{ color:#D7B46D !important; }
+
+  /* small pill badges inside auth-card (e.g. "Daftar di sini") */
+  body.public-home .auth-card .pill,
+  body.public-home .auth-card .kicker,
+  body.public-home .auth-card .chip{
+    border-color:rgba(244,246,248,.16) !important;
+    color:#5FE0B4 !important;
+    background:rgba(14,95,84,.16) !important;
+  }
+
+  /* error / notice banners inside the card (e.g. login error text) */
+  body.public-home .auth-card .field-error,
+  body.public-home .auth-card .form-error{
+    border-color:rgba(255,120,110,.30) !important;
+    background:rgba(255,120,110,.10) !important;
+    color:#FFB4AC !important;
+  }
+}

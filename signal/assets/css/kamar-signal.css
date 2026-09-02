@@ -1154,3 +1154,52 @@ overview card accent, recap tab dark-active, header icon mark.
 /* ==== scroll wheel bulan/tahun kalender - ditambahkan 2026-08-24 ==== */
 .ksig-cal-month-part, .ksig-cal-year-part{ cursor:ns-resize; padding:2px 5px; border-radius:6px; transition:background .15s ease; }
 .ksig-cal-month-part:hover, .ksig-cal-year-part:hover{ background:rgba(184,138,61,.12); }
+
+
+/* ==================================================================
+   KAMAR SIGNAL — EXECUTIVE DESKTOP REFINEMENT (Phase 2, additive)
+   Scope: desktop only (min-width:1024px), matches existing breakpoint.
+   Dark executive shell + light data-surface hybrid (cards untouched --
+   they already use var(--ks-surface)/var(--ks-text) correctly and stay
+   as premium light "paper" surfaces floating on the dark shell).
+   Does not edit any rule above -- pure cascade override, mobile/tablet
+   untouched per KAMAR_MASTER_PROMPT_KAMAR_SIGNAL_EXECUTIVE_DESKTOP.
+   ================================================================== */
+@media (min-width:1024px){
+  .ksig-body{
+    background:
+      radial-gradient(1200px 700px at 12% -10%, rgba(198,170,114,.05), transparent 60%),
+      radial-gradient(1100px 800px at 100% 0%, rgba(31,111,79,.12), transparent 55%),
+      radial-gradient(900px 700px at 50% 110%, rgba(198,170,114,.03), transparent 62%),
+      #070A0F !important;
+    color:#F4F6F8 !important;
+  }
+  .ksig-main{ max-width:960px !important; }
+  .ksig-appbar-inner, .ksig-header-row{ max-width:960px !important; }
+  .ksig-appbar{ background:rgba(11,16,23,.72) !important; border-bottom-color:rgba(244,246,248,.08) !important; }
+  .ksig-appbar.scrolled{
+    background:rgba(11,16,23,.86) !important;
+    backdrop-filter:blur(16px) saturate(1.4) !important;
+    -webkit-backdrop-filter:blur(16px) saturate(1.4) !important;
+    box-shadow:0 6px 24px rgba(0,0,0,.35) !important;
+  }
+  .ksig-appbar-back{
+    background:rgba(244,246,248,.06) !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+  .ksig-header-title{ color:#F4F6F8 !important; }
+  .ksig-header-sub{ color:rgba(244,246,248,.64) !important; }
+  .ksig-boot-mark{ color:#F4F6F8 !important; }
+  .ksig-boot-sub{ color:rgba(244,246,248,.55) !important; }
+  .ksig-boot .ksig-error p{ color:rgba(244,246,248,.72) !important; }
+
+  /* Section labels sit directly on the dark shell between cards */
+  .ksig-section-label, .ksig-block > .ksig-section-label{ color:rgba(244,246,248,.5) !important; }
+
+  /* Restrained pointer-follow gloss: subtle, no hard white hotspot */
+  .ksig-pointer-light::after{
+    background:radial-gradient(260px circle at var(--ksig-px,50%) var(--ksig-py,50%), rgba(255,255,255,.10), transparent 62%) !important;
+  }
+  .ksig-pointer-light:hover::after{ opacity:.65 !important; }
+}

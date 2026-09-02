@@ -34,6 +34,27 @@ window.KamarUI.revealAll = window.KamarUI.revealAll || function(selector){
     });
   }, 10000);
 })();
+window.KamarUI.autoReveal = window.KamarUI.autoReveal || function(el){
+  if(!el || el.__kamarAutoObserved) return;
+  el.__kamarAutoObserved = true;
+  var obs = new MutationObserver(function(){
+    window.KamarUI.reveal(el);
+    obs.disconnect();
+  });
+  obs.observe(el, {childList:true, subtree:true, characterData:true});
+};
+(function(){
+  function initAuto(){
+    document.querySelectorAll('.kamar-skel-gate[data-skel-auto]').forEach(function(el){
+      window.KamarUI.autoReveal(el);
+    });
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', initAuto);
+  } else {
+    initAuto();
+  }
+})();
 window.kamarFriendlyError=window.kamarFriendlyError||function(e){
   var raw=String((e&&e.message)||e||'');
   var low=raw.toLowerCase();

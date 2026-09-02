@@ -1483,7 +1483,7 @@ if(state.recap.type === type) renderRecapCard();
       status = 'ACTIVE'; statusCls = 'active';
       sub = daysLeft !== null ? (daysLeft+' HARI TERSISA') : 'Akses aktif';
     }
-    var sourceLabel = A.activation_source === 'ib_kamar' ? 'IB Kamar' : (A.activation_source ? esc(A.activation_source) : '');
+    var sourceLabel = A.activation_source === 'ib_kamar' ? 'IB Kamar' : (A.activation_source === 'paid' ? 'Akses Berbayar' : (A.activation_source ? esc(A.activation_source) : ''));
     return '<div class="ksig-access-card '+statusCls+'">'+
         '<div class="ksig-access-top-group">'+
           '<div class="ksig-access-top"><span class="ksig-access-label">KAMAR SIGNAL ACCESS</span><span class="ksig-access-status">'+

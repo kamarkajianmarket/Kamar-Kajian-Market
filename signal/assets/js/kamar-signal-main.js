@@ -2232,18 +2232,64 @@ var groups = groupRecapRows(R.rows);
     var ha = hasilAkhirInfo(s);
     var maxRunVal = s.max_running_point!=null ? s.max_running_point*10 : null;
     var maxRun = maxRunVal!=null ? fmtNum(maxRunVal,1)+' Pips' : '-';
-    var rows = [
-      ['Signal', (s.skenario||'-') + ' • ' + (s.timeframe||'-')],
-      ['Jenis Zona', s.jenis_zona],
-      ['Area', (s.area_low!=null && s.area_high!=null) ? fmtNum(s.area_low)+' – '+fmtNum(s.area_high) : '-'],
-      ['Take Profit', [s.tp1,s.tp2,s.tp3].map(function(v){return v!=null?fmtNum(v):'-';}).join(' / ')],
-      ['Cut Loss', s.invalidasi!=null?fmtNum(s.invalidasi):'-'],
-      ['Running Profit', maxRun],
-      ['Hasil Akhir', ha.text],
-      ['Dibuat', fmtWIB(s.created_at)],
-      ['Update Terakhir', fmtWIB(s.updated_at)],
-      ['ID Zona', s.id_zona]
-    ];
+    var farthest = s.farthest_tp_level || 0;
+    var pips = pipsOf(s);
+    var pipsText = pips!=null ? (pips>=0?'+':'')+fmtNum(pips,1)+' Pips' : '';
+    var isDoneState = ha.cls==='pos' || ha.cls==='neg';
+    var tagText = isDoneState ? ('COMPLETED \u2022 '+(ha.cls==='neg'?'LOSS':'PROFIT')) : (s.display_status==='aktif' ? 'SIGNAL AKTIF' : String(STATUS_LABEL[s.display_status]||s.display_status).toUpperCase());
+    var summaryHtml =
+      '<div class="ksig-detail-summary'+(ha.cls?' '+ha.cls:'')+(s.display_status==='aktif'?' running':'')+'">'+
+        '<span class="ksig-detail-summary-tag">'+esc(tagText)+'</span>'+
+        '<span class="ksig-detail-summary-title">'+esc(ha.text)+'</span>'+
+        (isDoneState && pipsText ? '<span class="ksig-detail-summary-pips">'+esc(pipsText)+'</span>' : '')+
+        (!isDoneState && s.display_status==='aktif' && maxRunVal!=null ? '<span class="ksig-detail-summary-pips">'+esc(maxRun)+'</span>' : '')+
+      '</div>';
+    var tpRows = [1,2,3].map(function(n){
+      var v = s['tp'+n];
+      if(v==null) return '';
+      var hit = farthest >= n;
+      return '<div class="ksig-tr-row'+(hit?' hit':'')+'"><span>TP'+n+'</span><strong>'+esc(fmtNum(v))+'</strong><span class="ksig-tr-mark">'+(hit?'\u2713':'\u25cb')+'</span></div>';
+    }).join('');
+    var clRow = s.invalidasi!=null ? '<div class="ksig-tr-row cl"><span>CUT LOSS</span><strong>'+esc(fmtNum(s.invalidasi))+'</strong></div>' : '';
+    var runRow = (maxRunVal!=null && s.display_status!=='aktif') ? '<div class="ksig-tr-row run"><span>Running Profit</span><strong><span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span></strong></div>' : '';
+    var entryTargetHtml =
+      '<div class="ksig-detail-split">'+
+        '<div class="ksig-detail-panel">'+
+          '<div class="ksig-detail-panel-title">ENTRY ZONE</div>'+
+          '<div class="ksig-detail-panel-value">'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(s.area_low))+' \u2013 '+esc(fmtNum(s.area_high)):'-')+'</div>'+
+          '<div class="ksig-detail-panel-sub">'+esc(s.jenis_zona||'-')+'</div>'+
+        '</div>'+
+        '<div class="ksig-detail-panel">'+
+          '<div class="ksig-detail-panel-title">TARGET & RISK</div>'+
+          tpRows + clRow + runRow +
+        '</div>'+
+      '</div>';
+    var tpCount = [s.tp1,s.tp2,s.tp3].filter(function(v){return v!=null;}).length;
+    var progressHtml = '';
+    if(tpCount>0){
+      var steps = [{label:'ENTRY', state_:'entered'}];
+      for(var i=1;i<=tpCount;i++) steps.push({label:'TP'+i, state_: farthest>=i ? 'hit' : 'pending'});
+      var stepsHtml = steps.map(function(st){
+        return '<div class="ksig-progress-step '+st.state_+'"><span class="ksig-progress-dot"></span><span class="ksig-progress-label">'+st.label+'</span></div>';
+      }).join('<div class="ksig-progress-line"></div>');
+      progressHtml = '<div class="ksig-progress-card"><div class="ksig-progress-title">TARGET PROGRESS</div><div class="ksig-progress-track">'+stepsHtml+'</div></div>';
+    }
+    var DETAIL_EVENT_ICON = {
+      NEW_ZONE:'\u25cf', ZONE_ACTIVE:'\u25c6', RUNNING_UPDATE:'\u2191',
+      TP1_HIT:'\u2713', TP2_HIT:'\u2713', TP3_HIT:'\u2713',
+      HOLD1_HIT:'\u2713', HOLD2_HIT:'\u2713', HOLD3_HIT:'\u2713',
+      RR_1_1_REACHED:'\u2191', HIGH_RISK_WARNING:'!',
+      CRITICAL_ZONE_WARNING:'!', HIT_INVALIDASI:'\u00d7'
+    };
+    var timelineHtml =
+      '<div class="ksig-timeline-card">'+
+        '<div class="ksig-timeline-title">RIWAYAT PERKEMBANGAN</div>'+
+        (D.events.length ? '<div class="ksig-tl-list">'+D.events.map(function(ev){
+          var icon = DETAIL_EVENT_ICON[ev.event_type] || '\u25cf';
+          var iconCls = (ev.event_type==='HIT_INVALIDASI') ? 'x' : (icon==='!' ? 'warn' : (icon==='\u2713' ? 'ok' : ''));
+          return '<div class="ksig-tl-item2"><div class="ksig-tl-icon '+iconCls+'">'+icon+'</div><div class="ksig-tl-content"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<span>'+esc(ev.event_description)+'</span>':'')+'</div></div>';
+        }).join('') + '</div>' : '<div class="ksig-empty" style="padding:16px 0;">Belum ada riwayat perkembangan.</div>')+
+      '</div>';
     var html =
       '<div class="ksig-fade">'+
       '<div class="ksig-detail-head">'+
@@ -2251,23 +2297,40 @@ var groups = groupRecapRows(R.rows);
           '<span class="ksig-detail-symbol">'+esc(s.pair)+'</span>'+
           '<div class="ksig-detail-meta"><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+'<span class="ksig-detail-tf">'+esc(s.timeframe||'-')+'</span></div>'+
         '</div>'+
-        (lastCallActive ? '<div class="ksig-lastcall-banner">⚡ LAST CALL — RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
-(s.is_critical_zone ? '<div class="ksig-critical-banner">⚠ ZONA KRITIS — pantau ketat, pertimbangkan kurangi risiko/lot</div>' : '') +
+        (lastCallActive ? '<div class="ksig-lastcall-banner">\u26a1 LAST CALL \u2014 RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
+        (s.is_critical_zone ? '<div class="ksig-critical-banner">\u26a0 ZONA KRITIS \u2014 pantau ketat, pertimbangkan kurangi risiko/lot</div>' : '') +
         (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
-        '<div class="ksig-detail-rows">' + rows.map(function(r){ var isRun = (r[0]==='Running Profit') && maxRunVal!=null; var valInner = isRun ? ('<span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span>') : esc(r[1]==null?'-':r[1]); var rowCls = (r[0]==='Jenis Zona') ? ' ksig-detail-row-zona' : (r[0]==='Area') ? ' ksig-detail-row-area' : (r[0]==='Take Profit') ? ' ksig-detail-row-tp' : (r[0]==='Cut Loss') ? ' ksig-detail-row-cl' : ''; return '<div class="ksig-detail-row'+rowCls+'"><span>'+esc(r[0])+'</span><strong>'+valInner+'</strong></div>'; }).join('') + '</div>'+
+        summaryHtml +
+        '<div class="ksig-detail-idrow"><span class="ksig-detail-idlabel">'+esc(s.id_zona)+'</span><button type="button" class="ksig-copy-btn" id="ksigCopyIdZona" data-copy="'+esc(s.id_zona)+'">Copy</button></div>'+
+        '<div class="ksig-detail-meta2"><span>Dibuat '+fmtWIB(s.created_at)+'</span><span>Update Terakhir '+fmtWIB(s.updated_at)+'</span></div>'+
       '</div>'+
-      '<div class="ksig-timeline-card">'+
-        '<div class="ksig-timeline-title">Riwayat Perkembangan</div>'+
-        (D.events.length ? D.events.map(function(ev){
-          return '<div class="ksig-tl-item"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><div class="ksig-tl-body"><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<span>'+esc(ev.event_description)+'</span>':'')+'</div></div>';
-        }).join('') : '<div class="ksig-empty" style="padding:16px 0;">Belum ada riwayat perkembangan.</div>')+
-      '</div>'+
+      entryTargetHtml +
+      progressHtml +
+      timelineHtml +
       '</div>';
     body.innerHTML = html;
     applyCountAnimations(body);
+    var copyBtn = document.getElementById('ksigCopyIdZona');
+    if(copyBtn) copyBtn.onclick = function(){
+      var v = copyBtn.getAttribute('data-copy');
+      var done = function(){ ksigToast('ID Zona disalin'); };
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(v).then(done, done); }
+      else { done(); }
+    };
+  }
+  function ksigToast(msg){
+    var old = document.getElementById('ksigGenericToast');
+    if(old && old.parentNode) old.parentNode.removeChild(old);
+    var t = document.createElement('div');
+    t.id = 'ksigGenericToast';
+    t.className = 'ksig-update-toast ksig-toast-plain';
+    t.innerHTML = '<span class="ksig-update-toast-text">'+esc(msg)+'</span>';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ t.classList.add('show'); }); });
+    setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 300); }, 2200);
   }
 
-    /* ---------------- update PWA (toast) ---------------- */
+  /* ---------------- update PWA (toast) ---------------- */
   function showUpdateToast(){
     if(document.getElementById('ksigUpdateToast')) return;
     var t = document.createElement('div');

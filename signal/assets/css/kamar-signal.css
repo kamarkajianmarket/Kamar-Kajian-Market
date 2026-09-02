@@ -1350,3 +1350,16 @@ overview card accent, recap tab dark-active, header icon mark.
   .ksig-sheet-handle{ background:rgba(244,246,248,.20) !important; }
   .ksig-sheet-backdrop{ background:rgba(3,5,8,.55) !important; }
 }
+
+@media (min-width:1024px){
+  .ksig-chip-opt{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#B8C2CE !important;
+  }
+  .ksig-chip-opt.active{
+    background:linear-gradient(135deg,#0e5f54,#17483f) !important;
+    color:#EAFFF5 !important;
+    border-color:#0e5f54 !important;
+  }
+}

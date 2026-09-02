@@ -1409,3 +1409,18 @@ overview card accent, recap tab dark-active, header icon mark.
     background:#101720 !important;
   }
 }
+
+@media (min-width:1024px){
+  #ksigSearchInput,
+  .ksig-search input:not([type="checkbox"]):not([type="radio"]),
+  .ksig-field input:not([type="checkbox"]):not([type="radio"]),
+  input.ksig-recap-date-input:not([type="checkbox"]):not([type="radio"]){
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+  #ksigSearchInput::placeholder,
+  .ksig-search input::placeholder{
+    color:#5C6672 !important;
+  }
+}

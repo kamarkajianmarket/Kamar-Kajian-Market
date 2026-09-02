@@ -1363,3 +1363,29 @@ overview card accent, recap tab dark-active, header icon mark.
     border-color:#0e5f54 !important;
   }
 }
+
+@media (min-width:1024px){
+  .ksig-recap-preset-btn{
+    background:#101720 !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#B8C2CE !important;
+  }
+  .ksig-recap-preset-btn:hover{ background:#1a2530 !important; }
+
+  .ksig-cal-btn{
+    background:#1E2833 !important;
+    border-color:rgba(244,246,248,.16) !important;
+    color:#F4F6F8 !important;
+  }
+  .ksig-cal-btn:hover{ background:#28323d !important; }
+
+  .ksig-cal-cell:not(.empty):not(.disabled):hover{
+    background:#1E2833 !important;
+  }
+
+  .ksig-install-card-btn.android{
+    background:#101720 !important;
+    color:#F4F6F8 !important;
+    border:1px solid rgba(244,246,248,.16) !important;
+  }
+}

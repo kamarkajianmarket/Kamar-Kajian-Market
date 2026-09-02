@@ -5,7 +5,7 @@
   var VERSION='30G';
   var FAC=['Kamar Edukasi','Kamar Signal','Kamar Private','Kamar Indikator','Kamar Robot'];
     var FAC_PAGES={'Kamar Edukasi':'member-materials.html','Kamar Signal':'member-study.html','Kamar Private':'member-private.html','Kamar Indikator':'member-indicator.html','Kamar Robot':'member-robot.html'};
-    function unlockSidebarFacilities(){var f=(location.pathname.split('/').pop()||'').toLowerCase(); if(!/^(dashboard\.html$|member-)/.test(f))return; var m=findCurrentMember(); if(!m||!isActive(m)||m.locked_by_expired||m.is_expired_by_date)return; var fac=facilitiesOf(m).map(function(x){return norm(x)}); Object.keys(FAC_PAGES).forEach(function(name){ if(fac.indexOf(norm(name))<0)return; var href=FAC_PAGES[name]; qsa('a.disabled[href="'+href+'"]').forEach(function(a){ a.classList.remove('disabled'); a.removeAttribute('aria-disabled'); a.classList.add('kamar-facility-unlocked'); a.innerHTML=a.innerHTML.replace(/\s*🔒\s*$/,' <span class="kamar-unlock-badge">Aktif</span>'); }); }); }
+    function unlockSidebarFacilities(){var f=(location.pathname.split('/').pop()||'').toLowerCase(); function revealSidebarGate(){ if(window.KamarUI && window.KamarUI.revealAll) window.KamarUI.revealAll('.sidebar-group.kamar-skel-gate'); } if(!/^(dashboard\.html$|member-)/.test(f))return; var m=findCurrentMember(); if(!m||!isActive(m)||m.locked_by_expired||m.is_expired_by_date){ revealSidebarGate(); return; } var fac=facilitiesOf(m).map(function(x){return norm(x)}); Object.keys(FAC_PAGES).forEach(function(name){ if(fac.indexOf(norm(name))<0)return; var href=FAC_PAGES[name]; qsa('a.disabled[href="'+href+'"]').forEach(function(a){ a.classList.remove('disabled'); a.removeAttribute('aria-disabled'); a.classList.add('kamar-facility-unlocked'); a.innerHTML=a.innerHTML.replace(/\s*🔒\s*$/,' <span class="kamar-unlock-badge">Aktif</span>'); }); }); revealSidebarGate(); }
     var FACILITY_ACCESS_COL={'member-materials.html':'access_materi_edukasi','member-study.html':'access_kamar_study','member-private.html':'access_kamar_private'};
     var FACILITY_DB_KEY={'member-materials.html':'materi_edukasi','member-study.html':'kamar_study','member-private.html':'kamar_private'};
     function facilityCardHTML(it,url){var ver=it.version_label?(' &middot; v'+esc(it.version_label)):''; var desc=it.description||it.changelog||''; return '<article class="facility-content-card"><h3>'+esc(it.title)+ver+'</h3>'+(desc?('<p>'+esc(desc)+'</p>'):'')+'<div class="button-row"><a class="btn mini" href="'+esc(url||'#')+'" target="_blank" rel="noopener">Download</a></div></article>';}
@@ -15,7 +15,7 @@
           var box=el('memberContentList'); if(!box)return;
           var m=findCurrentMember();
           var unlocked=!!(m&&isActive(m)&&m[accessCol]===true&&!m.locked_by_expired&&!m.is_expired_by_date);
-          if(!unlocked){ box.innerHTML='<div class="facility-locked-box"><span>Kamu belum memiliki akses ke fasilitas ini. Aktifkan dulu supaya bisa membuka materi dan tools di halaman ini.</span><a class="btn mini" href="member-renewal.html">Aktifkan Fasilitas</a></div>'; return; }
+          if(!unlocked){ box.innerHTML='<div class="facility-locked-box"><span>Kamu belum memiliki akses ke fasilitas ini. Aktifkan dulu supaya bisa membuka materi dan tools di halaman ini.</span><a class="btn mini" href="member-renewal.html">Aktifkan Fasilitas</a></div>'; if(window.KamarUI)window.KamarUI.reveal(box); return; }
           if (f === 'member-study.html'){
             box.outerHTML = '<div class="split-card"><span class="eyebrow">Kamar Signal</span><h2>Kenapa Kamar Signal?</h2>'+
               '<div class="facility-content-grid">'+
@@ -37,7 +37,7 @@
                   html+='<div class="split-card"><span class="eyebrow">Download</span><h2>Materi &amp; Dokumen</h2><p>Materi, panduan, dan dokumen untuk fasilitas ini.</p>'+(matList.length?('<div class="facility-content-grid">'+matList.map(function(it){return facilityCardHTML(it,it.material_url)}).join('')+'</div>'):'<div class="admin-empty-state">Materi untuk fasilitas ini sedang disiapkan. Kembali lagi dalam waktu dekat.</div>')+'</div>';
                   html+='<div class="split-card"><span class="eyebrow">Tools</span><h2>File Tools</h2><p>Indikator, robot/EA, template, dan file tools pendukung fasilitas ini.</p>'+(toolList.length?('<div class="facility-content-grid">'+toolList.map(function(it){return facilityCardHTML(it,it.file_url)}).join('')+'</div>'):'<div class="admin-empty-state">File tools untuk fasilitas ini sedang disiapkan. Kembali lagi dalam waktu dekat.</div>')+'</div>';
                   box.outerHTML=html;
-          }catch(e){ box.innerHTML='<div class="expired-note">Gagal memuat konten: '+esc(e.message||String(e))+'</div>'; }
+          }catch(e){ box.innerHTML='<div class="expired-note">Gagal memuat konten: '+esc(e.message||String(e))+'</div>'; if(window.KamarUI)window.KamarUI.reveal(box); }
     }
   var state={client:null, viewRows:[], profileRows:[], accessRows:[], affiliateRows:[], members:[], internal:[], source:'init', error:''};
 
@@ -116,9 +116,10 @@
     '<div class="setting-card"><span>Modal</span><strong>'+esc(capitalOf(m)||'-')+'</strong></div>'+
     '<div class="setting-card" style="grid-column:1/-1"><span>Fasilitas Aktif</span><strong>'+esc(fac.length?fac.join(', '):'Belum ada fasilitas aktif')+'</strong></div>'+
     '</div>'; }
+  function revealDashGates(){ if(window.KamarUI && window.KamarUI.revealAll){ window.KamarUI.revealAll('#memberWelcomeBlock.kamar-skel-gate'); window.KamarUI.revealAll('#memberStatusBox.kamar-skel-gate'); } }
   function fillMemberDashboard(){
 if((location.pathname.split('/').pop()||'').toLowerCase()!=='dashboard.html')return;
-var m=findCurrentMember(); if(!m)return;
+var m=findCurrentMember(); if(!m){ revealDashGates(); return; }
 var __isMaster=(emailOf(m)||'').toLowerCase()==='supermaster@akun.kamar';
 setText('memberWelcomeTitle', __isMaster ? 'SELAMAT DATANG MASTER' : ('Selamat datang, '+nameOf(m)+'.'));
 setText('memberWelcomeText','ID: '+(idOf(m)||'-'));
@@ -133,6 +134,7 @@ var title=active?'Member Aktif':pending?'Menunggu Persetujuan Admin':'Akun Belum
 var extra=active?('Fasilitas aktif: '+facText):(pending?'Akun kamu sudah terdaftar, tetapi belum disetujui admin.':'Akun kamu belum aktif. Hubungi admin jika ini tidak sesuai.');
 status.innerHTML='<strong>'+esc(title)+'</strong><br/>'+esc(extra)+'<br/>Kode referral: '+esc(ref);
 }
+revealDashGates();
 var line=el('memberSessionLine'); if(line)line.innerHTML='Login sebagai: '+esc(emailOf(m)||'-')+'<br>'+dbLine();
 var hero=qs('.hero')||qs('.split-main'); if(hero&&!el('memberOnlineDetailCard')){var d=document.createElement('div');d.className='card';d.id='memberOnlineDetailCard';d.innerHTML='<span class="eyebrow">Detail Akun Online</span>'+memberDetailsHTML(m);(hero.classList.contains('split-main')?hero.appendChild(d):hero.insertAdjacentElement('afterend',d))}
 }

@@ -2267,7 +2267,8 @@ var groups = groupRecapRows(R.rows);
     var tpCount = [s.tp1,s.tp2,s.tp3].filter(function(v){return v!=null;}).length;
     var progressHtml = '';
     if(tpCount>0){
-      var steps = [{label:'ENTRY', state_:'entered'}];
+      var hasEntered = farthest>0 || D.events.some(function(ev){ return ev.event_type==='ZONE_ACTIVE' || ev.event_type==='RUNNING_UPDATE'; });
+      var steps = [{label:'ENTRY', state_: hasEntered ? 'entered' : 'pending'}];
       for(var i=1;i<=tpCount;i++) steps.push({label:'TP'+i, state_: farthest>=i ? 'hit' : 'pending'});
       var stepsHtml = steps.map(function(st){
         return '<div class="ksig-progress-step '+st.state_+'"><span class="ksig-progress-dot"></span><span class="ksig-progress-label">'+st.label+'</span></div>';

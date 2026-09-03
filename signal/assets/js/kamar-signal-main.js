@@ -744,6 +744,15 @@ function esc(s){
     e.preventDefault();
     navigate(a.getAttribute('data-ksig-nav'));
   });
+  document.addEventListener('click', function(e){
+    var t = e.target.closest && e.target.closest('.ksig-tl-toggle');
+    if(!t) return;
+    var detail = t.nextElementSibling;
+    var open = t.classList.toggle('ksig-tl-open');
+    t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    t.textContent = open ? 'Sembunyikan detail pesan' : 'Lihat detail pesan';
+    if(detail) detail.classList.toggle('ksig-tl-open', open);
+  });
   document.addEventListener('keydown', function(e){
     if(e.key !== 'Enter' && e.key !== ' ') return;
     var a = e.target.closest && e.target.closest('[data-ksig-nav]');
@@ -2398,7 +2407,7 @@ var groups = groupRecapRows(R.rows);
         (D.events.length ? '<div class="ksig-tl-list">'+D.events.map(function(ev){
           var icon = DETAIL_EVENT_ICON[ev.event_type] || '\u25cf';
           var iconCls = (ev.event_type==='HIT_INVALIDASI') ? 'x' : (icon==='!' ? 'warn' : (icon==='\u2713' ? 'ok' : ''));
-          return '<div class="ksig-tl-item2"><div class="ksig-tl-icon '+iconCls+'">'+icon+'</div><div class="ksig-tl-content"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<span>'+esc(ev.event_description)+'</span>':'')+'</div></div>';
+          return '<div class="ksig-tl-item2"><div class="ksig-tl-icon '+iconCls+'">'+icon+'</div><div class="ksig-tl-content"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<button type="button" class="ksig-tl-toggle" aria-expanded="false">Lihat detail pesan</button><div class="ksig-tl-detail">'+esc(ev.event_description)+'</div>':'')+'</div></div>';
         }).join('') + '</div>' : '<div class="ksig-empty" style="padding:16px 0;">Belum ada riwayat perkembangan.</div>')+
       '</div>';
     var html =

@@ -390,6 +390,11 @@ dan .member-list .row (admin-activation.html). */
   display:flex; justify-content:flex-end; gap:10px;
   padding:16px 20px; border-top:1px solid var(--km-line);
 }
+.todo-review-foot .btn.secondary{
+  color:#a9660f !important;
+  border-color:rgba(201,157,81,.5) !important;
+  background:rgba(240,183,77,.08) !important;
+}
 
 /* Detail-box (grid label/value di panel detail member, mis. admin-activation.html) */
 .admin-detail-box{ background:#fff !important; border:1px solid var(--km-line) !important; border-radius:18px !important; }

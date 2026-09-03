@@ -1332,6 +1332,8 @@ overview card accent, recap tab dark-active, header icon mark.
     background:rgba(244,246,248,.06) !important;
     border-color:rgba(244,246,248,.16) !important;
   }
+  .ksig-cal-nav{ background:rgba(244,246,248,.06) !important; border-color:rgba(244,246,248,.16) !important; color:#F4F6F8 !important; }
+  .ksig-cal-nav:hover{ background:rgba(244,246,248,.14) !important; }
 }
 
 

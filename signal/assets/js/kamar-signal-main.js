@@ -2299,6 +2299,10 @@ var groups = groupRecapRows(R.rows);
           '<div class="ksig-detail-panel-title">ENTRY ZONE</div>'+
           '<div class="ksig-detail-panel-value">'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(s.area_low))+' \u2013 '+esc(fmtNum(s.area_high)):'-')+'</div>'+
           '<div class="ksig-detail-panel-sub">'+esc(s.jenis_zona||'-')+'</div>'+
+          ((s.area_low!=null&&s.area_high!=null)?(
+            '<div class="ksig-tr-row"><span>Lebar Zona</span><strong>'+esc(fmtNum(Math.abs(s.area_high-s.area_low)))+'</strong></div>'+
+            '<div class="ksig-tr-row"><span>Titik Tengah</span><strong>'+esc(fmtNum((s.area_low+s.area_high)/2))+'</strong></div>'
+          ):'')+
         '</div>'+
         '<div class="ksig-detail-panel">'+
           '<div class="ksig-detail-panel-title">TARGET & RISK</div>'+
@@ -2311,6 +2315,12 @@ var groups = groupRecapRows(R.rows);
       var hasEntered = farthest>0 || D.events.some(function(ev){ return ev.event_type==='ZONE_ACTIVE' || ev.event_type==='RUNNING_UPDATE'; });
       var steps = [{label:'ENTRY', state_: hasEntered ? 'entered' : 'pending'}];
       for(var i=1;i<=tpCount;i++) steps.push({label:'TP'+i, state_: farthest>=i ? 'hit' : 'pending'});
+      if(tpCount===3){
+        var holdHits = [1,2,3].filter(function(h){ return D.events.some(function(ev){ return ev.event_type==='HOLD'+h+'_HIT'; }); });
+        if(holdHits.length>0){
+          for(var h=1;h<=3;h++) steps.push({label:'HOLD '+h, state_: holdHits.indexOf(h)>-1 ? 'hit' : 'pending'});
+        }
+      }
       var stepsHtml = steps.map(function(st){
         return '<div class="ksig-progress-step '+st.state_+'"><span class="ksig-progress-dot"></span><span class="ksig-progress-label">'+st.label+'</span></div>';
       }).join('<div class="ksig-progress-line"></div>');
@@ -2341,7 +2351,7 @@ var groups = groupRecapRows(R.rows);
         '</div>'+
         (lastCallActive ? '<div class="ksig-lastcall-banner">\u26a1 LAST CALL \u2014 RR 1:1 tercapai, pantau terus pergerakan harga</div>' : '') +
         (s.is_critical_zone ? '<div class="ksig-critical-banner">\u26a0 ZONA KRITIS \u2014 pantau ketat, pertimbangkan kurangi risiko/lot</div>' : '') +
-        (s.setup_description ? '<div class="ksig-detail-sub">'+esc(s.setup_description)+'</div>' : '') +
+        (s.setup_description ? '<div class="ksig-detail-sub">'+esc(String(s.setup_description).replace(/EA\s+Kamar\s+Signal\s+Advisor/gi,'Kamar Ai Signal'))+'</div>' : '') +
         summaryHtml +
         '<div class="ksig-detail-idrow"><span class="ksig-detail-idlabel">'+esc(s.id_zona)+'</span><button type="button" class="ksig-copy-btn" id="ksigCopyIdZona" data-copy="'+esc(s.id_zona)+'">Copy</button></div>'+
         '<div class="ksig-detail-meta2"><span>Dibuat '+fmtWIB(s.created_at)+'</span><span>Update Terakhir '+fmtWIB(s.updated_at)+'</span></div>'+

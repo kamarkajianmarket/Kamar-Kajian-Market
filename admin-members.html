@@ -356,3 +356,133 @@ setTimeout(checkAndLoad, 250);
 })();
 </script>
 
+
+<script id="kamar-step-download-history-members">
+(function(){
+'use strict';
+if(window.__KAMAR_DOWNLOAD_HISTORY_MEMBERS__) return;
+window.__KAMAR_DOWNLOAD_HISTORY_MEMBERS__ = true;
+var PAGE = (location.pathname.split('/').pop()||'').toLowerCase();
+if(PAGE !== 'admin-members.html') return;
+
+function qs(s,r){ return (r||document).querySelector(s); }
+function esc(v){ return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
+function fmtDate(v){ if(!v) return '-'; try{ return new Date(v).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return String(v); } }
+function toast(msg){ if(window.toast) return window.toast(msg); try{ alert(msg); }catch(e){} }
+async function ready(){
+try{ if(window.KAMAR_CONFIG_READY) await window.KAMAR_CONFIG_READY; }catch(e){}
+try{ if(window.KamarSupabase && window.KamarSupabase.ready) return await window.KamarSupabase.ready(); }catch(e){}
+return window.kamarSupabaseClient || null;
+}
+function extractEmail(){
+var boxes = document.querySelectorAll('#adminMemberDetail .admin-detail-box');
+for(var i=0;i<boxes.length;i++){
+var span = boxes[i].querySelector('span');
+if(span && /email/i.test(span.textContent)){
+var strong = boxes[i].querySelector('strong');
+return strong ? strong.textContent.trim() : '';
+}
+}
+return '';
+}
+function ensureCard(){
+var body = qs('#adminMemberDetail');
+if(!body) return null;
+var existing = qs('#kamarDownloadHistoryCard1');
+if(existing) return existing;
+var card = document.createElement('div');
+card.id = 'kamarDownloadHistoryCard1';
+card.style.marginTop = '18px';
+card.innerHTML = '<h3 style="margin:18px 0 10px;color:#fff3d8">Riwayat Request Download EA / Tools</h3><div id="kamarDownloadHistoryWrap1" class="admin-note-soft">Memuat riwayat...</div>';
+body.appendChild(card);
+return card;
+}
+function statusLabel(row){
+var now = Date.now();
+if(row.request_status==='pending') return '<span class="status-pill warn">Menunggu Approval</span>';
+if(row.request_status==='approved'){
+if(row.downloaded_at) return '<span class="status-pill on">Sudah Didownload</span>';
+if(row.approved_expires_at && new Date(row.approved_expires_at).getTime()>now) return '<span class="status-pill on">Disetujui, Belum Download</span>';
+return '<span class="status-pill off">Disetujui, Kadaluarsa</span>';
+}
+if(row.request_status==='rejected') return '<span class="status-pill off">Ditolak</span>';
+return '<span class="status-pill off">'+esc(row.request_status||'-')+'</span>';
+}
+function canAllowRerequest(row){
+if(row.request_status!=='approved') return false;
+if(row.downloaded_at) return false;
+return !!(row.approved_expires_at && new Date(row.approved_expires_at).getTime()>Date.now());
+}
+async function loadDownloadHistoryForEmail(email){
+ensureCard();
+var wrap = qs('#kamarDownloadHistoryWrap1');
+if(!wrap) return;
+if(!email || email==='-'){ wrap.innerHTML = '<span style="color:var(--muted)">Email member tidak ditemukan.</span>'; return; }
+wrap.innerHTML = 'Memuat riwayat request download...';
+try{
+var c = await ready();
+if(!c) throw new Error('Supabase client tidak terbaca.');
+var pr = await c.from('member_profiles').select('id').eq('email', email).limit(1);
+if(pr.error) throw pr.error;
+if(!pr.data || !pr.data.length) throw new Error('Profil member tidak ditemukan untuk email ini.');
+var profileId = pr.data[0].id;
+var res = await c.from('kamar_download_requests').select('*').eq('member_profile_id', profileId).order('created_at',{ascending:false});
+if(res.error) throw res.error;
+var rows = res.data || [];
+if(!rows.length){ wrap.innerHTML = '<span style="color:var(--muted)">Belum ada request download dari member ini.</span>'; return; }
+wrap.innerHTML = rows.map(function(row){
+var rerequestBtn = canAllowRerequest(row) ? '<button class="btn mini secondary" type="button" data-allow-rerequest="'+esc(row.id)+'">Izinkan Request Ulang</button>' : '';
+return '<div class="admin-row" style="grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center">'
++'<div><strong>'+esc(row.file_title||'-')+'</strong><small>'+esc(row.facility_key||'-')+'</small></div>'
++'<div>'+statusLabel(row)+'</div>'
++'<div><small>Request: '+fmtDate(row.requested_at)+'<br>Approved s/d: '+fmtDate(row.approved_expires_at)+'<br>Download: '+fmtDate(row.downloaded_at)+'</small></div>'
++'<div>'+rerequestBtn+'</div>'
++'</div>';
+}).join('');
+}catch(e){ wrap.innerHTML = '<span style="color:var(--muted)">'+esc((window.kamarFriendlyError?window.kamarFriendlyError(e):(e.message||e)))+'</span>'; }
+}
+document.addEventListener('click', async function(e){
+var btn = e.target && e.target.closest && e.target.closest('[data-allow-rerequest]');
+if(!btn) return;
+var id = btn.getAttribute('data-allow-rerequest');
+if(!confirm('Izinkan member request download ulang untuk file ini walau belum download sebelumnya?')) return;
+btn.disabled = true;
+btn.textContent = 'Memproses...';
+try{
+var c = await ready();
+if(!c) throw new Error('Supabase client tidak terbaca.');
+var res = await c.rpc('admin_allow_download_rerequest', { p_request_id: id });
+if(res.error) throw res.error;
+toast('Member sekarang bisa request download ulang.');
+var email = extractEmail();
+await loadDownloadHistoryForEmail(email);
+}catch(err){
+toast('Gagal: '+((window.kamarFriendlyError?window.kamarFriendlyError(err):(err.message||err))));
+btn.disabled = false;
+btn.textContent = 'Izinkan Request Ulang';
+}
+});
+var lastEmail2 = '';
+function checkAndLoad2(){
+var wrapEl = qs('#adminMemberDetailWrap');
+if(!wrapEl || wrapEl.classList.contains('hidden')) return;
+var email = extractEmail();
+if(!email) return;
+if(email !== lastEmail2 || !qs('#kamarDownloadHistoryCard1')){
+lastEmail2 = email;
+loadDownloadHistoryForEmail(email);
+}
+}
+var targetEl2 = qs('#adminMemberDetailWrap');
+if(targetEl2){
+var mo2 = new MutationObserver(function(){ checkAndLoad2(); });
+mo2.observe(targetEl2, { attributes:true, attributeFilter:['class'], childList:true, subtree:true });
+}
+document.addEventListener('click', function(e){
+var t = e.target;
+if(t && t.closest && t.closest('[data-member-detail]')){
+setTimeout(checkAndLoad2, 400);
+}
+});
+})();
+</script>

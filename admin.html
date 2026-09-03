@@ -123,6 +123,7 @@ function renderTodo(){
   var el=byId('adminTodoList');if(!el)return;
   var list=state.todos||[];
   var pc=byId('pendingTodoCount');if(pc)pc.textContent=String(list.length);
+  return; // DISABLED 2026-09-03: legacy renderActionCenter() di kamar-admin-online-29f.js (dimuat 1.5 detik setelah load) adalah satu-satunya renderer TO DO sekarang, supaya tidak ada lagi race dua tampilan berbeda di #adminTodoList. pendingTodoCount tetap diupdate di atas.
   if(!list.length){el.innerHTML='<div class="empty">Tidak ada to do yang perlu ditinjau. Semua sudah bersih.</div>';return}
   el.innerHTML=list.map(function(t){
     var typeLabel=TODO_TYPE_LABEL[t.todo_type]||t.todo_type;

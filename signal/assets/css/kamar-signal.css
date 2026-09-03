@@ -1268,6 +1268,7 @@ overview card accent, recap tab dark-active, header icon mark.
 
   :root{
     --ks-surface:#101720 !important;
+    --ks-bg:#0B0F14 !important;
     --ks-surface-dark:#1E2833 !important;
     --ks-text:#F4F6F8 !important;
     --ks-text-muted:#8E98A8 !important;

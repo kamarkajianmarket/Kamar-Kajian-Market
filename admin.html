@@ -125,12 +125,48 @@ function renderTodo(){
   var pc=byId('pendingTodoCount');if(pc)pc.textContent=String(list.length);
   if(!list.length){el.innerHTML='<div class="empty">Tidak ada to do yang perlu ditinjau. Semua sudah bersih.</div>';return}
   el.innerHTML=list.map(function(t){
-    var link=todoDeepLink(t);
     var typeLabel=TODO_TYPE_LABEL[t.todo_type]||t.todo_type;
     var info=todoMemberInfo(t);
-    var desc=(t.description||'').split('\n').map(esc).join('<br>');
-    return '<div class="todo-row" data-todo-id="'+esc(t.id)+'"><div><strong>'+esc(typeLabel)+'</strong><small>'+esc(t.title||'')+(desc?('<br>'+desc):'')+'</small></div><div>'+esc(info.name)+'<br><small>'+esc(info.email)+'</small></div><div>'+priorityBadge(t.priority)+'</div><div class="todo-actions" style="flex-wrap:wrap">'+(link?('<a class="btn mini" href="'+esc(link)+'">Buka</a>'):'')+'<button class="btn mini secondary" type="button" data-todo-note="'+esc(t.id)+'">Kirim Note</button><button class="btn mini secondary" type="button" style="color:#ffd582;border-color:rgba(255,213,130,.35)" data-todo-revise="'+esc(t.id)+'">Kembalikan Revisi</button><button class="btn mini secondary" type="button" data-todo-done="'+esc(t.id)+'">Selesai</button><button class="btn mini secondary" type="button" style="color:#ffb4b4;border-color:rgba(255,96,96,.35)" data-todo-reject="'+esc(t.id)+'">Tolak</button></div></div>';
+    return '<div class="todo-row" data-todo-id="'+esc(t.id)+'"><div><strong>'+esc(typeLabel)+'</strong><small>'+esc(t.title||'')+'</small></div><div>'+esc(info.name)+'<br><small>'+esc(info.email)+'</small></div><div>'+priorityBadge(t.priority)+'</div><div class="todo-actions" style="flex-wrap:wrap"><button class="btn mini primary" type="button" data-todo-approve="'+esc(t.id)+'">Approve</button><button class="btn mini secondary" type="button" style="color:#ffb4b4;border-color:rgba(255,96,96,.35)" data-todo-reject="'+esc(t.id)+'">Tolak</button><button class="btn mini secondary" type="button" data-todo-review="'+esc(t.id)+'">Tinjau</button></div></div>';
   }).join('');
+}
+function closeTodoReview(){
+  var ov=document.getElementById('todoReviewOverlay');
+  if(ov) ov.remove();
+}
+function openTodoReview(id){
+  closeTodoReview();
+  var t=(state.todos||[]).find(function(x){ return String(x.id)===String(id); });
+  if(!t){ toast('To Do tidak ditemukan (mungkin sudah diproses).'); return; }
+  var link=todoDeepLink(t);
+  var typeLabel=TODO_TYPE_LABEL[t.todo_type]||t.todo_type;
+  var info=todoMemberInfo(t);
+  var desc=(t.description||'').split('\n').map(esc).join('<br>');
+  var wrap=document.createElement('div');
+  wrap.id='todoReviewOverlay';
+  wrap.className='todo-review-overlay';
+  wrap.innerHTML=
+    '<div class="todo-review-modal">'+
+      '<div class="todo-review-head"><strong>'+esc(typeLabel)+'</strong><button type="button" class="todo-review-x" data-todo-review-close="1" aria-label="Tutup">&times;</button></div>'+
+      '<div class="todo-review-body">'+
+        '<div class="todo-review-title">'+esc(t.title||'')+'</div>'+
+        (desc?('<div class="todo-review-desc">'+desc+'</div>'):'')+
+        '<div class="todo-review-member">'+esc(info.name)+' &middot; '+esc(info.email)+'</div>'+
+        '<div class="todo-review-linkrow">'+
+          (link?('<a class="btn mini secondary" href="'+esc(link)+'" target="_blank" rel="noopener">Buka Halaman Terkait</a>'):'')+
+          '<button type="button" class="btn mini secondary" data-todo-review-note="'+esc(t.id)+'">Kirim Note WA/Telegram</button>'+
+        '</div>'+
+        '<label class="todo-review-notelabel" for="todoReviewNoteInput">Catatan Admin (wajib untuk Revisi)</label>'+
+        '<textarea id="todoReviewNoteInput" class="todo-review-note" placeholder="Tulis catatan untuk member..."></textarea>'+
+      '</div>'+
+      '<div class="todo-review-foot">'+
+        '<button type="button" class="btn mini secondary" style="color:#ffd582;border-color:rgba(255,213,130,.35)" data-todo-review-revise="'+esc(t.id)+'">Revisi</button>'+
+        '<button type="button" class="btn mini primary" data-todo-review-approve="'+esc(t.id)+'">Approve</button>'+
+      '</div>'+
+    '</div>';
+  document.body.appendChild(wrap);
+  var noteEl=wrap.querySelector('.todo-review-note');
+  if(noteEl) noteEl.focus();
 }
 function renderRecentMembers(){
   var el=byId('adminRecentMembers'); if(!el) return;
@@ -166,15 +202,31 @@ async function sendTodoNote(id){
     else { toast('Kontak member tidak tersedia. Pesan: '+(data.message||'-')); }
   }catch(e){ toast('Gagal membuat note: '+window.kamarFriendlyError(e)); }
 }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeTodoReview(); } });
 document.addEventListener('click',function(e){
-  var doneBtn=e.target.closest('[data-todo-done]');
-  if(doneBtn){ actOnTodo(doneBtn.getAttribute('data-todo-done'),'done'); return; }
+  var approveBtn=e.target.closest('[data-todo-approve]');
+  if(approveBtn){ actOnTodo(approveBtn.getAttribute('data-todo-approve'),'done'); return; }
   var rejectBtn=e.target.closest('[data-todo-reject]');
-  if(rejectBtn){ var note=prompt('Catatan penolakan (opsional, akan tercatat di riwayat):',''); if(note===null)return; actOnTodo(rejectBtn.getAttribute('data-todo-reject'),'rejected',note); return; }
-  var reviseBtn=e.target.closest('[data-todo-revise]');
-  if(reviseBtn){ var note2=prompt('Catatan revisi untuk member (wajib diisi, jelaskan apa yang perlu diperbaiki):',''); if(note2===null)return; if(!note2.trim()){toast('Catatan revisi wajib diisi.');return;} actOnTodo(reviseBtn.getAttribute('data-todo-revise'),'processing',note2); return; }
-  var noteBtn=e.target.closest('[data-todo-note]');
-  if(noteBtn){ sendTodoNote(noteBtn.getAttribute('data-todo-note')); return; }
+  if(rejectBtn){ actOnTodo(rejectBtn.getAttribute('data-todo-reject'),'rejected'); return; }
+  var reviewBtn=e.target.closest('[data-todo-review]');
+  if(reviewBtn){ openTodoReview(reviewBtn.getAttribute('data-todo-review')); return; }
+  var reviewApproveBtn=e.target.closest('[data-todo-review-approve]');
+  if(reviewApproveBtn){ var rid=reviewApproveBtn.getAttribute('data-todo-review-approve'); closeTodoReview(); actOnTodo(rid,'done'); return; }
+  var reviewReviseBtn=e.target.closest('[data-todo-review-revise]');
+  if(reviewReviseBtn){
+    var overlay=document.getElementById('todoReviewOverlay');
+    var noteEl=overlay?overlay.querySelector('.todo-review-note'):null;
+    var noteVal=noteEl?noteEl.value.trim():'';
+    if(!noteVal){ toast('Catatan revisi wajib diisi.'); if(noteEl)noteEl.focus(); return; }
+    var rid2=reviewReviseBtn.getAttribute('data-todo-review-revise');
+    closeTodoReview();
+    actOnTodo(rid2,'processing',noteVal);
+    return;
+  }
+  var reviewNoteBtn=e.target.closest('[data-todo-review-note]');
+  if(reviewNoteBtn){ sendTodoNote(reviewNoteBtn.getAttribute('data-todo-review-note')); return; }
+  var reviewCloseBtn=e.target.closest('[data-todo-review-close]');
+  if(reviewCloseBtn || e.target.id==='todoReviewOverlay'){ closeTodoReview(); return; }
   var toggleBtn=e.target.closest('[data-toggle-mini]');
   if(toggleBtn){
     var el=byId('adminRecentMembers');

@@ -129,7 +129,7 @@ function facilitiesOf(o){
     try{var j=JSON.parse(v);if(Array.isArray(j))return j.filter(Boolean)}catch(e){}
     return v.split(',').map(function(x){return x.trim()}).filter(Boolean);
   }
-  var keys=['kamar_edukasi','kamar_study','kamar_private','kamar_indikator','kamar_robot'];
+  var keys=['access_materi_edukasi','access_kamar_study','access_kamar_private','access_kamar_indikator','access_kamar_robot'];
   var out=[];keys.forEach(function(k,i){var val=o[k];if(val===true||val==='true'||val===1||val==='1'||String(val||'').toLowerCase()==='active')out.push(FAC[i])});
   return out;
 }

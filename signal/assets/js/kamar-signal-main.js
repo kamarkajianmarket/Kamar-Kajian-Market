@@ -2362,7 +2362,7 @@ var groups = groupRecapRows(R.rows);
       var hit = farthest >= n;
       return '<div class="ksig-tr-row'+(hit?' hit':'')+'"><span>TP'+n+'</span><strong>'+esc(fmtNum(v))+'</strong><span class="ksig-tr-mark">'+(hit?'\u2713':'\u25cb')+'</span></div>';
     }).join('');
-    var clRow = s.invalidasi!=null ? '<div class="ksig-tr-row cl"><span>CUT LOSS</span><strong>'+esc(fmtNum(s.invalidasi))+'</strong></div>' : '';
+    var clHit = s.status === 'INVALID'; var clRow = s.invalidasi!=null ? '<div class="ksig-tr-row cl"><span>CUT LOSS</span><strong>'+esc(fmtNum(s.invalidasi))+'</strong><span class="ksig-tr-mark">'+(clHit?'\u2713':'\u25cb')+'</span></div>' : '';
     var runRow = (maxRunVal!=null && s.display_status!=='aktif') ? '<div class="ksig-tr-row run"><span>Running Profit</span><strong><span class="ksig-cnum" data-cnum="detail-runpips-'+esc(s.id_zona)+'" data-cval="'+maxRunVal+'" data-cdigits="1">'+esc(fmtNum(maxRunVal,1))+' Pips</span></strong></div>' : '';
     var entryTargetHtml =
       '<div class="ksig-detail-split">'+
@@ -2371,11 +2371,11 @@ var groups = groupRecapRows(R.rows);
           '<div class="ksig-detail-panel-value">'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(s.area_low))+' \u2013 '+esc(fmtNum(s.area_high)):'-')+'</div>'+
           '<div class="ksig-detail-panel-sub">'+esc(s.jenis_zona||'-')+'</div>'+
           ((s.area_low!=null&&s.area_high!=null)?(
-            '<div class="ksig-tr-row"><span>Lebar Zona</span><strong>'+esc(fmtNum(Math.abs(s.area_high-s.area_low)))+'</strong></div>'+
+            '<div class="ksig-tr-row"><span>Lebar Zona</span><strong>'+esc(fmtNum(Math.abs(s.area_high-s.area_low)*10,1))+' Pips</strong></div>'+
             '<div class="ksig-tr-row"><span>Titik Tengah</span><strong>'+esc(fmtNum((s.area_low+s.area_high)/2))+'</strong></div>'
           ):'')+
         '</div>'+
-        '<div class="ksig-detail-panel">'+
+        '<div class="ksig-detail-panel ksig-detail-panel-tr">'+
           '<div class="ksig-detail-panel-title">TARGET & RISK</div>'+
           tpRows + clRow + runRow +
         '</div>'+

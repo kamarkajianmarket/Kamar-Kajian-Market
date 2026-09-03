@@ -1746,6 +1746,7 @@ function rowHtml(s){
     var infoParts = [];
     if(s.jenis_zona) infoParts.push(ksigInfoChip('ksig-chip-zona', s.jenis_zona));
     if(s.area_low!=null && s.area_high!=null) infoParts.push(ksigInfoChip('ksig-chip-area','Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high)));
+    if(s.area_low!=null && s.area_high!=null) infoParts.push(ksigInfoChip('ksig-chip-area', fmtNum(Math.abs(s.area_high-s.area_low)*10,1)+' Pips'));
     var tpVals = [s.tp1,s.tp2,s.tp3].filter(function(v){ return v!=null; }).map(function(v){ return fmtNum(v); });
 if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('/')));
     if(s.invalidasi!=null) infoParts.push(ksigInfoChip('ksig-chip-cl','CL '+fmtNum(s.invalidasi)));

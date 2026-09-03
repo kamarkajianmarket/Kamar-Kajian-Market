@@ -351,6 +351,46 @@ dan .member-list .row (admin-activation.html). */
 .todo-row strong{ color: var(--km-ink) !important; }
 .todo-row small{ color: var(--km-muted) !important; }
 
+/* TO DO review modal (Tinjau popup) */
+.todo-review-overlay{
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(17,20,15,.55);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+}
+.todo-review-modal{
+  background:#fff; border:1px solid var(--km-line); border-radius:20px;
+  box-shadow:0 30px 80px rgba(20,16,8,.35);
+  width:100%; max-width:520px; max-height:86vh; overflow:auto;
+  display:flex; flex-direction:column;
+}
+.todo-review-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 20px; border-bottom:1px solid var(--km-line);
+}
+.todo-review-head strong{ font-size:15px; color:var(--km-ink); }
+.todo-review-x{
+  background:none; border:none; font-size:22px; line-height:1; cursor:pointer;
+  color:var(--km-muted); padding:2px 6px; border-radius:8px;
+}
+.todo-review-x:hover{ background:rgba(17,20,15,.06); color:var(--km-ink); }
+.todo-review-body{ padding:18px 20px; display:flex; flex-direction:column; gap:12px; }
+.todo-review-title{ font-weight:800; font-size:14px; color:var(--km-ink); }
+.todo-review-desc{ font-size:13px; color:var(--km-muted); line-height:1.6; background:rgba(17,20,15,.03); border:1px solid var(--km-line); border-radius:12px; padding:10px 12px; }
+.todo-review-member{ font-size:12.5px; color:var(--km-muted); }
+.todo-review-linkrow{ display:flex; flex-wrap:wrap; gap:8px; }
+.todo-review-notelabel{ font-size:11.5px; font-weight:800; color:var(--km-muted); letter-spacing:.02em; margin-top:4px; }
+.todo-review-note{
+  width:100%; min-height:90px; resize:vertical; font-family:inherit; font-size:13px;
+  border:1px solid var(--km-line); border-radius:12px; padding:10px 12px; color:var(--km-ink);
+  background:#fff;
+}
+.todo-review-note:focus{ outline:2px solid rgba(184,138,61,.4); outline-offset:1px; }
+.todo-review-foot{
+  display:flex; justify-content:flex-end; gap:10px;
+  padding:16px 20px; border-top:1px solid var(--km-line);
+}
+
 /* Detail-box (grid label/value di panel detail member, mis. admin-activation.html) */
 .admin-detail-box{ background:#fff !important; border:1px solid var(--km-line) !important; border-radius:18px !important; }
 .admin-detail-box span{ color:var(--km-gold) !important; font-weight:900 !important; }

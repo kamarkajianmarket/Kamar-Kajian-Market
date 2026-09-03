@@ -707,6 +707,38 @@ function esc(s){
     renderApp();
   }
   document.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('[data-ksig-reveal]');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    toggleReveal(btn);
+  }, true);
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Enter' && e.key !== ' ') return;
+    var btn = e.target.closest && e.target.closest('[data-ksig-reveal]');
+    if(!btn) return;
+    e.stopPropagation();
+  }, true);
+  function toggleReveal(btn){
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if(!panel) return;
+    var willOpen = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    panel.setAttribute('aria-hidden', willOpen ? 'false' : 'true');
+    if(willOpen){
+      panel.classList.add('ksig-reveal-open');
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          panel.classList.remove('ksig-reveal-open');
+          panel.style.maxHeight = '0px';
+        });
+      });
+    }
+  }
+  document.addEventListener('click', function(e){
     var a = e.target.closest && e.target.closest('[data-ksig-nav]');
     if(!a) return;
     e.preventDefault();
@@ -1082,7 +1114,7 @@ function refreshCounts(){
     var unreadOnly = !!L.filters.unread;
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
-    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,tp1,invalidasi,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
+    var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,tp1,tp2,tp3,invalidasi,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
     q = (L.status === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', L.status).eq('is_archived', false);
     if(L.search){
       var s = L.search.replace(/[%,]/g,'');
@@ -1719,7 +1751,34 @@ if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('
         (info ? '<div class="ksig-row-info">'+info+'</div>' : '')+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
-      '<div class="ksig-row-chev" aria-hidden="true">›</div>'+
+      var rid = 'ksigRvl-'+String(s.id_zona).replace(/[^a-zA-Z0-9_-]/g,'_');
+    return '<div class="ksig-row ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
+      '<div class="ksig-row-main">'+
+        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
+        (info ? '<div class="ksig-row-info">'+info+'</div>' : '')+
+        '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
+      '</div>'+
+      '<button type="button" class="ksig-row-reveal-btn" data-ksig-reveal="'+esc(s.id_zona)+'" aria-expanded="false" aria-controls="'+rid+'" aria-label="Lihat detail tambahan">›</button>'+
+    '</div>'+
+    revealPanelHtml(s, rid);
+  }
+
+  function revealPanelHtml(s, rid){
+    var tpRows = [1,2,3].map(function(n){
+      var v = s['tp'+n];
+      return v!=null ? '<div class="ksig-reveal-tp"><span>TP'+n+'</span><strong>'+esc(fmtNum(v))+'</strong></div>' : '';
+    }).join('');
+    var clRow = s.invalidasi!=null ? '<div class="ksig-reveal-tp cl"><span>CL</span><strong>'+esc(fmtNum(s.invalidasi))+'</strong></div>' : '';
+    var pips = pipsOf(s);
+    var runningRow = (s.display_status==='aktif' && pips!=null) ? '<div class="ksig-reveal-row"><span>Running</span><strong class="'+(pips>=0?'pos':'neg')+'">'+(pips>=0?'+':'')+esc(fmtNum(pips,1))+' Pips</strong></div>' : '';
+    var updateRow = s.updated_at ? '<div class="ksig-reveal-row"><span>Update Terakhir</span><strong>'+esc(fmtWIB(s.updated_at))+'</strong></div>' : '';
+    var riskRow = s.is_critical_zone ? '<div class="ksig-reveal-risk">⚠ ZONA KRITIS — pantau ketat, pertimbangkan kurangi risiko lot</div>' : '';
+    return '<div class="ksig-reveal-panel" id="'+rid+'" data-ksig-reveal-panel="'+esc(s.id_zona)+'" role="region" aria-hidden="true">'+
+      '<div class="ksig-reveal-inner">'+
+        ((tpRows||clRow) ? '<div class="ksig-reveal-title">TARGET</div><div class="ksig-reveal-tpgrid">'+tpRows+clRow+'</div>' : '')+
+        runningRow+updateRow+riskRow+
+        '<div class="ksig-reveal-footer"><span class="ksig-reveal-id">'+esc(s.id_zona)+'</span><span class="ksig-reveal-cta" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">DETAIL SIGNAL →</span></div>'+
+      '</div>'+
     '</div>';
   }
 

@@ -1362,6 +1362,10 @@ overview card accent, recap tab dark-active, header icon mark.
     color:#EAFFF5 !important;
     border-color:#0e5f54 !important;
   }
+  .ksig-chip-zona, .ksig-chip-area{
+    background:rgba(244,246,248,.08) !important;
+    color:#B8C2CE !important;
+  }
 }
 
 @media (min-width:1024px){

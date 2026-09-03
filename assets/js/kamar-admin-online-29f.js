@@ -571,24 +571,31 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     var wrap = qs('#kamarTodoReviewModal29F');
     if(wrap) wrap.classList.remove('open');
   }
+  async function actionGenericRevise(todo){
+    var note = getReviewNote(todo.id);
+    var label = TODO_LABELS[todo.todo_type] || todo.todo_type;
+    await markTodoDone(todo.id, 'done');
+    notifyMemberForTodo(todo, label + ' Perlu Direvisi', (note || 'Admin meminta Anda memeriksa kembali pengajuan ini dan mengajukan ulang.'), { link:'dashboard.html', category:'revision' });
+    toast('Dikembalikan ke member untuk revisi.');
+  }
   function reviewActionButtons(todo){
     var actions = '<button class="btn secondary" type="button" data-review-close="1">Tutup</button>';
-    if(todo.todo_type === 'profile_change'){
+    if(todo.todo_type === 'profile_change'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_profile" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_profile" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'license_request'){
+    } else if(todo.todo_type === 'license_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_license" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_license" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'download_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_download" data-todo-id="'+esc(todo.id)+'">Tolak</button>'; actions += ' <button class="btn mini" type="button" data-todo-action="approve_download" data-todo-id="'+esc(todo.id)+'">Setujui</button>'; } else if(todo.todo_type === 'affiliate_payout_change'){
+    } else if(todo.todo_type === 'download_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>'; actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_download" data-todo-id="'+esc(todo.id)+'">Tolak</button>'; actions += ' <button class="btn mini" type="button" data-todo-action="approve_download" data-todo-id="'+esc(todo.id)+'">Setujui</button>'; } else if(todo.todo_type === 'affiliate_payout_change'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_payout" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'trial_request'){
+    } else if(todo.todo_type === 'trial_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_trial" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_trial" data-todo-id="'+esc(todo.id)+'">Setujui (24 Jam)</button>';
     } else if(todo.todo_type === 'ib_kamar_activation'){
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_ib_kamar" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_ib_kamar" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
-    } else if(todo.todo_type === 'facility_renewal_request'){
+    } else if(todo.todo_type === 'facility_renewal_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'new_registration'){
@@ -596,7 +603,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
       actions += ' <button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button>';
     
-    } else if(todo.todo_type === 'affiliate_activation_request'){
+    } else if(todo.todo_type === 'affiliate_activation_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_affiliate_activation" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_affiliate_activation" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
 } else {
@@ -670,7 +677,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     if(!btn) return;
     var action = btn.getAttribute('data-todo-action');
     var todoId = btn.getAttribute('data-todo-id');
-    if(action === 'revise_ib_kamar' && !getReviewNote(todoId)){
+    if((action === 'revise_ib_kamar' || action === 'revise_generic') && !getReviewNote(todoId)){
       toast('Isi catatan revisi dulu supaya member tahu apa yang perlu diperbaiki.');
       return;
     }
@@ -696,6 +703,7 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
       else if(action === 'approve_ib_kamar') await actionIbKamarApplication(todo, 'approve');
       else if(action === 'reject_ib_kamar') await actionIbKamarApplication(todo, 'reject');
       else if(action === 'revise_ib_kamar') await actionIbKamarApplication(todo, 'need_revision');
+      else if(action === 'revise_generic') await actionGenericRevise(todo);
       else if(action === 'approve_renewal') await actionFacilityRenewal(todo, true);
       else if(action === 'reject_renewal') await actionFacilityRenewal(todo, false);
       else if(action === 'approve_trial') await actionTrialRequest(todo, true);

@@ -1754,11 +1754,20 @@ if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('
       if(pips!=null) infoParts.push(ksigInfoChip(pips>=0?'ksig-chip-tp':'ksig-chip-cl',(pips>=0?'+':'')+fmtNum(pips,1)+' Pips'));
     }
     var info = infoParts.join('');
+    var resultLine = '';
+    if(s.display_status==='profit' || s.display_status==='loss'){
+      var rp = pipsOf(s);
+      if(rp!=null){
+        var rLabel = s.display_status==='profit' ? (s.farthest_tp_level ? 'TP'+s.farthest_tp_level+' TERCAPAI' : 'PROFIT') : 'CUT LOSS';
+        resultLine = '<div class="ksig-row-result '+s.display_status+'">'+esc(rLabel)+' • '+(rp>=0?'+':'')+esc(fmtNum(rp,1))+' Pips</div>';
+      }
+    }
     var rid = 'ksigRvl-'+String(s.id_zona).replace(/[^a-zA-Z0-9_-]/g,'_');
     return '<div class="ksig-row ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
         '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
         (info ? '<div class="ksig-row-info">'+info+'</div>' : '')+
+        resultLine+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
       '<button type="button" class="ksig-row-reveal-btn" data-ksig-reveal="'+esc(s.id_zona)+'" aria-expanded="false" aria-controls="'+rid+'" aria-label="Lihat detail tambahan">›</button>'+

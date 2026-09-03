@@ -1277,6 +1277,8 @@ overview card accent, recap tab dark-active, header icon mark.
     --ks-emerald-soft:rgba(66,180,140,.16) !important;
     --ks-gold-soft:rgba(198,170,114,.18) !important;
     --ks-danger-soft:rgba(229,110,105,.16) !important;
+    --ks-emerald:#34D399 !important;
+    --ks-danger:#F87171 !important;
     --ks-warning-soft:rgba(198,150,80,.18) !important;
     --km-line:rgba(244,246,248,.12) !important;
     --km-muted:#8E98A8 !important;
@@ -1303,6 +1305,8 @@ overview card accent, recap tab dark-active, header icon mark.
   }
   .ksig-guide-icon{ color:#C6AA72 !important; }
   .ksig-badge.fresh{ color:#D7B46D !important; }
+  .ksig-chip-tp{ background:rgba(66,180,140,.18) !important; color:#34D399 !important; font-weight:800 !important; }
+  .ksig-chip-cl{ background:rgba(229,110,105,.18) !important; color:#F87171 !important; font-weight:800 !important; }
 
   .ksig-row{
     background:#101720 !important;

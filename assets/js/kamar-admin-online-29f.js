@@ -656,7 +656,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
         '<small>Ubah jika mau kasih masa berlaku berbeda dari yang diajukan. Kosongkan untuk pakai durasi default.</small>'+
       '</div>';
     }
-    var NOTE_EDIT_TYPES = {'ib_kamar_activation':1};
+    var NOTE_EDIT_TYPES = {'ib_kamar_activation':1, 'profile_change':1, 'license_request':1, 'download_request':1, 'affiliate_payout_change':1, 'trial_request':1, 'facility_renewal_request':1, 'affiliate_activation_request':1};
     if(NOTE_EDIT_TYPES[todo.todo_type]){
       html += '<div class="kamar-review-duration">'+
         '<label for="kamarReviewNoteInput29F">Catatan Admin (tampil ke member)</label>'+

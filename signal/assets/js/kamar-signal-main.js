@@ -1627,7 +1627,7 @@ if(state.recap.type === type) renderRecapCard();
     order.forEach(function(k){ if(ordered.indexOf(k)===-1) ordered.push(k); });
     return ordered.map(function(k){
       return '<div class="ksig-tf-section">' +
-        '<div class="ksig-tf-header">'+esc(k)+'<span class="ksig-tf-count">'+groups[k].length+'</span></div>' +
+        '<div class="ksig-tf-header">'+esc(k)+' <span class="ksig-tf-count">• '+groups[k].length+' SIGNAL</span></div>' +
         groups[k].map(rowHtml).join('') +
         '</div>';
     }).join('');
@@ -1732,8 +1732,9 @@ if(state.recap.type === type) renderRecapCard();
       }
       return;
     }
-    var rowsHtml = (L.sort === 'timeframe') ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
-    var html = '<div class="ksig-list ksig-fade">' + rowsHtml + '</div>';
+    var isWideDesktop = window.innerWidth >= 1024;
+    var rowsHtml = (L.sort === 'timeframe' || isWideDesktop) ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
+    var html = '<div class="ksig-list ksig-fade' + (isWideDesktop ? ' ksig-board' : '') + '">' + rowsHtml + '</div>';
     if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');

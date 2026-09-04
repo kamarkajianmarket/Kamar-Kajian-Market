@@ -842,18 +842,25 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
         + '<small>'+esc(name)+' &middot; '+esc(t.description||'')+'</small>'
         + '<time>'+esc(fmtRelative(t.created_at))+'</time>'
         + '</a>'
-        + '<button type="button" class="kamar-notif-mark" data-mark-todo="'+esc(t.todo_id||t.id||'')+'">Tandai Selesai</button>'
+        + '<button type="button" class="kamar-notif-mark" data-mark-todo="'+esc(t.todo_id||t.id||'')+'">Tandai Baca</button>'
         + '</div>';
     }).join('');
     panel.querySelectorAll('[data-mark-todo]').forEach(function(b){
-      b.onclick = async function(ev){
+      b.onclick = function(ev){
         ev.preventDefault();
+        ev.stopPropagation();
+        // PENTING: lonceng notifikasi cuma menandai "sudah dibaca" di sisi client (seenIds/localStorage).
+        // Jalur ini TIDAK BOLEH memanggil fungsi update status admin_todos atau menyentuh todo_status -
+        // proses approve/reject/cascade ke tabel sumber (ib_kamar_applications, kamar_licenses, member_access,
+        // dll) cuma boleh lewat halaman TO DO Action Center yang pakai fungsi admin_review_* per tipe.
+        // Notifikasi dan TO DO sengaja dua jalur terpisah supaya notifikasi tidak pernah diam-diam
+        // "menyelesaikan" sebuah pengajuan tanpa benar-benar memprosesnya.
         var id = b.getAttribute('data-mark-todo');
-        try{
-          var c = await ready();
-          if(c){ await c.rpc('admin_update_todo_status', { target_todo_id: id, new_status: 'done', admin_note: null }); }
-          await loadNotifs();
-        }catch(e){ toast(window.kamarFriendlyError(e)); }
+        notifState.seenIds.add(String(id));
+        saveSeenIds(notifState.seenIds);
+        updateNotifBadge();
+        b.textContent = 'Sudah dibaca';
+        b.disabled = true;
       };
     });
   }

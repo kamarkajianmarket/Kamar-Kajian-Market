@@ -90,4 +90,4 @@
 .kamar-reveal-summary{ font-size:13px!important; font-weight:800!important; opacity:.85!important; }
 .kamar-reveal-arrow{ flex:0 0 auto!important; opacity:.55!important; transition:transform .2s ease!important; font-size:18px!important; line-height:1!important; }
 .kamar-reveal-head.open .kamar-reveal-arrow{ transform:rotate(90deg)!important; opacity:1!important; }
-.kamar-reveal-body{ max-height:0!important; overflow:hidden!important; transition:max-height .25s ease!important; }
+.kamar-reveal-body{ max-height:0; overflow:hidden!important; transition:max-height .25s ease!important; }

@@ -107,3 +107,26 @@ if(el.tagName==='BUTTON'||el.tagName==='INPUT'){ try{ el.disabled=false; }catch(
 }, 6000);
 }, true);
 })();
+
+
+// ==========================================================================
+// KAMAR CARD REVEAL v1 - generic click-to-expand for info/action cards.
+// Markup: <button type="button" class="kamar-reveal-head">...summary...<span class="kamar-reveal-arrow">&rsaquo;</span></button>
+// followed immediately by a sibling <div class="kamar-reveal-body">...detail...</div>.
+// Collapsed by default (CSS max-height:0). Each card toggles independently
+// (not mutually exclusive like the step-guide accordion above).
+// ==========================================================================
+(function(){
+if(window.__KAMAR_REVEAL_CARD__) return;
+window.__KAMAR_REVEAL_CARD__ = true;
+document.addEventListener('click', function(e){
+var h = e.target && e.target.closest ? e.target.closest('.kamar-reveal-head') : null;
+if(!h) return;
+var body = h.nextElementSibling;
+if(!body || !body.classList.contains('kamar-reveal-body')) return;
+var open = h.classList.contains('open');
+h.classList.toggle('open', !open);
+h.setAttribute('aria-expanded', !open);
+body.style.maxHeight = !open ? (body.scrollHeight + 'px') : null;
+});
+})();

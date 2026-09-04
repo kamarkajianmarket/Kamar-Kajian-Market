@@ -249,6 +249,8 @@ var suspendedNote = license.status!=='active' ? ('<div class="expired-note">Stat
 var titleSuffix = total>1 ? (' — Token '+(idx+1)+' dari '+total) : '';
 return '<div class="split-card"><span class="eyebrow">License Aktif</span><h2>License '+FACILITY_LABEL+titleSuffix+'</h2>'+
 suspendedNote+
+'<button type="button" class="kamar-reveal-head" aria-expanded="false"><span class="kamar-reveal-summary">'+accountStatusPill(license.status)+' &middot; Berlaku sampai '+esc(expiry)+'</span><span class="kamar-reveal-arrow">&rsaquo;</span></button>'+
+'<div class="kamar-reveal-body">'+
 '<div class="admin-detail-panel">'+
 '<div class="setting-card"><span>Status Akun License</span><strong>'+accountStatusPill(license.status)+'</strong></div>'+
 '<div class="setting-card"><span>Paket</span><strong>'+esc(license.license_type||'-')+'</strong></div>'+
@@ -257,7 +259,7 @@ suspendedNote+
 '<div class="setting-card"><span>Broker / Server</span><strong>'+esc(license.broker_name)+' &middot; '+esc(license.server_name)+'</strong></div>'+
 '<div class="setting-card"><span>Nomor Akun</span><strong>'+esc(license.account_id)+'</strong></div>'+
 '<div class="setting-card"><span>Disetujui Pada</span><strong>'+fmtDate(license.reviewed_at)+'</strong></div>'+
-'</div><p style="margin-top:12px;font-size:13px">Token ini hanya berlaku untuk akun/broker/server di atas — pasang di EA yang berjalan pada akun MT5 yang sama persis.</p></div>';
+'</div><p style="margin-top:12px;font-size:13px">Token ini hanya berlaku untuk akun/broker/server di atas — pasang di EA yang berjalan pada akun MT5 yang sama persis.</p></div></div>';
 }
 
 function bindTokenReveal(license, idx){
@@ -312,6 +314,8 @@ try{ navigator.clipboard.writeText(license.token||''); copyBtn.textContent='Ters
 async function historyCardHTMLv2(c, rows){
 var html = '<div class="split-card"><span class="eyebrow">Riwayat</span><h2>Riwayat Semua Pengajuan License</h2><p>Semua token yang pernah Anda ajukan untuk '+FACILITY_LABEL+', termasuk yang masih diproses, perlu revisi, atau ditolak, beserta nomor tokennya.</p>';
 if(!rows.length){ html += '<div class="admin-empty-state">Belum ada pengajuan license.</div>'; html += '</div>'; return html; }
+html += '<button type="button" class="kamar-reveal-head" aria-expanded="false"><span class="kamar-reveal-summary">'+rows.length+' pengajuan sebelumnya</span><span class="kamar-reveal-arrow">&rsaquo;</span></button>';
+html += '<div class="kamar-reveal-body">';
 html += rows.map(function(r, idx){
 var tok = r.token ? ('<span id="licHistTokenMasked_'+idx+'">'+esc(maskToken(r.token))+'</span> <button type="button" class="btn mini secondary" data-hist-reveal="'+idx+'">Reveal</button> <button type="button" class="btn mini secondary" data-hist-copy="'+idx+'">Copy</button>') : '-';
 return '<div class="setting-card" style="margin-bottom:10px"><span>Diajukan '+fmtDate(r.requested_at)+'</span>'+
@@ -322,6 +326,7 @@ return '<div class="setting-card" style="margin-bottom:10px"><span>Diajukan '+fm
 (r.admin_note?('<small style="display:block;margin-top:4px">Catatan Admin: '+esc(r.admin_note)+'</small>'):'')+
 '</div>';
 }).join('');
+html += '</div>';
 html += '</div>';
 return html;
 }

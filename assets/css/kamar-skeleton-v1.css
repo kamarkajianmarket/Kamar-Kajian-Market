@@ -67,3 +67,27 @@
 @media (prefers-reduced-motion: reduce){
   .kamar-skel-gate::after{ animation:none; }
 }
+
+/* ==========================================================================
+   KAMAR CARD REVEAL v1
+   Generic, unscoped click-to-expand for info/action cards (works on ANY
+   page/viewport, no body-class or media-query needed -- same convention
+   as .kamar-skel-gate above). Pair with the click-delegate toggle in
+   kamar-ui.js (KAMAR_REVEAL_CARD block).
+   Markup: <button type="button" class="kamar-reveal-head">
+             <span class="kamar-reveal-summary">...closed-state summary...</span>
+             <span class="kamar-reveal-arrow">&rsaquo;</span>
+           </button>
+           <div class="kamar-reveal-body">...full detail...</div>
+   Collapsed (max-height:0) by default. Each card toggles independently.
+   ========================================================================== */
+.kamar-reveal-head{
+  display:flex!important; align-items:center!important; justify-content:space-between!important;
+  gap:12px!important; width:100%!important; text-align:left!important; background:none!important;
+  border:0!important; cursor:pointer!important; font:inherit!important; padding:10px 0!important;
+  margin-top:4px!important;
+}
+.kamar-reveal-summary{ font-size:13px!important; font-weight:800!important; opacity:.85!important; }
+.kamar-reveal-arrow{ flex:0 0 auto!important; opacity:.55!important; transition:transform .2s ease!important; font-size:18px!important; line-height:1!important; }
+.kamar-reveal-head.open .kamar-reveal-arrow{ transform:rotate(90deg)!important; opacity:1!important; }
+.kamar-reveal-body{ max-height:0!important; overflow:hidden!important; transition:max-height .25s ease!important; }

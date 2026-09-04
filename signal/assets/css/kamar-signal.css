@@ -632,6 +632,8 @@ html,body{ height:100%; }
   .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:16px; }
   .ksig-list.ksig-board .ksig-tf-section{ margin-bottom:0; min-width:0; }
 }
+.ksig-list.ksig-board .ksig-info-chip{ white-space:normal; min-width:0; max-width:100%; word-break:break-word; }
+.ksig-list.ksig-board .ksig-row-symbol{ word-break:break-word; }
 
 /* ---------- Filter sheet ---------- */
 .ksig-sheet-backdrop{ position:fixed; inset:0; background:rgba(17,20,23,.42); z-index:60; display:flex; align-items:flex-end; }

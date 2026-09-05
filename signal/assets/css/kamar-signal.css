@@ -618,29 +618,10 @@ html,body{ height:100%; }
 
 /* ---------- Pagination / load more ---------- */.ksig-loadmore{ margin-top:12px; }
 
-/* ---------- Section timeframe (M1/M5/M15/M30/H1/H4/Daily) ---------- */
-.ksig-tf-section{ margin-bottom:4px; display:flex; flex-direction:column; gap:8px; }
-.ksig-tf-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 4px 6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--km-muted); }
-.ksig-tf-count{ font-weight:700; color:var(--km-muted); opacity:.7; text-transform:none; letter-spacing:0; }
-.ksig-tf-pager{ display:flex; align-items:center; justify-content:center; gap:10px; padding:10px 4px 2px; }
-.ksig-tf-pager-btn{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:999px; border:1px solid var(--km-line); background:transparent; color:var(--km-ink); font-size:15px; line-height:1; cursor:pointer; transition:border-color .15s ease, color .15s ease; }
-.ksig-tf-pager-btn:hover:not(:disabled){ border-color:var(--km-gold); color:var(--km-gold); }
-.ksig-tf-pager-btn:disabled{ opacity:.3; cursor:default; }
-.ksig-tf-pager-info{ font-size:11px; font-weight:700; color:var(--km-muted); min-width:36px; text-align:center; }
-
-/* ---------- Timeframe Board (desktop-wide lane presentation, additive, presentation-only) ---------- */
-@media (min-width:1360px){
-  .ksig-main{ max-width:1360px; }
-  .ksig-appbar-inner, .ksig-header-row{ max-width:1360px; }
-  .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(4,minmax(300px,1fr)); align-items:start; gap:16px; }
-  .ksig-list.ksig-board .ksig-tf-section{ margin-bottom:0; min-width:0; }
+/* ---------- Signal list: flat 3-column grid (desktop, replaces old Timeframe Board) ---------- */
+@media (min-width:1024px){
+  #ksigListBody .ksig-list{ display:grid; grid-template-columns:repeat(3,minmax(280px,1fr)); align-items:start; gap:16px; }
 }
-@media (min-width:1024px) and (max-width:1359px){
-  .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(2,minmax(300px,1fr)); align-items:start; gap:16px; }
-  .ksig-list.ksig-board .ksig-tf-section{ margin-bottom:0; min-width:0; }
-}
-.ksig-list.ksig-board .ksig-info-chip{ white-space:normal; min-width:0; max-width:100%; word-break:break-word; }
-.ksig-list.ksig-board .ksig-row-symbol{ word-break:break-word; }
 
 /* ---------- Filter sheet ---------- */
 .ksig-sheet-backdrop{ position:fixed; inset:0; background:rgba(17,20,23,.42); z-index:60; display:flex; align-items:flex-end; }

@@ -1116,7 +1116,7 @@ function refreshCounts(){
 
   function loadList(reset){
     var L = state.list;
-    if(reset){ L.page = 0; L.items = []; L.hasMore = true; L.tfPage = {}; }
+    if(reset){ L.page = 0; L.items = []; L.hasMore = true; L.tfBoardPage = 0; }
     if(L.loading || (!L.hasMore && !reset)) return Promise.resolve();
     L.loading = true;
     renderApp();
@@ -1615,7 +1615,7 @@ if(state.recap.type === type) renderRecapCard();
   /* ---------------- signal list ---------------- */
   var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss', archive:'Arsip Signal' };
 
-  var TIMEFRAME_ORDER = ['M1','M5','M15','M30','H1','H4','Daily'];
+    var TIMEFRAME_ORDER = ['M1','M5','M15','M30','H1','H4','Daily'];
   var TF_PAGE_SIZE = 5;
   function groupedRowsHtml(items){
     var groups = {}; var order = [];
@@ -1626,36 +1626,39 @@ if(state.recap.type === type) renderRecapCard();
     });
     var ordered = TIMEFRAME_ORDER.filter(function(k){ return groups[k]; });
     order.forEach(function(k){ if(ordered.indexOf(k)===-1) ordered.push(k); });
-    if(!state.list.tfPage) state.list.tfPage = {};
+    var totalPages = 1;
+    ordered.forEach(function(k){ totalPages = Math.max(totalPages, Math.ceil(groups[k].length / TF_PAGE_SIZE)); });
+    var curPage = state.list.tfBoardPage || 0;
+    if(curPage > totalPages-1) curPage = totalPages-1;
+    if(curPage < 0) curPage = 0;
+    state.list.tfBoardPage = curPage;
+    state.list.tfBoardTotalPages = totalPages;
     return ordered.map(function(k){
       var rows = groups[k];
-      var totalPages = Math.max(1, Math.ceil(rows.length / TF_PAGE_SIZE));
-      var curPage = state.list.tfPage[k] || 0;
-      if(curPage > totalPages-1) curPage = totalPages-1;
-      if(curPage < 0) curPage = 0;
-      state.list.tfPage[k] = curPage;
       var visible = rows.slice(curPage*TF_PAGE_SIZE, curPage*TF_PAGE_SIZE + TF_PAGE_SIZE);
-      var pagerHtml = '';
-      if(totalPages > 1){
-        pagerHtml = '<div class="ksig-tf-pager">' +
-          '<button type="button" class="ksig-tf-pager-btn" data-tf-page-prev="'+esc(k)+'"'+(curPage<=0?' disabled':'')+' aria-label="Halaman sebelumnya">‹</button>' +
-          '<span class="ksig-tf-pager-info">'+(curPage+1)+' / '+totalPages+'</span>' +
-          '<button type="button" class="ksig-tf-pager-btn" data-tf-page-next="'+esc(k)+'"'+(curPage>=totalPages-1?' disabled':'')+' aria-label="Halaman berikutnya">›</button>' +
-        '</div>';
-      }
+      var body = visible.length ? visible.map(rowHtml).join('') : '<div class="ksig-tf-empty">—</div>';
       return '<div class="ksig-tf-section">' +
         '<div class="ksig-tf-header">'+esc(k)+' <span class="ksig-tf-count">• '+rows.length+' SIGNAL</span></div>' +
-        visible.map(rowHtml).join('') +
-        pagerHtml +
+        body +
         '</div>';
     }).join('');
+  }
+  function boardPagerHtml(){
+    var totalPages = state.list.tfBoardTotalPages || 1;
+    if(totalPages <= 1) return '';
+    var curPage = state.list.tfBoardPage || 0;
+    return '<div class="ksig-tf-pager ksig-board-pager">' +
+      '<button type="button" class="ksig-tf-pager-btn" data-board-page-prev aria-label="Halaman sebelumnya"'+(curPage<=0?' disabled':'')+'>‹</button>' +
+      '<span class="ksig-tf-pager-info">'+(curPage+1)+' / '+totalPages+'</span>' +
+      '<button type="button" class="ksig-tf-pager-btn" data-board-page-next aria-label="Halaman berikutnya"'+(curPage>=totalPages-1?' disabled':'')+'>›</button>' +
+    '</div>';
   }
 
   function renderList(){
     var L = state.list;
     var isStatusChange = L.status !== L.loadedForStatus && !L.loading;
     if(isStatusChange){
-      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null; L.scrollY = 0; L.tfPage = {};
+      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null; L.scrollY = 0; L.tfBoardPage = 0;
     }
     var isFirstLoad = !L.loaded && !L.loading && !L.error;
     var restoreScroll = !isFirstLoad && !isStatusChange && L.scrollY;
@@ -1751,59 +1754,57 @@ if(state.recap.type === type) renderRecapCard();
       return;
     }
     var isWideDesktop = window.innerWidth >= 1024;
-    var rowsHtml = (L.sort === 'timeframe' || isWideDesktop) ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
-    var html = '<div class="ksig-list ksig-fade' + (isWideDesktop ? ' ksig-board' : '') + '">' + rowsHtml + '</div>';
+    var grouped = (L.sort === 'timeframe' || isWideDesktop);
+    var rowsHtml = grouped ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
+    var html = '<div class="ksig-list ksig-fade' + (isWideDesktop ? ' ksig-board' : '') + '">' + rowsHtml + '</div>' + (grouped ? boardPagerHtml() : '');
     if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');
     if(lm) lm.addEventListener('click', function(){ loadList(false); });
-    body.querySelectorAll('[data-tf-page-prev]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var k = btn.getAttribute('data-tf-page-prev');
-        var cur = state.list.tfPage[k] || 0;
-        state.list.tfPage[k] = Math.max(0, cur - 1);
-        renderListBody();
-      });
+    var prevBtn = body.querySelector('[data-board-page-prev]');
+    if(prevBtn) prevBtn.addEventListener('click', function(){
+      state.list.tfBoardPage = Math.max(0, (state.list.tfBoardPage||0) - 1);
+      renderListBody();
     });
-    body.querySelectorAll('[data-tf-page-next]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var k = btn.getAttribute('data-tf-page-next');
-        var cur = state.list.tfPage[k] || 0;
-        state.list.tfPage[k] = cur + 1;
-        renderListBody();
-      });
+    var nextBtn = body.querySelector('[data-board-page-next]');
+    if(nextBtn) nextBtn.addEventListener('click', function(){
+      state.list.tfBoardPage = (state.list.tfBoardPage||0) + 1;
+      renderListBody();
     });
   }
   function ksigInfoChip(cls, text){ return '<span class="ksig-info-chip '+cls+'">'+esc(text)+'</span>'; }
 function rowHtml(s){
     var unread = state.readsLoaded && isUnread(s.id_zona, s.updated_at);
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
-    var infoParts = [];
-    if(s.jenis_zona) infoParts.push(ksigInfoChip('ksig-chip-zona', s.jenis_zona));
-    if(s.area_low!=null && s.area_high!=null) infoParts.push(ksigInfoChip('ksig-chip-area','Area '+fmtNum(s.area_low)+' – '+fmtNum(s.area_high)));
-    if(s.area_low!=null && s.area_high!=null) infoParts.push(ksigInfoChip('ksig-chip-area', fmtNum(Math.abs(s.area_high-s.area_low)*10,1)+' Pips'));
-    var tpVals = [s.tp1,s.tp2,s.tp3].filter(function(v){ return v!=null; }).map(function(v){ return fmtNum(v); });
-if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('/')));
-    if(s.invalidasi!=null) infoParts.push(ksigInfoChip('ksig-chip-cl','CL '+fmtNum(s.invalidasi)));
-    if(s.display_status!=='fresh'){
-      var pips = pipsOf(s);
-      if(pips!=null) infoParts.push(ksigInfoChip(pips>=0?'ksig-chip-tp':'ksig-chip-cl',(pips>=0?'+':'')+fmtNum(pips,1)+' Pips'));
-    }
-    var info = infoParts.join('');
-    var resultLine = '';
-    if(s.display_status==='profit' || s.display_status==='loss'){
-      var rp = pipsOf(s);
-      if(rp!=null){
-        var rLabel = s.display_status==='profit' ? (s.farthest_tp_level ? 'TP'+s.farthest_tp_level+' TERCAPAI' : 'PROFIT') : 'CUT LOSS';
-        resultLine = '<div class="ksig-row-result '+s.display_status+'">'+esc(rLabel)+' • '+(rp>=0?'+':'')+esc(fmtNum(rp,1))+' Pips</div>';
-      }
+    var zonePips = (s.area_low!=null && s.area_high!=null) ? fmtNum(Math.abs(s.area_high-s.area_low)*10,1) : null;
+    var tpCells = [1,2,3].map(function(n){
+      var v = s['tp'+n];
+      return '<div class="ksig-xc-cell'+(v==null?' empty':'')+'"><span class="ksig-xc-sub">TP'+n+'</span><strong>'+(v!=null?esc(fmtNum(v)):'—')+'</strong></div>';
+    }).join('');
+    var pips = pipsOf(s);
+    var runResultHtml = '';
+    if(s.display_status==='aktif' && pips!=null){
+      runResultHtml = '<div class="ksig-xc-row ksig-xc-running"><span>RUNNING</span><strong class="'+(pips>=0?'pos':'neg')+'">'+(pips>=0?'+':'')+esc(fmtNum(pips,1))+' Pips</strong></div>';
+    } else if((s.display_status==='profit' || s.display_status==='loss') && pips!=null){
+      var rLabel = s.display_status==='profit' ? (s.farthest_tp_level ? 'TP'+s.farthest_tp_level+' TERCAPAI' : 'PROFIT') : 'CUT LOSS';
+      runResultHtml = '<div class="ksig-xc-block ksig-xc-result '+s.display_status+'"><div class="ksig-xc-label">RESULT</div><div class="ksig-xc-resultval">'+esc(rLabel)+' <strong class="'+(pips>=0?'pos':'neg')+'">'+(pips>=0?'+':'')+esc(fmtNum(pips,1))+' Pips</strong></div></div>';
     }
     var rid = 'ksigRvl-'+String(s.id_zona).replace(/[^a-zA-Z0-9_-]/g,'_');
-    return '<div class="ksig-row ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
+    return '<div class="ksig-row ksig-xc ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
-        '<div class="ksig-row-top"><span class="ksig-row-symbol">'+esc(s.pair)+'</span><span class="ksig-row-tf">'+esc(s.timeframe||'-')+'</span><span class="ksig-badge '+dirBadge+'">'+esc(s.skenario||'-')+'</span><span class="ksig-badge '+s.display_status+'">'+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</span>'+(s.is_critical_zone?'<span class="ksig-badge critical">CRITICAL</span>':'')+(unread?'<span class="ksig-new-badge">NEW</span>':'')+'</div>'+
-        (info ? '<div class="ksig-row-info">'+info+'</div>' : '')+
-        resultLine+
+        '<div class="ksig-xc-pairline"><span class="ksig-xc-pair">'+esc(s.pair||'-')+'</span>'+(unread?'<span class="ksig-new-badge">NEW</span>':'')+(s.is_critical_zone?'<span class="ksig-badge critical">⚠ CRITICAL</span>':'')+'</div>'+
+        '<div class="ksig-xc-meta">'+esc(s.timeframe||'-')+' • <span class="'+dirBadge+'">'+esc(s.skenario||'-')+'</span> SIGNAL '+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</div>'+
+        '<div class="ksig-xc-zone">'+(s.jenis_zona?esc(s.jenis_zona):'—')+'</div>'+
+        '<div class="ksig-xc-block"><div class="ksig-xc-label">ENTRY AREA</div><div class="ksig-xc-entrygrid">'+
+          '<div class="ksig-xc-cell"><span class="ksig-xc-sub">FROM</span><strong>'+(s.area_low!=null?esc(fmtNum(s.area_low)):'—')+'</strong></div>'+
+          '<div class="ksig-xc-cell"><span class="ksig-xc-sub">TO</span><strong>'+(s.area_high!=null?esc(fmtNum(s.area_high)):'—')+'</strong></div>'+
+        '</div></div>'+
+        '<div class="ksig-xc-row"><span>ZONE SIZE</span><strong>'+(zonePips!=null?esc(zonePips)+' Pips':'—')+'</strong></div>'+
+        runResultHtml+
+        '<div class="ksig-xc-divider"></div>'+
+        '<div class="ksig-xc-block"><div class="ksig-xc-label">TARGET LEVELS</div><div class="ksig-xc-tpgrid">'+tpCells+'</div></div>'+
+        '<div class="ksig-xc-divider"></div>'+
+        '<div class="ksig-xc-row ksig-xc-cl"><span>CUT LOSS</span><strong>'+(s.invalidasi!=null?esc(fmtNum(s.invalidasi)):'—')+'</strong></div>'+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
       '<button type="button" class="ksig-row-reveal-btn" data-ksig-reveal="'+esc(s.id_zona)+'" aria-expanded="false" aria-controls="'+rid+'" aria-label="Lihat detail tambahan">›</button>'+
@@ -1812,18 +1813,12 @@ if(tpVals.length) infoParts.push(ksigInfoChip('ksig-chip-tp','TP '+tpVals.join('
   }
 
   function revealPanelHtml(s, rid){
-    var tpRows = [1,2,3].map(function(n){
-      var v = s['tp'+n];
-      return v!=null ? '<div class="ksig-reveal-tp"><span>TP'+n+'</span><strong>'+esc(fmtNum(v))+'</strong></div>' : '';
-    }).join('');
-    var clRow = s.invalidasi!=null ? '<div class="ksig-reveal-tp cl"><span>CL</span><strong>'+esc(fmtNum(s.invalidasi))+'</strong></div>' : '';
     var pips = pipsOf(s);
     var runningRow = (s.display_status==='aktif' && pips!=null) ? '<div class="ksig-reveal-row"><span>Running</span><strong class="'+(pips>=0?'pos':'neg')+'">'+(pips>=0?'+':'')+esc(fmtNum(pips,1))+' Pips</strong></div>' : '';
     var updateRow = s.updated_at ? '<div class="ksig-reveal-row"><span>Update Terakhir</span><strong>'+esc(fmtWIB(s.updated_at))+'</strong></div>' : '';
     var riskRow = s.is_critical_zone ? '<div class="ksig-reveal-risk">⚠ ZONA KRITIS — pantau ketat, pertimbangkan kurangi risiko lot</div>' : '';
     return '<div class="ksig-reveal-panel" id="'+rid+'" data-ksig-reveal-panel="'+esc(s.id_zona)+'" role="region" aria-hidden="true">'+
       '<div class="ksig-reveal-inner">'+
-        ((tpRows||clRow) ? '<div class="ksig-reveal-title">TARGET</div><div class="ksig-reveal-tpgrid">'+tpRows+clRow+'</div>' : '')+
         runningRow+updateRow+riskRow+
         '<div class="ksig-reveal-footer"><span class="ksig-reveal-id">'+esc(s.id_zona)+'</span><span class="ksig-reveal-cta" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">DETAIL SIGNAL →</span></div>'+
       '</div>'+

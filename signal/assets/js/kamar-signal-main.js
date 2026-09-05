@@ -1155,7 +1155,7 @@ function refreshCounts(){
       L.loading = false;
       L.error = null;
       L.loaded = true;
-      L.loadedForStatus = L.status; var isWideDesktopChain = window.innerWidth >= 1024; var groupedChain = (L.sort === 'timeframe' || isWideDesktopChain); if(groupedChain && L.hasMore && !unreadOnly && L.items.length < 500){ return loadList(false); } L.boardFullyLoaded = true;
+      L.loadedForStatus = L.status; L.boardFullyLoaded = true;
       renderApp();
     }).catch(function(err){
       L.loading = false; L.error = 'Data belum dapat dimuat.';
@@ -1756,11 +1756,9 @@ if(state.recap.type === type) renderRecapCard();
       }
       return;
     }
-    var isWideDesktop = window.innerWidth >= 1024;
-    var grouped = (L.sort === 'timeframe' || isWideDesktop);
-    var rowsHtml = grouped ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
-    var html = '<div class="ksig-list ksig-fade' + (isWideDesktop ? ' ksig-board' : '') + '">' + rowsHtml + '</div>' + (grouped ? boardPagerHtml() : '');
-    if(L.hasMore && (!grouped || L.boardFullyLoaded)) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
+    var rowsHtml = L.items.map(rowHtml).join('');
+    var html = '<div class="ksig-list ksig-fade">' + rowsHtml + '</div>';
+    if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');
     if(lm) lm.addEventListener('click', function(){ loadList(false); });
@@ -1875,7 +1873,7 @@ function rowHtml(s){
 
   function openSortSheet(){
     var L = state.list;
-    var options = [ ['terbaru','Terbaru'], ['terlama','Terlama'], ['update','Update Terbaru'], ['pips','Pips Terbesar'], ['timeframe','Berdasarkan Timeframe'] ];
+    var options = [ ['terbaru','Terbaru'], ['terlama','Terlama'], ['update','Update Terbaru'], ['pips','Pips Terbesar'] ];
     var wrap = document.createElement('div');
     wrap.className = 'ksig-sheet-backdrop';
     wrap.innerHTML = '<div class="ksig-sheet"><div class="ksig-sheet-handle"></div><div class="ksig-sheet-title">Urutkan</div><div class="ksig-chip-row">'+

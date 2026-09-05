@@ -1793,7 +1793,7 @@ function rowHtml(s){
     return '<div class="ksig-row ksig-xc ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(s.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
         '<div class="ksig-xc-pairline"><span class="ksig-xc-pair">'+esc(s.pair||'-')+'</span>'+(unread?'<span class="ksig-new-badge">NEW</span>':'')+(s.is_critical_zone?'<span class="ksig-badge critical">⚠ CRITICAL</span>':'')+'</div>'+
-        '<div class="ksig-xc-meta">'+esc(s.timeframe||'-')+' • <span class="'+dirBadge+'">'+esc(s.skenario||'-')+'</span> SIGNAL '+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</div>'+
+        '<div class="ksig-xc-meta">'+esc(s.timeframe||'-')+' • <span class="'+dirBadge+'">'+esc(s.skenario||'-')+'</span> '+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</div>'+
         '<div class="ksig-xc-zone">'+(s.jenis_zona?esc(s.jenis_zona):'—')+'</div>'+
         '<div class="ksig-xc-block"><div class="ksig-xc-label">ENTRY AREA</div><div class="ksig-xc-entrygrid">'+
           '<div class="ksig-xc-cell"><span class="ksig-xc-sub">FROM</span><strong>'+(s.area_low!=null?esc(fmtNum(s.area_low)):'—')+'</strong></div>'+

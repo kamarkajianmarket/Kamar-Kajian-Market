@@ -1622,10 +1622,10 @@ overview card accent, recap tab dark-active, header icon mark.
 /* Microinteraction gloss: hover lift + border lighten + chevron shift (Executive Card master prompt S) */
 /* Reuse homepage interaction DNA: --mx/--my cursor-follow gloss sudah aktif via .ksig-pointer-light (lihat fix bindPointerLight di kamar-signal-main.js). Ini menambah lift/border/chevron, restrained (bukan neon/tilt/giant glow). */
 @media (hover:hover) and (pointer:fine){
-  .ksig-xc:hover{ transform:translateY(-2px); box-shadow:var(--km-shadow); border-color:rgba(184,138,61,.32); }
-  .ksig-xc:hover .ksig-row-reveal-btn{ background:rgba(244,246,248,.07); margin-left:2px; }
+  .ksig-xc:hover{ transform:translateY(-2px); }
+  .ksig-xc:hover .ksig-row-reveal-btn{ margin-left:2px; }
 }
 @media (prefers-reduced-motion: reduce){
-  .ksig-xc:hover{ transform:none; box-shadow:none; }
+  .ksig-xc:hover{ transform:none; }
   .ksig-xc:hover .ksig-row-reveal-btn{ margin-left:0; }
 }

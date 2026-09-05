@@ -629,12 +629,12 @@ html,body{ height:100%; }
 .ksig-tf-pager-info{ font-size:11px; font-weight:700; color:var(--km-muted); min-width:36px; text-align:center; }
 
 /* ---------- Timeframe Board (desktop-wide lane presentation, additive, presentation-only) ---------- */
-@media (min-width:1280px){
-  .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); align-items:start; gap:16px; }
+@media (min-width:1360px){
+  .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(4,minmax(300px,1fr)); align-items:start; gap:16px; }
   .ksig-list.ksig-board .ksig-tf-section{ margin-bottom:0; min-width:0; }
 }
-@media (min-width:1024px) and (max-width:1279px){
-  .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:16px; }
+@media (min-width:1024px) and (max-width:1359px){
+  .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(2,minmax(300px,1fr)); align-items:start; gap:16px; }
   .ksig-list.ksig-board .ksig-tf-section{ margin-bottom:0; min-width:0; }
 }
 .ksig-list.ksig-board .ksig-info-chip{ white-space:normal; min-width:0; max-width:100%; word-break:break-word; }
@@ -1588,15 +1588,15 @@ overview card accent, recap tab dark-active, header icon mark.
 .ksig-xc-zone{ font-size:11px; color:var(--km-gold); font-weight:800; text-transform:uppercase; letter-spacing:.4px; }
 .ksig-xc-block{ margin-top:2px; }
 .ksig-xc-label{ font-size:10px; font-weight:900; color:var(--km-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
-.ksig-xc-entrygrid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-.ksig-xc-tpgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
-.ksig-xc-cell{ display:flex; flex-direction:column; gap:2px; padding:6px 8px; border:1px solid var(--km-line); border-radius:10px; min-width:0; overflow:hidden; }
-.ksig-xc-cell strong{ min-width:0; overflow-wrap:break-word; word-break:break-word; }
-.ksig-xc-tpgrid strong{ font-size:11.5px; line-height:1.25; }
-.ksig-xc-entrygrid strong{ font-size:12.5px; }
+.ksig-xc-entrygrid{ display:grid; grid-template-columns:repeat(2, minmax(96px, 1fr)); gap:8px; }
+.ksig-xc-tpgrid{ display:grid; grid-template-columns:repeat(3, minmax(84px, 1fr)); gap:6px; }
+.ksig-xc-cell{ display:flex; flex-direction:column; gap:2px; padding:6px 8px; border:1px solid var(--km-line); border-radius:10px; }
+.ksig-xc-cell strong{ white-space:nowrap; }
+.ksig-xc-tpgrid strong{ font-size:11px; line-height:1.25; }
+.ksig-xc-entrygrid strong{ font-size:12px; }
 .ksig-xc-cell.empty strong{ color:var(--km-muted); }
 .ksig-xc-sub{ font-size:9px; color:var(--km-muted); font-weight:800; text-transform:uppercase; letter-spacing:.4px; }
-.ksig-xc-cell strong, .ksig-xc-row strong{ font-variant-numeric:tabular-nums; font-size:13px; font-weight:900; color:var(--km-ink); }
+.ksig-xc-cell strong, .ksig-xc-row strong{ font-variant-numeric:tabular-nums; font-size:13px; font-weight:900; color:var(--km-ink); white-space:nowrap; flex-shrink:0; }
 .ksig-xc-tpgrid strong{ color:var(--ks-emerald); }
 .ksig-xc-tpgrid .empty strong{ color:var(--km-muted); }
 .ksig-xc-row{ display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--km-muted); font-weight:700; text-transform:uppercase; letter-spacing:.3px; }

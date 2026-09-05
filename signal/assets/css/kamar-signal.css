@@ -622,6 +622,11 @@ html,body{ height:100%; }
 .ksig-tf-section{ margin-bottom:4px; }
 .ksig-tf-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 4px 6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--km-muted); }
 .ksig-tf-count{ font-weight:700; color:var(--km-muted); opacity:.7; text-transform:none; letter-spacing:0; }
+.ksig-tf-pager{ display:flex; align-items:center; justify-content:center; gap:10px; padding:10px 4px 2px; }
+.ksig-tf-pager-btn{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:999px; border:1px solid var(--km-line); background:transparent; color:var(--km-ink); font-size:15px; line-height:1; cursor:pointer; transition:border-color .15s ease, color .15s ease; }
+.ksig-tf-pager-btn:hover:not(:disabled){ border-color:var(--km-gold); color:var(--km-gold); }
+.ksig-tf-pager-btn:disabled{ opacity:.3; cursor:default; }
+.ksig-tf-pager-info{ font-size:11px; font-weight:700; color:var(--km-muted); min-width:36px; text-align:center; }
 
 /* ---------- Timeframe Board (desktop-wide lane presentation, additive, presentation-only) ---------- */
 @media (min-width:1280px){

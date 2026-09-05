@@ -1618,7 +1618,7 @@ if(state.recap.type === type) renderRecapCard();
   var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss', archive:'Arsip Signal' };
 
     var TIMEFRAME_ORDER = ['M1','M5','M15','M30','H1','H4','Daily'];
-  var TF_PAGE_SIZE = 5;
+  var TF_PAGE_SIZE = 3;
   function groupedRowsHtml(items){
     var groups = {}; var order = [];
     items.forEach(function(s){

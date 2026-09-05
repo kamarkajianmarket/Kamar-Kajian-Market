@@ -1184,7 +1184,7 @@ renderApp();
 var b = wibNowBoundaries();
 var startIso = b.today;
 var endIso = new Date(new Date(b.today).getTime() + 86400000).toISOString();
-return state.client.from('signals').select('timeframe,skenario,display_status,result_point,max_running_point,created_at')
+return state.client.from('signals').select('timeframe,skenario,display_status,status,farthest_tp_level,running_point,max_running_point,created_at')
 .gte('created_at', startIso).lt('created_at', endIso).limit(5000)
 .then(function(res){
 if(res.error) throw res.error;
@@ -1196,8 +1196,8 @@ if(!map[tf]) map[tf] = { pair:'XAUUSD', timeframe:tf, period_start_wib:startIso,
 var g = map[tf];
 g.total_signal += 1;
 if(r.skenario==='BUY') g.total_buy += 1; else if(r.skenario==='SELL') g.total_sell += 1;
-if(r.display_status==='profit'){ g.total_profit += 1; g.total_pips += Number(r.result_point||0); }
-else if(r.display_status==='loss'){ g.total_loss += 1; g.total_pips += Number(r.result_point||0); }
+if(r.display_status==='profit'){ g.total_profit += 1; g.total_pips += Number(pipsOf(r)||0); }
+else if(r.display_status==='loss'){ g.total_loss += 1; g.total_pips += Number(pipsOf(r)||0); }
 else { g.total_open += 1; }
 });
 R.rows = Object.keys(map).map(function(k){ return map[k]; });
@@ -2085,7 +2085,7 @@ var R = state.recap;
 R.loading = true; R.error = null;
 renderRecapCard();
 // REBUILD 2026-09-06: live dari signals (bukan signal_recaps/EA), rentang [startIso, endIso).
-return state.client.from('signals').select('timeframe,skenario,display_status,result_point,max_running_point,created_at')
+return state.client.from('signals').select('timeframe,skenario,display_status,status,farthest_tp_level,running_point,max_running_point,created_at')
 .gte('created_at', startIso).lt('created_at', endIso).limit(5000)
 .then(function(res){
 if(res.error) throw res.error;
@@ -2097,8 +2097,8 @@ if(!map[tf]) map[tf] = { pair:'XAUUSD', timeframe:tf, period_start_wib:startIso,
 var g = map[tf];
 g.total_signal += 1;
 if(r.skenario==='BUY') g.total_buy += 1; else if(r.skenario==='SELL') g.total_sell += 1;
-if(r.display_status==='profit'){ g.total_profit += 1; g.total_pips += Number(r.result_point||0); }
-else if(r.display_status==='loss'){ g.total_loss += 1; g.total_pips += Number(r.result_point||0); }
+if(r.display_status==='profit'){ g.total_profit += 1; g.total_pips += Number(pipsOf(r)||0); }
+else if(r.display_status==='loss'){ g.total_loss += 1; g.total_pips += Number(pipsOf(r)||0); }
 else { g.total_open += 1; }
 });
 R.rows = Object.keys(map).map(function(k){ return map[k]; });

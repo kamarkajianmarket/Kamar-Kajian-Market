@@ -1570,3 +1570,42 @@ overview card accent, recap tab dark-active, header icon mark.
 @media (min-width:1024px){
   .ksig-active-filters{ margin:12px 0 6px; }
 }
+
+/* ==========================================================
+   EXECUTIVE SIGNAL CARD + GLOBAL BOARD PAGINATION
+   (Master prompt: EXECUTIVE_CARD_3TP_PAGINATION, 2026-09-05)
+   Additive only. Reuses .ksig-row as card container + existing
+   --km-*/--ks-* tokens. Global pager reuses .ksig-tf-pager-btn.
+   ========================================================== */
+.ksig-xc{ align-items:flex-start; }
+.ksig-xc .ksig-row-main{ display:flex; flex-direction:column; gap:6px; flex:1; min-width:0; }
+.ksig-xc .ksig-row-reveal-btn{ margin-top:2px; flex:0 0 auto; }
+.ksig-xc-pairline{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.ksig-xc-pair{ font-size:16px; font-weight:950; color:var(--km-ink); letter-spacing:.2px; }
+.ksig-xc-meta{ font-size:11.5px; color:var(--km-muted); font-weight:800; text-transform:uppercase; letter-spacing:.3px; }
+.ksig-xc-meta .buy{ color:var(--ks-emerald); }
+.ksig-xc-meta .sell{ color:var(--ks-danger); }
+.ksig-xc-zone{ font-size:11px; color:var(--km-gold); font-weight:800; text-transform:uppercase; letter-spacing:.4px; }
+.ksig-xc-block{ margin-top:2px; }
+.ksig-xc-label{ font-size:10px; font-weight:900; color:var(--km-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+.ksig-xc-entrygrid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.ksig-xc-tpgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+.ksig-xc-cell{ display:flex; flex-direction:column; gap:2px; padding:6px 8px; border:1px solid var(--km-line); border-radius:10px; min-width:0; }
+.ksig-xc-cell.empty strong{ color:var(--km-muted); }
+.ksig-xc-sub{ font-size:9px; color:var(--km-muted); font-weight:800; text-transform:uppercase; letter-spacing:.4px; }
+.ksig-xc-cell strong, .ksig-xc-row strong{ font-variant-numeric:tabular-nums; font-size:13px; font-weight:900; color:var(--km-ink); }
+.ksig-xc-tpgrid strong{ color:var(--ks-emerald); }
+.ksig-xc-tpgrid .empty strong{ color:var(--km-muted); }
+.ksig-xc-row{ display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--km-muted); font-weight:700; text-transform:uppercase; letter-spacing:.3px; }
+.ksig-xc-row.ksig-xc-cl strong{ color:var(--ks-danger); }
+.ksig-xc-divider{ height:1px; background:var(--km-line); margin:2px 0; }
+.ksig-xc-running strong.pos{ color:var(--ks-emerald); }
+.ksig-xc-running strong.neg{ color:var(--ks-danger); }
+.ksig-xc-result{ border-radius:10px; padding:6px 8px; }
+.ksig-xc-result.profit{ background:var(--ks-emerald-soft); }
+.ksig-xc-result.loss{ background:var(--ks-danger-soft); }
+.ksig-xc-resultval{ font-size:12.5px; font-weight:900; color:var(--km-ink); }
+.ksig-xc-resultval strong.pos{ color:var(--ks-emerald); }
+.ksig-xc-resultval strong.neg{ color:var(--ks-danger); }
+.ksig-tf-empty{ padding:14px 8px; text-align:center; color:var(--km-muted); font-size:13px; border:1px dashed var(--km-line); border-radius:12px; }
+.ksig-board-pager{ margin-top:14px; }

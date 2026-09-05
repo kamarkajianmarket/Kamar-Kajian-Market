@@ -619,7 +619,7 @@ html,body{ height:100%; }
 /* ---------- Pagination / load more ---------- */.ksig-loadmore{ margin-top:12px; }
 
 /* ---------- Section timeframe (M1/M5/M15/M30/H1/H4/Daily) ---------- */
-.ksig-tf-section{ margin-bottom:4px; }
+.ksig-tf-section{ margin-bottom:4px; display:flex; flex-direction:column; gap:8px; }
 .ksig-tf-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 4px 6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--km-muted); }
 .ksig-tf-count{ font-weight:700; color:var(--km-muted); opacity:.7; text-transform:none; letter-spacing:0; }
 .ksig-tf-pager{ display:flex; align-items:center; justify-content:center; gap:10px; padding:10px 4px 2px; }

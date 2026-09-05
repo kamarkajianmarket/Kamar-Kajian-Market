@@ -1175,34 +1175,39 @@ function refreshCounts(){
 
   function loadRecap(type, periodEndWib){
 var R = state.recap;
-if(R.type !== type){ R.periods = []; R.periodsLoaded = false; R.periodsLoading = false; }
-R.type = type; R.loading = true; R.error = null; R.pickerOpen = false;
-renderRecapCard();
-// Ambil rekap existing apa adanya. Struktur bisnis existing: satu periode bisa
-// mempunyai lebih dari satu baris (per timeframe, dan per pair kalau ada).
-// UI hanya mengelompokkan baris-baris ini untuk ditampilkan - tidak menghitung ulang,
-// tidak menggabungkan angka, tidak membuat timeframe baru.
-// periodEndWib opsional: kalau diisi, ambil periode spesifik itu (dari picker),
-// kalau kosong pakai periode terbaru seperti semula.
-var q = state.client.from('signal_recaps').select('*').eq('recap_type', type);
-if(periodEndWib) q = q.eq('period_end_wib', periodEndWib);
-return q.order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(periodEndWib ? 200 : 50)
+R.type = type; R.loading = true; R.error = null; R.pickerOpen = false; R.customRangeLabel = null;
+renderApp();
+// REBUILD 2026-09-06: rekap dihitung LIVE dari tabel signals (bukan signal_recaps/EA),
+// supaya tidak putus/tidak sinkron kalau EA terputus. Tab yang tersisa cuma DAILY (hari ini)
+// -- Mingguan/Bulanan/Custom-card dihapus; rentang custom sekarang lewat calendar icon
+// yang memanggil loadRecapCustomRange() (lihat fungsi itu, juga sudah live dari signals).
+var b = wibNowBoundaries();
+var startIso = b.today;
+var endIso = new Date(new Date(b.today).getTime() + 86400000).toISOString();
+return state.client.from('signals').select('timeframe,skenario,display_status,result_point,max_running_point,created_at')
+.gte('created_at', startIso).lt('created_at', endIso).limit(5000)
 .then(function(res){
 if(res.error) throw res.error;
-var rows = res.data || [];
-if(!periodEndWib && rows.length){
-var latestEnd = rows[0].period_end_wib;
-rows = rows.filter(function(r){ return r.period_end_wib === latestEnd; });
-}
-R.rows = rows;
-R.selectedPeriod = rows.length ? rows[0].period_end_wib : (periodEndWib || null);
+var raw = res.data || [];
+var map = {};
+raw.forEach(function(r){
+var tf = (r.timeframe && String(r.timeframe).trim()) ? String(r.timeframe).trim() : 'Lainnya';
+if(!map[tf]) map[tf] = { pair:'XAUUSD', timeframe:tf, period_start_wib:startIso, period_end_wib:endIso, total_signal:0, total_buy:0, total_sell:0, total_profit:0, total_loss:0, total_open:0, total_pips:0 };
+var g = map[tf];
+g.total_signal += 1;
+if(r.skenario==='BUY') g.total_buy += 1; else if(r.skenario==='SELL') g.total_sell += 1;
+if(r.display_status==='profit'){ g.total_profit += 1; g.total_pips += Number(r.result_point||0); }
+else if(r.display_status==='loss'){ g.total_loss += 1; g.total_pips += Number(r.result_point||0); }
+else { g.total_open += 1; }
+});
+R.rows = Object.keys(map).map(function(k){ return map[k]; });
+R.selectedPeriod = endIso;
 R.loading = false;
 R.loaded = true;
-renderRecapCard();
-if(!R.periodsLoaded && !R.periodsLoading) loadRecapPeriods(type);
+renderApp();
 }).catch(function(err){
 R.loading = false; R.error = 'Data belum dapat dimuat.';
-renderRecapCard();
+renderApp();
 });
 }
 
@@ -1895,7 +1900,7 @@ function rowHtml(s){
     return '<div class="ksig-recap-card" id="ksigRecapCard">'+
 '<div class="ksig-recap-toprow">'+
       '<div class="ksig-tabs" role="tablist">'+
-        tab('DAILY','Harian') + tab('WEEKLY','Mingguan') + tab('MONTHLY','Bulanan') + tab('CUSTOM','Custom') +
+        tab('DAILY','Harian') +
       '</div>'+
       '<button type="button" class="ksig-cal-btn" id="ksigRecapCalBtn" aria-label="Pilih rentang tanggal" title="Pilih rentang tanggal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>'+
 '</div>'+
@@ -2079,12 +2084,24 @@ function loadRecapCustomRange(startIso, endIso, label){
 var R = state.recap;
 R.loading = true; R.error = null;
 renderRecapCard();
-return state.client.from('signal_recaps').select('*').eq('recap_type','DAILY')
-.gte('period_end_wib', startIso).lt('period_end_wib', endIso)
-.order('period_end_wib', { ascending:false }).order('timeframe', { ascending:true }).limit(1000)
+// REBUILD 2026-09-06: live dari signals (bukan signal_recaps/EA), rentang [startIso, endIso).
+return state.client.from('signals').select('timeframe,skenario,display_status,result_point,max_running_point,created_at')
+.gte('created_at', startIso).lt('created_at', endIso).limit(5000)
 .then(function(res){
 if(res.error) throw res.error;
-R.rows = res.data || [];
+var raw = res.data || [];
+var map = {};
+raw.forEach(function(r){
+var tf = (r.timeframe && String(r.timeframe).trim()) ? String(r.timeframe).trim() : 'Lainnya';
+if(!map[tf]) map[tf] = { pair:'XAUUSD', timeframe:tf, period_start_wib:startIso, period_end_wib:endIso, total_signal:0, total_buy:0, total_sell:0, total_profit:0, total_loss:0, total_open:0, total_pips:0 };
+var g = map[tf];
+g.total_signal += 1;
+if(r.skenario==='BUY') g.total_buy += 1; else if(r.skenario==='SELL') g.total_sell += 1;
+if(r.display_status==='profit'){ g.total_profit += 1; g.total_pips += Number(r.result_point||0); }
+else if(r.display_status==='loss'){ g.total_loss += 1; g.total_pips += Number(r.result_point||0); }
+else { g.total_open += 1; }
+});
+R.rows = Object.keys(map).map(function(k){ return map[k]; });
 R.customRangeLabel = label;
 R.loading = false;
 R.loaded = true;
@@ -2093,8 +2110,7 @@ renderRecapCard();
 R.loading = false; R.error = 'Data belum dapat dimuat.';
 renderRecapCard();
 });
-}
-function applyCustomPreset(key){
+}function applyCustomPreset(key){
 var R = state.recap;
 R.customPreset = key;
 if(key === 'custom'){

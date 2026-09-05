@@ -1306,6 +1306,8 @@ if(state.recap.type === type) renderRecapCard();
   function bindPointerLight(){
     if(!pointerFineMedia || !pointerFineMedia.matches) return;
     document.querySelectorAll('.ksig-pointer-light').forEach(function(card){
+      if(card.dataset.plBound) return;
+      card.dataset.plBound = '1';
       card.addEventListener('mousemove', function(e){
         var r = card.getBoundingClientRect();
         card.style.setProperty('--ksig-px', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
@@ -1771,6 +1773,7 @@ if(state.recap.type === type) renderRecapCard();
       state.list.tfBoardPage = (state.list.tfBoardPage||0) + 1;
       renderListBody();
     });
+    bindPointerLight();
   }
   function ksigInfoChip(cls, text){ return '<span class="ksig-info-chip '+cls+'">'+esc(text)+'</span>'; }
 function rowHtml(s){

@@ -630,6 +630,8 @@ html,body{ height:100%; }
 
 /* ---------- Timeframe Board (desktop-wide lane presentation, additive, presentation-only) ---------- */
 @media (min-width:1360px){
+  .ksig-main{ max-width:1360px; }
+  .ksig-appbar-inner, .ksig-header-row{ max-width:1360px; }
   .ksig-list.ksig-board{ display:grid; grid-template-columns:repeat(4,minmax(300px,1fr)); align-items:start; gap:16px; }
   .ksig-list.ksig-board .ksig-tf-section{ margin-bottom:0; min-width:0; }
 }

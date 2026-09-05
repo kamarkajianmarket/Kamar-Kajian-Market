@@ -105,7 +105,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     readsMap: {}, // id_zona -> ISO timestamp member last opened detail signal itu
     readsLoaded: false,
     realtimeStatus: 'off', // off | connecting | on | warn
-    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0 },
+    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0, tfPage:{} },
     recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false, customPreset:null, customFrom:'', customTo:'', customRangeLabel:'', calOpen:false, calViewYear:null, calViewMonth:null, calStart:null, calEnd:null },
     activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
@@ -1116,7 +1116,7 @@ function refreshCounts(){
 
   function loadList(reset){
     var L = state.list;
-    if(reset){ L.page = 0; L.items = []; L.hasMore = true; }
+    if(reset){ L.page = 0; L.items = []; L.hasMore = true; L.tfPage = {}; }
     if(L.loading || (!L.hasMore && !reset)) return Promise.resolve();
     L.loading = true;
     renderApp();
@@ -1616,6 +1616,7 @@ if(state.recap.type === type) renderRecapCard();
   var STATUS_LABEL = { fresh:'Signal Fresh', aktif:'Signal Aktif', profit:'Signal Profit', loss:'Signal Loss', archive:'Arsip Signal' };
 
   var TIMEFRAME_ORDER = ['M1','M5','M15','M30','H1','H4','Daily'];
+  var TF_PAGE_SIZE = 5;
   function groupedRowsHtml(items){
     var groups = {}; var order = [];
     items.forEach(function(s){
@@ -1625,10 +1626,27 @@ if(state.recap.type === type) renderRecapCard();
     });
     var ordered = TIMEFRAME_ORDER.filter(function(k){ return groups[k]; });
     order.forEach(function(k){ if(ordered.indexOf(k)===-1) ordered.push(k); });
+    if(!state.list.tfPage) state.list.tfPage = {};
     return ordered.map(function(k){
+      var rows = groups[k];
+      var totalPages = Math.max(1, Math.ceil(rows.length / TF_PAGE_SIZE));
+      var curPage = state.list.tfPage[k] || 0;
+      if(curPage > totalPages-1) curPage = totalPages-1;
+      if(curPage < 0) curPage = 0;
+      state.list.tfPage[k] = curPage;
+      var visible = rows.slice(curPage*TF_PAGE_SIZE, curPage*TF_PAGE_SIZE + TF_PAGE_SIZE);
+      var pagerHtml = '';
+      if(totalPages > 1){
+        pagerHtml = '<div class="ksig-tf-pager">' +
+          '<button type="button" class="ksig-tf-pager-btn" data-tf-page-prev="'+esc(k)+'"'+(curPage<=0?' disabled':'')+' aria-label="Halaman sebelumnya">‹</button>' +
+          '<span class="ksig-tf-pager-info">'+(curPage+1)+' / '+totalPages+'</span>' +
+          '<button type="button" class="ksig-tf-pager-btn" data-tf-page-next="'+esc(k)+'"'+(curPage>=totalPages-1?' disabled':'')+' aria-label="Halaman berikutnya">›</button>' +
+        '</div>';
+      }
       return '<div class="ksig-tf-section">' +
-        '<div class="ksig-tf-header">'+esc(k)+' <span class="ksig-tf-count">• '+groups[k].length+' SIGNAL</span></div>' +
-        groups[k].map(rowHtml).join('') +
+        '<div class="ksig-tf-header">'+esc(k)+' <span class="ksig-tf-count">• '+rows.length+' SIGNAL</span></div>' +
+        visible.map(rowHtml).join('') +
+        pagerHtml +
         '</div>';
     }).join('');
   }
@@ -1637,7 +1655,7 @@ if(state.recap.type === type) renderRecapCard();
     var L = state.list;
     var isStatusChange = L.status !== L.loadedForStatus && !L.loading;
     if(isStatusChange){
-      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null; L.scrollY = 0;
+      L.items = []; L.page = 0; L.hasMore = true; L.loaded = false; L.error = null; L.scrollY = 0; L.tfPage = {};
     }
     var isFirstLoad = !L.loaded && !L.loading && !L.error;
     var restoreScroll = !isFirstLoad && !isStatusChange && L.scrollY;
@@ -1739,6 +1757,22 @@ if(state.recap.type === type) renderRecapCard();
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');
     if(lm) lm.addEventListener('click', function(){ loadList(false); });
+    body.querySelectorAll('[data-tf-page-prev]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var k = btn.getAttribute('data-tf-page-prev');
+        var cur = state.list.tfPage[k] || 0;
+        state.list.tfPage[k] = Math.max(0, cur - 1);
+        renderListBody();
+      });
+    });
+    body.querySelectorAll('[data-tf-page-next]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var k = btn.getAttribute('data-tf-page-next');
+        var cur = state.list.tfPage[k] || 0;
+        state.list.tfPage[k] = cur + 1;
+        renderListBody();
+      });
+    });
   }
   function ksigInfoChip(cls, text){ return '<span class="ksig-info-chip '+cls+'">'+esc(text)+'</span>'; }
 function rowHtml(s){

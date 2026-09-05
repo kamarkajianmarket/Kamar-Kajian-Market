@@ -105,7 +105,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     readsMap: {}, // id_zona -> ISO timestamp member last opened detail signal itu
     readsLoaded: false,
     realtimeStatus: 'off', // off | connecting | on | warn
-    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0, tfPage:{} },
+    list: { status:'fresh', loadedForStatus:null, loaded:false, items:[], page:0, pageSize:20, hasMore:true, boardFullyLoaded:false, loading:false, search:'', sort:'terbaru', filters:{ symbol:'', timeframe:'', dir:'', period:'', unread:false }, unreadTotal:0, tfPage:{} },
     recap: { type:'DAILY', rows:[], loaded:false, loading:false, selectedPeriod:null, periods:[], periodsLoaded:false, periodsLoading:false, pickerOpen:false, customPreset:null, customFrom:'', customTo:'', customRangeLabel:'', calOpen:false, calViewYear:null, calViewMonth:null, calStart:null, calEnd:null },
     activity: { items:[], loaded:false, loading:false },
     detail: { id_zona:null, signal:null, events:[], loading:false }
@@ -1116,7 +1116,7 @@ function refreshCounts(){
 
   function loadList(reset){
     var L = state.list;
-    if(reset){ L.page = 0; L.items = []; L.hasMore = true; L.tfBoardPage = 0; }
+    if(reset){ L.page = 0; L.items = []; L.hasMore = true; L.tfBoardPage = 0; L.boardFullyLoaded = false; }
     if(L.loading || (!L.hasMore && !reset)) return Promise.resolve();
     L.loading = true;
     renderApp();
@@ -1155,7 +1155,7 @@ function refreshCounts(){
       L.loading = false;
       L.error = null;
       L.loaded = true;
-      L.loadedForStatus = L.status;
+      L.loadedForStatus = L.status; var isWideDesktopChain = window.innerWidth >= 1024; var groupedChain = (L.sort === 'timeframe' || isWideDesktopChain); if(groupedChain && L.hasMore && !unreadOnly && L.items.length < 500){ return loadList(false); } L.boardFullyLoaded = true;
       renderApp();
     }).catch(function(err){
       L.loading = false; L.error = 'Data belum dapat dimuat.';
@@ -1646,6 +1646,7 @@ if(state.recap.type === type) renderRecapCard();
     }).join('');
   }
   function boardPagerHtml(){
+    var L = state.list; if(!L.boardFullyLoaded){ return '<div class="ksig-tf-pager ksig-board-pager ksig-board-pager-loading"><span class="ksig-tf-pager-info">Memuat seluruh signal…</span></div>'; }
     var totalPages = state.list.tfBoardTotalPages || 1;
     if(totalPages <= 1) return '';
     var curPage = state.list.tfBoardPage || 0;
@@ -1739,7 +1740,7 @@ if(state.recap.type === type) renderRecapCard();
     if(!body) return;
     var L = state.list;
     if(L.error){ body.innerHTML = '<div class="ksig-error"><p>'+esc(L.error)+'</p><button class="ksig-btn primary" id="ksigRetryList">Coba Lagi</button></div>'; document.getElementById('ksigRetryList').onclick=function(){ loadList(true); }; return; }
-    if(L.loading && L.items.length===0){
+    if(L.loading && (L.items.length===0 || ((L.sort === 'timeframe' || window.innerWidth >= 1024) && !L.boardFullyLoaded))){
       body.innerHTML = '<div class="ksig-skel">'+'<div class="ksig-skel-row"></div>'.repeat(5)+'</div>';
       return;
     }
@@ -1759,7 +1760,7 @@ if(state.recap.type === type) renderRecapCard();
     var grouped = (L.sort === 'timeframe' || isWideDesktop);
     var rowsHtml = grouped ? groupedRowsHtml(L.items) : L.items.map(rowHtml).join('');
     var html = '<div class="ksig-list ksig-fade' + (isWideDesktop ? ' ksig-board' : '') + '">' + rowsHtml + '</div>' + (grouped ? boardPagerHtml() : '');
-    if(L.hasMore) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
+    if(L.hasMore && (!grouped || L.boardFullyLoaded)) html += '<div class="ksig-loadmore"><button class="ksig-btn block" id="ksigLoadMore">'+(L.loading?'Memuat…':'Muat Lebih Banyak')+'</button></div>';
     body.innerHTML = html;
     var lm = document.getElementById('ksigLoadMore');
     if(lm) lm.addEventListener('click', function(){ loadList(false); });

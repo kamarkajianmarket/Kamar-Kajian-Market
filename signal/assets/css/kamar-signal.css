@@ -625,7 +625,7 @@ html,body{ height:100%; }
 }
 
 /* ---------- Executive Card header: CRITICAL badge beside pair name (not its own row) ---------- */
-.ksig-xc-pairline{ position:relative; flex-wrap:nowrap; padding-right:44px; }
+.ksig-xc-pairline{ position:relative; flex-wrap:nowrap !important; padding-right:44px; }
 .ksig-xc-pairline > *{ flex-shrink:0; }
 .ksig-badge.critical{ white-space:nowrap; }
 .ksig-new-badge{ position:absolute; top:0; right:0; margin-left:0 !important; }

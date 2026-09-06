@@ -21,6 +21,14 @@ var BELL_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/20
 
 var state = { items: [], unread: 0, open: false, profileId: null, client: null, loaded:false, btn:null, panel:null, badge:null };
 
+window.KamarNotifBell = {
+ready: false,
+getUnread: function(){ return state.items.filter(function(n){ return !n.is_read; }); },
+markRead: function(id){ return markRead(id); },
+markManyRead: function(ids){ return markManyRead(ids); },
+markAllRead: function(){ return markAllRead(); }
+};
+
 function waitFor(check, timeoutMs){
 return new Promise(function(resolve){
 var start = Date.now();
@@ -153,6 +161,22 @@ await state.client.from('member_notifications').update({ is_read:true, read_at:n
 }catch(e){}
 }
 
+async function markManyRead(ids){
+if(!ids || !ids.length) return;
+var idSet = {};
+ids.forEach(function(id){ idSet[id]=true; });
+var changed = false;
+state.items.forEach(function(n){ if(idSet[n.id] && !n.is_read){ n.is_read=true; changed=true; } });
+if(changed){
+state.unread = state.items.filter(function(n){ return !n.is_read; }).length;
+updateBadge();
+renderPanel();
+}
+try{
+await state.client.from('member_notifications').update({ is_read:true, read_at:new Date().toISOString() }).in('id', ids);
+}catch(e){}
+}
+
 async function loadNotifications(){
 try{
 var res = await state.client.from('member_notifications')
@@ -205,6 +229,7 @@ if(!state.btn) { await waitFor(function(){ buildUI(); return state.btn; }, 4000)
 if(!state.btn) return;
 
 await loadNotifications();
+window.KamarNotifBell.ready = true;
 
 try{
 var prof = await client.from('member_profiles').select('id').eq('user_id', session.user.id).limit(1).maybeSingle();

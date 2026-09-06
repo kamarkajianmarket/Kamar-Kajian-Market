@@ -148,7 +148,7 @@ Prinsip wajib: compact rows, tidak ada card besar per-field, depth terkendali,
 microinteraction subtle, aman untuk smartphone (safe-area, sticky toolbar tipis).
 ========================================================================== */
 
-html,body{ height:100%; }
+html,body{ min-height:100%; }
 :root{
   --ksig-t-hover:200ms; --ksig-t-press:140ms; --ksig-t-tab:220ms;
   --ksig-t-badge:220ms; --ksig-t-entrance:300ms;

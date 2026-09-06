@@ -621,6 +621,7 @@ html,body{ height:100%; }
 /* ---------- Signal list: flat 3-column grid (desktop, replaces old Timeframe Board) ---------- */
 @media (min-width:1024px){
   #ksigListBody .ksig-list{ display:grid; grid-template-columns:repeat(3,minmax(280px,1fr)); align-items:start; gap:16px; }
+  #ksigListBody .ksig-list > .ksig-reveal-panel{ grid-column:1 / -1; }
 }
 
 /* ---------- Filter sheet ---------- */

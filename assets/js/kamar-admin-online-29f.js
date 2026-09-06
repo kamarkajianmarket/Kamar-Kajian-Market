@@ -37,7 +37,6 @@
   // them to avoid showing a second, incorrect, duplicate form on the page.
   var MAP = {
     'admin-payment.html': { table:'payment_gateways', title:'Payment Gateway Online', fields:['name','bank_name','account_name','account_number','instructions','is_active'] },
-    'admin-links.html': { table:'link_settings', title:'Link Official Online', fields:['key','label','url','is_active'] },
     'admin-maintenance.html': { table:'maintenance_settings', title:'Maintenance Online', fields:['key','enabled','message'] },
     'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama Online', fields:['key','value','is_active'] },
     'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member Online', fields:['key','value','is_active'] }

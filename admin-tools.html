@@ -281,6 +281,10 @@ var title=byId('fJudul').value.trim();
 if(!title){ statusEl.innerHTML='<span class="chip bad">Judul wajib diisi.</span>'; return; }
 var fileInput=byId('fFile');
 var file=fileInput.files && fileInput.files[0];
+if(file && /\.(mq5|mqh)$/i.test(file.name)){
+statusEl.innerHTML='<span class="chip bad">File .mq5/.mqh adalah source code (dapur EA), tidak boleh diupload. Upload versi .ex5 (compiled) saja.</span>';
+return;
+}
 var payload={
 title:title,
 file_type:byId('fTipe').value,
@@ -297,6 +301,7 @@ byId('fSubmitBtn').disabled=true;
 statusEl.innerHTML='<span class="chip warn">Menyimpan...</span>';
 try{
 if(file){
+var oldRowForCleanup=state.editingId?findRow(state.editingId):null;
 statusEl.innerHTML='<span class="chip warn">Mengupload file...</span>';
 var path='tools/'+payload.access_required+'/'+Date.now()+'-'+slugify(file.name.replace(/\.[^.]+$/,''))+(file.name.match(/\.[^.]+$/)?file.name.match(/\.[^.]+$/)[0]:'');
 var up=await c.storage.from(bucketForAccess(payload.access_required)).upload(path,file,{cacheControl:'3600',upsert:false});
@@ -313,6 +318,12 @@ if(!file){ statusEl.innerHTML='<span class="chip bad">Pilih file untuk diupload.
 res=await c.from(TABLE).insert(payload);
 }
 if(res.error) throw res.error;
+if(file && oldRowForCleanup && oldRowForCleanup.storage_path && oldRowForCleanup.storage_path!==payload.storage_path){
+try{
+var rmOld=await c.storage.from(bucketForAccess(oldRowForCleanup.access_required)).remove([oldRowForCleanup.storage_path]);
+if(rmOld.error) console.warn('Gagal hapus file lama di storage:',rmOld.error);
+}catch(eOld){ console.warn('Gagal hapus file lama di storage:',eOld); }
+}
 statusEl.innerHTML='<span class="chip ok">Tersimpan.</span>';
 toast(state.editingId?'File berhasil diperbarui.':'File berhasil ditambahkan.');
 resetForm();

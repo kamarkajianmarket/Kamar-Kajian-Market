@@ -313,63 +313,125 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
 
-/* Kamar Step 64: personal per-member announcements. New table
-   member_notifications (RLS: member only sees their own rows via
-   current_profile_id()) - admin sends one from the member detail panel in
-   admin-activation.html, this reads it back only for the logged-in member
-   it was written for and lets them dismiss it (marks is_read = true so it
-   never shows again). */
+/* Kamar Step 65: personal per-member announcement/notification popup. Reads
+   unread rows from member_notifications (RLS: member only sees their own
+   rows via current_profile_id()) - admin sends these from the member detail
+   panel in admin-activation.html, automatically when a file update is
+   published (File Tools "Kirim Notifikasi"), or whenever admin responds to
+   a member submission. Shows ALL unread items together as cards inside ONE
+   popup modal (not an inline page card like the old Step 64 version) and
+   reuses window.KamarNotifBell (assets/js/kamar-notif-bell.js) to mark them
+   read, so the popup and the bell icon always agree on what is read -
+   dismissing here updates the bell badge immediately, no page reload. */
 (function(){
-  'use strict';
-  if(window.__KAMAR_MEMBER_NOTIFS_64__) return;
-  window.__KAMAR_MEMBER_NOTIFS_64__ = true;
+  "use strict";
+  if(window.__KAMAR_MEMBER_NOTIFS_65__) return;
+  window.__KAMAR_MEMBER_NOTIFS_65__ = true;
 
   var PAGES = ["dashboard.html","member-profile.html","member-materials.html","member-study.html","member-private.html","member-indicator.html","member-robot.html"];
 
   function esc(v){ return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
+  function waitForBell(timeoutMs){
+    return new Promise(function(resolve){
+      var waited = 0;
+      var iv = setInterval(function(){
+        waited += 100;
+        if(window.KamarNotifBell && window.KamarNotifBell.ready){
+          clearInterval(iv);
+          resolve(window.KamarNotifBell);
+        } else if(waited >= timeoutMs){
+          clearInterval(iv);
+          resolve(window.KamarNotifBell || null);
+        }
+      }, 100);
+    });
+  }
+
+  function buildModal(items, bell){
+    var overlay = document.createElement("div");
+    overlay.id = "kamarNotifPopup65";
+    overlay.style.cssText = "position:fixed;inset:0;z-index:9999;background:rgba(5,5,4,.72);display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)";
+
+    var box = document.createElement("div");
+    box.style.cssText = "width:100%;max-width:480px;max-height:82vh;overflow-y:auto;background:#0d0c0a;border:1px solid rgba(238,206,122,.32);border-radius:24px;padding:22px;box-shadow:0 24px 80px rgba(0,0,0,.55)";
+
+    var header = document.createElement("div");
+    header.style.cssText = "display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px";
+    header.innerHTML = '<strong style="color:#fff3d8;font-size:17px;letter-spacing:.02em">Pembaruan Terbaru</strong>'+
+      '<button type="button" id="kamarNotifPopupClose" aria-label="Tutup" style="border:0;background:rgba(255,255,255,.08);color:#f3d985;width:32px;height:32px;border-radius:999px;cursor:pointer;font-size:16px;line-height:1">&times;</button>';
+    box.appendChild(header);
+
+    var list = document.createElement("div");
+    list.style.cssText = "display:grid;gap:12px;margin-bottom:18px";
+    items.forEach(function(n){
+      var card = document.createElement("div");
+      card.style.cssText = "border:1px solid rgba(238,206,122,.2);background:rgba(255,255,255,.03);border-radius:16px;padding:14px 16px";
+      card.innerHTML = '<strong style="display:block;color:#fff3d8;letter-spacing:.01em;margin-bottom:4px">'+esc(n.title||"Pengumuman")+'</strong>'+
+        '<span style="display:block;color:#cfc5ad;line-height:1.55;font-size:14px">'+esc(n.message||"")+'</span>'+
+        (n.link_url ? '<a href="'+esc(n.link_url)+'" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#f3d985;font-weight:800;font-size:13px;text-decoration:underline">Buka &rarr;</a>' : "");
+      list.appendChild(card);
+    });
+    box.appendChild(list);
+
+    var footer = document.createElement("div");
+    footer.style.cssText = "display:flex;justify-content:flex-end";
+    var markBtn = document.createElement("button");
+    markBtn.type = "button";
+    markBtn.textContent = "Tandai Baca";
+    markBtn.style.cssText = "border:0;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:11px 22px;border-radius:999px;cursor:pointer";
+    footer.appendChild(markBtn);
+    box.appendChild(footer);
+
+    overlay.appendChild(box);
+
+    var ids = items.map(function(n){ return n.id; });
+    var dismissed = false;
+    async function dismiss(){
+      if(dismissed) return;
+      dismissed = true;
+      markBtn.disabled = true; markBtn.textContent = "Menyimpan...";
+      try{
+        if(bell && bell.markManyRead){ await bell.markManyRead(ids); }
+        else {
+          var client = window.kamarSupabaseClient || (window.KamarSupabase && await window.KamarSupabase.ready());
+          if(client){ await client.from("member_notifications").update({ is_read:true, read_at:new Date().toISOString() }).in("id", ids); }
+        }
+      }catch(e){}
+      overlay.remove();
+    }
+    markBtn.onclick = dismiss;
+    header.querySelector("#kamarNotifPopupClose").onclick = dismiss;
+    overlay.addEventListener("click", function(e){ if(e.target === overlay) dismiss(); });
+
+    document.body.appendChild(overlay);
+  }
+
   async function run(){
-    var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    if(PAGES.indexOf(file) === -1) return;
-    
-if(document.getElementById('kamarMemberNotifs64')) return;
+    var file = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+    if(PAGES.indexOf(file)===-1) return;
+    if(document.getElementById("kamarNotifPopup65")) return;
     try{
-      var client = window.kamarSupabaseClient || (window.KamarSupabase && await window.KamarSupabase.ready());
-      if(!client) return;
-      var res = await client.from('member_notifications')
-        .select('id,title,message,created_at')
-        .eq('is_read', false)
-        .order('created_at', { ascending:true })
-        .limit(5);
-      if(res.error || !res.data || !res.data.length) return;
-      try{var kNotifSnd=new Audio('/assets/sounds/kamar-notif-A-chime.mp3');kNotifSnd.volume=0.55;kNotifSnd.play().catch(function(){});}catch(kNotifErr){}
-      if(document.getElementById('kamarMemberNotifs64')) return;
-      var main = document.querySelector('.split-main') || document.querySelector('main');
-      var wrap = document.createElement('div');
-      wrap.id = 'kamarMemberNotifs64';
-      wrap.style.cssText = 'display:grid;gap:12px;margin:0 0 20px';
-      res.data.forEach(function(n){
-        var card = document.createElement('div');
-        card.style.cssText = 'border:1px solid rgba(238,206,122,.32);background:rgba(9,9,8,.92);color:#fff3d8;border-radius:20px;padding:16px 18px;display:flex;justify-content:space-between;gap:14px;align-items:flex-start;box-shadow:0 12px 40px rgba(0,0,0,.35)';
-        var body = document.createElement('div');
-        body.innerHTML = '<strong style="display:block;letter-spacing:.04em;margin-bottom:4px">'+esc(n.title||'Pengumuman')+'</strong><span style="color:#cfc5ad;line-height:1.5">'+esc(n.message||'')+'</span>';
-        var closeBtn = document.createElement('button');
-        closeBtn.textContent = 'Tutup';
-        closeBtn.type = 'button';
-        closeBtn.style.cssText = 'flex:none;border:1px solid rgba(238,206,122,.3);background:rgba(255,255,255,.06);color:#f3d985;border-radius:999px;padding:8px 14px;font-weight:900;cursor:pointer';
-        closeBtn.onclick = async function(){
-          card.style.opacity = '0.4'; closeBtn.disabled = true;
-          try{
-            await client.from('member_notifications').update({ is_read:true, read_at:new Date().toISOString() }).eq('id', n.id);
-            card.remove();
-          }catch(e){ closeBtn.disabled = false; card.style.opacity = '1'; }
-        };
-        card.appendChild(body); card.appendChild(closeBtn);
-        wrap.appendChild(card);
-      });
-      if(main) main.insertBefore(wrap, main.firstChild);
-      else document.body.insertBefore(wrap, document.body.firstChild);
+      var bell = await waitForBell(4000);
+      var items;
+      if(bell && bell.getUnread){
+        items = bell.getUnread();
+      } else {
+        var client = window.kamarSupabaseClient || (window.KamarSupabase && await window.KamarSupabase.ready());
+        if(!client) return;
+        var res = await client.from("member_notifications")
+          .select("id,title,message,link_url,is_read,created_at")
+          .eq("is_read", false)
+          .order("created_at", { ascending:true })
+          .limit(20);
+        if(res.error || !res.data) return;
+        items = res.data;
+      }
+      if(!items || !items.length) return;
+      try{ var kNotifSnd = new Audio("/assets/sounds/kamar-notif-A-chime.mp3"); kNotifSnd.volume = 0.55; kNotifSnd.play().catch(function(){}); }catch(kNotifErr){}
+      buildModal(items, bell);
     }catch(e){}
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
 })();

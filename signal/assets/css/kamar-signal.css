@@ -620,9 +620,15 @@ html,body{ height:100%; }
 
 /* ---------- Signal list: flat 3-column grid (desktop, replaces old Timeframe Board) ---------- */
 @media (min-width:1024px){
-  #ksigListBody .ksig-list{ display:grid; grid-auto-flow:dense; grid-template-columns:repeat(3,minmax(280px,1fr)); align-items:start; gap:16px; }
+  #ksigListBody .ksig-list{ display:grid; grid-auto-flow:dense; grid-template-columns:repeat(3,minmax(280px,1fr)); align-items:start; row-gap:4px; column-gap:16px; }
   #ksigListBody .ksig-list > .ksig-reveal-panel{ grid-column:1 / -1; }
 }
+
+/* ---------- Executive Card header: CRITICAL badge beside pair name (not its own row) ---------- */
+.ksig-xc-pairline{ position:relative; flex-wrap:nowrap; padding-right:44px; }
+.ksig-xc-pairline > *{ flex-shrink:0; }
+.ksig-badge.critical{ white-space:nowrap; }
+.ksig-new-badge{ position:absolute; top:0; right:0; margin-left:0 !important; }
 
 /* ---------- Filter sheet ---------- */
 .ksig-sheet-backdrop{ position:fixed; inset:0; background:rgba(17,20,23,.42); z-index:60; display:flex; align-items:flex-end; }

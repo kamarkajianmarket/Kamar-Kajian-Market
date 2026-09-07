@@ -308,7 +308,7 @@ tetap sama: CSS-only override, tidak menyentuh HTML/JS/struktur apa pun.
 ========================================================================== */
 
 /* Label section sidebar dinamis ("Utama", "Akun") dari rebuildSidebar() */
-.admin-menu-section{ color: var(--km-gold) !important; opacity:1 !important; }
+.admin-menu-section{ color: var(--km-gold) !important; opacity:1 !important; text-transform:uppercase !important; font-weight:1000 !important; letter-spacing:0.16em !important; font-size:11px !important; }
 .split-sidebar summary::after,.admin-sidebar summary::after{ color: var(--km-muted) !important; }
 
 /* Hero/ringkasan card varian (.split-card.hero, .activation-hero, dst) —

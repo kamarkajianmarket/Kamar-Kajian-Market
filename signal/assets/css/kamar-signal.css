@@ -6,7 +6,7 @@
 /* Champagne Gold thin accent only. Scoped entirely to .ksig-body / .ksig-* classes. */
 /* ================================================================== */
 :root{
-  --ks-bg:#F3F0E8;
+  --ks-bg:#070A0F;
   --ks-surface:#FBFAF7;
   --ks-surface-dark:#1C2024;
   --ks-text:#151719;
@@ -38,7 +38,7 @@
 
 /* ---------- Header: light & clean, remove dark-strip-era decorations ---------- */
 .ksig-header{ background:transparent !important; }
-.ksig-header-title{ color:var(--ks-text) !important; background:none !important; padding-left:0 !important; }
+.ksig-header-title{ color:#F4F6F8 !important; background:none !important; padding-left:0 !important; }
 .ksig-header-title::before{ display:none !important; }
 .ksig-header-title::after{ display:none !important; }
 .ksig-header-sub{ color:var(--ks-text-muted) !important; }
@@ -888,7 +888,7 @@ overview card accent, recap tab dark-active, header icon mark.
 /* Champagne Gold thin accent only. Scoped entirely to .ksig-body / .ksig-* classes. */
 /* ================================================================== */
 :root{
-  --ks-bg:#F3F0E8;
+  --ks-bg:#070A0F;
   --ks-surface:#FBFAF7;
   --ks-surface-dark:#1C2024;
   --ks-text:#151719;
@@ -918,7 +918,7 @@ overview card accent, recap tab dark-active, header icon mark.
 }
 
 .ksig-header{ background:transparent !important; }
-.ksig-header-title{ color:var(--ks-text) !important; background:none !important; padding-left:0 !important; }
+.ksig-header-title{ color:#F4F6F8 !important; background:none !important; padding-left:0 !important; }
 .ksig-header-title::before{ display:none !important; }
 .ksig-header-title::after{ display:none !important; }
 .ksig-header-sub{ color:var(--ks-text-muted) !important; }

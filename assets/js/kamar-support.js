@@ -5,6 +5,17 @@ window.__kamarSupportLoaded = true;
 
 var TELEGRAM_ADMIN_URL = 'https://telegram.me/kajianmarketkamar';
 
+var KAMAR_SUPA_URL69 = 'https://moxcqojvtglssftskouj.supabase.co';
+var KAMAR_SUPA_ANON69 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1veGNxb2p2dGdsc3NmdHNrb3VqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyODMyOTYsImV4cCI6MjA5Nzg1OTI5Nn0.VOl-rpfosa2DOxtLv76sym3tg2Qo0Q_yPNy_qBJfbDU';
+window.__kamarSocialLinksPromise = fetch(KAMAR_SUPA_URL69 + '/rest/v1/site_settings?select=setting_value&setting_key=eq.social_links', { headers: { apikey: KAMAR_SUPA_ANON69, Authorization: 'Bearer ' + KAMAR_SUPA_ANON69 } }).then(function(r){ return r.json(); }).then(function(rows){
+  var social = (rows && rows[0] && rows[0].setting_value) || null;
+  if (social) {
+    if (social.telegram_admin) TELEGRAM_ADMIN_URL = social.telegram_admin;
+    else if (social.support) TELEGRAM_ADMIN_URL = social.support;
+  }
+  return social;
+}).catch(function(){ return null; });
+
 function detectContext(){
   var explicit = document.body && document.body.getAttribute('data-kamar-support-context');
   if (explicit) return explicit;

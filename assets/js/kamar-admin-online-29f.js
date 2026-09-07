@@ -807,7 +807,7 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
     if(qs('#kamarNotifStyles29F')) return;
     var st = document.createElement('style');
     st.id = 'kamarNotifStyles29F';
-    st.textContent = '.kamar-notif-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;box-sizing:border-box;border-radius:12px;border:1px solid rgba(120,90,20,.25);background:linear-gradient(135deg,#f4df90,#c69a39);color:#1c1a16;cursor:pointer;font-size:18px;box-shadow:0 3px 10px rgba(184,138,61,.45)}'
+    st.textContent = '.kamar-notif-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0!important;box-sizing:border-box!important;border-radius:12px;border:1px solid rgba(120,90,20,.25);background:linear-gradient(135deg,#f4df90,#c69a39);color:#1c1a16;cursor:pointer;font-size:18px;box-shadow:0 3px 10px rgba(184,138,61,.45)}'
       + '.kamar-notif-badge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:linear-gradient(135deg,#ff8a8a,#e24b4b);color:#fff;font-size:10px;font-weight:1000;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.35)}'
       + '.kamar-notif-panel{position:absolute;top:52px;right:0;width:360px;max-height:420px;overflow:auto;background:rgba(11,10,8,.98);backdrop-filter:blur(14px);border:1px solid rgba(238,206,122,.28);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:10px;display:none;z-index:9999}'
       + '.kamar-notif-panel.open{display:block}'

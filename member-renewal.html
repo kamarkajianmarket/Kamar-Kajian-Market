@@ -140,4 +140,40 @@ window.KAMAR_MAYAR_LINKS = window.KAMAR_MAYAR_LINKS || {
 <script src="assets/js/kamar-mobile-shell.js"></script>
 <script src="/assets/js/kamar-livechat.js?v=1" defer></script>
 <script src="assets/js/kamar-notif-bell.js?v=1"></script>
+<script id="kamar-step74-dashboard-settings-live">
+(function(){
+  var SUPA_URL74 = 'https://moxcqojvtglssftskouj.supabase.co';
+  var SUPA_ANON74 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1veGNxb2p2dGdsc3NmdHNrb3VqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyODMyOTYsImV4cCI6MjA5Nzg1OTI5Nn0.VOl-rpfosa2DOxtLv76sym3tg2Qo0Q_yPNy_qBJfbDU';
+  var LABEL_TO_KEY74 = { 'Kamar Edukasi':'materi_edukasi', 'Kamar Signal':'kamar_study', 'Kamar Private':'kamar_private', 'Kamar Indikator':'kamar_indikator', 'Kamar Robot':'kamar_robot' };
+  function apply(){
+    initClient74().then(function(c){
+      if(!c) return;
+      return c.auth.getSession().then(function(sess){
+        var token = sess && sess.data && sess.data.session ? sess.data.session.access_token : null;
+        if(!token) return;
+        return fetch(SUPA_URL74 + '/rest/v1/dashboard_settings?select=key,is_active', { headers: { apikey: SUPA_ANON74, Authorization: 'Bearer ' + token } }).then(function(r){ return r.json(); }).then(function(rows){
+          if (!Array.isArray(rows)) return;
+          var map = {};
+          rows.forEach(function(r){ map[r.key] = r.is_active; });
+          document.querySelectorAll('.member-payment-card').forEach(function(card){
+            var h3 = card.querySelector('h3');
+            if (!h3) return;
+            var key = LABEL_TO_KEY74[h3.textContent.trim()];
+            if (!key) return;
+            if (map.hasOwnProperty(key) && map[key] === false) { card.style.display = 'none'; }
+          });
+        });
+      });
+    }).catch(function(){});
+  }
+  function initClient74(){
+    try{
+      if (window.KamarSupabase && window.KamarSupabase.ready) return window.KamarSupabase.ready();
+    }catch(e){}
+    var ex = window.kamarSupabaseClient || window.KamarSupabaseClient || null;
+    return Promise.resolve(ex);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply); else apply();
+})();
+</script>
 </body></html>

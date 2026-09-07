@@ -97,7 +97,7 @@ var priceBlock = state==='none' ? '<div class="fkx-price">'+fmtRp(price)+'<small
 return '<article class="fkx-card" data-detail-href="'+detailHref+'" tabindex="0" role="link" aria-label="'+esc(p.title)+'">'+
 '<div class="fkx-card-top">'+badge+'</div>'+
 '<h3>'+esc(p.title)+'</h3>'+
-(p.description?'<p>'+esc(p.description)+'</p>':'')+
+(p.description?'<button type="button" class="kamar-reveal-head" data-fkx-stop><span class="kamar-reveal-summary">Lihat Deskripsi</span><span class="kamar-reveal-arrow">&rsaquo;</span></button><div class="kamar-reveal-body"><p>'+esc(p.description)+'</p></div>':'')+
 priceBlock+
 '<div class="fkx-card-actions">'+actionHtml+'</div>'+
 '</article>';

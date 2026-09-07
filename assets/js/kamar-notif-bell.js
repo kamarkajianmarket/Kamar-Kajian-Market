@@ -157,7 +157,7 @@ state.unread = 0;
 updateBadge();
 renderPanel();
 try{
-await state.client.from('member_notifications').update({ is_read:true, read_at:new Date().toISOString() }).eq('is_read', false);
+await state.client.from('member_notifications').update({ is_read:true, read_at:new Date().toISOString() }).eq('is_read', false).eq('profile_id', state.profileId);
 }catch(e){}
 }
 
@@ -178,9 +178,11 @@ await state.client.from('member_notifications').update({ is_read:true, read_at:n
 }
 
 async function loadNotifications(){
+if(!state.profileId){ state.loaded = true; return; }
 try{
 var res = await state.client.from('member_notifications')
 .select('id,title,message,is_read,link_url,category,created_at')
+.eq('profile_id', state.profileId)
 .order('created_at', { ascending:false })
 .limit(20);
 if(res.error) throw res.error;
@@ -228,13 +230,14 @@ buildUI();
 if(!state.btn) { await waitFor(function(){ buildUI(); return state.btn; }, 4000); }
 if(!state.btn) return;
 
-await loadNotifications();
-window.KamarNotifBell.ready = true;
-
 try{
 var prof = await client.from('member_profiles').select('id').eq('user_id', session.user.id).limit(1).maybeSingle();
-if(prof && prof.data && prof.data.id){ state.profileId = prof.data.id; subscribeRealtime(prof.data.id); }
+if(prof && prof.data && prof.data.id){ state.profileId = prof.data.id; }
 }catch(e){}
+
+await loadNotifications();
+if(state.profileId) subscribeRealtime(state.profileId);
+window.KamarNotifBell.ready = true;
 }
 
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

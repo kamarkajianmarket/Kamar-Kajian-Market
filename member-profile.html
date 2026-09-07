@@ -65,8 +65,8 @@ body{background:#070707;color:var(--text)}
 <section class="split-card" id="memberChangeRequestCard">
   <span class="eyebrow">Ubah Data Akun</span>
   <h2>Ajukan Perubahan Data</h2>
-  <p>Untuk keamanan akun, nama, WhatsApp, dan Telegram tidak bisa diedit langsung dari sini. Ajukan permintaan di bawah, admin akan meninjau dan menyetujuinya sebelum data berubah.</p>
-  <div class="facility-guide-box">Petunjuk: pilih data yang mau diganti di kolom pertama (Nama Lengkap, Nomor WhatsApp, atau Username Telegram), isi nilai barunya di kolom kedua sesuai contoh placeholder, lalu klik Kirim Permintaan. Data baru aktif setelah disetujui admin.</div>
+  <button type="button" class="kamar-reveal-head"><span class="kamar-reveal-summary">Tentang Perubahan Data</span><span class="kamar-reveal-arrow">&rsaquo;</span></button><div class="kamar-reveal-body"><p>Untuk keamanan akun, nama, WhatsApp, dan Telegram tidak bisa diedit langsung dari sini. Ajukan permintaan di bawah, admin akan meninjau dan menyetujuinya sebelum data berubah.</p>
+  <div class="facility-guide-box">Petunjuk: pilih data yang mau diganti di kolom pertama (Nama Lengkap, Nomor WhatsApp, atau Username Telegram), isi nilai barunya di kolom kedua sesuai contoh placeholder, lalu klik Kirim Permintaan. Data baru aktif setelah disetujui admin.</div></div>
   <form id="profileChangeForm" class="grid-2 kamar-form-grid">
     <label class="field"><span>Data yang ingin diubah</span>
       <select id="profileChangeField" name="field">
@@ -87,8 +87,8 @@ body{background:#070707;color:var(--text)}
 <section class="split-card referral-lock-card" id="memberReferralProfileCard">
   <span class="eyebrow">Kode Referral</span>
   <h2>Referral Akun</h2>
-  <p>Jika akun Anda belum terhubung dengan kode referral, Anda bisa mengisinya satu kali dari halaman ini. Setelah tersimpan, perubahan hanya bisa dilakukan melalui admin.</p>
-  <div class="facility-guide-box">Petunjuk: isi kode referral dari affiliator (jika ada) di kolom bawah, contoh format KM00001C, lalu klik Simpan Referral. Kode hanya bisa diisi satu kali dan tidak bisa diubah sendiri setelah tersimpan.</div>
+  <button type="button" class="kamar-reveal-head"><span class="kamar-reveal-summary">Tentang Kode Referral</span><span class="kamar-reveal-arrow">&rsaquo;</span></button><div class="kamar-reveal-body"><p>Jika akun Anda belum terhubung dengan kode referral, Anda bisa mengisinya satu kali dari halaman ini. Setelah tersimpan, perubahan hanya bisa dilakukan melalui admin.</p>
+  <div class="facility-guide-box">Petunjuk: isi kode referral dari affiliator (jika ada) di kolom bawah, contoh format KM00001C, lalu klik Simpan Referral. Kode hanya bisa diisi satu kali dan tidak bisa diubah sendiri setelah tersimpan.</div></div>
   <div id="referralAlreadySet" hidden>
     <div class="referral-current-code" id="profileReferralCurrentCode">REFERRAL: -</div>
     <div class="referral-status-note success">Kode referral akun ini sudah terkunci. Untuk perubahan referral, hubungi admin.</div>
@@ -105,8 +105,8 @@ body{background:#070707;color:var(--text)}
 <section class="split-card" id="memberBrokerCapitalCard">
   <span class="eyebrow">Data Trading</span>
   <h2>Broker &amp; Modal</h2>
-  <p>Data ini opsional, membantu kami memahami broker dan kisaran modal yang paling banyak digunakan Member Kamar. Perubahan akan ditinjau dan disetujui admin sebelum data berubah.</p>
-  <div class="facility-guide-box">Petunjuk: pilih broker yang kamu pakai dari daftar (contoh: Exness, FBS), lalu pilih rentang modal/equity, dan klik Simpan Data Trading. Data ini opsional dan tidak memengaruhi akses fasilitas kamu.</div>
+  <button type="button" class="kamar-reveal-head"><span class="kamar-reveal-summary">Tentang Data Trading</span><span class="kamar-reveal-arrow">&rsaquo;</span></button><div class="kamar-reveal-body"><p>Data ini opsional, membantu kami memahami broker dan kisaran modal yang paling banyak digunakan Member Kamar. Perubahan akan ditinjau dan disetujui admin sebelum data berubah.</p>
+  <div class="facility-guide-box">Petunjuk: pilih broker yang kamu pakai dari daftar (contoh: Exness, FBS), lalu pilih rentang modal/equity, dan klik Simpan Data Trading. Data ini opsional dan tidak memengaruhi akses fasilitas kamu.</div></div>
   <form id="memberBrokerCapitalForm" class="grid-2">
     <label class="field">Broker yang digunakan
       <select id="brokerSelect" name="broker_name">

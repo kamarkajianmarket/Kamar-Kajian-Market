@@ -897,5 +897,25 @@ loadDenoms();
   }).catch(function(){});
 })();
 </script>
+<script id="kamar-step72-section-visibility-live">
+(function(){
+  var SUPA_URL72 = 'https://moxcqojvtglssftskouj.supabase.co';
+  var SUPA_ANON72 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1veGNxb2p2dGdsc3NmdHNrb3VqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyODMyOTYsImV4cCI6MjA5Nzg1OTI5Nn0.VOl-rpfosa2DOxtLv76sym3tg2Qo0Q_yPNy_qBJfbDU';
+  var SECTION_KEYS72 = ['tentang','kamarMaterialSection','fasilitas','affiliate-kamar','traktir-kamar','kamarVideoSection','utility-grid-kamar'];
+  fetch(SUPA_URL72 + '/rest/v1/homepage_settings?select=key,is_active', { headers: { apikey: SUPA_ANON72, Authorization: 'Bearer ' + SUPA_ANON72 } }).then(function(r){ return r.json(); }).then(function(rows){
+    if (!Array.isArray(rows)) return;
+    var map = {};
+    rows.forEach(function(r){ map[r.key] = r.is_active; });
+    SECTION_KEYS72.forEach(function(key){
+      var el = document.getElementById(key);
+      if (!el) return;
+      if (map.hasOwnProperty(key)) {
+        if (map[key] === false) { el.style.display = 'none'; }
+        else { el.style.display = ''; el.removeAttribute('hidden'); }
+      }
+    });
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

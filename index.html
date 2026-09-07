@@ -875,5 +875,27 @@ loadDenoms();
   onScroll();
 })();
 </script>
+<script id="kamar-step71-social-links-live">
+(function(){
+  var SUPA_URL71 = 'https://moxcqojvtglssftskouj.supabase.co';
+  var SUPA_ANON71 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1veGNxb2p2dGdsc3NmdHNrb3VqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyODMyOTYsImV4cCI6MjA5Nzg1OTI5Nn0.VOl-rpfosa2DOxtLv76sym3tg2Qo0Q_yPNy_qBJfbDU';
+  fetch(SUPA_URL71 + '/rest/v1/site_settings?select=setting_value&setting_key=eq.social_links', { headers: { apikey: SUPA_ANON71, Authorization: 'Bearer ' + SUPA_ANON71 } }).then(function(r){ return r.json(); }).then(function(rows){
+    var social = (rows && rows[0] && rows[0].setting_value) || null;
+    if (!social) return;
+    var groupUrl = social.telegram_group || null;
+    if (!groupUrl) return;
+    document.querySelectorAll('a[href="https://telegram.me/kamarkajianmarket"]').forEach(function(a){ a.setAttribute('href', groupUrl); });
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(function(s){
+      try {
+        var data = JSON.parse(s.textContent);
+        if (Array.isArray(data.sameAs)) {
+          data.sameAs = data.sameAs.map(function(u){ return u === 'https://telegram.me/kamarkajianmarket' ? groupUrl : u; });
+          s.textContent = JSON.stringify(data);
+        }
+      } catch(e){}
+    });
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

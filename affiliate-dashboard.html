@@ -47,7 +47,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
 <section class="split-card">
 <span class="mini-label">Member Referral</span>
 <h2>Member yang Kamu Referensikan</h2>
-<p>Daftar member yang bergabung lewat kode referral kamu. Detail dibatasi hanya nama, fasilitas yang aktif dibayar, dan potensi komisi &mdash; untuk menjaga privasi member.</p>
+<button type="button" class="kamar-reveal-head"><span class="kamar-reveal-summary">Tentang Data Ini</span><span class="kamar-reveal-arrow">&rsaquo;</span></button><div class="kamar-reveal-body"><p>Daftar member yang bergabung lewat kode referral kamu. Detail dibatasi hanya nama, fasilitas yang aktif dibayar, dan potensi komisi &mdash; untuk menjaga privasi member.</p></div>
 <div class="page-note" id="referredEmpty">Belum ada member yang direferensikan.</div>
 <table class="kamar-table hidden" id="referredTable"><thead><tr><th>Nama Member</th><th>Status</th><th>Fasilitas Aktif</th><th>Potensi Komisi</th></tr></thead><tbody id="referredBody"></tbody></table>
 </section>
@@ -61,7 +61,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
 <section class="split-card">
 <span class="mini-label">Pencairan Komisi</span>
 <h2>Ajukan Pencairan</h2>
-<p>Saldo komisi belum dibayar tersedia untuk dicairkan. Data rekening hanya disimpan sementara selama pengajuan berlangsung, otomatis dihapus setelah lunas/dibatalkan.</p>
+<button type="button" class="kamar-reveal-head"><span class="kamar-reveal-summary">Tentang Pencairan</span><span class="kamar-reveal-arrow">&rsaquo;</span></button><div class="kamar-reveal-body"><p>Saldo komisi belum dibayar tersedia untuk dicairkan. Data rekening hanya disimpan sementara selama pengajuan berlangsung, otomatis dihapus setelah lunas/dibatalkan.</p></div>
 <div class="button-row"><button class="btn" id="openPaymentModalBtn" type="button">Ajukan Pencairan</button></div>
 <div class="page-note hidden" id="paymentActionStatus" style="margin-top:14px"></div>
 <div class="page-note" id="paymentHistoryEmpty" style="margin-top:16px">Belum ada pengajuan pencairan.</div>

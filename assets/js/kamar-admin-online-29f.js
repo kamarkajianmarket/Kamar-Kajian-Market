@@ -37,7 +37,6 @@
   // them to avoid showing a second, incorrect, duplicate form on the page.
   var MAP = {
     'admin-maintenance.html': { table:'maintenance_settings', title:'Maintenance Online', fields:['key','enabled','message'] },
-    'admin-page-control.html': { table:'homepage_settings', title:'Kontrol Halaman Utama Online', fields:['key','value','is_active'] },
     'admin-dashboard-control.html': { table:'dashboard_settings', title:'Kontrol Dashboard Member Online', fields:['key','value','is_active'] }
   };
   var CRITICAL_TABLES = ['admin_member_overview','member_profiles','member_access','payments','affiliates','affiliate_referrals','affiliate_commissions','banners','videos','materials','tools_files','homepage_settings','dashboard_settings','maintenance_settings','payment_gateways','link_settings','app_settings','admin_pending_todos'];

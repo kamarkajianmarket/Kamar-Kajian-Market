@@ -369,7 +369,7 @@
     color: #8E98A8 !important;
   }
 
-  /* Bespoke sidebar used on admin-affiliate-*/admin-data-check shells
+  /* Bespoke sidebar used on admin-affiliate and admin-data-check shells
      (distinct from .split-sidebar, already covered above) */
   body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-sidebar,
   body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-shell .admin-sidebar,

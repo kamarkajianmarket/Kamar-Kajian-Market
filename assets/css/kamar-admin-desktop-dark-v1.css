@@ -278,6 +278,22 @@
     color: #FFFAF0 !important;
   }
 
+  /* identity-v2 has a higher-specificity rule
+     (.split-card:not([class*="hero"]):not(.kamar-title-card) h1,h2,h3 -> 3
+     classes + 1 tag) that beats the doubled-class h1-h6 rule above (2
+     classes + 1 tag) whenever the heading sits inside .split-card - this
+     was making "Menu Admin Kamar" grid-card titles (h3 inside
+     .admin-click-card inside .split-card) render near-black/invisible.
+     Re-target with .split-card in the selector so we win on specificity. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card h1,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card h2,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card h3,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card h4,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card h5,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card h6 {
+    color: #F4F6F8 !important;
+  }
+
   body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 input:not([type="checkbox"]):not([type="radio"]),
   body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 select,
   body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 textarea {

@@ -1904,7 +1904,7 @@ function rowHtml(s){
       '</div>'+
       '<button type="button" class="ksig-cal-btn" id="ksigRecapCalBtn" aria-label="Pilih rentang tanggal" title="Pilih rentang tanggal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>'+
 '</div>'+
-(R.type==='CUSTOM' ? recapCustomRangeHtml() : '') +
+'' +
       '<div id="ksigRecapBody"></div>'+
 (R.calOpen ? ksigCalPopupHtml() : '') +
     '</div>';

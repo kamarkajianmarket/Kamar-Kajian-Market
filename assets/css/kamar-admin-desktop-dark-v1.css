@@ -341,4 +341,125 @@
     border-radius: 8px;
   }
 
+  /* ---------- v5: bespoke-shell white/cream card sweep ----------
+     Several admin pages (admin-token, admin-affiliate-*, admin-data-check,
+     admin-maintenance, admin-payment-products, admin-study-control,
+     admin-connection-check, admin-materials/video/banner, etc.) use their
+     own embedded <style> component classes (never covered by the pilot
+     build, which only targeted admin.html + admin-members.html's
+     .split-card/.admin-table-card shell). identity-v2.css's light-theme
+     rules for these same class names were winning the cascade, producing
+     solid white/cream boxes. Reported by user 2026-09-08 via admin-token.html
+     screenshot: "masih banyak CARD berwarna putih/cream". */
+
+  /* Token cards (admin-token.html) */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-card {
+    background: #0B0F14 !important;
+  }
+
+  /* Token Admin "Ringkasan" stat cards — previously treated as an
+     intentional light-card-on-dark-page pattern (like .stat-card), but
+     user's 2026-09-08 report explicitly wants every remaining cream
+     surface converted, so bring it in line with .stat-card's dark style. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-ringkasan-card {
+    background: #0B0F14 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-ringkasan-body span {
+    color: #8E98A8 !important;
+  }
+
+  /* Bespoke sidebar used on admin-affiliate-*/admin-data-check shells
+     (distinct from .split-sidebar, already covered above) */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-sidebar,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-shell .admin-sidebar,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 aside.sidebar {
+    background: #0B0F14 !important;
+  }
+
+  /* Generic "glass panel" .card used across affiliate/data-check pages */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .card {
+    background: linear-gradient(135deg, rgba(255,255,255,.045), rgba(255,255,255,.016)) !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .submenu-card {
+    background: #0B0F14 !important;
+  }
+
+  /* Rate / setting / online-card wrappers (own bespoke shells, text colors
+     already correct light values in each page's own <style>, only bg was
+     wrong) */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .rate-card,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .setting-card,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .online-card,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .table-box,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .stat {
+    background: #0B0F14 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .toggle-row,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .toggle-row-mini {
+    background: rgba(255,255,255,.035) !important;
+  }
+
+  /* Off-state pill (admin-affiliate-list.html "Nonaktif" style pill) */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .pill.off {
+    background: rgba(255,255,255,.06) !important;
+    color: #8E98A8 !important;
+  }
+
+  /* Empty-state boxes (distinct component names per page) */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .empty,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-empty {
+    background: rgba(255,255,255,.035) !important;
+    color: #8E98A8 !important;
+  }
+
+  /* Info/callout note box (admin-data-check.html) — was cream+brown,
+     now dark+gold to match .stat-card em accent color */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .note {
+    background: rgba(230,212,169,.08) !important;
+    border-color: rgba(230,212,169,.22) !important;
+    color: #F1D893 !important;
+  }
+
+  /* Result box (admin-data-check.html) — near-black text on cream fixed
+     to light text on dark */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .result-box {
+    background: #0B0F14 !important;
+    color: #F4F6F8 !important;
+  }
+
+  /* Generic tag/chip components. Status-colored variants (.ok/.warn/.bad,
+     already used correctly on admin.html e.g. "Terhubung"/"Gagal" chips)
+     are excluded so their semantic colors are untouched. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .chip:not(.ok):not(.warn):not(.bad) {
+    background: rgba(255,255,255,.035) !important;
+    color: #D8CDA9 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .kamar-chip {
+    background: rgba(255,255,255,.035) !important;
+    color: #F4F6F8 !important;
+  }
+
+  /* Affiliate table data rows (admin-affiliate-list.html) — .aff-row.head
+     (the transparent gold-text header row) is already correct and must
+     stay untouched, only the plain data rows had a solid white bg. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .aff-row:not(.head) {
+    background: #0B0F14 !important;
+  }
+
+  /* Generic key/value table rows (admin-data-check.html "Data Lokal yang
+     Terbaca" / "Koneksi & Tabel Supabase" tables) — same header/data-row
+     split as .aff-row: .row.header stays transparent+gold, plain .row was
+     solid white with near-black <strong> text. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .row:not(.header) {
+    background: #0B0F14 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .row:not(.header) strong {
+    color: #F4F6F8 !important;
+  }
+
 }

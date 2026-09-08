@@ -286,6 +286,30 @@
     color: #F4F6F8 !important;
   }
 
+  /* ---------- Stat cards (admin.html "Ringkasan Admin" grid) ----------
+     .stat-card is an <a> wrapper with its own white background, unrelated
+     to .split-card, so it needs its own explicit override. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .stat-card {
+    background: #0B0F14 !important;
+    border-color: rgba(230,212,169,.14) !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .stat-card span {
+    color: #C99D51 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .stat-card strong {
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .stat-card small {
+    color: #8E98A8 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .stat-card em {
+    color: #F1D893 !important;
+  }
+
   /* ---------- Scrollbar (webkit) ---------- */
   body.kamar-admin-desktop-v1 ::-webkit-scrollbar {
     width: 10px;

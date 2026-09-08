@@ -1,0 +1,272 @@
+/* ==========================================================================
+   kamar-admin-desktop-dark-v1.css
+   Dark "Neo Minimal Palace" theme for the ADMIN panel, matching the dark
+   theme already used on Member Dashboard Desktop (kamar-member-desktop-v2.css)
+   and the Homepage (kamar-homepage-dark-v1.css).
+
+   Scope: DESKTOP ONLY (min-width: 981px), and ONLY on pages whose <body>
+   carries the "kamar-admin-desktop-v1" marker class - every real admin page
+   (admin.html, admin-members.html, admin-settings.html, admin-token.html,
+   etc - see the adminPages guard array in kamar-session-final-28.js).
+
+   This guarantees zero effect on mobile/tablet admin (existing breakpoint is
+   max-width:980px sitewide) and zero effect on any page that does NOT carry
+   the marker class, so member/homepage pages and admin pages that have not
+   yet been rolled into this project are completely unaffected.
+
+   IMPORTANT: kamar-dashboard-identity-v2.css forces the light "Neo Minimal
+   Palace" theme sitewide via blanket !important rules on bare classes
+   (html body, .split-card, .split-sidebar, .btn, etc). Every rule below is
+   scoped under body.kamar-admin-desktop-v1 so it always wins on specificity
+   (body.class + descendant selector beats their bare class selectors) and
+   uses !important to beat any tied-specificity rules, exactly like the
+   member-desktop-v2 stylesheet does. Do not remove the marker-class prefix
+   or the !important flags - identity-v2 WILL win again if you do.
+   ========================================================================== */
+
+@media (min-width: 981px) {
+
+  /* ---------- Page background ---------- */
+  body.kamar-admin-desktop-v1 {
+    background:
+      radial-gradient(circle at 10% -6%, rgba(184,138,61,.16), transparent 576px),
+      radial-gradient(circle at 88% 10%, rgba(14,95,84,.20), transparent 512px),
+      linear-gradient(180deg,#0B0F14 0%,#070A0F 55%,#070A0F 100%) !important;
+    background-attachment: fixed !important;
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-shell,
+  body.kamar-admin-desktop-v1 .split-app,
+  body.kamar-admin-desktop-v1 .split-main {
+    background: transparent !important;
+  }
+
+  /* ---------- Global header ---------- */
+  body.kamar-admin-desktop-v1 .kamar-global-header,
+  body.kamar-admin-desktop-v1 .site-header {
+    background: rgba(11,15,20,.92) !important;
+    border-color: rgba(230,212,169,.14) !important;
+    color: #F4F6F8 !important;
+    backdrop-filter: blur(10px);
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-global-brand,
+  body.kamar-admin-desktop-v1 .kamar-global-brand * {
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-global-logout {
+    background: rgba(150,63,63,.16) !important;
+    color: #ffb4b4 !important;
+    border-color: rgba(150,63,63,.4) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-notif-btn {
+    background: rgba(201,157,81,.16) !important;
+    border-color: rgba(201,157,81,.35) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-notif-panel {
+    background: #0B0F14 !important;
+    border-color: rgba(230,212,169,.16) !important;
+    color: #F4F6F8 !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-notif-empty {
+    color: #8E98A8 !important;
+  }
+
+  /* ---------- Sidebar ---------- */
+  body.kamar-admin-desktop-v1 .split-sidebar {
+    background: #0B0F14 !important;
+    border-color: rgba(230,212,169,.12) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-sidebar .brand-small {
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-menu-section {
+    color: #C99D51 !important;
+    border-color: rgba(230,212,169,.12) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-sidebar a {
+    color: #B8C2CE !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-sidebar a:hover {
+    color: #F4F6F8 !important;
+    background: rgba(201,157,81,.10) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-sidebar a.active {
+    color: #F1D893 !important;
+    background: rgba(201,157,81,.16) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-sidebar summary {
+    color: #F4F6F8 !important;
+  }
+
+  /* ---------- Cards / hero title ---------- */
+  body.kamar-admin-desktop-v1 .split-card {
+    background: #0B0F14 !important;
+    border-color: rgba(230,212,169,.12) !important;
+    color: #F4F6F8 !important;
+    box-shadow: 0 18px 40px rgba(0,0,0,.35) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .split-card .eyebrow {
+    color: #C99D51 !important;
+  }
+
+  /* kamar-title-card already renders dark-navy via identity-v2 on light
+     admin pages too - keep it, just make sure text stays legible here */
+  body.kamar-admin-desktop-v1 .split-card.kamar-title-card {
+    background: linear-gradient(135deg,#15120B,#0B0F14) !important;
+    color: #FFFAF0 !important;
+  }
+
+  /* ---------- Data list (admin-table-card / admin-row) ---------- */
+  body.kamar-admin-desktop-v1 .admin-table-card {
+    background: #0B0F14 !important;
+    border-color: rgba(230,212,169,.12) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-row {
+    border-color: rgba(230,212,169,.08) !important;
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-row.header {
+    color: #8E98A8 !important;
+    background: rgba(255,255,255,.02) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-row:hover {
+    background: rgba(201,157,81,.06) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-note-soft {
+    color: #8E98A8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-empty {
+    color: #8E98A8 !important;
+  }
+
+  /* ---------- Status pills / badges ---------- */
+  body.kamar-admin-desktop-v1 .status-pill {
+    background: rgba(142,152,168,.14) !important;
+    color: #B8C2CE !important;
+    border-color: rgba(142,152,168,.3) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .status-pill.on {
+    background: rgba(14,95,84,.22) !important;
+    color: #8EFFC0 !important;
+    border-color: rgba(23,72,63,.6) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .status-pill.warn {
+    background: rgba(184,138,61,.20) !important;
+    color: #F1D893 !important;
+    border-color: rgba(184,138,61,.5) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-notif-badge {
+    background: #963F3F !important;
+    color: #FFFAF0 !important;
+  }
+
+  /* ---------- Buttons ---------- */
+  body.kamar-admin-desktop-v1 .btn,
+  body.kamar-admin-desktop-v1 .kamar-global-btn {
+    background: linear-gradient(180deg,#F1D893,#C99D51) !important;
+    color: #15120B !important;
+    border-color: transparent !important;
+  }
+
+  body.kamar-admin-desktop-v1 .btn.secondary {
+    background: rgba(184,194,206,.1) !important;
+    color: #F4F6F8 !important;
+    border-color: rgba(184,194,206,.3) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .btn.danger {
+    background: rgba(150,63,63,.18) !important;
+    color: #ffb4b4 !important;
+    border-color: rgba(150,63,63,.45) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .btn:hover,
+  body.kamar-admin-desktop-v1 .kamar-global-btn:hover {
+    filter: brightness(1.08);
+  }
+
+  /* ---------- Form inputs ---------- */
+  body.kamar-admin-desktop-v1 input,
+  body.kamar-admin-desktop-v1 select,
+  body.kamar-admin-desktop-v1 textarea {
+    background: #111417 !important;
+    border-color: rgba(230,212,169,.18) !important;
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 input::placeholder,
+  body.kamar-admin-desktop-v1 textarea::placeholder {
+    color: #8E98A8 !important;
+  }
+
+  body.kamar-admin-desktop-v1 input:focus,
+  body.kamar-admin-desktop-v1 select:focus,
+  body.kamar-admin-desktop-v1 textarea:focus {
+    border-color: rgba(201,157,81,.6) !important;
+    outline-color: rgba(201,157,81,.4) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .admin-toolbar-grid {
+    background: transparent !important;
+  }
+
+  /* ---------- Toast / drawer / misc ---------- */
+  body.kamar-admin-desktop-v1 .toast {
+    background: #0B0F14 !important;
+    color: #F4F6F8 !important;
+    border-color: rgba(230,212,169,.16) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-drawer-head {
+    background: #0B0F14 !important;
+    border-color: rgba(230,212,169,.12) !important;
+  }
+
+  body.kamar-admin-desktop-v1 .kamar-drawer-close-btn {
+    color: #B8C2CE !important;
+  }
+
+  body.kamar-admin-desktop-v1 .site-footer {
+    background: transparent !important;
+    color: #8E98A8 !important;
+    border-color: rgba(230,212,169,.1) !important;
+  }
+
+  /* ---------- Scrollbar (webkit) ---------- */
+  body.kamar-admin-desktop-v1 ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  body.kamar-admin-desktop-v1 ::-webkit-scrollbar-track {
+    background: #0B0F14;
+  }
+
+  body.kamar-admin-desktop-v1 ::-webkit-scrollbar-thumb {
+    background: rgba(201,157,81,.35);
+    border-radius: 8px;
+  }
+
+}

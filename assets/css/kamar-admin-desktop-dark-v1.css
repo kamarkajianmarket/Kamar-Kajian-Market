@@ -254,6 +254,38 @@
     border-color: rgba(230,212,169,.1) !important;
   }
 
+  /* ---------- Specificity safety net ----------
+     identity-v2.css has some bare-tag rules (label, strong/b, input) with
+     higher specificity (2 pseudo-class/attribute selectors) than a single
+     body.class + tag rule, even though ours carries !important too. Doubling
+     the marker class (body.X.X) adds one more class to our specificity count
+     so we reliably win without having to touch identity-v2.css itself. */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 strong,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 b,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 label,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 h1,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 h2,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 h3,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 h4,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 h5,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 h6 {
+    color: #F4F6F8 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card.kamar-title-card strong,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card.kamar-title-card h1,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .split-card.kamar-title-card h2 {
+    color: #FFFAF0 !important;
+  }
+
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 input:not([type="checkbox"]):not([type="radio"]),
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 select,
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 textarea {
+    background: #111417 !important;
+    border-color: rgba(230,212,169,.18) !important;
+    color: #F4F6F8 !important;
+  }
+
   /* ---------- Scrollbar (webkit) ---------- */
   body.kamar-admin-desktop-v1 ::-webkit-scrollbar {
     width: 10px;

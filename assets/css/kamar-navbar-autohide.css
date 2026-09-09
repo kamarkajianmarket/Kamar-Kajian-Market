@@ -1,0 +1,14 @@
+/* Kamar Navbar Auto-Hide on Scroll (desktop + mobile + PWA) */
+header.site-header{
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+  will-change: transform;
+}
+header.site-header.kamar-nav-hidden{
+  transform: translateY(-130%);
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce){
+  header.site-header{
+    transition: none;
+  }
+}

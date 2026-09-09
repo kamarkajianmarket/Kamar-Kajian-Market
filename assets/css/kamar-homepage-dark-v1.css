@@ -922,3 +922,335 @@ body.public-home #traktir-kamar .traktir-card-v2 p{
   /* Fix: saat is-expanded (buka detail chapter/kurikulum), lepas cap 660px biar konten chapter-copy-card yg direveal tidak clipped overflow:hidden (task #139 fix 2) */
   body.public-home #privateCourseExplorer.private-detail-collapse.is-expanded{ max-height:none !important; overflow:visible !important; }
 }
+
+
+/* ===== KOREKSI 2026-09-09: mobile/tablet/PWA dark theme extension (max-width:980px) =====
+Mirror dari blok desktop (min-width:981px) di atas, khusus rule warna/background
+(bukan layout grid desktop-only), supaya homepage tetap dark di HP/tablet/PWA.
+Tidak menyentuh ukuran hero (sudah diatur kamar-mobile-homepage-v1.css). */
+@media (max-width: 980px) {
+
+body.public-home,
+body.kamar-v46-atelier{
+background:
+radial-gradient(circle at 10% -6%, rgba(184,138,61,.16), transparent 36rem),
+radial-gradient(circle at 88% 10%, rgba(14,95,84,.20), transparent 32rem),
+linear-gradient(180deg,#0B0F14 0%,#070A0F 55%,#0B0F14 100%) !important;
+color:#F4F6F8 !important;
+}
+body.public-home h1, body.public-home h2, body.public-home h3{ color:#F4F6F8 !important; }
+body.public-home p{ color:#93A0AF; }
+body.public-home .premium-reveal{ opacity: 1 !important; transform: none !important; filter: none !important; }
+body.public-home{ --km-muted: #8E98A8 !important; }
+
+/* navbar */
+body.public-home .site-header{
+background:rgba(11,15,20,.92) !important;
+border-color:rgba(244,246,248,.10) !important;
+box-shadow:0 18px 50px rgba(0,0,0,.45) !important;
+}
+body.public-home .site-header .brand{ color:#F4F6F8 !important; }
+body.public-home .nav-links a,
+body.public-home .quick-mobile-nav a{ color:#B8C2CE !important; }
+body.public-home .nav-links a:hover{ color:#F4F6F8 !important; background:rgba(244,246,248,.06) !important; }
+
+/* universal section shell */
+body.public-home .section-shell{
+background:rgba(16,23,32,.88) !important;
+border-color:rgba(244,246,248,.08) !important;
+box-shadow:0 20px 70px rgba(0,0,0,.40) !important;
+}
+body.public-home .section-shell:not(.hero) .btn-secondary{
+background:rgba(244,246,248,.06) !important;
+border-color:rgba(244,246,248,.16) !important;
+color:#F4F6F8 !important;
+}
+
+/* facility cards */
+body.public-home .facility-card,
+body.public-home .facility-selector-v2 .facility-card{
+background:#101720 !important;
+border-color:rgba(244,246,248,.10) !important;
+box-shadow:0 14px 42px rgba(0,0,0,.35) !important;
+}
+body.public-home .facility-card h3{ color:#F4F6F8 !important; }
+body.public-home .facility-card p{ color:#8E98A8 !important; }
+body.public-home .facility-status-badge{ background:rgba(244,246,248,.08) !important; color:#D7B46D !important; }
+body.public-home .facility-pill{ background:rgba(244,246,248,.06) !important; color:#B8C2CE !important; }
+body.public-home .facility-access-badge{
+border:1px solid rgba(244,246,248,.16) !important;
+background:rgba(244,246,248,.05) !important;
+color:#8E98A8 !important;
+}
+body.public-home .facility-access-badge-mixed{
+color:#C7B889 !important;
+border-color:rgba(215,180,109,.32) !important;
+background:rgba(215,180,109,.06) !important;
+}
+body.public-home .facility-featured-badge{
+background:linear-gradient(135deg,#D7B46D,#B88A3D) !important;
+color:#171204 !important;
+box-shadow:0 6px 16px rgba(184,138,61,.35) !important;
+}
+body.public-home .facility-featured-badge-premium{
+background:linear-gradient(135deg,#F0DDA8,#D7A63A) !important;
+box-shadow:0 6px 16px rgba(215,166,58,.45) !important;
+}
+
+/* trust strip / stats */
+body.public-home .stats-grid>div{ background:#101720 !important; border-color:rgba(244,246,248,.10) !important; box-shadow:0 10px 30px rgba(0,0,0,.30) !important; }
+body.public-home .stats-grid strong{ color:#F4F6F8 !important; }
+body.public-home .detail-grid>div{ background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; }
+body.public-home .about-stats-grid > div{ background:#101720 !important; border-color:rgba(244,246,248,.10) !important; }
+body.public-home .about-stats-grid strong{ color:#F4F6F8 !important; }
+body.public-home .about-stats-grid span{ color:#8E98A8 !important; }
+
+/* Signal recap */
+body.public-home .recap-copy, body.public-home .recap-card{ background:rgba(16,23,32,.85) !important; border-color:rgba(244,246,248,.10) !important; }
+body.public-home .showcase-tab{ background:rgba(244,246,248,.06) !important; color:#B8C2CE !important; }
+body.public-home .kamar-recap-live-card{
+background-image:
+radial-gradient(circle at 12% 0%, rgba(14,95,84,.16), rgba(0,0,0,0) 55%),
+linear-gradient(150deg, rgba(16,23,32,.96) 0%, rgba(11,16,23,.94) 100%) !important;
+border-color: rgba(244,246,248,.10) !important;
+}
+body.public-home .kamar-recap-stats-daily > *{
+background: rgb(16,23,32) !important;
+border-color: rgba(244,246,248,.08) !important;
+}
+body.public-home .kamar-recap-live-card h4{ color:#F4F6F8 !important; }
+body.public-home .kamar-recap-period{ color:#8E98A8 !important; }
+
+/* access / social / traktir / faq */
+body.public-home .access-box, body.public-home .access-split-box,
+body.public-home .social-box, body.public-home .traktir-card,
+body.public-home .faq-category, body.public-home .faq-item{
+background:#101720 !important; border-color:rgba(244,246,248,.10) !important; box-shadow:0 12px 38px rgba(0,0,0,.35) !important;
+}
+body.public-home .social-link{ background:rgba(244,246,248,.06) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.12) !important; }
+body.public-home .faq-category summary span,
+body.public-home .faq-category summary strong{ color: #F4F6F8 !important; }
+body.public-home .faq-category summary small{ color: #8E98A8 !important; }
+body.public-home .faq-item summary{ color: #F4F6F8 !important; }
+body.public-home .faq-item p{ color: #93A0AF !important; }
+
+/* Traktir Kamar */
+body.public-home #traktir-kamar .traktir-card,
+body.public-home #traktir-kamar .simple-traktir-card{
+background-image:
+radial-gradient(circle at 85% 0%, rgba(215,180,109,.14), rgba(0,0,0,0) 22rem),
+linear-gradient(160deg, rgba(16,23,32,.95) 0%, rgba(11,16,23,.93) 100%) !important;
+border-color: rgba(244,246,248,.10) !important;
+}
+body.public-home #traktir-kamar .traktir-card h3{ color:#F4F6F8 !important; }
+body.public-home #traktir-kamar .traktir-card > p{ color:#8E98A8 !important; }
+body.public-home #traktir-kamar .traktir-denom-chip:not(.active){
+background: rgba(244,246,248,.06) !important;
+border-color: rgba(244,246,248,.18) !important;
+color:#F4F6F8 !important;
+}
+body.public-home #traktir-kamar .traktir-qty-label{ color:#8E98A8 !important; }
+body.public-home #traktir-kamar .traktir-qty-btn{
+background: rgba(244,246,248,.10) !important;
+color:#F4F6F8 !important;
+}
+body.public-home #traktir-kamar .traktir-qty-value{ color:#F4F6F8 !important; }
+body.public-home #traktir-kamar #traktirTotalValue{ color:#F4C95D !important; }
+/* task #284: 5 tombol nominal simetris di HP, jangan 2-kolom nyisa 1 sendiri */
+body.public-home #traktir-kamar .traktir-denom-row{
+display:grid !important;
+grid-template-columns:repeat(2, 1fr) !important;
+gap:10px !important;
+}
+body.public-home #traktir-kamar .traktir-denom-chip{
+width:100% !important;
+text-align:center !important;
+}
+body.public-home #traktir-kamar .traktir-denom-row .traktir-denom-chip:last-child:nth-child(odd){
+grid-column: 1 / -1 !important;
+}
+
+/* affiliate */
+body.public-home #affiliate-kamar .affiliate-benefit-item,
+body.public-home #affiliate-kamar .affiliate-note-card{ background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; }
+body.public-home #affiliate-kamar.section-shell{
+background:
+radial-gradient(circle at 12% 16%, rgba(201,157,81,.14), rgba(0,0,0,0) 384px),
+radial-gradient(circle at 88% 10%, rgba(14,95,84,.20), rgba(0,0,0,0) 32rem),
+linear-gradient(180deg,#0B1017 0%,#070A0F 100%) !important;
+}
+body.public-home #affiliate-kamar .affiliate-note-card{
+background: linear-gradient(160deg, rgba(16,23,32,.92), rgba(11,16,23,.9)) !important;
+border-color: rgba(244,246,248,.08) !important;
+}
+body.public-home #affiliate-kamar .affiliate-note-card h3{ color:#F4F6F8 !important; }
+body.public-home #affiliate-kamar .affiliate-note-card > p{ color:#8E98A8 !important; }
+body.public-home #affiliate-kamar .affiliate-note-card span{ color:#F4F6F8 !important; }
+body.public-home #affiliate-kamar .affiliate-steps span{
+background: rgba(244,246,248,.07) !important;
+border-color: rgba(244,246,248,.14) !important;
+color:#F4F6F8 !important;
+}
+body.public-home #affiliate-kamar .affiliate-commission{
+border:1px solid rgba(184,138,61,.25) !important;
+background:rgba(184,138,61,.06) !important;
+}
+body.public-home #affiliate-kamar .affiliate-commission small{ color:#93A0AF !important; }
+body.public-home #affiliate-kamar .affiliate-commission strong{ color:#C7B889 !important; }
+
+/* utility grid (YouTube/Resources/FAQ/Telegram/Affiliate tiles) */
+body.public-home .utility-card{
+background: linear-gradient(160deg, rgba(16,23,32,.9), rgba(11,16,23,.88)) !important;
+border: 1px solid rgba(244,246,248,.08) !important;
+}
+body.public-home .utility-card-label{ color:#F4F6F8 !important; }
+body.public-home .utility-card-desc{ color:#8E98A8 !important; }
+body.public-home .utility-card-cta{ color:#D7B46D !important; }
+body.public-home .utility-card-disabled .utility-card-cta{ color:#8E98A8 !important; }
+
+/* YouTube featured video (task #285: teks tak terbaca di HP) */
+.kamar-featured-video{
+background:#101720 !important;
+border:1px solid rgba(244,246,248,.10) !important;
+box-shadow:0 14px 42px rgba(0,0,0,.35) !important;
+}
+.kamar-featured-video-media{ background:#070a0f !important; border:1px solid rgba(244,246,248,.08) !important; }
+.kamar-featured-video-copy h3{ color:#F4F6F8 !important; }
+.kamar-featured-video-copy p{ color:#b8c2ce !important; }
+
+/* Kamar Private course explorer */
+body.public-home .private-course-explorer{ background:rgba(16,23,32,.85) !important; border-color:rgba(215,180,109,.28) !important; }
+body.public-home .chapter-copy-card{ background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; }
+body.public-home .chapter-tabs button, body.public-home .gallery-tabs button, body.public-home .course-nav-arrows button{
+background:rgba(244,246,248,.06) !important; color:#B8C2CE !important; border-color:rgba(244,246,248,.14) !important;
+}
+body.public-home .continuous-heading span{ color:#D7B46D !important; }
+body.public-home .chapter-visual{ background: rgba(244,246,248,.06) !important; color:#F4F6F8 !important; }
+body.public-home .chapter-framework{ background: rgba(160,120,220,.16) !important; color:#D9C6F5 !important; }
+body.public-home .chapter-category{ background: rgba(244,246,248,.06) !important; color:#8E98A8 !important; }
+body.public-home .private-course-topbar strong{ color:#F4F6F8 !important; }
+body.public-home .chapter-detail-grid > section{ background: rgba(244,246,248,.05) !important; border-color: rgba(244,246,248,.1) !important; }
+body.public-home .chapter-objective{ background: linear-gradient(135deg, rgba(160,120,220,.14), rgba(244,246,248,.04)) !important; }
+body.public-home .learning-roadmap button:not(.active){
+background: rgba(244,246,248,.05) !important;
+color:#C7D1DC !important;
+border-color: rgba(244,246,248,.12) !important;
+}
+.private-curriculum-preview{
+border:1px solid rgba(184,138,61,.22) !important;
+background:rgba(184,138,61,.05) !important;
+color:#B9C2CE !important;
+}
+.private-curriculum-preview-label{ color:#C7B889 !important; }
+.private-curriculum-preview-stages{ color:#93A0AF !important; }
+.private-detail-toggle{
+background:rgba(215,180,109,.08) !important;
+border:1px solid rgba(215,180,109,.35) !important;
+color:#d7b46d !important;
+}
+
+/* indicator / robot preview */
+body.public-home .indicator-badges article, body.public-home .mechanism-grid div,
+body.public-home .robot-flow span, body.public-home .facility-info-grid section{
+background:rgba(244,246,248,.05) !important; border-color:rgba(244,246,248,.10) !important; color:#B8C2CE !important;
+}
+
+/* lightbox */
+body.public-home .lightbox-close, body.public-home .lightbox-nav{
+background:rgba(16,23,32,.85) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.14) !important;
+}
+
+/* hero floating badges */
+body.public-home .hero-badges-on-visual span{
+background:rgba(16,23,32,.85) !important; color:#F4F6F8 !important; border-color:rgba(244,246,248,.14) !important;
+}
+
+/* fix regresi: chip akses (Akses Gratis/Berbayar) */
+body.public-home #akses .access-option{
+background: linear-gradient(160deg, rgba(16,23,32,.92), rgba(11,16,23,.9)) !important;
+border-color: rgba(244,246,248,.08) !important;
+}
+body.public-home #akses .access-option h3{ color:#F4F6F8 !important; }
+body.public-home #akses .access-option p{ color:#8E98A8 !important; }
+body.public-home #akses .access-option span{ color:#D7B46D !important; }
+
+/* facility-note (blue box) */
+body.public-home .facility-note{
+background: rgba(53,132,229,.10) !important;
+border-left-color: rgba(90,150,235,.7) !important;
+color:#C7D3E0 !important;
+}
+body.public-home .facility-note, body.public-home .facility-note p,
+body.public-home .course-note, body.public-home .course-note p,
+body.public-home .facility-benefit-card, body.public-home .facility-benefit-card p,
+body.public-home .facility-info-card, body.public-home .facility-info-card p{
+color:#1B2228 !important;
+}
+
+/* Kamar Support panel */
+body.public-home .kmr-sup-panel{
+background: linear-gradient(160deg, rgba(16,23,32,.98), rgba(11,16,23,.97)) !important;
+border-color: rgba(244,246,248,.10) !important;
+}
+body.public-home .kmr-sup-opt{
+background: rgba(244,246,248,.05) !important;
+border-color: rgba(244,246,248,.12) !important;
+}
+body.public-home .kmr-sup-opt-title{ color:#F4F6F8 !important; }
+body.public-home .kmr-sup-opt-desc{ color:#8E98A8 !important; }
+body.public-home .kmr-sup-opt-arrow{ color:#D7B46D !important; }
+
+/* scam warning modal */
+body.public-home .kamar-scam-card{
+background: linear-gradient(160deg, rgba(16,23,32,.98), rgba(11,16,23,.97)) !important;
+border: 1px solid rgba(244,246,248,.10) !important;
+}
+body.public-home .kamar-scam-card h2{ color:#F4F6F8 !important; }
+body.public-home .kamar-scam-card strong{ color:#F4F6F8 !important; }
+body.public-home .kamar-scam-card > p{ color:#8E98A8 !important; }
+body.public-home .kamar-scam-highlight{
+background: rgba(215,180,109,.12) !important;
+border-color: rgba(215,180,109,.3) !important;
+color:#F4F6F8 !important;
+}
+body.public-home .kamar-scam-highlight strong{ color:#F4F6F8 !important; }
+body.public-home .kamar-scam-footnote{ color:#8E98A8 !important; }
+body.public-home .kamar-scam-close{
+background: rgba(244,246,248,.08) !important;
+color:#F4F6F8 !important;
+}
+
+/* facility detail panels (Edukasi/Signal/Private/Indikator/Robot) */
+body.public-home .facility-panel-v2,
+body.public-home .facility-detail-card,
+body.public-home .private-course-panel{
+background-image:linear-gradient(145deg,#101720 0%,#0B0F14 100%) !important;
+background-color:#101720 !important;
+--kamar-ink:#F4F6F8;
+--kamar-text:#F4F6F8;
+--kamar-text-secondary:#B8C2CE;
+--km-ink:#F4F6F8;
+--km-muted:#8E98A8;
+}
+body.public-home .facility-panel-v2 h2, body.public-home .facility-panel-v2 h3,
+body.public-home .facility-detail-card h2, body.public-home .facility-detail-card h3,
+body.public-home .private-course-panel h2, body.public-home .private-course-panel h3{
+color:#F4F6F8 !important;
+}
+body.public-home .facility-info-grid h4{ color:#F4F6F8 !important; }
+body.public-home .facility-info-grid ul{ color:#B8C2CE !important; }
+body.public-home .facility-info-grid section{ background:rgba(244,246,248,.06) !important; }
+body.public-home .chapter-detail-grid h5,
+body.public-home .chapter-objective strong,
+body.public-home .facility-system-heading strong,
+body.public-home .facility-panel-v2 .eyebrow,
+body.public-home .facility-panel-v2 .section-label{ color:#D7B46D !important; }
+body.public-home .kamar-recap-live-card h4{ color:#F4F6F8 !important; }
+
+/* fix step chip Affiliate 981 duplicate covered above; ensure detail-card private right stack */
+body.public-home .facility-detail-card.theme-private .private-right-stack{
+background: rgba(16,23,32,.55) !important;
+border: 1px solid rgba(215,180,109,.16) !important;
+}
+
+}

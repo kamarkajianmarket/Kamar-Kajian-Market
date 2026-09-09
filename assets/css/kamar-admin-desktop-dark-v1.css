@@ -821,3 +821,57 @@
   }
 
 }
+
+
+/* ==========================================================================
+   TOKEN ADMIN MODAL/POPUP + CARD TEXT FIX (2026-09-09)
+   Reported by user: Detail/Edit/Confirm/Bulk popups on admin-token.html still
+   render on the old near-white #fffdf8 card with near-invisible pale text, and
+   .tc-facility/.tc-sub kept their hardcoded dark #1c1a16/#7a7266 text color from
+   before .token-card's background was darkened on 2026-09-08 - that earlier fix
+   only touched the card bg, not this child text, so it went dark-text-on-dark-bg.
+   All 4 popups (#tokenDetailModal, #tokenConfirmModal, #tokenEditModal,
+   #tokenBulkModal) share the same .token-modal-card wrapper, so one fix covers all.
+   ========================================================================== */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-modal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.024)) !important;
+    border: 1px solid rgba(255,255,255,.10) !important;
+    box-shadow: 0 30px 90px rgba(0,0,0,.45) !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-modal-card h3 {
+    color: #FFFAF0 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-detail-grid div span {
+    color: #8E98A8 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-detail-grid div strong {
+    color: #F4F6F8 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-audit-list {
+    border-top-color: rgba(255,255,255,.14) !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-audit-row {
+    color: #B8C2CE !important;
+    border-bottom-color: rgba(255,255,255,.10) !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-desc {
+    color: #8E98A8 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .tc-facility {
+    color: #F4F6F8 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .tc-sub {
+    color: #8E98A8 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-pagination button {
+    background: rgba(255,255,255,.06) !important;
+    color: #B8C2CE !important;
+    border-color: rgba(255,255,255,.16) !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .token-pagination button.active {
+    background: linear-gradient(135deg,#C99D51,#F1D893) !important;
+    color: #15120B !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .bulk-bar span {
+    color: #E6D4A9 !important;
+  }

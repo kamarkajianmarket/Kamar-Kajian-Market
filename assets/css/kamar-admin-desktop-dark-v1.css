@@ -875,3 +875,15 @@
   body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .bulk-bar span {
     color: #E6D4A9 !important;
   }
+
+  /* DATA MEMBER: admin-detail-box (identity-v2 forces white bg + var(--km-ink) text -> invisible on this page) */
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-detail-box {
+    background: rgba(255,255,255,.025) !important;
+    border-color: rgba(238,206,122,.14) !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-detail-box span {
+    color: #E7D391 !important;
+  }
+  body.kamar-admin-desktop-v1.kamar-admin-desktop-v1 .admin-detail-box strong {
+    color: #FFF4DB !important;
+  }

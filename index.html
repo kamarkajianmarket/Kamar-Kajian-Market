@@ -324,13 +324,20 @@
 </section>
 <div class="showcase-lightbox" hidden="" id="kamarShowcaseLightbox"><button aria-label="Tutup gambar" class="lightbox-close" type="button">×</button><button aria-label="Gambar sebelumnya" class="lightbox-nav lightbox-prev" type="button">‹</button><figure><img alt="Preview diperbesar"/><figcaption></figcaption></figure><button aria-label="Gambar berikutnya" class="lightbox-nav lightbox-next" type="button">›</button></div>
 
+<style id="kh-home-polish">
+#fasilitas .facility-card{transition:transform .25s,box-shadow .25s,border-color .25s}
+#fasilitas .facility-card:hover{transform:translateY(-6px);border-color:rgba(244,223,144,.55)!important;box-shadow:0 22px 50px rgba(0,0,0,.45),0 0 0 1px rgba(244,223,144,.18)}
+#fasilitas .facility-card h3{font-size:21px!important;line-height:1.2!important}
+#fasilitas .facility-card p{font-size:14.5px!important;line-height:1.6!important}
+#katalog-harga .kc-grp{background:transparent;border-color:rgba(238,206,122,.14)}
+</style>
 <section class="section" id="katalog-harga" style="padding:70px 0">
 <div class="container" style="max-width:1180px;margin:0 auto;padding:0 20px">
 <div style="text-align:center;margin-bottom:26px"><span class="eyebrow" style="letter-spacing:.2em;font-size:12px;font-weight:900;color:#f4df90;text-transform:uppercase">Katalog Produk</span><h2 style="margin:8px 0 8px;font-size:clamp(26px,4vw,40px);color:#fff3d8">Pilih Paket Kamar yang Sesuai</h2><p style="margin:0 auto;max-width:640px;color:#a99d82;line-height:1.6">Kamar Indikator, Kamar Robot, dan Kamar E-Book dengan Free Mentoring. Harga transparan, pilih sesuai kebutuhan.</p></div>
 <div id="homeCatalog"></div>
 </div>
-<script src="assets/js/kamar-catalog.js?v=1"></script>
-<script>window.addEventListener('load',function(){var e=document.getElementById('homeCatalog');if(e&&window.KamarCatalog)KamarCatalog.render(e,{cta:'Pilih Paket'});});</script>
+<script src="assets/js/kamar-catalog.js?v=3"></script>
+<script>window.addEventListener('load',function(){var e=document.getElementById('homeCatalog');if(e&&window.KamarCatalog)KamarCatalog.render(e,{cta:'Pilih Paket',tabs:true}).then(function(){document.querySelectorAll('#fasilitas .facility-card').forEach(function(c){var t=(c.textContent||'').toLowerCase();var f=t.indexOf('e-book')>=0?'private':(t.indexOf('indikator')>=0?'indikator':(t.indexOf('robot')>=0?'robot':null));if(!f)return;c.style.cursor='pointer';c.addEventListener('click',function(ev){if(ev.target.closest('a'))return;var k=document.getElementById('homeCatalog');if(k&&k.__kcShow)k.__kcShow(f==='private'?'kamar_private':'kamar_'+f);var s=document.getElementById('katalog-harga');if(s)s.scrollIntoView({behavior:'smooth'});});});});});</script>
 </section>
 
 <section class="section-shell compact-section" id="affiliate-kamar">

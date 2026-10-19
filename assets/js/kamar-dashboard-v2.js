@@ -91,7 +91,8 @@
       var a=(await c.from('member_access').select('*').eq('profile_id',p.id).maybeSingle()).data||{};
       var nm=document.getElementById('kd2Name'); if(nm) nm.textContent='Halo, '+(p.full_name||'Kawan Kamar');
       var now=Date.now(),act=0,chips='';
-      var html=FACS.map(function(f){
+      var hid=[];try{hid=((await c.from('dashboard_settings').select('key').eq('is_active',false)).data||[]).map(function(x){return x.key})}catch(e){}
+      var html=FACS.filter(function(f){return hid.indexOf(f.k)<0}).map(function(f){
         var on=!!a['access_'+f.k], ex=a['expires_'+f.k], st='';
         if(on){
           if(ex){var d=Math.ceil((new Date(ex).getTime()-now)/86400000);

@@ -567,3 +567,7 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
+
+
+/* KAMAR ADMIN LOADER v1 */
+(function(){try{if(!document.body||!document.body.classList.contains('kamar-admin-desktop-v1'))return;var b=document.head;if(!document.querySelector('link[href*="kamar-admin-theme-v3"]')){var l=document.createElement('link');l.rel='stylesheet';l.href='assets/css/kamar-admin-theme-v3.css?v=1';b.appendChild(l)}if(!document.querySelector('script[src*="kamar-admin-v3"]')){var s=document.createElement('script');s.src='assets/js/kamar-admin-v3.js?v=1';document.body.appendChild(s)}}catch(e){}})();

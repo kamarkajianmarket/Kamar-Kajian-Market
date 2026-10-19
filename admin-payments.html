@@ -19,6 +19,7 @@ label.field{display:flex;flex-direction:column;gap:7px;font-weight:800;color:#d8
 <div class="split-card kamar-title-card"><h1>Pembayaran &amp; Verifikasi</h1><p>Periksa konfirmasi Direct Transfer, preview bukti, setujui atau tolak, lalu kirim link invoice ke member.</p></div>
 <section class="split-card"><div class="ap-tools"><label class="field">Status<select id="apStatus"><option value="awaiting_verification">Menunggu Verifikasi</option><option value="pending">Menunggu Pembayaran</option><option value="expired">Kedaluwarsa</option><option value="confirmed">Lunas</option><option value="rejected">Ditolak</option><option value="refunded">Direfund</option><option value="all">Semua</option></select></label><label class="field">Cari<input id="apSearch" type="search" placeholder="Kode pesanan, nama, email, ID member"></label><button class="btn" id="apRefresh" type="button">Refresh</button></div><div class="ap-count" id="apCount"></div></section>
 <section class="split-card"><div class="ap-row header"><div>Member</div><div>Produk</div><div>Nominal</div><div>Status</div><div>Aksi</div></div><div class="ap-list" id="apList"><p>Memuat…</p></div></section>
+<section class="split-card" id="apPromo"><h2>Promo Upgrade E-Book (bulan berjalan)</h2><p>Diskon ini dipotongkan dari <b>selisih harga</b> saat member upgrade paket E-Book. Isi persen, atur masa berlaku, lalu aktifkan.</p><div class="ap-tools" style="grid-template-columns:160px 200px 200px auto;margin-top:12px"><label class="field">Diskon (%)<input id="prPct" type="number" min="0" max="100" step="1" value="0"></label><label class="field">Berlaku mulai<input id="prFrom" type="date"></label><label class="field">Sampai<input id="prTo" type="date"></label><label class="field" style="flex-direction:row;align-items:center;gap:8px"><input id="prOn" type="checkbox" style="width:20px;height:20px"> Aktif</label></div><div class="ap-actions" style="margin-top:12px"><button class="btn" id="prSave" type="button">Simpan Promo</button><span id="prInfo" style="color:#a99d82;align-self:center"></span></div></section>
 <section class="split-card hidden" id="apDetailWrap"><h2 id="apDetailTitle">Detail Pesanan</h2><div class="ap-detail" id="apDetail"></div></section>
 </section></div></main><footer class="site-footer">© Kamar Kajian Market</footer><div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script><script src="assets/js/kamar-preview.js?v=1"></script>
@@ -36,7 +37,7 @@ label.field{display:flex;flex-direction:column;gap:7px;font-weight:800;color:#d8
     rows=r.data||[];
     var ids=Array.from(new Set(rows.map(function(x){return x.profile_id;})));
     if(ids.length){var m=await ctx.client.from('member_profiles').select('id,full_name,email,member_id,whatsapp,telegram_username').in('id',ids);(m.data||[]).forEach(function(p){profs[p.id]=p;});}
-    render();
+    render();loadPromo();
   }
   function filtered(){
     var st=el('apStatus').value,q=el('apSearch').value.trim().toLowerCase();
@@ -110,6 +111,9 @@ label.field{display:flex;flex-direction:column;gap:7px;font-weight:800;color:#d8
     var a=e.target.closest('[data-act]');if(a){act(a.getAttribute('data-act'));return;}
     var p=e.target.closest('[data-proof]');if(p){e.preventDefault();var path=p.getAttribute('data-proof');KamarPreview.open({title:'Bukti pembayaran',type:/\.pdf$/i.test(path)?'pdf':'image',getUrl:async function(){var s=await ctx.client.storage.from('kamar-payment-proofs').createSignedUrl(path,600);return s.data&&s.data.signedUrl;}});}
   });
+
+  async function loadPromo(){var r=await ctx.client.from('payment_promos').select('*').eq('key','ebook_upgrade').maybeSingle();var p=r.data;if(!p)return;el('prPct').value=p.discount_percent;el('prOn').checked=!!p.is_active;el('prFrom').value=p.valid_from?p.valid_from.slice(0,10):'';el('prTo').value=p.valid_to?p.valid_to.slice(0,10):'';el('prInfo').textContent=p.is_active?'Promo aktif.':'Promo nonaktif.';}
+  el('prSave').onclick=async function(){var pct=Number(el('prPct').value);if(!(pct>=0&&pct<=100))return KP.toast('Diskon harus 0-100.');var f=el('prFrom').value,t=el('prTo').value;var r=await ctx.client.from('payment_promos').update({discount_percent:pct,is_active:el('prOn').checked,valid_from:f?new Date(f+'T00:00:00+07:00').toISOString():null,valid_to:t?new Date(t+'T23:59:59+07:00').toISOString():null,updated_at:new Date().toISOString()}).eq('key','ebook_upgrade');if(r.error)return KP.toast('Gagal: '+r.error.message);KP.toast('Promo disimpan.');loadPromo();};
   el('apStatus').onchange=render;el('apSearch').oninput=render;el('apRefresh').onclick=load;
   load().catch(function(e){if(e&&e.message!=='login')el('apList').innerHTML='<p>'+esc(e.message||'Gagal memuat.')+'</p>';});
 })();

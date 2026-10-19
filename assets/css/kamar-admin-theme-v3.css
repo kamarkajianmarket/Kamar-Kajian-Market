@@ -36,8 +36,10 @@ body.kamar-admin-desktop-v1 .kamar-rc:hover{border-color:rgba(244,223,144,.4)!im
 .ka-row:hover{background:rgba(240,207,116,.08)}
 .ka-empty{padding:14px;color:#a99d84;font-size:13px}
 
-/* kontras label toggle */
-body.kamar-admin-desktop-v1 .split-main label,body.kamar-admin-desktop-v1 .split-main label span,body.kamar-admin-desktop-v1 .split-main label b{color:#efe6cf!important;-webkit-text-fill-color:#efe6cf!important}
-body.kamar-admin-desktop-v1 .split-main label small{color:#a99d84!important;-webkit-text-fill-color:#a99d84!important}
-body.kamar-admin-desktop-v1 .split-main label input[type=checkbox]{accent-color:#d4a63f}
-body.kamar-admin-desktop-v1 .split-shell{width:min(1180px,calc(100% - 32px));margin-inline:auto}
+/* switch toggle */
+body.kamar-admin-desktop-v1 .toggle-row{display:flex!important;align-items:center;justify-content:space-between;gap:14px;cursor:pointer}
+body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]{-webkit-appearance:none;appearance:none;position:relative!important;opacity:1!important;flex:0 0 auto;width:48px!important;height:28px!important;padding:0!important;border-radius:999px!important;background:rgba(255,255,255,.12)!important;border:1px solid rgba(238,206,122,.3)!important;cursor:pointer;transition:background .2s}
+body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff3d8;transition:transform .2s}
+body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]:checked{background:linear-gradient(135deg,#f4df90,#d4a63f)!important}
+body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]:checked::after{transform:translateX(20px);background:#1a1407}
+body.kamar-admin-desktop-v1 .admin-main .hero .pill,body.kamar-admin-desktop-v1 .admin-main .hero .eyebrow,body.kamar-admin-desktop-v1 .admin-main .hero>span{width:fit-content!important;max-width:100%}

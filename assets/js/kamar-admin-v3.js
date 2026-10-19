@@ -27,7 +27,7 @@ function build(){
  load();
 }
 async function load(){
- var c=sb();if(!c)return;var K=document.getElementById('kaKpis');
+ var c=sb();for(var w=0;!c&&w<60;w++){await new Promise(function(r){setTimeout(r,250)});c=sb()}if(!c)return;var K=document.getElementById('kaKpis');
  try{
   var now=new Date(),m0=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
   var r=await Promise.all([

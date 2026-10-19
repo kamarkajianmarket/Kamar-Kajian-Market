@@ -180,3 +180,27 @@ body.ksig-fx-intro .ksig-block:nth-of-type(2){animation-delay:.28s}body.ksig-fx-
 .ksig-body .ksig-section-label::before{margin-right:2px}
 .ksig-body .ksig-section-label::after{display:none}
 
+/* ===== v5: kartu signal berarah (SELL merah / BUY hijau), hierarki lebih tegas ===== */
+.ksig-body .ksig-row.ksig-xc{--dir:#e8c777;border-left:1px solid rgba(255,255,255,.07)!important;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.012))!important}
+.ksig-body .ksig-row.ksig-xc:has(.ksig-xc-meta .sell){--dir:#ff5d6c}
+.ksig-body .ksig-row.ksig-xc:has(.ksig-xc-meta .buy){--dir:#2fe6a4}
+.ksig-body .ksig-row.ksig-xc::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,var(--dir),transparent 85%);z-index:1}
+.ksig-body .ksig-row.ksig-xc::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 70% at 0% 0%,color-mix(in srgb,var(--dir) 15%,transparent),transparent 60%)}
+.ksig-body .ksig-row.ksig-xc>*{position:relative;z-index:2}
+@media(hover:hover){.ksig-body .ksig-row.ksig-xc:hover{transform:translateY(-3px)!important;border-color:color-mix(in srgb,var(--dir) 50%,transparent)!important;box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 28px color-mix(in srgb,var(--dir) 18%,transparent)}}
+.ksig-body .ksig-xc-pair{font-size:20px;font-weight:900;letter-spacing:.03em;color:#fff6df}
+.ksig-body .ksig-xc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:2px}
+.ksig-body .ksig-xc-meta .sell,.ksig-body .ksig-xc-meta .buy{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.08em}
+.ksig-body .ksig-xc-meta .sell{color:#ff8a95;background:rgba(255,93,108,.14);border:1px solid rgba(255,93,108,.38)}
+.ksig-body .ksig-xc-meta .buy{color:#5df0bb;background:rgba(47,230,164,.13);border:1px solid rgba(47,230,164,.38)}
+.ksig-body .ksig-xc-meta .sell::before{content:"\25BC  "}
+.ksig-body .ksig-xc-meta .buy::before{content:"\25B2  "}
+.ksig-body .ksig-xc .ksig-new-badge{animation:none!important;box-shadow:none!important;font-size:9px;letter-spacing:.1em;padding:2px 8px;border-radius:999px;color:#ff8a95;background:rgba(255,93,108,.14);border:1px solid rgba(255,93,108,.4)}
+.ksig-body .ksig-xc-zone{align-self:flex-start;width:fit-content;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:2px 9px;border-radius:6px;color:#e8c777;background:rgba(232,199,119,.1);border:1px solid rgba(232,199,119,.22)}
+.ksig-body .ksig-xc-cell{background:rgba(0,0,0,.3)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:12px!important}
+.ksig-body .ksig-xc-cell strong{font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.ksig-body .ksig-xc-tpgrid .ksig-xc-cell{border-color:rgba(47,230,164,.24)!important;background:linear-gradient(180deg,rgba(47,230,164,.08),rgba(0,0,0,.28))!important}
+.ksig-body .ksig-xc-label{color:rgba(232,199,119,.75);letter-spacing:.16em}
+.ksig-body .ksig-card-badge{font-size:10px;padding:1px 7px}
+.ksig-body .ksig-cnum{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+@media(hover:hover){.ksig-body .ksig-card:hover{transform:translateY(-4px)}}

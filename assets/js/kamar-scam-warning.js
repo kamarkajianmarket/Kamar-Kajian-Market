@@ -80,7 +80,27 @@ document.documentElement.classList.remove('kamar-scam-lock');
 });
 }
 
-if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject); else inject();
+window.__kamarScamOpen=inject;
+  function initRibbon(){
+    var KEY='kamarScamRibbonDismissed';
+    try{var t=parseInt(localStorage.getItem(KEY)||'0',10); if(t && Date.now()-t<7*864e5) return;}catch(e){}
+    if(!document.getElementById('kamarScamRibbonStyle')){
+      var st=document.createElement('style'); st.id='kamarScamRibbonStyle';
+      st.textContent='.kamar-scam-ribbon{position:relative;z-index:60;display:flex;align-items:center;gap:10px;padding:9px 16px;background:linear-gradient(90deg,rgba(201,162,77,.2),rgba(201,162,77,.07));border-bottom:1px solid rgba(243,217,139,.28);color:#e9e1cc;font-size:12.5px;line-height:1.45;font-family:inherit}'
+      +'.kamar-scam-ribbon .ks-ic{flex:0 0 auto;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:12px;color:#1c1405;background:linear-gradient(145deg,#f8e4a8,#c9a24d)}'
+      +'.kamar-scam-ribbon .ks-tx{flex:1;min-width:0}.kamar-scam-ribbon .ks-tx b{color:#f3d98b}'
+      +'.kamar-scam-ribbon .ks-more{flex:0 0 auto;border:0;background:none;color:#f3d98b;font-weight:700;font-size:12.5px;text-decoration:underline;cursor:pointer;padding:4px 2px;font-family:inherit}'
+      +'.kamar-scam-ribbon .ks-x{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1px solid rgba(243,217,139,.3);background:rgba(255,255,255,.06);color:#f3d98b;font-size:16px;line-height:1;cursor:pointer;padding:0}'
+      +'@media(max-width:640px){.kamar-scam-ribbon{padding:8px 12px;font-size:12px;gap:8px}}';
+      document.head.appendChild(st);
+    }
+    var bar=document.createElement('div'); bar.className='kamar-scam-ribbon'; bar.setAttribute('role','note');
+    bar.innerHTML='<span class="ks-ic">!</span><span class="ks-tx"><b>Waspada penipuan.</b> Transaksi Kamar Kajian Market hanya sah lewat Admin resmi.</span><button type="button" class="ks-more">Selengkapnya</button><button type="button" class="ks-x" aria-label="Tutup">&times;</button>';
+    document.body.insertBefore(bar,document.body.firstChild);
+    bar.querySelector('.ks-more').addEventListener('click',function(){ inject(); });
+    bar.querySelector('.ks-x').addEventListener('click',function(){ try{ localStorage.setItem(KEY,String(Date.now())); }catch(e){} bar.parentNode&&bar.parentNode.removeChild(bar); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initRibbon); else initRibbon();
 })();
 
 

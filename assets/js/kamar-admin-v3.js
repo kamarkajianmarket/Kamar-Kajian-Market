@@ -27,7 +27,7 @@ function build(){
  load();
 }
 async function load(){
- var c=sb();if(!c){window.__kaTry=(window.__kaTry||0)+1;if(window.__kaTry<40)setTimeout(load,500);return}var K=document.getElementById('kaKpis');
+ var c=sb();if(!c)return;var K=document.getElementById('kaKpis');
  try{
   var now=new Date(),m0=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
   var r=await Promise.all([
@@ -43,7 +43,7 @@ async function load(){
   var aw=r[1].count||0;
   K.innerHTML=kpi('admin-members.html','Total Member',r[0].count||0,'akun terdaftar')+kpi('admin-payments.html','Menunggu Verifikasi',aw,'bukti transfer perlu dicek',aw>0)+kpi('admin-payments.html','Menunggu Pembayaran',r[2].count||0,'invoice aktif')+kpi('admin-payments.html','Omzet Bulan Ini',rp(om),'pembayaran lunas')+kpi('admin-affiliate-payment.html','Komisi Diminta',r[4].count||0,'menunggu dicairkan',(r[4].count||0)>0)+kpi('admin-payment-products.html','Produk Aktif',r[5].count||0,'tampil di katalog & checkout');
   var P=document.getElementById('kaPay'),M=document.getElementById('kaMem');
-  P.innerHTML=(r[6].data||[]).map(function(x){return '<a class="ka-row" href="admin-payments.html"><span>'+esc(x.order_code||x.product_key||'-')+' · '+rp(x.amount)+'</span><i>'+esc(x.payment_status)+' · '+dt(x.created_at)+'</i></a>'}).join('')||'<div class="ka-empty">Belum ada pembayaran.</div>';
+  P.innerHTML=(r[6].data||[]).map(function(x){return '<a class="ka-row" href="admin-payments.html"><span>'+esc(x.order_code||x.product_key||x.payment_type||'Pembayaran')+' · '+rp(x.amount)+'</span><i>'+esc(x.payment_status)+' · '+dt(x.created_at)+'</i></a>'}).join('')||'<div class="ka-empty">Belum ada pembayaran.</div>';
   M.innerHTML=(r[7].data||[]).map(function(x){return '<a class="ka-row" href="admin-members.html"><span>'+esc(x.full_name||x.email||'-')+'</span><i>'+dt(x.created_at)+'</i></a>'}).join('')||'<div class="ka-empty">Belum ada member.</div>';
  }catch(e){console.warn('kamar-admin-v3',e)}
 }

@@ -112,3 +112,9 @@ background:radial-gradient(900px 520px at 12% -8%,rgba(232,199,119,.11),transpar
 .ksig-body .ksig-header-titles{flex:1 1 260px}
 .ksig-body .ksig-header-meta{flex:0 1 auto;width:auto!important}
 @media(max-width:760px){.ksig-body .ksig-header-meta{width:100%!important}}
+
+/* v3fix2 */
+.ksig-body .ksig-header-row{flex-direction:row!important;flex-wrap:wrap!important;align-items:flex-end!important;justify-content:space-between!important}
+.ksig-body .ksig-header-titles{flex:1 1 280px!important;align-self:flex-start!important;text-align:left!important;width:auto!important;height:auto!important}
+.ksig-body .ksig-header-title,.ksig-body .ksig-header-sub{text-align:left!important}
+@media(max-width:760px){.ksig-body .ksig-header-row{flex-direction:column!important;align-items:flex-start!important;gap:14px!important}.ksig-body .ksig-header-titles{flex:none!important;width:100%!important}.ksig-body .ksig-header-meta{width:100%!important;justify-content:flex-start}}

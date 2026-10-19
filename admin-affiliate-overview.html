@@ -35,8 +35,8 @@
   <link href="assets/css/kamar-admin-desktop-dark-v1.css?v=7" rel="stylesheet"/>
 </head>
 <body class="kamar-admin-desktop-v1">
-<div class="admin-shell">
-  <aside class="admin-sidebar">
+<div class="split-shell"><div class="admin-shell split-app">
+  <aside class="admin-sidebar split-sidebar">
     <div class="brand-small">Admin Kamar</div>
     <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
     <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
@@ -45,15 +45,15 @@
     <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
     <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
   </aside>
-  <main class="admin-main">
-    <section class="card hero">
+  <main class="admin-main split-main">
+    <section class="split-card card hero">
       <div class="hero-inner">
         <div><span class="eyebrow">Affiliate Admin</span> <span class="module-chip">◆ Ringkasan</span><h1 id="viewTitle">Data Affiliate</h1><p id="viewDesc">Ringkasan performa program affiliate: statistik approval &amp; rekening, pendaftar terbaru, dan leaderboard affiliator dengan referral terbanyak.</p></div>
         <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
       </div>
     </section>
 
-    <section class="card" id="affiliateSubmenuCard">
+    <section class="split-card card" id="affiliateSubmenuCard">
       <h2 class="section-title">Struktur Menu Affiliate</h2>
       <p class="muted">Affiliator baru wajib mengisi data pembayaran lengkap dan menunggu approval admin. Kode referral baru aktif setelah status affiliator disetujui.</p>
       <div class="submenu-grid">
@@ -74,19 +74,18 @@
       <a class="stat-card" href="admin-affiliate-reward.html?reward=paid"><span>Reward Dibayar</span><strong id="statRewardPaid">0</strong><small>Komisi referral sudah dibayar.</small></a>
     </section>
 
-    <section class="card" id="recentAffiliateCard">
+    <section class="split-card card" id="recentAffiliateCard">
       <h2 class="section-title">Affiliator Terbaru</h2>
       <p class="muted">6 pendaftar affiliate paling baru. Buka <b>Daftar Affiliator</b> untuk approve, tolak, atau verifikasi rekening.</p>
       <div class="mini-table" id="recentAffiliateList"></div>
     </section>
 
-    <section class="card" id="leaderboardCard">
+    <section class="split-card card" id="leaderboardCard">
       <h2 class="section-title">Top Affiliator — Referral Terbanyak</h2>
       <p class="muted">Peringkat affiliator dengan jumlah referral member aktif terbanyak. Hanya affiliator berstatus <b>Disetujui</b> yang dihitung.</p>
       <div class="mini-table" id="leaderboardList"></div>
     </section>
-  </main>
-</div>
+  </main></div></div>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>
 <script>

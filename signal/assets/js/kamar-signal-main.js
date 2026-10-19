@@ -1184,8 +1184,7 @@ renderApp();
 var b = wibNowBoundaries();
 var startIso = b.today;
 var endIso = new Date(new Date(b.today).getTime() + 86400000).toISOString();
-return state.client.from('signals').select('timeframe,skenario,display_status,status,farthest_tp_level,running_point,max_running_point,created_at')
-.gte('created_at', startIso).lt('created_at', endIso).limit(5000)
+return (function(){ var all=[]; function step(from){ return state.client.from('signals').select('timeframe,skenario,display_status,status,farthest_tp_level,running_point,max_running_point,created_at').gte('created_at', startIso).lt('created_at', endIso).order('created_at',{ ascending:true }).order('id',{ ascending:true }).range(from, from+999).then(function(r){ if(r.error) return { data:null, error:r.error }; var rows=r.data||[]; all=all.concat(rows); if(rows.length===1000) return step(from+1000); return { data:all, error:null }; }); } return step(0); })()
 .then(function(res){
 if(res.error) throw res.error;
 var raw = res.data || [];
@@ -2085,8 +2084,7 @@ var R = state.recap;
 R.loading = true; R.error = null;
 renderRecapCard();
 // REBUILD 2026-09-06: live dari signals (bukan signal_recaps/EA), rentang [startIso, endIso).
-return state.client.from('signals').select('timeframe,skenario,display_status,status,farthest_tp_level,running_point,max_running_point,created_at')
-.gte('created_at', startIso).lt('created_at', endIso).limit(5000)
+return (function(){ var all=[]; function step(from){ return state.client.from('signals').select('timeframe,skenario,display_status,status,farthest_tp_level,running_point,max_running_point,created_at').gte('created_at', startIso).lt('created_at', endIso).order('created_at',{ ascending:true }).order('id',{ ascending:true }).range(from, from+999).then(function(r){ if(r.error) return { data:null, error:r.error }; var rows=r.data||[]; all=all.concat(rows); if(rows.length===1000) return step(from+1000); return { data:all, error:null }; }); } return step(0); })()
 .then(function(res){
 if(res.error) throw res.error;
 var raw = res.data || [];

@@ -385,3 +385,6 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(mark,150);}).observe(document.documentElement,{childList:true,subtree:true});
   mark();
 })();
+
+/* KAMAR FIX v1: baris putih tak terbaca (reward-row) */
+(function(){var s=document.createElement('style');s.textContent='.reward-row,.reward-list .row,.reward-table .row{background:rgba(255,255,255,.035)!important;color:#f5f0e6!important;border:1px solid rgba(238,206,122,.14)!important;border-radius:18px!important}.reward-row strong{color:#fff3d8!important}.reward-row small,.reward-row .info-small{color:#d8cda9!important}.reward-row input,.reward-row select{background:rgba(0,0,0,.35)!important;color:#f5f0e6!important;border:1px solid rgba(238,206,122,.25)!important}';document.head.appendChild(s);})();

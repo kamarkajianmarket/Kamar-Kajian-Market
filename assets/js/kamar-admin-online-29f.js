@@ -751,6 +751,7 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
     if(!/^admin/i.test(PAGE)) return;
     injectSharedStyles();
     rebuildSidebar();
+    try{document.body.classList.add('kmr-sb-ready');}catch(_e){}
     await patchKamarAdminLocal();
     renderActionCenter();
     setTimeout(renderActionCenter, 1500);

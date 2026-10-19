@@ -12,3 +12,12 @@ header.site-header.kamar-nav-hidden{
     transition: none;
   }
 }
+
+/* Bar shortcut mobile (Fasilitas/FAQ/Traktir) ikut tersembunyi bersama header */
+.quick-mobile-nav{transition:transform .35s cubic-bezier(.22,.61,.36,1),opacity .25s ease !important;}
+header.site-header.kamar-nav-hidden ~ .quick-mobile-nav,
+body.kamar-nav-is-hidden .quick-mobile-nav{
+  transform:translateY(-220%) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}

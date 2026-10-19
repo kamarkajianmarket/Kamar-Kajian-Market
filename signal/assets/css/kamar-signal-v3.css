@@ -104,3 +104,11 @@ background:radial-gradient(900px 520px at 12% -8%,rgba(232,199,119,.11),transpar
 .ksig-body .ksig-card-label{letter-spacing:.1em!important;white-space:nowrap}
 .ksig-body .ksig-card-top-right{display:inline-flex;align-items:center;gap:4px}
 .ksig-body .ksig-card-count,.ksig-body .ksig-card-desc{padding:0!important}
+
+/* v3fix1 */
+.ksig-body .ksig-header{position:static!important;top:auto!important}
+.ksig-body .ksig-header-row::before,.ksig-body .ksig-header-row::after,.ksig-body .ksig-header::before,.ksig-body .ksig-header::after{display:none!important;content:none!important}
+.ksig-body .ksig-header-row{justify-content:space-between;gap:14px 20px}
+.ksig-body .ksig-header-titles{flex:1 1 260px}
+.ksig-body .ksig-header-meta{flex:0 1 auto;width:auto!important}
+@media(max-width:760px){.ksig-body .ksig-header-meta{width:100%!important}}

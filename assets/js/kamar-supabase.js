@@ -37,6 +37,24 @@
     window.KAMAR_SUPABASE_ANON_KEY = cfg.key;
     return cfg;
   }
+  // PERF: gabungkan request GET identik (in-flight) + cache singkat 5 dtk; mutasi menghapus cache.
+  var __kc={};
+  function kamarDedupFetch(input, init){
+    try{
+      var url=typeof input==='string'?input:(input&&input.url)||'';
+      var method=((init&&init.method)||(input&&input.method)||'GET').toUpperCase();
+      if(url.indexOf('/rest/v1/')<0) return fetch(input, init);
+      if(method!=='GET'){ __kc={}; return fetch(input, init); }
+      var h=(init&&init.headers)||{};
+      var key=url+'|'+JSON.stringify(h instanceof Headers?Array.from(h.entries()):h);
+      var e=__kc[key];
+      if(e&&Date.now()-e.t<5000) return e.p.then(function(r){return r.clone();});
+      var p=fetch(input, init);
+      __kc[key]={t:Date.now(),p:p};
+      p.catch(function(){ delete __kc[key]; });
+      return p.then(function(r){ if(!r.ok) delete __kc[key]; return r.clone(); });
+    }catch(_e){ return fetch(input, init); }
+  }
   function createClientFromConfig(cfg){
     cfg = applyConfig(cfg || readConfig());
     if(window.kamarSupabaseClient) return window.kamarSupabaseClient;
@@ -48,7 +66,8 @@
         autoRefreshToken: true,
         detectSessionInUrl: true,
         lock: kamarNoopAuthLock
-      }
+      },
+      global: { fetch: kamarDedupFetch }
     });
     window.KamarSupabase.client = window.kamarSupabaseClient;
     window.KamarSupabaseClient = window.kamarSupabaseClient;

@@ -37,7 +37,8 @@ body{background:#070707;color:var(--text)}
 .edu-switch i:after{content:"";position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:#fff;transition:transform .25s}
 .edu-switch input:checked+i{background:linear-gradient(145deg,#f8e4a8,#c9a24d)}
 .edu-switch input:checked+i:after{transform:translateX(21px);background:#1c1405}
-.edu-switch span{display:flex;flex-direction:column;gap:2px}.edu-switch small{opacity:.65;font-size:12.5px;line-height:1.4}
+.edu-switch span{display:flex;flex-direction:column;gap:2px}.edu-switch small{color:#b9b19d;font-size:12.5px;line-height:1.4}
+#eduTopics,#eduSchedule{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(243,217,139,.22);background:rgba(255,255,255,.05);color:#fff;font-size:14px;line-height:1.6;font-family:inherit;resize:vertical}
 .edu-hint{font-size:12.5px;line-height:1.6;opacity:.65;margin-top:12px}
 #eduSaveLink{border:0;cursor:pointer}
 .edu-tools{display:flex;flex-direction:column;gap:12px;margin:14px 0}
@@ -100,6 +101,9 @@ body{background:#070707;color:var(--text)}
 <label class="edu-switch"><input type="checkbox" id="eduOpen"><i></i><span><b>Pendaftaran dibuka</b><small>Matikan untuk menutup pendaftar baru. Member yang sudah aktif tidak terpengaruh.</small></span></label>
 <label class="field" style="margin-top:14px">Link grup Telegram Kamar Edukasi<input id="eduLink" type="url" placeholder="https://t.me/+xxxxxxxx" autocomplete="off"></label>
 <div class="button-row"><button class="btn" id="eduSaveLink" type="button">Simpan Link Grup</button></div>
+<label class="field" style="margin-top:18px">Materi yang dipelajari (tampil di dashboard Kamar Edukasi member aktif)<textarea id="eduTopics" rows="4" maxlength="4000" placeholder="Satu poin per baris, contoh: Struktur market"></textarea></label>
+<label class="field" style="margin-top:14px">Jadwal pelaksanaan<textarea id="eduSchedule" rows="4" maxlength="4000" placeholder="Contoh: Selasa dan Kamis, 20.00 WIB"></textarea></label>
+<div class="button-row"><button class="btn" id="eduSaveText" type="button" style="border:0;cursor:pointer">Simpan Materi &amp; Jadwal</button></div>
 <p class="edu-hint">Link ini dikirim lewat email welcome saat pendaftar disetujui, dan tampil di halaman Kamar Edukasi member yang aktif. Ubah link di sini kapan saja; member melihat link terbaru.</p>
 </section>
 
@@ -223,7 +227,7 @@ function say(m){try{toast(m)}catch(e){alert(m)}}
 function fmt(d){try{return new Date(d).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}}
 var LBL={pending:'Menunggu',approved:'Aktif',suspended:'Suspend',rejected:'Ditolak'};
 async function waitClient(){for(var i=0;i<80;i++){if(window.kamarSupabaseClient)return window.kamarSupabaseClient;await new Promise(function(r){setTimeout(r,250)})}return null}
-async function loadSettings(){var r=await c.rpc('admin_edu_get_settings');if(r.error){say('Gagal memuat pengaturan: '+r.error.message);return}var s=r.data||{};$('eduOpen').checked=(s.registration_open!=='false');$('eduLink').value=s.group_link||''}
+async function loadSettings(){var r=await c.rpc('admin_edu_get_settings');if(r.error){say('Gagal memuat pengaturan: '+r.error.message);return}var s=r.data||{};$('eduOpen').checked=(s.registration_open!=='false');$('eduLink').value=s.group_link||'';$('eduTopics').value=s.topics_text||'';$('eduSchedule').value=s.schedule_text||''}
 async function loadRows(){
   var r=await c.from('edu_registrations').select('*, member_profiles(member_id)').order('requested_at',{ascending:false});
   if(r.error){$('eduList').innerHTML='<p class="edu-empty">Gagal memuat: '+esc(r.error.message)+'</p>';return}
@@ -272,6 +276,7 @@ async function init(){
   loadSettings();loadRows();
   $('eduOpen').addEventListener('change',async function(){var r=await c.rpc('admin_edu_set_setting',{p_key:'registration_open',p_value:this.checked?'true':'false'});if(r.error){say('Gagal: '+r.error.message);loadSettings();return}say(this.checked?'Pendaftaran dibuka.':'Pendaftaran ditutup.')});
   $('eduSaveLink').addEventListener('click',async function(){var v=$('eduLink').value.trim();var r=await c.rpc('admin_edu_set_setting',{p_key:'group_link',p_value:v});if(r.error){say('Gagal: '+r.error.message);return}say('Link grup disimpan.')});
+  $('eduSaveText').addEventListener('click',async function(){var r1=await c.rpc('admin_edu_set_setting',{p_key:'topics_text',p_value:$('eduTopics').value});var r2=await c.rpc('admin_edu_set_setting',{p_key:'schedule_text',p_value:$('eduSchedule').value});if(r1.error||r2.error){say('Gagal: '+((r1.error||r2.error).message));return}say('Materi dan jadwal disimpan.')});
   $('eduTabs').addEventListener('click',function(e){var b=e.target.closest('button[data-f]');if(!b)return;filter=b.getAttribute('data-f');[].forEach.call($('eduTabs').children,function(x){x.classList.toggle('on',x===b)});render()});
   $('eduSearch').addEventListener('input',function(){q=this.value.trim();render()});
   $('eduList').addEventListener('click',function(e){var b=e.target.closest('button[data-act]');if(!b)return;act(b.getAttribute('data-act'),b.getAttribute('data-id'))});

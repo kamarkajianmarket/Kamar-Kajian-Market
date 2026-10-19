@@ -427,3 +427,22 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(enhance,150);}).observe(document.documentElement,{childList:true,subtree:true});
   enhance();
 })();
+
+/* KAMAR ADMIN MENU PEMBAYARAN v1: tambah menu Pembayaran & Verifikasi di sidebar admin */
+(function(){
+  if(!/\/admin[^\/]*\.html$/i.test(location.pathname)) return;
+  function add(){
+    if(document.querySelector('a[href^="admin-payments.html"]')) return;
+    var a=document.querySelector('.split-sidebar a[href^="admin-activation"], .admin-sidebar a[href^="admin-activation"], aside a[href^="admin-activation"]');
+    if(!a) return;
+    var n=a.cloneNode(false);
+    n.setAttribute('href','admin-payments.html');
+    n.className=(a.className||'').replace(/\bactive\b/g,'').trim();
+    n.removeAttribute('aria-current');
+    n.textContent='Pembayaran & Verifikasi';
+    a.insertAdjacentElement('afterend',n);
+  }
+  var tm;
+  new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(add,200);}).observe(document.documentElement,{childList:true,subtree:true});
+  add();
+})();

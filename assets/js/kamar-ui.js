@@ -487,3 +487,19 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(run,800);}); else setTimeout(run,800);
 })();
+
+
+/* KAMAR KATALOG MENU v1 - menu "Katalog Produk" di sidebar member */
+(function(){
+  function add(){
+    document.querySelectorAll('aside.split-sidebar').forEach(function(s){
+      if(s.querySelector('a[href="member-catalog.html"]')) return;
+      var ref=s.querySelector('a[href="member-renewal.html"]'); if(!ref) return;
+      var a=document.createElement('a'); a.href='member-catalog.html'; a.textContent='Katalog Produk';
+      if(/member-catalog/.test(location.pathname)) a.className='active';
+      ref.parentNode.insertBefore(a,ref);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
+  setTimeout(add,1200);
+})();

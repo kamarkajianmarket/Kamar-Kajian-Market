@@ -41,7 +41,6 @@
   dbg('script kamar-signal-boot.js mulai jalan');
   /* __ksigDiag2: tampilkan log di layar jika boot macet >7s + tangkap error global */
   try{ window.addEventListener('error',function(e){dbg('ERROR: '+(e&&e.message)+' @'+(e&&e.filename?String(e.filename).split('/').pop():'')+':'+(e&&e.lineno));}); window.addEventListener('unhandledrejection',function(e){dbg('REJECT: '+(e&&e.reason&&(e.reason.message||e.reason)));}); }catch(_e){}
-  setTimeout(function(){ try{ if(document.querySelector('.ksig-boot')&&__ksigLogEl){ __ksigLogEl.style.display='block'; } }catch(_e){} },7000);
 
   var __settled = false;
   var state = { client: null, user: null };

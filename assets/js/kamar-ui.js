@@ -531,3 +531,39 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
   setTimeout(run,1500);
 })();
+
+
+/* KAMAR MEMBER LOADER v2 - sidebar seragam + modul halaman member */
+(function(){
+  var p=(location.pathname.split('/').pop()||'').toLowerCase();
+  if(!(p==='dashboard.html'||p.indexOf('member-')===0||p==='affiliate-dashboard.html')) return;
+  if(p==='member-renewal.html'||p==='member-profile.html'){
+    var s=document.createElement('script');s.src='assets/js/kamar-member-pages-v2.js?v=1';s.defer=true;(document.body||document.documentElement).appendChild(s);
+  }
+  var ORDER=['a[href="dashboard.html"]','a[href="member-catalog.html"]','a[href="member-renewal.html"]','a[href="member-orders.html"]','a[href="member-fasilitas-khusus.html"]','details.sidebar-group','a[href="affiliate-dashboard.html"]','a[href="member-profile.html"]','a[data-kamar-logout],a[href="member.html"]'];
+  var busy=false;
+  function norm(){
+    if(busy) return; busy=true;
+    try{
+      document.querySelectorAll('aside.split-sidebar').forEach(function(aside){
+        function q(sel){var l=aside.querySelectorAll(sel);for(var i=0;i<l.length;i++){if(l[i].parentElement===aside) return l[i];}return null;}
+        var nodes=ORDER.map(q).filter(Boolean);
+        var ref=null,kids=aside.children;
+        for(var i=0;i<kids.length;i++){var k=kids[i];if((k.tagName==='HR'&&/divider/.test(k.className))||/admin-block/.test(k.className)){ref=k;break;}}
+        var cur=[].slice.call(kids).filter(function(k){return nodes.indexOf(k)>=0;});
+        var same=cur.length===nodes.length&&cur.every(function(k,i){return k===nodes[i];});
+        if(!same){nodes.forEach(function(n){if(ref) aside.insertBefore(n,ref); else aside.appendChild(n);});}
+        nodes.forEach(function(n){if(n.tagName==='A'){var h=(n.getAttribute('href')||'').toLowerCase();var on=(h===p);if(on!==n.classList.contains('active')) n.classList.toggle('active',on);}});
+      });
+    }catch(e){}
+    busy=false;
+  }
+  var t=null;function later(){clearTimeout(t);t=setTimeout(norm,120);}
+  function start(){
+    norm();
+    var a=document.querySelector('aside.split-sidebar');
+    if(a&&window.MutationObserver) new MutationObserver(later).observe(a,{childList:true});
+    setTimeout(norm,800);setTimeout(norm,2500);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();

@@ -182,12 +182,19 @@ st.textContent = ''
 document.head.appendChild(st);
 }
 function txt(el){ return (el.textContent || '').trim(); }
+function isCand(card){
+if(card.classList.contains('kamar-title-card') || card.classList.contains('kamar-rc')) return false;
+if(card.querySelector(':scope > .split-card')) return false;
+var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
+if(!ey) return false;
+return txt(ey).toLowerCase() !== 'ringkasan';
+}
 function wrapCard(card){
 if(card.classList.contains('kamar-title-card')) return;
 if(card.querySelector(':scope > .kamar-rc-head')) return;
-var ey = card.querySelector(':scope > .eyebrow');
+var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 var h = card.querySelector(':scope > h2, :scope > h3');
-if(!ey || !h) return;
+if(!ey) return;
 if(card.querySelector(':scope > .split-card')) return;
 var key = txt(ey).toLowerCase();
 if(key === 'ringkasan') return;
@@ -197,12 +204,12 @@ if(card.querySelector(':scope > .kamar-reveal-head')){ card.classList.add('kamar
 var head = document.createElement('button');
 head.type = 'button'; head.className = 'kamar-rc-head'; head.setAttribute('aria-expanded','false');
 head.innerHTML = '<span class="kamar-rc-text"><span class="kamar-rc-eyebrow"></span><span class="kamar-rc-title"></span></span><span class="kamar-rc-arrow">&rsaquo;</span>';
-head.querySelector('.kamar-rc-eyebrow').textContent = txt(ey);
-head.querySelector('.kamar-rc-title').textContent = txt(h);
+head.querySelector('.kamar-rc-eyebrow').textContent = h ? txt(ey) : '';
+head.querySelector('.kamar-rc-title').textContent = txt(h || ey);
 var body = document.createElement('div'); body.className = 'kamar-rc-body';
 var kids = Array.prototype.slice.call(card.childNodes);
 for(var i=0;i<kids.length;i++){ if(kids[i] !== ey && kids[i] !== h) body.appendChild(kids[i]); }
-card.removeChild(ey); card.removeChild(h);
+card.removeChild(ey); if(h) card.removeChild(h);
 card.appendChild(head); card.appendChild(body);
 }
 function groupParent(parent){
@@ -228,7 +235,15 @@ var main = document.querySelector('.split-main');
 if(!main) return;
 injectCss();
 var all = main.querySelectorAll('.split-card');
-for(var i=0;i<all.length;i++){ wrapCard(all[i]); }
+var counts = [];
+for(var a=0;a<all.length;a++){
+var pc = all[a].parentElement; if(!pc) continue;
+if(all[a].classList.contains('kamar-rc') || isCand(all[a])){ var ix = counts.findIndex(function(x){ return x.p === pc; }); if(ix < 0) counts.push({p:pc, n:1}); else counts[ix].n++; }
+}
+for(var i=0;i<all.length;i++){
+var cp = counts.filter(function(x){ return x.p === all[i].parentElement; })[0];
+if(cp && cp.n >= 2) wrapCard(all[i]);
+}
 var parents = [];
 var rcs = main.querySelectorAll('.kamar-rc');
 for(var j=0;j<rcs.length;j++){ var p = rcs[j].parentElement; if(p && parents.indexOf(p) < 0) parents.push(p); }

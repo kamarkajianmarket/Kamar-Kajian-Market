@@ -161,6 +161,10 @@ function injectCss(){
 if(document.getElementById('kamarRcStyle')) return;
 var st = document.createElement('style'); st.id = 'kamarRcStyle';
 st.textContent = ''
++ '.split-card.kamar-rc{min-height:0 !important;height:auto !important;padding:0 !important;overflow:hidden;margin-bottom:10px}'
++ '.split-card.kamar-rc .kamar-rc-head{background:transparent !important;background-image:none !important;box-shadow:none !important;border:0 !important;border-radius:0 !important;color:#f3ecdc !important;min-height:0 !important;height:auto !important;width:100% !important;text-shadow:none !important;text-transform:none !important;transform:none !important;filter:none !important;margin:0 !important;justify-content:space-between !important;text-align:left !important}'
++ '.split-card.kamar-rc .kamar-rc-head:hover{background:rgba(255,255,255,.045) !important}'
++ '.kamar-rc-head .kamar-rc-arrow{color:#d8b25a !important}'
 + '.kamar-sec{margin:18px 0 6px}'
 + '.kamar-sec-title{margin:0 0 10px;padding:0 4px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d8b25a;display:flex;align-items:center;gap:10px}'
 + '.kamar-sec-title:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(216,178,90,.35),transparent)}'
@@ -193,6 +197,7 @@ return false;
 function isCand(card){
 if(card.classList.contains('kamar-title-card') || card.classList.contains('kamar-rc')) return false;
 if(isSignalCta(card)) return false;
+if(card.dataset.kcrSkip || card.classList.contains('hidden') || /detail|modal|popup|drawer|dialog/i.test((card.id || '') + ' ' + card.className)) return false;
 if(card.querySelector(':scope > .split-card')) return false;
 var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 if(!ey) return false;
@@ -201,6 +206,7 @@ return txt(ey).toLowerCase() !== 'ringkasan';
 function wrapCard(card){
 if(card.classList.contains('kamar-title-card')) return;
 if(isSignalCta(card)) return;
+if(card.dataset.kcrSkip || card.classList.contains('hidden') || /detail|modal|popup|drawer|dialog/i.test((card.id || '') + ' ' + card.className)){ card.dataset.kcrSkip = '1'; return; }
 if(card.querySelector(':scope > .kamar-rc-head')) return;
 var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 var h = card.querySelector(':scope > h2, :scope > h3');
@@ -269,6 +275,11 @@ new MutationObserver(schedule).observe(document.documentElement, {childList:true
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 document.addEventListener('click', function(e){
 var h = e.target && e.target.closest ? e.target.closest('.kamar-rc-head') : null;
+if(!h && e.target && e.target.closest){
+// Klik di area kosong card (di luar judul/isi) tetap membuka/menutup reveal.
+var rcCard = e.target.closest('.kamar-rc');
+if(rcCard && !e.target.closest('.kamar-rc-body') && !e.target.closest('a,button,input,select,textarea,label')){ h = rcCard.querySelector(':scope > .kamar-rc-head'); }
+}
 if(!h) return;
 var open = h.classList.contains('open');
 if(!open){

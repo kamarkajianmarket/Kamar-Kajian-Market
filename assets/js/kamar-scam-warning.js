@@ -82,3 +82,17 @@ document.documentElement.classList.remove('kamar-scam-lock');
 
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject); else inject();
 })();
+
+
+/* klik di mana saja (selain tombol Telegram) menutup pengumuman; Esc juga menutup */
+(function(){
+  function popup(){return document.getElementById('kamarScamWarning29F');}
+  function closeIt(){var p=popup();if(!p)return false;var b=p.querySelector('[data-scam-close]');if(b){b.click();return true;}p.remove();return true;}
+  document.addEventListener('click',function(e){
+    var p=popup();if(!p)return;
+    if(e.target.closest&&e.target.closest('#kamarScamWarning29F a[href]'))return;
+    if(e.target.closest&&e.target.closest('[data-scam-close]'))return;
+    e.preventDefault();e.stopPropagation();closeIt();
+  },true);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeIt();});
+})();

@@ -335,4 +335,3 @@ setTimeout(function(){
 }, 8000);
 
 })();
-hideLauncher

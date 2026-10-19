@@ -125,6 +125,20 @@ if(!h) return;
 var body = h.nextElementSibling;
 if(!body || !body.classList.contains('kamar-reveal-body')) return;
 var open = h.classList.contains('open');
+// Accordion: hanya 1 reveal terbuka per halaman. Saat membuka yang baru, tutup reveal lain
+// (kecuali reveal induk yang membungkus h, supaya reveal bersarang tetap jalan).
+if(!open){
+var others = document.querySelectorAll('.kamar-reveal-head.open');
+for(var oi=0; oi<others.length; oi++){
+var oh = others[oi];
+if(oh === h) continue;
+var ob = oh.nextElementSibling;
+if(ob && ob.contains(h)) continue;
+oh.classList.remove('open');
+oh.setAttribute('aria-expanded', 'false');
+if(ob && ob.classList.contains('kamar-reveal-body')) ob.style.maxHeight = null;
+}
+}
 h.classList.toggle('open', !open);
 h.setAttribute('aria-expanded', !open);
 body.style.maxHeight = !open ? (body.scrollHeight + 'px') : null;

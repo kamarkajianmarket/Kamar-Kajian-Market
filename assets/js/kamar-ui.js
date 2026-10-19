@@ -166,6 +166,7 @@ st.textContent = ''
 + '.split-card.kamar-rc .kamar-rc-head:hover{background:rgba(255,255,255,.045) !important}'
 + '.kamar-rc-head .kamar-rc-arrow{color:#d8b25a !important}'
 + '.split-main{align-content:start !important}'
++ '.kamar-rc-head .kamar-rc-title:before,.kamar-rc-head .kamar-rc-title:after,.kamar-rc-head .kamar-rc-eyebrow:before,.kamar-rc-head .kamar-rc-eyebrow:after{display:none !important;content:none !important}'
 + '.kamar-sec{margin:18px 0 6px}'
 + '.kamar-sec-title{margin:0 0 10px;padding:0 4px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d8b25a;display:flex;align-items:center;gap:10px}'
 + '.kamar-sec-title:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(216,178,90,.35),transparent)}'
@@ -302,4 +303,43 @@ h.classList.toggle('open', !open);
 h.setAttribute('aria-expanded', !open);
 if(!open){ setTimeout(function(){ try{ h.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(err){} }, 30); }
 });
+})();
+
+
+// ===========================================================================
+// KAMAR RENAME v1 - tampilan: "Kamar Private" -> "Kamar E-Book" (lapisan tampilan saja).
+// Kunci internal (kamar_private, access_kamar_private, nilai data/option value) TIDAK diubah.
+// ===========================================================================
+(function(){
+if(window.__KAMAR_RENAME_V1__) return;
+window.__KAMAR_RENAME_V1__ = true;
+var PAIRS = [[/Kamar Private/g,'Kamar E-Book'],[/KAMAR PRIVATE/g,'KAMAR E-BOOK'],[/Kamar private/g,'Kamar E-Book'],[/kamar private/g,'kamar e-book']];
+function fix(s){
+if(!s || s.toLowerCase().indexOf('kamar private') < 0) return s;
+for(var i=0;i<PAIRS.length;i++){ s = s.replace(PAIRS[i][0], PAIRS[i][1]); }
+return s;
+}
+var ATTRS = ['placeholder','title','aria-label','alt'];
+function walk(root){
+if(!root) return;
+if(root.nodeType === 3){ var v = fix(root.nodeValue); if(v !== root.nodeValue) root.nodeValue = v; return; }
+if(root.nodeType !== 1) return;
+var tag = root.tagName;
+if(tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA') return;
+for(var a=0;a<ATTRS.length;a++){ var av = root.getAttribute(ATTRS[a]); if(av){ var nv = fix(av); if(nv !== av) root.setAttribute(ATTRS[a], nv); } }
+var c = root.firstChild;
+while(c){ walk(c); c = c.nextSibling; }
+}
+var timer = null;
+function run(){
+timer = null;
+if(document.title) document.title = fix(document.title);
+if(document.body) walk(document.body);
+}
+function schedule(){ if(timer) return; timer = setTimeout(run, 60); }
+function start(){
+run();
+new MutationObserver(schedule).observe(document.documentElement, {childList:true, subtree:true, characterData:true});
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

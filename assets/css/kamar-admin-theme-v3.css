@@ -1,0 +1,37 @@
+/* KAMAR ADMIN THEME v3 - tema seragam menu admin (hitam-emas, sama dengan member v3) */
+body.kamar-admin-desktop-v1 .split-main{gap:18px}
+body.kamar-admin-desktop-v1 .split-main h1,body.kamar-admin-desktop-v1 .split-main h2,body.kamar-admin-desktop-v1 .split-main h3{color:#fff3d8;-webkit-text-fill-color:#fff3d8}
+body.kamar-admin-desktop-v1 .split-main p{color:#b9ad92}
+body.kamar-admin-desktop-v1 .split-card{border:1px solid rgba(238,206,122,.18)!important;border-radius:24px!important;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015))!important}
+body.kamar-admin-desktop-v1 .split-card.hero,body.kamar-admin-desktop-v1 .split-card.kd-pagehero{position:relative;overflow:hidden;border:1px solid rgba(244,223,144,.3)!important;border-radius:30px!important;padding:28px 32px!important;background:radial-gradient(900px 300px at 100% 0%,rgba(212,166,63,.20),transparent 60%),linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.01))!important}
+body.kamar-admin-desktop-v1 .split-main .hero h1,body.kamar-admin-desktop-v1 .kd-pagehero h1{font-size:clamp(28px,3.2vw,44px)!important;line-height:1.08;letter-spacing:-.02em;margin:6px 0 8px}
+body.kamar-admin-desktop-v1 input,body.kamar-admin-desktop-v1 select,body.kamar-admin-desktop-v1 textarea{border-radius:14px!important;border:1px solid rgba(238,206,122,.22)!important;background:rgba(255,255,255,.04)!important;color:#fff3d8!important}
+body.kamar-admin-desktop-v1 input:focus,body.kamar-admin-desktop-v1 select:focus,body.kamar-admin-desktop-v1 textarea:focus{outline:none;border-color:#f0cf74!important;box-shadow:0 0 0 3px rgba(240,207,116,.15)}
+body.kamar-admin-desktop-v1 table{border-collapse:separate;border-spacing:0 6px;width:100%}
+body.kamar-admin-desktop-v1 th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#d9b866;text-align:left;padding:8px 12px}
+body.kamar-admin-desktop-v1 td{padding:12px;background:rgba(255,255,255,.035);color:#efe6cf}
+body.kamar-admin-desktop-v1 td:first-child{border-radius:14px 0 0 14px}body.kamar-admin-desktop-v1 td:last-child{border-radius:0 14px 14px 0}
+body.kamar-admin-desktop-v1 tbody tr:hover td{background:rgba(240,207,116,.08)}
+body.kamar-admin-desktop-v1 .kamar-rc{transition:border-color .2s}
+body.kamar-admin-desktop-v1 .kamar-rc:hover{border-color:rgba(244,223,144,.4)!important}
+/* dashboard admin v2 */
+.ka-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.ka-kpi{display:block;text-decoration:none;color:inherit;padding:18px 20px;border-radius:22px;border:1px solid rgba(238,206,122,.18);background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.015));transition:transform .18s,border-color .18s,box-shadow .18s;cursor:pointer}
+.ka-kpi:hover{transform:translateY(-3px);border-color:rgba(244,223,144,.55);box-shadow:0 14px 34px rgba(0,0,0,.35)}
+.ka-kpi small{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#d9b866}
+.ka-kpi b{display:block;margin:8px 0 2px;font-size:30px;line-height:1.1;color:#fff3d8;-webkit-text-fill-color:#fff3d8}
+.ka-kpi span{font-size:12px;color:#a99d84}
+.ka-kpi.warn{border-color:rgba(255,170,90,.55)}.ka-kpi.warn b{color:#ffcf8a;-webkit-text-fill-color:#ffcf8a}
+.ka-sec{margin-top:4px}
+.ka-sec h2{font-size:15px!important;letter-spacing:.08em;text-transform:uppercase;color:#d9b866!important;-webkit-text-fill-color:#d9b866!important;margin:0 0 12px!important}
+.ka-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.ka-tile{display:block;text-decoration:none;padding:16px 18px;border-radius:20px;border:1px solid rgba(238,206,122,.16);background:rgba(255,255,255,.03);color:#fff3d8;cursor:pointer;transition:transform .18s,border-color .18s,background .18s}
+.ka-tile:hover{transform:translateY(-2px);border-color:rgba(244,223,144,.5);background:rgba(240,207,116,.07)}
+.ka-tile b{display:block;font-size:14px;color:#fff3d8}.ka-tile span{display:block;margin-top:4px;font-size:12px;color:#a99d84;line-height:1.4}
+.ka-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.ka-two{grid-template-columns:1fr}}
+.ka-list{display:flex;flex-direction:column;gap:8px}
+.ka-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:11px 14px;border-radius:16px;background:rgba(255,255,255,.035);font-size:13px;color:#efe6cf;text-decoration:none}
+.ka-row i{font-style:normal;color:#a99d84;font-size:12px}
+.ka-row:hover{background:rgba(240,207,116,.08)}
+.ka-empty{padding:14px;color:#a99d84;font-size:13px}

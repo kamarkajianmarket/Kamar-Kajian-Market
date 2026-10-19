@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Pembayaran & Verifikasi — Kamar Kajian Market</title><meta content="Verifikasi konfirmasi pembayaran, preview bukti, dan kirim invoice." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="style.css" rel="stylesheet"/>
+<style>
+:root{--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:11px 14px;border-radius:16px;font-weight:800}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.admin-menu-section{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#d4a63f;font-weight:1000;margin:12px 10px 4px}.split-main{display:grid;gap:22px;align-content:start}.split-card{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:26px;padding:22px}.split-card h1,.split-card h2,.split-card h3{margin:0 0 8px;color:#fff3d8}.split-card p{color:var(--muted);line-height:1.6;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:11px 18px;text-decoration:none;cursor:pointer;font-size:14px}.btn.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.danger{background:rgba(255,96,96,.12);color:#ffb4b4;border:1px solid rgba(255,96,96,.3)}.btn.mini{padding:8px 13px;font-size:12px}.btn[disabled]{opacity:.45;cursor:not-allowed}
+label.field{display:flex;flex-direction:column;gap:7px;font-weight:800;color:#d8d0bd;font-size:13px}input,select,textarea{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.35);color:#f5f0e6;border-radius:14px;padding:11px 14px;outline:none;max-width:100%}
+.ap-tools{display:grid;grid-template-columns:200px 1fr auto;gap:12px;align-items:end}.ap-count{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ap-row{display:grid;grid-template-columns:1.3fr 1.3fr 1fr .9fr .6fr;gap:12px;align-items:center;padding:14px 16px;border:1px solid rgba(238,206,122,.14);border-radius:16px;background:rgba(255,255,255,.03)}.ap-row.header{background:transparent;border:0;padding:0 16px 4px;color:#d8cda9;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900}.ap-row small{display:block;color:#a99d82;margin-top:3px}.ap-row strong{color:#fff3d8}.ap-list{display:grid;gap:10px;margin-top:14px}
+.ap-detail{display:grid;gap:14px}.ap-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ap-box{border:1px solid rgba(238,206,122,.14);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.025)}.ap-box span{display:block;color:#d8cda9;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:900}.ap-box b{display:block;color:#fff;margin-top:5px;word-break:break-word}.ap-actions{display:flex;gap:10px;flex-wrap:wrap}.ap-inv{display:flex;gap:10px;flex-wrap:wrap}.ap-inv input{flex:1;min-width:220px}.hidden{display:none!important}
+.toast{position:fixed;right:22px;bottom:22px;z-index:99999;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:18px;padding:14px 16px;opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:none}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}
+@media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.split-shell{padding-top:92px}.ap-tools{grid-template-columns:1fr}.ap-row{grid-template-columns:1fr}.ap-row.header{display:none}.ap-grid{grid-template-columns:1fr}}
+</style>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/><link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
+</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a></header>
+<main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div><div class="admin-menu-section">Utama</div><a href="admin.html">Dashboard Admin</a><div class="admin-menu-section">Member &amp; Akses</div><a href="admin-members.html">Data Member</a><a href="admin-activation.html">Aktivasi Akun &amp; Fasilitas</a><a class="active" href="admin-payments.html">Pembayaran &amp; Verifikasi</a><a href="admin-license-requests.html">Request License</a><div class="admin-menu-section">Affiliate</div><a href="admin-affiliate-overview.html">Data Affiliate</a><a href="admin-affiliate-reward.html">Reward / Komisi</a><div class="admin-menu-section">Sistem</div><a href="admin-payment.html">Payment Gateway</a><a href="admin-settings.html">Pengaturan Umum</a><a data-kamar-logout="" href="index.html">Logout</a></aside>
+<section class="split-main">
+<div class="split-card kamar-title-card"><h1>Pembayaran &amp; Verifikasi</h1><p>Periksa konfirmasi Direct Transfer, preview bukti, setujui atau tolak, lalu kirim link invoice ke member.</p></div>
+<section class="split-card"><div class="ap-tools"><label class="field">Status<select id="apStatus"><option value="awaiting_verification">Menunggu Verifikasi</option><option value="pending">Menunggu Pembayaran</option><option value="expired">Kedaluwarsa</option><option value="confirmed">Lunas</option><option value="rejected">Ditolak</option><option value="refunded">Direfund</option><option value="all">Semua</option></select></label><label class="field">Cari<input id="apSearch" type="search" placeholder="Kode pesanan, nama, email, ID member"></label><button class="btn" id="apRefresh" type="button">Refresh</button></div><div class="ap-count" id="apCount"></div></section>
+<section class="split-card"><div class="ap-row header"><div>Member</div><div>Produk</div><div>Nominal</div><div>Status</div><div>Aksi</div></div><div class="ap-list" id="apList"><p>Memuat…</p></div></section>
+<section class="split-card hidden" id="apDetailWrap"><h2 id="apDetailTitle">Detail Pesanan</h2><div class="ap-detail" id="apDetail"></div></section>
+</section></div></main><footer class="site-footer">© Kamar Kajian Market</footer><div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script><script src="assets/js/kamar-preview.js?v=1"></script>
+<script>
+(function(){
+  var KP=window.KamarPay, esc=KP.esc, ctx=null, rows=[], profs={}, prods={};
+  function el(i){return document.getElementById(i);}
+  function codeOf(o){return o.order_code||('LAMA-'+String(o.id).slice(0,6).toUpperCase());}
+  function pTitle(o){var p=prods[o.product_key||(o.raw_payload&&o.raw_payload.product_key)];return p?p.title:((o.selected_facilities&&o.selected_facilities[0])||'Pembayaran');}
+  async function load(){
+    ctx=await KP.me();
+    if(ctx.profile.role!=='admin'){location.replace('admin-login.html');return;}
+    var pr=await ctx.client.from('payment_products').select('product_key,title');(pr.data||[]).forEach(function(p){prods[p.product_key]=p;});
+    var r=await ctx.client.from('payments').select('*').order('created_at',{ascending:false}).limit(500);
+    rows=r.data||[];
+    var ids=Array.from(new Set(rows.map(function(x){return x.profile_id;})));
+    if(ids.length){var m=await ctx.client.from('member_profiles').select('id,full_name,email,member_id,whatsapp,telegram_username').in('id',ids);(m.data||[]).forEach(function(p){profs[p.id]=p;});}
+    render();
+  }
+  function filtered(){
+    var st=el('apStatus').value,q=el('apSearch').value.trim().toLowerCase();
+    return rows.filter(function(o){
+      if(st!=='all'&&o.payment_status!==st)return false;
+      if(!q)return true;
+      var p=profs[o.profile_id]||{};
+      return [codeOf(o),p.full_name,p.email,p.member_id,pTitle(o)].join(' ').toLowerCase().indexOf(q)>=0;
+    });
+  }
+  function render(){
+    var cnt={};rows.forEach(function(o){cnt[o.payment_status]=(cnt[o.payment_status]||0)+1;});
+    el('apCount').innerHTML=['awaiting_verification','pending','confirmed','rejected','expired'].map(function(s){return KP.statusChip(s)+' <b style="color:#fff;margin-right:8px">'+(cnt[s]||0)+'</b>';}).join('');
+    var list=filtered();
+    el('apList').innerHTML=list.length?list.map(function(o){
+      var p=profs[o.profile_id]||{};
+      return '<div class="ap-row admin-row"><div><strong>'+esc(p.full_name||'Member')+'</strong><small>'+esc(p.member_id||'-')+' · '+esc(p.email||'')+'</small></div><div>'+esc(pTitle(o))+'<small>'+esc(codeOf(o))+' · '+(o.payment_route==='direct'?'Direct':'Gateway')+' · '+KP.fmtDate(o.created_at)+'</small></div><div><b style="color:#fff">'+KP.rp(o.amount)+'</b>'+(o.unique_code?'<small>kode unik '+o.unique_code+'</small>':'')+'</div><div>'+KP.statusChip(o.payment_status)+'</div><div class="admin-row-actions"><button type="button" class="btn mini secondary" data-detail="'+esc(o.id)+'">Detail</button></div></div>';
+    }).join(''):'<p>Tidak ada pesanan untuk filter ini.</p>';
+  }
+  function detail(id){
+    var o=rows.find(function(x){return x.id===id;});if(!o)return;
+    var p=profs[o.profile_id]||{},f=o.confirm_form||{},code=codeOf(o),hasCode=!!o.order_code;
+    el('apDetailTitle').textContent='Detail '+code+' — '+(p.full_name||'Member');
+    var h='<div class="ap-grid">'
+      +'<div class="ap-box"><span>Produk</span><b>'+esc(pTitle(o))+'</b></div>'
+      +'<div class="ap-box"><span>Status</span><b>'+KP.statusChip(o.payment_status)+'</b></div>'
+      +'<div class="ap-box"><span>Nominal yang harus masuk</span><b>'+KP.rp(o.amount)+(o.unique_code?' (kode unik '+o.unique_code+')':'')+'</b></div>'
+      +'<div class="ap-box"><span>Jalur</span><b>'+(o.payment_route==='direct'?'Direct Transfer':'Payment Gateway (Mayar)')+'</b></div>'
+      +'<div class="ap-box"><span>Member</span><b>'+esc(p.full_name||'-')+' · '+esc(p.member_id||'-')+'</b></div>'
+      +'<div class="ap-box"><span>Kontak</span><b>'+esc(p.email||'-')+' · WA '+esc(p.whatsapp||'-')+'</b></div>'
+      +'<div class="ap-box"><span>Pengirim (menurut member)</span><b>'+esc(f.sender_name||'-')+' · '+esc(f.bank_from||'-')+'</b></div>'
+      +'<div class="ap-box"><span>Waktu transfer</span><b>'+esc(f.transfer_at||'-')+'</b></div>'
+      +'<div class="ap-box"><span>Catatan member</span><b>'+esc(f.note||'-')+'</b></div>'
+      +'<div class="ap-box"><span>Persetujuan S&amp;K</span><b>'+(o.terms_accepted&&o.terms_accepted.accepted_at?'Disetujui '+KP.fmtDate(o.terms_accepted.accepted_at):'-')+'</b></div>'
+      +'<div class="ap-box"><span>Kedaluwarsa</span><b>'+KP.fmtDate(o.expires_at)+'</b></div>'
+      +'<div class="ap-box"><span>Catatan admin</span><b>'+esc(o.review_note||'-')+'</b></div></div>';
+    if(o.proof_path)h+='<div class="ap-actions"><a class="btn secondary" href="#" data-proof="'+esc(o.proof_path)+'">Lihat Bukti Pembayaran</a></div>';
+    if(hasCode){
+      if(o.payment_status==='awaiting_verification'||o.payment_status==='expired'||o.payment_status==='pending'){
+        h+='<div class="ap-actions"><button class="btn" data-act="approve">Setujui &amp; Aktifkan Akses</button><button class="btn danger" data-act="reject">Tolak</button></div>';
+      }
+      if(o.payment_status==='confirmed'){h+='<div class="ap-actions"><button class="btn danger mini" data-act="refund">Tandai Refund (transfer ganda)</button></div>';}
+      h+='<div class="ap-box"><span>Link Invoice (dari finance.hikarichgroup.com)</span><div class="ap-inv" style="margin-top:8px"><input id="apInv" type="url" placeholder="https://finance.hikarichgroup.com/..." value="'+esc(o.invoice_url||'')+'"><button class="btn" data-act="invoice">'+(o.invoice_url?'Perbarui Invoice':'Kirim Invoice ke Member')+'</button>'+(o.invoice_url?'<a class="btn secondary" href="#" data-kamar-preview="'+esc(o.invoice_url)+'" data-type="link" data-title="Invoice '+esc(code)+'">Preview</a>':'')+'</div></div>';
+    }else{h+='<p>Pesanan dari alur lama (Mayar). Verifikasi otomatis oleh sistem.</p>';}
+    el('apDetail').innerHTML=h;el('apDetail').setAttribute('data-id',id);
+    el('apDetailWrap').classList.remove('hidden');el('apDetailWrap').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  async function act(kind){
+    var id=el('apDetail').getAttribute('data-id'),o=rows.find(function(x){return x.id===id;});if(!o)return;
+    var code=o.order_code,res;
+    try{
+      if(kind==='approve'){
+        if(!confirm('Setujui pembayaran '+code+' sebesar '+KP.rp(o.amount)+' dan aktifkan akses member?'))return;
+        res=await ctx.client.rpc('kamar_admin_review_payment',{p_order_code:code,p_action:'approve',p_note:null,p_refund_amount:null});
+      }else if(kind==='reject'){
+        var why=prompt('Alasan penolakan (akan dilihat member):');if(why===null)return;
+        res=await ctx.client.rpc('kamar_admin_review_payment',{p_order_code:code,p_action:'reject',p_note:why||null,p_refund_amount:null});
+      }else if(kind==='refund'){
+        var amt=prompt('Nominal kelebihan/ganda yang direfund (angka):');if(!amt)return;
+        res=await ctx.client.rpc('kamar_admin_review_payment',{p_order_code:code,p_action:'refund',p_note:'Refund transfer ganda',p_refund_amount:Number(amt)});
+      }else if(kind==='invoice'){
+        var u=(el('apInv').value||'').trim();if(!u)return KP.toast('Isi link invoice.');
+        res=await ctx.client.rpc('kamar_admin_set_invoice',{p_order_code:code,p_invoice_url:u});
+      }
+      if(res.error)throw new Error(res.error.message.replace(/^.*?:\s*/,''));
+      KP.toast('Berhasil.');await load();detail(id);
+    }catch(err){KP.toast(err.message||'Gagal.');}
+  }
+  document.addEventListener('click',function(e){
+    var d=e.target.closest('[data-detail]');if(d){detail(d.getAttribute('data-detail'));return;}
+    var a=e.target.closest('[data-act]');if(a){act(a.getAttribute('data-act'));return;}
+    var p=e.target.closest('[data-proof]');if(p){e.preventDefault();var path=p.getAttribute('data-proof');KamarPreview.open({title:'Bukti pembayaran',type:/\.pdf$/i.test(path)?'pdf':'image',getUrl:async function(){var s=await ctx.client.storage.from('kamar-payment-proofs').createSignedUrl(path,600);return s.data&&s.data.signedUrl;}});}
+  });
+  el('apStatus').onchange=render;el('apSearch').oninput=render;el('apRefresh').onclick=load;
+  load().catch(function(e){if(e&&e.message!=='login')el('apList').innerHTML='<p>'+esc(e.message||'Gagal memuat.')+'</p>';});
+})();
+</script>
+<script id="kamar-global-header-script">
+(function(){
+  function clearSessionAndLogout(){try{['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});}catch(err){}}
+  function buildHeader(){
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');header.className='site-header kamar-global-header';
+    header.innerHTML='<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/><span>Kamar Kajian Market</span></a><nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav><div class="kamar-global-actions"><a class="kamar-global-btn" href="index.html">Beranda</a><a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a></div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');if(out)out.addEventListener('click',clearSessionAndLogout);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',buildHeader);else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+</body></html>

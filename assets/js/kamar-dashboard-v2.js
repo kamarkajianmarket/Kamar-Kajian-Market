@@ -56,7 +56,7 @@
     cap:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'
   };
   var FACS=[
-    {k:'materi_edukasi',n:'Kamar Edukasi',ic:'cap',page:'member-materials.html',buy:'member-renewal.html'},
+    {k:'materi_edukasi',n:'Kamar Edukasi',ic:'cap',page:'member-materials.html',buy:'member-edukasi-daftar.html'},
     {k:'kamar_study',n:'Kamar Signal',ic:'radio',page:'member-study.html',buy:'member-renewal.html'},
     {k:'kamar_private',n:'Kamar E-Book',ic:'book',page:'member-private.html',buy:'member-checkout.html?facility=ebook'},
     {k:'kamar_indikator',n:'Kamar Indikator',ic:'pulse',page:'member-indicator.html',buy:'member-checkout.html?facility=indikator'},
@@ -104,7 +104,7 @@
         if(on) act++;
         if(on&&f.k==='kamar_private'&&a.ebook_chapter_max) st='<b>Aktif</b> · Chapter 1–'+a.ebook_chapter_max;
         var href=on?f.page:f.buy;
-        return '<a class="kd-fac'+(on?' on':'')+'" href="'+href+'"><span class="kd-ic"><svg viewBox="0 0 24 24">'+ICON[f.ic]+'</svg></span><span class="kd-fn">'+f.n+'</span><span class="kd-fs">'+st+'</span><span class="kd-fa">'+(on?'Buka →':(f.k==='materi_edukasi'||f.k==='kamar_study'?'Aktifkan':'Beli Paket'))+'</span></a>';
+        return '<a class="kd-fac'+(on?' on':'')+'" href="'+href+'"><span class="kd-ic"><svg viewBox="0 0 24 24">'+ICON[f.ic]+'</svg></span><span class="kd-fn">'+f.n+'</span><span class="kd-fs">'+st+'</span><span class="kd-fa">'+(on?'Buka →':(f.k==='materi_edukasi'?'Daftar Gratis':(f.k==='kamar_study'?'Aktifkan':'Beli Paket')))+'</span></a>';
       }).join('');
       var box=document.getElementById('kd2Facs'); if(box) box.innerHTML=html;
       var chipsEl=document.getElementById('kd2Chips');

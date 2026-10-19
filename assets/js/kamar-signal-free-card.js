@@ -49,6 +49,19 @@
     if(s==='INVALID') return { label:'Invalid &middot; Signal Batal', cls:'is-loss' };
     return { label: esc(status||'-'), cls:'' };
   }
+  function statusInfoRow(row){
+    var s = String(row.status||'').toUpperCase();
+    var tp = Number(row.farthest_tp_level||0);
+    if(s === 'INVALID'){
+      if(tp > 0) return { label:'Selesai &middot; Profit (TP'+tp+' tercapai)', cls:'is-profit' };
+      return { label:'Selesai &middot; Cut Loss', cls:'is-loss' };
+    }
+    if(s === 'ACTIVE'){
+      if(tp > 0) return { label:'Profit &middot; TP'+tp+' tercapai', cls:'is-profit' };
+      if(row.last_call_reached_at) return { label:'Profit &middot; Last Call tercapai', cls:'is-profit' };
+    }
+    return statusInfo(row.status);
+  }
   function render(container, row){
     injectStyle();
     if(!row){
@@ -56,7 +69,7 @@
       return;
     }
     var s = String(row.status||'').toUpperCase();
-    var info = statusInfo(row.status);
+    var info = statusInfoRow(row);
     var pips = pipsOf(row);
     var pText = pipsText(pips);
     var pCls = pips!=null ? (pips >= 0 ? 'pos' : 'neg') : '';
@@ -95,8 +108,8 @@
         cachedToken = token;
       }
       if(!token) return;
-      var url = client.supabaseUrl + '/rest/v1/signals?select=id,timeframe,jenis_zona,skenario,setup_title,area_high,area_low,tp1,tp2,tp3,invalidasi,status,running_point,max_running_point,farthest_tp_level,result_point,created_at&timeframe=eq.M5&visibility=in.(public,both)&order=created_at.desc&limit=1';
-      var res = await fetch(url, { headers: { apikey: client.supabaseKey, Authorization: 'Bearer ' + token } });
+      var url = client.supabaseUrl + '/rest/v1/rpc/kamar_signal_free_current';
+      var res = await fetch(url, { method:'POST', headers: { apikey: client.supabaseKey, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: '{}' });
       if(res.status === 401 || res.status === 403){ cachedToken = null; return; }
       if(!res.ok) return;
       var rows = await res.json();

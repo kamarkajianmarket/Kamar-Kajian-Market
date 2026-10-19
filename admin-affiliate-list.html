@@ -34,8 +34,8 @@
   <link href="assets/css/kamar-admin-desktop-dark-v1.css?v=7" rel="stylesheet"/>
 </head>
 <body class="kamar-admin-desktop-v1">
-<div class="admin-shell">
-  <aside class="admin-sidebar">
+<div class="split-shell"><div class="admin-shell split-app">
+  <aside class="admin-sidebar split-sidebar">
     <div class="brand-small">Admin Kamar</div>
     <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
     <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
@@ -44,15 +44,15 @@
     <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
     <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
   </aside>
-  <main class="admin-main">
-    <section class="card hero">
+  <main class="admin-main split-main">
+    <section class="split-card card hero">
       <div class="hero-inner">
         <div><span class="eyebrow">Affiliate Admin</span> <span class="module-chip">▤ Kelola</span><h1 id="viewTitle">Daftar Affiliator</h1><p id="viewDesc">Kelola pendaftar affiliate: approve, tolak, verifikasi rekening, salin kode referral, dan hapus data duplikat.</p></div>
         <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button><button class="btn" id="exportBtn" type="button">Export CSV</button></div>
       </div>
     </section>
 
-    <section class="card" id="affiliateSubmenuCard">
+    <section class="split-card card" id="affiliateSubmenuCard">
       <h2 class="section-title">Struktur Menu Affiliate</h2>
       <p class="muted">Affiliator baru wajib mengisi data pembayaran lengkap dan menunggu approval admin. Kode referral baru aktif setelah status affiliator disetujui.</p>
       <div class="submenu-grid">
@@ -70,7 +70,7 @@
       <div class="stat-card" style="cursor:default"><span>Ditolak</span><strong id="statRejected">0</strong><small>Affiliator yang ditolak admin.</small></div>
     </section>
 
-    <section class="card" id="affiliateListCard" data-view-section="list">
+    <section class="split-card card" id="affiliateListCard" data-view-section="list">
       <h2 class="section-title">Daftar Affiliator</h2>
       <p class="muted">Kode referral hanya bisa disalin dan dianggap aktif jika status approval sudah <b>Disetujui</b>. Pendaftar tetap bisa di-approve meskipun data rekening belum lengkap; rekening bisa diverifikasi menyusul.</p>
       <div class="toolbar">
@@ -84,9 +84,8 @@
       <div class="aff-pagination" id="affiliatePagination"></div>
     </section>
 
-    <section class="card detail-card" id="detailCard" data-view-section="list"></section>
-  </main>
-</div>
+    <section class="split-card card detail-card" id="detailCard" data-view-section="list"></section>
+  </main></div></div>
 <div class="toast" id="toast"></div>
 <div class="confirm" id="confirmModal"><div class="confirm-box"><h3 id="confirmTitle">Konfirmasi</h3><p id="confirmText"></p><div class="confirm-actions"><button class="btn secondary" id="cancelConfirm" type="button">Batal</button><button class="btn danger" id="confirmAction" type="button">Ya, Lanjutkan</button></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=29F"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script>

@@ -1,0 +1,30 @@
+/* KAMAR SUPPORT v2 - launcher tunggal modern, tidak menumpuk */
+iframe.kmr-tawk-bubble{display:none!important}
+html:not(.kmr-chat-open) iframe[title*="tawk.to"]{display:none!important}
+html.kmr-chat-open .kmr-sup-launcher{display:none!important}
+html.kamar-drawer-open .kmr-sup-launcher{opacity:0!important;pointer-events:none!important}
+
+.kmr-sup-launcher{right:24px!important;bottom:24px!important;height:54px!important;padding:0 22px 0 16px!important;gap:10px!important;align-items:center!important;border-radius:27px!important;border:1px solid rgba(243,217,139,.5)!important;background:linear-gradient(145deg,#f8e4a8,#c9a24d)!important;color:#1c1405!important;font-weight:800!important;font-size:14px!important;letter-spacing:.03em!important;box-shadow:0 16px 36px rgba(0,0,0,.45),0 0 0 5px rgba(201,162,77,.12),inset 0 1px 0 rgba(255,255,255,.6)!important;transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s!important;-webkit-tap-highlight-color:transparent}
+.kmr-sup-launcher svg{width:21px!important;height:21px!important;flex:0 0 auto}
+.kmr-sup-launcher:hover{transform:translateY(-3px)!important;box-shadow:0 22px 44px rgba(0,0,0,.5),0 0 0 7px rgba(201,162,77,.16),inset 0 1px 0 rgba(255,255,255,.6)!important}
+.kmr-sup-launcher:active{transform:scale(.96)!important}
+
+.kmr-sup-overlay{background:rgba(3,3,4,.5)!important;-webkit-backdrop-filter:blur(5px)!important;backdrop-filter:blur(5px)!important}
+.kmr-sup-panel{right:24px!important;bottom:92px!important;width:344px!important;max-width:calc(100vw - 28px)!important;border-radius:26px!important;padding:24px 20px 18px!important;background:radial-gradient(120% 60% at 0 0,rgba(201,162,77,.18),transparent 60%),linear-gradient(180deg,rgba(30,28,24,.96),rgba(11,11,12,.98))!important;border:1px solid rgba(243,217,139,.26)!important;box-shadow:0 34px 90px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.07)!important;color:#efe6cf!important;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.kmr-sup-head h2{margin:0 0 6px!important;font-size:12.5px!important;font-weight:800!important;letter-spacing:.26em!important;background:linear-gradient(90deg,#f8e4a8,#c9a24d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent!important}
+.kmr-sup-head p{margin:0 0 16px!important;font-size:13.5px!important;line-height:1.5!important;color:rgba(236,228,208,.62)!important}
+.kmr-sup-opt{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;margin:0 0 10px!important;padding:14px 16px!important;border-radius:18px!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.09)!important;color:#fff!important;text-align:left!important;cursor:pointer;transition:background .25s,border-color .25s,transform .2s!important}
+.kmr-sup-opt:hover{background:rgba(201,162,77,.12)!important;border-color:rgba(243,217,139,.45)!important;transform:translateY(-1px)}
+.kmr-sup-opt:active{transform:scale(.98)}
+.kmr-sup-opt-title{color:#f8e4a8!important;font-weight:700!important;font-size:15px!important}
+.kmr-sup-opt-desc{color:rgba(236,228,208,.55)!important;font-size:12.5px!important}
+.kmr-sup-opt-arrow{color:#c9a24d!important;font-size:18px!important;transition:transform .25s}
+.kmr-sup-opt:hover .kmr-sup-opt-arrow{transform:translateX(4px)}
+.kmr-sup-note{margin-top:6px!important;font-size:11.5px!important;line-height:1.5!important;color:rgba(236,228,208,.45)!important}
+.kmr-sup-close{top:14px!important;right:14px!important;width:34px!important;height:34px!important;border-radius:50%!important;background:rgba(255,255,255,.07)!important;border:1px solid rgba(243,217,139,.25)!important;color:#f3d98b!important}
+
+@media (max-width:1024px){
+  .kmr-sup-launcher{right:14px!important;bottom:calc(98px + env(safe-area-inset-bottom))!important;width:54px!important;height:54px!important;padding:0!important;border-radius:50%!important;justify-content:center!important;font-size:0!important;gap:0!important}
+  .kmr-sup-launcher svg{width:24px!important;height:24px!important}
+  .kmr-sup-panel{right:14px!important;left:14px!important;width:auto!important;max-width:none!important;bottom:calc(164px + env(safe-area-inset-bottom))!important}
+}

@@ -184,9 +184,15 @@ st.textContent = ''
 document.head.appendChild(st);
 }
 function txt(el){ return (el.textContent || '').trim(); }
+function isSignalCta(card){
+// Card yang berisi tombol/tautan ke Dashboard Signal (mis. 'Buka Dashboard Signal') tidak dikecilkan.
+var as = card.querySelectorAll('a[href="/signal/"]');
+for(var q=0;q<as.length;q++){ if(/dashboard signal/i.test(as[q].textContent || '')) return true; }
+return false;
+}
 function isCand(card){
 if(card.classList.contains('kamar-title-card') || card.classList.contains('kamar-rc')) return false;
-if(card.querySelector('a[href="/signal/"]')) return false;
+if(isSignalCta(card)) return false;
 if(card.querySelector(':scope > .split-card')) return false;
 var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 if(!ey) return false;
@@ -194,7 +200,7 @@ return txt(ey).toLowerCase() !== 'ringkasan';
 }
 function wrapCard(card){
 if(card.classList.contains('kamar-title-card')) return;
-if(card.querySelector('a[href="/signal/"]')) return;
+if(isSignalCta(card)) return;
 if(card.querySelector(':scope > .kamar-rc-head')) return;
 var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 var h = card.querySelector(':scope > h2, :scope > h3');

@@ -218,8 +218,9 @@ card.classList.add('kamar-rc');
 card.dataset.kcrKey = key;
 var onlyReveal = card.querySelectorAll(':scope > .kamar-reveal-head').length === 1 && Array.prototype.every.call(card.children, function(c){ return c === ey || c === h || c.classList.contains('kamar-reveal-head') || c.classList.contains('kamar-reveal-body'); });
 if(onlyReveal){ card.classList.add('kamar-rc-own'); return; }
-var head = document.createElement('button');
-head.type = 'button'; head.className = 'kamar-rc-head'; head.setAttribute('aria-expanded','false');
+var head = document.createElement('div');
+// div role=button (bukan <button>) supaya tidak tertimpa CSS global tombol emas di halaman admin.
+head.setAttribute('role','button'); head.tabIndex = 0; head.className = 'kamar-rc-head'; head.setAttribute('aria-expanded','false');
 head.innerHTML = '<span class="kamar-rc-text"></span><span class="kamar-rc-arrow">&rsaquo;</span>';
 var tx = head.firstChild;
 // Pindahkan node ASLI (bukan salin teks) supaya teks dinamis (mis. 'Memuat status...') tetap ikut ter-update.
@@ -273,6 +274,9 @@ schedule();
 new MutationObserver(schedule).observe(document.documentElement, {childList:true, subtree:true});
 }
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+document.addEventListener('keydown', function(e){
+if((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('kamar-rc-head')){ e.preventDefault(); e.target.click(); }
+});
 document.addEventListener('click', function(e){
 var h = e.target && e.target.closest ? e.target.closest('.kamar-rc-head') : null;
 if(!h && e.target && e.target.closest){

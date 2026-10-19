@@ -1,7 +1,7 @@
 // Kamar Signal — service worker v2
 // Hanya cache APP SHELL (HTML/CSS/JS/ikon). JANGAN pernah cache data signal —
 // semua request ke Supabase/API selalu diambil fresh dari network, tidak lewat sini.
-  var SHELL_CACHE = 'kamar-signal-shell-v49';
+  var SHELL_CACHE = 'kamar-signal-shell-v50';
 var SHELL_FILES = [
   '/signal/',
   '/signal/index.html',
@@ -12,6 +12,7 @@ var SHELL_FILES = [
   '/signal/manifest.webmanifest'
 ];
 
+
 self.addEventListener('install', function(event){
   self.skipWaiting();
   event.waitUntil(
@@ -21,6 +22,7 @@ self.addEventListener('install', function(event){
   );
 });
 
+
 self.addEventListener('activate', function(event){
   event.waitUntil(
     caches.keys().then(function(keys){
@@ -28,6 +30,7 @@ self.addEventListener('activate', function(event){
     }).then(function(){ return self.clients.claim(); })
   );
 });
+
 
 self.addEventListener('fetch', function(event){
   // FIX 2026-08-23 (nuklir): signal/sw.js SEKARANG TIDAK PERNAH intercept fetch APAPUN.
@@ -45,6 +48,7 @@ self.addEventListener('fetch', function(event){
   return;
 });
 
+
 // --- Notifikasi (additive, tidak mengubah cache app-shell di atas) ---
 self.addEventListener('push', function(event){
   var data = {};
@@ -59,16 +63,8 @@ self.addEventListener('push', function(event){
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
+
 self.addEventListener('notificationclick', function(event){
   event.notification.close();
   var url = (event.notification.data && event.notification.data.url) || '/signal/';
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list){
-      for (var i = 0; i < list.length; i++) {
-        var c = list[i];
-        if ('focus' in c) { c.navigate(url); return c.focus(); }
-      }
-      if (self.clients.openWindow) return self.clients.openWindow(url);
-    })
-  );
-});

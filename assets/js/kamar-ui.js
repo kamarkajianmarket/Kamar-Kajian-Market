@@ -446,3 +446,44 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(add,200);}).observe(document.documentElement,{childList:true,subtree:true});
   add();
 })();
+
+/* KAMAR EBOOK v1: status paket di halaman E-Book member + menu admin E-Book per Paket */
+(function(){
+  var path=location.pathname;
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+  if(/\/admin[^\/]*\.html$/i.test(path)){
+    var tm;
+    var addE=function(){
+      if(document.querySelector('a[href^="admin-ebook.html"]')) return;
+      var a=document.querySelector('a[href^="admin-payments.html"]')||document.querySelector('aside a[href^="admin-activation"]');
+      if(!a) return;
+      var n=a.cloneNode(false);
+      n.setAttribute('href','admin-ebook.html');
+      n.className=(a.className||'').replace(/\bactive\b/g,'').trim();
+      n.removeAttribute('aria-current');
+      n.textContent='E-Book per Paket';
+      a.insertAdjacentElement('afterend',n);
+    };
+    new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(addE,250);}).observe(document.documentElement,{childList:true,subtree:true});
+    addE();
+    return;
+  }
+  if(!/\/member-private\.html$/i.test(path)) return;
+  async function run(){
+    if(document.getElementById('kamarEbookStatus')) return;
+    var main=document.querySelector('.split-main'); if(!main||!window.KamarSupabase||!KamarSupabase.ready) return;
+    var c=await KamarSupabase.ready(); if(!c) return;
+    var r=await c.rpc('kamar_my_ebook_status'); if(r.error||!r.data) return;
+    var s=r.data;
+    var box=document.createElement('section'); box.id='kamarEbookStatus'; box.className='split-card';
+    var h='<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between"><div><div style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#d8cda9;font-weight:1000">Paket E-Book Anda</div><div style="font-size:22px;font-weight:1000;color:#fff3d8;margin-top:4px">'+(s.package?esc(s.package):'Belum ada paket aktif')+'</div>'+(s.chapter_max?'<div style="color:#a99d82;font-size:13px;margin-top:2px">Akses selamanya · Free Mentoring · Download 1× (request ulang bila perlu)</div>':'')+'</div>';
+    if(s.next_package){h+='<a class="btn" href="member-checkout.html?facility=ebook" style="text-decoration:none">'+(s.level>0?'Upgrade ke '+esc(s.next_package)+' (bayar selisih)':'Pilih Paket E-Book')+'</a>';}
+    h+='</div>';
+    if(s.locked&&s.locked.length){
+      h+='<div style="margin-top:14px;border-top:1px dashed rgba(238,206,122,.2);padding-top:12px"><div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#d8cda9;font-weight:900;margin-bottom:8px">Terkunci — butuh paket lebih tinggi</div>'+s.locked.map(function(x){return '<div style="display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.03);margin-bottom:6px;color:#d8d0bd"><span>🔒 '+esc(x.title)+'</span><b style="color:#f4df90;font-size:13px">'+esc(x.package||('Paket '+x.min_level))+'</b></div>';}).join('')+'</div>';
+    }
+    box.innerHTML=h;
+    var first=main.children[0]; if(first) first.insertAdjacentElement('afterend',box); else main.appendChild(box);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(run,800);}); else setTimeout(run,800);
+})();

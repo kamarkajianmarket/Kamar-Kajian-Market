@@ -117,4 +117,18 @@ label.field{display:flex;flex-direction:column;gap:7px;font-weight:800;color:#d8
   load().catch(function(e){if(e&&e.message!=='login')el('poList').innerHTML='<div class="split-card po-empty">'+esc(e.message||'Gagal memuat data.')+'</div>';});
 })();
 </script>
+<script id="kamar-global-header-script">
+(function(){
+  function clearSessionAndLogout(){try{['kamarAdminSession','kamarMemberSession','kamarAffiliateSession','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(function(k){localStorage.removeItem(k);});}catch(err){}}
+  function buildHeader(){
+    document.querySelectorAll('header.site-header, header.kamar-global-header').forEach(function(h){h.remove();});
+    var header=document.createElement('header');header.className='site-header kamar-global-header';
+    header.innerHTML='<a aria-label="Kamar Kajian Market" class="kamar-global-brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg" onerror="this.style.display=\'none\'"/><span>Kamar Kajian Market</span></a><nav aria-label="Navigasi utama" class="kamar-global-center"><a href="index.html">Beranda</a></nav><div class="kamar-global-actions"><a class="kamar-global-btn" href="index.html">Beranda</a><a class="kamar-global-btn kamar-global-logout" data-kamar-logout href="index.html">Logout</a></div>';
+    document.body.insertBefore(header, document.body.firstChild);
+    var out=header.querySelector('[data-kamar-logout]');if(out)out.addEventListener('click',clearSessionAndLogout);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',buildHeader);else buildHeader();
+})();
+</script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script>
 </body></html>

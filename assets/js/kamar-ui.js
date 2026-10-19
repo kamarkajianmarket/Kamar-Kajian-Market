@@ -388,3 +388,42 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
 
 /* KAMAR FIX v1: baris putih tak terbaca (reward-row) */
 (function(){var s=document.createElement('style');s.textContent='.admin-shell .reward-row:not(.head),.admin-shell .aff-row:not(.head),.admin-shell .pay-row:not(.head),.admin-shell .ref-row:not(.head){background:rgba(255,255,255,.035)!important;color:#f5f0e6!important;border:1px solid rgba(238,206,122,.14)!important;border-radius:18px!important}.admin-shell .reward-row:not(.head) strong,.admin-shell .aff-row:not(.head) strong,.admin-shell .pay-row:not(.head) strong,.admin-shell .ref-row:not(.head) strong{color:#fff3d8!important}.admin-shell .reward-row:not(.head) small,.admin-shell .aff-row:not(.head) small,.admin-shell .pay-row:not(.head) small,.admin-shell .ref-row:not(.head) small{color:#d8cda9!important}.admin-shell .reward-row:not(.head) input,.admin-shell .aff-row:not(.head) input,.admin-shell .pay-row:not(.head) input,.admin-shell .ref-row:not(.head) input,.admin-shell .reward-row:not(.head) select,.admin-shell .aff-row:not(.head) select,.admin-shell .pay-row:not(.head) select,.admin-shell .ref-row:not(.head) select{background:rgba(0,0,0,.35)!important;color:#f5f0e6!important;border:1px solid rgba(238,206,122,.25)!important}';document.head.appendChild(s);})();
+
+/* KAMAR DURASI MANUAL v1: isi hari manual selain pilihan (admin-activation) */
+(function(){
+  if(!/admin-activation\.html$/i.test(location.pathname)) return;
+  var st=document.createElement('style');
+  st.textContent='.tc-duration-row{flex-wrap:wrap !important}.tc-duration-custom{width:128px;min-width:0;padding:10px 12px;border-radius:14px;border:1px solid rgba(238,206,122,.3);background:rgba(0,0,0,.35);color:#f5f0e6;font:inherit;font-weight:700}.tc-duration-custom::placeholder{color:#9b927e;font-weight:600}.tc-duration-custom:focus{outline:none;border-color:#f4df90}#detailPanel .info-box,.info-box#kamarSubHistoryWrap29F{background:rgba(255,255,255,.04) !important;color:#f5f0e6 !important;border:1px solid rgba(238,206,122,.16) !important}#detailPanel .info-box *{color:inherit}#detailPanel .info-box small,#detailPanel .info-box p{color:#d8cda9 !important}';
+  document.head.appendChild(st);
+  function enhance(){
+    document.querySelectorAll('select.tc-duration:not([data-custom])').forEach(function(sel){
+      sel.setAttribute('data-custom','1');
+      var inp=document.createElement('input');
+      inp.type='number';inp.min='1';inp.max='3650';inp.step='1';inp.inputMode='numeric';
+      inp.placeholder='Isi manual (hari)';inp.className='tc-duration-custom';inp.title='Isi jumlah hari secara manual';
+      sel.insertAdjacentElement('afterend',inp);
+      var opt=null;
+      function sync(){
+        var v=parseInt(inp.value,10);
+        if(v>3650){v=3650;inp.value=v;}
+        if(v>0){
+          if(!opt){opt=document.createElement('option');sel.appendChild(opt);}
+          opt.value=String(v);opt.textContent=v+' Hari (manual)';sel.value=String(v);
+        }else if(opt){
+          if(sel.value===opt.value)sel.selectedIndex=0;
+          opt.remove();opt=null;
+        }
+      }
+      inp.addEventListener('input',sync);
+      inp.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){sync();var b=sel.parentElement.querySelector('[data-apply-duration]');if(b)b.click();}
+      });
+      sel.addEventListener('change',function(){
+        if(opt&&sel.value!==opt.value){inp.value='';opt.remove();opt=null;}
+      });
+    });
+  }
+  var tm;
+  new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(enhance,150);}).observe(document.documentElement,{childList:true,subtree:true});
+  enhance();
+})();

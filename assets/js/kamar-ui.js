@@ -200,7 +200,7 @@ var key = txt(ey).toLowerCase();
 if(key === 'ringkasan') return;
 card.classList.add('kamar-rc');
 card.dataset.kcrKey = key;
-if(card.querySelector(':scope > .kamar-reveal-head')){ card.classList.add('kamar-rc-own'); return; }
+if(card.querySelectorAll(':scope > .kamar-reveal-head').length === 1){ card.classList.add('kamar-rc-own'); return; }
 var head = document.createElement('button');
 head.type = 'button'; head.className = 'kamar-rc-head'; head.setAttribute('aria-expanded','false');
 head.innerHTML = '<span class="kamar-rc-text"><span class="kamar-rc-eyebrow"></span><span class="kamar-rc-title"></span></span><span class="kamar-rc-arrow">&rsaquo;</span>';

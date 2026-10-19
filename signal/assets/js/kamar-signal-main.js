@@ -1037,7 +1037,7 @@ function refreshCounts(){
   if(!state.__knownStatusIds){ state.__knownStatusIds = {fresh:null,aktif:null,profit:null,loss:null}; }
   var statuses = ['fresh','aktif','profit','loss','archive'];
   return Promise.all(statuses.map(function(s){
-    var q = state.client.from('signals').select('id_zona,updated_at');
+    var q = state.client.from('signals').select('id_zona,updated_at',{ count:'exact' }).order('updated_at',{ ascending:false });
     q = (s === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', s).eq('is_archived', false);
     return q;
   })).then(function(results){
@@ -1048,7 +1048,7 @@ function refreshCounts(){
     results.forEach(function(r,i){
       var st = statuses[i];
       var rows = (r && r.data) || [];
-      state.counts[st] = rows.length;
+      state.counts[st] = (r && typeof r.count === 'number') ? r.count : rows.length;
       var u = state.readsLoaded ? rows.filter(function(row){ return isUnread(row.id_zona, row.updated_at); }).length : (prev[st]||0);
       next[st] = u;
       changed[st] = state.readsLoaded && u !== (prev[st]||0);

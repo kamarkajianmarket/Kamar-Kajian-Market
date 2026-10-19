@@ -2,7 +2,7 @@
 (function(){
   if(window.__KAMAR_SHELL_V2__) return; window.__KAMAR_SHELL_V2__=true;
   if(!document.querySelector('link[data-kamar-shell-v2]')){
-    var l=document.createElement('link'); l.rel='stylesheet'; l.href='/assets/css/kamar-mobile-shell-v2.css?v=1'; l.setAttribute('data-kamar-shell-v2','1');
+    var l=document.createElement('link'); l.rel='stylesheet'; l.href='/assets/css/kamar-mobile-shell-v2.css?v=2'; l.setAttribute('data-kamar-shell-v2','1');
     document.head.appendChild(l);
   }
   function role(){
@@ -17,6 +17,12 @@
     if(n<15) setTimeout(function(){addRole(n+1)},300);
   }
   addRole(0);
+  function markLogout(n){
+    var as=document.querySelectorAll('.split-sidebar a');
+    as.forEach(function(a){ if(/^\s*logout\s*$/i.test(a.textContent)) a.classList.add('kamar-logout'); });
+    if(n<12) setTimeout(function(){markLogout(n+1)},500);
+  }
+  markLogout(0);
   var sx=0,sy=0,tr=false;
   document.addEventListener('touchstart',function(e){
     if(!document.documentElement.classList.contains('kamar-drawer-open')) return;

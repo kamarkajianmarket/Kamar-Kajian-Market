@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1" name="viewport"><title>Katalog Produk — Kamar Kajian Market</title><meta content="Katalog seluruh produk dan harga Kamar Kajian Market." name="description"><meta content="#070707" name="theme-color"><link href="assets/favicon.png" rel="icon"><link href="style.css" rel="stylesheet">
+<style>
+:root{--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:block;padding:12px 14px;border-radius:14px;color:#e8dfc9;text-decoration:none;font-weight:800;margin-bottom:6px}.split-sidebar a.active,.split-sidebar a:hover{background:rgba(244,223,144,.1);color:#f4df90}
+.cat-title{margin:0 0 6px;font-size:30px;color:#fff3d8;letter-spacing:.02em}.cat-sub{margin:0 0 20px;color:#a99d82;line-height:1.55}
+@media(max-width:900px){.split-shell{padding:96px 14px 30px}.split-app{grid-template-columns:1fr}.split-sidebar{position:static}.cat-title{font-size:24px}}
+</style></head><body>
+<div class="split-shell"><div class="split-app">
+<aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-catalog.html">Katalog Produk</a><a href="member-renewal.html">Tambah &amp; Perpanjang Fasilitas</a><a href="member-orders.html">Riwayat Pembayaran</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside>
+<main><h1 class="cat-title">KATALOG PRODUK</h1><p class="cat-sub">Seluruh produk Kamar Kajian Market beserta harga terbaru. Pilih paket lalu lanjutkan ke pembayaran.</p><div id="catRoot"></div></main>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script><script src="assets/js/kamar-catalog.js?v=1"></script><script src="assets/js/kamar-mobile-shell.js"></script>
+<script>
+(async function(){
+  try{await KamarPay.me();}catch(e){return;}
+  KamarCatalog.render(document.getElementById('catRoot'),{cta:'Beli / Perpanjang'});
+})();
+</script></body></html>

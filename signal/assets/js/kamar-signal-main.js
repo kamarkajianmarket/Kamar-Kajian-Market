@@ -1563,7 +1563,7 @@ if(state.recap.type === type) renderRecapCard();
   function renderDashboard(){
     var c = state.counts;
     var firstPaint = !dashboardEntered;
-    function ac(n){ return (firstPaint || state._rtRender) ? ' ksig-fade ksig-stagger-'+n : ''; }
+    function ac(n){ return firstPaint ? ' ksig-fade ksig-stagger-'+n : ''; }
     el.innerHTML =
       dashboardHeader(ac(1)) +
       '<div class="ksig-main ksig-dashboard">'+
@@ -1674,7 +1674,7 @@ if(state.recap.type === type) renderRecapCard();
     ) : '';
     el.innerHTML =
       appBar(STATUS_LABEL[L.status] || 'Signal', { back:'/signal/' }) +
-      '<div class="ksig-main'+(state._rtRender?' ksig-fade':'')+'">'+
+      '<div class="ksig-main'+''+'">'+
         '<div class="ksig-toolbar">'+
           '<div class="ksig-search"><span aria-hidden="true">🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona…" value="'+esc(L.search)+'"/></div>'+
           '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter"><span class="ksig-tool-icon">⚙</span><span class="ksig-tool-label">Filter</span></div>'+

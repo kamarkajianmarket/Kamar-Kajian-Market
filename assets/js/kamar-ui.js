@@ -503,3 +503,31 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
   setTimeout(add,1200);
 })();
+
+
+/* KAMAR MEMBER THEME LOADER v1 - tema seragam semua halaman member */
+(function(){
+  var p=(location.pathname.split('/').pop()||'').toLowerCase();
+  if(!(p==='dashboard.html'||p.indexOf('member-')===0||p==='affiliate-dashboard.html')) return;
+  if(!document.getElementById('kamar-member-theme-v3')){
+    var l=document.createElement('link');l.id='kamar-member-theme-v3';l.rel='stylesheet';l.href='assets/css/kamar-member-theme-v3.css?v=1';document.head.appendChild(l);
+  }
+  function run(){
+    document.body.classList.add('kamar-member-desktop-v2');
+    var main=document.querySelector('.split-main');
+    if(main&&!main.querySelector('.kd-pagehero')&&p!=='dashboard.html'){
+      var h=main.querySelector('h1'); var c=h&&h.closest('.split-card,.kamar-title-card,div,section');
+      if(c&&c!==main) c.classList.add('kd-pagehero');
+      if(c&&!c.classList.contains('split-card')) c.classList.add('split-card');
+    }
+    document.querySelectorAll('aside.split-sidebar').forEach(function(s){
+      if(s.querySelector('a[href="member-orders.html"]')) return;
+      var ref=s.querySelector('a[href="member-fasilitas-khusus.html"]')||s.querySelector('a[href="member-profile.html"]'); if(!ref) return;
+      var a=document.createElement('a');a.href='member-orders.html';a.textContent='Riwayat Pembayaran';
+      if(p==='member-orders.html') a.className='active';
+      ref.parentNode.insertBefore(a,ref);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+  setTimeout(run,1500);
+})();

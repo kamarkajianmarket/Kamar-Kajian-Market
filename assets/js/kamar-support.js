@@ -335,3 +335,6 @@ setTimeout(function(){
 }, 8000);
 
 })();
+
+/* v2 loader */
+(function(){var s=document.createElement('script');s.src='/assets/js/kamar-support-v2.js?v=1';document.head.appendChild(s);})();

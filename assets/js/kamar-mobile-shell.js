@@ -178,3 +178,6 @@
     setupBottomNav();
   });
 })();
+
+/* v2 loader */
+(function(){var s=document.createElement('script');s.src='/assets/js/kamar-mobile-shell-v2.js?v=1';document.head.appendChild(s);})();

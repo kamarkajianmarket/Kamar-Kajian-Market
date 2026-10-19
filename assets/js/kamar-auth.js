@@ -1,3 +1,5 @@
+/* next-redirect helper: hanya halaman member-*.html yang diizinkan */
+window.__kamarNext=function(){try{var n=new URLSearchParams(location.search).get('next');if(n&&/^member-[a-z0-9\-]+\.html$/i.test(n))return n;}catch(e){}return null;};
 (function(){
   'use strict';
   if(window.__KAMAR_AUTH_29F__) return;
@@ -197,7 +199,7 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
       if(ALL_ROLE_EMAILS.indexOf(email)>=0){ saveRole('admin', sessionFromAuthUser(user,'admin',profile)); saveRole('member', sessionFromAuthUser(user,'member',profile)); } else { saveRole(finalRole,s); }
       status(form,'Login berhasil. Membuka dashboard...',true);
       setTimeout(function(){
-        location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;
+        location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : (window.__kamarNext && window.__kamarNext()) || 'dashboard.html?v='+VERSION;
       },300);
     }catch(e){
       status(form,authMessage(e),false);
@@ -210,7 +212,7 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
     var s = sessionFromAuthUser(user,finalRole,profile);
     if(ALL_ROLE_EMAILS.indexOf(norm(user&&user.email))>=0){ saveRole('admin', sessionFromAuthUser(user,'admin',profile)); saveRole('member', sessionFromAuthUser(user,'member',profile)); } else { saveRole(finalRole,s); }
     setTimeout(function(){
-      location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : 'dashboard.html?v='+VERSION;
+      location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : (window.__kamarNext && window.__kamarNext()) || 'dashboard.html?v='+VERSION;
     },300);
   }
 
@@ -376,7 +378,7 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
 
       status(form, affiliate
         ? ('Pendaftaran berhasil dengan kode referral dari '+affiliate.full_name+'! Cek email kamu jika perlu verifikasi, lalu login untuk mulai menggunakan akun.')
-        : 'Pendaftaran berhasil! Cek email kamu jika perlu verifikasi, lalu login untuk mulai menggunakan akun.', true);
+        : 'Pendaftaran berhasil! Cek email kamu jika perlu verifikasi, lalu login untuk mulai menggunakan akun.', true); try{ var __n=window.__kamarNext&&window.__kamarNext(); if(__n) setTimeout(function(){ location.href='member.html?next='+encodeURIComponent(__n); },2800); }catch(e){}
       form.reset();
     }catch(e){ status(form,'Gagal daftar: '+authMessage(e),false); }
     finally{ processing(form,'',false); }

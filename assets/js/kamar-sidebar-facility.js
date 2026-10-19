@@ -64,6 +64,7 @@
       if(!row) return;
       Object.keys(byFile).forEach(function(file){
         if(isActive(row, FACILITY_MAP[file])) unlockLink(byFile[file]);
+          else if(file==='member-materials.html'){ var _l=byFile[file]; if(_l){ _l.setAttribute('href','member-edukasi-daftar.html'); _l.classList.remove('disabled'); _l.removeAttribute('aria-disabled'); _l.textContent='Daftar Kamar Edukasi Gratis'; } }
       });
     }catch(e){ }
   }

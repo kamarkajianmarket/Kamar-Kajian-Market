@@ -12,8 +12,8 @@ select,input{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.35
 .toast{position:fixed;right:22px;bottom:22px;z-index:99999;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:18px;padding:14px 16px;opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:none}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}
 @media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.split-shell{padding-top:92px}.eb-row{grid-template-columns:1fr}.eb-row.header{display:none}}
 </style>
-<link href="assets/css/kamar-full-online.css" rel="stylesheet"/><link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/>
-</head><body><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"></header>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/><link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><link href="assets/css/kamar-step36-hide-member-access.css" rel="stylesheet"/><link href="assets/css/kamar-dashboard-identity-v2.css" rel="stylesheet"/><link href="assets/css/kamar-mobile-shell.css" rel="stylesheet"/><link href="assets/css/kamar-skeleton-v1.css" rel="stylesheet"/><link href="assets/css/kamar-admin-desktop-dark-v1.css" rel="stylesheet"/>
+</head><body class="kamar-admin-desktop-v1"><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"></header>
 <main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">ADMIN KAMAR</div><div class="admin-menu-section">Utama</div><a href="admin.html">Dashboard Admin</a><div class="admin-menu-section">Member &amp; Akses</div><a href="admin-members.html">Data Member</a><a href="admin-activation.html">Aktivasi Akun &amp; Fasilitas</a><a href="admin-payments.html">Pembayaran &amp; Verifikasi</a><div class="admin-menu-section">Konten</div><a href="admin-materials.html">Konten &amp; Materi</a><a href="admin-video.html">Konten Video</a><a href="admin-tools.html">File Tools</a><a class="active" href="admin-ebook.html">E-Book per Paket</a><a data-kamar-logout="" href="index.html">Logout</a></aside>
 <section class="split-main">
 <div class="split-card kamar-title-card"><h1>E-Book per Paket</h1><p>Tentukan paket minimum yang boleh membuka setiap konten E-Book.</p></div>
@@ -21,7 +21,7 @@ select,input{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.35
 <section class="split-card"><div class="eb-tools"><label><input type="checkbox" id="ebAll"> Tampilkan konten semua fasilitas</label><button class="btn secondary" id="ebRefresh" type="button">Refresh</button></div>
 <div class="eb-row header" style="margin-top:14px"><div>Konten</div><div>Jenis</div><div>Akses</div><div>Paket minimum</div></div><div class="eb-list" id="ebList"><p>Memuat…</p></div></section>
 </section></div></main><footer class="site-footer">© Kamar Kajian Market</footer><div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-data-online-25e.js"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script>
 <script>
 (function(){
   var KP=window.KamarPay, esc=KP.esc, ctx=null, pk=[], items=[];
@@ -76,5 +76,5 @@ select,input{font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.35
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',buildHeader);else buildHeader();
 })();
 </script>
-<script src="assets/js/kamar-premium-v29.js?v=30"></script>
+<script src="assets/js/kamar-premium-v29.js?v=30"></script><script src="assets/js/kamar-admin-online-29f.js"></script><script src="assets/js/kamar-mobile-shell.js"></script>
 </body></html>

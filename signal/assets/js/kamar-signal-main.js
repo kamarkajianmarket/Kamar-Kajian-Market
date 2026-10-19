@@ -226,7 +226,7 @@ function isIOSDevice(){
   }
 
   function checkNotifStatus(){
-    if(!('serviceWorker' in navigator) || !('PushManager' in window)) return Promise.resolve(false);
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)){ notifState.checked = true; return Promise.resolve(false); }
     return navigator.serviceWorker.ready.then(function(reg){
       return reg.pushManager.getSubscription();
     }).then(function(sub){
@@ -1680,7 +1680,7 @@ if(state.recap.type === type) renderRecapCard();
           '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter"><span class="ksig-tool-icon">⚙</span><span class="ksig-tool-label">Filter</span></div>'+
           '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan"><span class="ksig-tool-icon">↕</span><span class="ksig-tool-label">Urutkan</span></div>'+
         '</div>'+
-        filterChipsHtml(L.filters)+
+        quickFilterHtml(L.filters)+filterChipsHtml(L.filters)+
         unreadBarHtml+
         '<div id="ksigListBody"></div>'+
       '</div>';
@@ -1691,7 +1691,7 @@ if(state.recap.type === type) renderRecapCard();
     search.addEventListener('input', debounce(function(){ L.search = search.value.trim(); loadList(true); }, 400));
     document.getElementById('ksigFilterBtn').addEventListener('click', openFilterSheet);
     document.getElementById('ksigSortBtn').addEventListener('click', openSortSheet);
-    bindFilterChips();
+    bindFilterChips(); bindQuickFilter();
     var markAllBtn = document.getElementById('ksigMarkAllRead');
     if(markAllBtn) markAllBtn.addEventListener('click', function(){
       markAllBtn.disabled = true;
@@ -1702,7 +1702,28 @@ if(state.recap.type === type) renderRecapCard();
     if(isFirstLoad) loadList(true);
     if(restoreScroll) window.requestAnimationFrame(function(){ window.scrollTo(0, L.scrollY); });
   }
-  function hasActiveFilter(f){ return !!(f.symbol||f.timeframe||f.dir||f.period||f.unread); }
+  function quickFilterHtml(f){
+  function seg(key,label,opts){return '<div class="ksig-qf-grp"><span class="ksig-qf-lab">'+label+'</span><div class="ksig-qf-seg">'+opts.map(function(o){var on=(f[key]||'')===o[0];return '<button type="button" class="ksig-qf-opt'+(on?' on':'')+(o[2]?' '+o[2]:'')+'" data-qf-key="'+key+'" data-qf-val="'+o[0]+'">'+o[1]+'</button>';}).join('')+'</div></div>';}
+  var any=hasActiveFilter(f);
+  return '<div class="ksig-qf">'+
+    seg('dir','Arah',[['','Semua'],['BUY','Buy','buy'],['SELL','Sell','sell']])+
+    seg('period','Periode',[['','Semua'],['today','Hari Ini'],['week','Minggu'],['month','Bulan']])+
+    seg('timeframe','Timeframe',[['','Semua'],['M1','M1'],['M5','M5'],['M15','M15'],['M30','M30'],['H1','H1'],['H4','H4']])+
+    '<div class="ksig-qf-grp"><span class="ksig-qf-lab">Status</span><div class="ksig-qf-seg"><button type="button" class="ksig-qf-opt'+(f.unread?' on':'')+'" data-qf-key="unread" data-qf-val="x">Belum Dibaca</button></div></div>'+
+    (any?'<button type="button" class="ksig-qf-reset" id="ksigQfReset">Reset</button>':'')+
+    '</div>';
+}
+function bindQuickFilter(){
+  var L=state.list;
+  document.querySelectorAll('.ksig-qf-opt').forEach(function(b){b.addEventListener('click',function(){
+    var k=b.getAttribute('data-qf-key'),v=b.getAttribute('data-qf-val');var nf=Object.assign({},L.filters);
+    if(k==='unread') nf.unread=!nf.unread; else nf[k]=(nf[k]===v?'':v);
+    L.filters=nf; loadList(true); renderList();
+  });});
+  var rs=document.getElementById('ksigQfReset');
+  if(rs) rs.addEventListener('click',function(){L.filters={symbol:'',timeframe:'',dir:'',period:'',unread:false}; loadList(true); renderList();});
+}
+function hasActiveFilter(f){ return !!(f.symbol||f.timeframe||f.dir||f.period||f.unread); }
 
   var PERIOD_LABEL = { today:'Hari Ini', week:'Minggu Ini', month:'Bulan Ini' };
   function filterChipsHtml(f){

@@ -2,7 +2,7 @@
 (function(){
   if(window.__KAMAR_SUPPORT_V2__) return; window.__KAMAR_SUPPORT_V2__=true;
   if(!document.querySelector('link[data-kmr-sup-v2]')){
-    var l=document.createElement('link'); l.rel='stylesheet'; l.href='/assets/css/kamar-support-v2.css?v=1'; l.setAttribute('data-kmr-sup-v2','1');
+    var l=document.createElement('link'); l.rel='stylesheet'; l.href='/assets/css/kamar-support-v2.css?v=2'; l.setAttribute('data-kmr-sup-v2','1');
     document.head.appendChild(l);
   }
   var root=document.documentElement, userOpened=false;
@@ -15,8 +15,8 @@
       var f=ifr[i], t=(f.title||'').toLowerCase();
       if(t.indexOf('widget chat')<0 && t.indexOf('chat widget')<0 && t.indexOf('tawk')<0) continue;
       var r=f.getBoundingClientRect();
-      if(t.indexOf('tawk')>=0) continue;
-      if(r.width>0 && r.width<=90 && r.height<=90){ f.classList.add('kmr-tawk-bubble'); }
+      if(t.indexOf('tawk')>=0){ if(open||root.classList.contains('kmr-chat-open')){ f.style.removeProperty('display'); } else { f.style.setProperty('display','none','important'); } continue; }
+      if(r.width>0 && r.width<=90 && r.height<=90){ f.classList.add('kmr-tawk-bubble'); f.style.setProperty('display','none','important'); }
       else if(r.width>=280 && r.height>=300){ open=true; }
     }
     root.classList.toggle('kmr-chat-open',open);

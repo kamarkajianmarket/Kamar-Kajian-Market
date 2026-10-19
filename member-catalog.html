@@ -17,13 +17,13 @@ h1.kd-name{margin:6px 0 8px;font-size:clamp(26px,3.4vw,40px);line-height:1.1;col
 <link href="assets/css/kamar-full-online.css" rel="stylesheet"><link href="assets/css/kamar-step36-hide-member-access.css?v=36" rel="stylesheet"><link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"><link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"><link href="assets/css/kamar-mobile-shell.css?v=1" rel="stylesheet"><link href="assets/css/kamar-member-desktop-v2.css?v=2" rel="stylesheet"><link href="assets/css/kamar-skeleton-v1.css?v=1" rel="stylesheet">
 </head><body class="kamar-member-desktop-v2"><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div>
 <main class="split-shell"><div class="split-app">
-<aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-catalog.html">Katalog Produk</a><a href="member-renewal.html">Tambah / Perpanjang Fasilitas</a><a href="member-orders.html">Riwayat Pembayaran</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside>
+<aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a href="member-catalog.html">Katalog Produk</a><a href="member-renewal.html">Tambah / Perpanjang Fasilitas</a><a href="member-orders.html">Riwayat Pembayaran</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><details class="sidebar-group"><summary>Fasilitas Kamar</summary><a href="member-materials.html">Kamar Edukasi</a><a href="member-study.html">Kamar Signal</a><a href="member-private.html">Kamar E-Book</a><a href="member-indicator.html">Kamar Indikator</a><a href="member-robot.html">Kamar Robot</a></details><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside>
 <section class="split-main">
 <div class="kd-hero"><div class="kd-hero-top"><div><div class="kd-eyebrow">Kamar Kajian Market</div><h1 class="kd-name">Katalog Produk</h1><p class="kd-sub">Seluruh produk beserta harga terbaru. Pilih paket yang sesuai, lalu lanjutkan ke pembayaran.</p></div><div class="kd-btns"><a class="kd-btn pri" href="member-renewal.html">Perpanjang / Tambah</a><a class="kd-btn" href="member-orders.html">Riwayat Pembayaran</a></div></div></div>
 <div id="catRoot"></div>
 </section></div></main>
 <footer class="site-footer"><strong>© Kamar Kajian Market</strong></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script><script src="assets/js/kamar-catalog.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-data-online-25e.js?v=29F"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-auth.js?v=29F"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-page-guard.js?v=28"></script><script src="assets/js/kamar-sidebar-facility.js?v=1"></script><script src="assets/js/kamar-pay.js?v=1"></script><script src="assets/js/kamar-catalog.js?v=2"></script>
 <script>
 (function(){
   function build(){
@@ -40,5 +40,5 @@ h1.kd-name{margin:6px 0 8px;font-size:clamp(26px,3.4vw,40px);line-height:1.1;col
   try{await KamarPay.me();}catch(e){return;}
   KamarCatalog.render(document.getElementById('catRoot'),{cta:'Beli / Perpanjang'});
 })();
-</script><script src="assets/js/kamar-premium-v29.js?v=30"></script><script src="assets/js/kamar-mobile-shell.js"></script>
+</script><script src="assets/js/kamar-premium-v29.js?v=30"></script><script src="assets/js/kamar-mobile-shell.js"></script><script src="assets/js/kamar-notif-bell.js?v=1"></script>
 </body></html>

@@ -128,7 +128,7 @@ var open = h.classList.contains('open');
 // Accordion: hanya 1 reveal terbuka per halaman. Saat membuka yang baru, tutup reveal lain
 // (kecuali reveal induk yang membungkus h, supaya reveal bersarang tetap jalan).
 if(!open){
-var others = document.querySelectorAll('.kamar-reveal-head.open');
+var others = document.querySelectorAll('.kamar-reveal-head.open, .kamar-rc-head.open');
 for(var oi=0; oi<others.length; oi++){
 var oh = others[oi];
 if(oh === h) continue;
@@ -142,5 +142,121 @@ if(ob && ob.classList.contains('kamar-reveal-body')) ob.style.maxHeight = null;
 h.classList.toggle('open', !open);
 h.setAttribute('aria-expanded', !open);
 body.style.maxHeight = !open ? (body.scrollHeight + 'px') : null;
+});
+})();
+
+
+// ===========================================================================
+// KAMAR SECTIONS v1 - pisahkan card menu member jadi SECTION berjudul + card ringkas (reveal).
+// Otomatis untuk card .split-card yang berisi .eyebrow + h2 (template Robot/Indikator/Profil).
+// Accordion: hanya 1 reveal terbuka per halaman (juga menutup reveal lama).
+// ===========================================================================
+(function(){
+if(window.__KAMAR_SECTIONS_V1__) return;
+window.__KAMAR_SECTIONS_V1__ = true;
+var SEC_ORDER = ['Download & Panduan','License'];
+var MAP = {'download':'Download & Panduan','panduan':'Download & Panduan','status request':'License','license aktif':'License','request license':'License','riwayat':'License'};
+var KEY_ORDER = ['download','panduan','status request','license aktif','request license','riwayat'];
+function injectCss(){
+if(document.getElementById('kamarRcStyle')) return;
+var st = document.createElement('style'); st.id = 'kamarRcStyle';
+st.textContent = ''
++ '.kamar-sec{margin:18px 0 6px}'
++ '.kamar-sec-title{margin:0 0 10px;padding:0 4px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d8b25a;display:flex;align-items:center;gap:10px}'
++ '.kamar-sec-title:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(216,178,90,.35),transparent)}'
++ '.kamar-sec > .kamar-rc{margin-bottom:10px}'
++ '.split-card.kamar-rc{padding:0 !important;overflow:hidden}'
++ '.kamar-rc-head{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:14px 18px;cursor:pointer;color:inherit}'
++ '.kamar-rc-head:hover{background:rgba(255,255,255,.03)}'
++ '.kamar-rc-head:focus-visible{outline:2px solid #d8b25a;outline-offset:-2px}'
++ '.kamar-rc-text{display:flex;flex-direction:column;gap:3px;min-width:0}'
++ '.kamar-rc-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d8b25a}'
++ '.kamar-rc-title{font-size:17px;font-weight:800;line-height:1.25;color:#f3ecdc}'
++ '.kamar-rc-arrow{flex:none;font-size:22px;line-height:1;opacity:.7;transition:transform .2s ease}'
++ '.kamar-rc-head.open .kamar-rc-arrow{transform:rotate(90deg)}'
++ '.kamar-rc-body{display:none;padding:2px 18px 18px}'
++ '.kamar-rc-head.open + .kamar-rc-body{display:block;animation:kamarRcIn .18s ease}'
++ '@keyframes kamarRcIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}'
++ '.split-card.kamar-rc-own{padding:14px 18px !important}'
++ '.split-card.kamar-rc-own > h2{font-size:17px;margin:2px 0 8px}';
+document.head.appendChild(st);
+}
+function txt(el){ return (el.textContent || '').trim(); }
+function wrapCard(card){
+if(card.classList.contains('kamar-title-card')) return;
+if(card.querySelector(':scope > .kamar-rc-head')) return;
+var ey = card.querySelector(':scope > .eyebrow');
+var h = card.querySelector(':scope > h2, :scope > h3');
+if(!ey || !h) return;
+if(card.querySelector(':scope > .split-card')) return;
+var key = txt(ey).toLowerCase();
+if(key === 'ringkasan') return;
+card.classList.add('kamar-rc');
+card.dataset.kcrKey = key;
+if(card.querySelector(':scope > .kamar-reveal-head')){ card.classList.add('kamar-rc-own'); return; }
+var head = document.createElement('button');
+head.type = 'button'; head.className = 'kamar-rc-head'; head.setAttribute('aria-expanded','false');
+head.innerHTML = '<span class="kamar-rc-text"><span class="kamar-rc-eyebrow"></span><span class="kamar-rc-title"></span></span><span class="kamar-rc-arrow">&rsaquo;</span>';
+head.querySelector('.kamar-rc-eyebrow').textContent = txt(ey);
+head.querySelector('.kamar-rc-title').textContent = txt(h);
+var body = document.createElement('div'); body.className = 'kamar-rc-body';
+var kids = Array.prototype.slice.call(card.childNodes);
+for(var i=0;i<kids.length;i++){ if(kids[i] !== ey && kids[i] !== h) body.appendChild(kids[i]); }
+card.removeChild(ey); card.removeChild(h);
+card.appendChild(head); card.appendChild(body);
+}
+function groupParent(parent){
+if(parent.classList.contains('kamar-sec')) return;
+var cards = [];
+for(var i=0;i<parent.children.length;i++){ var c = parent.children[i]; if(c.classList.contains('kamar-rc') && MAP[c.dataset.kcrKey]) cards.push(c); }
+if(!cards.length) return;
+var ref = cards[0];
+var secs = {};
+SEC_ORDER.forEach(function(name){
+if(!cards.some(function(c){ return MAP[c.dataset.kcrKey] === name; })) return;
+var sec = document.createElement('div'); sec.className = 'kamar-sec';
+var t = document.createElement('h3'); t.className = 'kamar-sec-title'; t.textContent = name; sec.appendChild(t);
+parent.insertBefore(sec, ref); secs[name] = sec;
+});
+cards.sort(function(a,b){ return KEY_ORDER.indexOf(a.dataset.kcrKey) - KEY_ORDER.indexOf(b.dataset.kcrKey); });
+cards.forEach(function(c){ secs[MAP[c.dataset.kcrKey]].appendChild(c); });
+}
+var timer = null;
+function run(){
+timer = null;
+var main = document.querySelector('.split-main');
+if(!main) return;
+injectCss();
+var all = main.querySelectorAll('.split-card');
+for(var i=0;i<all.length;i++){ wrapCard(all[i]); }
+var parents = [];
+var rcs = main.querySelectorAll('.kamar-rc');
+for(var j=0;j<rcs.length;j++){ var p = rcs[j].parentElement; if(p && parents.indexOf(p) < 0) parents.push(p); }
+parents.forEach(groupParent);
+}
+function schedule(){ if(timer) return; timer = setTimeout(run, 80); }
+function start(){
+schedule();
+new MutationObserver(schedule).observe(document.documentElement, {childList:true, subtree:true});
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+document.addEventListener('click', function(e){
+var h = e.target && e.target.closest ? e.target.closest('.kamar-rc-head') : null;
+if(!h) return;
+var open = h.classList.contains('open');
+if(!open){
+var others = document.querySelectorAll('.kamar-reveal-head.open, .kamar-rc-head.open');
+for(var k=0;k<others.length;k++){
+var oh = others[k];
+if(oh === h) continue;
+var ob = oh.nextElementSibling;
+if(ob && ob.contains(h)) continue;
+oh.classList.remove('open'); oh.setAttribute('aria-expanded','false');
+if(ob && ob.classList.contains('kamar-reveal-body')) ob.style.maxHeight = null;
+}
+}
+h.classList.toggle('open', !open);
+h.setAttribute('aria-expanded', !open);
+if(!open){ setTimeout(function(){ try{ h.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(err){} }, 30); }
 });
 })();

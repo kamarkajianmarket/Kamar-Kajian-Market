@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Checkout — Kamar Kajian Market</title><meta content="Pilih paket, pilih cara pembayaran, dan selesaikan pesanan." name="description"/><meta content="#070707" name="theme-color"/><link href="assets/favicon.png" rel="icon"/><link href="style.css" rel="stylesheet"/>
+<style>
+:root{--line:rgba(238,206,122,.18);--muted:#aaa393;--text:#f5f0e6}
+body{background:#070707;color:var(--text)}
+.split-shell{max-width:1380px;margin:0 auto;padding:120px 24px 40px}.split-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:26px}.split-sidebar{position:sticky;top:100px;align-self:start;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.025);padding:18px}.split-sidebar .brand-small{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4df90;font-weight:1000;margin:4px 0 16px}.split-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#d8d0bd;padding:12px 14px;border-radius:16px;font-weight:800}.split-sidebar a:hover,.split-sidebar a.active{background:rgba(212,166,63,.12);color:#f4df90}.split-main{display:grid;gap:22px;align-content:start}.split-card{border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:26px;padding:22px}.split-card h1,.split-card h2,.split-card h3{margin:0 0 8px;color:#fff3d8}.split-card p{color:var(--muted);line-height:1.6;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;padding:13px 22px;text-decoration:none;cursor:pointer;font-size:15px}.btn.secondary{background:rgba(255,255,255,.06);color:#f3d985;border:1px solid var(--line)}.btn.mini{padding:8px 13px;font-size:12px}.btn[disabled]{opacity:.4;cursor:not-allowed}
+.ck-step{display:flex;align-items:center;gap:10px;margin-bottom:14px}.ck-num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111;font-weight:1000;display:inline-flex;align-items:center;justify-content:center;flex:0 0 30px}.ck-step h2{margin:0;font-size:20px}
+.ck-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.ck-tab{border:1px solid var(--line);background:rgba(255,255,255,.04);color:#d8d0bd;border-radius:999px;padding:9px 16px;font-weight:900;font-size:13px;cursor:pointer;text-decoration:none}.ck-tab.on{background:rgba(244,223,144,.16);color:#f4df90;border-color:rgba(244,223,144,.6)}
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.ck-p{position:relative;border:1px solid rgba(238,206,122,.16);border-radius:18px;background:rgba(255,255,255,.03);padding:16px;cursor:pointer;display:grid;gap:6px;align-content:start;transition:.18s}.ck-p:hover{border-color:rgba(244,223,144,.5);transform:translateY(-2px)}.ck-p.sel{border-color:#f4df90;background:rgba(244,223,144,.09);box-shadow:0 0 0 1px rgba(244,223,144,.5)}.ck-p.off{opacity:.45;cursor:not-allowed}.ck-p.off:hover{transform:none;border-color:rgba(238,206,122,.16)}.ck-t{font-weight:900;color:#fff3d8;line-height:1.35}.ck-pr{font-size:21px;font-weight:1000;color:#fff}.ck-n{font-size:12px;color:#d8cda9;font-weight:700}.ck-up{font-size:12px;color:#9effca;font-weight:800}.ck-tag{position:absolute;top:10px;right:10px;font-size:10px;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:linear-gradient(135deg,#f4df90,#c69a39);color:#111}.ck-more{margin-top:12px}
+.ck-routes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.ck-r{border:1px solid rgba(238,206,122,.2);border-radius:18px;padding:18px;background:rgba(255,255,255,.03);cursor:pointer;display:grid;gap:6px;transition:.18s}.ck-r:hover{border-color:rgba(244,223,144,.5)}.ck-r.sel{border-color:#f4df90;background:rgba(244,223,144,.09);box-shadow:0 0 0 1px rgba(244,223,144,.5)}.ck-r b{color:#fff3d8;font-size:16px}.ck-r span{color:#a99d82;font-size:13px;line-height:1.5}
+.ck-sum{border:1px solid rgba(238,206,122,.28);border-radius:16px;padding:16px;background:rgba(244,223,144,.05);display:grid;gap:8px}.ck-sum div{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#d8cda9}.ck-sum b{color:#fff;font-size:18px}.ck-tot{font-size:22px!important;color:#f4df90!important}
+.toast{position:fixed;right:22px;bottom:22px;z-index:99999;max-width:360px;border:1px solid rgba(238,206,122,.3);background:rgba(9,9,8,.96);color:#f5f0e6;border-radius:18px;padding:14px 16px;opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s ease}.toast.show{opacity:1;transform:none}.site-footer{text-align:center;padding:28px 18px;color:#a99d82}.site-footer strong{color:#d8cda9}
+@media(max-width:980px){.split-app{grid-template-columns:1fr}.split-sidebar{position:relative;top:auto}.split-shell{padding-top:92px}.ck-routes{grid-template-columns:1fr}}
+</style>
+<link href="assets/css/kamar-full-online.css" rel="stylesheet"/><link href="assets/css/kamar-luxury-atelier-v46.css?v=46ATELIER" rel="stylesheet"/><link href="assets/css/kamar-dashboard-identity-v2.css?v=1" rel="stylesheet"/><link href="assets/css/kamar-mobile-shell.css?v=1" rel="stylesheet"/><link href="assets/css/kamar-member-desktop-v2.css?v=1" rel="stylesheet"/>
+</head><body class="kamar-member-desktop-v2"><div class="page-glow page-glow-1"></div><div class="page-glow page-glow-2"></div><header class="site-header admin-header"><a aria-label="Kamar Kajian Market" class="brand" href="index.html"><img alt="Logo Kamar Kajian Market" src="assets/logo-kamar.jpeg"/><span>Kamar Kajian Market</span></a><nav class="nav-links centered-admin"><a href="dashboard.html">Dashboard</a></nav><div class="header-actions"><a class="header-cta" href="dashboard.html">Dashboard</a><a class="header-cta header-member-cta" data-kamar-logout="" href="member.html">Logout</a></div></header>
+<main class="split-shell"><div class="split-app"><aside class="split-sidebar"><div class="brand-small">MEMBER KAMAR</div><a href="dashboard.html">Dashboard</a><a class="active" href="member-renewal.html">Tambah / Perpanjang Fasilitas</a><a href="member-orders.html">Riwayat Pembayaran</a><a href="member-fasilitas-khusus.html">Fasilitas Khusus</a><a href="member-profile.html">Profil Akun</a><a data-kamar-logout="" href="member.html">Logout</a></aside>
+<section class="split-main">
+<div class="split-card kamar-title-card"><h1>Checkout</h1><p>Pilih paket, pilih cara pembayaran, lalu selesaikan pesanan Anda.</p></div>
+<div id="ckWarn"></div>
+<div class="split-card"><div class="ck-step"><span class="ck-num">1</span><h2>Pilih Paket</h2></div><div class="ck-tabs" id="ckTabs"></div><div class="ck-grid" id="ckGrid"><p>Memuat paket…</p></div><div class="ck-more" id="ckMore"></div></div>
+<div class="split-card"><div class="ck-step"><span class="ck-num">2</span><h2>Pilih Cara Pembayaran</h2></div><div class="ck-routes" id="ckRoutes">
+<div class="ck-r" data-route="gateway"><b>Payment Gateway</b><span>QRIS, E-Wallet, Virtual Account, atau Transfer Bank. Diproses otomatis; akses aktif setelah pembayaran terkonfirmasi.</span></div>
+<div class="ck-r" data-route="direct"><b>Direct Transfer</b><span>Transfer langsung ke rekening PT Hikarich Kitana Digital. Nominal memakai kode unik, lalu unggah bukti pembayaran untuk diverifikasi admin.</span></div></div></div>
+<div class="split-card"><div class="ck-step"><span class="ck-num">3</span><h2>Ringkasan &amp; Persetujuan</h2></div><div class="ck-sum" id="ckSum"><div><span>Paket</span><b id="sumP">-</b></div><div><span>Total</span><b class="ck-tot" id="sumT">-</b></div><div style="font-size:12px" id="sumN"></div></div><div id="ckTerms" style="margin:14px 0"></div><button type="button" class="btn" id="ckGo" disabled>Lanjutkan Pembayaran</button></div>
+</section></div></main>
+<footer class="site-footer"><strong>© Kamar Kajian Market</strong> · dioperasikan oleh PT Hikarich Kitana Digital</footer><div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/kamar-config.js?v=29F"></script><script src="assets/js/kamar-supabase.js?v=30H"></script><script src="assets/js/kamar-ui.js?v=28"></script><script src="assets/js/kamar-session-final-28.js?v=29D"></script><script src="assets/js/kamar-pay.js?v=1"></script><script src="assets/js/kamar-mobile-shell.js"></script><script src="assets/js/kamar-notif-bell.js?v=1"></script>
+<script>
+(function(){
+  var KP=window.KamarPay, esc=KP.esc, ctx=null, all=[], quotes={}, owned=0, facility='ebook', pick=null, route=null, showAll=false;
+  var FAC={ebook:{label:'Kamar E-Book',key:'kamar_private'},robot:{label:'Kamar Robot',key:'kamar_robot'},indikator:{label:'Kamar Indikator',key:'kamar_indikator'}};
+  function el(i){return document.getElementById(i);}
+  var qp=new URLSearchParams(location.search);
+  var f0=(qp.get('facility')||'ebook').toLowerCase();if(f0==='private')f0='ebook';if(FAC[f0])facility=f0;
+  function list(){return all.filter(function(p){return p.facility_key===FAC[facility].key&&(facility!=='ebook'||p.package_level);}).sort(function(a,b){return a.sort_order-b.sort_order;});}
+  function tabs(){
+    el('ckTabs').innerHTML=Object.keys(FAC).map(function(k){return '<a class="ck-tab'+(k===facility?' on':'')+'" href="#" data-fac="'+k+'">'+FAC[k].label+'</a>';}).join('');
+  }
+  function sub(p){
+    if(p.package_level)return 'Chapter 1–'+p.chapter_max+' · Free Mentoring';
+    if(p.is_lifetime)return 'Akses seumur hidup';
+    return p.duration_days+' hari';
+  }
+  function grid(){
+    var items=list();
+    var vis=items;
+    if(facility==='ebook'&&!showAll){vis=items.filter(function(p){return p.is_featured;});}
+    el('ckGrid').innerHTML=vis.map(function(p){
+      var q=quotes[p.product_key]||{}, isOwned=p.package_level&&owned>=p.package_level;
+      var price=q.amount!=null?q.amount:(p.promo_price||p.base_price);
+      var up=q.is_upgrade?'<div class="ck-up">Upgrade: bayar selisih'+(q.discount_amount>0?' + diskon '+KP.rp(q.discount_amount):'')+'</div>':'';
+      var tag=isOwned?'Dimiliki':(p.is_featured&&facility==='ebook'?'Pilihan':(p.is_lifetime?'Lifetime':''));
+      return '<div class="ck-p'+(pick&&pick.product_key===p.product_key?' sel':'')+(isOwned?' off':'')+'" data-pk="'+esc(p.product_key)+'">'+(tag?'<span class="ck-tag">'+tag+'</span>':'')+'<div class="ck-t">'+esc(p.title.replace(/^Kamar E-Book · /,''))+'</div><div class="ck-n">'+esc(sub(p))+'</div><div class="ck-pr">'+KP.rp(price)+'</div>'+(q.is_upgrade?'<div class="ck-n">Harga paket '+KP.rp(q.list_price)+'</div>':'')+up+(p.discount_note?'<div class="ck-n">'+esc(p.discount_note)+'</div>':'')+'</div>';
+    }).join('')||'<p>Belum ada paket.</p>';
+    el('ckMore').innerHTML=facility==='ebook'?'<button type="button" class="btn secondary mini" id="ckToggle">'+(showAll?'Tampilkan paket pilihan saja':'Lihat semua '+items.length+' paket')+'</button>':'';
+  }
+  function summary(){
+    var q=pick&&quotes[pick.product_key];
+    el('sumP').textContent=pick?pick.title:'-';
+    el('sumT').textContent=pick?KP.rp(q&&q.amount!=null?q.amount:(pick.promo_price||pick.base_price)):'-';
+    el('sumN').textContent=route==='direct'?'Direct Transfer: nominal akan ditambah 3 digit kode unik saat pesanan dibuat.':'';
+    var ok=pick&&route&&KP.termsOk(el('ckTerms'));
+    el('ckGo').disabled=!ok;
+  }
+  async function loadQuotes(){
+    quotes={};
+    await Promise.all(list().map(async function(p){
+      try{var r=await ctx.client.rpc('kamar_my_quote',{p_product_key:p.product_key});if(r.data)quotes[p.product_key]=r.data;}catch(e){}
+    }));
+  }
+  async function init(){
+    ctx=await KP.me();
+    el('ckWarn').innerHTML=KP.warnBanner();
+    el('ckTerms').innerHTML=KP.termsHtml();
+    var r=await ctx.client.from('payment_products').select('*').eq('is_active',true);
+    all=r.data||[];
+    var a=await ctx.client.from('member_access').select('ebook_package_level').eq('profile_id',ctx.profile.id).maybeSingle();
+    owned=(a.data&&a.data.ebook_package_level)||0;
+    tabs();grid();summary();
+    await loadQuotes();grid();
+    var pk=qp.get('product');if(pk){var p=all.find(function(x){return x.product_key===pk;});if(p){pick=p;grid();summary();}}
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-fac]');if(t){e.preventDefault();facility=t.getAttribute('data-fac');pick=null;showAll=false;tabs();grid();summary();loadQuotes().then(grid);return;}
+    var c=e.target.closest('[data-pk]');if(c&&!c.classList.contains('off')){pick=all.find(function(x){return x.product_key===c.getAttribute('data-pk');});grid();summary();return;}
+    var r=e.target.closest('[data-route]');if(r){route=r.getAttribute('data-route');document.querySelectorAll('[data-route]').forEach(function(n){n.classList.toggle('sel',n===r);});summary();return;}
+    if(e.target.id==='ckToggle'){showAll=!showAll;grid();}
+  });
+  el('ckTerms').addEventListener('change',summary);
+  el('ckGo').onclick=async function(){
+    var btn=this;if(btn.disabled)return;
+    var terms=KP.termsValue(el('ckTerms'));
+    btn.disabled=true;btn.textContent='Memproses…';
+    try{
+      if(route==='gateway'){
+        var r=await ctx.client.functions.invoke('kamar-checkout-gateway',{body:{product_key:pick.product_key,terms:terms}});
+        var d=r.data;if(r.error||!d||!d.payment_link){var m=(d&&d.error)||(r.error&&r.error.message)||'Gagal membuat tagihan.';throw new Error(m);}
+        location.href=d.payment_link;return;
+      }
+      var o=await ctx.client.rpc('kamar_create_direct_order',{p_product_key:pick.product_key,p_terms:terms});
+      if(o.error)throw new Error(o.error.message.replace(/^.*?:\s*/,''));
+      location.href='member-orders.html?open='+encodeURIComponent(o.data.order_code);
+    }catch(err){KP.toast(err.message||'Terjadi kesalahan.');btn.textContent='Lanjutkan Pembayaran';summary();}
+  };
+  init().catch(function(e){if(e&&e.message!=='login')KP.toast(e.message||'Gagal memuat.');});
+})();
+</script>
+</body></html>

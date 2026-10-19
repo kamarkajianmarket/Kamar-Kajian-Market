@@ -516,7 +516,7 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
     document.body.classList.add('kamar-member-desktop-v2');
     var main=document.querySelector('.split-main');
     if(main&&!main.querySelector('.kd-pagehero')&&p!=='dashboard.html'){
-      var h=main.querySelector('h1'); var c=h&&h.closest('.split-card,.kamar-title-card,div,section');
+      var h=main.querySelector('h1'); var c=h; while(c&&c.parentElement!==main) c=c.parentElement;
       if(c&&c!==main) c.classList.add('kd-pagehero');
       if(c&&!c.classList.contains('split-card')) c.classList.add('split-card');
     }

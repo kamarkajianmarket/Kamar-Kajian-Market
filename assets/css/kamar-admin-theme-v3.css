@@ -15,11 +15,11 @@ body.kamar-admin-desktop-v1 tbody tr:hover td{background:rgba(240,207,116,.08)}
 body.kamar-admin-desktop-v1 .kamar-rc{transition:border-color .2s}
 body.kamar-admin-desktop-v1 .kamar-rc:hover{border-color:rgba(244,223,144,.4)!important}
 /* dashboard admin v2 */
-.ka-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.ka-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(122px,1fr));gap:14px}
 .ka-kpi{display:block;text-decoration:none;color:inherit;padding:18px 20px;border-radius:22px;border:1px solid rgba(238,206,122,.18);background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.015));transition:transform .18s,border-color .18s,box-shadow .18s;cursor:pointer}
 .ka-kpi:hover{transform:translateY(-3px);border-color:rgba(244,223,144,.55);box-shadow:0 14px 34px rgba(0,0,0,.35)}
 .ka-kpi small{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#d9b866}
-.ka-kpi b{display:block;margin:8px 0 2px;font-size:30px;line-height:1.1;color:#fff3d8;-webkit-text-fill-color:#fff3d8}
+.ka-kpi b{display:block;margin:8px 0 2px;font-size:26px;line-height:1.1;color:#fff3d8;-webkit-text-fill-color:#fff3d8}
 .ka-kpi span{font-size:12px;color:#a99d84}
 .ka-kpi.warn{border-color:rgba(255,170,90,.55)}.ka-kpi.warn b{color:#ffcf8a;-webkit-text-fill-color:#ffcf8a}
 .ka-sec{margin-top:4px}

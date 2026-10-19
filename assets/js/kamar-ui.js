@@ -343,3 +343,45 @@ new MutationObserver(schedule).observe(document.documentElement, {childList:true
 }
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
+
+/* KAMAR NAME NAV v1: klik nama di baris admin -> aksi detail/kelola baris tsb */
+(function(){
+  if(!/\/admin[^\/]*\.html$/i.test(location.pathname)) return;
+  var ROWS='.admin-row,.row,.aff-row,tr';
+  var ACT=/^(detail|lihat|kelola|buka|pilih)/i;
+  function actionOf(row){
+    var c=row.querySelectorAll('button,a');
+    for(var i=0;i<c.length;i++){var t=(c[i].textContent||'').trim();if(ACT.test(t)&&!c[i].disabled)return c[i];}
+    return null;
+  }
+  function nameEl(t){
+    var s=t.closest&&t.closest('strong');
+    if(!s||s.closest('button,a,input,select,textarea,label'))return null;
+    var row=s.closest(ROWS);
+    if(!row||row.classList.contains('header'))return null;
+    var cell=s.parentElement;
+    if(!cell||cell.parentElement!==row)return null;
+    if(cell!==row.firstElementChild&&!cell.classList.contains('aff-name'))return null;
+    return {s:s,row:row};
+  }
+  var st=document.createElement('style');
+  st.textContent='.kamar-name-nav{cursor:pointer;text-decoration:underline dotted rgba(244,223,144,.5);text-underline-offset:3px;transition:color .15s}.kamar-name-nav:hover{color:#f4df90!important;text-decoration-style:solid}';
+  document.head.appendChild(st);
+  function mark(){
+    document.querySelectorAll('strong:not(.kamar-name-nav)').forEach(function(s){
+      var r=nameEl(s);
+      if(r&&actionOf(r.row)){s.classList.add('kamar-name-nav');s.setAttribute('title','Klik untuk buka detail');}
+    });
+  }
+  document.addEventListener('click',function(e){
+    var r=nameEl(e.target);
+    if(!r||!r.s.classList.contains('kamar-name-nav'))return;
+    var a=actionOf(r.row);
+    if(!a)return;
+    e.preventDefault();e.stopPropagation();
+    a.click();
+  },true);
+  var tm;
+  new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(mark,150);}).observe(document.documentElement,{childList:true,subtree:true});
+  mark();
+})();

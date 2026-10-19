@@ -572,3 +572,9 @@ html body aside.split-sidebar [class*="kamar-master-"] .brand-small:not(.kamar-d
 }
 @media (max-width:1024px) and (prefers-reduced-motion:reduce){html body .split-sidebar,html body .kamar-drawer-backdrop{transition:none!important}html.kamar-drawer-open body .split-sidebar>*{animation:none!important}}
 
+
+
+/* ===== anti-flash sidebar admin: sembunyikan isi sidebar lama sampai menu final dibangun (fallback 2.2s) ===== */
+body.kamar-admin-desktop-v1 .split-sidebar>*{transition:opacity .18s ease}
+body.kamar-admin-desktop-v1:not(.kmr-sb-ready) .split-sidebar>*{opacity:0;animation:kmrSbFallback 0s linear 2.2s forwards}
+@keyframes kmrSbFallback{to{opacity:1}}

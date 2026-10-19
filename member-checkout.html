@@ -80,7 +80,7 @@ body{background:#070707;color:var(--text)}
     owned=(a.data&&a.data.ebook_package_level)||0;
     tabs();grid();summary();
     await loadQuotes();grid();
-    var pk=qp.get('product');if(pk){var p=all.find(function(x){return x.product_key===pk;});if(p){pick=p;grid();summary();}}
+    var pk=qp.get('product');if(pk){var p=all.find(function(x){return x.product_key===pk;});if(p){var fk=Object.keys(FAC).find(function(k){return FAC[k].key===p.facility_key;});if(fk)facility=fk;pick=p;showAll=true;tabs();grid();summary();loadQuotes().then(grid);setTimeout(function(){var r=el('ckRoutes');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});},400);}}
   }
   document.addEventListener('click',function(e){
     var t=e.target.closest('[data-fac]');if(t){e.preventDefault();facility=t.getAttribute('data-fac');pick=null;showAll=false;tabs();grid();summary();loadQuotes().then(grid);return;}

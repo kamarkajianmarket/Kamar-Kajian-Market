@@ -221,7 +221,7 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
     var c=await getClient();
     if(!c){ showGate('Koneksi Supabase belum siap. Muat ulang halaman.'); return; }
     try{
-      var affRes=await c.from('affiliates').select('*').limit(1);
+      var affRes=await c.from('affiliates').select('*').eq('user_id',((await c.auth.getSession()).data.session||{user:{}}).user.id||'00000000-0000-0000-0000-000000000000').limit(1);
       if(affRes.error) throw affRes.error;
       var aff=(affRes.data&&affRes.data[0])||null;
       if(!aff){ showGate('Kamu belum menjadi affiliate. Klik tombol di bawah untuk mengaktifkan.'); return; }
@@ -230,14 +230,14 @@ label.field{display:flex;flex-direction:column;gap:8px;font-weight:900;color:#d8
         return;
       }
       state.aff=aff;
-      var refRes=await c.from('affiliate_referrals').select('*').order('created_at',{ascending:false});
+      var refRes=await c.from('affiliate_referrals').select('*').eq('affiliate_id',aff.id).order('created_at',{ascending:false});
       state.referrals=(refRes.data)||[];
-      var comRes=await c.from('affiliate_commissions').select('*').order('created_at',{ascending:false});
+      var comRes=await c.from('affiliate_commissions').select('*').eq('affiliate_id',aff.id).order('created_at',{ascending:false});
       state.commissions=(comRes.data)||[];
-      var payRes=await c.from('affiliate_payment_requests').select('*').order('requested_at',{ascending:false});
+      var payRes=await c.from('affiliate_payment_requests').select('*').eq('affiliate_id',aff.id).order('requested_at',{ascending:false});
       state.payments=(payRes.data)||[];
       try{
-        var clickRes=await c.from('affiliate_link_clicks').select('id',{count:'exact',head:true}).eq('affiliate_id',aff.id);
+        var clickRes=await c.from('affiliate_link_clicks').select('id',{count:'exact',head:true}).eq('affiliate_id',aff.id).eq('affiliate_id',aff.id);
         state.clicks=clickRes.count||0;
       }catch(e){ state.clicks=0; }
 

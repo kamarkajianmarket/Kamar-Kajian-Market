@@ -36,8 +36,8 @@
   <link href="assets/css/kamar-admin-desktop-dark-v1.css?v=7" rel="stylesheet"/>
 </head>
 <body class="kamar-admin-desktop-v1">
-<div class="admin-shell">
-  <aside class="admin-sidebar">
+<div class="split-shell"><div class="admin-shell split-app">
+  <aside class="admin-sidebar split-sidebar">
     <div class="brand-small">Admin Kamar</div>
     <div class="admin-menu-section">Utama</div><a href="admin.html?v=24dx">Dashboard Admin</a>
     <div class="admin-menu-section">Member & Akses</div><a href="admin-members.html?v=24dx">Data Member</a><a href="admin-internal.html?v=24dx">Data Internal</a><a href="admin-activation.html?v=24dx">Aktivasi Akun & Fasilitas</a>
@@ -46,15 +46,15 @@
     <div class="admin-menu-section">Kontrol Sistem</div><a href="admin-maintenance.html?v=24dx">Maintenance Fasilitas</a><a href="admin-page-control.html?v=24dx">Kontrol Halaman Utama</a><a href="admin-dashboard-control.html?v=24dx">Kontrol Dashboard Member</a><a href="admin-payment.html?v=24dx">Payment Gateway</a><a href="admin-links.html?v=24dx">Pengaturan Link</a><a href="admin-settings.html?v=24dx">Pengaturan Umum</a>
     <div class="admin-menu-section">Akun</div><a href="index.html">Logout</a>
   </aside>
-  <main class="admin-main">
-    <section class="card hero">
+  <main class="admin-main split-main">
+    <section class="split-card card hero">
       <div class="hero-inner">
         <div><span class="eyebrow">Affiliate Admin</span> <span class="module-chip">▤ Kelola</span><h1>Pencairan Komisi Affiliate</h1><p>Tinjau, setujui, tolak, atau tandai lunas pengajuan pencairan komisi affiliate. Data rekening lengkap hanya terlihat selama pengajuan masih aktif (Menunggu/Review/Disetujui) — otomatis terhapus setelah Lunas atau Dibatalkan, hanya menyisakan 4 digit terakhir.</p></div>
         <div class="hero-actions"><button class="btn secondary" id="refreshBtn" type="button">Refresh Data</button></div>
       </div>
     </section>
 
-    <section class="card">
+    <section class="split-card card">
       <h2 class="section-title">Struktur Menu Affiliate</h2>
       <p class="muted">Kelola seluruh alur affiliate dari satu tempat: data ringkas, daftar affiliator, pencairan komisi, dan pengaturan persentase komisi per fasilitas.</p>
       <div class="submenu-grid">
@@ -71,7 +71,7 @@
       <div class="stat-card"><span>Ditolak / Dibatalkan</span><strong id="statOther">0</strong><small>Tidak diproses lebih lanjut.</small></div>
     </section>
 
-    <section class="card">
+    <section class="split-card card">
       <h2 class="section-title">Daftar Pengajuan Pencairan</h2>
       <div class="toolbar">
         <label class="field">Cari Nama / Kode Affiliate<input id="paySearch" placeholder="Cari nama atau kode referral"></label>
@@ -81,8 +81,7 @@
       </div>
       <div class="pay-table" id="payList"></div>
     </section>
-  </main>
-</div>
+  </main></div></div>
 <div class="toast" id="toast"></div>
 <div class="confirm" id="actionModal">
   <div class="confirm-box">

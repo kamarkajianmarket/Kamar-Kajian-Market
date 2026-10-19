@@ -170,6 +170,8 @@ st.textContent = ''
 + '.kamar-rc-head:hover{background:rgba(255,255,255,.03)}'
 + '.kamar-rc-head:focus-visible{outline:2px solid #d8b25a;outline-offset:-2px}'
 + '.kamar-rc-text{display:flex;flex-direction:column;gap:3px;min-width:0}'
++ '.kamar-rc-head .kamar-rc-eyebrow{display:block !important;margin:0 !important;padding:0 !important;background:none !important;border:0 !important;box-shadow:none !important;font-size:10.5px !important;font-weight:800 !important;letter-spacing:.14em !important;text-transform:uppercase !important;color:#d8b25a !important;line-height:1.3 !important}'
++ '.kamar-rc-head .kamar-rc-title{display:block !important;margin:0 !important;padding:0 !important;background:none !important;border:0 !important;box-shadow:none !important;font-size:17px !important;font-weight:800 !important;line-height:1.25 !important;letter-spacing:normal !important;text-transform:none !important;color:#f3ecdc !important}'
 + '.kamar-rc-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d8b25a}'
 + '.kamar-rc-title{font-size:17px;font-weight:800;line-height:1.25;color:#f3ecdc}'
 + '.kamar-rc-arrow{flex:none;font-size:22px;line-height:1;opacity:.7;transition:transform .2s ease}'
@@ -184,6 +186,7 @@ document.head.appendChild(st);
 function txt(el){ return (el.textContent || '').trim(); }
 function isCand(card){
 if(card.classList.contains('kamar-title-card') || card.classList.contains('kamar-rc')) return false;
+if(card.querySelector('a[href="/signal/"]')) return false;
 if(card.querySelector(':scope > .split-card')) return false;
 var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 if(!ey) return false;
@@ -191,6 +194,7 @@ return txt(ey).toLowerCase() !== 'ringkasan';
 }
 function wrapCard(card){
 if(card.classList.contains('kamar-title-card')) return;
+if(card.querySelector('a[href="/signal/"]')) return;
 if(card.querySelector(':scope > .kamar-rc-head')) return;
 var ey = card.querySelector(':scope > .eyebrow, :scope > .mini-label');
 var h = card.querySelector(':scope > h2, :scope > h3');
@@ -204,13 +208,14 @@ var onlyReveal = card.querySelectorAll(':scope > .kamar-reveal-head').length ===
 if(onlyReveal){ card.classList.add('kamar-rc-own'); return; }
 var head = document.createElement('button');
 head.type = 'button'; head.className = 'kamar-rc-head'; head.setAttribute('aria-expanded','false');
-head.innerHTML = '<span class="kamar-rc-text"><span class="kamar-rc-eyebrow"></span><span class="kamar-rc-title"></span></span><span class="kamar-rc-arrow">&rsaquo;</span>';
-head.querySelector('.kamar-rc-eyebrow').textContent = h ? txt(ey) : '';
-head.querySelector('.kamar-rc-title').textContent = txt(h || ey);
+head.innerHTML = '<span class="kamar-rc-text"></span><span class="kamar-rc-arrow">&rsaquo;</span>';
+var tx = head.firstChild;
+// Pindahkan node ASLI (bukan salin teks) supaya teks dinamis (mis. 'Memuat status...') tetap ikut ter-update.
+if(h){ ey.classList.add('kamar-rc-eyebrow'); h.classList.add('kamar-rc-title'); tx.appendChild(ey); tx.appendChild(h); }
+else { ey.classList.add('kamar-rc-title'); tx.appendChild(ey); }
 var body = document.createElement('div'); body.className = 'kamar-rc-body';
 var kids = Array.prototype.slice.call(card.childNodes);
 for(var i=0;i<kids.length;i++){ if(kids[i] !== ey && kids[i] !== h) body.appendChild(kids[i]); }
-card.removeChild(ey); if(h) card.removeChild(h);
 card.appendChild(head); card.appendChild(body);
 }
 function groupParent(parent){
@@ -243,7 +248,7 @@ if(all[a].classList.contains('kamar-rc') || isCand(all[a])){ var ix = counts.fin
 }
 for(var i=0;i<all.length;i++){
 var cp = counts.filter(function(x){ return x.p === all[i].parentElement; })[0];
-if(cp && cp.n >= 2) wrapCard(all[i]);
+if((cp && cp.n >= 2) || (all[i].parentElement && all[i].parentElement.closest('.split-card'))) wrapCard(all[i]);
 }
 var parents = [];
 var rcs = main.querySelectorAll('.kamar-rc');

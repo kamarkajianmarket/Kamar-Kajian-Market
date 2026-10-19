@@ -55,7 +55,7 @@
     return '<div class="kp-warn"><span class="kp-warn-ico">⚠</span><div><strong>Harga fasilitas Kamar dapat naik sewaktu-waktu.</strong><span> Jangan lewatkan kesempatan Anda!</span></div></div>';
   }
   var TERMS=[
-    {k:'no_refund',t:'Saya memahami dan menyetujui bahwa seluruh pembayaran bersifat final dan <b>TIDAK DAPAT DIREFUND</b>. Pengecualian hanya untuk transfer ganda, dan yang dikembalikan hanya kelebihan transfer ke rekening pengirim.'},
+    {k:'no_refund',t:'Saya memahami dan menyetujui bahwa seluruh pembayaran bersifat final dan <b>TIDAK DAPAT DIREFUND</b>.'},
     {k:'risk',t:'Saya memahami bahwa trading mengandung <b>risiko tinggi</b>, termasuk kehilangan seluruh modal. Seluruh produk, materi, dan mentoring Kamar bersifat edukasi, <b>BUKAN jaminan profit</b> dan BUKAN nasihat investasi. Keputusan trading sepenuhnya tanggung jawab saya.'},
     {k:'tos',t:'Saya telah membaca dan menyetujui Syarat &amp; Ketentuan Kamar Kajian Market, dan saya hanya akan membayar ke rekening resmi <b>PT Hikarich Kitana Digital</b> yang tertera di halaman ini atau melalui Payment Gateway resmi.'}
   ];

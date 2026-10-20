@@ -52,7 +52,7 @@
     '</div>'+
     '<div class="bs-chart"><div class="bs-k" style="margin-bottom:10px">Kurva akumulasi pips harian</div>'+spark(d.series)+'</div>'+
     '<p class="bs-note">Hasil historis dicatat otomatis oleh sistem dan bukan jaminan hasil di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</p>'+
-    '<a class="bs-cta" href="/signup.html">Daftar &amp; Lihat Signal Lengkap</a></div>';
+    '<a class="bs-cta" href="/register.html">Daftar &amp; Lihat Signal Lengkap</a></div>';
     return sec;
   }
   function run(){

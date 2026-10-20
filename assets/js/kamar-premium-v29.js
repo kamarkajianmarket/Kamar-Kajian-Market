@@ -79,3 +79,16 @@
   }
   setTimeout(tick,250);
 })();
+
+(function(){
+  var st=document.createElement('style');st.id='kmr-free-style';
+  st.textContent='.kmr-free-pill{display:inline-flex;align-items:center;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.14em;color:#04170f;background:linear-gradient(180deg,#7dffcb,#2fe6a4);box-shadow:0 0 14px rgba(47,230,164,.5);vertical-align:middle;-webkit-text-fill-color:#04170f}';
+  document.head.appendChild(st);
+  function run(){ document.querySelectorAll('main,.split-sidebar,aside,nav').forEach(function(r){
+    var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT,null),n,list=[];
+    while((n=w.nextNode())){ if(n.nodeValue.trim()==='Kamar Signal'){var p=n.parentElement; if(!p||p.closest('script,style,button,a[href*="signal"]'))continue; if(p.querySelector('.kmr-free-pill')||(p.nextElementSibling&&p.nextElementSibling.classList.contains('kmr-free-pill')))continue; list.push(p);} }
+    list.forEach(function(p){var s=document.createElement('span');s.className='kmr-free-pill';s.textContent='GRATIS';p.appendChild(s);});
+  }); }
+  var q=0; function sched(){ if(q)return; q=requestAnimationFrame(function(){q=0;run();}); }
+  new MutationObserver(sched).observe(document.body,{childList:true,subtree:true}); sched();
+})();

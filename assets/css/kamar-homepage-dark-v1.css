@@ -1265,3 +1265,29 @@ box-shadow: 0 10px 30px rgba(0,0,0,.35) !important;
 body.public-home .quick-mobile-nav a{ color:#B8C2CE !important; }
 body.public-home .quick-mobile-nav a:hover, body.public-home .quick-mobile-nav a.active{ color:#F4F6F8 !important; background:rgba(244,246,248,.08) !important; }
 }
+
+/* ===== HOMEPAGE v2: sinematik, futuristik, elegan ===== */
+@property --hv2a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes hv2spin{to{--hv2a:360deg}}
+@keyframes hv2pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.7)}}
+@keyframes hv2sheen{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(220%) skewX(-20deg)}}
+body .site-header{-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02))!important;border:1px solid rgba(232,199,119,.18)!important;box-shadow:0 14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07)}
+body .site-header .nav-links a{position:relative;transition:color .2s ease}
+body .site-header .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#e8c777,transparent);transform:scaleX(0);transition:transform .25s ease}
+body .site-header .nav-links a:hover{color:#f3d98d}
+body .site-header .nav-links a:hover::after{transform:scaleX(1)}
+body .hero{position:relative;overflow:hidden}
+body .hero::before{content:"";position:absolute;inset:-20% -10% auto -10%;height:70%;pointer-events:none;background:radial-gradient(40% 60% at 20% 30%,rgba(232,199,119,.16),transparent 70%),radial-gradient(36% 56% at 85% 20%,rgba(47,230,164,.1),transparent 70%)}
+body .hero .hero-copy,body .hero .hero-visual{position:relative;z-index:1}
+body .hero .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border-radius:999px;letter-spacing:.16em;color:#f3d98d;background:rgba(232,199,119,.09);border:1px solid rgba(232,199,119,.32)}
+body .hero .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#2fe6a4;box-shadow:0 0 10px #2fe6a4;animation:hv2pulse 1.8s ease-in-out infinite}
+body .hero .hero-copy h1{font-size:clamp(34px,4.6vw,60px)!important;line-height:1.06!important;letter-spacing:-.03em!important;background:linear-gradient(180deg,#ffffff 0%,#f6e3a8 62%,#d9b45a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+body .hero .btn{position:relative;overflow:hidden;border-radius:14px!important;font-weight:800;letter-spacing:.03em;transition:transform .2s ease,box-shadow .2s ease}
+body .hero .btn:hover{transform:translateY(-2px)}
+body .hero .btn-primary{background:linear-gradient(135deg,#f6e3a8,#d6ac4c)!important;color:#1b1406!important;box-shadow:0 12px 30px rgba(232,199,119,.3)}
+body .hero .btn-primary::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:hv2sheen 4.5s ease-in-out infinite}
+body .hero .btn-secondary{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.16)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+body .hero .visual-card{position:relative;border-radius:26px!important;overflow:hidden;border:1px solid transparent!important;background:linear-gradient(#0a0e13,#0a0e13) padding-box,conic-gradient(from var(--hv2a),#e8c777,#2fe6a4,#e8c777 50%,#8a6a22,#e8c777) border-box;animation:hv2spin 9s linear infinite;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 60px rgba(232,199,119,.12)}
+body .hero .hero-badges span{border-radius:999px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(255,255,255,.07)!important;border:1px solid rgba(232,199,119,.3)!important;color:#fff3d8}
+body main>section.section-shell{border:1px solid rgba(255,255,255,.07);box-shadow:0 20px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+@media(prefers-reduced-motion:reduce){body .hero .visual-card,body .hero .btn-primary::after,body .hero .eyebrow::before{animation:none!important}}

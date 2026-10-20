@@ -1560,7 +1560,14 @@ if(state.recap.type === type) renderRecapCard();
         '</div>'+
       '</div>';
   }
-  function renderDashboard(){
+  function perfPanelHtml(){
+  var c=state.counts||{}; if(state.lastUpdate===null||state.lastUpdate===undefined) return '';
+  var p=Number(c.profit)||0,l=Number(c.loss)||0,t=p+l,wr=t>0?Math.round(p/t*1000)/10:0;
+  function st(lab,val,cls){return '<div class="ksig-perf-stat'+(cls?' '+cls:'')+'"><small>'+lab+'</small><b>'+String(val).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+'</b></div>';}
+  return '<div class="ksig-perf ksig-pointer-light"><div class="ksig-perf-ring" style="--p:'+wr+'"><div class="ksig-perf-ring-in"><b>'+String(wr.toFixed(1)).replace('.',',')+'%</b><span>Winrate</span></div></div>'+
+    '<div class="ksig-perf-body"><div class="ksig-perf-title">PERFORMA KESELURUHAN</div><div class="ksig-perf-stats">'+st('Total Closed',t)+st('Profit',p,'up')+st('Loss',l,'dn')+st('Signal Aktif',Number(c.aktif)||0,'on')+'</div></div></div>';
+}
+function renderDashboard(){
     var c = state.counts;
     var firstPaint = !dashboardEntered;
     function ac(n){ return firstPaint ? ' ksig-fade ksig-stagger-'+n : ''; }
@@ -1568,8 +1575,7 @@ if(state.recap.type === type) renderRecapCard();
       dashboardHeader(ac(1)) +
       '<div class="ksig-main ksig-dashboard">'+
 '<div class="ksig-top-row">'+
-                accessCardHtml() +
-        installCardHtml() +
+                accessCardHtml() + perfPanelHtml() + installCardHtml() +
         '</div>'+
         '<div class="'+('ksig-block'+ac(2)).trim()+'">'+
           sectionLabel('SIGNAL OVERVIEW') +

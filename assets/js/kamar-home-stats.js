@@ -39,7 +39,7 @@
     return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="bsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fe6a4" stop-opacity=".4"/><stop offset="1" stop-color="#2fe6a4" stop-opacity="0"/></linearGradient></defs><path d="'+a+'" fill="url(#bsG)"/><path class="ln" pathLength="2400" d="'+d+'"/></svg>';
   }
   function build(d){
-    var sec=document.createElement('section');sec.id='bukti-signal';sec.className='section-shell compact-section';
+    var sec=document.createElement('section');sec.id='bukti-signal';sec.className='section-shell compact-section is-visible';
     var since='';try{since=new Date(d.since+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});}catch(e){}
     sec.innerHTML='<div class="bs-wrap"><span class="bs-eyebrow">BUKTI TERCATAT</span><span class="bs-live"><i></i>LIVE</span>'+
     '<h2>Hasil <em>Kamar Signal</em> tercatat apa adanya</h2>'+
@@ -59,14 +59,14 @@
   function ensurePh(){
     if(ph)return ph;var anchor=document.getElementById('tentang')||document.querySelector('main section:nth-of-type(2)');if(!anchor)return null;
     if(!stDone){stDone=true;var st=document.createElement('style');st.textContent=css+'#bukti-signal.bs-skel{min-height:940px;background:linear-gradient(110deg,rgba(255,255,255,.02) 30%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 70%) 0 0/220% 100%,rgba(16,23,32,.88);animation:bsShim 1.8s linear infinite}@keyframes bsShim{to{background-position:-220% 0,0 0}}@media(max-width:860px){#bukti-signal.bs-skel{min-height:1240px}}';document.head.appendChild(st);}
-    ph=document.createElement('section');ph.id='bukti-signal';ph.className='section-shell compact-section bs-skel';anchor.parentNode.insertBefore(ph,anchor);return ph;
+    ph=document.createElement('section');ph.id='bukti-signal';ph.className='section-shell compact-section is-visible bs-skel';anchor.parentNode.insertBefore(ph,anchor);return ph;
   }
   function run(){
     var c=window.kamarSupabaseClient;if(!c||!c.rpc)return false;
     var p=ensurePh();if(!p)return false;
     c.rpc('public_signal_stats').then(function(r){
       if(r.error||!r.data||!r.data.total_closed){p.remove();return;}
-      var sec=build(r.data);p.className='section-shell compact-section';p.innerHTML=sec.innerHTML;
+      var sec=build(r.data);p.className='section-shell compact-section is-visible';p.innerHTML=sec.innerHTML;
       var done=false;function go(){if(done)return;done=true;p.classList.add('in');p.querySelectorAll('[data-c]').forEach(function(e){count(e,parseFloat(e.getAttribute('data-c')),e.getAttribute('data-dec')==='1');});}
       if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){go();o.disconnect();}},{threshold:.25}).observe(p);}else go();
     });

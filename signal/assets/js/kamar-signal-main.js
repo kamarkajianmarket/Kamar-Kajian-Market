@@ -1807,8 +1807,8 @@ function rowHtml(s){
     var dirBadge = s.skenario==='SELL' ? 'sell' : 'buy';
     var zonePips = (s.area_low!=null && s.area_high!=null) ? fmtNum(Math.abs(s.area_high-s.area_low)*10,1) : null;
     var tpCells = [1,2,3].map(function(n){
-      var v = s['tp'+n];
-      return '<div class="ksig-xc-cell'+(v==null?' empty':'')+'"><span class="ksig-xc-sub">TP'+n+'</span><strong>'+(v!=null?esc(fmtNum(v)):'—')+'</strong></div>';
+      var v = s['tp'+n]; var hit = Number(s.farthest_tp_level||0)>=n && v!=null;
+      return '<div class="ksig-xc-cell'+(v==null?' empty':'')+(hit?' hit':'')+'"><span class="ksig-xc-sub">TP'+n+(hit?'<i class="ksig-ck">&#10003;</i>':'')+'</span><strong>'+(v!=null?esc(fmtNum(v)):'—')+'</strong></div>';
     }).join('');
     var pips = pipsOf(s);
     var runResultHtml = '';
@@ -1833,7 +1833,7 @@ function rowHtml(s){
         '<div class="ksig-xc-divider"></div>'+
         '<div class="ksig-xc-block"><div class="ksig-xc-label">TARGET LEVELS</div><div class="ksig-xc-tpgrid">'+tpCells+'</div></div>'+
         '<div class="ksig-xc-divider"></div>'+
-        '<div class="ksig-xc-row ksig-xc-cl"><span>CUT LOSS</span><strong>'+(s.invalidasi!=null?esc(fmtNum(s.invalidasi)):'—')+'</strong></div>'+
+        '<div class="ksig-xc-row ksig-xc-cl'+(s.display_status==='loss'?' hit':'')+'"><span>CUT LOSS'+(s.display_status==='loss'?'<i class="ksig-ck">&#10005;</i>':'')+'</span><strong>'+(s.invalidasi!=null?esc(fmtNum(s.invalidasi)):'—')+'</strong></div>'+
         '<div class="ksig-row-time">'+fmtWIB(s.created_at)+'</div>'+
       '</div>'+
       '<button type="button" class="ksig-row-reveal-btn" data-ksig-reveal="'+esc(s.id_zona)+'" aria-expanded="false" aria-controls="'+rid+'" aria-label="Lihat detail tambahan">›</button>'+

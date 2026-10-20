@@ -60,26 +60,22 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 
-/* intro halus admin/member: tahan tampilan sampai data awal selesai, lalu animasi masuk berjalan */
+/* intro halus admin/member: konten ditahan dari paint pertama (lihat CSS luxury-atelier), dibuka sekali setelah data awal selesai */
 (function(){
   var b=document.body;if(!b||!/kamar-(admin-desktop-v1|member-desktop-v2)/.test(b.className))return;
   var d=document.documentElement;d.classList.add('kmr-hold');
   var st=document.createElement('style');
-  st.textContent='main{transition:opacity .7s ease}'+
-  'html.kmr-hold main{opacity:0!important}'+
-  'html.kmr-hold body *{animation-play-state:paused!important}'+
-  'html.kmr-hold::after{content:"";position:fixed;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid rgba(232,199,119,.18);border-top-color:#e8c777;animation:kmrSpin .9s linear infinite!important;animation-play-state:running!important;z-index:99999}'+
-  '@keyframes kmrSpin{to{transform:rotate(360deg)}}';
+  st.textContent='html.kmr-hold main{opacity:0!important}';
   document.head.appendChild(st);
   var t0=Date.now(),done=false;
-  function ready(){if(done)return;done=true;d.classList.remove('kmr-hold');}
+  function ready(){if(done)return;done=true;d.classList.remove('kmr-hold');d.classList.add('kmr-ready');}
   function tick(){
     if(done)return;
     var now=performance.now(),last=0,n=0;
     try{performance.getEntriesByType('resource').forEach(function(e){if(/\/rest\/v1\/|\/rpc\//.test(e.name)){n++;if(e.responseEnd>last)last=e.responseEnd;}});}catch(x){}
     var age=Date.now()-t0;
-    if((n>0&&now-last>450&&age>700)||(n===0&&age>1400)||age>3000){ready();return;}
-    setTimeout(tick,150);
+    if((n>0&&now-last>350&&age>600)||(n===0&&age>1300)||age>3000){ready();return;}
+    setTimeout(tick,120);
   }
-  setTimeout(tick,300);
+  setTimeout(tick,250);
 })();

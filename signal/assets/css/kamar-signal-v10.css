@@ -1,0 +1,28 @@
+/* Kamar Signal v10 - iPhone hardening + mobile polish */
+html{color-scheme:dark!important;background:#05070b!important}
+body.ksig-body{background:#05070b!important;color:#f4eddc!important;-webkit-text-size-adjust:100%}
+.ksig-body .ksig-header-title,.ksig-body .ksig-appbar-title,.ksig-body .ksig-sheet-title{color:#fff6df!important;-webkit-text-fill-color:#fff6df!important;background:none!important;text-shadow:0 1px 12px rgba(232,199,119,.25)}
+.ksig-body .ksig-header-sub,.ksig-body .ksig-header-updated{color:#a9b3c4!important;-webkit-text-fill-color:#a9b3c4!important}
+.ksig-body .ksig-row-symbol,.ksig-body .ksig-xc-pair{color:#fff6df!important;-webkit-text-fill-color:#fff6df!important}
+.ksig-body .ksig-xc strong,.ksig-body .ksig-row strong{color:#f4f6f8!important;-webkit-text-fill-color:#f4f6f8!important}
+.ksig-body .ksig-xc-sub,.ksig-body .ksig-row-time{color:#a9b3c4!important;-webkit-text-fill-color:#a9b3c4!important}
+.ksig-body .ksig-xc-label{color:#e8c777!important;-webkit-text-fill-color:#e8c777!important}
+.ksig-body .ksig-xc-zone{color:#e8c777!important;-webkit-text-fill-color:#e8c777!important}
+.ksig-body .ksig-row .buy{color:#5df0bb!important;-webkit-text-fill-color:#5df0bb!important}
+.ksig-body .ksig-row .sell{color:#ff7b86!important;-webkit-text-fill-color:#ff7b86!important}
+.ksig-sheet-backdrop{background:rgba(3,5,9,.72)!important;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);color:#f4eddc!important}
+.ksig-sheet-backdrop .ksig-sheet{background:linear-gradient(180deg,#121722 0%,#0a0d14 100%)!important;color:#f4eddc!important;border:1px solid rgba(232,199,119,.22)!important;border-bottom:0!important;box-shadow:0 -24px 70px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.08)!important}
+.ksig-sheet-backdrop .ksig-sheet-handle{background:rgba(255,246,223,.28)!important}
+.ksig-sheet-backdrop .ksig-sheet-title{color:#fff6df!important;-webkit-text-fill-color:#fff6df!important}
+.ksig-sheet-backdrop .ksig-sheet-group-label{color:#e8c777!important;-webkit-text-fill-color:#e8c777!important}
+.ksig-sheet-backdrop .ksig-info-row,.ksig-sheet-backdrop .ksig-sheet-group{background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:16px!important}
+.ksig-sheet-backdrop .ksig-info-row-title{color:#fff6df!important;-webkit-text-fill-color:#fff6df!important;font-weight:700}
+.ksig-sheet-backdrop .ksig-info-row-desc{color:#b4bece!important;-webkit-text-fill-color:#b4bece!important}
+.ksig-sheet-backdrop .ksig-info-row-arrow{color:#e8c777!important;-webkit-text-fill-color:#e8c777!important}
+.ksig-sheet-backdrop .ksig-info-row-tag,.ksig-sheet-backdrop .ksig-info-chip{color:#e8c777!important;-webkit-text-fill-color:#e8c777!important;background:rgba(232,199,119,.12)!important}
+.ksig-vchart{display:flex!important;align-items:flex-end;gap:8px;min-height:120px;padding:14px 12px 10px;margin:10px 0 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08)}
+.ksig-vbar{flex:1 1 0;min-width:0;border-radius:8px 8px 3px 3px;height:var(--h,24px);background:linear-gradient(180deg,#5df0bb,#12a37a);box-shadow:0 0 18px rgba(93,240,187,.35)}
+.ksig-vbar.neg{background:linear-gradient(180deg,#ff7b86,#b3263a);box-shadow:0 0 18px rgba(255,123,134,.3)}
+@media (max-width:760px){
+ .ksig-row.ksig-xc{border-radius:20px!important;border:1px solid rgba(232,199,119,.18)!important;background:linear-gradient(160deg,rgba(24,30,42,.96),rgba(9,12,19,.98))!important;box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07)!important}
+}

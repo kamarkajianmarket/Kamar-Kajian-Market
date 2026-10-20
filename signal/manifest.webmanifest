@@ -5,30 +5,30 @@
   "start_url": "/signal/",
   "scope": "/signal/",
   "display": "standalone",
-  "background_color": "#f5f1e8",
-  "theme_color": "#111820",
+  "background_color": "#050505",
+  "theme_color": "#050505",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/icons/kamar-signal-icon-192-v3.png",
+      "src": "/signal/assets/icons/kamar-signal-icon-192-v4.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/icons/kamar-signal-icon-512-v3.png",
+      "src": "/signal/assets/icons/kamar-signal-icon-512-v4.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/icons/kamar-signal-icon-1024-v3.png",
+      "src": "/signal/assets/icons/kamar-signal-icon-1024-v4.png",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://moxcqojvtglssftskouj.supabase.co/storage/v1/object/public/kamar-content/signal/icons/kamar-signal-icon-maskable-512-v3.png",
+      "src": "/signal/assets/icons/kamar-signal-icon-maskable-512-v4.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

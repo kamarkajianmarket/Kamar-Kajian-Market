@@ -510,7 +510,7 @@ if(document.readyState === 'loading') document.addEventListener('DOMContentLoade
   var p=(location.pathname.split('/').pop()||'').toLowerCase();
   if(!(p==='dashboard.html'||p.indexOf('member-')===0||p==='affiliate-dashboard.html')) return;
   if(!document.getElementById('kamar-member-theme-v3')){
-    var l=document.createElement('link');l.id='kamar-member-theme-v3';l.rel='stylesheet';l.href='assets/css/kamar-member-theme-v3.css?v=1';document.head.appendChild(l);
+    var l=document.createElement('link');l.id='kamar-member-theme-v3';l.rel='stylesheet';l.href='assets/css/kamar-member-theme-v3.css?v=1';document.head.appendChild(l);var m=document.createElement('link');m.id='kamar-member-modern-v4';m.rel='stylesheet';m.href='assets/css/kamar-member-modern-v4.css?v=1';document.head.appendChild(m);
   }
   function run(){
     document.body.classList.add('kamar-member-desktop-v2');

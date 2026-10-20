@@ -1,5 +1,4 @@
 (function(){
-  if(!document.getElementById('kd2Fac')&&!document.querySelector('.kd-hero'))return;
   var css=''
 +'.kd-hero{position:relative;overflow:hidden;background:radial-gradient(900px 260px at 85% -20%,rgba(232,199,119,.18),transparent 60%),linear-gradient(165deg,rgba(24,30,43,.95),rgba(8,11,17,.97))!important;border:1px solid rgba(232,199,119,.26)!important;box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)!important}'
 +'.kd-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,246,223,.06) 50%,transparent 60%);transform:translateX(-120%);animation:kdSheen 5.5s 1s ease-in-out infinite;pointer-events:none}'

@@ -42,7 +42,8 @@ async function load(){
 }
 ready=true;
 var t=null;
-new MutationObserver(function(){clearTimeout(t);t=setTimeout(apply,80)}).observe(document.documentElement,{childList:true,subtree:true});
+new MutationObserver(function(){clearTimeout(t);t=setTimeout(apply,80)}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+setInterval(apply,1500);
 apply();
 load();
 })();

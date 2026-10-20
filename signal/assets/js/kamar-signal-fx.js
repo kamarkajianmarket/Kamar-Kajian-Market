@@ -166,46 +166,43 @@
     '<div class="ksig-eq-st"><span>Winrate<b>'+(wins/rows.length*100).toFixed(1).replace('.',',')+'%</b></span><span>Max Drawdown<b>-'+Math.round(dd).toLocaleString('id-ID')+'</b></span><span>Rata-rata/signal<b>'+fmt(cum/rows.length)+'</b></span></div>'+
     '<div class="ksig-hm"><div class="ksig-eq-t">HEATMAP WINRATE</div><div class="ksig-eq-s">Hari × jam masuk (WIB) · hijau = winrate tinggi</div>'+hm+'</div>';
   }
+  function cardAnim(el){if(window.__ksigEqAnimated)return;if(window.__ksigIntroHold&&!window.__ksigIntroFlag)return;el.classList.add('anim');window.__ksigEqAnimated=1;}
   function bind(el){el.addEventListener('click',function(e){var b=e.target.closest('[data-eqf]');if(!b)return;F.mode=b.getAttribute('data-eqf');if(F.mode==='custom'&&!F.from){F.to=todayS();F.from=shift(F.to,-30);}el.innerHTML=build();});el.addEventListener('change',function(e){var i=e.target.closest('[data-eqd]');if(!i)return;F[i.getAttribute('data-eqd')]=i.value;el.innerHTML=build();});}
   function skel(){var top=document.querySelector('#ksigRoot .ksig-top-row');if(!top)return;var n=top.nextElementSibling;if(n&&n.classList.contains('ksig-eq'))return;var el=document.createElement('div');el.className='ksig-eq skel';top.insertAdjacentElement('afterend',el);}
   function place(){
     if(!data)return;var top=document.querySelector('#ksigRoot .ksig-top-row');if(!top)return;
     var ex=top.nextElementSibling;
-    if(ex&&ex.classList.contains('ksig-eq')){if(!ex.classList.contains('skel'))return;var h0=build();if(!h0)return;ex.classList.remove('skel');ex.classList.add('anim');ex.innerHTML=h0;bind(ex);return;}
+    if(ex&&ex.classList.contains('ksig-eq')){if(!ex.classList.contains('skel'))return;var h0=build();if(!h0)return;ex.classList.remove('skel');ex.innerHTML=h0;bind(ex);cardAnim(ex);return;}
     var html=build();if(!html)return;
-    var el=document.createElement('div');el.className='ksig-eq'+(animated?'':' anim');animated=true;el.innerHTML=html;top.insertAdjacentElement('afterend',el);bind(el);
+    var el=document.createElement('div');el.className='ksig-eq';el.innerHTML=html;top.insertAdjacentElement('afterend',el);bind(el);cardAnim(el);
   }
   function load(){
     if(loading||(data&&Date.now()-lastLoad<120000))return;
     var c=window.kamarSupabaseClient;if(!c)return;loading=true;
-    (function(){var all=[];function page(from){return c.from('signals').select('created_at,status,display_status,farthest_tp_level,running_point,max_running_point').eq('is_archived',false).in('display_status',['profit','loss']).order('created_at',{ascending:true}).range(from,from+999).then(function(r){if(r.error)throw r.error;all=all.concat(r.data||[]);if((r.data||[]).length===1000)return page(from+1000);return all;});}return page(0);})()
+    Promise.all([0,1000,2000,3000].map(function(f){return c.from('signals').select('created_at,status,display_status,farthest_tp_level,running_point,max_running_point').eq('is_archived',false).in('display_status',['profit','loss']).order('created_at',{ascending:true}).range(f,f+999).then(function(r){if(r.error)throw r.error;return r.data||[];});})).then(function(parts){return [].concat.apply([],parts);})
     .then(function(rows){loading=false;if(!rows||!rows.length)return;data=rows;lastLoad=Date.now();place();})
     .catch(function(){loading=false;});
   }
   var q=0;function sched(){if(q)return;q=requestAnimationFrame(function(){q=0;if(document.querySelector('#ksigRoot .ksig-top-row')){if(data)place();else skel();load();}});}
-  function start(){var root=document.getElementById('ksigRoot')||document.body;new MutationObserver(sched).observe(root,{childList:true,subtree:true});sched();}
+  function start(){var root=document.getElementById('ksigRoot')||document.body;new MutationObserver(sched).observe(root,{childList:true,subtree:true});sched();(function early(n){if(window.kamarSupabaseClient){load();return;}if(n<60)setTimeout(function(){early(n+1);},100);})(0);}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 })();
 
-/* intro: tahan konten sampai stabil, lalu reveal berurutan (hanya saat dashboard dibuka/reload) */
+
+/* intro dashboard: overlay statis di index.html, dibuka SEKALI saat semua bagian siap (tanpa animasi per-elemen => tidak berkedip) */
 (function(){
-  var p=location.pathname.replace(/\/+$/,'');
-  if(p!=='/signal'&&p!=='/signal/index.html')return;
-  var d=document.documentElement;d.classList.add('ksig-hold');
-  var css='.ksig-hold .ksig-main{opacity:0!important}'+
-  'html.ksig-hold::after{content:"";position:fixed;left:0;top:0;height:2px;width:40%;background:linear-gradient(90deg,transparent,#e8c777,transparent);animation:ksBar 1.2s ease-in-out infinite;z-index:9999}@keyframes ksBar{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}.ksig-main{transition:opacity 1.1s cubic-bezier(.2,.8,.2,1)}'+
-  '@keyframes ksSpin{to{transform:rotate(360deg)}}'+
-  '@keyframes ksRise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}'+
-  '.ksig-reveal .ksig-main>*{animation:ksRise 1.3s cubic-bezier(.16,.84,.24,1) both}'+
-  '.ksig-reveal .ksig-main>*:nth-child(2){animation-delay:.18s}.ksig-reveal .ksig-main>*:nth-child(3){animation-delay:.36s}.ksig-reveal .ksig-main>*:nth-child(4){animation-delay:.54s}.ksig-reveal .ksig-main>*:nth-child(5){animation-delay:.72s}.ksig-reveal .ksig-main>*:nth-child(n+6){animation-delay:.9s}'+
-  '.ksig-eq.skel{min-height:780px;background:linear-gradient(110deg,rgba(255,255,255,.03) 30%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.03) 70%) 0 0/220% 100%,linear-gradient(165deg,rgba(20,26,38,.95),rgba(8,11,17,.98));animation:ksShim 1.6s linear infinite}'+
-  '@keyframes ksShim{to{background-position:-220% 0,0 0}}'+
-  '.ksig-eq.anim{animation:ksRise .8s cubic-bezier(.2,.8,.2,1) both}'+
-  '@media(prefers-reduced-motion:reduce){.ksig-reveal .ksig-main>*,.ksig-eq.anim{animation:none}html.ksig-hold::after{animation:none}}';
-  var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+  if(!window.__ksigIntroHold)return;
   var done=false;
-  function release(){if(done)return;done=true;d.classList.remove('ksig-hold');d.classList.add('ksig-reveal');setTimeout(function(){d.classList.remove('ksig-reveal');},3200);}
-  function check(){if(done)return;if(document.querySelector('#ksigRoot .ksig-top-row')&&document.querySelector('#ksigRoot .ksig-vchart')&&document.querySelector('#ksigRoot .ksig-eq'))setTimeout(release,200);}
+  function release(){
+    if(done)return;done=true;
+    window.__ksigIntroFlag=1;
+    if(window.__ksigIntroDone)window.__ksigIntroDone();
+    setTimeout(function(){var e=document.querySelector('#ksigRoot .ksig-eq');if(e&&!window.__ksigEqAnimated){e.classList.add('anim');window.__ksigEqAnimated=1;}},650);
+  }
+  function check(){
+    if(done)return;
+    if(document.querySelector('#ksigRoot .ksig-top-row')&&document.querySelector('#ksigRoot .ksig-vchart')&&document.querySelector('#ksigRoot .ksig-eq:not(.skel)'))setTimeout(release,250);
+  }
   new MutationObserver(check).observe(document.body,{childList:true,subtree:true});
-  setTimeout(release,3000);
+  setTimeout(release,5500);
 })();

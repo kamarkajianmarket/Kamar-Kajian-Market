@@ -193,18 +193,18 @@
   if(p!=='/signal'&&p!=='/signal/index.html')return;
   var d=document.documentElement;d.classList.add('ksig-hold');
   var css='.ksig-hold .ksig-main{opacity:0!important}'+
-  'html.ksig-hold::after{content:"";position:fixed;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:3px solid rgba(232,199,119,.18);border-top-color:#e8c777;animation:ksSpin .9s linear infinite;z-index:9999}'+
+  'html.ksig-hold::after{content:"";position:fixed;left:0;top:0;height:2px;width:40%;background:linear-gradient(90deg,transparent,#e8c777,transparent);animation:ksBar 1.2s ease-in-out infinite;z-index:9999}@keyframes ksBar{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}.ksig-main{transition:opacity 1.1s cubic-bezier(.2,.8,.2,1)}'+
   '@keyframes ksSpin{to{transform:rotate(360deg)}}'+
-  '@keyframes ksRise{from{opacity:0;transform:translateY(28px) scale(.985)}to{opacity:1;transform:none}}'+
-  '.ksig-reveal .ksig-main>*{animation:ksRise .9s cubic-bezier(.2,.8,.2,1) both}'+
-  '.ksig-reveal .ksig-main>*:nth-child(2){animation-delay:.12s}.ksig-reveal .ksig-main>*:nth-child(3){animation-delay:.24s}.ksig-reveal .ksig-main>*:nth-child(4){animation-delay:.36s}.ksig-reveal .ksig-main>*:nth-child(5){animation-delay:.48s}.ksig-reveal .ksig-main>*:nth-child(n+6){animation-delay:.6s}'+
+  '@keyframes ksRise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}'+
+  '.ksig-reveal .ksig-main>*{animation:ksRise 1.3s cubic-bezier(.16,.84,.24,1) both}'+
+  '.ksig-reveal .ksig-main>*:nth-child(2){animation-delay:.18s}.ksig-reveal .ksig-main>*:nth-child(3){animation-delay:.36s}.ksig-reveal .ksig-main>*:nth-child(4){animation-delay:.54s}.ksig-reveal .ksig-main>*:nth-child(5){animation-delay:.72s}.ksig-reveal .ksig-main>*:nth-child(n+6){animation-delay:.9s}'+
   '.ksig-eq.skel{min-height:740px;background:linear-gradient(110deg,rgba(255,255,255,.03) 30%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.03) 70%) 0 0/220% 100%,linear-gradient(165deg,rgba(20,26,38,.95),rgba(8,11,17,.98));animation:ksShim 1.6s linear infinite}'+
   '@keyframes ksShim{to{background-position:-220% 0,0 0}}'+
   '.ksig-eq.anim{animation:ksRise .8s cubic-bezier(.2,.8,.2,1) both}'+
   '@media(prefers-reduced-motion:reduce){.ksig-reveal .ksig-main>*,.ksig-eq.anim{animation:none}html.ksig-hold::after{animation:none}}';
   var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
   var done=false;
-  function release(){if(done)return;done=true;d.classList.remove('ksig-hold');d.classList.add('ksig-reveal');setTimeout(function(){d.classList.remove('ksig-reveal');},2600);}
+  function release(){if(done)return;done=true;d.classList.remove('ksig-hold');d.classList.add('ksig-reveal');setTimeout(function(){d.classList.remove('ksig-reveal');},3200);}
   function check(){if(done)return;if(document.querySelector('#ksigRoot .ksig-top-row')&&document.querySelector('#ksigRoot .ksig-vchart')&&document.querySelector('#ksigRoot .ksig-eq:not(.skel)'))setTimeout(release,200);}
   new MutationObserver(check).observe(document.body,{childList:true,subtree:true});
   setTimeout(release,4500);

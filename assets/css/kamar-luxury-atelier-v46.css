@@ -398,3 +398,10 @@ body.kamar-v46-atelier::after{
   .kamar-v46-atelier #faq .faq-item p{padding-left:18px!important;}
   .kamar-v46-atelier .social-links{grid-template-columns:1fr!important;}
 }
+
+/* tahan konten admin/member dari paint pertama; dibuka oleh JS (kmr-ready), failsafe 3.8s tanpa JS */
+html:not(.kmr-ready) body.kamar-admin-desktop-v1 main,html:not(.kmr-ready) body.kamar-member-desktop-v2 main{opacity:0;transform:translateY(14px);animation:kmrFS .01s 3.8s forwards}
+body.kamar-admin-desktop-v1 main,body.kamar-member-desktop-v2 main{transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1)}
+html:not(.kmr-ready) body.kamar-admin-desktop-v1::before,html:not(.kmr-ready) body.kamar-member-desktop-v2::before{content:"";position:fixed;left:0;top:0;height:2px;width:40%;background:linear-gradient(90deg,transparent,#e8c777,transparent);animation:kmrBar 1.2s ease-in-out infinite;z-index:99999}
+@keyframes kmrBar{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+@keyframes kmrFS{to{opacity:1;transform:none}}

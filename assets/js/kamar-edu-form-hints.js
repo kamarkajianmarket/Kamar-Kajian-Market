@@ -1,10 +1,11 @@
-/* Kamar Edukasi: validasi per kolom dengan penjelasan spesifik + perbaikan otomatis. */
+/* Kamar Edukasi: validasi per kolom, kalimat salah ditampilkan, tombol terkunci sampai benar, kegagalan dicatat. */
 (function(){
 'use strict';
 var TYPOS={'gmial.com':'gmail.com','gmai.com':'gmail.com','gmail.co':'gmail.com','gmail.con':'gmail.com','gnail.com':'gmail.com','gmaill.com':'gmail.com','yahooo.com':'yahoo.com','yaho.com':'yahoo.com','yahoo.co':'yahoo.com','hotmial.com':'hotmail.com','outlok.com':'outlook.com'};
+var LABEL={eduName:'Nama Lengkap',eduEmail:'Email',eduEmail2:'Ulangi email',eduPhone:'Nomor Telegram',eduUser:'Username Telegram',eduAgree:'Pernyataan data benar'};
 function $(id){return document.getElementById(id)}
 var css=document.createElement('style');
-css.textContent='.edu-fe{margin-top:6px;font-size:12.5px;line-height:1.5;font-weight:700;display:none}.edu-fe.bad{display:block;color:#ffb3a8}.edu-fe.ok{display:block;color:#9effca}.edu-fe.hint{display:block;color:#aaa393;font-weight:600}.edu-bad{border-color:rgba(255,120,100,.75)!important;box-shadow:0 0 0 3px rgba(255,90,70,.14)}';
+css.textContent='.edu-fe{margin-top:6px;font-size:12.5px;line-height:1.5;font-weight:700;display:none}.edu-fe.bad{display:block;color:#ffb3a8}.edu-fe.ok{display:block;color:#9effca}.edu-fe.hint{display:block;color:#aaa393;font-weight:600}.edu-fe .wr{display:block;color:#fff;background:rgba(255,90,70,.16);border-radius:8px;padding:5px 9px;margin-bottom:5px;word-break:break-word}.edu-bad{border-color:rgba(255,120,100,.85)!important;box-shadow:0 0 0 3px rgba(255,90,70,.16)}#eduSubmit.edu-btn-off{opacity:.45;filter:grayscale(.5);cursor:not-allowed}#eduStatus{margin-top:12px;font-size:13px;line-height:1.5;font-weight:700;color:#ffd582}#eduStatus.ok{color:#9effca}';
 document.head.appendChild(css);
 
 var HINTS={
@@ -19,9 +20,13 @@ function slot(id){
   if(!el){el=document.createElement('div');el.className='edu-fe';el.setAttribute('data-for',id);host.appendChild(el)}
   return el;
 }
-function setMsg(id,type,text){
+function setMsg(id,type,text,entered){
   var el=slot(id),inp=$(id); if(!el) return;
-  el.className='edu-fe '+(text?type:''); el.textContent=text||'';
+  el.className='edu-fe '+(text?type:''); el.textContent='';
+  if(text){
+    if(type==='bad'&&entered){var w=document.createElement('span');w.className='wr';w.textContent='Yang kamu tulis: "'+entered+'"';el.appendChild(w)}
+    el.appendChild(document.createTextNode(text));
+  }
   if(inp&&inp.type!=='checkbox') inp.classList.toggle('edu-bad',type==='bad'&&!!text);
 }
 function showHint(id){setMsg(id,'hint',HINTS[id]||'')}
@@ -30,7 +35,7 @@ function chkName(v){
   v=v.trim().replace(/\s+/g,' ');
   if(!v) return {error:'Nama lengkap belum diisi.'};
   if(!/[A-Za-z]/.test(v)) return {error:'Nama harus berisi huruf, bukan angka atau simbol saja.'};
-  if(v.split(' ').length<2) return {error:'Baru satu kata ("'+v+'"). Tulis nama lengkap sesuai nama asli, minimal dua kata. Contoh: Budi Santoso.'};
+  if(v.split(' ').length<2) return {error:'Baru satu kata. Tulis nama lengkap sesuai nama asli, minimal dua kata. Contoh: Budi Santoso.'};
   return {value:v};
 }
 function chkEmail(v){
@@ -64,7 +69,7 @@ function chkUser(v){
   if(m){s=m[1];note='Kami ambil username dari link kamu: @'+s+'.'}
   s=s.replace(/^@+/,'');
   if(/^\+?[0-9]{6,}$/.test(s)) return {error:'Ini terlihat seperti nomor telepon, bukan username. Nomor ditulis di kolom Nomor Telegram. Username diawali huruf, contoh: @budi_santoso.'};
-  if(/\s/.test(s)) return {error:'Username tidak boleh pakai spasi. Yang kamu tulis ("'+s+'") sepertinya nama tampilan, bukan username. Buka Telegram, Pengaturan, lalu lihat kolom Username (diawali @), contoh: @budi_santoso.'};
+  if(/\s/.test(s)) return {error:'Username tidak boleh pakai spasi. Itu sepertinya nama tampilan, bukan username. Buka Telegram, Pengaturan, lalu lihat kolom Username (diawali @), contoh: @budi_santoso.'};
   var bad=s.match(/[^A-Za-z0-9_]/g);
   if(bad){var u=[];bad.forEach(function(c){if(u.indexOf(c)<0)u.push(c)});return {error:'Karakter "'+u.join('" "')+'" tidak boleh ada di username. Hanya huruf, angka, dan garis bawah (_).'}}
   if(s.length<5) return {error:'Username terlalu pendek ('+s.length+' karakter). Telegram mewajibkan 5 sampai 32 karakter. Kalau belum punya username, buat dulu di Telegram: Pengaturan lalu Username.'};
@@ -72,54 +77,97 @@ function chkUser(v){
   if(/^[0-9_]/.test(s)) note=(note?note+' ':'')+'Catatan: username Telegram biasanya diawali huruf. Pastikan sudah sama persis dengan yang di Telegram.';
   return {value:s,note:note};
 }
-
 var RULES={eduName:chkName,eduEmail:chkEmail,eduPhone:chkPhone,eduUser:chkUser};
-function run(id,applyFix){
-  var inp=$(id); if(!inp) return null;
-  var r=RULES[id](inp.value);
-  if(r.error){setMsg(id,'bad',r.error);return r}
+
+function email2Result(){
+  var a=$('eduEmail'),b=$('eduEmail2'); if(!a||!b) return {};
+  var x=a.value.trim().toLowerCase(),y=b.value.trim().toLowerCase();
+  if(!y) return {error:'Ketik ulang email yang sama persis seperti di kolom sebelumnya.'};
+  if(x!==y) return {error:'Tidak sama dengan email di atas ("'+x+'"). Samakan keduanya.'};
+  return {value:y};
+}
+function agreeResult(){var c=$('eduAgree'); return c&&c.checked?{value:1}:{error:'Centang kotak ini dulu untuk memastikan semua data sudah benar.'}}
+function result(id){
+  if(id==='eduEmail2') return email2Result();
+  if(id==='eduAgree') return agreeResult();
+  var inp=$(id); return inp?RULES[id](inp.value):{};
+}
+var ORDER=['eduName','eduEmail','eduEmail2','eduPhone','eduUser','eduAgree'];
+
+var sent={};
+function log(items){
+  var out=[];
+  items.forEach(function(i){var k=i.field+'|'+i.reason+'|'+i.entered;if(!sent[k]){sent[k]=1;out.push(i)}});
+  if(!out.length) return;
+  try{var c=window.kamarSupabaseClient;if(c&&c.rpc) c.rpc('edu_log_attempt',{p_items:out}).then(function(){},function(){})}catch(e){}
+}
+function item(id,r){var inp=$(id);return {field:LABEL[id]||id,reason:r.error,entered:inp&&inp.type!=='checkbox'?inp.value:''}}
+
+function paint(id,applyFix){
+  var inp=$(id),r=result(id);
+  if(id==='eduAgree'){
+    var host=inp.closest('label'),el=host.parentNode.querySelector('.edu-fe[data-for="eduAgree"]');
+    if(!el){el=document.createElement('div');el.className='edu-fe';el.setAttribute('data-for','eduAgree');host.insertAdjacentElement('afterend',el)}
+    el.className='edu-fe'+(r.error?' bad':'');el.textContent=r.error||'';return r;
+  }
+  if(r.error){setMsg(id,'bad',r.error,inp.value.trim());return r}
   if(applyFix&&r.value!==undefined&&inp.value!==r.value) inp.value=r.value;
-  if(r.note) setMsg(id,'ok',r.note); else if(HINTS[id]) showHint(id); else setMsg(id,'ok','');
+  if(id==='eduEmail2') setMsg(id,'ok','Email cocok.');
+  else if(r.note) setMsg(id,'ok',r.note); else if(HINTS[id]) showHint(id); else setMsg(id,'ok','');
   return r;
 }
-function chkEmail2(){
-  var a=$('eduEmail'),b=$('eduEmail2'); if(!a||!b) return null;
-  var x=a.value.trim().toLowerCase(),y=b.value.trim().toLowerCase();
-  if(!y){setMsg('eduEmail2','bad','Ketik ulang email yang sama persis seperti di kolom sebelumnya.');return {error:1}}
-  if(x!==y){setMsg('eduEmail2','bad','Tidak sama dengan email di atas. Di atas: "'+x+'". Di sini: "'+y+'". Samakan keduanya.');return {error:1}}
-  setMsg('eduEmail2','ok','Email cocok.');return {value:y};
-}
-function chkAgree(){
-  var c=$('eduAgree'); if(!c) return null;
-  var host=c.closest('label');
-  var el=host&&host.parentNode.querySelector('.edu-fe[data-for="eduAgree"]');
-  if(!el){el=document.createElement('div');el.className='edu-fe';el.setAttribute('data-for','eduAgree');host.insertAdjacentElement('afterend',el)}
-  if(!c.checked){el.className='edu-fe bad';el.textContent='Centang kotak ini dulu untuk memastikan semua data sudah benar.';return {error:1}}
-  el.className='edu-fe';el.textContent='';return {value:1};
+function names(ids){return ids.map(function(i){return LABEL[i]}).join(', ')}
+function refreshButton(){
+  var b=$('eduSubmit'),st=$('eduStatus'); if(!b) return;
+  var wrong=ORDER.filter(function(id){return result(id).error});
+  b.classList.toggle('edu-btn-off',wrong.length>0);
+  b.setAttribute('aria-disabled',wrong.length?'true':'false');
+  if(st){
+    if(wrong.length){st.className='';st.textContent='Tombol akan aktif setelah semua isian benar. Yang belum benar: '+names(wrong)+'.'}
+    else{st.className='ok';st.textContent='Semua isian sudah benar. Silakan kirim pendaftaran.'}
+  }
 }
 
 function init(){
   var form=$('eduFormEl'); if(!form) return;
+  var row=$('eduSubmit')&&$('eduSubmit').parentNode;
+  if(row&&!$('eduStatus')){var st=document.createElement('div');st.id='eduStatus';row.insertAdjacentElement('afterend',st)}
   ['eduName','eduPhone','eduUser'].forEach(showHint);
   ['eduName','eduEmail','eduPhone','eduUser'].forEach(function(id){
     var inp=$(id); if(!inp) return;
-    inp.addEventListener('blur',function(){if(inp.value.trim()) run(id,true)});
-    inp.addEventListener('input',function(){if(inp.classList.contains('edu-bad')) run(id,false)});
+    inp.addEventListener('blur',function(){
+      if(!inp.value.trim()){refreshButton();return}
+      var r=paint(id,true);
+      if(r.error) log([item(id,r)]);
+      if(id==='eduEmail'&&$('eduEmail2').value.trim()) paint('eduEmail2',false);
+      refreshButton();
+    });
+    inp.addEventListener('input',function(){
+      if(inp.classList.contains('edu-bad')) paint(id,false);
+      refreshButton();
+    });
   });
-  var e2=$('eduEmail2'); if(e2) e2.addEventListener('blur',function(){if(e2.value.trim()) chkEmail2()});
-  var ag=$('eduAgree'); if(ag) ag.addEventListener('change',chkAgree);
+  var e2=$('eduEmail2');
+  if(e2){
+    e2.addEventListener('blur',function(){if(e2.value.trim()){var r=paint('eduEmail2',false);if(r.error)log([item('eduEmail2',r)])}refreshButton()});
+    e2.addEventListener('input',function(){if(e2.classList.contains('edu-bad')) paint('eduEmail2',false);refreshButton()});
+  }
+  var ag=$('eduAgree'); if(ag) ag.addEventListener('change',function(){paint('eduAgree');refreshButton()});
+  refreshButton();
 
   document.addEventListener('submit',function(ev){
     if(ev.target!==form) return;
-    var order=['eduName','eduEmail','eduEmail2','eduPhone','eduUser','eduAgree'],first=null,count=0;
-    order.forEach(function(id){
-      var r=id==='eduEmail2'?chkEmail2():id==='eduAgree'?chkAgree():run(id,true);
-      if(r&&r.error){count++;if(!first)first=id}
+    var first=null,errs=[];
+    ORDER.forEach(function(id){
+      var r=paint(id,true);
+      if(r.error){errs.push(item(id,r));if(!first)first=id}
     });
-    if(count){
+    refreshButton();
+    if(errs.length){
       ev.preventDefault();ev.stopImmediatePropagation();
+      log(errs);
       var box=$('eduError');
-      if(box){box.hidden=false;box.textContent=count===1?'Ada 1 isian yang perlu diperbaiki. Lihat tulisan merah di bawah kolom yang ditandai.':'Ada '+count+' isian yang perlu diperbaiki. Lihat tulisan merah di bawah kolom yang ditandai.'}
+      if(box){box.hidden=false;box.textContent='Pendaftaran belum bisa dikirim. Ada '+errs.length+' isian yang masih salah: '+errs.map(function(e){return e.field}).join(', ')+'. Perbaiki yang bertanda merah.'}
       var t=$(first); if(t){try{t.scrollIntoView({behavior:'smooth',block:'center'})}catch(e){}setTimeout(function(){try{t.focus({preventScroll:true})}catch(e){}},250)}
     } else {
       var b=$('eduError'); if(b){b.hidden=true;b.textContent=''}

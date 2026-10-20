@@ -126,7 +126,7 @@
   '.ksig-hm-c{height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:10.5px}'+
   '.ksig-hm-l{display:flex;align-items:center;font-weight:700;letter-spacing:.04em}'+
   '.ksig-hm-d{text-align:center;font-weight:800;letter-spacing:.06em}';
-  var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+  var extra='.ksig-eqf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}.ksig-eqf button{cursor:pointer;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#c4cddb;font:800 11px inherit;letter-spacing:.08em;text-transform:uppercase;transition:all .25s}.ksig-eqf button.on{background:linear-gradient(180deg,#f3d98d,#c9a24a);color:#1a1305;border-color:transparent;box-shadow:0 6px 18px rgba(201,162,74,.35)}.ksig-eqf-d{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%}.ksig-eqf-d input{padding:8px 10px;border-radius:12px;border:1px solid rgba(232,199,119,.3);background:rgba(255,255,255,.06);color:#fff6df;color-scheme:dark;font-size:12px}.ksig-eqf-d span{font-size:11px;color:#a9b3c4}.ksig-eq-empty{padding:30px 10px;text-align:center;color:#a9b3c4;font-size:13px}';var st=document.createElement('style');st.textContent=css+extra;document.head.appendChild(st);
   var data=null,loading=false,animated=false,lastLoad=0;
   function pips(s){
     var rp=s.running_point!=null?Number(s.running_point):null, mx=s.max_running_point!=null?Number(s.max_running_point):null;
@@ -136,9 +136,17 @@
   }
   function wib(iso){var d=new Date(iso);var p=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'numeric',hour12:false,weekday:'short'}).formatToParts(d);var o={};p.forEach(function(x){o[x.type]=x.value});var days={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6};return {d:days[o.weekday],h:parseInt(o.hour,10)%24};}
   function fmt(n){return (n>=0?'+':'')+Math.round(n).toLocaleString('id-ID');}
+  var F={mode:'all',from:'',to:''};
+  function dstr(iso){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta'}).format(new Date(iso));}
+  function todayS(){return dstr(new Date().toISOString());}
+  function shift(ds,n){var d=new Date(ds+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);}
+  function range(){var t=todayS();if(F.mode==='day')return [t,t];if(F.mode==='week'){var dow=(new Date(t+'T00:00:00Z').getUTCDay()+6)%7;return [shift(t,-dow),t];}if(F.mode==='month')return [t.slice(0,8)+'01',t];if(F.mode==='custom')return [F.from||'0000-01-01',F.to||'9999-12-31'];return ['0000-01-01','9999-12-31'];}
+  function flabel(){return {all:'Seluruh masa',day:'Hari ini',week:'Minggu ini',month:'Bulan ini',custom:(F.from||'...')+' s/d '+(F.to||'...')}[F.mode];}
+  function filtered(){var r=range();return data.filter(function(s){var d=dstr(s.created_at);return d>=r[0]&&d<=r[1];});}
+  function filterHtml(){var m=[['all','Keseluruhan'],['month','Bulanan'],['week','Mingguan'],['day','Harian'],['custom','Custom']];return '<div class="ksig-eqf">'+m.map(function(x){return '<button type="button" data-eqf="'+x[0]+'" class="'+(F.mode===x[0]?'on':'')+'">'+x[1]+'</button>';}).join('')+(F.mode==='custom'?'<div class="ksig-eqf-d"><span>Dari</span><input type="date" data-eqd="from" value="'+F.from+'"><span>Sampai</span><input type="date" data-eqd="to" value="'+F.to+'"></div>':'')+'</div>';}
   function build(){
-    var rows=data.map(function(s){return {p:pips(s),w:wib(s.created_at),win:s.display_status==='profit'};}).filter(function(r){return r.p!=null;});
-    if(rows.length<3)return null;
+    var rows=filtered().map(function(s){return {p:pips(s),w:wib(s.created_at),win:s.display_status==='profit'};}).filter(function(r){return r.p!=null;});
+    if(rows.length<1)return filterHtml()+'<div class="ksig-eq-empty">Belum ada signal tertutup pada periode ini.</div>';
     var cum=0,pts=[0],peak=0,dd=0;
     rows.forEach(function(r){cum+=r.p;pts.push(cum);if(cum>peak)peak=cum;if(peak-cum>dd)dd=peak-cum;});
     var W=600,H=190,pad=8,mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts);if(mx===mn)mx=mn+1;
@@ -153,7 +161,7 @@
     for(var b=0;b<4;b++){hm+='<div class="ksig-hm-l">'+bl[b]+'</div>';for(var k=0;k<7;k++){var g=grid[b+'-'+k];if(!g||g.n<2){hm+='<div class="ksig-hm-c" style="background:rgba(255,255,255,.05);color:#667">–</div>';}else{var wr=g.w/g.n;var hue=Math.round(wr*130);hm+='<div class="ksig-hm-c" title="'+g.n+' signal" style="background:hsla('+hue+',70%,'+(28+wr*8)+'%,'+(.55+wr*.4)+')">'+Math.round(wr*100)+'%</div>';}}}
     hm+='</div>';
     var neg=cum<0;
-    return '<div class="ksig-eq-h"><div><div class="ksig-eq-t">EQUITY CURVE</div><div class="ksig-eq-s">Akumulasi pips · '+rows.length+' signal tertutup terakhir</div></div><div class="ksig-eq-v'+(neg?' neg':'')+'">'+fmt(cum)+' <small style="font-size:.4em;letter-spacing:.1em">PIPS</small></div></div>'+
+    return filterHtml()+'<div class="ksig-eq-h"><div><div class="ksig-eq-t">EQUITY CURVE</div><div class="ksig-eq-s">Akumulasi pips · '+flabel()+' · '+rows.length+' signal</div></div><div class="ksig-eq-v'+(neg?' neg':'')+'">'+fmt(cum)+' <small style="font-size:.4em;letter-spacing:.1em">PIPS</small></div></div>'+
     '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="ksEqG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fe6a4" stop-opacity=".38"/><stop offset="1" stop-color="#2fe6a4" stop-opacity="0"/></linearGradient></defs><line x1="0" x2="'+W+'" y1="'+y0+'" y2="'+y0+'" stroke="rgba(255,255,255,.18)" stroke-dasharray="4 5"/><path class="ar" d="'+area+'" fill="url(#ksEqG)"/><path class="ln" style="--len:'+Math.round(W*4)+'" pathLength="'+Math.round(W*4)+'" d="'+d+'"/><circle cx="'+xs(pts.length-1).toFixed(1)+'" cy="'+ys(cum).toFixed(1)+'" r="4.5" fill="#fff" stroke="#2fe6a4" stroke-width="2"/></svg>'+
     '<div class="ksig-eq-st"><span>Winrate<b>'+(wins/rows.length*100).toFixed(1).replace('.',',')+'%</b></span><span>Max Drawdown<b>-'+Math.round(dd).toLocaleString('id-ID')+'</b></span><span>Rata-rata/signal<b>'+fmt(cum/rows.length)+'</b></span></div>'+
     '<div class="ksig-hm"><div class="ksig-eq-t">HEATMAP WINRATE</div><div class="ksig-eq-s">Hari × jam masuk (WIB) · hijau = winrate tinggi</div>'+hm+'</div>';
@@ -162,13 +170,13 @@
     if(!data)return;var top=document.querySelector('#ksigRoot .ksig-top-row');if(!top)return;
     if(top.nextElementSibling&&top.nextElementSibling.classList.contains('ksig-eq'))return;
     var html=build();if(!html)return;
-    var el=document.createElement('div');el.className='ksig-eq'+(animated?'':' anim');animated=true;el.innerHTML=html;top.insertAdjacentElement('afterend',el);
+    var el=document.createElement('div');el.className='ksig-eq'+(animated?'':' anim');animated=true;el.innerHTML=html;top.insertAdjacentElement('afterend',el);el.addEventListener('click',function(e){var b=e.target.closest('[data-eqf]');if(!b)return;F.mode=b.getAttribute('data-eqf');if(F.mode==='custom'&&!F.from){F.to=todayS();F.from=shift(F.to,-30);}el.innerHTML=build();});el.addEventListener('change',function(e){var i=e.target.closest('[data-eqd]');if(!i)return;F[i.getAttribute('data-eqd')]=i.value;el.innerHTML=build();});
   }
   function load(){
     if(loading||(data&&Date.now()-lastLoad<120000))return;
     var c=window.kamarSupabaseClient;if(!c)return;loading=true;
-    c.from('signals').select('created_at,status,display_status,farthest_tp_level,running_point,max_running_point').in('display_status',['profit','loss']).order('created_at',{ascending:false}).limit(400)
-    .then(function(r){loading=false;if(r.error||!r.data||!r.data.length)return;data=r.data.slice().reverse();lastLoad=Date.now();place();})
+    (function(){var all=[];function page(from){return c.from('signals').select('created_at,status,display_status,farthest_tp_level,running_point,max_running_point').eq('is_archived',false).in('display_status',['profit','loss']).order('created_at',{ascending:true}).range(from,from+999).then(function(r){if(r.error)throw r.error;all=all.concat(r.data||[]);if((r.data||[]).length===1000)return page(from+1000);return all;});}return page(0);})()
+    .then(function(rows){loading=false;if(!rows||!rows.length)return;data=rows;lastLoad=Date.now();place();})
     .catch(function(){loading=false;});
   }
   var q=0;function sched(){if(q)return;q=requestAnimationFrame(function(){q=0;if(document.querySelector('#ksigRoot .ksig-top-row')){if(data)place();load();}});}

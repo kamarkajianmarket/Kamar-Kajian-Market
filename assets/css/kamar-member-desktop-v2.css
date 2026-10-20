@@ -1218,3 +1218,48 @@ body.kamar-member-desktop-v2 .kd-pagehero .kamar-rc{border:0!important;backgroun
 body.kamar-member-desktop-v2 .kd-pagehero .kamar-rc-head{display:none!important}
 body.kamar-member-desktop-v2 .kd-pagehero .kamar-rc-body{display:block!important;max-height:none!important;height:auto!important;opacity:1!important;visibility:visible!important;padding:0!important}
 
+/* ===== KATALOG + FASILITAS KHUSUS v4: futuristik, reveal ===== */
+@property --kv4a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes kv4spin{to{--kv4a:360deg}}
+@keyframes kv4in{from{opacity:0;transform:translateY(34px) scale(.965);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
+@keyframes kv4sheen{0%{transform:translateX(-130%) skewX(-20deg)}55%,100%{transform:translateX(260%) skewX(-20deg)}}
+@keyframes kv4pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+body.kamar-member-desktop-v2 .kc-grp{position:relative;overflow:hidden;border-radius:26px!important;background:radial-gradient(90% 60% at 0% 0%,rgba(232,199,119,.1),transparent 60%),linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012))!important;border:1px solid rgba(232,199,119,.2)!important;box-shadow:0 22px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+body.kamar-member-desktop-v2 .kc-head h3{font-size:clamp(22px,2.4vw,30px)!important;font-weight:900;letter-spacing:-.02em;background:linear-gradient(180deg,#fff,#f0d98f 70%,#d4aa4e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.kamar-member-desktop-v2 .kc-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:16px!important}
+body.kamar-member-desktop-v2 .kc-card{position:relative;overflow:hidden;border-radius:20px!important;padding:20px!important;background:linear-gradient(165deg,rgba(255,255,255,.07),rgba(255,255,255,.015))!important;border:1px solid rgba(255,255,255,.1)!important;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease}
+body.kamar-member-desktop-v2 .kc-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#e8c777,transparent 80%);opacity:.8}
+body.kamar-member-desktop-v2 .kc-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 80% at 100% 0%,rgba(232,199,119,.1),transparent 55%);opacity:.7;transition:opacity .3s ease}
+@media(hover:hover){body.kamar-member-desktop-v2 .kc-card:hover{transform:translateY(-6px);border-color:rgba(232,199,119,.55)!important;box-shadow:0 24px 50px rgba(0,0,0,.5),0 0 34px rgba(232,199,119,.16)}body.kamar-member-desktop-v2 .kc-card:hover::after{opacity:1}}
+body.kamar-member-desktop-v2 .kc-name{font-size:12px!important;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,199,119,.85)!important}
+body.kamar-member-desktop-v2 .kc-price{font-size:clamp(24px,2.2vw,30px)!important;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff7df,#e8c777);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.kamar-member-desktop-v2 .kc-note{display:inline-block;margin-top:2px;padding:3px 10px;border-radius:999px;font-size:11px!important;font-weight:800;color:#5df0bb!important;background:rgba(47,230,164,.1);border:1px solid rgba(47,230,164,.28)}
+body.kamar-member-desktop-v2 .kc-cta{font-weight:800;color:#f3d98d!important;transition:letter-spacing .25s ease}
+body.kamar-member-desktop-v2 .kc-card:hover .kc-cta{letter-spacing:.06em}
+body.kamar-member-desktop-v2 .kc-card.hot{border:1px solid transparent!important;background:linear-gradient(#0d1217,#0d1217) padding-box,conic-gradient(from var(--kv4a),#e8c777,#a78bfa,#2fe6a4,#e8c777) border-box!important;animation:kv4spin 7s linear infinite;box-shadow:0 0 40px rgba(167,139,250,.18)}
+body.kamar-member-desktop-v2 .kc-badge{background:linear-gradient(135deg,#8b5cf6,#c084fc)!important;box-shadow:0 6px 18px rgba(139,92,246,.45);letter-spacing:.14em}
+body.kamar-member-desktop-v2 .kc-go{position:relative;overflow:hidden;border-radius:14px!important;background:linear-gradient(135deg,#f6e3a8,#d6ac4c)!important;color:#1b1406!important;font-weight:900;box-shadow:0 10px 26px rgba(232,199,119,.28)}
+body.kamar-member-desktop-v2 .kc-go::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:kv4sheen 4.2s ease-in-out infinite}
+body.kamar-member-desktop-v2 .kc-warn{border-radius:16px!important;background:linear-gradient(90deg,rgba(232,199,119,.12),rgba(255,93,108,.08))!important;border:1px solid rgba(232,199,119,.35)!important}
+body.kamar-member-desktop-v2 .fkx-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))!important;gap:18px!important}
+body.kamar-member-desktop-v2 .fkx-card{position:relative;overflow:hidden;border-radius:24px!important;padding:24px!important;border:1px solid transparent!important;background:linear-gradient(165deg,#10161c,#0a0e13) padding-box,conic-gradient(from var(--kv4a),#e8c777,#2fe6a4,#e8c777 45%,#6b531c,#e8c777) border-box!important;animation:kv4spin 10s linear infinite;box-shadow:0 22px 56px rgba(0,0,0,.5),0 0 40px rgba(232,199,119,.08);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+body.kamar-member-desktop-v2 .fkx-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(100% 70% at 0% 0%,rgba(232,199,119,.13),transparent 60%)}
+@media(hover:hover){body.kamar-member-desktop-v2 .fkx-card:hover{transform:translateY(-7px)}}
+body.kamar-member-desktop-v2 .fkx-card h3{font-size:clamp(22px,2vw,27px)!important;font-weight:900;letter-spacing:-.02em;background:linear-gradient(180deg,#fff,#f0d98f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.kamar-member-desktop-v2 .fkx-badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;font-weight:800;letter-spacing:.14em}
+body.kamar-member-desktop-v2 .fkx-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#2fe6a4;box-shadow:0 0 10px #2fe6a4;animation:kv4pulse 1.8s ease-in-out infinite}
+body.kamar-member-desktop-v2 .fkx-price{font-size:clamp(26px,2.4vw,32px);font-weight:900;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff7df,#e8c777);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.kamar-member-desktop-v2 .fkx-price small{-webkit-text-fill-color:rgba(255,255,255,.55);font-weight:600}
+body.kamar-member-desktop-v2 .fkx-btn.primary{position:relative;overflow:hidden;border-radius:14px!important;background:linear-gradient(135deg,#f6e3a8,#d6ac4c)!important;color:#1b1406!important;font-weight:900;box-shadow:0 12px 30px rgba(232,199,119,.3)}
+body.kamar-member-desktop-v2 .fkx-btn.primary::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:kv4sheen 4.2s ease-in-out infinite}
+@supports (animation-timeline:view()){
+body.kamar-member-desktop-v2 .kc-grp,body.kamar-member-desktop-v2 .kc-card:not(.hot),body.kamar-member-desktop-v2 .kc-warn{animation:kv4in linear both;animation-timeline:view();animation-range:entry 0% cover 26%}
+body.kamar-member-desktop-v2 .kc-card.hot{animation:kv4spin 7s linear infinite,kv4in linear both;animation-timeline:auto,view();animation-range:normal,entry 0% cover 26%}
+body.kamar-member-desktop-v2 .fkx-card{animation:kv4spin 10s linear infinite,kv4in linear both;animation-timeline:auto,view();animation-range:normal,entry 0% cover 26%}
+}
+@supports not (animation-timeline:view()){
+body.kamar-member-desktop-v2 .kc-grp,body.kamar-member-desktop-v2 .kc-warn{animation:kv4in .7s cubic-bezier(.2,.8,.2,1) both}
+body.kamar-member-desktop-v2 .kc-card:not(.hot){animation:kv4in .7s cubic-bezier(.2,.8,.2,1) both}
+body.kamar-member-desktop-v2 .kc-card:nth-child(2){animation-delay:.07s}body.kamar-member-desktop-v2 .kc-card:nth-child(3){animation-delay:.14s}body.kamar-member-desktop-v2 .kc-card:nth-child(4){animation-delay:.21s}body.kamar-member-desktop-v2 .kc-card:nth-child(5){animation-delay:.28s}
+}
+@media(prefers-reduced-motion:reduce){body.kamar-member-desktop-v2 .kc-grp,body.kamar-member-desktop-v2 .kc-card,body.kamar-member-desktop-v2 .fkx-card,body.kamar-member-desktop-v2 .kc-go::after,body.kamar-member-desktop-v2 .fkx-btn.primary::after,body.kamar-member-desktop-v2 .fkx-badge::before{animation:none!important}}

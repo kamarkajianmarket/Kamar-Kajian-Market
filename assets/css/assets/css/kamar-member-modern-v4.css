@@ -41,7 +41,6 @@ body.kamar-member-desktop-v2 .mini-label::before{content:"";width:6px;height:6px
 
 /* ---------- Hero dashboard ---------- */
 body.kamar-member-desktop-v2 .kd-hero{position:relative;overflow:hidden;background:radial-gradient(700px 260px at 100% 0%,rgba(212,166,63,.18),transparent 62%),var(--km-glass)!important;border:1px solid var(--km-line)!important;border-radius:26px!important;box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06)!important}
-body.kamar-member-desktop-v2 .kd-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border:1px solid rgba(232,199,119,.12);border-radius:50%;box-shadow:0 0 0 28px rgba(232,199,119,.03),0 0 0 56px rgba(232,199,119,.02);pointer-events:none}
 body.kamar-member-desktop-v2 .kd-eyebrow{background:none!important;border:0!important;padding:0!important;color:var(--km-gold)!important;font-size:10.5px!important;letter-spacing:.22em!important;font-weight:800}
 body.kamar-member-desktop-v2 .kd-name{font-weight:800;letter-spacing:-.03em!important;color:#fff7e4!important}
 body.kamar-member-desktop-v2 .kd-chip{background:rgba(255,255,255,.04)!important;border:1px solid var(--km-line2)!important;border-radius:999px!important;color:#e9e2cf!important;font-weight:700;font-size:12px}
@@ -139,3 +138,10 @@ body.kamar-member-desktop-v2 .site-footer{color:#6f6a5c}
   body.kamar-member-desktop-v2 .kamar-drawer-backdrop{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 }
 @media (prefers-reduced-motion:reduce){body.kamar-member-desktop-v2 *{transition:none!important}}
+
+/* patch 1 */
+body.kamar-member-desktop-v2 .kamar-sigfree-card .levels{grid-template-columns:1fr!important;gap:8px}
+body.kamar-member-desktop-v2 .kamar-sigfree-card .levels>div{display:flex!important;justify-content:space-between;align-items:baseline;gap:14px;text-align:right}
+body.kamar-member-desktop-v2 .kamar-sigfree-card .levels>div strong{margin:0!important;text-align:left;flex:none}
+body.kamar-member-desktop-v2 .brand-small{display:flex!important;flex-direction:column;gap:4px;font-weight:800;letter-spacing:.14em;color:var(--km-gold)}
+body.kamar-member-desktop-v2 .kamar-drawer-role{display:block!important;color:var(--km-mute)!important;font-size:11px!important;letter-spacing:.12em;font-weight:600;text-transform:uppercase}

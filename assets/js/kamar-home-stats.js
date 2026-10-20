@@ -55,17 +55,23 @@
     '<a class="bs-cta" href="/register.html">Daftar &amp; Lihat Signal Lengkap</a></div>';
     return sec;
   }
+  var ph=null,stDone=false;
+  function ensurePh(){
+    if(ph)return ph;var anchor=document.getElementById('tentang')||document.querySelector('main section:nth-of-type(2)');if(!anchor)return null;
+    if(!stDone){stDone=true;var st=document.createElement('style');st.textContent=css+'#bukti-signal.bs-skel{min-height:940px;background:linear-gradient(110deg,rgba(255,255,255,.02) 30%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 70%) 0 0/220% 100%,rgba(16,23,32,.88);animation:bsShim 1.8s linear infinite}@keyframes bsShim{to{background-position:-220% 0,0 0}}@media(max-width:860px){#bukti-signal.bs-skel{min-height:1240px}}';document.head.appendChild(st);}
+    ph=document.createElement('section');ph.id='bukti-signal';ph.className='section-shell compact-section bs-skel';anchor.parentNode.insertBefore(ph,anchor);return ph;
+  }
   function run(){
     var c=window.kamarSupabaseClient;if(!c||!c.rpc)return false;
+    var p=ensurePh();if(!p)return false;
     c.rpc('public_signal_stats').then(function(r){
-      if(r.error||!r.data||!r.data.total_closed)return;
-      var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
-      var anchor=document.getElementById('tentang')||document.querySelector('main section:nth-of-type(2)');if(!anchor)return;
-      var sec=build(r.data);anchor.parentNode.insertBefore(sec,anchor);
-      var done=false;function go(){if(done)return;done=true;sec.classList.add('in');sec.querySelectorAll('[data-c]').forEach(function(e){count(e,parseFloat(e.getAttribute('data-c')),e.getAttribute('data-dec')==='1');});}
-      if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){go();o.disconnect();}},{threshold:.25}).observe(sec);}else go();
+      if(r.error||!r.data||!r.data.total_closed){p.remove();return;}
+      var sec=build(r.data);p.className='section-shell compact-section';p.innerHTML=sec.innerHTML;
+      var done=false;function go(){if(done)return;done=true;p.classList.add('in');p.querySelectorAll('[data-c]').forEach(function(e){count(e,parseFloat(e.getAttribute('data-c')),e.getAttribute('data-dec')==='1');});}
+      if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){go();o.disconnect();}},{threshold:.25}).observe(p);}else go();
     });
     return true;
   }
+  ensurePh();
   var tries=0;(function w(){if(run())return;if(++tries<40)setTimeout(w,250);})();
 })();

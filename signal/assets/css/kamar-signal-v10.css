@@ -113,3 +113,21 @@ body.ksig-body{background:#05070b!important;color:#f4eddc!important;-webkit-text
 .ksig-body .ksig-tl-item2{position:relative}
 .ksig-body .ksig-tl-icon{background:#151b28!important;border:1px solid rgba(232,199,119,.5)!important;box-shadow:0 0 14px rgba(232,199,119,.25);position:relative;z-index:1}
 @media (max-width:760px){.ksig-body .ksig-detail-split{display:flex!important;flex-direction:column;gap:12px}}
+
+/* v14 layout: performa, kurva, lalu akses ringkas */
+.ksig-main.ksig-dashboard{display:flex!important;flex-direction:column;gap:18px}
+.ksig-main.ksig-dashboard>.ksig-top-row{display:contents!important}
+.ksig-main.ksig-dashboard .ksig-perf{order:1;width:100%}
+.ksig-main.ksig-dashboard>.ksig-eq{order:2;margin:0}
+.ksig-main.ksig-dashboard .ksig-access-card{order:3}
+.ksig-main.ksig-dashboard .ksig-install-card{order:4}
+.ksig-main.ksig-dashboard>.ksig-block,.ksig-main.ksig-dashboard>.ksig-minifooter{order:5}
+.ksig-fold{padding:0!important;min-height:0!important;height:auto!important;overflow:hidden}
+.ksig-fold-bar{display:flex!important;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ksig-fold-t{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e8c777;font-weight:800}
+.ksig-fold-s{margin-left:auto;font-size:13px;font-weight:700;color:#fff6df}
+.ksig-fold-i{width:8px;height:8px;border-right:2px solid #e8c777;border-bottom:2px solid #e8c777;transform:rotate(45deg);transition:transform .35s;margin-top:-3px}
+.ksig-fold.open .ksig-fold-i{transform:rotate(-135deg);margin-top:3px}
+.ksig-fold:not(.open)>*:not(.ksig-fold-bar){display:none!important}
+.ksig-fold.open{padding:0 18px 18px!important}
+.ksig-fold.open>.ksig-fold-bar{margin:0 -18px 14px;border-bottom:1px solid rgba(255,255,255,.08)}

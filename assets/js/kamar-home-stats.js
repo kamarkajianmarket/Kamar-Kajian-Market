@@ -1,8 +1,8 @@
 /* Kamar Home: statistik signal live (angka ringkasan publik) */
 (function(){
   if(window.__kamarHomeStats) return; window.__kamarHomeStats=1;
-  var css='#bukti-signal{position:relative;padding:clamp(48px,8vw,96px) 0}'+
-  '#bukti-signal .bs-wrap{width:min(1120px,92vw);margin:0 auto}'+
+  var css='#bukti-signal{position:relative}'+
+  '#bukti-signal .bs-wrap{width:100%}'+
   '#bukti-signal .bs-eyebrow{display:inline-block;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.2em;color:#e8c777;background:rgba(232,199,119,.1);border:1px solid rgba(232,199,119,.3)}'+
   '#bukti-signal h2{margin:16px 0 10px;font-size:clamp(28px,5vw,46px);line-height:1.1;font-weight:900;color:#fff6df;letter-spacing:-.02em}'+
   '#bukti-signal h2 em{font-style:normal;color:#e8c777}'+
@@ -26,7 +26,7 @@
   '#bukti-signal .bs-chart .ln{fill:none;stroke:#5df0bb;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(47,230,164,.7));stroke-dasharray:2400;stroke-dashoffset:2400}'+
   '#bukti-signal.in .bs-chart .ln{animation:bsDraw 2s .5s cubic-bezier(.2,.8,.2,1) forwards}'+
   '@keyframes bsDraw{to{stroke-dashoffset:0}}'+
-  '#bukti-signal .bs-note{margin-top:14px;font-size:11.5px;color:#8a95a8;line-height:1.5}'+
+  '#bukti-signal .bs-note{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(232,199,119,.3);border-left:4px solid #e8c777;background:rgba(232,199,119,.07);font-size:13.5px;color:#dfe5ee;line-height:1.65}#bukti-signal .bs-note b{display:block;margin-bottom:4px;font-size:11px;letter-spacing:.2em;color:#e8c777}'+
   '#bukti-signal .bs-cta{display:inline-block;margin-top:18px;padding:13px 26px;border-radius:999px;font-weight:800;color:#1a1305;background:linear-gradient(180deg,#f3d98d,#c9a24a);text-decoration:none;box-shadow:0 10px 30px rgba(201,162,74,.35)}'+
   '@media(max-width:860px){#bukti-signal .bs-grid{grid-template-columns:repeat(2,1fr)}}'+
   '@media(prefers-reduced-motion:reduce){#bukti-signal .bs-card,#bukti-signal .bs-chart{opacity:1;transform:none;transition:none}#bukti-signal .bs-chart .ln{animation:none;stroke-dashoffset:0}}';
@@ -39,7 +39,7 @@
     return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="bsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fe6a4" stop-opacity=".4"/><stop offset="1" stop-color="#2fe6a4" stop-opacity="0"/></linearGradient></defs><path d="'+a+'" fill="url(#bsG)"/><path class="ln" pathLength="2400" d="'+d+'"/></svg>';
   }
   function build(d){
-    var sec=document.createElement('section');sec.id='bukti-signal';
+    var sec=document.createElement('section');sec.id='bukti-signal';sec.className='section-shell compact-section';
     var since='';try{since=new Date(d.since+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});}catch(e){}
     sec.innerHTML='<div class="bs-wrap"><span class="bs-eyebrow">BUKTI TERCATAT</span><span class="bs-live"><i></i>LIVE</span>'+
     '<h2>Hasil <em>Kamar Signal</em> tercatat apa adanya</h2>'+
@@ -51,7 +51,7 @@
     '<div class="bs-card"><div class="bs-k">Total Pips</div><div class="bs-v '+(d.total_pips<0?'r':'g')+'"><span data-c="'+Math.abs(d.total_pips)+'">0</span></div><div class="bs-d">akumulasi sejak '+since+'</div></div>'+
     '</div>'+
     '<div class="bs-chart"><div class="bs-k" style="margin-bottom:10px">Kurva akumulasi pips harian</div>'+spark(d.series)+'</div>'+
-    '<p class="bs-note">Hasil historis dicatat otomatis oleh sistem dan bukan jaminan hasil di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</p>'+
+    '<div class="bs-note"><b>DISCLAIMER</b>Hasil historis dicatat otomatis oleh sistem dan bukan jaminan hasil di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</div>'+
     '<a class="bs-cta" href="/register.html">Daftar &amp; Lihat Signal Lengkap</a></div>';
     return sec;
   }

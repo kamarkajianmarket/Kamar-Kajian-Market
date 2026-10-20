@@ -81,6 +81,7 @@
 })();
 
 (function(){
+  if(/^\/(index\.html)?$/.test(location.pathname))return;
   var st=document.createElement('style');st.id='kmr-free-style';
   st.textContent='.kmr-free-pill{display:inline-flex;align-items:center;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.14em;color:#04170f;background:linear-gradient(180deg,#7dffcb,#2fe6a4);box-shadow:0 0 14px rgba(47,230,164,.5);vertical-align:middle;-webkit-text-fill-color:#04170f}';
   document.head.appendChild(st);

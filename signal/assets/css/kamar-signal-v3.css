@@ -255,3 +255,29 @@ body.ksig-fx-intro .ksig-block:nth-of-type(2){animation-delay:.28s}body.ksig-fx-
 @media(hover:hover) and (min-width:1000px){.ksig-body .ksig-install-card{display:none!important}}
 @media(max-width:1000px){.ksig-body .ksig-top-row{grid-template-columns:1fr}}
 @media(max-width:560px){.ksig-body .ksig-perf{flex-direction:column;align-items:stretch;gap:18px;padding:22px 18px}.ksig-body .ksig-perf-ring{align-self:center;width:150px;height:150px}.ksig-body .ksig-perf-ring-in{width:116px;height:116px}}
+
+/* ===== v9: grafik batang rekap + bar menang/kalah, warna aktif seragam ===== */
+.ksig-body .ksig-perf-stat.on b{color:#2fe6a4}
+.ksig-body .ksig-vchart{position:relative;margin:4px 0 18px;padding:18px 18px 14px;border-radius:20px;background:linear-gradient(165deg,rgba(255,255,255,.055),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.09);overflow:hidden}
+.ksig-body .ksig-vchart::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 38px)}
+.ksig-body .ksig-vchart-title{position:relative;font-size:10.5px;font-weight:800;letter-spacing:.2em;color:rgba(232,199,119,.85);margin-bottom:14px}
+.ksig-body .ksig-vchart-bars{position:relative;display:flex;align-items:flex-end;justify-content:space-around;gap:clamp(8px,2.4vw,24px)}
+.ksig-body .ksig-vbar{flex:1;max-width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.ksig-body .ksig-vbar-track{height:156px;width:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}
+.ksig-body .ksig-vbar-val{font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.ksig-body .ksig-vbar.pos .ksig-vbar-val{color:#5df0bb}
+.ksig-body .ksig-vbar.neg .ksig-vbar-val{color:#ff8a95}
+.ksig-body .ksig-vbar-col{width:min(48px,70%);height:var(--h);border-radius:11px 11px 4px 4px;transform-origin:bottom}
+.ksig-body .ksig-vbar.pos .ksig-vbar-col{background:linear-gradient(180deg,#7bf5cb,#1fae80 68%,#0d6a4f);box-shadow:0 0 24px rgba(47,230,164,.38),inset 0 1px 0 rgba(255,255,255,.45)}
+.ksig-body .ksig-vbar.neg .ksig-vbar-col{background:linear-gradient(180deg,#ff9aa4,#e0414f 68%,#8e1f2b);box-shadow:0 0 24px rgba(255,93,108,.35),inset 0 1px 0 rgba(255,255,255,.4)}
+.ksig-body .ksig-vbar-lab{font-size:12px;font-weight:800;letter-spacing:.08em;color:rgba(255,255,255,.72)}
+.ksig-body .ksig-vchart.anim .ksig-vbar-col{animation:v9grow .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*90ms)}
+@keyframes v9grow{from{transform:scaleY(0);opacity:.2}to{transform:scaleY(1);opacity:1}}
+.ksig-body .ksig-rbar{display:flex;gap:3px;height:6px;margin-top:10px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.06)}
+.ksig-body .ksig-rbar i{display:block;height:100%;width:var(--w);border-radius:99px;transform-origin:left}
+.ksig-body .ksig-rbar .p{background:linear-gradient(90deg,#1fae80,#6af2c2);box-shadow:0 0 10px rgba(47,230,164,.5)}
+.ksig-body .ksig-rbar .l{background:linear-gradient(90deg,#e0414f,#ff8a95)}
+.ksig-body .ksig-rbar.anim i{animation:v9bar 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes v9bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(max-width:560px){.ksig-body .ksig-vbar-track{height:130px}.ksig-body .ksig-vchart{padding:14px 12px 12px}}
+@media(prefers-reduced-motion:reduce){.ksig-body .ksig-vchart.anim .ksig-vbar-col,.ksig-body .ksig-rbar.anim i{animation:none!important}}

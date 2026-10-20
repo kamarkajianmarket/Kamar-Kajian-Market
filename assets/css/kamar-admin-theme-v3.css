@@ -43,3 +43,38 @@ body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]::after{content:'';p
 body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]:checked{background:linear-gradient(135deg,#f4df90,#d4a63f)!important}
 body.kamar-admin-desktop-v1 .toggle-row input[type=checkbox]:checked::after{transform:translateX(20px);background:#1a1407}
 body.kamar-admin-desktop-v1 .admin-main .hero .pill,body.kamar-admin-desktop-v1 .admin-main .hero .eyebrow,body.kamar-admin-desktop-v1 .admin-main .hero>span{width:fit-content!important;max-width:100%}
+
+/* ===== ADMIN v4: reveal + modern polish ===== */
+@keyframes kadIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes kadSheen{0%,60%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+body.kamar-admin-desktop-v1 .ka-kpi,body.kamar-admin-desktop-v1 .split-card,body.kamar-admin-desktop-v1 .stat-card,body.kamar-admin-desktop-v1 .admin-click-card,body.kamar-admin-desktop-v1 .member-mini-card{animation:kadIn .7s cubic-bezier(.2,.8,.2,1) both}
+body.kamar-admin-desktop-v1 .ka-kpis>*:nth-child(2){animation-delay:.06s}
+body.kamar-admin-desktop-v1 .ka-kpis>*:nth-child(3){animation-delay:.12s}
+body.kamar-admin-desktop-v1 .ka-kpis>*:nth-child(4){animation-delay:.18s}
+body.kamar-admin-desktop-v1 .ka-kpis>*:nth-child(5){animation-delay:.24s}
+body.kamar-admin-desktop-v1 .ka-kpis>*:nth-child(6){animation-delay:.30s}
+@supports (animation-timeline:view()){
+ body.kamar-admin-desktop-v1 .split-card,body.kamar-admin-desktop-v1 .stat-card,body.kamar-admin-desktop-v1 .admin-click-card{animation:kadIn linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+}
+body.kamar-admin-desktop-v1 .ka-kpi{position:relative;overflow:hidden;border:1px solid rgba(232,199,119,.2)!important;background:linear-gradient(165deg,rgba(24,30,42,.92),rgba(9,12,19,.96))!important;box-shadow:0 12px 34px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07);transition:transform .35s,border-color .35s,box-shadow .35s}
+body.kamar-admin-desktop-v1 .ka-kpi::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#e8c777,transparent);opacity:.85}
+body.kamar-admin-desktop-v1 .ka-kpi::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.07) 50%,transparent 60%);transform:translateX(-130%);animation:kadSheen 7s ease-in-out infinite;pointer-events:none}
+body.kamar-admin-desktop-v1 .ka-kpi:hover{transform:translateY(-4px);border-color:rgba(232,199,119,.55)!important;box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 28px rgba(232,199,119,.18)}
+body.kamar-admin-desktop-v1 .ka-kpi b,body.kamar-admin-desktop-v1 .ka-kpi strong{font-variant-numeric:tabular-nums;text-shadow:0 0 22px rgba(232,199,119,.28)}
+body.kamar-admin-desktop-v1 .split-card,body.kamar-admin-desktop-v1 .stat-card{border:1px solid rgba(255,255,255,.1)!important;background:linear-gradient(165deg,rgba(22,28,41,.9),rgba(9,12,19,.95))!important;box-shadow:0 16px 44px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.06)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+body.kamar-admin-desktop-v1 .ka-list>*,body.kamar-admin-desktop-v1 .todo-list>*{transition:background .25s,transform .25s,border-color .25s}
+body.kamar-admin-desktop-v1 .ka-list>*:hover,body.kamar-admin-desktop-v1 .todo-list>*:hover{transform:translateX(3px);background:rgba(232,199,119,.08)!important}
+/* tabel */
+body.kamar-admin-desktop-v1 table{border-collapse:separate;border-spacing:0 6px}
+body.kamar-admin-desktop-v1 thead th{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#e8c777;font-weight:800;border:0!important;background:transparent!important;padding:8px 12px}
+body.kamar-admin-desktop-v1 tbody td{background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.07)!important;border-bottom:1px solid rgba(255,255,255,.07)!important;padding:12px;transition:background .2s}
+body.kamar-admin-desktop-v1 tbody td:first-child{border-left:1px solid rgba(255,255,255,.07)!important;border-radius:12px 0 0 12px}
+body.kamar-admin-desktop-v1 tbody td:last-child{border-right:1px solid rgba(255,255,255,.07)!important;border-radius:0 12px 12px 0}
+body.kamar-admin-desktop-v1 tbody tr:hover td{background:rgba(232,199,119,.09)}
+/* input + pencarian */
+body.kamar-admin-desktop-v1 input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),body.kamar-admin-desktop-v1 select,body.kamar-admin-desktop-v1 textarea{background-color:rgba(255,255,255,.05)!important;border:1px solid rgba(232,199,119,.22)!important;border-radius:14px!important;color:#f4eddc!important;transition:border-color .25s,box-shadow .25s,background-color .25s}
+body.kamar-admin-desktop-v1 input:focus,body.kamar-admin-desktop-v1 select:focus,body.kamar-admin-desktop-v1 textarea:focus{outline:0!important;border-color:rgba(232,199,119,.75)!important;box-shadow:0 0 0 4px rgba(232,199,119,.14),0 0 24px rgba(232,199,119,.18)!important;background-color:rgba(255,255,255,.08)!important}
+body.kamar-admin-desktop-v1 input[type=search],body.kamar-admin-desktop-v1 input[placeholder*="Cari" i],body.kamar-admin-desktop-v1 input[placeholder*="Search" i]{padding-left:42px!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23e8c777' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:14px center!important}
+body.kamar-admin-desktop-v1 ::placeholder{color:rgba(196,205,219,.55)}
+@media (max-width:760px){body.kamar-admin-desktop-v1 .ka-kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}}
+@media (prefers-reduced-motion:reduce){body.kamar-admin-desktop-v1 .ka-kpi::after{animation:none}body.kamar-admin-desktop-v1 *{animation-duration:.01ms!important}}

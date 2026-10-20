@@ -32,17 +32,17 @@ async function load(){
   try{
     var c=null;
     for(var i=0;i<40&&!c;i++){c=window.kamarSupabaseClient||null;if(!c)await new Promise(function(r){setTimeout(r,250)})}
-    if(c){
-      var s=await c.auth.getSession(); var uid=s&&s.data&&s.data.session&&s.data.session.user&&s.data.session.user.id;
-      if(uid){
-        var p=await c.from('member_profiles').select('id').eq('user_id',uid).maybeSingle();
-        if(p&&p.data){var a=await c.from('member_access').select('activation_source').eq('profile_id',p.data.id).maybeSingle();source=a&&a.data?a.data.activation_source:null}
-      }
-    }
+    if(!c) return;
+    var s=await c.auth.getSession(); var uid=s&&s.data&&s.data.session&&s.data.session.user&&s.data.session.user.id;
+    if(!uid) return;
+    var p=await c.from('member_profiles').select('id').eq('user_id',uid).maybeSingle();
+    if(p&&p.data){var a=await c.from('member_access').select('activation_source').eq('profile_id',p.data.id).maybeSingle();source=a&&a.data?a.data.activation_source:null}
   }catch(e){}
-  ready=true; apply();
+  apply();
 }
+ready=true;
 var t=null;
 new MutationObserver(function(){clearTimeout(t);t=setTimeout(apply,80)}).observe(document.documentElement,{childList:true,subtree:true});
+apply();
 load();
 })();

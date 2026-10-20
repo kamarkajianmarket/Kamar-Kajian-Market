@@ -71,8 +71,8 @@
       d.r.appendChild(b);
     });
     var old=body.querySelector('.ksig-vchart'); if(old) old.parentNode.removeChild(old);
-    var ch=document.createElement('div'); ch.className='ksig-vchart'+cls;
-    ch.innerHTML='<div class="ksig-vchart-title">PIPS PER TIMEFRAME</div><div class="ksig-vchart-bars">'+data.map(function(d,i){
+    var tabEl=document.querySelector('.ksig-tab.active'),perEl=document.querySelector('.ksig-recap-period');var per=((tabEl?tabEl.textContent.trim():'')+(perEl?' \u00b7 '+perEl.textContent.trim():'')).replace(/</g,'');var ch=document.createElement('div'); ch.className='ksig-vchart'+cls;
+    ch.innerHTML='<div class="ksig-vchart-title"><b>PIPS PER TIMEFRAME</b><em>'+per+'</em></div><div class="ksig-vchart-bars">'+data.map(function(d,i){
       var h=Math.max(6,Math.abs(d.pips)/maxAbs*120);
       return '<div class="ksig-vbar '+(d.pips>=0?'pos':'neg')+'" style="--h:'+h+'px;--i:'+i+'"><div class="ksig-vbar-track"><span class="ksig-vbar-val">'+(d.pips>=0?'+':'')+Math.round(d.pips)+'</span><div class="ksig-vbar-col"></div></div><span class="ksig-vbar-lab">'+d.lab+'</span></div>';
     }).join('')+'</div>';
@@ -80,6 +80,27 @@
     list.setAttribute('data-viz','1');
   }
   function sched(){ if(pend) return; pend=requestAnimationFrame(deco); }
+  function start(){ var root=document.getElementById('ksigRoot')||document.body; new MutationObserver(sched).observe(root,{childList:true,subtree:true}); sched(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
+
+/* fold: kartu akses + app ringkas di HP */
+(function(){
+  var open={};
+  function fold(cls,title,sumFn){
+    var c=document.querySelector('.'+cls); if(!c||c.getAttribute('data-fold')) return;
+    c.setAttribute('data-fold','1'); c.classList.add('ksig-fold'); if(open[cls]) c.classList.add('open');
+    var bar=document.createElement('div'); bar.className='ksig-fold-bar'; bar.setAttribute('role','button'); bar.tabIndex=0;
+    bar.innerHTML='<span class="ksig-fold-t">'+title+'</span><b class="ksig-fold-s">'+sumFn(c.textContent||'')+'</b><i class="ksig-fold-i"></i>';
+    function tg(){ var o=c.classList.toggle('open'); open[cls]=o; }
+    bar.addEventListener('click',tg); bar.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();tg();} });
+    c.insertBefore(bar,c.firstChild);
+  }
+  function run(){
+    fold('ksig-access-card','Akses',function(t){var m=t.match(/(\d+)\s*HARI\s*TERSISA/i);return m?m[1]+' hari tersisa':'Aktif';});
+    fold('ksig-install-card','Kamar Signal App',function(){return 'Install';});
+  }
+  var q=0; function sched(){ if(q) return; q=requestAnimationFrame(function(){q=0;run();}); }
   function start(){ var root=document.getElementById('ksigRoot')||document.body; new MutationObserver(sched).observe(root,{childList:true,subtree:true}); sched(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();

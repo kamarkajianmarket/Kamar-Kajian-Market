@@ -45,3 +45,41 @@
   function start(){ var r=document.getElementById('ksigRoot')||document.body; mo.observe(r,{childList:true,subtree:true}); scan(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
+
+/* ===== viz: grafik batang rekap + bar menang/kalah ===== */
+(function(){
+  if(window.__ksigViz) return; window.__ksigViz=true;
+  var animated=false, pend=0;
+  function num(s){var m=String(s||'').replace(/\./g,'').match(/-?\d+(,\d+)?/);return m?parseFloat(m[0].replace(',','.')):0;}
+  function deco(){
+    pend=0;
+    var body=document.getElementById('ksigRecapBody'); if(!body) return;
+    var list=body.querySelector('.ksig-recap-list'); if(!list||list.getAttribute('data-viz')==='1') return;
+    var rows=[].slice.call(list.querySelectorAll('.ksig-recap-row')); if(!rows.length) return;
+    var data=rows.map(function(r){
+      var pe=r.querySelector('.ksig-recap-row-pips'), lb=r.querySelector('.ksig-recap-row-label'), st=(r.querySelector('.ksig-recap-row-stats')||{}).textContent||'';
+      var m=st.match(/(\d+)\s*Signal[\s\S]*?(\d+)\s*Profit[\s\S]*?(\d+)\s*Loss/i)||[];
+      return {r:r,lab:((lb&&lb.textContent)||'').trim(),pips:num(pe&&pe.textContent),sig:+m[1]||0,pr:+m[2]||0,ls:+m[3]||0};
+    });
+    var maxAbs=Math.max.apply(null,data.map(function(d){return Math.abs(d.pips);}).concat([1]));
+    var cls=animated?'':' anim'; animated=true;
+    data.forEach(function(d){
+      if(d.r.querySelector('.ksig-rbar')) return;
+      var tot=Math.max(d.sig,d.pr+d.ls,1);
+      var b=document.createElement('div'); b.className='ksig-rbar'+cls;
+      b.innerHTML='<i class="p" style="--w:'+(d.pr/tot*100)+'%"></i><i class="l" style="--w:'+(d.ls/tot*100)+'%"></i>';
+      d.r.appendChild(b);
+    });
+    var old=body.querySelector('.ksig-vchart'); if(old) old.parentNode.removeChild(old);
+    var ch=document.createElement('div'); ch.className='ksig-vchart'+cls;
+    ch.innerHTML='<div class="ksig-vchart-title">PIPS PER TIMEFRAME</div><div class="ksig-vchart-bars">'+data.map(function(d,i){
+      var h=Math.max(6,Math.abs(d.pips)/maxAbs*120);
+      return '<div class="ksig-vbar '+(d.pips>=0?'pos':'neg')+'" style="--h:'+h+'px;--i:'+i+'"><div class="ksig-vbar-track"><span class="ksig-vbar-val">'+(d.pips>=0?'+':'')+Math.round(d.pips)+'</span><div class="ksig-vbar-col"></div></div><span class="ksig-vbar-lab">'+d.lab+'</span></div>';
+    }).join('')+'</div>';
+    list.parentNode.insertBefore(ch,list);
+    list.setAttribute('data-viz','1');
+  }
+  function sched(){ if(pend) return; pend=requestAnimationFrame(deco); }
+  function start(){ var root=document.getElementById('ksigRoot')||document.body; new MutationObserver(sched).observe(root,{childList:true,subtree:true}); sched(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();

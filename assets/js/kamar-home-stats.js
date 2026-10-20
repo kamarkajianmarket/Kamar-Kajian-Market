@@ -41,9 +41,9 @@
   function build(d){
     var sec=document.createElement('section');sec.id='bukti-signal';sec.className='section-shell compact-section is-visible';
     var since='';try{since=new Date(d.since+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});}catch(e){}
-    sec.innerHTML='<div class="bs-wrap"><span class="bs-eyebrow">BUKTI TERCATAT</span><span class="bs-live"><i></i>LIVE</span>'+
-    '<h2>Hasil <em>Kamar Signal</em> tercatat apa adanya</h2>'+
-    '<p class="bs-sub">Setiap zona entry, target, dan invalidasi dicatat otomatis oleh sistem Kamar AI sejak '+since+'. Angka di bawah dihitung langsung dari seluruh signal yang sudah selesai, bukan dipilih-pilih.</p>'+
+    sec.innerHTML='<div class="bs-wrap"><span class="bs-eyebrow">PERFORMA NYATA · TERBUKA UNTUK SIAPA SAJA</span><span class="bs-live"><i></i>LIVE</span>'+
+    '<h2>Kamar Signal Performance: Winrate <em>'+String(d.winrate).replace(".",",")+'%</em>, Semua Terbuka Tanpa Disensor.</h2>'+
+    '<p class="bs-sub">Sistem di balik Kamar Signal sudah berjalan bertahun-tahun, lalu disempurnakan menjadi <b>Kamar AI</b> sejak awal 2026. Sejak 17 Agustus 2026, setiap signal tayang otomatis di website ini, yang profit maupun yang loss. Lihat performanya sendiri, nilai sendiri.</p>'+
     '<div class="bs-grid">'+
     '<div class="bs-card"><div class="bs-k">Winrate</div><div class="bs-v g"><span data-c="'+d.winrate+'" data-dec="1">0</span>%</div><div class="bs-d">'+fmt(d.profit)+' profit · '+fmt(d.loss)+' loss</div></div>'+
     '<div class="bs-card"><div class="bs-k">Signal Selesai</div><div class="bs-v"><span data-c="'+d.total_closed+'">0</span></div><div class="bs-d">dicatat tanpa dihapus</div></div>'+
@@ -51,8 +51,8 @@
     '<div class="bs-card"><div class="bs-k">Total Pips</div><div class="bs-v '+(d.total_pips<0?'r':'g')+'"><span data-c="'+Math.abs(d.total_pips)+'">0</span></div><div class="bs-d">akumulasi sejak '+since+'</div></div>'+
     '</div>'+
     '<div class="bs-chart"><div class="bs-k" style="margin-bottom:10px">Kurva akumulasi pips harian</div>'+spark(d.series)+'</div>'+
-    '<div class="bs-note"><b>DISCLAIMER</b>Hasil historis dicatat otomatis oleh sistem dan bukan jaminan hasil di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</div>'+
-    '<a class="bs-cta" href="/register.html">Daftar &amp; Lihat Signal Lengkap</a></div>';
+    '<div class="bs-note"><b>DISCLAIMER</b>Performa historis dicatat otomatis oleh sistem dan bukan jaminan performa di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</div>'+
+    '<a class="bs-cta" href="/register.html">Mulai Pantau Kamar Signal <span style="margin-left:10px;padding:3px 10px;border-radius:999px;background:#2fe6a4;color:#04170f;font-size:11px;letter-spacing:.14em;font-weight:900">GRATIS</span></a><span style="display:block;margin-top:10px;font-size:12.5px;color:#a9b3c4">Gratis, tanpa biaya langganan. Daftar sekarang dan pantau signal setiap hari.</span></div>';
     return sec;
   }
   var ph=null,stDone=false;

@@ -7,7 +7,7 @@
   }
   var root=document.documentElement, userOpened=false;
   document.addEventListener('click',function(e){
-    if(e.target && e.target.closest && e.target.closest('[data-kmr-action="chat"]')) userOpened=true;window.__kmrUserOpened=true;try{window.Tawk_API.showWidget()}catch(x){}
+    if(e.target && e.target.closest && e.target.closest('[data-kmr-action="chat"]')) {userOpened=true;window.__kmrUserOpened=true;try{window.Tawk_API.showWidget()}catch(x){}}
   },true);
 
   var cb=document.createElement('button'); cb.type='button'; cb.className='kmr-chat-close'; cb.setAttribute('aria-label','Tutup chat');

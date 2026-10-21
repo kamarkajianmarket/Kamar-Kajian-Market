@@ -62,3 +62,25 @@
   }
   var n=0; (function wait(){ if(!hook() && n++<40) setTimeout(wait,250); })();
 })();
+
+/* Sapu bersih: sembunyikan bubble/greeting "We Are Here" Tawk (iframe kecil) kecuali pengguna membuka chat sendiri */
+(function(){
+  function isTawk(f){var t=(f.title||'').toLowerCase();return t.indexOf('widget chat')>-1||t.indexOf('chat widget')>-1||t.indexOf('tawk')>-1||(f.src||'').indexOf('tawk.to')>-1;}
+  function sweep(){
+    if(window.__kmrUserOpened) return;
+    var all=document.querySelectorAll('iframe');
+    for(var i=0;i<all.length;i++){
+      var f=all[i]; if(!isTawk(f)) continue;
+      var r=f.getBoundingClientRect();
+      if(r.width>0&&r.height>0&&r.width<320&&r.height<280){
+        var s=f.style;
+        s.setProperty('display','none','important');s.setProperty('visibility','hidden','important');
+        s.setProperty('opacity','0','important');s.setProperty('pointer-events','none','important');
+        f.setAttribute('data-kmr-hidden','1');
+      }
+    }
+  }
+  setInterval(sweep,250);
+  try{ new MutationObserver(sweep).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']}); }catch(e){}
+  sweep();
+})();

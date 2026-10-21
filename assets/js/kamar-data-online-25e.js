@@ -152,7 +152,7 @@ var hero=qs('.hero')||qs('.split-main'); if(hero&&!el('memberOnlineDetailCard'))
       if(sidebar.querySelector('[data-kamar-affiliate-menu]')) return;
       var c=await clientReady();
       if(!c) return;
-      var res=await timeout(c.from('affiliates').select('approval_status,is_active').limit(1),10000);
+      var sessAff=await c.auth.getSession(); var uidAff=((sessAff&&sessAff.data&&sessAff.data.session)||{user:{}}).user.id||'00000000-0000-0000-0000-000000000000'; var res=await timeout(c.from('affiliates').select('approval_status,is_active').eq('user_id',uidAff).limit(1),10000);
       var row=(res&&res.data&&res.data[0])||null;
       var anchor=sidebar.querySelector('a[href="member-profile.html"]');
       if(!anchor) return;

@@ -1,13 +1,13 @@
 /* KAMAR SUPPORT v2 - CSS loader, rapikan widget Tawk (bubble/badge), tombol Tutup, tidak auto-buka */
 (function(){
-  if(window.__KAMAR_SUPPORT_V2__) return; window.__KAMAR_SUPPORT_V2__=true;
+  if(window.__KAMAR_SUPPORT_V2__) return; window.__KAMAR_SUPPORT_V2__=true;(function(){var w=window;w.Tawk_API=w.Tawk_API||{};var T=w.Tawk_API;var pl=T.onLoad,pm=T.onChatMaximized;function quiet(){try{if(!w.__kmrUserOpened){T.minimize();T.hideWidget()}}catch(e){}}T.onLoad=function(){try{pl&&pl()}catch(e){}quiet()};T.onChatMaximized=function(){try{pm&&pm()}catch(e){}quiet()};T.onChatMessageSystem=T.onChatMessageSystem||function(){};})();
   if(!document.querySelector('link[data-kmr-sup-v2]')){
     var l=document.createElement('link'); l.rel='stylesheet'; l.href='/assets/css/kamar-support-v2.css?v=4'; l.setAttribute('data-kmr-sup-v2','1');
     document.head.appendChild(l);
   }
   var root=document.documentElement, userOpened=false;
   document.addEventListener('click',function(e){
-    if(e.target && e.target.closest && e.target.closest('[data-kmr-action="chat"]')) userOpened=true;
+    if(e.target && e.target.closest && e.target.closest('[data-kmr-action="chat"]')) userOpened=true;window.__kmrUserOpened=true;try{window.Tawk_API.showWidget()}catch(x){}
   },true);
 
   var cb=document.createElement('button'); cb.type='button'; cb.className='kmr-chat-close'; cb.setAttribute('aria-label','Tutup chat');

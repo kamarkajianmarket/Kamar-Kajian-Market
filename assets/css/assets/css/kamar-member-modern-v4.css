@@ -312,3 +312,13 @@ body.kamar-member-desktop-v2 label{color:#b9b09a;font-size:12px;letter-spacing:.
   body.kamar-member-desktop-v2 .grid-4{grid-template-columns:1fr 1fr}
   body.kamar-member-desktop-v2 .grid-4 .stat-card:nth-child(4){grid-column:1/-1}
 }
+
+/* patch 9 - semua area geser horizontal harus bisa digeser di HP */
+@media (max-width:820px){
+  body.kamar-member-desktop-v2 .kd-facs{overflow-x:auto!important;overflow-y:hidden;scroll-snap-type:x proximity!important;scroll-padding-left:16px;touch-action:pan-x pan-y;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;cursor:grab}
+  body.kamar-member-desktop-v2 .kd-facs .kd-fac{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;animation:none!important;flex:0 0 172px!important;min-width:172px;scroll-snap-align:start;scroll-margin-left:16px}
+  body.kamar-member-desktop-v2 .kd-facs::after{content:"";flex:0 0 4px}
+  body.kamar-member-desktop-v2 table,body.kamar-member-desktop-v2 .kamar-table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;white-space:nowrap}
+  body.kamar-member-desktop-v2 .table-wrap,body.kamar-member-desktop-v2 .table-scroll,body.kamar-member-desktop-v2 .kx-facs{-webkit-overflow-scrolling:touch}
+  body.kamar-member-desktop-v2 [class*="scroller"],body.kamar-member-desktop-v2 [class*="carousel"],body.kamar-member-desktop-v2 [class*="tabs"]{overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+}

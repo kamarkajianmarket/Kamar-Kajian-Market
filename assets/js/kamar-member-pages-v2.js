@@ -45,7 +45,7 @@
     cap:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'
   };
   var FACS=[
-    {k:'materi_edukasi',n:'Kamar Edukasi',ic:'cap',d:'Materi dan panduan edukasi dasar trading dan investasi.',href:'member-activate.html?facility=edukasi',page:'member-materials.html'},
+    {k:'materi_edukasi',n:'Kamar Edukasi',ic:'cap',d:'Materi dan panduan edukasi dasar trading dan investasi.',href:'member-edukasi-daftar.html',free:1,chip:'Gratis · Selamanya',page:'member-materials.html'},
     {k:'kamar_study',n:'Kamar Signal',ic:'radio',d:'Signal trading dengan penjelasan zona dan area penting.',href:'member-signal-activate-select.html',page:'member-study.html',badge:'feat',bt:'Populer'},
     {k:'kamar_private',n:'Kamar E-Book',ic:'book',d:'E-Book 20 chapter terstruktur plus Free Mentoring. Akses selamanya.',href:'member-checkout.html?facility=ebook',page:'member-private.html',badge:'prem',bt:'Premium',pk:'kamar_private',chip:'Free Mentoring'},
     {k:'kamar_indikator',n:'Kamar Indikator',ic:'pulse',d:'Indikator zona Kamar untuk membaca struktur dan area penting market.',href:'member-checkout.html?facility=indikator',page:'member-indicator.html',pk:'kamar_indikator'},
@@ -86,9 +86,9 @@
     var h='<div class="kx-sec-title"><h2>Pilih Fasilitas</h2><p>Klik kartu untuk membeli atau memperpanjang.</p></div><div class="kx-facs">';
     FACS.forEach(function(f){
       if(hidden[f.k]) return;
-      var st=facStatus(a,f.k);
+      var st=facStatus(a,f.k); if(f.free){st=a['access_'+f.k]?{on:true,t:'<b>Aktif</b> · Selamanya'}:{on:false,t:'Belum aktif'};}
       var badge=f.badge==='hot'?'<span class="kx-hot">'+f.bt+'</span>':(f.badge==='feat'?'<span class="kx-feat">'+f.bt+'</span>':(f.badge==='prem'?'<span class="kx-prem">'+f.bt+'</span>':''));
-      h+='<a class="kx-fac'+(st.on?' on':'')+'" href="'+f.href+'">'+badge+'<span class="kx-ic"><svg viewBox="0 0 24 24">'+ICON[f.ic]+'</svg></span><span class="kx-nm">'+f.n+'</span>'+(f.chip?'<span class="kx-chip">'+f.chip+'</span>':'')+'<span class="kx-ds">'+f.d+'</span><span class="kx-st">'+st.t+'</span>'+(f.pk&&prices[f.pk]?'<span class="kx-pr">Mulai <b>'+rp(prices[f.pk])+'</b></span>':'')+'<span class="kx-go"><span>'+(st.on?'Perpanjang':'Aktifkan')+'</span><span>→</span></span></a>';
+      h+='<a class="kx-fac'+(st.on?' on':'')+'" href="'+((f.free&&st.on)?f.page:f.href)+'">'+badge+'<span class="kx-ic"><svg viewBox="0 0 24 24">'+ICON[f.ic]+'</svg></span><span class="kx-nm">'+f.n+'</span>'+(f.chip?'<span class="kx-chip">'+f.chip+'</span>':'')+'<span class="kx-ds">'+f.d+'</span><span class="kx-st">'+st.t+'</span>'+(f.pk&&prices[f.pk]?'<span class="kx-pr">Mulai <b>'+rp(prices[f.pk])+'</b></span>':'')+'<span class="kx-go"><span>'+(f.free?(st.on?'Buka':'Daftar Gratis'):(st.on?'Perpanjang':'Aktifkan'))+'</span><span>→</span></span></a>';
     });
     h+='</div><div class="kx-note">Harga fasilitas Kamar dapat naik sewaktu-waktu. Jangan lewatkan kesempatan Anda! Akses aktif setelah pembayaran terkonfirmasi.</div>';
     var box=document.createElement('div');box.id='kxFacBox';box.innerHTML=h;

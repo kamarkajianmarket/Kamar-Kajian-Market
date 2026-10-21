@@ -1252,7 +1252,7 @@ body.kamar-member-desktop-v2 .fkx-price{font-size:clamp(26px,2.4vw,32px);font-we
 body.kamar-member-desktop-v2 .fkx-price small{-webkit-text-fill-color:rgba(255,255,255,.55);font-weight:600}
 body.kamar-member-desktop-v2 .fkx-btn.primary{position:relative;overflow:hidden;border-radius:14px!important;background:linear-gradient(135deg,#f6e3a8,#d6ac4c)!important;color:#1b1406!important;font-weight:900;box-shadow:0 12px 30px rgba(232,199,119,.3)}
 body.kamar-member-desktop-v2 .fkx-btn.primary::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:kv4sheen 4.2s ease-in-out infinite}
-@supports (animation-timeline:view()){
+@supports (not (display:block)){
 body.kamar-member-desktop-v2 .kc-grp,body.kamar-member-desktop-v2 .kc-card:not(.hot),body.kamar-member-desktop-v2 .kc-warn{animation:kv4in linear both;animation-timeline:view();animation-range:entry 0% cover 26%}
 body.kamar-member-desktop-v2 .kc-card.hot{animation:kv4spin 7s linear infinite,kv4in linear both;animation-timeline:auto,view();animation-range:normal,entry 0% cover 26%}
 body.kamar-member-desktop-v2 .fkx-card{animation:kv4spin 10s linear infinite,kv4in linear both;animation-timeline:auto,view();animation-range:normal,entry 0% cover 26%}
@@ -1287,7 +1287,7 @@ body.kamar-member-desktop-v2 .kamar-rc-title{font-size:clamp(20px,2vw,26px)!impo
 body.kamar-member-desktop-v2 .kamar-rc-arrow{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(232,199,119,.1);border:1px solid rgba(232,199,119,.35);color:#f3d98d;transition:transform .3s ease,background .3s ease}
 body.kamar-member-desktop-v2 .kamar-rc:hover .kamar-rc-arrow{background:rgba(232,199,119,.22);transform:scale(1.1)}
 body.kamar-member-desktop-v2 .kamar-guide-box,body.kamar-member-desktop-v2 .admin-empty-state{border-radius:16px!important}
-@supports (animation-timeline:view()){
+@supports (not (display:block)){
 body.kamar-member-desktop-v2 .kd-pagehero,body.kamar-member-desktop-v2 .stat-card,body.kamar-member-desktop-v2 .kamar-rc,body.kamar-member-desktop-v2 .kamar-sec-title{animation:kv4in linear both;animation-timeline:view();animation-range:entry 0% cover 24%}
 }
 @supports not (animation-timeline:view()){

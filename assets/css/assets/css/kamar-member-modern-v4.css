@@ -247,3 +247,11 @@ body.kamar-member-desktop-v2 .kp-warn svg{color:var(--km-gold)!important}
 @media (max-width:820px){body.kamar-member-desktop-v2 .kd-hero::before{content:none!important;display:none!important}}
 /* patch 5 */
 @media (max-width:820px){body.kamar-member-desktop-v2 .kd-hero::before,body.kamar-member-desktop-v2 .kd-hero::after{outline:0}body.kamar-member-desktop-v2 .kd-btn.pri{background-size:100% 100%}}
+
+/* patch 6 - hentikan reveal berbasis scroll (kartu bawah tidak pernah jelas) + badge tidak terpotong */
+body.kamar-member-desktop-v2 .kc-grp,body.kamar-member-desktop-v2 .kc-warn,body.kamar-member-desktop-v2 .kc-card:not(.hot),body.kamar-member-desktop-v2 .kd-pagehero,body.kamar-member-desktop-v2 .stat-card,body.kamar-member-desktop-v2 .kamar-rc,body.kamar-member-desktop-v2 .kamar-sec-title{animation:none!important;animation-timeline:auto!important;filter:none!important;opacity:1!important;transform:none!important}
+body.kamar-member-desktop-v2 .kc-card.hot{animation:kv4spin 7s linear infinite!important;animation-timeline:auto!important;animation-range:normal!important;filter:none!important;opacity:1!important}
+body.kamar-member-desktop-v2 .fkx-card{animation:kv4spin 10s linear infinite!important;animation-timeline:auto!important;animation-range:normal!important;filter:none!important;opacity:1!important}
+body.kamar-member-desktop-v2 .kc-card.hot{padding-top:46px!important}
+body.kamar-member-desktop-v2 .kc-card .kc-badge{top:12px!important;right:14px!important;z-index:3;padding:5px 11px!important;line-height:1.2!important;white-space:nowrap}
+body.kamar-member-desktop-v2 .member-payment-card [class*=badge],body.kamar-member-desktop-v2 .member-payment-card [class*=ribbon]{white-space:nowrap}

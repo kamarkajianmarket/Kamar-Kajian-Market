@@ -143,7 +143,7 @@
   function range(){var t=todayS();if(F.mode==='day')return [t,t];if(F.mode==='week'){var dow=(new Date(t+'T00:00:00Z').getUTCDay()+6)%7;return [shift(t,-dow),t];}if(F.mode==='month')return [t.slice(0,8)+'01',t];if(F.mode==='custom')return [F.from||'0000-01-01',F.to||'9999-12-31'];return ['0000-01-01','9999-12-31'];}
   function flabel(){return {all:'Seluruh masa',day:'Hari ini',week:'Minggu ini',month:'Bulan ini',custom:(F.from||'...')+' s/d '+(F.to||'...')}[F.mode];}
   function filtered(){var r=range();return data.filter(function(s){var d=dstr(s.created_at);return d>=r[0]&&d<=r[1];});}
-  function filterHtml(){var m=[['all','Keseluruhan'],['month','Bulanan'],['week','Mingguan'],['day','Harian'],['custom','Custom']];return '<div class="ksig-eqf">'+m.map(function(x){return '<button type="button" data-eqf="'+x[0]+'" class="'+(F.mode===x[0]?'on':'')+'">'+x[1]+'</button>';}).join('')+(F.mode==='custom'?'<div class="ksig-eqf-d"><span>Dari</span><input type="date" data-eqd="from" value="'+F.from+'"><span>Sampai</span><input type="date" data-eqd="to" value="'+F.to+'"></div>':'')+'</div>';}
+  function filterHtml(){var m=[['all','Keseluruhan'],['month','Bulanan'],['week','Mingguan'],['day','Harian'],['custom','Custom']];return '<div class="ksig-eqf">'+m.map(function(x){return '<button type="button" data-eqf="'+x[0]+'" class="'+(F.mode===x[0]?'on':'')+'">'+x[1]+'</button>';}).join('')+(F.mode==='custom'?calBtnHtml():'')+'</div>';}
   function build(){
     var rows=filtered().map(function(s){return {p:pips(s),w:wib(s.created_at),win:s.display_status==='profit'};}).filter(function(r){return r.p!=null;});
     if(rows.length<1)return filterHtml()+'<div class="ksig-eq-empty">Belum ada signal tertutup pada periode ini.</div>';
@@ -167,7 +167,51 @@
     '<div class="ksig-hm"><div class="ksig-eq-t">HEATMAP WINRATE</div><div class="ksig-eq-s">Hari × jam masuk (WIB) · hijau = winrate tinggi</div>'+hm+'</div>';
   }
   function cardAnim(el){if(window.__ksigEqAnimated)return;if(window.__ksigIntroHold&&!window.__ksigIntroFlag)return;el.classList.add('anim');window.__ksigEqAnimated=1;}
-  function bind(el){el.addEventListener('click',function(e){var b=e.target.closest('[data-eqf]');if(!b)return;F.mode=b.getAttribute('data-eqf');if(F.mode==='custom'&&!F.from){F.to=todayS();F.from=shift(F.to,-30);}el.innerHTML=build();});el.addEventListener('change',function(e){var i=e.target.closest('[data-eqd]');if(!i)return;F[i.getAttribute('data-eqd')]=i.value;el.innerHTML=build();});}
+  var CM=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],DW=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  var cal={y:0,m:0,s:'',e:''}, curEl=null;
+  (function(){if(document.getElementById('ksig-eqcal-css'))return;var st=document.createElement('style');st.id='ksig-eqcal-css';st.textContent='.ksig-eqf-d{display:block!important;width:100%;margin-top:10px}.ksig-eqf-cal{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid rgba(232,199,119,.45);background:linear-gradient(180deg,rgba(232,199,119,.14),rgba(232,199,119,.05));color:#f3e3b3;font:inherit;font-size:13px;font-weight:700;letter-spacing:.02em;cursor:pointer}.ksig-eqf-cal:hover{border-color:#e8c777}.ksig-eqf-cal span{opacity:.75;font-size:11px;font-weight:600}';document.head.appendChild(st);})();
+  function ymd(y,m,d){return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');}
+  function dlab(s){var p=s.split('-').map(Number);return p[2]+' '+CM[p[1]-1]+' '+p[0];}
+  function calBtnHtml(){var l=(F.from&&F.to)?(F.from===F.to?dlab(F.from):dlab(F.from)+' \u2013 '+dlab(F.to)):'Pilih tanggal';return '<div class="ksig-eqf-d"><button type="button" class="ksig-eqf-cal" data-eqcal="1"><b>\uD83D\uDCC5 '+l+'</b><span>Ubah</span></button></div>';}
+  function calHtml(){
+    var t=todayS(),first=(new Date(Date.UTC(cal.y,cal.m,1)).getUTCDay()+6)%7,dim=new Date(Date.UTC(cal.y,cal.m+1,0)).getUTCDate(),cells='',i,d;
+    for(i=0;i<first;i++)cells+='<div class="ksig-cal-cell empty"></div>';
+    for(d=1;d<=dim;d++){var ds=ymd(cal.y,cal.m,d),sel=(cal.s===ds||cal.e===ds),inr=!!(cal.s&&cal.e&&ds>cal.s&&ds<cal.e),fut=ds>t;
+      cells+='<div class="ksig-cal-cell'+(sel?' selected':'')+(inr?' in-range':'')+(ds===t?' today':'')+(fut?' disabled':'')+'" data-date="'+(fut?'':ds)+'">'+d+'</div>';}
+    var rt=cal.s?(dlab(cal.s)+(cal.e&&cal.e!==cal.s?' \u2013 '+dlab(cal.e):'')):'Pilih tanggal mulai';
+    return '<div class="ksig-cal-popup-backdrop" id="ksigEqBackdrop"><div class="ksig-cal-popup" id="ksigEqPopup"><div class="ksig-cal-head"><button type="button" class="ksig-cal-nav" id="ksigEqPrev" aria-label="Bulan sebelumnya">\u2039</button><div class="ksig-cal-title"><span class="ksig-cal-month-part">'+CM[cal.m]+'</span> <span class="ksig-cal-year-part">'+cal.y+'</span></div><button type="button" class="ksig-cal-nav" id="ksigEqNext" aria-label="Bulan berikutnya">\u203a</button></div><div class="ksig-cal-dow">'+DW.map(function(x){return '<div>'+x+'</div>';}).join('')+'</div><div class="ksig-cal-grid">'+cells+'</div><div class="ksig-cal-range-label">'+rt+'</div><div class="ksig-cal-actions"><button type="button" class="ksig-btn" id="ksigEqCancel">Batal</button><button type="button" class="ksig-btn primary" id="ksigEqApply"'+(cal.s?'':' disabled')+'>Terapkan</button></div></div></div>';
+  }
+  function closeCal(){var o=document.getElementById('ksigEqBackdrop');if(o)o.remove();}
+  function showCal(){
+    closeCal();var h=document.createElement('div');h.innerHTML=calHtml();var bd=h.firstChild;document.body.appendChild(bd);
+    bd.addEventListener('click',function(e){
+      var x=e.target;
+      if(x===bd){cancelCal();return;}
+      if(x.closest('#ksigEqPrev')){cal.m--;if(cal.m<0){cal.m=11;cal.y--;}showCal();return;}
+      if(x.closest('#ksigEqNext')){cal.m++;if(cal.m>11){cal.m=0;cal.y++;}showCal();return;}
+      if(x.closest('#ksigEqCancel')){cancelCal();return;}
+      if(x.closest('#ksigEqApply')){if(!cal.s)return;F.from=cal.s;F.to=cal.e||cal.s;closeCal();if(curEl)curEl.innerHTML=build();return;}
+      var c=x.closest('.ksig-cal-cell[data-date]');if(!c)return;var ds=c.getAttribute('data-date');if(!ds)return;
+      if(!cal.s||(cal.s&&cal.e)){cal.s=ds;cal.e='';}else if(ds<cal.s){cal.s=ds;}else{cal.e=ds;}
+      showCal();
+    });
+  }
+  function cancelCal(){closeCal();if(!F.from&&curEl){F.mode='all';curEl.innerHTML=build();}}
+  function openCal(){var b=(F.from||todayS()).split('-').map(Number);cal.y=b[0];cal.m=b[1]-1;cal.s=F.from||'';cal.e=F.to||'';showCal();}
+  function bind(el){curEl=el;el.addEventListener('click',function(e){
+    var cb=e.target.closest('[data-eqcal]');if(cb){openCal();return;}
+    var b=e.target.closest('[data-eqf]');if(!b)return;F.mode=b.getAttribute('data-eqf');
+    if(F.mode!=='custom'){F.from='';F.to='';}
+    curEl=el;el.innerHTML=build();
+    if(F.mode==='custom'&&!F.from)openCal();
+  });}
+  function patchPerf(){
+    if(!data)return;var p=0,l=0;data.forEach(function(s){if(s.display_status==='profit')p++;else if(s.display_status==='loss')l++;});
+    var t=p+l;if(!t)return;var wr=Math.round(p/t*1000)/10;
+    var ring=document.querySelector('.ksig-perf-ring');if(!ring)return;
+    ring.style.setProperty('--p',wr);var rb=ring.querySelector('b');var wt=String(wr.toFixed(1)).replace('.',',')+'%';if(rb&&rb.textContent!==wt)rb.textContent=wt;
+    document.querySelectorAll('.ksig-perf-stat').forEach(function(st){var lb=((st.querySelector('small')||{}).textContent||'').trim().toLowerCase(),v=st.querySelector('b');if(!v)return;var val=null;if(lb==='total closed')val=t;else if(lb==='profit')val=p;else if(lb==='loss')val=l;if(val===null)return;var sv=String(val).replace(/\B(?=(\d{3})+(?!\d))/g,'.');if(v.textContent!==sv)v.textContent=sv;});
+  }
   function skel(){var top=document.querySelector('#ksigRoot .ksig-top-row');if(!top)return;var n=top.nextElementSibling;if(n&&n.classList.contains('ksig-eq'))return;var el=document.createElement('div');el.className='ksig-eq skel';top.insertAdjacentElement('afterend',el);}
   function place(){
     if(!data)return;var top=document.querySelector('#ksigRoot .ksig-top-row');if(!top)return;
@@ -179,11 +223,11 @@
   function load(){
     if(loading||(data&&Date.now()-lastLoad<120000))return;
     var c=window.kamarSupabaseClient;if(!c)return;loading=true;
-    Promise.all([0,1000,2000,3000].map(function(f){return c.from('signals').select('created_at,status,display_status,farthest_tp_level,running_point,max_running_point').eq('is_archived',false).in('display_status',['profit','loss']).order('created_at',{ascending:true}).range(f,f+999).then(function(r){if(r.error)throw r.error;return r.data||[];});})).then(function(parts){return [].concat.apply([],parts);})
+    Promise.all([0,1000,2000,3000,4000,5000,6000,7000].map(function(f){return c.from('signals').select('created_at,status,display_status,farthest_tp_level,running_point,max_running_point').in('display_status',['profit','loss']).order('created_at',{ascending:true}).range(f,f+999).then(function(r){if(r.error)throw r.error;return r.data||[];});})).then(function(parts){return [].concat.apply([],parts);})
     .then(function(rows){loading=false;if(!rows||!rows.length)return;data=rows;lastLoad=Date.now();place();})
     .catch(function(){loading=false;});
   }
-  var q=0;function sched(){if(q)return;q=requestAnimationFrame(function(){q=0;if(document.querySelector('#ksigRoot .ksig-top-row')){if(data)place();else skel();load();}});}
+  var q=0;function sched(){if(q)return;q=requestAnimationFrame(function(){q=0;if(document.querySelector('#ksigRoot .ksig-top-row')){if(data){place();patchPerf();}else skel();load();}});}
   function start(){var root=document.getElementById('ksigRoot')||document.body;new MutationObserver(sched).observe(root,{childList:true,subtree:true});sched();(function early(n){if(window.kamarSupabaseClient){load();return;}if(n<60)setTimeout(function(){early(n+1);},100);})(0);}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 })();

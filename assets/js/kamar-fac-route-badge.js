@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 var FREE={'kamar edukasi':1,'kamar signal':1,'kamar study':1};
-var IB_FREE={'kamar indikator':1,'kamar robot':1};
-var source=null,ready=false;
+var COMPLETE_FREE={'kamar indikator':1,'kamar robot':1};
+var isComplete=false,ready=false;
 var css=document.createElement('style');
 css.textContent='.kd-route{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;vertical-align:middle;line-height:1.6}.kd-route.gratis{color:#bfffd9;background:rgba(28,97,65,.22);border:1px solid rgba(158,255,202,.35)}.kd-route.berbayar{color:#ffe2a0;background:rgba(212,166,63,.16);border:1px solid rgba(232,199,119,.4)}';
 document.head.appendChild(css);
@@ -11,7 +11,7 @@ document.head.appendChild(css);
 function routeFor(name){
   var n=String(name||'').trim().toLowerCase();
   if(FREE[n]) return 'gratis';
-  if(IB_FREE[n]&&source==='ib_kamar') return 'gratis';
+  if(COMPLETE_FREE[n]&&isComplete) return 'gratis';
   return 'berbayar';
 }
 function apply(){
@@ -33,10 +33,9 @@ async function load(){
     var c=null;
     for(var i=0;i<40&&!c;i++){c=window.kamarSupabaseClient||null;if(!c)await new Promise(function(r){setTimeout(r,250)})}
     if(!c) return;
-    var s=await c.auth.getSession(); var uid=s&&s.data&&s.data.session&&s.data.session.user&&s.data.session.user.id;
-    if(!uid) return;
-    var p=await c.from('member_profiles').select('id').eq('user_id',uid).maybeSingle();
-    if(p&&p.data){var a=await c.from('member_access').select('activation_source').eq('profile_id',p.data.id).maybeSingle();source=a&&a.data?a.data.activation_source:null}
+    // Indikator & Robot gratis hanya untuk pembeli ebook paket Complete (Chapter 1-20); tidak ada jalur gratis IB Kamar.
+    var r=await c.rpc('kamar_my_ebook_status');
+    if(!r.error&&r.data&&Number(r.data.chapter_max)>=20) isComplete=true;
   }catch(e){}
   apply();
 }

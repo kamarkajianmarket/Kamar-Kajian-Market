@@ -18,12 +18,13 @@
       '.kamar-recap-live-card{grid-column:1/-1;margin-top:18px;padding:26px 30px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,248,232,.55));border:1px solid rgba(184,138,61,.22);box-shadow:0 10px 32px rgba(184,138,61,.12)}' +
       '.kamar-recap-live-card h4{margin:8px 0 4px;font-size:21px}' +
       '.kamar-recap-live-card .kamar-recap-stats{display:grid !important;gap:16px !important;margin:18px 0 22px}' +
-      '.kamar-recap-live-card .kamar-recap-stats>div{padding:20px 22px;border-radius:16px;background:rgba(255,255,255,.7);border:1px solid rgba(184,138,61,.2);text-align:left;transition:transform .15s ease}' +
+      '.kamar-recap-live-card .kamar-recap-stats>div{padding:20px 22px;border-radius:16px;background:rgba(255,255,255,.7);border:1px solid rgba(184,138,61,.2);text-align:left;transition:transform .15s ease;min-width:0}' +
       '.kamar-recap-live-card .kamar-recap-stats>div:hover{transform:translateY(-2px)}' +
       '.kamar-recap-live-card .kamar-recap-stats>div strong{font-size:19px;margin-bottom:6px}' +
       '.kamar-recap-live-card .kamar-recap-stats>div span.pips{font-size:14px}' +
       '.kamar-recap-live-card .btn{margin-top:6px}' +
-      '@media(max-width:640px){.kamar-recap-live-card{padding:20px}.kamar-recap-live-card .kamar-recap-stats{grid-template-columns:repeat(2,1fr) !important}}';
+      '@media(max-width:760px){.kamar-recap-live-card{padding:20px}.kamar-recap-live-card .kamar-recap-stats{gap:10px !important}.kamar-recap-live-card .kamar-recap-stats>div{padding:14px 14px}.kamar-recap-live-card .kamar-recap-stats>div strong{font-size:16px;margin-bottom:4px}.kamar-recap-live-card .kamar-recap-stats>div span.pips{font-size:13px;line-height:1.35;overflow-wrap:anywhere}}' +
+      '@media(max-width:640px){.kamar-recap-live-card .kamar-recap-stats{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}';
     document.head.appendChild(st);
   }
   function fmtPips(n){
@@ -82,12 +83,25 @@
       return '<div><strong>' + esc(r.timeframe) + ' &bull; <span class="wr">' + fmtWinrate(r.winrate) + ' WR</span></strong><span class="pips ' + pipsClass(r.total_pips) + '">' + fmtPips(r.total_pips) + ' pips (' + (r.total_signal||0) + ' signal)</span></div>';
     }).join('');
   }
+  // Kolom mengikuti lebar layar: maksimal 2 kolom di HP/tablet kecil, 4 kolom di desktop.
   function applyColumns(container, count){
     if(container.closest('.kamar-recap-live-card')){
-      var cols = Math.min(count, 4) || 1;
-      container.style.setProperty('grid-template-columns', 'repeat(' + cols + ', 1fr)', 'important');
+      container.__kmrCount = count;
+      var max = window.innerWidth <= 760 ? 2 : 4;
+      var cols = Math.min(count, max) || 1;
+      container.style.setProperty('grid-template-columns', 'repeat(' + cols + ', minmax(0, 1fr))', 'important');
     }
   }
+  var resizeT = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function(){
+      var list = document.querySelectorAll('.kamar-recap-live-card .kamar-recap-stats');
+      for(var i = 0; i < list.length; i++){
+        applyColumns(list[i], list[i].__kmrCount || list[i].children.length);
+      }
+    }, 120);
+  });
   function renderStats(container, rows){
     var periodEl = ensurePeriodEl(container);
     if(!rows || !rows.length){

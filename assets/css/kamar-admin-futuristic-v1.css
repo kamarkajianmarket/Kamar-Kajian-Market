@@ -1,0 +1,373 @@
+/* ==========================================================================
+   KAMAR ADMIN — FUTURISTIC EXECUTIVE LAYER v1 (token sama dengan area member)
+   Lapisan visual terakhir untuk area member (body.kamar-admin-desktop-v1).
+   Hanya CSS: tidak mengubah id, handler, endpoint, atau data.
+   Tema: hitam + emas, Inter. Kontras dijaga >= WCAG AA.
+   ========================================================================== */
+
+body.kamar-admin-desktop-v1{
+  --k-bg:#06070a;
+  --k-bg2:#0b0d12;
+  --k-surface:rgba(255,255,255,.035);
+  --k-surface-hi:rgba(255,255,255,.06);
+  --k-line:rgba(244,223,144,.14);
+  --k-line-hi:rgba(244,223,144,.34);
+  --k-gold:#e8c867;
+  --k-gold-hi:#f6e6a6;
+  --k-gold-lo:#b8902f;
+  --k-text:#f3efe6;
+  --k-muted:#a9a393;
+  --k-ok:#8ff0bd;
+  --k-bad:#ffb0b0;
+  --k-r:18px;
+  --k-r-lg:22px;
+  --k-glow:0 0 0 1px rgba(244,223,144,.06), 0 18px 48px -24px rgba(0,0,0,.8);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif !important;
+  background:
+    radial-gradient(900px 480px at 82% -8%, rgba(232,200,103,.09), transparent 60%),
+    radial-gradient(700px 420px at -6% 18%, rgba(70,110,255,.05), transparent 60%),
+    var(--k-bg) !important;
+  color:var(--k-text) !important;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.005em;
+}
+body.kamar-admin-desktop-v1 .page-glow{opacity:.35 !important}
+
+/* ---------- Header: ramping, menempel, tidak memakan ruang ---------- */
+body.kamar-admin-desktop-v1 .site-header,
+body.kamar-admin-desktop-v1 .kamar-global-header{
+  width:min(calc(100% - 32px),1480px) !important;
+  margin:12px auto 0 !important;
+  padding:8px 14px !important;
+  min-height:0 !important;
+  border-radius:16px !important;
+  border:1px solid var(--k-line) !important;
+  background:rgba(8,9,13,.78) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:var(--k-glow) !important;
+}
+body.kamar-admin-desktop-v1 .site-header .brand,
+body.kamar-admin-desktop-v1 .kamar-global-brand{font-size:15px !important;font-weight:700 !important;letter-spacing:-.01em}
+body.kamar-admin-desktop-v1 .site-header img,
+body.kamar-admin-desktop-v1 .kamar-global-brand img{width:34px !important;height:34px !important;border-radius:10px !important}
+body.kamar-admin-desktop-v1 .kamar-global-btn,
+body.kamar-admin-desktop-v1 .header-cta{
+  min-height:36px !important;padding:0 14px !important;font-size:13px !important;font-weight:600 !important;
+  border-radius:11px !important;background:var(--k-surface) !important;border:1px solid var(--k-line) !important;color:var(--k-text) !important;
+}
+body.kamar-admin-desktop-v1 .kamar-global-btn:hover,
+body.kamar-admin-desktop-v1 .header-cta:hover{border-color:var(--k-line-hi) !important;background:var(--k-surface-hi) !important}
+body.kamar-admin-desktop-v1 .kamar-global-logout{color:var(--k-bad) !important;border-color:rgba(255,176,176,.25) !important;background:rgba(255,120,120,.06) !important}
+
+/* ---------- Kerangka: hilangkan ruang kosong di atas konten ---------- */
+body.kamar-admin-desktop-v1 .split-shell{
+  max-width:1480px !important;width:min(calc(100% - 32px),1480px) !important;
+  margin:0 auto !important;padding:20px 0 56px !important;
+}
+body.kamar-admin-desktop-v1 .split-main{min-width:0;display:grid;gap:16px}
+
+/* ---------- Sidebar: grup jelas, ikon, kompak ---------- */
+body.kamar-admin-desktop-v1 .split-sidebar .brand-small{
+  margin:2px 6px 8px !important;padding:0 0 10px !important;
+  font-size:10.5px !important;font-weight:700 !important;letter-spacing:.2em !important;
+  color:var(--k-gold) !important;border-bottom:1px solid var(--k-line) !important;
+}
+body.kamar-admin-desktop-v1 .split-sidebar .brand-small small{display:block;margin-top:3px;font-size:10px;letter-spacing:.16em;color:var(--k-muted) !important;font-weight:600}
+body.kamar-admin-desktop-v1 .split-sidebar > a,
+body.kamar-admin-desktop-v1 .split-sidebar details > a,
+body.kamar-admin-desktop-v1 .split-sidebar summary{
+  display:flex !important;align-items:center;gap:11px;
+  min-height:40px;padding:8px 12px !important;margin:0 !important;
+  border-radius:12px !important;border:1px solid transparent !important;border-left-width:1px !important;
+  font-size:14px !important;font-weight:550 !important;line-height:1.25;letter-spacing:-.005em;
+  color:#c9c3b4 !important;text-decoration:none;justify-content:flex-start !important;text-align:left !important;transition:background .18s,color .18s,border-color .18s;
+}
+body.kamar-admin-desktop-v1 .split-sidebar > a::before,
+body.kamar-admin-desktop-v1 .split-sidebar details > a::before,
+body.kamar-admin-desktop-v1 .split-sidebar summary::before{
+  content:"";flex:0 0 18px;width:18px;height:18px;background:currentColor;opacity:.78;
+  -webkit-mask:var(--k-ico,none) center/contain no-repeat;mask:var(--k-ico,none) center/contain no-repeat;
+}
+body.kamar-admin-desktop-v1 .split-sidebar > a:hover,
+body.kamar-admin-desktop-v1 .split-sidebar details > a:hover,
+body.kamar-admin-desktop-v1 .split-sidebar summary:hover{
+  background:var(--k-surface-hi) !important;color:#fff !important;border-color:var(--k-line) !important;
+}
+body.kamar-admin-desktop-v1 .split-sidebar > a.active,
+body.kamar-admin-desktop-v1 .split-sidebar details > a.active{
+  background:linear-gradient(135deg,rgba(232,200,103,.20),rgba(232,200,103,.05)) !important;
+  color:var(--k-gold-hi) !important;border-color:rgba(244,223,144,.38) !important;padding-left:12px !important;
+  box-shadow:0 0 22px -8px rgba(232,200,103,.45);
+}
+body.kamar-admin-desktop-v1 .split-sidebar > a.active::before{opacity:1}
+body.kamar-admin-desktop-v1 .split-sidebar a.disabled{opacity:.5 !important}
+body.kamar-admin-desktop-v1 .split-sidebar details{margin:4px 0 !important;border:0 !important;padding:0 !important}
+body.kamar-admin-desktop-v1 .split-sidebar details.sidebar-group,
+body.kamar-admin-desktop-v1 .split-sidebar details{border-top:1px solid var(--k-line) !important;padding-top:6px !important;margin-top:6px !important}
+body.kamar-admin-desktop-v1 .split-sidebar details > a{margin-left:14px !important;font-size:13.5px !important;min-height:36px;border-left:1px solid var(--k-line) !important;border-radius:0 10px 10px 0 !important}
+body.kamar-admin-desktop-v1 .split-sidebar summary{list-style:none;cursor:pointer;justify-content:flex-start}
+body.kamar-admin-desktop-v1 .split-sidebar summary::-webkit-details-marker{display:none}
+body.kamar-admin-desktop-v1 .split-sidebar summary::after{
+  content:"";margin-left:auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);transition:transform .2s;opacity:.6;font-size:0 !important;
+}
+body.kamar-admin-desktop-v1 .split-sidebar details[open] > summary::after{transform:rotate(225deg) translate(-2px,0)}
+body.kamar-admin-desktop-v1 .split-sidebar details[open] > summary{color:var(--k-gold-hi) !important}
+body.kamar-admin-desktop-v1 .split-sidebar .admin-menu-section{
+  margin:14px 8px 4px;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--k-muted);
+}
+body.kamar-admin-desktop-v1 .split-sidebar a[data-kamar-logout]{
+  color:var(--k-bad) !important;margin-top:6px !important;border-top:1px solid var(--k-line) !important;border-radius:12px !important;
+}
+/* ikon per menu (tanpa mengubah HTML) */
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="dashboard"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='9' rx='1.5'/%3E%3Crect x='14' y='3' width='7' height='5' rx='1.5'/%3E%3Crect x='14' y='12' width='7' height='9' rx='1.5'/%3E%3Crect x='3' y='16' width='7' height='5' rx='1.5'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="member-catalog"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16v16H4z'/%3E%3Cpath d='M4 9h16M9 9v11'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="member-renewal"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12a9 9 0 1 1-3-6.7'/%3E%3Cpath d='M21 4v5h-5'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="member-orders"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h12v18l-3-2-3 2-3-2-3 2z'/%3E%3Cpath d='M9 8h6M9 12h6'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="member-fasilitas-khusus"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar details > summary{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2 3 7l9 5 9-5z'/%3E%3Cpath d='m3 12 9 5 9-5M3 17l9 5 9-5'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="affiliate"],
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="member-affiliate"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3.5'/%3E%3Cpath d='M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5'/%3E%3Cpath d='M17 5.5a3 3 0 0 1 0 5.8M18.5 14.7c1.8.6 3 2.2 3.3 4.8'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[href^="member-profile"]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c.8-4.2 4-6.5 8-6.5s7.2 2.3 8 6.5'/%3E%3C/svg%3E")}
+body.kamar-admin-desktop-v1 .split-sidebar a[data-kamar-logout]{--k-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpath d='m16 17 5-5-5-5M21 12H9'/%3E%3C/svg%3E")}
+/* sub-menu fasilitas & menu admin memakai titik penanda */
+body.kamar-admin-desktop-v1 .split-sidebar details > a::before{flex-basis:6px;width:6px;height:6px;border-radius:50%;-webkit-mask:none;mask:none;background:var(--k-gold-lo);opacity:.8}
+
+/* ---------- Kartu ---------- */
+body.kamar-admin-desktop-v1 .split-card,
+body.kamar-admin-desktop-v1 .card,
+body.kamar-admin-desktop-v1 .panel{
+  position:relative;border-radius:var(--k-r-lg) !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018)) !important;
+  border:1px solid var(--k-line) !important;box-shadow:var(--k-glow) !important;
+  padding:22px !important;
+}
+body.kamar-admin-desktop-v1 .split-card:not(.kamar-rc):not(.kd-pagehero)::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;border-radius:inherit;
+  background:linear-gradient(90deg,transparent,rgba(244,223,144,.45),transparent);opacity:.6;pointer-events:none;
+}
+body.kamar-admin-desktop-v1 .split-card.kamar-title-card{
+  background:
+    radial-gradient(600px 220px at 100% 0%,rgba(232,200,103,.14),transparent 70%),
+    linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015)) !important;
+  border-color:var(--k-line-hi) !important;
+}
+body.kamar-admin-desktop-v1 .split-card:not(.kamar-rc):hover{border-color:rgba(244,223,144,.22) !important}
+
+/* ---------- Tipografi ---------- */
+body.kamar-admin-desktop-v1 h1,
+body.kamar-admin-desktop-v1 h2,
+body.kamar-admin-desktop-v1 h3{font-family:inherit !important;letter-spacing:-.02em !important;color:var(--k-text) !important;font-weight:700 !important}
+body.kamar-admin-desktop-v1 h1{font-size:clamp(26px,2.6vw,36px) !important;line-height:1.12 !important;font-weight:750 !important}
+body.kamar-admin-desktop-v1 h2{font-size:clamp(20px,1.8vw,26px) !important;line-height:1.2 !important}
+body.kamar-admin-desktop-v1 h3{font-size:17px !important;line-height:1.3 !important}
+body.kamar-admin-desktop-v1 p,
+body.kamar-admin-desktop-v1 li{color:#cfc9ba;line-height:1.6;font-weight:450}
+body.kamar-admin-desktop-v1 .mini-label,
+body.kamar-admin-desktop-v1 .eyebrow,
+body.kamar-admin-desktop-v1 .kamar-section-label{
+  font-size:11px !important;font-weight:700 !important;letter-spacing:.18em !important;text-transform:uppercase;color:var(--k-gold) !important;
+}
+body.kamar-admin-desktop-v1 small,
+body.kamar-admin-desktop-v1 .muted{color:var(--k-muted) !important}
+
+/* ---------- Tombol ---------- */
+body.kamar-admin-desktop-v1 .btn,
+body.kamar-admin-desktop-v1 button.btn,
+body.kamar-admin-desktop-v1 a.btn{
+  min-height:42px;padding:0 18px !important;border-radius:12px !important;font-size:14px !important;font-weight:650 !important;letter-spacing:-.005em;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+  border:1px solid var(--k-line) !important;background:var(--k-surface) !important;color:var(--k-text) !important;
+  transition:transform .15s,border-color .18s,background .18s,box-shadow .18s;box-shadow:none !important;
+}
+body.kamar-admin-desktop-v1 .btn:hover{border-color:var(--k-line-hi) !important;background:var(--k-surface-hi) !important;transform:translateY(-1px)}
+body.kamar-admin-desktop-v1 .btn.primary,
+body.kamar-admin-desktop-v1 .btn.gold{
+  background:linear-gradient(135deg,var(--k-gold-hi),var(--k-gold) 55%,var(--k-gold-lo)) !important;
+  color:#15120a !important;border-color:rgba(255,236,170,.6) !important;font-weight:750 !important;
+  box-shadow:0 10px 28px -12px rgba(232,200,103,.65) !important;
+}
+body.kamar-admin-desktop-v1 .btn.primary:hover{filter:brightness(1.05);box-shadow:0 14px 34px -12px rgba(232,200,103,.8) !important}
+body.kamar-admin-desktop-v1 .btn.mini{min-height:34px;padding:0 12px !important;font-size:13px !important}
+body.kamar-admin-desktop-v1 .button-row{display:flex;flex-wrap:wrap;gap:10px}
+body.kamar-admin-desktop-v1 :is(a,button,summary,input,select,textarea):focus-visible{outline:2px solid var(--k-gold-hi);outline-offset:2px;border-radius:12px}
+
+/* ---------- Badge / status ---------- */
+body.kamar-admin-desktop-v1 .status-pill,
+body.kamar-admin-desktop-v1 .badge,
+body.kamar-admin-desktop-v1 .pill{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:650;
+  border:1px solid var(--k-line);background:var(--k-surface);color:#d8d2c2;
+}
+body.kamar-admin-desktop-v1 .status-pill.on{color:var(--k-ok);border-color:rgba(143,240,189,.35);background:rgba(143,240,189,.08)}
+
+/* ---------- Form ---------- */
+body.kamar-admin-desktop-v1 input:not([type=checkbox]):not([type=radio]),
+body.kamar-admin-desktop-v1 select,
+body.kamar-admin-desktop-v1 textarea{
+  min-height:44px;border-radius:12px !important;border:1px solid var(--k-line) !important;background:rgba(0,0,0,.35) !important;
+  color:var(--k-text) !important;padding:10px 14px !important;font-size:14.5px !important;font-family:inherit !important;
+  transition:border-color .18s,box-shadow .18s;
+}
+body.kamar-admin-desktop-v1 input:focus,
+body.kamar-admin-desktop-v1 select:focus,
+body.kamar-admin-desktop-v1 textarea:focus{border-color:var(--k-gold) !important;box-shadow:0 0 0 3px rgba(232,200,103,.16) !important;outline:none}
+body.kamar-admin-desktop-v1 label{font-size:13px;font-weight:600;color:#d8d2c2}
+
+/* ---------- Tabel & baris ---------- */
+body.kamar-admin-desktop-v1 table{border-collapse:separate;border-spacing:0;width:100%}
+body.kamar-admin-desktop-v1 th{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--k-gold);font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid var(--k-line)}
+body.kamar-admin-desktop-v1 td{padding:12px;border-bottom:1px solid rgba(255,255,255,.06);color:#d8d2c2;font-size:14px}
+body.kamar-admin-desktop-v1 tbody tr:hover td{background:rgba(255,255,255,.025)}
+body.kamar-admin-desktop-v1 .admin-detail-row{gap:16px !important}
+
+/* ---------- Grid kartu fasilitas / aksi cepat (dashboard) ---------- */
+body.kamar-admin-desktop-v1 .stats-grid{gap:12px !important}
+body.kamar-admin-desktop-v1 .kamar-content-card{
+  border-radius:var(--k-r) !important;border:1px solid var(--k-line) !important;background:var(--k-surface) !important;
+  transition:transform .18s,border-color .18s;
+}
+body.kamar-admin-desktop-v1 .kamar-content-card:hover{transform:translateY(-2px);border-color:var(--k-line-hi) !important}
+
+
+/* ---------- Desktop (>=1025px): kerangka dua kolom, sidebar menempel ---------- */
+@media (min-width:1025px){
+  body.kamar-admin-desktop-v1 .split-app{display:grid !important;grid-template-columns:264px minmax(0,1fr) !important;gap:20px !important;align-items:start}
+  body.kamar-admin-desktop-v1 .split-sidebar{
+    position:sticky !important;top:78px !important;max-height:calc(100vh - 96px) !important;overflow-y:auto !important;
+    padding:14px !important;border-radius:var(--k-r-lg) !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)) !important;
+    border:1px solid var(--k-line) !important;box-shadow:var(--k-glow) !important;
+    scrollbar-width:thin;scrollbar-color:rgba(244,223,144,.25) transparent;display:flex;flex-direction:column;gap:2px;
+  }
+}
+
+/* ---------- Efek tambahan (aditif, tidak menghapus efek lama) ---------- */
+html{background:#06070a}
+body.kamar-admin-desktop-v1{min-height:100vh;background-attachment:fixed}
+body.kamar-admin-desktop-v1::before{ /* grid halus ala HUD */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:linear-gradient(rgba(244,223,144,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(244,223,144,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask:radial-gradient(ellipse 80% 60% at 50% 0%,#000 20%,transparent 75%);mask:radial-gradient(ellipse 80% 60% at 50% 0%,#000 20%,transparent 75%);
+}
+body.kamar-admin-desktop-v1 .split-shell,
+body.kamar-admin-desktop-v1 .site-header{position:relative;z-index:1}
+body.kamar-admin-desktop-v1 .site-header{position:sticky;z-index:1000}
+@keyframes kFuturRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes kFuturSheen{0%{background-position:-160% 0}100%{background-position:260% 0}}
+@keyframes kFuturPulse{0%,100%{box-shadow:0 0 18px -8px rgba(232,200,103,.4)}50%{box-shadow:0 0 28px -6px rgba(232,200,103,.65)}}
+body.kamar-admin-desktop-v1 .split-main > *:not(.kd-pagehero):not(.kamar-rc):not(.stat-card){animation:kFuturRise .5s cubic-bezier(.22,1,.36,1) both}
+body.kamar-admin-desktop-v1 .split-card.kamar-title-card:not(.kd-pagehero)::after{ /* kilau emas tipis */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(244,223,144,.09) 50%,transparent 65%);
+  background-size:220% 100%;animation:kFuturSheen 7s ease-in-out infinite;
+}
+body.kamar-admin-desktop-v1 .split-sidebar > a.active{animation:kFuturPulse 3.6s ease-in-out infinite}
+body.kamar-admin-desktop-v1 .split-card{transition:border-color .25s,box-shadow .25s,transform .25s}
+body.kamar-admin-desktop-v1 .split-card:not(.kamar-rc):hover{box-shadow:0 0 0 1px rgba(244,223,144,.12),0 22px 56px -26px rgba(232,200,103,.28) !important}
+body.kamar-admin-desktop-v1 .kd-q,
+body.kamar-admin-desktop-v1 .kd-fac{transition:transform .2s,border-color .2s,box-shadow .2s}
+body.kamar-admin-desktop-v1 .kd-q:hover,
+body.kamar-admin-desktop-v1 .kd-fac:hover{transform:translateY(-3px);box-shadow:0 16px 36px -20px rgba(232,200,103,.45)}
+
+/* ---------- Simetri: grid kartu seragam ---------- */
+body.kamar-admin-desktop-v1 .split-main{grid-template-columns:minmax(0,1fr)}
+body.kamar-admin-desktop-v1 .kd-facs{display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:12px !important}
+body.kamar-admin-desktop-v1 .kd-quick{display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:12px !important}
+body.kamar-admin-desktop-v1 .kd-q,
+body.kamar-admin-desktop-v1 .kd-fac{display:flex !important;flex-direction:column;min-height:100%;border-radius:var(--k-r) !important}
+body.kamar-admin-desktop-v1 .kd-q{justify-content:center;padding:14px 16px !important}
+body.kamar-admin-desktop-v1 .kamar-rc{display:flex;flex-direction:column}
+body.kamar-admin-desktop-v1 .kamar-rc-head{align-items:flex-start}
+
+/* ---------- iPad / tablet (<=1024px): drawer + bottom nav bawaan tetap dipakai ---------- */
+@media (max-width:1024px){
+  body.kamar-admin-desktop-v1 .split-shell{width:min(calc(100% - 32px),920px) !important;padding:16px 0 96px !important}
+  body.kamar-admin-desktop-v1 .split-app{display:block !important}
+  body.kamar-admin-desktop-v1 .kd-facs{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+  body.kamar-admin-desktop-v1 .kd-quick{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  body.kamar-admin-desktop-v1 .site-header{width:calc(100% - 24px) !important}
+  body.kamar-admin-desktop-v1 .btn{min-height:46px}
+  body.kamar-admin-desktop-v1 .split-sidebar > a,
+  body.kamar-admin-desktop-v1 .split-sidebar summary{min-height:46px}
+}
+
+
+/* ---------- Judul bagian & judul kartu (menang atas CSS lama; efek lama kamar-rc tetap) ---------- */
+body.kamar-admin-desktop-v1 .split-main .kd-sec-title{display:flex;justify-content:space-between;align-items:center;margin:6px 4px 12px !important}
+body.kamar-admin-desktop-v1 .split-main .kd-sec-title h2{
+  margin:0 !important;font-size:11.5px !important;font-weight:700 !important;letter-spacing:.18em !important;text-transform:uppercase !important;
+  color:var(--k-gold) !important;-webkit-text-fill-color:var(--k-gold) !important;
+}
+body.kamar-admin-desktop-v1 .split-main .kd-sec-title a{font-size:12px !important;font-weight:650 !important;letter-spacing:.08em !important;color:var(--k-gold-hi) !important;text-decoration:none}
+body.kamar-admin-desktop-v1 .split-main .kamar-rc .mini-label.kamar-rc-title{font-size:12px !important;font-weight:700 !important;letter-spacing:.18em !important;text-transform:uppercase !important;color:var(--k-gold) !important}
+body.kamar-admin-desktop-v1 .split-main .kamar-rc h2.kamar-rc-title{font-weight:750 !important;font-size:clamp(20px,1.7vw,24px) !important;line-height:1.22;letter-spacing:-.02em !important;text-transform:none !important}
+body.kamar-admin-desktop-v1 .kamar-reveal-head{border-radius:12px !important;border-color:var(--k-line) !important;background:var(--k-surface) !important}
+body.kamar-admin-desktop-v1 .kamar-reveal-summary{font-size:12px !important;font-weight:650 !important;letter-spacing:.1em !important;text-transform:uppercase;color:#e3dcc8 !important}
+body.kamar-admin-desktop-v1 .kamar-reveal-arrow{color:var(--k-gold) !important}
+/* kartu berdampingan sama tinggi (simetri) */
+body.kamar-admin-desktop-v1 .split-main{align-items:stretch}
+
+/* ---------- HP (<=640px) ---------- */
+@media (max-width:640px){
+  body.kamar-admin-desktop-v1 .split-shell{width:calc(100% - 24px) !important;padding:12px 0 96px !important}
+  body.kamar-admin-desktop-v1 .split-card{padding:16px !important;border-radius:18px !important}
+  body.kamar-admin-desktop-v1 h1{font-size:25px !important}
+  body.kamar-admin-desktop-v1 h2.kamar-rc-title{font-size:20px !important}
+  body.kamar-admin-desktop-v1 .kd-facs{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  body.kamar-admin-desktop-v1 .kd-quick{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  body.kamar-admin-desktop-v1 .button-row .btn{flex:1 1 100%}
+  body.kamar-admin-desktop-v1 table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.kamar-admin-desktop-v1 *,
+  body.kamar-admin-desktop-v1 *::after{animation:none !important;transition:none !important}
+}
+body.kamar-admin-desktop-v1 .split-main > .kamar-rc,
+body.kamar-admin-desktop-v1 .split-main > .split-card{align-self:stretch}
+
+/* ---------- Pilihan radio / persetujuan (form IB & aktivasi) ---------- */
+body.kamar-admin-desktop-v1 .radio-row{display:flex;flex-wrap:wrap;gap:10px}
+body.kamar-admin-desktop-v1 .radio-pill,
+body.kamar-admin-desktop-v1 .consent-item{
+  display:flex !important;align-items:center;gap:10px;min-height:44px;padding:10px 16px !important;border-radius:12px !important;
+  background:var(--k-surface) !important;border:1px solid var(--k-line) !important;color:var(--k-text) !important;
+  font-size:13.5px !important;font-weight:600 !important;letter-spacing:0 !important;text-transform:none !important;cursor:pointer;
+  transition:border-color .18s,background .18s;
+}
+body.kamar-admin-desktop-v1 .radio-pill:hover,
+body.kamar-admin-desktop-v1 .consent-item:hover{border-color:var(--k-line-hi) !important;background:var(--k-surface-hi) !important}
+body.kamar-admin-desktop-v1 .radio-pill:has(input:checked),
+body.kamar-admin-desktop-v1 .consent-item:has(input:checked){border-color:var(--k-gold) !important;background:rgba(232,200,103,.1) !important}
+body.kamar-admin-desktop-v1 input[type=checkbox],
+body.kamar-admin-desktop-v1 input[type=radio]{accent-color:var(--k-gold);width:18px;height:18px;flex:0 0 18px}
+body.kamar-admin-desktop-v1 .consent-item span,
+body.kamar-admin-desktop-v1 .radio-pill span{color:var(--k-text) !important;font-weight:500;line-height:1.5}
+
+/* ---------- Khusus admin ---------- */
+body.kamar-admin-desktop-v1 .split-sidebar .brand-small{display:block !important}
+body.kamar-admin-desktop-v1 .split-sidebar .brand-small small{display:block;margin-top:3px}
+body.kamar-admin-desktop-v1 .split-sidebar > a::before,
+body.kamar-admin-desktop-v1 .split-sidebar summary::before{flex-basis:6px;width:6px;height:6px;border-radius:50%;-webkit-mask:none;mask:none;background:var(--k-gold-lo);opacity:.9}
+body.kamar-admin-desktop-v1 .split-sidebar > a.active::before{background:var(--k-gold-hi)}
+body.kamar-admin-desktop-v1 .split-sidebar > a{--k-ico:none}
+body.kamar-admin-desktop-v1 .split-sidebar summary{font-size:12px !important;font-weight:700 !important;letter-spacing:.14em;text-transform:uppercase}
+body.kamar-admin-desktop-v1 .split-main > .split-card.hero h1,
+body.kamar-admin-desktop-v1 .split-main h1{font-size:clamp(26px,2.4vw,34px) !important}
+body.kamar-admin-desktop-v1 .stat-card{border-radius:var(--k-r) !important}
+body.kamar-admin-desktop-v1 .admin-click-card,
+body.kamar-admin-desktop-v1 .admin-click-card *{letter-spacing:-.005em}
+body.kamar-admin-desktop-v1 .admin-click-card{border-radius:var(--k-r) !important;border:1px solid var(--k-line) !important;background:var(--k-surface) !important;transition:transform .2s,border-color .2s,box-shadow .2s}
+body.kamar-admin-desktop-v1 .admin-click-card:hover{transform:translateY(-3px);border-color:var(--k-line-hi) !important;box-shadow:0 16px 36px -20px rgba(232,200,103,.45)}
+body.kamar-admin-desktop-v1 .chip{border-radius:999px !important;font-size:11.5px !important;font-weight:650 !important;letter-spacing:.08em}
+body.kamar-admin-desktop-v1 .split-main .split-card h2,
+body.kamar-admin-desktop-v1 .split-main .split-card > h2{
+  font-size:clamp(18px,1.5vw,21px) !important;font-weight:700 !important;text-transform:none !important;letter-spacing:-.015em !important;
+  color:var(--k-text) !important;-webkit-text-fill-color:var(--k-text) !important;margin:0 0 12px !important;
+}
+body.kamar-admin-desktop-v1 .split-main .split-card.hero h1{margin-bottom:8px !important}
+body.kamar-admin-desktop-v1 .kamar-reveal-summary,
+body.kamar-admin-desktop-v1 .split-main .mini-label.kamar-rc-title{font-size:14px !important;letter-spacing:-.005em !important;text-transform:none !important;font-weight:650 !important;color:var(--k-text) !important}

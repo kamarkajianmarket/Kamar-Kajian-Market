@@ -932,7 +932,7 @@ function refreshCounts(){
   var statuses = ['fresh','aktif','profit','loss','archive'];
   return Promise.all(statuses.map(function(s){
     var q = state.client.from('signals').select('id_zona,updated_at',{ count:'exact' }).order('updated_at',{ ascending:false });
-    q = (s === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', s).eq('is_archived', false);
+    q = (s === 'archive') ? q.eq('is_archived', true) : ((s==='profit'||s==='loss') ? q.eq('display_status', s) : q.eq('display_status', s).eq('is_archived', false));
     return q;
   })).then(function(results){
     var prev = state.unreadCounts;
@@ -1018,7 +1018,7 @@ function refreshCounts(){
     var from = L.page * L.pageSize;
     var to = from + L.pageSize - 1;
     var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,tp1,invalidasi,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
-    q = (L.status === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', L.status).eq('is_archived', false);
+    q = (L.status === 'archive') ? q.eq('is_archived', true) : ((L.status==='profit'||L.status==='loss') ? q.eq('display_status', L.status) : q.eq('display_status', L.status).eq('is_archived', false));
     if(L.search){
       var s = L.search.replace(/[%,]/g,'');
       q = q.or('pair.ilike.%'+s+'%,id_zona.ilike.%'+s+'%,timeframe.ilike.%'+s+'%');

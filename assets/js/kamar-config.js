@@ -31,20 +31,7 @@
 
   apply(current());
 
-  function __dbgc(msg){
-    try{
-      var elx = document.getElementById('__ksigDebugLog');
-      if(!elx){
-        elx = document.createElement('div');
-        elx.id = '__ksigDebugLog';
-        elx.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;white-space:pre-wrap;word-break:break-all;';
-        (document.body||document.documentElement).appendChild(elx);
-      }
-      var line = document.createElement('div');
-      line.textContent = '[cfg ' + Date.now()%100000 + 'ms] ' + msg;
-      elx.appendChild(line);
-    }catch(e){}
-  }
+  function __dbgc(){ /* logging debug dimatikan: tidak ada UI debug untuk member */ }
 
   window.KAMAR_CONFIG_READY = (async function(){
     __dbgc('IIFE mulai jalan');
@@ -61,7 +48,7 @@
         var data = await res.json();
         cfg = normalize(data);
         if(cfg.supabaseUrl && cfg.supabaseAnonKey) return apply(cfg);
-      catch(e){ __dbgc('fetch endpoint ke-' + i + ' GAGAL: ' + (e && (e.message||String(e)))); }
+      }catch(e){ __dbgc('fetch endpoint ke-' + i + ' GAGAL: ' + (e && (e.message||String(e)))); }
     }
     __dbgc('SEMUA endpoint gagal, fallback ke config kosong/asli'); return apply(current());
   })();

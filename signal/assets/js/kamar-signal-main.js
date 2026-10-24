@@ -1110,6 +1110,23 @@ function refreshCounts(){
     }).catch(function(){});
   }
 
+  // Teks pencarian yang hanya berisi angka (boleh titik/koma desimal) dianggap pencarian harga.
+  function priceSearchTerm(raw){
+    var t = String(raw||'').trim().replace(/,/g,'.');
+    return /^\d+(\.\d*)?$|^\.\d+$/.test(t) ? t : '';
+  }
+  var PRICE_FIELDS = ['area_low','area_high','tp1','tp2','tp3','invalidasi'];
+  function matchesPriceSearch(r, term, rawText){
+    for(var i=0;i<PRICE_FIELDS.length;i++){
+      var v = r[PRICE_FIELDS[i]];
+      if(v==null) continue;
+      if(String(v).indexOf(term) !== -1) return true;
+    }
+    // angka juga bisa bagian dari ID zona / pair / timeframe (perilaku pencarian teks lama)
+    var low = String(rawText||'').trim().toLowerCase();
+    return [r.id_zona, r.pair, r.timeframe].some(function(x){ return x!=null && String(x).toLowerCase().indexOf(low) !== -1; });
+  }
+
   function loadList(reset){
     var L = state.list;
     if(reset){ L.page = 0; L.items = []; L.hasMore = true; L.tfBoardPage = 0; L.boardFullyLoaded = false; }
@@ -1121,7 +1138,11 @@ function refreshCounts(){
     var to = from + L.pageSize - 1;
     var q = state.client.from('signals').select('id_zona,pair,timeframe,jenis_zona,area_low,area_high,tp1,tp2,tp3,invalidasi,skenario,status,display_status,farthest_tp_level,running_point,max_running_point,result_point,created_at,updated_at,is_archived,is_critical_zone');
     q = (L.status === 'archive') ? q.eq('is_archived', true) : q.eq('display_status', L.status).eq('is_archived', false);
-    if(L.search){
+    // Pencarian angka (mis. "4034" atau "4034.5"): kolom harga bertipe numeric sehingga
+    // tidak bisa dicocokkan substring di server. Ambil semua baris sesuai status + filter
+    // lain, lalu cocokkan sebagian angka di client ke semua kolom harga signal.
+    var priceQ = priceSearchTerm(L.search);
+    if(L.search && !priceQ){
       var s = L.search.replace(/[%,]/g,'');
       q = q.or('pair.ilike.%'+s+'%,id_zona.ilike.%'+s+'%,timeframe.ilike.%'+s+'%');
     }
@@ -1140,13 +1161,15 @@ function refreshCounts(){
     // Filter "Belum Dibaca" dihitung di sisi client dari signal_member_reads (bukan kolom
     // di tabel signals), jadi kalau filter ini aktif kita ambil seluruh baris status ini
     // (jumlahnya kecil per kategori) lalu saring di client, tanpa pagination server-side.
-    if(unreadOnly) q = q.limit(200); else q = q.range(from, to);
+    if(priceQ) q = q.range(0, 999); else if(unreadOnly) q = q.limit(200); else q = q.range(from, to);
     return q.then(function(res){
       if(res.error) throw res.error;
       var rows = res.data || [];
+      if(priceQ) rows = rows.filter(function(r){ return matchesPriceSearch(r, priceQ, L.search); });
       if(unreadOnly) rows = rows.filter(function(r){ return isUnread(r.id_zona, r.updated_at); });
-      L.items = (reset || unreadOnly) ? rows : L.items.concat(rows);
-      L.hasMore = unreadOnly ? false : rows.length === L.pageSize;
+      var fullFetch = unreadOnly || !!priceQ;
+      L.items = (reset || fullFetch) ? rows : L.items.concat(rows);
+      L.hasMore = fullFetch ? false : rows.length === L.pageSize;
       L.page += 1;
       L.loading = false;
       L.error = null;
@@ -1682,7 +1705,7 @@ function renderDashboard(){
       appBar(STATUS_LABEL[L.status] || 'Signal', { back:'/signal/' }) +
       '<div class="ksig-main'+''+'">'+
         '<div class="ksig-toolbar">'+
-          '<div class="ksig-search"><span aria-hidden="true">🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona…" value="'+esc(L.search)+'"/></div>'+
+          '<div class="ksig-search"><span aria-hidden="true">🔎</span><input id="ksigSearchInput" placeholder="Cari symbol, ID zona, atau harga…" value="'+esc(L.search)+'"/></div>'+
           '<div class="ksig-tool-btn'+(hasActiveFilter(L.filters)?' on':'')+'" id="ksigFilterBtn" tabindex="0" role="button" aria-label="Filter"><span class="ksig-tool-icon">⚙</span><span class="ksig-tool-label">Filter</span></div>'+
           '<div class="ksig-tool-btn" id="ksigSortBtn" tabindex="0" role="button" aria-label="Urutkan"><span class="ksig-tool-icon">↕</span><span class="ksig-tool-label">Urutkan</span></div>'+
         '</div>'+

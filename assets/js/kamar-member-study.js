@@ -1,4 +1,4 @@
 (function(){
   "use strict";
-  // Signal live Kamar Study sedang hiatus. Halaman member-study kini berfungsi sebagai informasi fasilitas dan CTA pendaftaran/perpanjangan.
+  // Signal live Kamar Signal sedang hiatus. Halaman member-study kini berfungsi sebagai informasi fasilitas dan CTA pendaftaran/perpanjangan.
 })();

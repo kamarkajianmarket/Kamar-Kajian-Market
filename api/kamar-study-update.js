@@ -590,7 +590,7 @@ export default async function handler(req, res) {
       }
       return send(res, 200, {
         ok: true,
-        message: "API Kamar Study aktif. Endpoint ini menerima POST dari EA.",
+        message: "API Kamar Signal aktif. Endpoint ini menerima POST dari EA.",
         endpoint: "/api/kamar-study-update",
         expected_method: "POST",
         fallback_supported: true,

@@ -679,3 +679,20 @@ body.kamar-member-desktop-v2 .kamar-reveal-head.open + .kamar-reveal-body{max-he
 body.kamar-member-desktop-v2 .fkx-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)) !important}
 body.kamar-member-desktop-v2 .fkx-grid > .fkx-card:only-child{max-width:560px}
 body.kamar-member-desktop-v2 .fkx-card{background-color:#0d0f14 !important}
+
+/* ---------- v8: Katalog — harga tidak terpotong & sejajar di HP/iPad (temuan Chrome live) ---------- */
+html body.kamar-member-desktop-v2 .kc-card{overflow:visible !important}
+html body.kamar-member-desktop-v2 .kc-card .kc-badge{top:-10px !important;right:12px !important}
+html body.kamar-member-desktop-v2 .kc-card.hot .kc-name{padding-right:0 !important;padding-top:0 !important}
+html body.kamar-member-desktop-v2 .kc-grp[data-g="indikator"] .kc-name,
+html body.kamar-member-desktop-v2 .kc-grp[data-g="robot"] .kc-name,
+html body.kamar-member-desktop-v2 .kc-grp[data-g="indikator"] .kc-sub,
+html body.kamar-member-desktop-v2 .kc-grp[data-g="robot"] .kc-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){
+  html body.kamar-member-desktop-v2 .kc-card,
+  html body.kamar-member-desktop-v2 .kc-card.hot{padding:14px 12px !important}
+  html body.kamar-member-desktop-v2 .kc-card .kc-price{font-size:15px !important;letter-spacing:-.03em}
+}
+@media (min-width:641px) and (max-width:1100px){
+  html body.kamar-member-desktop-v2 .kc-card .kc-price{font-size:clamp(17px,2.3vw,22px) !important}
+}

@@ -559,3 +559,10 @@ body.kamar-member-desktop-v2 .split-sidebar a.disabled{opacity:.78 !important;co
 }
 /* kartu ringkasan yang tertutup: tanpa ruang kosong */
 body.kamar-member-desktop-v2 .kamar-reveal-body{margin-top:0 !important;margin-bottom:0 !important;padding-top:0 !important;padding-bottom:0 !important}
+
+/* ---------- v6: tombol Bantuan ringkas di HP/iPad (tidak menutupi isi) ---------- */
+@media (max-width:1024px){
+  html body .kmr-sup-launcher{padding:0 !important;width:44px;height:44px;justify-content:center;right:10px !important;opacity:.92;font-size:0 !important;gap:0 !important}
+  html body .kmr-sup-launcher svg{width:20px;height:20px}
+  html body.kamar-has-bottom-nav .kmr-sup-launcher{bottom:calc(92px + env(safe-area-inset-bottom)) !important}
+}

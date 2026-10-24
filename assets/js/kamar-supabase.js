@@ -90,20 +90,7 @@
     }
     return applyConfig(readConfig());
   }
-  function __dbg(msg){
-    try{
-      var elx = document.getElementById('__ksigDebugLog');
-      if(!elx){
-        elx = document.createElement('div');
-        elx.id = '__ksigDebugLog';
-        elx.style.cssText = 'display:none;position:fixed;left:0;right:0;bottom:0;max-height:45vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:10px/1.4 monospace;padding:8px;z-index:2147483647;pointer-events:none;white-space:pre-wrap;word-break:break-all;';
-        (document.body||document.documentElement).appendChild(elx);
-      }
-      var line = document.createElement('div');
-      line.textContent = '[sup ' + Date.now()%100000 + 'ms] ' + msg;
-      elx.appendChild(line); elx.scrollTop = elx.scrollHeight;
-    }catch(e){}
-  }
+  function __dbg(){ /* logging debug dimatikan: tidak ada UI debug untuk member */ }
   async function ready(){
     __dbg('ready() dipanggil');
     

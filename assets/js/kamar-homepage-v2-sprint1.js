@@ -1,13 +1,13 @@
 (function(){
   const galleries={
     study:[
-      {src:'assets/showcase/study-01.png',alt:'Contoh Kamar Study XAUUSD M5 Sell',caption:'M5 • SELL Study'},
-      {src:'assets/showcase/study-02.png',alt:'Contoh Kamar Study XAUUSD M5 Sell kedua',caption:'M5 • SELL Study'},
-      {src:'assets/showcase/study-03.png',alt:'Contoh Kamar Study XAUUSD M30 Sell',caption:'M30 • SELL Study'},
-      {src:'assets/showcase/study-04.png',alt:'Contoh Kamar Study XAUUSD M15 Sell',caption:'M15 • SELL Study'},
-      {src:'assets/showcase/study-05.png',alt:'Contoh Kamar Study XAUUSD H1 Buy',caption:'H1 • BUY Study'},
-      {src:'assets/showcase/study-06.png',alt:'Rekap Kamar Study M5 dan M15',caption:'Rekap M5 & M15'},
-      {src:'assets/showcase/study-07.png',alt:'Rekap Kamar Study H1 dan M30',caption:'Rekap H1 & M30'}
+      {src:'assets/showcase/study-01.png',alt:'Contoh Kamar Signal XAUUSD M5 Sell',caption:'M5 • SELL Signal'},
+      {src:'assets/showcase/study-02.png',alt:'Contoh Kamar Signal XAUUSD M5 Sell kedua',caption:'M5 • SELL Signal'},
+      {src:'assets/showcase/study-03.png',alt:'Contoh Kamar Signal XAUUSD M30 Sell',caption:'M30 • SELL Signal'},
+      {src:'assets/showcase/study-04.png',alt:'Contoh Kamar Signal XAUUSD M15 Sell',caption:'M15 • SELL Signal'},
+      {src:'assets/showcase/study-05.png',alt:'Contoh Kamar Signal XAUUSD H1 Buy',caption:'H1 • BUY Signal'},
+      {src:'assets/showcase/study-06.png',alt:'Rekap Kamar Signal M5 dan M15',caption:'Rekap M5 & M15'},
+      {src:'assets/showcase/study-07.png',alt:'Rekap Kamar Signal H1 dan M30',caption:'Rekap H1 & M30'}
     ],
     indicator:[
       {src:'assets/showcase/indicator-01.png',alt:'Kamar Indikator timeframe H1',caption:'H1 Preview'},

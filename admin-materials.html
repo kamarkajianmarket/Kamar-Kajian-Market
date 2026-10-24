@@ -89,7 +89,7 @@ body{background:#070707;color:var(--text)}
 <select id="fFasilitas">
 <option value="public">Publik (tanpa login)</option>
 <option value="member">Semua Member (fasilitas apa saja)</option>
-<option value="kamar_study">Kamar Study / Signal</option>
+<option value="kamar_study">Kamar Signal</option>
 <option value="kamar_private">Kamar Private</option>
 <option value="kamar_indikator">Kamar Indikator</option>
 <option value="kamar_robot">Kamar Robot</option>
@@ -135,7 +135,7 @@ body{background:#070707;color:var(--text)}
 'use strict';var BUCKET='kamar-content';function bucketForAccess(acc){return (acc==='kamar_study'||acc==='public')?'kamar-content':'kamar-protected';}
 var TABLE='materials';
 var AREA_LABEL={public:'Publik',member:'Member',both:'Publik & Member'};
-var FACILITY_LABEL={public:'Publik',member:'Semua Member',kamar_study:'Kamar Study/Signal',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',materi_edukasi:'Kamar Edukasi',all_paid:'Semua Berbayar'};
+var FACILITY_LABEL={public:'Publik',member:'Semua Member',kamar_study:'Kamar Signal',kamar_private:'Kamar Private',kamar_indikator:'Kamar Indikator',kamar_robot:'Kamar Robot',materi_edukasi:'Kamar Edukasi',all_paid:'Semua Berbayar'};
 var STATUS_LABEL={draft:'Draft',published:'Published',hidden:'Hidden'};
 var state={client:null,rows:[],editingId:null};
 function byId(id){return document.getElementById(id)}

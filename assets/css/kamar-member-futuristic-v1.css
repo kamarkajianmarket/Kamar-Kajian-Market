@@ -533,3 +533,29 @@ body.kamar-member-desktop-v2 ::placeholder{color:#8f897b !important;opacity:1 !i
   body.kamar-member-desktop-v2 .kx-sec-title{display:grid !important;gap:4px !important;justify-items:start}
   body.kamar-member-desktop-v2 .kx-sec-title h2{white-space:normal}
 }
+
+/* ---------- v4b: kartu info fasilitas rata atas, link disabled terbaca ---------- */
+body.kamar-member-desktop-v2 .facility-content-card{display:flex !important;flex-direction:column !important;justify-content:flex-start !important;gap:10px !important}
+body.kamar-member-desktop-v2 .facility-content-card h3{margin:0 !important}
+body.kamar-member-desktop-v2 .facility-content-card p{margin:0 !important}
+body.kamar-member-desktop-v2 .facility-content-card .btn{align-self:flex-start;margin-top:auto}
+body.kamar-member-desktop-v2 .split-sidebar a.disabled{opacity:.78 !important;color:#cfc9ba !important}
+
+/* ---------- v4c: Status Fasilitas simetris di HP/iPad (grid, bukan scroller) ---------- */
+@media (max-width:1024px){
+  html body.kamar-member-desktop-v2 .kd-facs{display:grid !important;overflow:visible !important;scroll-snap-type:none !important;grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:12px !important;padding-bottom:0 !important}
+  html body.kamar-member-desktop-v2 .kd-fac{min-width:0 !important;grid-column:span 2}
+  html body.kamar-member-desktop-v2 .kd-fac:nth-last-child(2):nth-child(3n+1),
+  html body.kamar-member-desktop-v2 .kd-fac:last-child:nth-child(3n+2){grid-column:span 3}
+  html body.kamar-member-desktop-v2 .kd-fac:nth-last-child(2):nth-child(3n+1) + .kd-fac{grid-column:span 3}
+}
+@media (max-width:640px){
+  html body.kamar-member-desktop-v2 .kd-facs{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  html body.kamar-member-desktop-v2 .kd-fac,
+  html body.kamar-member-desktop-v2 .kd-fac:nth-last-child(2):nth-child(3n+1),
+  html body.kamar-member-desktop-v2 .kd-fac:last-child:nth-child(3n+2),
+  html body.kamar-member-desktop-v2 .kd-fac:nth-last-child(2):nth-child(3n+1) + .kd-fac{grid-column:auto}
+  html body.kamar-member-desktop-v2 .kd-facs > .kd-fac:last-child:nth-child(odd){grid-column:1/-1 !important}
+}
+/* kartu ringkasan yang tertutup: tanpa ruang kosong */
+body.kamar-member-desktop-v2 .kamar-reveal-body{margin-top:0 !important;margin-bottom:0 !important;padding-top:0 !important;padding-bottom:0 !important}

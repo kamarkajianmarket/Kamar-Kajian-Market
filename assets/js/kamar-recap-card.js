@@ -80,7 +80,7 @@
   function statCardsHtml(rows){
     var sorted = rows.slice().sort(function(a,b){ return TF_ORDER.indexOf(a.timeframe) - TF_ORDER.indexOf(b.timeframe); });
     return sorted.map(function(r){
-      return '<div><strong>' + esc(r.timeframe) + ' &bull; <span class="wr">' + fmtWinrate(r.winrate) + ' WR</span></strong><span class="pips ' + pipsClass(r.total_pips) + '">' + fmtPips(r.total_pips) + ' pips (' + (r.total_signal||0) + ' signal)</span></div>';
+      return '<div><strong>' + esc(r.timeframe) + ' &bull; <span class="wr">' + fmtWinrate(r.winrate) + ' WR</span></strong><span class="pips ' + pipsClass(r.total_pips) + '">' + fmtPips(r.total_pips) + ' pips <span class="sg">(' + (r.total_signal||0) + ' signal)</span></span></div>';
     }).join('');
   }
   // Kolom mengikuti lebar layar: maksimal 2 kolom di HP/tablet kecil, 4 kolom di desktop.

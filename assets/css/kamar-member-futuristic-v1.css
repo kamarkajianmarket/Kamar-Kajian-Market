@@ -495,3 +495,41 @@ body.kamar-member-desktop-v2 .status-pill.off{color:#fecaca;border-color:rgba(25
 body.kamar-member-desktop-v2 .status-pill.on{color:#a7f3d0}
 /* placeholder dan teks bantu */
 body.kamar-member-desktop-v2 ::placeholder{color:#8f897b !important;opacity:1 !important}
+
+/* ---------- v4: drawer HP/iPad harus di atas backdrop ----------
+   .split-shell (kamar-dashboard-motion.css) membuat stacking context z-index:1,
+   sehingga backdrop blur (z 10000) menutupi drawer di dalamnya. */
+@media (max-width:1024px){
+  body.kamar-member-desktop-v2 .split-shell{z-index:auto !important}
+}
+
+/* ---------- v4: drawer & bottom nav HP/iPad ---------- */
+@media (max-width:1024px){
+  html body.kamar-member-desktop-v2 .split-sidebar{
+    padding-bottom:calc(34px + env(safe-area-inset-bottom)) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    width:min(88vw,360px) !important;
+  }
+  html body.kamar-member-desktop-v2 .split-sidebar .kamar-drawer-head{padding-top:calc(24px + env(safe-area-inset-top)) !important}
+  html body.kamar-member-desktop-v2 .split-sidebar > a,
+  html body.kamar-member-desktop-v2 .split-sidebar details > a{
+    margin:3px 12px !important;min-height:48px !important;
+  }
+  html body.kamar-member-desktop-v2 .split-sidebar summary{margin:6px 12px !important;min-height:48px !important}
+  html body.kamar-member-desktop-v2 .split-sidebar a.active{box-shadow:inset 3px 0 0 var(--k-gold),0 0 22px -8px rgba(232,200,103,.5) !important}
+  html body.kamar-member-desktop-v2 .kamar-bottom-nav a{min-height:52px;-webkit-tap-highlight-color:transparent}
+  html body.kamar-member-desktop-v2 .kamar-bottom-nav a span{font-size:10px;letter-spacing:.06em}
+  html body.kamar-member-desktop-v2 .kamar-bottom-nav a.active{box-shadow:0 0 22px -6px rgba(232,200,103,.65)}
+  /* isi tidak tertutup bottom nav + tombol Bantuan */
+  body.kamar-member-desktop-v2 .split-shell{padding-bottom:calc(130px + env(safe-area-inset-bottom)) !important}
+}
+@media (max-width:1024px) and (min-width:641px){
+  html body.kamar-member-desktop-v2 .kamar-bottom-nav{max-width:560px !important}
+}
+@media (prefers-reduced-motion:reduce){
+  html body .split-sidebar,html body .kamar-drawer-backdrop{transition-duration:.01ms !important}
+}
+@media (max-width:640px){
+  body.kamar-member-desktop-v2 .kx-sec-title{display:grid !important;gap:4px !important;justify-items:start}
+  body.kamar-member-desktop-v2 .kx-sec-title h2{white-space:normal}
+}

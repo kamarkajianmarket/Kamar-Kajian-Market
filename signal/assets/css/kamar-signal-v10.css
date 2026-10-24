@@ -131,3 +131,10 @@ body.ksig-body{background:#05070b!important;color:#f4eddc!important;-webkit-text
 .ksig-fold:not(.open)>*:not(.ksig-fold-bar){display:none!important}
 .ksig-fold.open{padding:0 18px 18px!important}
 .ksig-fold.open>.ksig-fold-bar{margin:0 -18px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+
+/* v13: kartu Akses terlipat -- padding 26px dari v3 (spesifisitas lebih tinggi) membuat bar terdorong ke bawah dan terpotong. Pusatkan vertikal. */
+.ksig-body .ksig-access-card.ksig-fold,.ksig-body .ksig-install-card.ksig-fold{padding:0!important;min-height:0!important;height:auto!important;display:block!important}
+.ksig-body .ksig-access-card.ksig-fold.open,.ksig-body .ksig-install-card.ksig-fold.open{padding:0 18px 18px!important}
+.ksig-fold-bar{min-height:56px;box-sizing:border-box;line-height:1.2}
+.ksig-fold-i{margin-top:-4px!important}
+.ksig-fold.open .ksig-fold-i{margin-top:4px!important}

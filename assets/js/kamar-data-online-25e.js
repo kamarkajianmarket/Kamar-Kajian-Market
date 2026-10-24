@@ -110,7 +110,7 @@
     '<div class="setting-card"><span>WhatsApp</span><strong>'+esc(waOf(m))+'</strong></div>'+
     '<div class="setting-card"><span>Telegram</span><strong>'+esc(tgOf(m))+'</strong></div>'+
     '<div class="setting-card"><span>Status</span><strong>'+(isActive(m)?'Aktif':isPending(m)?'Pending':'Belum Aktif')+'</strong></div>'+
-    '<div class="setting-card"><span>Masa Akses</span><strong>'+esc(expiryOf(m))+'</strong></div>'+
+    '<div class="setting-card"><span>Masa Akses</span><strong>'+esc(fmtAccessDate(expiryOf(m)))+'</strong></div>'+
     '<div class="setting-card"><span>Referral</span><strong>'+esc(referralOf(m)||'-')+'</strong></div>'+
     '<div class="setting-card"><span>Broker</span><strong>'+esc(brokerOf(m)||'-')+'</strong></div>'+
     '<div class="setting-card"><span>Modal</span><strong>'+esc(capitalOf(m)||'-')+'</strong></div>'+

@@ -45,7 +45,7 @@ function loadEmbed(){
 
   var s2 = document.createElement('script');
   s2.defer = true;
-  s2.src = '/assets/js/kamar-support.js?v=3';
+  s2.src = '/assets/js/kamar-support.js?v=4';
   if (s0 && s0.parentNode){ s0.parentNode.insertBefore(s2, s0); }
   else { document.head.appendChild(s2); }
 }

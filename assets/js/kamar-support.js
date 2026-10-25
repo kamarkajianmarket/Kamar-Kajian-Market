@@ -337,4 +337,4 @@ setTimeout(function(){
 })();
 
 /* v2 loader */
-(function(){var s=document.createElement('script');s.src='/assets/js/kamar-support-v2.js?v=2';document.head.appendChild(s);})();
+(function(){var s=document.createElement('script');s.src='/assets/js/kamar-support-v2.js?v=3';document.head.appendChild(s);})();

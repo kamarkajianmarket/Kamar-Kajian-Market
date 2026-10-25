@@ -371,3 +371,11 @@ body.kamar-admin-desktop-v1 .split-main .split-card > h2{
 body.kamar-admin-desktop-v1 .split-main .split-card.hero h1{margin-bottom:8px !important}
 body.kamar-admin-desktop-v1 .kamar-reveal-summary,
 body.kamar-admin-desktop-v1 .split-main .mini-label.kamar-rc-title{font-size:14px !important;letter-spacing:-.005em !important;text-transform:none !important;font-weight:650 !important;color:var(--k-text) !important}
+
+/* ===== v2: seragam dengan tema member (pil gelap-emas, tombol utama emas) ===== */
+body.kamar-admin-desktop-v1 span.eyebrow,body.kamar-admin-desktop-v1 .kamar-badge{background:rgba(230,195,106,.08) !important;color:#e6c36a !important;border:1px solid rgba(230,195,106,.28) !important;box-shadow:none !important}
+body.kamar-admin-desktop-v1 .btn:not(.secondary):not(.danger):not(.good):not(.warn-btn):not(.mini):not(.small){background:linear-gradient(135deg,var(--k-gold-hi),var(--k-gold) 55%,var(--k-gold-lo)) !important;color:#15120a !important;border-color:rgba(255,236,170,.6) !important;font-weight:750 !important;box-shadow:0 10px 28px -12px rgba(232,200,103,.55) !important}
+body.kamar-admin-desktop-v1 .btn.mini:not(.secondary):not(.danger):not(.good):not(.warn-btn){background:linear-gradient(135deg,var(--k-gold-hi),var(--k-gold) 55%,var(--k-gold-lo)) !important;color:#15120a !important;border-color:rgba(255,236,170,.6) !important;font-weight:750 !important}
+body.kamar-admin-desktop-v1 .btn.danger{background:rgba(255,92,92,.12) !important;color:#ffb0b0 !important;border-color:rgba(255,92,92,.4) !important}
+body.kamar-admin-desktop-v1 .btn.good{background:rgba(52,211,153,.12) !important;color:#8cf0c4 !important;border-color:rgba(52,211,153,.4) !important}
+body.kamar-admin-desktop-v1 .split-card,body.kamar-admin-desktop-v1 .card{background-color:#0d0f14}

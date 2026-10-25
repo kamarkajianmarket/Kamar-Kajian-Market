@@ -81,9 +81,13 @@
     } else if(s==='FRESH'){
       progressHtml = '<div class="progress muted">Menunggu harga masuk area&hellip;</div>';
     }
+    var titleTxt = String(row.setup_title || ((row.jenis_zona||'') + ' ' + (row.skenario||'')));
+    var dm = /\b(SELL|BUY)\b/i.exec(titleTxt + ' ' + String(row.skenario||'') + ' ' + String(row.arah||row.direction||''));
+    var dir = dm ? dm[1].toLowerCase() : '';
+    var titleHtml = esc(titleTxt).replace(/\b(SELL|BUY)\b/i, function(w){ return '<span class="dir-word">' + w + '</span>'; });
     container.innerHTML =
-      '<div class="kamar-sigfree-card">' +
-        '<div class="pair">' + esc(row.setup_title || ((row.jenis_zona||'') + ' ' + (row.skenario||''))) + '</div>' +
+      '<div class="kamar-sigfree-card' + (dir ? ' dir-' + dir : '') + '">' +
+        '<div class="pair">' + titleHtml + '</div>' +
         '<div class="meta">Timeframe M5 <span class="status-badge ' + info.cls + '">' + info.label + '</span></div>' +
         progressHtml +
         '<div class="levels">' +

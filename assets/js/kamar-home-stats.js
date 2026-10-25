@@ -52,7 +52,8 @@
     '</div>'+
     '<div class="bs-chart"><div class="bs-k" style="margin-bottom:10px">Kurva akumulasi pips harian</div>'+spark(d.series)+'</div>'+
     '<div class="bs-note"><b>DISCLAIMER</b>Performa historis dicatat otomatis oleh sistem dan bukan jaminan performa di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</div>'+
-    '<a class="bs-cta" href="/register.html">Mulai Pantau Kamar Signal <span style="margin-left:10px;padding:3px 10px;border-radius:999px;background:#2fe6a4;color:#04170f;font-size:11px;letter-spacing:.14em;font-weight:900">GRATIS</span></a><span style="display:block;margin-top:10px;font-size:12.5px;color:#a9b3c4">Gratis, tanpa biaya langganan. Daftar sekarang dan pantau signal setiap hari.</span></div>';
+    '<div class="bs-free"><b>Signal Gratis 2x Sehari</b><span>Member terdaftar mendapat signal gratis dua kali sehari (jam 14:00 dan 20:00 WIB) langsung di dashboard member.</span></div>'+
+    '<a class="bs-cta" id="bsFreeCta" href="/register.html"><span class="bs-cta-t">Daftar Sekarang</span> <span class="bs-cta-b" style="margin-left:10px;padding:3px 10px;border-radius:999px;background:#2fe6a4;color:#04170f;font-size:11px;letter-spacing:.14em;font-weight:900">GRATIS</span></a><span style="display:block;margin-top:10px;font-size:12.5px;color:#a9b3c4">Gratis, tanpa biaya langganan. Signal bersifat edukatif dan bukan jaminan hasil.</span></div>';
     return sec;
   }
   var ph=null,stDone=false;
@@ -61,12 +62,13 @@
     if(!stDone){stDone=true;var st=document.createElement('style');st.textContent=css+'#bukti-signal.bs-skel{min-height:940px;background:linear-gradient(110deg,rgba(255,255,255,.02) 30%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 70%) 0 0/220% 100%,rgba(16,23,32,.88);animation:bsShim 1.8s linear infinite}@keyframes bsShim{to{background-position:-220% 0,0 0}}@media(max-width:860px){#bukti-signal.bs-skel{min-height:1240px}}';document.head.appendChild(st);}
     ph=document.createElement('section');ph.id='bukti-signal';ph.className='section-shell compact-section is-visible bs-skel';anchor.parentNode.insertBefore(ph,anchor);return ph;
   }
+  function swapCta(p,c){try{c.auth.getSession().then(function(x){var ss=x&&x.data&&x.data.session;if(ss&&ss.user){var a=p.querySelector('#bsFreeCta');if(a){a.setAttribute('href','dashboard.html');a.innerHTML='<span class="bs-cta-t">Buka Dashboard</span>';}}}).catch(function(){});}catch(e){}}
   function run(){
     var c=window.kamarSupabaseClient;if(!c||!c.rpc)return false;
     var p=ensurePh();if(!p)return false;
     c.rpc('public_signal_stats').then(function(r){
       if(r.error||!r.data||!r.data.total_closed){p.remove();return;}
-      var sec=build(r.data);p.className='section-shell compact-section is-visible';p.innerHTML=sec.innerHTML;
+      var sec=build(r.data);p.className='section-shell compact-section is-visible';p.innerHTML=sec.innerHTML;swapCta(p,c);
       var done=false;function go(){if(done)return;done=true;p.classList.add('in');p.querySelectorAll('[data-c]').forEach(function(e){count(e,parseFloat(e.getAttribute('data-c')),e.getAttribute('data-dec')==='1');});}
       if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){go();o.disconnect();}},{threshold:.25}).observe(p);}else go();
     });

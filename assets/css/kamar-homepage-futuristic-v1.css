@@ -55,3 +55,29 @@ html body.public-home #affiliate-kamar .affiliate-commission strong{display:bloc
 @media (min-width:561px){html body.public-home #affiliate-kamar .affiliate-commission strong{font-size:clamp(36px,4.6vw,60px) !important}}
 @supports (font-size:1cqw){html body.public-home #affiliate-kamar .affiliate-commission strong{font-size:min(11.5cqw,72px) !important}}
 html body.public-home #affiliate-kamar .private-detail-toggle{display:inline-flex !important;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px !important;border-radius:999px !important;border:1px solid var(--hf-line) !important;background:rgba(230,195,106,.08) !important;color:var(--hf-gold) !important;font-weight:700;white-space:nowrap}
+
+/* ===== audit penuh: kemitraan, traktir, jelajahi ===== */
+html body.public-home .kamar-badge{background:rgba(230,195,106,.08) !important;color:var(--hf-gold) !important;border:1px solid var(--hf-line) !important;box-shadow:none !important}
+html body.public-home #affiliate-kamar .section-heading p{color:var(--hf-muted) !important}
+html body.public-home #affiliate-kamar .affiliate-program-grid{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:20px !important;align-items:stretch;max-width:1080px;margin-left:auto !important;margin-right:auto !important}
+html body.public-home #affiliate-kamar .affiliate-program-grid > *{width:auto !important;max-width:none !important;min-width:0;height:auto !important;max-height:none !important}
+@media (max-width:900px){html body.public-home #affiliate-kamar .affiliate-program-grid{grid-template-columns:1fr !important}}
+html body.public-home .traktir-card .traktir-denom-row,html body.public-home .traktir-card p,html body.public-home .traktir-card small{color:var(--hf-muted) !important}
+/* Jelajahi Kamar: 3 + 2 simetris, teks terbaca */
+html body.public-home .utility-grid{display:grid !important;grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:16px !important}
+html body.public-home .utility-grid > .utility-card{grid-column:span 2 !important;min-width:0}
+html body.public-home .utility-grid > .utility-card:nth-child(4){grid-column:2 / span 2 !important}
+html body.public-home .utility-grid > .utility-card:nth-child(5){grid-column:4 / span 2 !important}
+@media (max-width:720px){
+  html body.public-home .utility-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  html body.public-home .utility-grid > .utility-card,html body.public-home .utility-grid > .utility-card:nth-child(4),html body.public-home .utility-grid > .utility-card:nth-child(5){grid-column:auto !important}
+  html body.public-home .utility-grid > .utility-card:last-child:nth-child(odd){grid-column:1 / -1 !important}
+}
+html body.public-home .utility-card-desc{color:var(--hf-muted) !important}
+html body.public-home .utility-card .utility-card-cta{color:var(--hf-gold)}
+html body.public-home .utility-card.is-soon .utility-card-cta,html body.public-home .utility-card[aria-disabled="true"] .utility-card-cta{color:#9aa4b5}
+/* affiliate: seluruh detail selalu tampil utuh (tanpa pratinjau terpotong) */
+html body.public-home #affiliate-kamar .private-detail-collapse{max-height:none !important;height:auto !important;overflow:visible !important}
+html body.public-home #affiliate-kamar .private-detail-collapse::after{display:none !important}
+html body.public-home #affiliate-kamar #affiliateDetailToggle{display:none !important}
+html body.public-home #affiliate-kamar .affiliate-main-card{display:flex;flex-direction:column;gap:14px}

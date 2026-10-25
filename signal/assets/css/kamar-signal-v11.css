@@ -68,3 +68,10 @@ html body.ksig-body .ksig-eq-st span b{font-size:20px;font-weight:900;font-varia
 html body.ksig-body .ksig-eq-st span.up b{color:#5df0bb}
 html body.ksig-body .ksig-eq-st span.dn b{color:#ff7482}
 @media(max-width:560px){html body.ksig-body .ksig-perf-stat b{font-size:24px}html body.ksig-body .ksig-eq-st span b{font-size:17px}}
+/* sparkline mini di kartu KPI */
+html body.ksig-body .ksig-spark{position:absolute;right:14px;top:50%;width:84px;height:30px;transform:translateY(-50%);overflow:visible;pointer-events:none;opacity:.9}
+html body.ksig-body .ksig-spark path{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+html body.ksig-body .ksig-spark-all path{stroke:#e8c777;filter:drop-shadow(0 0 4px rgba(232,199,119,.5))}
+html body.ksig-body .ksig-spark-profit path{stroke:#5df0bb;filter:drop-shadow(0 0 4px rgba(47,230,164,.55))}
+html body.ksig-body .ksig-spark-loss path{stroke:#ff7482;filter:drop-shadow(0 0 4px rgba(255,92,110,.5))}
+@media(max-width:420px){html body.ksig-body .ksig-spark{width:56px;right:10px}}

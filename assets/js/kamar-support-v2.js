@@ -12,7 +12,8 @@
 
   var cb=document.createElement('button'); cb.type='button'; cb.className='kmr-chat-close'; cb.setAttribute('aria-label','Tutup chat');
   cb.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Tutup</span>';
-  function closeChat(){ try{ window.Tawk_API.minimize(); }catch(e){} root.classList.remove('kmr-chat-open'); }
+  function resetChat(){ userOpened=false; window.__kmrUserOpened=false; try{ window.Tawk_API.hideWidget(); }catch(e){} setTimeout(function(){try{window.Tawk_API.hideWidget()}catch(e){}},300); }
+  function closeChat(){ try{ window.Tawk_API.minimize(); }catch(e){} root.classList.remove('kmr-chat-open'); resetChat(); }
   cb.addEventListener('click',closeChat);
   document.body.appendChild(cb);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && root.classList.contains('kmr-chat-open')) closeChat(); });
@@ -54,7 +55,7 @@
     var T=window.Tawk_API; if(!T) return false;
     var prevMax=T.onChatMaximized, prevMin=T.onChatMinimized, prevLoad=T.onLoad;
     T.onChatMaximized=function(){ root.classList.add('kmr-chat-open'); sweep(); if(typeof prevMax==='function') prevMax(); };
-    T.onChatMinimized=function(){ root.classList.remove('kmr-chat-open'); sweep(); if(typeof prevMin==='function') prevMin(); };
+    T.onChatMinimized=function(){ root.classList.remove('kmr-chat-open'); resetChat(); sweep(); if(typeof prevMin==='function') prevMin(); };
     function calm(){ try{ if(!userOpened && typeof T.minimize==='function' && typeof T.isChatMaximized==='function' && T.isChatMaximized()) T.minimize(); if(typeof T.hideWidget==='function') T.hideWidget(); }catch(e){} }
     T.onLoad=function(){ if(typeof prevLoad==='function') prevLoad(); setTimeout(calm,600); setTimeout(calm,1800); };
     if(typeof T.isChatMaximized==='function'){ setTimeout(calm,600); setTimeout(calm,1800); }

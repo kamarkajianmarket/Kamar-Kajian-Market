@@ -103,9 +103,7 @@
   function place(){
     var meta=document.querySelector('.ksig-header-meta'),perf=document.querySelector('.ksig-perf'),row=document.querySelector('.ksig-header-row');
     if(!meta||!perf||!row) return;
-    var wide=window.innerWidth>760;
-    if(wide&&meta.parentNode!==perf) perf.insertBefore(meta,perf.firstChild);
-    else if(!wide&&meta.parentNode===perf) row.appendChild(meta);
+    if(meta.parentNode!==perf) perf.insertBefore(meta,perf.firstChild);
   }
   var q=0; function sched(){ if(q) return; q=requestAnimationFrame(function(){q=0;run();place();}); }
   window.addEventListener('resize',sched);
@@ -172,7 +170,7 @@
     hm+='</div>';
     var neg=cum<0;
     return filterHtml()+'<div class="ksig-eq-h"><div><div class="ksig-eq-t">EQUITY CURVE</div><div class="ksig-eq-s">Akumulasi pips · '+flabel()+' · '+rows.length+' signal</div></div><div class="ksig-eq-v'+(neg?' neg':'')+'">'+fmt(cum)+' <small style="font-size:.4em;letter-spacing:.1em">PIPS</small></div></div>'+
-    '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="ksEqG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fe6a4" stop-opacity=".38"/><stop offset="1" stop-color="#2fe6a4" stop-opacity="0"/></linearGradient></defs><line x1="0" x2="'+W+'" y1="'+y0+'" y2="'+y0+'" stroke="rgba(255,255,255,.18)" stroke-dasharray="4 5"/><path class="ar" d="'+area+'" fill="url(#ksEqG)"/><path class="ln" style="--len:'+Math.round(W*4)+'" pathLength="'+Math.round(W*4)+'" d="'+d+'"/><circle cx="'+xs(pts.length-1).toFixed(1)+'" cy="'+ys(cum).toFixed(1)+'" r="4.5" fill="#fff" stroke="#2fe6a4" stroke-width="2"/></svg>'+
+    '<svg data-pts="'+pts.map(Math.round).join(',')+'" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="ksEqG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fe6a4" stop-opacity=".38"/><stop offset="1" stop-color="#2fe6a4" stop-opacity="0"/></linearGradient></defs><line x1="0" x2="'+W+'" y1="'+y0+'" y2="'+y0+'" stroke="rgba(255,255,255,.18)" stroke-dasharray="4 5"/><path class="ar" d="'+area+'" fill="url(#ksEqG)"/><path class="ln" style="--len:'+Math.round(W*4)+'" pathLength="'+Math.round(W*4)+'" d="'+d+'"/><circle cx="'+xs(pts.length-1).toFixed(1)+'" cy="'+ys(cum).toFixed(1)+'" r="4.5" fill="#fff" stroke="#2fe6a4" stroke-width="2"/></svg>'+
     '<div class="ksig-eq-st"><span>Winrate<b>'+(wins/rows.length*100).toFixed(1).replace('.',',')+'%</b></span><span>Rata-rata Drawdown<b>'+(avgDd>0?'-':'')+Math.round(avgDd).toLocaleString('id-ID')+' Pips</b></span><span>Rata-rata Profit<b>'+fmt(cum/rows.length)+' Pips</b></span></div>'+
     '<div class="ksig-hm"><div class="ksig-eq-t">HEATMAP WINRATE</div><div class="ksig-eq-s">Hari × jam masuk (WIB) · hijau = winrate tinggi</div>'+hm+'</div>';
   }
@@ -259,4 +257,34 @@
   }
   new MutationObserver(check).observe(document.body,{childList:true,subtree:true});
   setTimeout(release,5500);
+})();
+
+/* tooltip grafik equity: hover / sentuh menampilkan akumulasi pips per signal */
+(function(){
+  var css='.ksig-eq{position:relative}.ksig-eq-tip{position:absolute;pointer-events:none;z-index:3;padding:7px 11px;border-radius:12px;background:rgba(8,11,17,.96);border:1px solid rgba(232,199,119,.35);box-shadow:0 8px 24px rgba(0,0,0,.55);font-size:12px;font-weight:800;color:#fff6df;white-space:nowrap;transform:translate(-50%,-100%);font-variant-numeric:tabular-nums}.ksig-eq-tip small{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;color:#a9b3c4}.ksig-eq-tip.up b{color:#5df0bb}.ksig-eq-tip.dn b{color:#ff6b7a}.ksig-eq-vl{position:absolute;pointer-events:none;width:1px;background:rgba(232,199,119,.45);z-index:2}.ksig-eq-dot{position:absolute;pointer-events:none;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#e8c777;box-shadow:0 0 12px rgba(232,199,119,.9);z-index:3}.ksig-eq svg{touch-action:pan-y;cursor:crosshair}';
+  var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+  var tip,vl,dot;
+  function hide(){[tip,vl,dot].forEach(function(e){if(e&&e.parentNode)e.parentNode.removeChild(e);});}
+  function move(e){
+    var svg=e.target&&e.target.closest?e.target.closest('.ksig-eq svg[data-pts]'):null;
+    if(!svg){hide();return;}
+    var pts=svg.getAttribute('data-pts').split(',').map(Number),n=pts.length;if(n<2)return;
+    var r=svg.getBoundingClientRect(),card=svg.closest('.ksig-eq'),cr=card.getBoundingClientRect();
+    var f=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),i=Math.round(f*(n-1)),v=pts[i];
+    var mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts);if(mx===mn)mx=mn+1;
+    var pad=8/190,yf=1-pad-(v-mn)/(mx-mn)*(1-2*pad);
+    var x=r.left-cr.left+(8/600+i*(1-16/600)/(n-1))*r.width,y=r.top-cr.top+yf*r.height;
+    if(!tip){tip=document.createElement('div');vl=document.createElement('div');dot=document.createElement('div');vl.className='ksig-eq-vl';dot.className='ksig-eq-dot';}
+    [vl,dot,tip].forEach(function(el){if(el.parentNode!==card)card.appendChild(el);});
+    vl.style.left=x+'px';vl.style.top=(r.top-cr.top)+'px';vl.style.height=r.height+'px';
+    dot.style.left=x+'px';dot.style.top=y+'px';
+    tip.className='ksig-eq-tip '+(v>=0?'up':'dn');
+    tip.innerHTML='<small>'+(i===0?'Awal':'Signal ke-'+i)+'</small><b>'+(v>=0?'+':'')+v.toLocaleString('id-ID')+' pips</b>';
+    var tw=tip.offsetWidth/2+6,tx=Math.min(cr.width-tw,Math.max(tw,x));
+    tip.style.left=tx+'px';tip.style.top=Math.max(tip.offsetHeight+4,y-12)+'px';
+  }
+  document.addEventListener('pointermove',move,{passive:true});
+  document.addEventListener('pointerdown',move,{passive:true});
+  document.addEventListener('pointerleave',hide);
+  document.addEventListener('pointerup',function(e){if(e.pointerType==='touch')setTimeout(hide,1400);});
 })();

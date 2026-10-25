@@ -37,3 +37,17 @@ html body.ksig-body .ksig-perf>.ksig-header-meta .ksig-header-updated{white-spac
 html body.ksig-body .ksig-perf>.ksig-header-meta .ksig-live{height:30px}
 html body.ksig-body .ksig-perf:has(>.ksig-header-meta){padding-top:68px !important}
 html body.ksig-body .ksig-perf>.ksig-header-meta{top:16px;right:22px}
+/* HP: baris meta rapi di dalam card performa */
+@media(max-width:760px){
+ html body.ksig-body .ksig-perf:has(>.ksig-header-meta){padding-top:22px !important}
+ html body.ksig-body .ksig-perf>.ksig-header-meta{position:static !important;order:-1;width:100% !important;flex-wrap:wrap;justify-content:space-between;gap:8px 10px}
+ html body.ksig-body .ksig-perf>.ksig-header-meta .ksig-header-updated{flex:1 1 auto;min-width:0;font-size:11px;white-space:normal}
+}
+/* kartu AKSES/Install (fold) tidak boleh menyusut jadi 2px di flex column */
+html body.ksig-body .ksig-fold{flex:0 0 auto !important;min-height:56px !important}
+/* placeholder: menang atas #ksigSearchInput::placeholder (kontras AA) */
+html body.ksig-body #ksigSearchInput::placeholder,html body.ksig-body .ksig-field input::placeholder{color:#9aa4b5 !important;opacity:1 !important}
+/* baris/daftar: tidak boleh melebar di HP */
+html body.ksig-body .ksig-row-top{flex-wrap:wrap;min-width:0;gap:6px 8px}
+html body.ksig-body .ksig-row-top>*{min-width:0;max-width:100%}
+html body.ksig-body .ksig-qf-seg,html body.ksig-body .ksig-qf-grp{max-width:100%;min-width:0}

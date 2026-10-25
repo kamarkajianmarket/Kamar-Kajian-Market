@@ -147,8 +147,10 @@
   function build(){
     var rows=filtered().map(function(s){return {p:pips(s),w:wib(s.created_at),win:s.display_status==='profit'};}).filter(function(r){return r.p!=null;});
     if(rows.length<1)return filterHtml()+'<div class="ksig-eq-empty">Belum ada signal tertutup pada periode ini.</div>';
-    var cum=0,pts=[0],peak=0,dd=0;
-    rows.forEach(function(r){cum+=r.p;pts.push(cum);if(cum>peak)peak=cum;if(peak-cum>dd)dd=peak-cum;});
+    var cum=0,pts=[0],peak=0,dd=0,ddSum=0,ddN=0;
+    rows.forEach(function(r){cum+=r.p;pts.push(cum);if(cum>peak){if(dd>0){ddSum+=dd;ddN++;dd=0;}peak=cum;}else if(peak-cum>dd)dd=peak-cum;});
+    if(dd>0){ddSum+=dd;ddN++;}
+    var avgDd=ddN?ddSum/ddN:0;
     var W=600,H=190,pad=8,mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts);if(mx===mn)mx=mn+1;
     var xs=function(i){return pad+i*(W-2*pad)/(pts.length-1);},ys=function(v){return H-pad-(v-mn)/(mx-mn)*(H-2*pad);};
     var d='';pts.forEach(function(v,i){d+=(i?'L':'M')+xs(i).toFixed(1)+' '+ys(v).toFixed(1)+' ';});
@@ -163,7 +165,7 @@
     var neg=cum<0;
     return filterHtml()+'<div class="ksig-eq-h"><div><div class="ksig-eq-t">EQUITY CURVE</div><div class="ksig-eq-s">Akumulasi pips · '+flabel()+' · '+rows.length+' signal</div></div><div class="ksig-eq-v'+(neg?' neg':'')+'">'+fmt(cum)+' <small style="font-size:.4em;letter-spacing:.1em">PIPS</small></div></div>'+
     '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="ksEqG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fe6a4" stop-opacity=".38"/><stop offset="1" stop-color="#2fe6a4" stop-opacity="0"/></linearGradient></defs><line x1="0" x2="'+W+'" y1="'+y0+'" y2="'+y0+'" stroke="rgba(255,255,255,.18)" stroke-dasharray="4 5"/><path class="ar" d="'+area+'" fill="url(#ksEqG)"/><path class="ln" style="--len:'+Math.round(W*4)+'" pathLength="'+Math.round(W*4)+'" d="'+d+'"/><circle cx="'+xs(pts.length-1).toFixed(1)+'" cy="'+ys(cum).toFixed(1)+'" r="4.5" fill="#fff" stroke="#2fe6a4" stroke-width="2"/></svg>'+
-    '<div class="ksig-eq-st"><span>Winrate<b>'+(wins/rows.length*100).toFixed(1).replace('.',',')+'%</b></span><span>Max Drawdown<b>-'+Math.round(dd).toLocaleString('id-ID')+' Pips</b></span><span>Rata-rata/signal<b>'+fmt(cum/rows.length)+' Pips</b></span></div>'+
+    '<div class="ksig-eq-st"><span>Winrate<b>'+(wins/rows.length*100).toFixed(1).replace('.',',')+'%</b></span><span>Rata-rata Drawdown<b>'+(avgDd>0?'-':'')+Math.round(avgDd).toLocaleString('id-ID')+' Pips</b></span><span>Rata-rata/signal<b>'+fmt(cum/rows.length)+' Pips</b></span></div>'+
     '<div class="ksig-hm"><div class="ksig-eq-t">HEATMAP WINRATE</div><div class="ksig-eq-s">Hari × jam masuk (WIB) · hijau = winrate tinggi</div>'+hm+'</div>';
   }
   function cardAnim(el){if(window.__ksigEqAnimated)return;if(window.__ksigIntroHold&&!window.__ksigIntroFlag)return;el.classList.add('anim');window.__ksigEqAnimated=1;}

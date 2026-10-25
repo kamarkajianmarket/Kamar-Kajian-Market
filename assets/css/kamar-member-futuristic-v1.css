@@ -745,3 +745,5 @@ html body.kamar-member-desktop-v2 .kd-remind-go{flex:none;font-weight:800;color:
 .kqm-item.on i{opacity:1}
 .kqm-none{padding:16px;color:#b4bdcc;font-size:14px}
 .kqm-hint{padding:10px 16px;border-top:1px solid rgba(255,255,255,.06);color:#9aa4b5;font-size:12px}
+/* target sentuh: tautan judul seksi dashboard */
+html body.kamar-member-desktop-v2 .kd-sec-title a{display:inline-flex;align-items:center;min-height:40px;padding:0 8px}

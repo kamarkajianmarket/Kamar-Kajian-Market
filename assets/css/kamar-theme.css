@@ -1,0 +1,23 @@
+/* Mode tampilan: Otomatis / Gelap (default desain) / Terang (krem-emas).
+   Terang = inversi terkontrol dari desain gelap: kontras relatif tetap, tidak ada teks gelap-di-gelap atau terang-di-terang.
+   Media (gambar/video/canvas/logo) dikembalikan agar warna aslinya tetap. */
+html[data-theme="light"]{filter:invert(1) hue-rotate(180deg) sepia(.06);background:#fff}
+html[data-theme="light"] img,html[data-theme="light"] video,html[data-theme="light"] canvas,html[data-theme="light"] picture,html[data-theme="light"] iframe,html[data-theme="light"] .kt-keep{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="light"],html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"] ::selection{background:#1a1405;color:#f3d98d}
+/* tombol mode */
+.kt-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:40px;height:40px;padding:0 12px;border-radius:999px;border:1px solid rgba(232,199,119,.35);background:rgba(232,199,119,.1);color:#f3d98d;font:800 12px/1 inherit;letter-spacing:.06em;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,transform .15s}
+.kt-btn:hover{background:rgba(232,199,119,.2)}.kt-btn:active{transform:scale(.96)}
+.kt-btn svg{width:18px;height:18px;flex:0 0 auto;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kt-btn .kt-l{display:none}
+.kt-menu{position:fixed;z-index:2147483000;min-width:170px;padding:6px;border-radius:14px;background:#0d1017;border:1px solid rgba(232,199,119,.35);box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.kt-menu button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#f4f6fb;font:700 14px/1 inherit;cursor:pointer;text-align:left}
+.kt-menu button:hover,.kt-menu button:focus-visible{background:rgba(232,199,119,.14);outline:0}
+.kt-menu button[aria-checked="true"]{color:#f3d98d}
+.kt-menu button[aria-checked="true"]::after{content:"\2713";margin-left:auto}
+.kt-menu svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kt-float{position:fixed;right:14px;bottom:84px;z-index:2147482000;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+@media(min-width:1000px){.kt-float{bottom:18px}}
+.kt-btn.kt-drawer{display:flex;width:calc(100% - 28px);margin:12px 14px 14px;justify-content:flex-start;padding:0 14px;height:44px}
+.kt-btn.kt-drawer .kt-l{display:inline;font-size:13px}
+@media(min-width:1025px){.kt-btn.kt-drawer{display:none}}

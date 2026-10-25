@@ -2,7 +2,7 @@
    Terang = inversi terkontrol dari desain gelap: kontras relatif tetap, tidak ada teks gelap-di-gelap atau terang-di-terang.
    Media (gambar/video/canvas/logo) dikembalikan agar warna aslinya tetap. */
 html[data-theme="light"]{filter:invert(1) hue-rotate(180deg) sepia(.06);background:#fff}
-html[data-theme="light"] img,html[data-theme="light"] video,html[data-theme="light"] canvas,html[data-theme="light"] picture,html[data-theme="light"] iframe,html[data-theme="light"] .kt-keep{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="light"] img,html[data-theme="light"] .brand-badge,html[data-theme="light"] .split-sidebar::before,html[data-theme="light"] body:not(.public-home) .split-main::before,html[data-theme="light"] video,html[data-theme="light"] canvas,html[data-theme="light"] picture,html[data-theme="light"] iframe,html[data-theme="light"] .kt-keep{filter:invert(1) hue-rotate(180deg) !important}
 html[data-theme="light"],html[data-theme="dark"]{color-scheme:dark}
 html[data-theme="light"] ::selection{background:#1a1405;color:#f3d98d}
 /* tombol mode */
@@ -20,7 +20,6 @@ html[data-theme="light"] ::selection{background:#1a1405;color:#f3d98d}
 @media(min-width:1000px){.kt-float{bottom:18px}}
 .kt-btn.kt-drawer{display:flex;width:calc(100% - 28px);margin:12px 14px 14px;justify-content:flex-start;padding:0 14px;height:44px}
 .kt-btn.kt-drawer .kt-l{display:inline;font-size:13px}
-@media(min-width:1025px){.kt-btn.kt-drawer{display:none}}
 
 /* Mode ringkas (member): padding/jarak kecil, teks sedikit lebih kecil; isi dan fungsi tidak berubah */
 html[data-density="compact"] body.kamar-member-desktop-v2 .split-main{zoom:.94}
@@ -29,3 +28,7 @@ html[data-density="compact"] body.kamar-member-desktop-v2 :is(.split-main,.kd-fa
 html[data-density="compact"] body.kamar-member-desktop-v2 :is(h1){font-size:clamp(22px,4.2vw,30px) !important;line-height:1.15 !important}
 html[data-density="compact"] body.kamar-member-desktop-v2 :is(h2,h3){line-height:1.2 !important}
 html[data-density="compact"] body.kamar-member-desktop-v2 :is(.btn,.header-cta){min-height:38px}
+
+html[data-theme="light"] img,html[data-theme="light"] video,html[data-theme="light"] canvas{filter:invert(1) hue-rotate(180deg) !important}
+/* hero login: foto diganti gradasi gelap di mode terang (menghindari foto negatif) */
+html[data-theme="light"] .auth-hero{background:linear-gradient(135deg,#1c1608,#0a0a09) !important}

@@ -51,3 +51,9 @@ html body.ksig-body #ksigSearchInput::placeholder,html body.ksig-body .ksig-fiel
 html body.ksig-body .ksig-row-top{flex-wrap:wrap;min-width:0;gap:6px 8px}
 html body.ksig-body .ksig-row-top>*{min-width:0;max-width:100%}
 html body.ksig-body .ksig-qf-seg,html body.ksig-body .ksig-qf-grp{max-width:100%;min-width:0}
+/* Timeframe 390: tombol membungkus, tidak keluar kontainer */
+html body.ksig-body .ksig-qf-seg{flex-wrap:wrap !important;width:100%;box-sizing:border-box}
+@media(max-width:640px){
+ html body.ksig-body .ksig-qf-seg .ksig-qf-opt{padding:6px 9px;min-width:0;flex:1 1 auto;text-align:center}
+ html body.ksig-body .ksig-qf{box-sizing:border-box;max-width:100%}
+}

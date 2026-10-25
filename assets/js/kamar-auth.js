@@ -148,6 +148,16 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
     if(/is invalid$/i.test(m) && /email/i.test(m)) return 'Format email tidak valid. Coba pakai alamat email lain.';
     return m;
   }
+  async function directPasswordLogin(cc,email,password){
+    var r = await timeout(fetch(cc.url.replace(/\/+$/,'')+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':cc.key,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password})}),15000);
+    var j = await r.json().catch(function(){return {};});
+    if(!r.ok || !j.access_token){ var err = new Error(j.error_description || j.msg || j.message || 'Login gagal. Silakan coba lagi.'); err.status = r.status; err.code = j.error_code || j.code; throw err; }
+    try{
+      var ref = (new URL(cc.url)).hostname.split('.')[0];
+      localStorage.setItem('sb-'+ref+'-auth-token',JSON.stringify({access_token:j.access_token,token_type:j.token_type||'bearer',expires_in:j.expires_in,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),refresh_token:j.refresh_token,user:j.user}));
+    }catch(e){}
+    return {data:{user:j.user,session:j},error:null};
+  }
   async function doLogin(form,requestedRole,opts){
     opts = opts || {};
     var email = (val(form,'email') || val(form,'loginEmail')).toLowerCase();
@@ -161,7 +171,14 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
       var cc = cfg();
       if(!c || !cc.url || !cc.key) throw new Error(configError());
 
-      var res = await timeout(c.auth.signInWithPassword({email:email,password:password}),15000);
+      var res;
+      try{ res = await timeout(c.auth.signInWithPassword({email:email,password:password}),8000); }
+      catch(te){
+        // Klien auth kadang menggantung (iOS/WebKit, sesi lama). Login langsung ke endpoint token,
+        // simpan sesi dengan format yang sama, lalu lanjut seperti biasa.
+        if(!/koneksi habis/i.test(String(te&&te.message))) throw te;
+        res = await directPasswordLogin(cc,email,password);
+      }
       if(res.error) throw res.error;
       if(!res.data || !res.data.user) throw new Error('Login gagal. Silakan coba lagi.');
       try{

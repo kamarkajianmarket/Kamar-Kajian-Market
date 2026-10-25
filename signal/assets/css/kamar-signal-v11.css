@@ -1,0 +1,32 @@
+/* Kamar Signal v11: kontras AA, simetri, empty state gelap. Dimuat paling akhir. */
+html body.ksig-body .ksig-search input{color:#f4f6fb !important;-webkit-text-fill-color:#f4f6fb !important;caret-color:#e8c777;font-size:15px}
+html body.ksig-body .ksig-search input::placeholder{color:#9aa4b5 !important;opacity:1 !important;font-size:13.5px}
+/* empty state: gelap-emas, bukan krem */
+html body.ksig-body .ksig-empty{background:#0d0f14 !important;color:#b4bdcc !important;border:1px dashed rgba(232,199,119,.28) !important;box-shadow:none !important}
+/* panduan */
+html body.ksig-body .ksig-guide-desc{color:#b4bdcc !important}
+html body.ksig-body .ksig-guide-title{color:#f4efe0 !important}
+html body.ksig-body .ksig-guide-cta{color:#e8c777 !important}
+html body.ksig-body .ksig-guide-card .ksig-guide-cta:only-child{color:#e8c777 !important}
+html body.ksig-body .ksig-minifooter{color:#9aa4b5 !important}
+/* daftar: penanda belum dibaca / tandai semua */
+html body.ksig-body .ksig-mark-all-btn{color:#f2d88a !important}
+html body.ksig-body [class*="ksig-unread-count"],html body.ksig-body .ksig-list-meta span{color:#b4bdcc !important}
+html body.ksig-body .ksig-qf-lab{color:#e8c777 !important}
+/* pil koneksi: tidak terpotong */
+html body.ksig-body .ksig-live{max-width:none !important;white-space:nowrap}
+html body.ksig-body .ksig-live .ksig-live-label{overflow:visible !important;text-overflow:clip !important;max-width:none !important}
+/* Signal Overview: kartu ganjil terakhir selebar penuh di HP/iPad */
+@media (max-width:760px){
+  html body.ksig-body .ksig-grid > .ksig-card:last-child:nth-child(odd){grid-column:1 / -1}
+}
+/* filter arah/periode: grup membungkus penuh, chip tidak terpotong */
+html body.ksig-body .ksig-qf-opt{white-space:nowrap}
+html body.ksig-body .ksig-qf-seg{max-width:100%}
+html body.ksig-body .ksig-qf{flex-wrap:wrap !important;overflow:visible !important}
+@media (max-width:640px){
+  html body.ksig-body .ksig-qf-grp{flex:1 1 100% !important}
+  html body.ksig-body .ksig-qf-seg{display:flex}
+  html body.ksig-body .ksig-qf-seg .ksig-qf-opt{flex:1 1 auto}
+}
+html body.ksig-body .ksig-guide-grid > .ksig-guide-card:first-child .ksig-guide-cta{color:#9aa4b5 !important}

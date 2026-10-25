@@ -247,6 +247,7 @@
   }
 
   var TODO_LABELS = {
+    edu_registration: 'Pendaftaran Edukasi Gratis',
     new_registration: 'Pendaftaran Baru',
     new_payment: 'Pembayaran Baru',
     renewal_request: 'Perpanjangan',
@@ -415,6 +416,23 @@ async function actionProfileChange(todo, approve){
   notifyMemberForTodo(todo, approve?'Perpanjangan Fasilitas Disetujui':'Perpanjangan Fasilitas Ditolak', approve?'Pengajuan perpanjangan fasilitas Anda sudah disetujui admin dan aksesnya sudah diperpanjang.':'Pengajuan perpanjangan fasilitas Anda ditolak admin. Silakan hubungi admin untuk info lebih lanjut.', { link:'member-renewal.html', category:'facility' });
   toast(approve?'Perpanjangan disetujui, akses fasilitas diperpanjang.':'Pengajuan perpanjangan ditolak.');
 }
+async function actionEduRegistration(todo, approve){
+  var payload = todo.action_payload || {};
+  if(!payload.registration_id) throw new Error('ID pendaftaran tidak ada di tugas ini. Buka menu Kamar Edukasi Gratis.');
+  var note = null;
+  if(approve){
+    if(!window.confirm('Setujui pendaftaran ini? Akses Kamar Edukasi aktif (tanpa pembayaran) dan email welcome dikirim.')){ throw new Error('Dibatalkan.'); }
+  } else {
+    note = window.prompt('Alasan penolakan (opsional, dilihat member):', '');
+    if(note === null){ throw new Error('Dibatalkan.'); }
+  }
+  var c = await ready();
+  if(!c) throw new Error('Supabase client tidak terbaca.');
+  var res = await c.rpc('admin_edu_review', { p_id: payload.registration_id, p_action: approve ? 'approve' : 'reject', p_note: note || null });
+  if(res.error) throw res.error;
+  var d = res.data || {};
+  toast(d.message || (approve ? 'Pendaftar disetujui.' : 'Pendaftaran ditolak.'));
+}
 async function actionTrialRequest(todo, approve){
   var payload = todo.action_payload || {};
   var trialId = payload.trial_id;
@@ -479,7 +497,9 @@ function todoCard(todo){
     // field_label/old_value/new_value yang siap ditampilkan via openReviewModal().
     var reviewBtn = '<button class="btn mini secondary" type="button" data-todo-action="review" data-todo-id="'+esc(todo.id)+'">Tinjau</button> ';
     var actionsHtml;
-    if(todo.todo_type === 'new_registration'){
+    if(todo.todo_type === 'edu_registration'){
+      actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="approve_edu" data-todo-id="'+esc(todo.id)+'">Setujui</button> <button class="btn mini secondary" type="button" data-todo-action="reject_edu" data-todo-id="'+esc(todo.id)+'">Tolak</button> <button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
+    } else if(todo.todo_type === 'new_registration'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
       actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action="confirm_payment" data-todo-id="'+esc(todo.id)+'">Verifikasi</button> <button class="btn mini secondary" type="button" data-todo-action="reject_payment" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
@@ -594,6 +614,9 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
     } else if(todo.todo_type === 'facility_renewal_request'){ actions += ' <button class="btn mini secondary" type="button" data-todo-action="revise_generic" data-todo-id="'+esc(todo.id)+'">Kembalikan untuk Revisi</button>';
       actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_renewal" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
       actions += ' <button class="btn mini" type="button" data-todo-action="approve_renewal" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
+    } else if(todo.todo_type === 'edu_registration'){
+      actions += ' <button class="btn mini secondary" type="button" data-todo-action="reject_edu" data-todo-id="'+esc(todo.id)+'">Tolak</button>';
+      actions += ' <button class="btn mini" type="button" data-todo-action="approve_edu" data-todo-id="'+esc(todo.id)+'">Setujui</button>';
     } else if(todo.todo_type === 'new_registration'){
       actions += ' <button class="btn mini" type="button" data-todo-action="activate" data-todo-id="'+esc(todo.id)+'">Aktivasi</button>';
     } else if(todo.todo_type === 'new_payment' || todo.todo_type === 'upgrade_request' || todo.todo_type === 'renewal_request'){
@@ -702,6 +725,8 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
       else if(action === 'revise_generic') await actionGenericRevise(todo);
       else if(action === 'approve_renewal') await actionFacilityRenewal(todo, true);
       else if(action === 'reject_renewal') await actionFacilityRenewal(todo, false);
+      else if(action === 'approve_edu') await actionEduRegistration(todo, true);
+      else if(action === 'reject_edu') await actionEduRegistration(todo, false);
       else if(action === 'approve_trial') await actionTrialRequest(todo, true);
       else if(action === 'reject_trial') await actionTrialRequest(todo, false);
       else if(action === 'dismiss') await actionDismiss(todo);

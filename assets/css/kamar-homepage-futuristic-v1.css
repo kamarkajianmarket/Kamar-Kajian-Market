@@ -13,11 +13,11 @@ html body.public-home .facility-featured-badge,html body.public-home .kamar-free
 html body.public-home .kamar-free-mentoring i{animation:none !important}
 /* facility grid: 5 in a row on wide screens, 3+2 on tablet, 2 cols (last full) on phone; aligned content */
 html body.public-home .facility-grid.modern-facilities.facility-selector-v2{display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:16px !important}
-html body.public-home .facility-selector-v2 .facility-card{width:auto !important;max-width:none !important;min-width:0;position:relative;display:flex !important;flex-direction:column;align-items:flex-start;overflow:hidden !important;background:var(--hf-surface) !important;min-height:0 !important}
+html body.public-home .facility-selector-v2 .facility-card{width:auto !important;max-width:none !important;min-width:0;position:relative;display:flex !important;flex-direction:column;align-items:flex-start;overflow:visible !important;background:var(--hf-surface) !important;min-height:0 !important}
 html body.public-home .facility-selector-v2 .facility-card h3{margin-top:12px;min-height:1.3em}
 html body.public-home .facility-selector-v2 .facility-card p{flex:1 1 auto;color:var(--hf-muted) !important}
 html body.public-home .facility-selector-v2 .facility-access-badge{margin-top:14px !important;align-self:flex-start}
-html body.public-home .facility-selector-v2 .kamar-hot-badge,html body.public-home .facility-selector-v2 .facility-featured-badge,html body.public-home .facility-selector-v2 .kamar-free-mentoring{position:absolute !important;top:12px !important;right:12px !important;left:auto !important;bottom:auto !important;margin:0 !important;box-shadow:none !important;outline:0 !important;white-space:nowrap}
+html body.public-home .facility-selector-v2 .kamar-hot-badge,html body.public-home .facility-selector-v2 .facility-featured-badge,html body.public-home .facility-selector-v2 .kamar-free-mentoring{position:absolute !important;top:-11px !important;right:14px !important;z-index:3;left:auto !important;bottom:auto !important;margin:0 !important;box-shadow:none !important;outline:0 !important;white-space:nowrap}
 html body.public-home .facility-selector-v2 .facility-card::before{box-shadow:none !important}
 @media (max-width:1180px){
   html body.public-home .facility-grid.modern-facilities.facility-selector-v2{grid-template-columns:repeat(6,minmax(0,1fr)) !important}
@@ -44,3 +44,40 @@ html body.public-home #bukti-signal .bs-cta + span{text-align:center}
   html body.public-home .site-header .header-actions,html body.public-home .site-header nav + div{display:flex !important;flex-direction:row !important;gap:8px !important;width:100%}
   html body.public-home .site-header a.btn,html body.public-home .site-header .header-cta{flex:1 1 0;min-width:0;padding:9px 8px !important;font-size:12.5px !important;text-align:center;white-space:nowrap}
 }
+
+/* grid: clip only sideways (glow pseudo-elements), keep badges straddling the top border */
+html body.public-home .facility-grid.modern-facilities.facility-selector-v2{overflow-x:clip;overflow-y:visible;padding-top:14px !important}
+/* card descriptions: always show full text */
+html body.public-home .facility-selector-v2 .facility-card p{display:block !important;-webkit-line-clamp:unset !important;line-clamp:unset !important;-webkit-box-orient:initial !important;overflow:visible !important;max-height:none !important;text-overflow:clip !important;height:auto !important}
+/* affiliate reward number: always fits one line */
+html body.public-home #affiliate-kamar .affiliate-commission{container-type:inline-size;overflow:visible !important}
+html body.public-home #affiliate-kamar .affiliate-commission strong{display:block;max-width:100%;white-space:nowrap;text-align:center;padding:0 .06em;font-size:clamp(30px,9.4vw,44px) !important}
+@media (min-width:561px){html body.public-home #affiliate-kamar .affiliate-commission strong{font-size:clamp(36px,4.6vw,60px) !important}}
+@supports (font-size:1cqw){html body.public-home #affiliate-kamar .affiliate-commission strong{font-size:min(11.5cqw,72px) !important}}
+html body.public-home #affiliate-kamar .private-detail-toggle{display:inline-flex !important;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px !important;border-radius:999px !important;border:1px solid var(--hf-line) !important;background:rgba(230,195,106,.08) !important;color:var(--hf-gold) !important;font-weight:700;white-space:nowrap}
+
+/* ===== audit penuh: kemitraan, traktir, jelajahi ===== */
+html body.public-home .kamar-badge{background:rgba(230,195,106,.08) !important;color:var(--hf-gold) !important;border:1px solid var(--hf-line) !important;box-shadow:none !important}
+html body.public-home #affiliate-kamar .section-heading p{color:var(--hf-muted) !important}
+html body.public-home #affiliate-kamar .affiliate-program-grid{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:20px !important;align-items:stretch;max-width:1080px;margin-left:auto !important;margin-right:auto !important}
+html body.public-home #affiliate-kamar .affiliate-program-grid > *{width:auto !important;max-width:none !important;min-width:0;height:auto !important;max-height:none !important}
+@media (max-width:900px){html body.public-home #affiliate-kamar .affiliate-program-grid{grid-template-columns:1fr !important}}
+html body.public-home .traktir-card .traktir-denom-row,html body.public-home .traktir-card p,html body.public-home .traktir-card small{color:var(--hf-muted) !important}
+/* Jelajahi Kamar: 3 + 2 simetris, teks terbaca */
+html body.public-home .utility-grid{display:grid !important;grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:16px !important}
+html body.public-home .utility-grid > .utility-card{grid-column:span 2 !important;min-width:0}
+html body.public-home .utility-grid > .utility-card:nth-child(4){grid-column:2 / span 2 !important}
+html body.public-home .utility-grid > .utility-card:nth-child(5){grid-column:4 / span 2 !important}
+@media (max-width:720px){
+  html body.public-home .utility-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  html body.public-home .utility-grid > .utility-card,html body.public-home .utility-grid > .utility-card:nth-child(4),html body.public-home .utility-grid > .utility-card:nth-child(5){grid-column:auto !important}
+  html body.public-home .utility-grid > .utility-card:last-child:nth-child(odd){grid-column:1 / -1 !important}
+}
+html body.public-home .utility-card-desc{color:var(--hf-muted) !important}
+html body.public-home .utility-card .utility-card-cta{color:var(--hf-gold)}
+html body.public-home .utility-card.is-soon .utility-card-cta,html body.public-home .utility-card[aria-disabled="true"] .utility-card-cta{color:#9aa4b5}
+/* affiliate: seluruh detail selalu tampil utuh (tanpa pratinjau terpotong) */
+html body.public-home #affiliate-kamar .private-detail-collapse{max-height:none !important;height:auto !important;overflow:visible !important}
+html body.public-home #affiliate-kamar .private-detail-collapse::after{display:none !important}
+html body.public-home #affiliate-kamar #affiliateDetailToggle{display:none !important}
+html body.public-home #affiliate-kamar .affiliate-main-card{display:flex;flex-direction:column;gap:14px}

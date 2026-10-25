@@ -917,6 +917,7 @@ window.addEventListener('popstate', function(){ routeFromLocation(); renderApp()
     state.client.auth.signInWithPassword({ email:email, password:password }).then(function(res){
       if(res.error){ onDone(res.error.message || 'Login gagal.'); return; }
       state.user = res.data.user;
+      try{ window.KamarSessionFinal28 && window.KamarSessionFinal28.bridge(); }catch(e){}
       onDone(null);
       renderBoot('Login berhasil, membuka Kamar Signal…');
       loadProfileAndAccess();
@@ -929,6 +930,7 @@ window.addEventListener('popstate', function(){ routeFromLocation(); renderApp()
   function doLogout(){
     stopRealtime();
     state.client.auth.signOut().then(function(){
+      try{ window.KamarSessionFinal28 && window.KamarSessionFinal28.clearLocal(); }catch(e){}
       state.user = null; state.profile = null; state.access = null; state.approved = false;
       navigate(ROOT_PATH, true);
     });

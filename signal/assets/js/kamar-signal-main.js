@@ -119,7 +119,7 @@ Prinsip (jangan dilanggar, lihat master prompt user):
     function ksigBackNavHtml(){
     if (isStandaloneMode()) return '';
     return '<div class="ksig-backnav">' +
-        '<a class="ksig-brandmark" href="/index.html"><img src="/signal/assets/icons/kamar-signal-icon-192-v4.png" alt="" width="34" height="34"><span>KAMAR<b>SIGNAL</b></span></a>' +
+        '<a class="ksig-brandmark" href="/signal/" aria-label="Kamar Signal (muat ulang dashboard)"><img src="/signal/assets/icons/kamar-signal-icon-192-v4.png" alt="" width="34" height="34"><span>KAMAR<b>SIGNAL</b></span></a>' +
         '<nav class="ksig-topnav">' +
         '<a class="ksig-btn ksig-backnav-btn" href="/dashboard.html"><svg viewBox="0 0 24 24" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d="M15 18l-6-6 6-6"/></svg><span>Dashboard</span></a>' +
         '<a class="ksig-btn ksig-backnav-btn primary" href="/index.html"><svg viewBox="0 0 24 24" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg><span>Beranda</span></a>' +

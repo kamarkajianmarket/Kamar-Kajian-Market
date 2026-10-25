@@ -81,3 +81,5 @@ html body.public-home #affiliate-kamar .private-detail-collapse{max-height:none 
 html body.public-home #affiliate-kamar .private-detail-collapse::after{display:none !important}
 html body.public-home #affiliate-kamar #affiliateDetailToggle{display:none !important}
 html body.public-home #affiliate-kamar .affiliate-main-card{display:flex;flex-direction:column;gap:14px}
+/* target sentuh >= 40px di HP/iPad */
+body.public-home .ks-more,body.public-home .ks-x{min-height:40px;min-width:40px;display:inline-flex;align-items:center;justify-content:center}

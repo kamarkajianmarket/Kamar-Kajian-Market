@@ -52,7 +52,7 @@
     '</div>'+
     '<div class="bs-chart"><div class="bs-k" style="margin-bottom:10px">Kurva akumulasi pips harian</div>'+spark(d.series)+'</div>'+
     '<div class="bs-note"><b>DISCLAIMER</b>Performa historis dicatat otomatis oleh sistem dan bukan jaminan performa di masa depan. Trading mengandung risiko; gunakan sebagai bahan kajian, bukan ajakan membeli atau menjual.</div>'+
-    '<div class="bs-free"><b>Signal Gratis 2x Sehari</b><span>Member terdaftar mendapat signal gratis dua kali sehari langsung di dashboard member.</span></div>'+
+    '<div class="bs-free"><b>Bonus Member Terdaftar</b><span>Dapatkan 2 signal pilihan setiap hari langsung di dashboard member.</span></div>'+
     '<a class="bs-cta" id="bsFreeCta" href="/register.html"><span class="bs-cta-t">Daftar Sekarang</span> <span class="bs-cta-b" style="margin-left:10px;padding:3px 10px;border-radius:999px;background:#2fe6a4;color:#04170f;font-size:11px;letter-spacing:.14em;font-weight:900">GRATIS</span></a><span style="display:block;margin-top:10px;font-size:12.5px;color:#a9b3c4">Gratis, tanpa biaya langganan. Signal bersifat edukatif dan bukan jaminan hasil.</span></div>';
     return sec;
   }

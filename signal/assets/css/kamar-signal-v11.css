@@ -30,3 +30,10 @@ html body.ksig-body .ksig-qf{flex-wrap:wrap !important;overflow:visible !importa
   html body.ksig-body .ksig-qf-seg .ksig-qf-opt{flex:1 1 auto}
 }
 html body.ksig-body .ksig-guide-grid > .ksig-guide-card:first-child .ksig-guide-cta{color:#9aa4b5 !important}
+
+/* LIVE + Terakhir Diperbarui: pojok kanan atas card Performa Keseluruhan (>760px, dipindah via fx.js place()) */
+html body.ksig-body .ksig-perf>.ksig-header-meta{position:absolute !important;top:16px;right:20px;width:auto !important;flex-wrap:nowrap;gap:10px;justify-content:flex-end;z-index:2}
+html body.ksig-body .ksig-perf>.ksig-header-meta .ksig-header-updated{white-space:nowrap;font-variant-numeric:tabular-nums}
+html body.ksig-body .ksig-perf>.ksig-header-meta .ksig-live{height:30px}
+html body.ksig-body .ksig-perf:has(>.ksig-header-meta){padding-top:68px !important}
+html body.ksig-body .ksig-perf>.ksig-header-meta{top:16px;right:22px}

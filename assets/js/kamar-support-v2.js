@@ -7,7 +7,7 @@
   }
   var root=document.documentElement, userOpened=false;
   document.addEventListener('click',function(e){
-    if(e.target && e.target.closest && e.target.closest('[data-kmr-action="chat"]')) {userOpened=true;window.__kmrUserOpened=true;try{window.Tawk_API.showWidget()}catch(x){}}
+    if(e.target && e.target.closest && e.target.closest('[data-kmr-action="chat"]')) {userOpened=true;window.__kmrUserOpened=true;window.__kmrOpenAt=Date.now();try{window.Tawk_API.showWidget()}catch(x){}}
   },true);
 
   var cb=document.createElement('button'); cb.type='button'; cb.className='kmr-chat-close'; cb.setAttribute('aria-label','Tutup chat');
@@ -68,8 +68,13 @@
 (function(){
   function isTawk(f){var t=(f.title||'').toLowerCase();return t.indexOf('widget chat')>-1||t.indexOf('chat widget')>-1||t.indexOf('tawk')>-1||(f.src||'').indexOf('tawk.to')>-1;}
   function sweep(){
-    if(window.__kmrUserOpened) return;
     var all=document.querySelectorAll('iframe');
+    if(window.__kmrUserOpened){
+      var big=false;
+      for(var k=0;k<all.length;k++){ if(!isTawk(all[k])) continue; var q=all[k].getBoundingClientRect(); if(q.width>=280&&q.height>=300) big=true; }
+      if(big||Date.now()-(window.__kmrOpenAt||0)<6000) return;
+      window.__kmrUserOpened=false; try{window.Tawk_API.hideWidget()}catch(e){}
+    }
     for(var i=0;i<all.length;i++){
       var f=all[i]; if(!isTawk(f)) continue;
       var r=f.getBoundingClientRect();

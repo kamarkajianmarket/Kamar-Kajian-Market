@@ -13,7 +13,26 @@
   function isAdmin(s){var r=roleText(s);return !!s&&(/admin|internal|owner|superadmin|staff|team/.test(r)||norm(emailOf(s))==='kamarkajianmarket@gmail.com'||norm(s&&s.name)==='kamarkajianmarket'||norm(s&&s.fullName)==='kamarkajianmarket');}
   function isAffiliate(s){var r=roleText(s);return !!s&&/affiliate|affiliator|referral/.test(r);}
   function isMember(s){return !!s&&!isAdmin(s)&&!isAffiliate(s);}
-  function bridge(){var _pa=get('kamarAdminSession');var _pm=get('kamarMemberSession');if(_pa&&_pm){var _pae=norm(emailOf(_pa));var _pme=norm(emailOf(_pm));if(!(ALL_ROLE_EMAILS.indexOf(_pae)>=0&&_pae===_pme)){del('kamarMemberSession');del('KAMAR_MEMBER_SESSION');del('kamarCurrentMember');del('kamarAuthMember');}}
+  // Login lewat Kamar Signal hanya membuat sesi auth (sb-*-auth-token), bukan sesi halaman member.
+  // Bangun sesi member dari token auth yang masih valid agar dashboard tidak meminta login ulang.
+  function fromAuthToken(){
+    try{
+      if(get('kamarMemberSession')||get('kamarAdminSession')||get('kamarAffiliateSession')) return;
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i); if(!/^sb-.+-auth-token$/.test(k)) continue;
+        var t=get(k); var u=t&&t.user; if(!u||!u.email||!t.refresh_token) continue;
+        var meta=Object.assign({},u.user_metadata||{},u.app_metadata||{});
+        var email=norm(u.email); var name=meta.full_name||meta.name||email;
+        var base=Object.assign({},meta,{id:u.id,user_id:u.id,email:email,fullName:name,full_name:name,loginAt:new Date().toISOString(),lastActivity:Date.now(),source:'supabase_auth_bridge'});
+        var m=Object.assign({},base,{role:'member'});
+        if(ALL_ROLE_EMAILS.indexOf(email)>=0){ var a=Object.assign({},base,{role:'admin'}); set('kamarAdminSession',a);set('KAMAR_ADMIN_SESSION',a);set('kamarCurrentAdmin',a); }
+        set('kamarMemberSession',m);set('KAMAR_MEMBER_SESSION',m);set('kamarCurrentMember',m);set('kamarCurrentUser',m);
+        return;
+      }
+    }catch(e){}
+  }
+  function bridge(){
+    fromAuthToken();var _pa=get('kamarAdminSession');var _pm=get('kamarMemberSession');if(_pa&&_pm){var _pae=norm(emailOf(_pa));var _pme=norm(emailOf(_pm));if(!(ALL_ROLE_EMAILS.indexOf(_pae)>=0&&_pae===_pme)){del('kamarMemberSession');del('KAMAR_MEMBER_SESSION');del('kamarCurrentMember');del('kamarAuthMember');}}
     var a=get('kamarAdminSession');
     var m=get('kamarMemberSession');
     var af=get('kamarAffiliateSession');
@@ -30,7 +49,7 @@
   function logout(){
     ['kamarAdminSession','KAMAR_ADMIN_SESSION','kamarCurrentAdmin','kamarAuthAdmin','kamarMemberSession','KAMAR_MEMBER_SESSION','kamarCurrentMember','kamarAuthMember','kamarAffiliateSession','KAMAR_AFFILIATE_SESSION','kamarCurrentAffiliate','kamarAuthAffiliate','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(del);
     var done=false;
-    function go(){if(done)return;done=true;location.href='index.html?v='+VERSION;}
+    function go(){if(done)return;done=true;try{ Object.keys(localStorage).forEach(function(k){ if(/^sb-.+-auth-token$/.test(k)) localStorage.removeItem(k); }); }catch(e){}location.href='index.html?v='+VERSION;}
     try{
       if(window.KamarSupabase && window.KamarSupabase.ready){
         window.KamarSupabase.ready().then(function(client){

@@ -629,12 +629,12 @@ function esc(s){
     try{
       var d = new Date(iso);
       var o = Object.assign({ timeZone:'Asia/Jakarta', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }, opts||{});
-      return new Intl.DateTimeFormat('id-ID', o).format(d) + ' WIB';
+      return new Intl.DateTimeFormat('id-ID', o).format(d).replace(/(\d{2})\.(\d{2})/g,'$1:$2') + ' WIB';
     }catch(e){ return iso; }
   }
   function fmtTimeShort(iso){
     if(!iso) return '--:--';
-    try{ return new Intl.DateTimeFormat('id-ID',{ timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit' }).format(new Date(iso)); }
+    try{ return new Intl.DateTimeFormat('id-ID',{ timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit' }).format(new Date(iso)).replace('.',':'); }
     catch(e){ return '--:--'; }
   }
   function fmtNum(n, d){

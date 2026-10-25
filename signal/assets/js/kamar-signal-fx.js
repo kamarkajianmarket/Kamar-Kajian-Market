@@ -100,7 +100,15 @@
     fold('ksig-access-card','Akses',function(t){var m=t.match(/(\d+)\s*HARI\s*TERSISA/i);return m?m[1]+' hari tersisa':'Aktif';});
     fold('ksig-install-card','Kamar Signal App',function(){return 'Install';});
   }
-  var q=0; function sched(){ if(q) return; q=requestAnimationFrame(function(){q=0;run();}); }
+  function place(){
+    var meta=document.querySelector('.ksig-header-meta'),perf=document.querySelector('.ksig-perf'),row=document.querySelector('.ksig-header-row');
+    if(!meta||!perf||!row) return;
+    var wide=window.innerWidth>760;
+    if(wide&&meta.parentNode!==perf) perf.insertBefore(meta,perf.firstChild);
+    else if(!wide&&meta.parentNode===perf) row.appendChild(meta);
+  }
+  var q=0; function sched(){ if(q) return; q=requestAnimationFrame(function(){q=0;run();place();}); }
+  window.addEventListener('resize',sched);
   function start(){ var root=document.getElementById('ksigRoot')||document.body; new MutationObserver(sched).observe(root,{childList:true,subtree:true}); sched(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();

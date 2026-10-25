@@ -46,8 +46,12 @@
       if(!get('kamarAffiliateSession')&&isAffiliate(u)) set('kamarAffiliateSession',u);
     }
   }
-  function logout(){
+  function clearLocal(){
     ['kamarAdminSession','KAMAR_ADMIN_SESSION','kamarCurrentAdmin','kamarAuthAdmin','kamarMemberSession','KAMAR_MEMBER_SESSION','kamarCurrentMember','kamarAuthMember','kamarAffiliateSession','KAMAR_AFFILIATE_SESSION','kamarCurrentAffiliate','kamarAuthAffiliate','kamarSession','kamarAuthSession','kamarCurrentUser'].forEach(del);
+    try{ Object.keys(localStorage).forEach(function(k){ if(/^sb-.+-auth-token$/.test(k)) localStorage.removeItem(k); }); }catch(e){}
+  }
+  function logout(){
+    clearLocal();
     var done=false;
     function go(){if(done)return;done=true;try{ Object.keys(localStorage).forEach(function(k){ if(/^sb-.+-auth-token$/.test(k)) localStorage.removeItem(k); }); }catch(e){}location.href='index.html?v='+VERSION;}
     try{
@@ -72,5 +76,5 @@
   }
   document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('[data-kamar-logout],a[href*="logout=1"]'); if(!t)return; e.preventDefault(); e.stopImmediatePropagation(); logout();},true);
   guard();
-  window.KamarSessionFinal28={bridge:bridge,logout:logout,getAdmin:function(){bridge();return get('kamarAdminSession')},getMember:function(){bridge();return get('kamarMemberSession')},getAffiliate:function(){bridge();return get('kamarAffiliateSession')}};
+  window.KamarSessionFinal28={bridge:bridge,clearLocal:clearLocal,logout:logout,getAdmin:function(){bridge();return get('kamarAdminSession')},getMember:function(){bridge();return get('kamarMemberSession')},getAffiliate:function(){bridge();return get('kamarAffiliateSession')}};
 })();

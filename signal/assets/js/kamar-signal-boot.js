@@ -102,6 +102,7 @@
           return;
         }
         dbg('login berhasil');
+        try{ window.KamarSessionFinal28 && window.KamarSessionFinal28.bridge(); }catch(e){}
         renderBoot('Login berhasil, membuka Kamar Signal…');
         loadMainApp();
       }).catch(function(err){

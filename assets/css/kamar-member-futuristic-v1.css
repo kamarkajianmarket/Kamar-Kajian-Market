@@ -696,3 +696,29 @@ html body.kamar-member-desktop-v2 .kc-grp[data-g="robot"] .kc-sub{white-space:no
 @media (min-width:641px) and (max-width:1100px){
   html body.kamar-member-desktop-v2 .kc-card .kc-price{font-size:clamp(17px,2.3vw,22px) !important}
 }
+
+/* ===== v9: Signal Gratis Hari Ini — aksen arah BUY (hijau) / SELL (merah) ===== */
+html body.kamar-member-desktop-v2 .kamar-sigfree-card{--sg:230,195,106;--sgc:#e6c36a;position:relative;overflow:hidden;padding:18px 18px 16px 22px !important;border-radius:18px !important;background:linear-gradient(160deg,rgba(var(--sg),.09),#0d0f14 55%) !important;border:1px solid rgba(var(--sg),.28) !important;box-shadow:0 0 28px rgba(var(--sg),.10),inset 0 1px 0 rgba(255,255,255,.04) !important;color:#e8ecf3}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card.dir-sell{--sg:255,92,92;--sgc:#ff6b6b}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card.dir-buy{--sg:52,211,153;--sgc:#34d399}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--sgc),rgba(var(--sg),.15));box-shadow:0 0 16px rgba(var(--sg),.6)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card::after{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(var(--sg),.18),transparent 65%);pointer-events:none}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .pair{font-size:clamp(17px,4.4vw,21px);font-weight:800;color:#f4f6fb;margin-bottom:6px}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .pair .dir-word{color:var(--sgc);text-shadow:0 0 14px rgba(var(--sg),.55);letter-spacing:.04em;padding:1px 8px;margin-left:2px;border-radius:8px;background:rgba(var(--sg),.14);border:1px solid rgba(var(--sg),.4)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .meta{color:#b4bdcc;opacity:1}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .status-badge{padding:4px 11px;font-size:11px;border:1px solid transparent}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .status-badge.is-fresh{background:rgba(96,165,250,.16);color:#bcd8ff;border-color:rgba(96,165,250,.4)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .status-badge.is-active{background:rgba(230,195,106,.16);color:#f2d88a;border-color:rgba(230,195,106,.4)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .status-badge.is-profit{background:rgba(52,211,153,.16);color:#8cf0c4;border-color:rgba(52,211,153,.4)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .status-badge.is-loss{background:rgba(255,92,92,.16);color:#ffb0b0;border-color:rgba(255,92,92,.4)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .progress{color:#d5dbe6}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .progress strong.pos{color:#4ade80}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .progress strong.neg{color:#ff8080}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels{display:grid !important;grid-template-columns:1fr !important;gap:8px !important}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 14px !important;border-radius:12px !important;background:rgba(5,6,10,.7) !important;border:1px solid rgba(255,255,255,.07);color:#f4f6fb;font-weight:700;font-variant-numeric:tabular-nums}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div strong{display:inline !important;margin:0 !important;opacity:1 !important;font-size:11px !important;letter-spacing:.14em;color:#e6c36a}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div:nth-child(2) strong{color:#4ade80 !important}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div:nth-child(3) strong{color:#ff8080 !important}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div:nth-child(2){border-left:3px solid rgba(52,211,153,.7)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div:nth-child(3){border-left:3px solid rgba(255,92,92,.7)}
+html body.kamar-member-desktop-v2 .kamar-sigfree-card .levels div:nth-child(1){border-left:3px solid rgba(230,195,106,.7)}

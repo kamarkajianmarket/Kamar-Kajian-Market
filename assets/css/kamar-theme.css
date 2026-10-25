@@ -21,3 +21,11 @@ html[data-theme="light"] ::selection{background:#1a1405;color:#f3d98d}
 .kt-btn.kt-drawer{display:flex;width:calc(100% - 28px);margin:12px 14px 14px;justify-content:flex-start;padding:0 14px;height:44px}
 .kt-btn.kt-drawer .kt-l{display:inline;font-size:13px}
 @media(min-width:1025px){.kt-btn.kt-drawer{display:none}}
+
+/* Mode ringkas (member): padding/jarak kecil, teks sedikit lebih kecil; isi dan fungsi tidak berubah */
+html[data-density="compact"] body.kamar-member-desktop-v2 .split-main{zoom:.94}
+html[data-density="compact"] body.kamar-member-desktop-v2 :is(.split-card,.kc-card,.kd-fac,.method-card,.facility-content-card,.kx-card,.kamar-sigfree-card,.kd-remind){padding:12px 14px !important;margin-top:0 !important;margin-bottom:0 !important}
+html[data-density="compact"] body.kamar-member-desktop-v2 :is(.split-main,.kd-facs,.kc-grp,.kc-grid,.stats-grid,.grid-3-signal,.facility-grid){gap:10px !important}
+html[data-density="compact"] body.kamar-member-desktop-v2 :is(h1){font-size:clamp(22px,4.2vw,30px) !important;line-height:1.15 !important}
+html[data-density="compact"] body.kamar-member-desktop-v2 :is(h2,h3){line-height:1.2 !important}
+html[data-density="compact"] body.kamar-member-desktop-v2 :is(.btn,.header-cta){min-height:38px}

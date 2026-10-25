@@ -90,14 +90,14 @@
       if(!p) return;
       var a=(await c.from('member_access').select('*').eq('profile_id',p.id).maybeSingle()).data||{};
       var nm=document.getElementById('kd2Name'); if(nm) nm.textContent='Halo, '+(p.full_name||'Kawan Kamar');
-      var now=Date.now(),act=0,chips='';
+      var now=Date.now(),act=0,chips='',soon=[];
       var hid=[];try{hid=((await c.from('dashboard_settings').select('key').eq('is_active',false)).data||[]).map(function(x){return x.key})}catch(e){}
       var html=FACS.filter(function(f){return hid.indexOf(f.k)<0}).map(function(f){
         var on=!!a['access_'+f.k], ex=a['expires_'+f.k], st='';
         if(on){
           if(ex){var d=Math.ceil((new Date(ex).getTime()-now)/86400000);
             if(d<0){on=false;st='<b class="x">Berakhir</b> '+fmt(ex);}
-            else if(d<=7){st='<b class="w">Sisa '+d+' hari</b> · s.d. '+fmt(ex);}
+            else if(d<=7){st='<b class="w">Sisa '+d+' hari</b> · s.d. '+fmt(ex);soon.push({n:f.n,d:d});}
             else{st='<b>Aktif</b> · s.d. '+fmt(ex);}
           }else{st='<b>Aktif</b> · Selamanya';}
         } else {st='Belum aktif';}
@@ -107,6 +107,14 @@
         return '<a class="kd-fac'+(on?' on':'')+'" href="'+href+'"><span class="kd-ic"><svg viewBox="0 0 24 24">'+ICON[f.ic]+'</svg></span><span class="kd-fn">'+f.n+'</span><span class="kd-fs">'+st+'</span><span class="kd-fa">'+(on?'Buka →':(f.k==='materi_edukasi'?'Daftar Gratis':(f.k==='kamar_study'?'Aktifkan':'Beli Paket')))+'</span></a>';
       }).join('');
       var box=document.getElementById('kd2Facs'); if(box) box.innerHTML=html;
+      try{
+        var old=document.getElementById('kd2Remind'); if(old) old.remove();
+        if(soon.length&&box){
+          var rm=document.createElement('a'); rm.id='kd2Remind'; rm.className='kd-remind'; rm.href='member-renewal.html';
+          rm.innerHTML='<span class="kd-remind-ic" aria-hidden="true">!</span><span class="kd-remind-tx"><b>Akses segera berakhir</b><span>'+soon.map(function(x){return esc(x.n)+' ('+(x.d<=0?'hari ini':x.d+' hari')+')';}).join(' · ')+'</span></span><span class="kd-remind-go">Perpanjang →</span>';
+          var sec=document.getElementById('kd2Fac'); if(sec&&sec.parentNode) sec.parentNode.insertBefore(rm,sec);
+        }
+      }catch(e){}
       var chipsEl=document.getElementById('kd2Chips');
       if(chipsEl){
         chips='<span class="kd-chip">ID '+esc(p.member_id||'-')+'</span>';

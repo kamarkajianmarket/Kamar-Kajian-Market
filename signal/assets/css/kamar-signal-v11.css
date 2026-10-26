@@ -75,3 +75,14 @@ html body.ksig-body .ksig-spark-all path{stroke:#e8c777;filter:drop-shadow(0 0 4
 html body.ksig-body .ksig-spark-profit path{stroke:#5df0bb;filter:drop-shadow(0 0 4px rgba(47,230,164,.55))}
 html body.ksig-body .ksig-spark-loss path{stroke:#ff7482;filter:drop-shadow(0 0 4px rgba(255,92,110,.5))}
 @media(max-width:420px){html body.ksig-body .ksig-spark{width:42px;right:10px;top:28%}}
+
+/* Ringkasan Periode: label dan angka seragam, rata tengah, satu baris (HP/iPad) */
+html body.ksig-body .ksig-recap-summary-head{gap:10px!important;flex-wrap:nowrap!important;align-items:center!important}
+html body.ksig-body .ksig-recap-summary-head>span:first-child{white-space:nowrap!important;font-size:11px!important;letter-spacing:.14em!important}
+html body.ksig-body .ksig-recap-summary-pips{white-space:nowrap!important;font-size:clamp(18px,5.4vw,26px)!important;text-align:right!important;flex:0 0 auto!important}
+html body.ksig-body .ksig-recap-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+html body.ksig-body .ksig-recap-summary-item{align-items:center!important;justify-content:center!important;text-align:center!important;gap:6px!important;min-height:78px!important;padding:12px 6px!important}
+html body.ksig-body .ksig-recap-summary-val{font-size:22px!important;line-height:1.1!important;text-align:center!important;width:100%!important}
+html body.ksig-body .ksig-recap-summary-label{font-size:10px!important;letter-spacing:.08em!important;white-space:nowrap!important;text-align:center!important;width:100%!important}
+@media(max-width:440px){html body.ksig-body .ksig-recap-summary-label{font-size:9.5px!important;letter-spacing:.03em!important}html body.ksig-body .ksig-recap-summary-val{font-size:20px!important}}
+html[data-theme="light"] body.ksig-body .ksig-recap-summary-item:nth-child(5) .ksig-recap-summary-val{color:#ff9690!important}

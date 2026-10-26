@@ -32,3 +32,7 @@ html[data-density="compact"] body.kamar-member-desktop-v2 :is(.btn,.header-cta){
 html[data-theme="light"] img,html[data-theme="light"] video,html[data-theme="light"] canvas{filter:invert(1) hue-rotate(180deg) !important}
 /* hero login: foto diganti gradasi gelap di mode terang (menghindari foto negatif) */
 html[data-theme="light"] .auth-hero{background:linear-gradient(135deg,#1c1608,#0a0a09) !important}
+
+/* admin: ikon bel terlihat di mode Terang (warna pra-inversi dibuat terang agar jadi gelap) */
+html[data-theme="light"] #kamarNotifBtn29F,html[data-theme="light"] #kamarNotifBtn29F svg{color:#f3ead2!important}
+html[data-theme="light"] #kamarNotifBtn29F{border-color:rgba(232,199,119,.55)!important}

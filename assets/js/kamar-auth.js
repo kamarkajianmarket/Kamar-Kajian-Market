@@ -148,6 +148,15 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
     if(/is invalid$/i.test(m) && /email/i.test(m)) return 'Format email tidak valid. Coba pakai alamat email lain.';
     return m;
   }
+  // Log diagnostik ringan (tersimpan lokal, tanpa data pribadi) untuk menangkap penyebab timeout login.
+  function authDiag(stage,extra){
+    try{
+      var a=JSON.parse(localStorage.getItem('kamarAuthDiag')||'[]');
+      a.push({t:new Date().toISOString(),page:location.pathname,stage:stage,ua:/iPhone|iPad|Mac OS X.*Mobile/.test(navigator.userAgent)?'webkit-mobile':'other',online:navigator.onLine,extra:extra||''});
+      localStorage.setItem('kamarAuthDiag',JSON.stringify(a.slice(-20)));
+      if(window.console&&console.warn)console.warn('[kamar-auth]',stage,extra||'');
+    }catch(e){}
+  }
   async function directPasswordLogin(cc,email,password){
     var r = await timeout(fetch(cc.url.replace(/\/+$/,'')+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':cc.key,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password})}),15000);
     var j = await r.json().catch(function(){return {};});
@@ -177,7 +186,9 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
         // Klien auth kadang menggantung (iOS/WebKit, sesi lama). Login langsung ke endpoint token,
         // simpan sesi dengan format yang sama, lalu lanjut seperti biasa.
         if(!/koneksi habis/i.test(String(te&&te.message))) throw te;
+        authDiag('signIn-timeout-8s','fallback langsung');
         res = await directPasswordLogin(cc,email,password);
+        authDiag('fallback-ok');
       }
       if(res.error) throw res.error;
       if(!res.data || !res.data.user) throw new Error('Login gagal. Silakan coba lagi.');
@@ -190,7 +201,9 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
 
       var user = res.data.user;
       var baseMeta = Object.assign({}, user.user_metadata||{}, user.app_metadata||{});
+      var __t0=Date.now();
       var profile = await tryProfile(email);
+      if(Date.now()-__t0>3000) authDiag('profile-lambat',(Date.now()-__t0)+'ms');
       var admin = isOfficialAdmin(email, Object.assign({}, baseMeta, profile));
 
       var finalRole = requestedRole;
@@ -219,6 +232,7 @@ var ALL_ROLE_EMAILS = ['supermaster@akun.kamar'];
         location.href = finalRole==='admin' ? 'admin.html?v='+VERSION : finalRole==='affiliate' ? 'affiliate-dashboard.html?v='+VERSION : (window.__kamarNext && window.__kamarNext()) || 'dashboard.html?v='+VERSION;
       },300);
     }catch(e){
+      if(/koneksi habis/i.test(String(e&&e.message))) authDiag('login-timeout-akhir',String(e.message).slice(0,60));
       status(form,authMessage(e),false);
     }finally{
       processing(form,'',false);

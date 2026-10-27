@@ -844,7 +844,42 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
       + '.kamar-notif-item time{display:block;color:#d8cda9;font-size:11px;margin-top:6px;font-weight:800;text-transform:uppercase}'
       + '.kamar-notif-empty{padding:18px;text-align:center;color:#aaa393;font-size:13px}'
       + '.kamar-notif-mark{margin-top:8px;border:1px solid rgba(238,206,122,.28);background:rgba(244,223,144,.1);color:#f3d985;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;cursor:pointer}';
+    st.textContent += ''
+      + '.kamar-notif-item{cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s,border-color .2s}.kamar-notif-item:hover,.kamar-notif-item:focus-visible{background:rgba(232,199,119,.1);border-color:rgba(238,206,122,.45);outline:0}'
+      + '.kamar-notif-mark{min-height:36px}'
+      + '@media(max-width:640px){.kamar-notif-panel{position:fixed!important;left:12px!important;right:12px!important;top:76px!important;width:auto!important;max-height:calc(100vh - 170px)!important}}'
+      + '.todo-row.kamar-todo-focus{outline:2px solid #e8c777;outline-offset:2px;border-radius:14px;animation:kamarTodoPulse 1.1s ease-in-out 3}@keyframes kamarTodoPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,199,119,.0)}50%{box-shadow:0 0 0 8px rgba(232,199,119,.28)}}'
+      ;
     document.head.appendChild(st);
+  }
+  // Klik notifikasi: tandai dibaca, tutup panel, lalu arahkan ke kartu To Do terkait (tempat Verifikasi/Setujui/Tolak/Aktivasi).
+  function closeNotifPanel(){
+    notifState.open = false;
+    var p = qs('#kamarNotifPanel29F'); if(p) p.classList.remove('open');
+  }
+  function focusTodo(id, tries){
+    tries = tries || 0;
+    var list = qs('#adminTodoList');
+    var btn = list && list.querySelector('[data-todo-id="'+String(id).replace(/"/g,'')+'"]');
+    var row = btn && (btn.closest('.todo-row') || btn.parentElement);
+    if(!row){
+      if(tries < 25){ setTimeout(function(){ focusTodo(id, tries+1); }, 300); return; }
+      if(list){ list.scrollIntoView({behavior:'smooth', block:'start'}); if(typeof toast==='function') toast('Item ini sudah diproses atau tidak lagi menunggu.'); }
+      return;
+    }
+    row.scrollIntoView({behavior:'smooth', block:'center'});
+    row.classList.add('kamar-todo-focus');
+    setTimeout(function(){ row.classList.remove('kamar-todo-focus'); }, 4500);
+  }
+  function openNotif(id){
+    if(!id) return;
+    notifState.seenIds.add(String(id)); saveSeenIds(notifState.seenIds); updateNotifBadge();
+    closeNotifPanel();
+    if(qs('#adminTodoList')){ focusTodo(id); }
+    else { location.href = 'admin.html?todo='+encodeURIComponent(id)+'#adminTodoList'; }
+  }
+  function focusFromUrl(){
+    try{ var id = new URLSearchParams(location.search).get('todo'); if(id && qs('#adminTodoList')) focusTodo(id); }catch(e){}
   }
   function renderNotifPanel(){
     var panel = qs('#kamarNotifPanel29F');
@@ -856,17 +891,26 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
     panel.innerHTML = notifState.items.map(function(t){
       var payload = t.action_payload || {};
       var name = payload.full_name || '-';
-      var linkBase = NOTIF_LINK[t.todo_type] || 'admin.html?member=';
-      var href = linkBase + encodeURIComponent(t.profile_id || '');
-      return '<div class="kamar-notif-item">'
-        + '<a href="'+esc(href)+'" style="text-decoration:none;color:inherit">'
+      var tid = String(t.todo_id||t.id||'');
+      return '<div class="kamar-notif-item" role="link" tabindex="0" data-notif-open="'+esc(tid)+'" aria-label="Buka: '+esc(t.title||'Notifikasi')+'">'
         + '<strong>'+(NOTIF_ICON[t.todo_type]||String.fromCodePoint(128276))+' '+esc(t.title||'Notifikasi')+'</strong>'
         + '<small>'+esc(name)+' &middot; '+esc(t.description||'')+'</small>'
         + '<time>'+esc(fmtRelative(t.created_at))+'</time>'
-        + '</a>'
-        + '<button type="button" class="kamar-notif-mark" data-mark-todo="'+esc(t.todo_id||t.id||'')+'">Tandai Baca</button>'
+        + '<button type="button" class="kamar-notif-mark" data-mark-todo="'+esc(tid)+'">Tandai Baca</button>'
         + '</div>';
     }).join('');
+    if(!panel.getAttribute('data-nav-bound')){
+      panel.setAttribute('data-nav-bound','1');
+      var go = function(ev){
+        if(ev.target.closest && ev.target.closest('[data-mark-todo]')) return;
+        var it = ev.target.closest && ev.target.closest('[data-notif-open]');
+        if(!it) return;
+        if(ev.type==='keydown'){ if(ev.key!=='Enter' && ev.key!==' ') return; ev.preventDefault(); }
+        openNotif(it.getAttribute('data-notif-open'));
+      };
+      panel.addEventListener('click', go);
+      panel.addEventListener('keydown', go);
+    }
     panel.querySelectorAll('[data-mark-todo]').forEach(function(b){
       b.onclick = function(ev){
         ev.preventDefault();
@@ -963,6 +1007,6 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
       }
     }catch(e){}
   }
-  function initNotif(){ injectNotificationBell(); }
+  function initNotif(){ injectNotificationBell(); focusFromUrl(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initNotif); else initNotif();
 })();

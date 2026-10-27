@@ -1,7 +1,7 @@
 /* Badge jalur aktivasi (GRATIS / BERBAYAR) seragam di semua kartu fasilitas AKTIF pada dashboard member. */
 (function(){
 'use strict';
-var FREE={'kamar edukasi':1};
+var FREE={'kamar edukasi':1,'kamar signal':1};
 var COMPLETE_FREE={'kamar indikator':1,'kamar robot':1};
 var isComplete=false,ready=false;
 var css=document.createElement('style');

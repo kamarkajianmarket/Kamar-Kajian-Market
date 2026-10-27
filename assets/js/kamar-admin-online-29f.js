@@ -796,8 +796,28 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
   var NOTIF_POLL_MS = 30000;
   var NOTIF_SEEN_KEY = 'kamarAdminNotifSeenIds29F';
   function loadSeenIds(){ try{ var raw = localStorage.getItem(NOTIF_SEEN_KEY); var arr = raw ? JSON.parse(raw) : []; return new Set(Array.isArray(arr)?arr:[]); }catch(e){ return new Set(); } }
-  function saveSeenIds(set){ try{ localStorage.setItem(NOTIF_SEEN_KEY, JSON.stringify(Array.from(set))); }catch(e){} }
+  var seenSynced = new Set(), seenTimer = null;
+  function saveSeenIds(set){ try{ localStorage.setItem(NOTIF_SEEN_KEY, JSON.stringify(Array.from(set))); }catch(e){} clearTimeout(seenTimer); seenTimer = setTimeout(syncSeenToDb, 600); }
   var notifState = { items: [], open: false, channel: null, seenIds: loadSeenIds() };
+  // Status dibaca disimpan di tabel admin_todo_reads (per admin); localStorage hanya cache.
+  async function syncSeenToDb(){
+    try{
+      var c = await ready(); if(!c) return;
+      var ids = Array.from(notifState.seenIds).filter(function(id){ return !seenSynced.has(id) && /^[0-9a-f-]{36}$/i.test(id); });
+      if(!ids.length) return;
+      var res = await c.from('admin_todo_reads').upsert(ids.map(function(id){ return { todo_id: id }; }), { onConflict: 'user_id,todo_id', ignoreDuplicates: true });
+      if(!res.error) ids.forEach(function(id){ seenSynced.add(id); });
+    }catch(e){}
+  }
+  async function loadSeenFromDb(c, ids){
+    try{
+      if(!ids.length) return;
+      var res = await c.from('admin_todo_reads').select('todo_id').in('todo_id', ids);
+      if(res.error) return;
+      (res.data||[]).forEach(function(r){ var id = String(r.todo_id); notifState.seenIds.add(id); seenSynced.add(id); });
+      try{ localStorage.setItem(NOTIF_SEEN_KEY, JSON.stringify(Array.from(notifState.seenIds))); }catch(e){}
+    }catch(e){}
+  }
 
   function qs(s,r){ return (r||document).querySelector(s); }
   function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c;}); }
@@ -965,6 +985,8 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
         if(!payload.full_name && profiles[r.profile_id]) payload.full_name = profiles[r.profile_id].full_name;
         return Object.assign({}, r, { todo_id:r.id, action_payload: payload });
       });
+      await loadSeenFromDb(c, notifState.items.map(function(t){ return String(t.id); }));
+      syncSeenToDb();
       updateNotifBadge();
       renderNotifPanel();
     }catch(e){ /* silent, biar tidak ganggu halaman lain */ }

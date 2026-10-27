@@ -36,3 +36,19 @@ html[data-theme="light"] .auth-hero{background:linear-gradient(135deg,#1c1608,#0
 /* admin: ikon bel terlihat di mode Terang (warna pra-inversi dibuat terang agar jadi gelap) */
 html[data-theme="light"] #kamarNotifBtn29F,html[data-theme="light"] #kamarNotifBtn29F svg{color:#f3ead2!important}
 html[data-theme="light"] #kamarNotifBtn29F{border-color:rgba(232,199,119,.55)!important}
+
+/* ===== Anti-kedip (2026-10-28) =====
+   Penyebab: beberapa animasi masuk (kv4in/kFuturRise/kadIn) menimpa elemen yang sama, mulai dari opacity 0 + blur,
+   dan fill "both" menahan transform/filter sehingga hover dan transisi terlihat berkedip gelap.
+   Sekarang satu animasi lembut saja (tanpa blur, mulai opacity .4) dan tidak menahan keadaan akhir. */
+@keyframes kSoftIn{from{opacity:.4;transform:translateY(10px)}to{opacity:1;transform:none}}
+html body.kamar-member-desktop-v2 :is(.split-main > *,.kc-grp,.kc-card:not(.hot),.kc-warn,.kd-pagehero,.stat-card,.kamar-rc,.kamar-sec-title),
+html body.kamar-admin-desktop-v1 :is(.split-main > *,.ka-kpi,.split-card,.stat-card,.admin-click-card,.member-mini-card),
+html body .facility-panel-v2.active:not([hidden]){animation:kSoftIn .38s ease-out backwards !important;animation-timeline:auto !important;animation-range:normal !important}
+html body.kamar-member-desktop-v2 .kc-card.hot{animation:kv4spin 7s linear infinite,kSoftIn .38s ease-out backwards !important;animation-timeline:auto,auto !important;animation-range:normal,normal !important}
+html body.kamar-member-desktop-v2 .fkx-card{animation:kv4spin 10s linear infinite,kSoftIn .38s ease-out backwards !important;animation-timeline:auto,auto !important;animation-range:normal,normal !important}
+html:not([data-theme="light"]){background-color:#070707}
+@media (prefers-reduced-motion:reduce){html body *{animation-duration:.01ms !important}}
+/* Safari: kartu ber-backdrop-filter + hover/animasi memicu kedip hitam saat kursor pindah. Latar kartu sudah hampir solid, blur dibuang. */
+html body :is(.split-card,.member-card,.action-card,.member-payment-card,.setting-card,.kc-card,.fkx-card,.stat-card,.kd-fac,.kamar-rc,.method-card,.ka-kpi,.admin-click-card,.member-mini-card){-webkit-backdrop-filter:none !important;backdrop-filter:none !important;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+html body :is(.split-sidebar,.split-sidebar a,.split-sidebar summary){-webkit-backdrop-filter:none !important;backdrop-filter:none !important;-webkit-backface-visibility:hidden;backface-visibility:hidden}

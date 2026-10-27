@@ -522,7 +522,7 @@ actionsHtml = reviewBtn+'<button class="btn mini" type="button" data-todo-action
       actionsHtml = reviewBtn+'<button class="btn mini secondary" type="button" data-todo-action="dismiss" data-todo-id="'+esc(todo.id)+'">Selesai</button>';
     }
     return '<div class="todo-row">'
-    +'<div><strong>'+esc(todo.title || label)+'</strong><small>'+esc(p.full_name || '')+(subBits.length ? ' &middot; '+esc(subBits.join(' &middot; ')) : '')+'</small></div>'
+    +'<div><strong>'+esc(todo.title || label)+'</strong><small>'+esc(p.full_name || '')+(subBits.length ? ' &middot; '+esc(subBits.join(' \u00b7 ')) : '')+'</small></div>'
     +'<div>'+esc(todo.description || p.email || '-')+'</div>'
     +'<div><span class="chip">'+esc(label)+'</span></div>'
     +'<div>'+actionsHtml+'</div>'

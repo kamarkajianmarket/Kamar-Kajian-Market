@@ -867,7 +867,15 @@ else if(action === 'reject_payment') await actionRejectPayment(todo);
       if(list){ list.scrollIntoView({behavior:'smooth', block:'start'}); if(typeof toast==='function') toast('Item ini sudah diproses atau tidak lagi menunggu.'); }
       return;
     }
-    row.scrollIntoView({behavior:'smooth', block:'center'});
+    var body = list.closest('.kamar-rc-body');
+    var head = body && body.previousElementSibling;
+    if(head && head.classList.contains('kamar-rc-head') && !head.classList.contains('open')){
+      head.click();
+      if(!head.classList.contains('open')){ head.classList.add('open'); head.setAttribute('aria-expanded','true'); }
+    }
+    if(body && !row.offsetHeight && tries < 25){ setTimeout(function(){ focusTodo(id, tries+1); }, 200); return; }
+    var go = function(){ row.scrollIntoView({block:'center'}); };
+    go(); setTimeout(go, 350);
     row.classList.add('kamar-todo-focus');
     setTimeout(function(){ row.classList.remove('kamar-todo-focus'); }, 4500);
   }

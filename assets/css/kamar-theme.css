@@ -52,3 +52,7 @@ html:not([data-theme="light"]){background-color:#070707}
 /* Safari: kartu ber-backdrop-filter + hover/animasi memicu kedip hitam saat kursor pindah. Latar kartu sudah hampir solid, blur dibuang. */
 html body :is(.split-card,.member-card,.action-card,.member-payment-card,.setting-card,.kc-card,.fkx-card,.stat-card,.kd-fac,.kamar-rc,.method-card,.ka-kpi,.admin-click-card,.member-mini-card){-webkit-backdrop-filter:none !important;backdrop-filter:none !important;-webkit-backface-visibility:hidden;backface-visibility:hidden}
 html body :is(.split-sidebar,.split-sidebar a,.split-sidebar summary){-webkit-backdrop-filter:none !important;backdrop-filter:none !important;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+/* Drawer HP: .split-shell (z-index:1 dari kamar-dashboard-motion.css) membuat stacking context sehingga drawer (z 10001)
+   berada di bawah backdrop blur (z 10000, anak body): layar blur dan tak bisa diklik. Berlaku di SEMUA halaman ber-sidebar
+   (member, admin, affiliate). Jangan beri z-index/transform/filter/isolation pada .split-shell/.split-app/main induk sidebar. */
+html body .split-shell,html body .split-app{z-index:auto !important;isolation:auto !important;transform:none !important;filter:none !important}

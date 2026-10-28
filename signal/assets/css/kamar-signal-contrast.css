@@ -1,0 +1,70 @@
+/* Kamar Signal: kontras AA di semua lebar layar.
+   Akar masalah: token warna gelap (--km-ink, --km-muted, warna badge) hanya didefinisikan di
+   @media (min-width:1024px), padahal permukaan v10/v11 sudah gelap di HP/iPad. Akibatnya teks
+   Riwayat Perkembangan, High Risk, badge, dan keterangan tampil gelap di atas gelap.
+   Berkas ini dimuat terakhir dan hanya menyetel warna teks/badge (tanpa mengubah layout). */
+html body.ksig-body{
+  --km-ink:#F4F6F8;
+  --km-muted:#B4BDC9;
+  --km-line:rgba(244,246,248,.14);
+  --ks-text:#F4F6F8;
+  --ks-text-muted:#B4BDC9;
+  --ks-text-faint:#98A2B0;
+  --ks-emerald:#4ADE9F;
+  --ks-danger:#FF8A84;
+}
+/* Riwayat Perkembangan */
+.ksig-body .ksig-tl-content strong{color:#F4F6F8!important}
+.ksig-body .ksig-tl-time{color:#B4BDC9!important}
+.ksig-body .ksig-tl-icon{color:#D7DEE8}
+.ksig-body .ksig-tl-icon.ok{color:#4ADE9F}
+.ksig-body .ksig-tl-icon.warn{color:#F5C451}
+.ksig-body .ksig-tl-icon.x{color:#FF8A84}
+.ksig-body .ksig-tl-detail{color:#D3DAE4!important}
+.ksig-body .ksig-tl-toggle{color:#E8C777!important}
+/* Badge status & arah */
+.ksig-body .ksig-badge.fresh{background:rgba(232,199,119,.18)!important;color:#F0D58A!important}
+.ksig-body .ksig-badge.aktif,.ksig-body .ksig-badge.profit,.ksig-body .ksig-badge.buy{background:rgba(66,180,140,.20)!important;color:#5BE3AC!important}
+.ksig-body .ksig-badge.loss,.ksig-body .ksig-badge.sell{background:rgba(229,110,105,.20)!important;color:#FF9C96!important}
+.ksig-body .ksig-badge.lastcall{background:rgba(110,150,230,.22)!important;color:#A9C4FF!important}
+.ksig-body .ksig-badge.critical{background:rgba(229,110,105,.24)!important;color:#FFB0AB!important}
+.ksig-body .ksig-badge.archive{background:rgba(180,189,201,.16)!important;color:#D3DAE4!important}
+/* Keterangan & meta */
+.ksig-body .ksig-row-info,.ksig-body .ksig-xc-meta,.ksig-body .ksig-recap-row-stats,.ksig-body .ksig-recap-period,
+.ksig-body .ksig-detail-idlabel,.ksig-body .ksig-detail-summary-tag{color:#B4BDC9!important}
+.ksig-body .ksig-detail-tf{color:#F0D58A!important}
+.ksig-body .ksig-copy-btn{color:#F0D58A!important}
+
+/* Bar atas (Beranda / app bar) tetap gelap saat digulir di HP/iPad.
+   Semula latar bar berubah menjadi ivory/putih (rgba(249,245,237,.86)) begitu kelas .scrolled aktif,
+   karena versi gelapnya hanya ada di @media (min-width:1024px). */
+html body.ksig-body .ksig-header,
+html body.ksig-body .ksig-appbar{background:rgba(5,7,11,.82)!important;border-bottom-color:rgba(244,246,248,.08)!important}
+html body.ksig-body .ksig-header.scrolled,
+html body.ksig-body .ksig-appbar.scrolled{background:rgba(5,7,11,.92)!important;border-bottom-color:rgba(232,199,119,.22)!important;
+  box-shadow:0 6px 24px rgba(0,0,0,.4)!important;backdrop-filter:blur(16px) saturate(1.3)!important;-webkit-backdrop-filter:blur(16px) saturate(1.3)!important}
+html body.ksig-body .ksig-appbar-back{background:rgba(244,246,248,.06)!important;border-color:rgba(244,246,248,.18)!important;color:#F4F6F8!important}
+/* Latar akar gelap agar tarikan lebih (overscroll Safari iOS) tidak menampakkan putih */
+html:has(body.ksig-body){background:#05070b}
+
+/* Teks merah/hijau/label kecil: dipertegas agar lolos AA di tema Gelap dan Terang (Terang memakai filter invert) */
+html body.ksig-body .sell,html body.ksig-body .ksig-badge.sell{color:#FFC2BD!important}
+html body.ksig-body .buy,html body.ksig-body .ksig-badge.buy{color:#8CF0C6!important}
+html body.ksig-body .ksig-badge.loss,html body.ksig-body .ksig-badge.critical{color:#FFC2BD!important}
+html body.ksig-body .ksig-badge.aktif,html body.ksig-body .ksig-badge.profit{color:#8CF0C6!important}
+html body.ksig-body .ksig-xc-cl strong,html body.ksig-body .ksig-xc-cl.hit strong,html body.ksig-body .ksig-xc-cl.hit span{color:#FFC2BD!important}
+html body.ksig-body .ksig-tl-icon.x{color:#FFC2BD!important}
+html body.ksig-body .ksig-reveal-id{color:#B4BDC9!important}
+html body.ksig-body .ksig-perf-ring-in span,html body.ksig-body .ksig-perf-stat span,html body.ksig-body .ksig-perf-stat small{color:#C9D0DA!important}
+html body.ksig-body .ksig-row-reveal-btn{color:#C9D0DA!important}
+html body.ksig-body .ksig-xc-cl .ksig-ck{background:#C42B3D!important;color:#fff!important}
+html body.ksig-body .ksig-card-badge,html body.ksig-body .ksig-new-badge{background:#C42B3D!important;color:#fff!important}
+
+/* text-fill-color juga dikunci (v10 memakainya) */
+html body.ksig-body .ksig-row .sell,html body.ksig-body .ksig-xc .sell,html body.ksig-body .ksig-badge.sell,html body.ksig-body .ksig-badge.loss,html body.ksig-body .ksig-badge.critical,
+html body.ksig-body .ksig-xc .ksig-xc-resultval strong.neg,html body.ksig-body .ksig-xc-cl strong,html body.ksig-body .ksig-xc-cl span{color:#FFC2BD!important;-webkit-text-fill-color:#FFC2BD!important}
+html body.ksig-body .ksig-row .buy,html body.ksig-body .ksig-xc .buy,html body.ksig-body .ksig-badge.buy,html body.ksig-body .ksig-badge.aktif,html body.ksig-body .ksig-badge.profit,
+html body.ksig-body .ksig-xc .ksig-xc-resultval strong.pos{color:#8CF0C6!important;-webkit-text-fill-color:#8CF0C6!important}
+html body.ksig-body .ksig-xc-row.ksig-xc-cl,html body.ksig-body .ksig-xc-row.ksig-xc-cl.hit{color:#FFC2BD!important;-webkit-text-fill-color:#FFC2BD!important}
+html body.ksig-body .ksig-badge.critical{background:rgba(120,20,30,.7)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+html body.ksig-body .ksig-xc-row.ksig-xc-cl.hit strong,html body.ksig-body .ksig-xc-running strong.neg,html body.ksig-body .ksig-xc .ksig-xc-resultval strong.neg{color:#FFC2BD!important;-webkit-text-fill-color:#FFC2BD!important}

@@ -1,0 +1,29 @@
+/* FX auth: login/daftar hitam-emas dengan aurora emas bergerak + garis tepi kilau (terinspirasi 21st.dev "Sign In" split).
+   Sekaligus memperbaiki kontras: tautan Lupa Password / Daftar di sini / notice sebelumnya hijau gelap di atas gelap. */
+html body .auth-grid .auth-hero{
+  background:radial-gradient(520px 320px at 12% 0%,rgba(244,223,144,.16),transparent 70%),radial-gradient(460px 300px at 100% 100%,rgba(198,154,57,.14),transparent 70%),linear-gradient(160deg,#14110a 0%,#0b0a08 100%)!important;
+  border:1px solid rgba(244,223,144,.30)!important;position:relative;overflow:hidden;isolation:isolate}
+html body .auth-grid .auth-hero::before,html body .auth-grid .auth-hero::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(46px);pointer-events:none;opacity:.55}
+html body .auth-grid .auth-hero::before{width:260px;height:260px;left:-60px;top:-70px;background:rgba(244,223,144,.35);animation:kfxDriftA 16s ease-in-out infinite alternate}
+html body .auth-grid .auth-hero::after{width:300px;height:300px;right:-90px;bottom:-110px;background:rgba(198,154,57,.30);animation:kfxDriftB 19s ease-in-out infinite alternate}
+@keyframes kfxDriftA{to{transform:translate(70px,50px) scale(1.15)}}
+@keyframes kfxDriftB{to{transform:translate(-60px,-40px) scale(1.2)}}
+html body.public-home .auth-card{
+  background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.015)),#0d0c09!important;
+  border:1px solid rgba(244,223,144,.30)!important;position:relative}
+html body.public-home .auth-card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--kfx-a,0deg),transparent 0 70%,rgba(244,223,144,.9) 85%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:kfxSpin 7s linear infinite}
+@property --kfx-a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes kfxSpin{to{--kfx-a:360deg}}
+html body .label-link,html body.public-home .auth-card .label-link{color:#f0d58a!important;text-decoration:underline;text-underline-offset:3px}
+html body .auth-grid .auth-hero .notice{background:rgba(244,223,144,.07)!important;border:1px solid rgba(244,223,144,.35)!important;color:#f3ecdc!important}
+html body .auth-grid .auth-hero .notice a{color:#f4df90!important;text-decoration:underline;text-underline-offset:3px;font-weight:900}
+html body.public-home .auth-card .pill,html body.public-home .auth-card a.pill{background:rgba(244,223,144,.12)!important;color:#f4df90!important;border:1px solid rgba(244,223,144,.5)!important}
+html body .auth-grid .chip{background:rgba(244,223,144,.08)!important;color:#f4df90!important;border:1px solid rgba(244,223,144,.35)!important}
+html body:has(.auth-card) .site-header .header-cta{background:rgba(244,223,144,.10)!important;color:#f4df90!important;border:1px solid rgba(244,223,144,.45)!important}
+@media(prefers-reduced-motion:reduce){html body .auth-grid .auth-hero::before,html body .auth-grid .auth-hero::after,html body.public-home .auth-card::before{animation:none}}
+/* Perbaikan: tautan di dalam notice sebelumnya tersembunyi sehingga kalimat terbaca "Belum jadi member? dan mulai belajar..." */
+html body .auth-grid .auth-hero .notice a[href="register.html"]{display:inline!important}
+html body.public-home .auth-card .switch-row{flex-wrap:wrap;gap:10px}
+html body.public-home .auth-card .switch-row .pill{white-space:nowrap}

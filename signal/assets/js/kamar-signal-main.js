@@ -634,6 +634,12 @@ function esc(s){
     try{ return new Intl.DateTimeFormat('id-ID',{ timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit' }).format(new Date(iso)).replace('.',':'); }
     catch(e){ return '--:--'; }
   }
+  // Urutan tampilan area entry: BUY tinggi -> rendah, SELL rendah -> tinggi (hanya tampilan, data tidak diubah).
+  function entryPair(sig){
+    var a=Number(sig.area_low), b=Number(sig.area_high);
+    var lo=Math.min(a,b), hi=Math.max(a,b);
+    return String(sig.skenario||'').toUpperCase()==='SELL' ? [lo,hi] : [hi,lo];
+  }
   function fmtNum(n, d){
     if(n===null||n===undefined) return '-';
     var f = Number(n);
@@ -1850,8 +1856,8 @@ function rowHtml(s){
         '<div class="ksig-xc-meta">'+esc(s.timeframe||'-')+' • <span class="'+dirBadge+'">'+esc(s.skenario||'-')+'</span> '+esc(STATUS_LABEL[s.display_status]||s.display_status)+'</div>'+
         '<div class="ksig-xc-zone">'+(s.jenis_zona?esc(s.jenis_zona):'—')+'</div>'+
         '<div class="ksig-xc-block"><div class="ksig-xc-label">ENTRY AREA</div><div class="ksig-xc-entrygrid">'+
-          '<div class="ksig-xc-cell"><span class="ksig-xc-sub">FROM</span><strong>'+(s.area_low!=null?esc(fmtNum(s.area_low)):'—')+'</strong></div>'+
-          '<div class="ksig-xc-cell"><span class="ksig-xc-sub">TO</span><strong>'+(s.area_high!=null?esc(fmtNum(s.area_high)):'—')+'</strong></div>'+
+          '<div class="ksig-xc-cell"><span class="ksig-xc-sub">FROM</span><strong>'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(entryPair(s)[0])):'—')+'</strong></div>'+
+          '<div class="ksig-xc-cell"><span class="ksig-xc-sub">TO</span><strong>'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(entryPair(s)[1])):'—')+'</strong></div>'+
         '</div></div>'+
         '<div class="ksig-xc-row"><span>ZONE SIZE</span><strong>'+(zonePips!=null?esc(zonePips)+' Pips':'—')+'</strong></div>'+
         runResultHtml+
@@ -2386,7 +2392,7 @@ var groups = groupRecapRows(R.rows);
     var unread = state.readsLoaded && isUnread(item.id_zona, sig.updated_at);
     var info;
     if(isFreshCreate && sig.jenis_zona){
-      info = sig.jenis_zona + ((sig.area_low!=null && sig.area_high!=null) ? ' • Area '+fmtNum(sig.area_low)+' – '+fmtNum(sig.area_high) : '');
+      info = sig.jenis_zona + ((sig.area_low!=null && sig.area_high!=null) ? ' • Area '+fmtNum(entryPair(sig)[0])+' – '+fmtNum(entryPair(sig)[1]) : '');
     } else {
       info = item.event_description || item.event_title || EVENT_LABEL[item.event_type] || '';
     }
@@ -2463,7 +2469,7 @@ var groups = groupRecapRows(R.rows);
       '<div class="ksig-detail-split">'+
         '<div class="ksig-detail-panel">'+
           '<div class="ksig-detail-panel-title">ENTRY ZONE</div>'+
-          '<div class="ksig-detail-panel-value">'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(s.area_low))+' \u2013 '+esc(fmtNum(s.area_high)):'-')+'</div>'+
+          '<div class="ksig-detail-panel-value">'+((s.area_low!=null&&s.area_high!=null)?esc(fmtNum(entryPair(s)[0]))+' \u2013 '+esc(fmtNum(entryPair(s)[1])):'-')+'</div>'+
           '<div class="ksig-detail-panel-sub">'+esc(s.jenis_zona||'-')+'</div>'+
           ((s.area_low!=null&&s.area_high!=null)?(
             '<div class="ksig-tr-row"><span>Lebar Zona</span><strong>'+esc(fmtNum(Math.abs(s.area_high-s.area_low)*10,1))+' Pips</strong></div>'+

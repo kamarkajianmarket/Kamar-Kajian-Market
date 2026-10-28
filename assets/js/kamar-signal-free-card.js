@@ -91,7 +91,7 @@
         '<div class="meta">Timeframe M5 <span class="status-badge ' + info.cls + '">' + info.label + '</span></div>' +
         progressHtml +
         '<div class="levels">' +
-          '<div><strong>Area</strong>' + fmtNum(row.area_low) + ' - ' + fmtNum(row.area_high) + '</div>' +
+          '<div><strong>Area</strong>' + (function(){ var a=Number(row.area_low), b=Number(row.area_high); if(row.area_low==null||row.area_high==null) return fmtNum(row.area_low) + ' - ' + fmtNum(row.area_high); var lo=Math.min(a,b), hi=Math.max(a,b); return dir==='sell' ? fmtNum(lo)+' - '+fmtNum(hi) : fmtNum(hi)+' - '+fmtNum(lo); })() + '</div>' +
           '<div><strong>Take Profit</strong>' + [row.tp1,row.tp2,row.tp3].map(function(v){return v!=null?fmtNum(v):'-';}).join(' / ') + '</div>' +
           '<div><strong>Cut Loss</strong>' + fmtNum(row.invalidasi) + '</div>' +
         '</div>' +

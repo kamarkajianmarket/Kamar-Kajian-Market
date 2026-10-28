@@ -640,6 +640,17 @@ function esc(s){
     var lo=Math.min(a,b), hi=Math.max(a,b);
     return String(sig.skenario||'').toUpperCase()==='SELL' ? [lo,hi] : [hi,lo];
   }
+  // Teks pesan dari server yang memuat rentang area (From x To y / Area x - y): urutkan sesuai arah, hanya tampilan.
+  function fixAreaText(txt, skenario){
+    if(!txt) return txt;
+    var sell = String(skenario||'').toUpperCase()==='SELL';
+    function num(x){ var s=String(x); s = s.indexOf('.')>-1 ? s.replace(/,/g,'') : s.replace(',','.'); return Number(s); }
+    function ord(a,b){ var lo=num(a)<=num(b); var first = sell ? lo : !lo; return first ? [a,b] : [b,a]; }
+    var N='(\\d[\\d.,]*)';
+    txt = txt.replace(new RegExp('(\\b(?:From|Dari)\\s*:?\\s*)'+N+'(\\s*(?:,|\\u2022|\\|)?\\s*(?:To|Ke|Sampai|s/d)\\s*:?\\s*)'+N,'gi'), function(m,a,x,b,y){ var o=ord(x,y); return a+o[0]+b+o[1]; });
+    txt = txt.replace(new RegExp('(\\b(?:Area|Entry|Zona)[^\\d\\n]{0,24}?)'+N+'(\\s*[-\\u2013\\u2014]\\s*)'+N,'gi'), function(m,a,x,b,y){ var o=ord(x,y); return a+o[0]+b+o[1]; });
+    return txt;
+  }
   function fmtNum(n, d){
     if(n===null||n===undefined) return '-';
     var f = Number(n);
@@ -2394,7 +2405,7 @@ var groups = groupRecapRows(R.rows);
     if(isFreshCreate && sig.jenis_zona){
       info = sig.jenis_zona + ((sig.area_low!=null && sig.area_high!=null) ? ' • Area '+fmtNum(entryPair(sig)[0])+' – '+fmtNum(entryPair(sig)[1]) : '');
     } else {
-      info = item.event_description || item.event_title || EVENT_LABEL[item.event_type] || '';
+      info = fixAreaText(item.event_description, sig.skenario) || item.event_title || EVENT_LABEL[item.event_type] || '';
     }
     return '<div class="ksig-row ksig-pointer-light'+(unread?' ksig-row-unread':'')+'" data-ksig-nav="/signal/id/'+encodeURIComponent(item.id_zona)+'" tabindex="0" role="link">'+
       '<div class="ksig-row-main">'+
@@ -2511,7 +2522,7 @@ var groups = groupRecapRows(R.rows);
         (D.events.length ? '<div class="ksig-tl-list">'+D.events.map(function(ev){
           var icon = DETAIL_EVENT_ICON[ev.event_type] || '\u25cf';
           var iconCls = (ev.event_type==='HIT_INVALIDASI') ? 'x' : (icon==='!' ? 'warn' : (icon==='\u2713' ? 'ok' : ''));
-          return '<div class="ksig-tl-item2"><div class="ksig-tl-icon '+iconCls+'">'+icon+'</div><div class="ksig-tl-content"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<button type="button" class="ksig-tl-toggle" aria-expanded="false">Lihat detail pesan</button><div class="ksig-tl-detail">'+esc(ev.event_description)+'</div>':'')+'</div></div>';
+          return '<div class="ksig-tl-item2"><div class="ksig-tl-icon '+iconCls+'">'+icon+'</div><div class="ksig-tl-content"><div class="ksig-tl-time">'+fmtTimeShort(ev.created_at)+'</div><strong>'+esc(ev.event_title || EVENT_LABEL[ev.event_type] || ev.event_type)+'</strong>'+(ev.event_description?'<button type="button" class="ksig-tl-toggle" aria-expanded="false">Lihat detail pesan</button><div class="ksig-tl-detail">'+esc(fixAreaText(ev.event_description, s.skenario))+'</div>':'')+'</div></div>';
         }).join('') + '</div>' : '<div class="ksig-empty" style="padding:16px 0;">Belum ada riwayat perkembangan.</div>')+
       '</div>';
     var html =

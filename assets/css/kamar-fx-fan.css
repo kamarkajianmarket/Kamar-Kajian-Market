@@ -1,0 +1,12 @@
+/* FX fan: carousel cover chapter E-Book 3D (terinspirasi 21st.dev "fan/coverflow gallery"). Simetris, hitam-emas. */
+.fx-fan{position:relative;width:100%;max-width:920px;flex:0 0 auto;align-self:center;box-sizing:border-box;aspect-ratio:2.35/1;min-height:120px;margin:6px auto 18px;perspective:1100px;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none}
+.fx-fan::before{content:"";position:absolute;left:8%;right:8%;bottom:-6px;height:34px;background:radial-gradient(ellipse at center,rgba(244,223,144,.22),transparent 70%);filter:blur(8px);pointer-events:none}
+.fx-fan:focus-visible{box-shadow:0 0 0 2px #f4df90;border-radius:18px}
+.fx-fan-card{position:absolute;top:0;left:50%;width:min(58%,420px);aspect-ratio:3/2;padding:0;border:1px solid rgba(244,223,144,.5);border-radius:14px;overflow:hidden;background:#0d0c09;cursor:pointer;
+  box-shadow:0 18px 40px rgba(0,0,0,.55);transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s ease,filter .45s ease;will-change:transform}
+.fx-fan-card img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.fx-fan-card.is-active{border-color:#f4df90;box-shadow:0 22px 50px rgba(0,0,0,.6),0 0 0 1px rgba(244,223,144,.4),0 0 38px rgba(244,223,144,.22)}
+.fx-fan-card:focus-visible{outline:2px solid #f4df90;outline-offset:2px}
+.fx-fan-card[hidden]{display:none}
+.fx-fan-count{display:block;width:100%;flex:0 0 auto;text-align:center;color:#d3cab6;font-size:13px;font-weight:800;letter-spacing:.08em;margin:-6px 0 14px}
+@media(prefers-reduced-motion:reduce){.fx-fan-card{transition:none}}

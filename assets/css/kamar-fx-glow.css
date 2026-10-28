@@ -1,0 +1,10 @@
+/* FX glow: sorot emas mengikuti kursor di kartu (terinspirasi 21st.dev "spotlight card").
+   Hanya perangkat dengan hover; mati total pada prefers-reduced-motion. */
+.fx-glow-host{position:relative}
+.fx-glow{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;z-index:0;transition:opacity .35s ease;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(244,223,144,.13),transparent 62%)}
+.fx-glow::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(244,223,144,.85),transparent 65%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.fx-glow-host.fx-glow-on>.fx-glow{opacity:1}
+@media(hover:none),(prefers-reduced-motion:reduce){.fx-glow{display:none}}

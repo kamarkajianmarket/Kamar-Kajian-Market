@@ -344,7 +344,7 @@ function isIOSDevice(){
     var body;
     if(notifState.subscribed){
       body = '<div class="ksig-sheet-title">Notifikasi Aktif</div>'+
-        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">HP Anda akan mendapat pemberitahuan saat ada Signal FRESH (baru). Perubahan status lain (aktif, TP, cut loss) tidak akan berbunyi, cukup tampil sebagai tanda "Baru" di daftar. Matikan notifikasi?</p>'+
+        '<p style="color:var(--km-muted);font-size:13.5px;line-height:1.6;margin:0 0 16px">HP Anda akan mendapat pemberitahuan saat ada Signal FRESH (baru). Perubahan status lain (aktif, cut loss) tidak akan berbunyi, cukup tampil sebagai tanda "Baru" di daftar. Notifikasi TP/Hold bisa Anda pilih sendiri di Pengaturan (ikon ⚙️). Matikan notifikasi?</p>'+
         '<div class="ksig-sheet-actions"><button class="ksig-btn" id="ksigNotifCancel">Batal</button><button class="ksig-btn primary" id="ksigNotifOff">Matikan Notifikasi</button></div>';
     } else {
       var ios = isIOSDevice();
@@ -412,7 +412,7 @@ function bindSettingsBtn(){
   var b = document.getElementById('ksigSettingsBtn');
   if(b) b.addEventListener('click', function(){
     if(!state.profile) return;
-    state.client.from('notification_prefs').select('telegram_enabled').eq('profile_id', state.profile.id).maybeSingle().then(function(res){
+    state.client.from('notification_prefs').select('telegram_enabled,notify_tp1,notify_tp2,notify_tp3,notify_hold1,notify_hold2,notify_hold3').eq('profile_id', state.profile.id).maybeSingle().then(function(res){
       state.notifPrefs = (res && res.data) ? res.data : {};
       openSettingsSheet();
     });
@@ -427,6 +427,18 @@ function setTelegramEnabled(enabled){
     telegram_enabled: enabled,
     updated_at: new Date().toISOString()
   }, { onConflict: 'profile_id' });
+}
+var NOTIFY_TARGETS = [
+  { key:'notify_tp1', label:'TP 1' }, { key:'notify_tp2', label:'TP 2' }, { key:'notify_tp3', label:'TP 3' },
+  { key:'notify_hold1', label:'Hold 1' }, { key:'notify_hold2', label:'Hold 2' }, { key:'notify_hold3', label:'Hold 3' }
+];
+function setNotifyTarget(key, enabled){
+  if(!state.profile) return Promise.resolve();
+  state.notifPrefs = state.notifPrefs || {};
+  state.notifPrefs[key] = enabled;
+  var row = { profile_id: state.profile.id, updated_at: new Date().toISOString() };
+  row[key] = enabled;
+  return state.client.from('notification_prefs').upsert(row, { onConflict: 'profile_id' });
 }
 function openSettingsSheet(){
   if(!state.profile) return;
@@ -453,6 +465,11 @@ function openSettingsSheet(){
     '</div>';
   }
 
+  var targetChips = NOTIFY_TARGETS.map(function(t){
+    var on = !!(state.notifPrefs && state.notifPrefs[t.key] === true);
+    return '<div class="ksig-chip-opt'+(on?' active':'')+'" role="switch" tabindex="0" aria-checked="'+(on?'true':'false')+'" data-target-key="'+t.key+'">'+t.label+'</div>';
+  }).join('');
+
   var tgBlock;
   if(!tgConnected){
     tgBlock = '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">'+
@@ -473,6 +490,9 @@ function openSettingsSheet(){
       '<div class="ksig-sheet-title">Pengaturan Notifikasi</div>'+
       '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">\uD83D\uDD14 Notifikasi Push</div>'+pushBlock+'</div>'+
       '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label" style="display:flex;align-items:center">'+TG_ICON+'Notifikasi Telegram</div>'+tgBlock+'</div>'+
+      '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">\uD83C\uDFAF Notifikasi Target (TP & Hold)</div>'+
+        '<div class="ksig-chip-row" data-settings-row="targets">'+targetChips+'</div>'+
+        '<p style="color:var(--km-muted);font-size:12.5px;line-height:1.6;margin:8px 0 0">Pilih target yang ingin Anda terima notifikasinya (Push dan Telegram pribadi). Target yang tidak dipilih tetap tampil di website sebagai Riwayat Perkembangan, tanpa notifikasi. Bawaan: mati.</p></div>'+
       '<div class="ksig-sheet-group"><div class="ksig-sheet-group-label">🔔 Bunyi Signal Aktif</div>'+
         '<div class="ksig-chip-row" data-settings-row="chime-active">'+
           '<div class="ksig-chip-opt'+(chimeActiveOn?' active':'')+'" data-val="on">Aktif</div>'+
@@ -522,6 +542,26 @@ function openSettingsSheet(){
     if(want===tgOn) return;
     setTelegramEnabled(want).then(function(){ wrap.remove(); openSettingsSheet(); });
   });
+
+  var targetsRow = wrap.querySelector('[data-settings-row="targets"]');
+  if(targetsRow){
+    var toggleTarget = function(opt){
+      var key = opt.getAttribute('data-target-key'); if(!key) return;
+      var want = !(opt.getAttribute('aria-checked') === 'true');
+      opt.setAttribute('aria-checked', want ? 'true' : 'false');
+      opt.classList.toggle('active', want);
+      setNotifyTarget(key, want).catch(function(){
+        opt.setAttribute('aria-checked', want ? 'false' : 'true');
+        opt.classList.toggle('active', !want);
+      });
+    };
+    targetsRow.addEventListener('click', function(e){ var opt = e.target.closest('.ksig-chip-opt'); if(opt) toggleTarget(opt); });
+    targetsRow.addEventListener('keydown', function(e){
+      if(e.key !== 'Enter' && e.key !== ' ') return;
+      var opt = e.target.closest('.ksig-chip-opt'); if(!opt) return;
+      e.preventDefault(); toggleTarget(opt);
+    });
+  }
 
   var chimeActiveRow = wrap.querySelector('[data-settings-row="chime-active"]');
   if(chimeActiveRow) chimeActiveRow.addEventListener('click', function(e){

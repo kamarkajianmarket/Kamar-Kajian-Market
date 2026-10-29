@@ -27,8 +27,14 @@ export default async function handler(req, res) {
 
   try {
     const rawBody = await readRawBody(req);
+    // EA v2.14: permintaan {"kind":"state"} (daftar signal yang sudah dikenal website) dilayani function terpisah,
+    // sehingga alur ingest event tidak tersentuh.
+    let targetFunction = "kamar-signal-ingest";
+    if (/"kind"\s*:\s*"state"/.test(rawBody.toString("utf8").slice(0, 400))) {
+      targetFunction = "kamar-signal-state";
+    }
       console.log("[kamar-signal proxy] raw body preview:", rawBody.toString("utf8").slice(0, 800));    const response = await fetch(
-      "https://moxcqojvtglssftskouj.supabase.co/functions/v1/kamar-signal-ingest",
+      "https://moxcqojvtglssftskouj.supabase.co/functions/v1/" + targetFunction,
       {
         method: "POST",
         headers: {

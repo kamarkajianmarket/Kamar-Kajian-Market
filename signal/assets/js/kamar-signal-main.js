@@ -412,7 +412,12 @@ function bindSettingsBtn(){
   var b = document.getElementById('ksigSettingsBtn');
   if(b) b.addEventListener('click', function(){
     if(!state.profile) return;
-    state.client.from('notification_prefs').select('telegram_enabled,notify_tp1,notify_tp2,notify_tp3,notify_hold1,notify_hold2,notify_hold3').eq('profile_id', state.profile.id).maybeSingle().then(function(res){
+    var tbl = function(cols){ return state.client.from('notification_prefs').select(cols).eq('profile_id', state.profile.id).maybeSingle(); };
+    tbl('telegram_enabled,notify_tp1,notify_tp2,notify_tp3,notify_hold1,notify_hold2,notify_hold3').then(function(res){
+      // Kolom notify_* belum ada di database (SQL belum dijalankan): ulangi tanpa kolom itu agar status Telegram tetap benar.
+      if(res && res.error) return tbl('telegram_enabled');
+      return res;
+    }).then(function(res){
       state.notifPrefs = (res && res.data) ? res.data : {};
       openSettingsSheet();
     });
@@ -550,10 +555,12 @@ function openSettingsSheet(){
       var want = !(opt.getAttribute('aria-checked') === 'true');
       opt.setAttribute('aria-checked', want ? 'true' : 'false');
       opt.classList.toggle('active', want);
-      setNotifyTarget(key, want).catch(function(){
+      var revert = function(){
         opt.setAttribute('aria-checked', want ? 'false' : 'true');
         opt.classList.toggle('active', !want);
-      });
+        if(state.notifPrefs) state.notifPrefs[key] = !want;
+      };
+      setNotifyTarget(key, want).then(function(res){ if(res && res.error) revert(); }).catch(revert);
     };
     targetsRow.addEventListener('click', function(e){ var opt = e.target.closest('.ksig-chip-opt'); if(opt) toggleTarget(opt); });
     targetsRow.addEventListener('keydown', function(e){
